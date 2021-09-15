@@ -45,8 +45,21 @@ class DashboardController extends Controller
         $village_filled = $villageModel->getVillageFill(); // fungsi total desa di provinsi banten
         $total_village_filled      = count($village_filled);
         $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
+
+         // Grfaik Data member
+        $regencyModel     = new Regency();
+        $province = $regencyModel->getGrafikTotalMember();
+        $cat_province      = [];
+        $cat_province_data = [];
+        foreach ($province as $val) {
+            $cat_province[] = $val->province; 
+            $cat_province_data[] = [
+                "y" => $val->total_member,
+                // "url" => route('admin-dashboard-province', $val->province_id)
+            ];
+        }
         
-        return view('pages.admin.dashboard.index', compact('total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
+        return view('pages.admin.dashboard.index', compact('cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
     }
 
     public function province($province_id)
