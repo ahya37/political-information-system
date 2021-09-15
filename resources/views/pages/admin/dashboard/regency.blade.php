@@ -19,7 +19,7 @@
                 <h2 class="dashboard-title mb-4">Dashboard</h2>
                  <nav aria-label="breadcrumb">
                   <ol class="breadcrumb">
-                     <li class="breadcrumb-item"><a href="{{ route('admin-dashboard') }}">Provinsi {{ $regency->province->name }}</a></li>
+                     <li class="breadcrumb-item"><a href="{{ route('admin-dashboard-province', $regency->province->id) }}">Provinsi {{ $regency->province->name }}</a></li>
                       <li class="breadcrumb-item active" aria-current="page">{{ $regency->name }}</li>
                   </ol>
                 </nav>
