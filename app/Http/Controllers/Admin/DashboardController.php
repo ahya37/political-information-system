@@ -236,7 +236,7 @@ class DashboardController extends Controller
         
         // kirimkan regency_id ke provider khusus API untuk Dashboard
 
-        $regency          = Regency::select('id','name')->where('id', $regency_id)->first();
+        $regency          = Regency::with('province')->where('id', $regency_id)->first();
         $userModel        = new User();
         $member           = $userModel->getMemberRegency($regency_id);   
         $total_member     = count($member); // total anggota terdaftar
