@@ -39,8 +39,14 @@ class DashboardController extends Controller
         $regencyModel     = new Regency();
         $target_member    = $regencyModel->getRegency()->total_district * 5000;
         $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
+
+        $villageModel   = new Village();
+        $total_village  = $villageModel->getVillages()->total_village; // fungsi total desa di provinsi banten
+        $village_filled = $villageModel->getVillageFill(); // fungsi total desa di provinsi banten
+        $total_village_filled      = count($village_filled);
+        $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
         
-        return view('pages.admin.dashboard.index', compact('gF','total_member','target_member','persentage_target_member'));
+        return view('pages.admin.dashboard.index', compact('total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
     }
 
     public function province($province_id)

@@ -53,7 +53,7 @@
                           % Jumlah Anggota
                         </div>
                         <div class="dashboard-card-subtitle">
-                          {{-- <h4 class="text-white">{{ $gF->persen($persentage_target_member)}}</h4> --}}
+                          <h4 class="text-white">{{ $gF->persen($persentage_target_member)}}</h4>
                         </div>
                       </div>
                     </div>
@@ -65,7 +65,7 @@
                           Target Anggota
                         </div>
                         <div class="dashboard-card-subtitle">
-                          {{-- <h4 class="text-white">{{ $gF->decimalFormat($target_member)}}</h4> --}}
+                          <h4 class="text-white">{{ $gF->decimalFormat($target_member)}}</h4>
                         </div>
                       </div>
                     </div>
@@ -80,7 +80,7 @@
                           Jumlah Desa Terisi
                         </div>
                         <div class="dashboard-card-subtitle">
-                          {{-- <h4 class="text-white">{{ $gF->decimalFormat($total_village_filled) }}</h4> --}}
+                          <h4 class="text-white">{{ $gF->decimalFormat($total_village_filled) }}</h4>
                         </div>
                       </div>
                     </div>
@@ -92,7 +92,7 @@
                           % Desa
                         </div>
                         <div class="dashboard-card-subtitle">
-                          {{-- <h4 class="text-white">{{ $gF->persen($presentage_village_filled)}}</h4> --}}
+                          <h4 class="text-white">{{ $gF->persen($presentage_village_filled)}}</h4>
                         </div>
                       </div>
                     </div>
@@ -104,7 +104,7 @@
                           Total Desa
                         </div>
                         <div class="dashboard-card-subtitle">
-                          {{-- <h4 class="text-white">{{ $gF->decimalFormat($total_village) }}</h4> --}}
+                          <h4 class="text-white">{{ $gF->decimalFormat($total_village) }}</h4>
                         </div>
                       </div>
                     </div>
