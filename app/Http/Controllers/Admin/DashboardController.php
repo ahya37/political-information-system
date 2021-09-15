@@ -29,50 +29,47 @@ class DashboardController extends Controller
         $this->excel = $excel;
     }
 
-    public function index()
+    public function province()
     {
+        $province_id = 36;
+        $province    = Province::select('id','name')->where('id', $province_id)->first();
         $gF   = app('GlobalProvider'); // global function
 
         $userModel        = new User();
-        $total_member           = $userModel->select('id','name')->count();
-        
+        $member           = $userModel->getMemberProvince($province_id);
+        $total_member     = count($member); // total anggota terdaftar
+
         $regencyModel     = new Regency();
-        $target_member    = $regencyModel->getRegency()->total_district * 5000;
-        $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
-        
+        $target_member    = $regencyModel->getRegencyProvince($province_id)->total_district * 5000;
+        $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
+
         $villageModel   = new Village();
-        $total_village  = $villageModel->getVillages()->total_village; // fungsi total desa di provinsi banten
-        $village_filled = $villageModel->getVillageFill(); // fungsi total desa di provinsi banten
-        
+        $total_village  = $villageModel->getVillagesProvince($province_id)->total_village; // fungsi total desa di provinsi banten
+        $village_filled = $villageModel->getVillageFillProvince($province_id); // fungsi total desa di provinsi banten
         $total_village_filled      = count($village_filled);
-        $presentage_village_filled = $gF->persen(($total_village_filled / $total_village) * 100); // persentasi jumlah desa terisi
-        
+        $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
+
         // Grfaik Data member
-        $province = $regencyModel->getGrafikTotalMember();
+        $regency = $regencyModel->getGrafikTotalMemberRegencyProvince($province_id);
         // dd($regency);
-        $cat_province      = [];
-        $cat_province_data = [];
-        foreach ($province as $val) {
-            $cat_province[] = $val->province; 
-            $cat_province_data[] = [
+        $cat_regency      = [];
+        $cat_regency_data = [];
+        foreach ($regency as $val) {
+            $cat_regency[] = $val->regency; 
+            $cat_regency_data[] = [
                 "y" => $val->total_member,
-                // "url" => route('admin-dashboard-province', $val->province_id)
+                "url" => route('admin-dashboard-regency', $val->regency_id)
             ];
         }
-
         
         // grafik data anggota terdaftar vs target
-        $member_registered  = $userModel->getMemberRegisteredAll();
-        
+        $member_registered  = $userModel->getMemberRegistered($province_id);
         $cat_member_registered = [];
         foreach($member_registered as $val){
-            if ($val->realisasi_member != 0) {
-                $cat_member_registered['label'][] = $val->name;
-                $cat_member_registered['data'][]  = $gF->persen(($val->realisasi_member / $val->target_member)*100);
-                $cat_member_registered['target'][] = $val->target_member;
-            }
+            $cat_member_registered['label'][] = $val->name;
+            $cat_member_registered['data'][]  = $gF->persen(($val->realisasi_member / $val->target_member)*100);
+            $cat_member_registered['target'][] = $val->target_member;
         }
-
         $label_member_registered    = collect($cat_member_registered['label']);
         $data_member_registered     = $cat_member_registered['data'];
         $data_member_target         = $cat_member_registered['target'];
@@ -99,10 +96,8 @@ class DashboardController extends Controller
                                     ]);
         // grafik data job
         $jobModel = new Job();
-        $most_jobs = $jobModel->getMostJobs();
-        // dd($most_jobs);
-
-        $jobs     = $jobModel->getJobs();
+        $most_jobs = $jobModel->getMostJobsProvince($province_id);
+        $jobs     = $jobModel->getJobProvince($province_id);
         $cat_jobs =[];
         $sum_jobs = collect($jobs)->sum(function($q){return $q->total_job; }); // fungsi untuk menjumlahkan total job
         foreach ($jobs as  $val) {
@@ -132,8 +127,7 @@ class DashboardController extends Controller
             ]);
 
         // grafik data jenis kelamin
-        $gender = $userModel->getGenders();
-
+        $gender = $userModel->getGenderProvince($province_id);
         $cat_gender = [];
         $all_gender  = [];
 
@@ -156,7 +150,7 @@ class DashboardController extends Controller
         $total_female_gender = empty($all_gender[1]) ?  0 :  $all_gender[1]; // total gender wanita
 
         // range umur
-        $range_age     = $userModel->rangeAgea();
+        $range_age     = $userModel->rangeAgeProvince($province_id);
         $cat_range_age = [];
         $cat_range_age_data = [];
         foreach ($range_age as $val) {
@@ -167,7 +161,7 @@ class DashboardController extends Controller
         }
 
         // generasi umur
-        $gen_age     = $userModel->generationAges();
+        $gen_age     = $userModel->generationAgeProvince($province_id);
         $cat_gen_age = [];
         $cat_gen_age_data = [];
         foreach ($gen_age as $val) {
@@ -181,16 +175,9 @@ class DashboardController extends Controller
         }
 
         // Daftar pencapaian lokasi / daerah
-        $achievments   = $regencyModel->achievements();
-        $data_achievments = [];
-        foreach ($achievments as $value) {
-            // tampilkan yang hanya jika ada data saja / realisasi != 0
-            if ($value->realisasi_member != 0) {
-                $data_achievments[] = $value;
-            }
-        }
+        $achievments   = $regencyModel->achievementProvince($province_id);
         if (request()->ajax()) {
-            return DataTables::of($data_achievments)
+            return DataTables::of($achievments)
                     ->addColumn('persentage', function($item){
                         $gF   = app('GlobalProvider'); // global function
                         $persentage = ($item->realisasi_member / $item->target_member)*100;
@@ -208,7 +195,7 @@ class DashboardController extends Controller
 
         $referalModel = new Referal();
         // input admin terbanyak
-        $inputer      = $referalModel->getInputers();
+        $inputer      = $referalModel->getInputerProvince($province_id);
         $cat_inputer = [];
         foreach($inputer as $val){
             $cat_inputer['label'][] = $val->name;
@@ -229,20 +216,18 @@ class DashboardController extends Controller
             ]
             ]);
         // anggota dengan referal terbanyak
-        $referal      = $referalModel->getReferals();
-        // dd($referal);
-
+        $referal      = $referalModel->getReferalProvince($province_id);
         $cat_referal      = [];
         $cat_referal_data = [];
         foreach ($referal as $val) {
             $cat_referal[] = $val->name; 
             $cat_referal_data[] = [
                 "y" => $val->total_referal,
-                // "url" => route('admin-dashboard')
+                "url" => route('admin-dashboard')
             ];
         }
 
-        return view('pages.admin.dashboard.index', compact('chart_member_registered','cat_gen_age_data','cat_gen_age','chart_inputer','most_jobs','colors','chart_jobs','cat_referal_data','cat_referal','cat_range_age','cat_range_age_data','total_male_gender','total_female_gender','province','cat_gender','cat_jobs','cat_province_data','cat_province','gF','total_member','persentage_target_member','target_member','total_village_filled','presentage_village_filled','total_village'));
+        return view('pages.admin.dashboard.province', compact('province','chart_member_registered','cat_gen_age_data','cat_gen_age','chart_inputer','most_jobs','colors','chart_jobs','cat_referal_data','cat_referal','cat_range_age','cat_range_age_data','total_male_gender','total_female_gender','regency','cat_gender','cat_jobs','cat_regency_data','cat_regency','gF','total_member','persentage_target_member','target_member','total_village_filled','presentage_village_filled','total_village'));
     }
 
     public function regency($regency_id)
