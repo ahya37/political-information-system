@@ -1,0 +1,50 @@
+.btn-sc-secondary {
+    background-color: #f89604;
+    color: #ffffff;
+}
+
+.required {
+    color: red;
+}
+
+.cs-card {
+    background-color: #0f70ad;
+    color: #ffffff;
+}
+
+.cs-card-danger {
+    background-color: #922b21;
+}
+
+.cs-card-warning {
+    background-color: #dc7633;
+}
+
+.cd-card-primary {
+    background-color: #2471a3;
+}
+
+.cd-card-primary-cart {
+    background-color: #7cb5ec;
+}
+
+.cd-card-secondary-cart {
+    background-color: #434348;
+}
+
+.cart-gender-female {
+    background-color: #ec407a;
+}
+
+.cart-gender-male {
+    background-color: #063df7;
+}
+
+.card-width-jobs {
+    width: 100px;
+    height: 50px;
+    font-size: 10px;
+    padding: 2px;
+    text-align: justify;
+    margin-top: -6px;
+}
