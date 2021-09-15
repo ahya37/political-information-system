@@ -34,7 +34,7 @@ class DashboardController extends Controller
         $gF   = app('GlobalProvider'); // global function
 
         $userModel        = new User();
-        $total_member     = $userModel->count();
+        $total_member     = $userModel->where('village_id', '!=', NULL)->count();
 
         $regencyModel     = new Regency();
         $target_member    = $regencyModel->getRegency()->total_district * 5000;
@@ -55,7 +55,7 @@ class DashboardController extends Controller
             $cat_province[] = $val->province; 
             $cat_province_data[] = [
                 "y" => $val->total_member,
-                // "url" => route('admin-dashboard-province', $val->province_id)
+                "url" => route('admin-dashboard-province', $val->province_id)
             ];
         }
         
