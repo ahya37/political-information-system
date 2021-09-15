@@ -56,7 +56,7 @@ class DashboardController extends Controller
             $cat_province[] = $val->province; 
             $cat_province_data[] = [
                 "y" => $val->total_member,
-                "url" => route('admin-dashboard-province', $val->province_id)
+                // "url" => route('admin-dashboard-province', $val->province_id)
             ];
         }
 
