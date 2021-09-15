@@ -29,9 +29,22 @@ class DashboardController extends Controller
         $this->excel = $excel;
     }
 
-    public function province()
+    public function index()
     {
-        $province_id = 36;
+        $gF   = app('GlobalProvider'); // global function
+
+        $userModel        = new User();
+        $total_member     = $userModel->count();
+
+        $regencyModel     = new Regency();
+        $target_member    = $regencyModel->getRegency()->total_district * 5000;
+        $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
+        
+        return view('pages.admin.dashboard.index', compact('gF','total_member','target_member','persentage_target_member'));
+    }
+
+    public function province($province_id)
+    {
         $province    = Province::select('id','name')->where('id', $province_id)->first();
         $gF   = app('GlobalProvider'); // global function
 
