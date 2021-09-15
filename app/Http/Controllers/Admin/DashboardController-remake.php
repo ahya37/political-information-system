@@ -245,6 +245,206 @@ class DashboardController extends Controller
         return view('pages.admin.dashboard.index', compact('chart_member_registered','cat_gen_age_data','cat_gen_age','chart_inputer','most_jobs','colors','chart_jobs','cat_referal_data','cat_referal','cat_range_age','cat_range_age_data','total_male_gender','total_female_gender','province','cat_gender','cat_jobs','cat_province_data','cat_province','gF','total_member','persentage_target_member','target_member','total_village_filled','presentage_village_filled','total_village'));
     }
 
+    public function province($province_id)
+    {
+        $province    = Province::select('id','name')->where('id', $province_id)->first();
+        $gF   = app('GlobalProvider'); // global function
+
+        $userModel        = new User();
+        $member           = $userModel->getMemberProvince($province_id);
+        $total_member     = count($member); // total anggota terdaftar
+
+        $regencyModel     = new Regency();
+        $target_member    = $regencyModel->getRegencyProvince($province_id)->total_district * 5000;
+        $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
+
+        $villageModel   = new Village();
+        $total_village  = $villageModel->getVillagesProvince($province_id)->total_village; // fungsi total desa di provinsi banten
+        $village_filled = $villageModel->getVillageFillProvince($province_id); // fungsi total desa di provinsi banten
+        $total_village_filled      = count($village_filled);
+        $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
+
+        // Grfaik Data member
+        $regency = $regencyModel->getGrafikTotalMemberRegencyProvince($province_id);
+        // dd($regency);
+        $cat_regency      = [];
+        $cat_regency_data = [];
+        foreach ($regency as $val) {
+            $cat_regency[] = $val->regency; 
+            $cat_regency_data[] = [
+                "y" => $val->total_member,
+                "url" => route('admin-dashboard-regency', $val->regency_id)
+            ];
+        }
+        
+        // grafik data anggota terdaftar vs target
+        $member_registered  = $userModel->getMemberRegistered($province_id);
+        $cat_member_registered = [];
+        foreach($member_registered as $val){
+            $cat_member_registered['label'][] = $val->name;
+            $cat_member_registered['data'][]  = $gF->persen(($val->realisasi_member / $val->target_member)*100);
+            $cat_member_registered['target'][] = $val->target_member;
+        }
+        $label_member_registered    = collect($cat_member_registered['label']);
+        $data_member_registered     = $cat_member_registered['data'];
+        $data_member_target         = $cat_member_registered['target'];
+        $colors           = $label_member_registered->map(function($item){return $rand_color = '#00FF00';});
+        $colors_target    = $label_member_registered->map(function($item){return $rand_color = '#CC0000';});
+        $chart_member_registered    = app()->chartjs
+                                    ->name('registerGrafik')
+                                    ->type('bar')
+                                    ->labels($cat_member_registered['label'])
+                                    ->datasets([
+                                        [
+                                            "label" => "Terdaftar",
+                                            'backgroundColor' => $colors,
+                                            'data' =>  $cat_member_registered['data']
+                                        ],
+                                        [
+                                            "label" => "Target",
+                                            'backgroundColor' => $colors_target,
+                                            'data' => $cat_member_registered['target']
+                                        ]
+                                    ])
+                                    ->options([
+                                        'legend' => false,
+                                    ]);
+        // grafik data job
+        $jobModel = new Job();
+        $most_jobs = $jobModel->getMostJobsProvince($province_id);
+        $jobs     = $jobModel->getJobProvince($province_id);
+        $cat_jobs =[];
+        $sum_jobs = collect($jobs)->sum(function($q){return $q->total_job; }); // fungsi untuk menjumlahkan total job
+        foreach ($jobs as  $val) {
+            $cat_jobs['label'][] = $val->name;
+            $cat_jobs['data'][] = $gF->persen(($val->total_job / $sum_jobs)*100);
+        }
+
+        $data_cat_jobs = collect($cat_jobs);
+        $labels_jobs = collect($cat_jobs['label']);
+        $data_jobs   = $cat_jobs['data'];
+        $colors = $labels_jobs->map(function($item){
+            return $rand_color = '#' . substr(md5(mt_rand()),0,6);
+        });
+        $chart_jobs = new JobChart();
+        $chart_jobs->labels($labels_jobs);
+        $chart_jobs->dataset('Anggota Berdasarkan Pekerjaan','pie', $data_jobs)->backgroundColor($colors);
+        $chart_jobs->options([
+            'tooltip' => false,
+            'legend' => [
+                'position' => 'bottom',
+                'align' => 'right',
+                'display' => false,
+            ],
+            'title' => [
+                'display' => true,
+                ]
+            ]);
+
+        // grafik data jenis kelamin
+        $gender = $userModel->getGenderProvince($province_id);
+        $cat_gender = [];
+        $all_gender  = [];
+
+        // untuk menghitung jumlah keseluruhan jenis kelamin L/P
+        $total_gender = 0;
+        foreach ($gender as $key => $value) {
+            $total_gender += $value->total;
+        }
+
+        foreach ($gender as  $val) {
+            $all_gender[]  = $val->total;
+
+            $cat_gender[] = [
+                "label" => $val->gender == 0 ? 'Laki-laki' : 'Perempuan',
+                "value"    => $gF->persen(($val->total/$total_gender)*100),
+            ];
+        }
+        
+        $total_male_gender   =empty($all_gender[0]) ?  0 :  $all_gender[0];; // total gender pria
+        $total_female_gender = empty($all_gender[1]) ?  0 :  $all_gender[1]; // total gender wanita
+
+        // range umur
+        $range_age     = $userModel->rangeAgeProvince($province_id);
+        $cat_range_age = [];
+        $cat_range_age_data = [];
+        foreach ($range_age as $val) {
+            $cat_range_age[]      = $val->range_age;
+            $cat_range_age_data[] = [
+                'y'    => $val->total
+            ];
+        }
+
+        // generasi umur
+        $gen_age     = $userModel->generationAgeProvince($province_id);
+        $cat_gen_age = [];
+        $cat_gen_age_data = [];
+        foreach ($gen_age as $val) {
+            if (isset($val->gen_age) != null) {
+                # code...
+                $cat_gen_age[]      = $val->gen_age;
+                $cat_gen_age_data[] = [
+                    'y'    => $val->total
+                ];
+            }
+        }
+
+        // Daftar pencapaian lokasi / daerah
+        $achievments   = $regencyModel->achievementProvince($province_id);
+        if (request()->ajax()) {
+            return DataTables::of($achievments)
+                    ->addColumn('persentage', function($item){
+                        $gF   = app('GlobalProvider'); // global function
+                        $persentage = ($item->realisasi_member / $item->target_member)*100;
+                        $persentage = $gF->persen($persentage);
+                        $persentageWidth = $persentage + 30;
+                        return '
+                        <div class="mt-3 progress" style="width:100%;">
+                            <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
+                        </div>
+                        ';
+                    })
+                    ->rawColumns(['persentage'])
+                    ->make();
+        }
+
+        $referalModel = new Referal();
+        // input admin terbanyak
+        $inputer      = $referalModel->getInputerProvince($province_id);
+        $cat_inputer = [];
+        foreach($inputer as $val){
+            $cat_inputer['label'][] = $val->name;
+            $cat_inputer['data'][]  = $val->total_data;
+        }
+        $data_cat_inputer = collect($cat_inputer);
+        $label_inputer    = collect($cat_inputer['label']);
+        $data_inputer     = $cat_inputer['data'];
+        $colors           = $label_inputer->map(function($item){return $rand_color = '#' . substr(md5(mt_rand()),0,6);});
+        $chart_inputer    = new InputerChart();
+        $chart_inputer->labels($label_inputer);
+        $chart_inputer->dataset('','bar', $data_inputer)->backgroundColor($colors);
+        $chart_inputer->options([
+            'legend' => false,
+            'title' => [
+                'display' => true,
+                // 'text' => 'Admin Dengan Input Terbanyak'
+            ]
+            ]);
+        // anggota dengan referal terbanyak
+        $referal      = $referalModel->getReferalProvince($province_id);
+        $cat_referal      = [];
+        $cat_referal_data = [];
+        foreach ($referal as $val) {
+            $cat_referal[] = $val->name; 
+            $cat_referal_data[] = [
+                "y" => $val->total_referal,
+                "url" => route('admin-dashboard')
+            ];
+        }
+
+        return view('pages.admin.dashboard.province', compact('province','chart_member_registered','cat_gen_age_data','cat_gen_age','chart_inputer','most_jobs','colors','chart_jobs','cat_referal_data','cat_referal','cat_range_age','cat_range_age_data','total_male_gender','total_female_gender','regency','cat_gender','cat_jobs','cat_regency_data','cat_regency','gF','total_member','persentage_target_member','target_member','total_village_filled','presentage_village_filled','total_village'));
+    }
+
     public function regency($regency_id)
     {
         $gF   = app('GlobalProvider'); // global function

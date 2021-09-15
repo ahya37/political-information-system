@@ -19,7 +19,7 @@
               href="{{ route('admin-member-create') }}"
               class="list-group-item list-group-item-action {{ (request()->is('admin/member/create')) ? 'active' : '' }}"
             >
-              Buat Anggota Barus
+              Buat Anggota Baru
             </a>
             <a
               href="{{ route('admin-admincontroll-district-create') }}"
