@@ -199,13 +199,13 @@
                       </div>
                     </div>
                   </div>
-                  {{-- <div class="col-md-6 mt-3">
+                  <div class="col-md-6 mt-3">
                     <div class="card mb-2">
                       <div class="card-body">
                         <div id="ageGen"></div>
                       </div>
                     </div>
-                  </div> --}}
+                  </div>
                    {{-- <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
@@ -393,6 +393,49 @@
           series: [{
               name:"",
               data: {!! json_encode($cat_range_age_data) !!},
+
+          }]
+      });
+
+      // generation age
+      Highcharts.chart('ageGen', {
+          credits: {
+            enabled: false
+        },
+          chart: {
+              type: 'column'
+          },
+          legend: {enabled: false},
+          title: {
+              text: 'Anggota Berdasarkan Generasi Umur'
+          },
+          xAxis: {
+              categories: {!! json_encode($cat_gen_age) !!},
+              crosshair: true,
+          },
+          yAxis: {
+              min: 0,
+              title: false
+          },
+          tooltip: {
+              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+              footerFormat: '</table>',
+              shared: true,
+              useHTML: true
+          },
+          plotOptions: {
+              column: {
+                  pointPadding: 0.2,
+                  borderWidth: 0
+              },
+              series: {
+                    stacking: 'normal',
+                    borderRadius: 3,
+                }
+          },
+          series: [{
+              name:"",
+              data: {!! json_encode($cat_gen_age_data) !!},
 
           }]
       });

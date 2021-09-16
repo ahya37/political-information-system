@@ -293,10 +293,7 @@ class User extends Authenticatable
             from 
             (
                 select date_berth, TIMESTAMPDIFF(YEAR, date_berth, CURDATE()) as age from users as a
-                join villages as b on a.village_id = b.id
-                join districts as c on b.district_id = c.id
-                join regencies as d on c.regency_id = d.id
-                join provinces as e on d.province_id = e.id
+                where a.village_id is not null
             ) as tb_age
             group by gen_age order by gen_age asc";
         $result = DB::select($sql);
