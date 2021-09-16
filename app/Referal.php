@@ -60,11 +60,7 @@ class Referal extends Model
         $sql = "SELECT b.id, b.name , count(b.id) as total_data
                 from users as a
                 join users as b on a.cby = b.id
-                left join villages as c on b.village_id = c.id
-                left join districts as   d on c.district_id = d.id 
-                left join regencies as e on d.regency_id = e.id
-                left join provinces as f on e.province_id = f.id
-                and  not b.level = 1
+                where a.village_id is not null and  b.level != 1
                 group by b.name, b.id
                 order by count(b.id) desc
                 limit 10";

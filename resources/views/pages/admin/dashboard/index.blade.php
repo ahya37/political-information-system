@@ -206,7 +206,7 @@
                       </div>
                     </div>
                   </div>
-                   {{-- <div class="col-md-12">
+                   <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Admin Berdasarkan Input Terbanyak</h6>
@@ -215,7 +215,7 @@
                         </div>
                       </div>
                     </div>
-                  </div> --}}
+                  </div>
                   {{-- <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
@@ -288,7 +288,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
 {!! $chart_jobs->script() !!}
-{{-- {!! $chart_inputer->script() !!} --}}
+{!! $chart_inputer->script() !!}
 <script>
   // member calculate
       Highcharts.chart('province', {
