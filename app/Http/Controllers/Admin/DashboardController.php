@@ -107,6 +107,32 @@ class DashboardController extends Controller
         $CatReferal   = $GrafikProvider->getGrafikReferal($referal);
         $cat_referal      = $CatReferal['cat_referal'];
         $cat_referal_data = $CatReferal['cat_referal_data'];
+
+        // Daftar pencapaian lokasi / daerah
+        $achievments   = $regencyModel->achievements();
+        $data_achievments = [];
+        // tampilkan yang hanya ada datanya saja / realisasi tidak kosong
+        foreach($achievments as $val){
+            if ($val->realisasi_member != 0) {
+                $data_achievments[] = $val;
+            }
+        }
+        if (request()->ajax()) {
+            return DataTables::of($data_achievments)
+                    ->addColumn('persentage', function($item){
+                        $gF   = app('GlobalProvider'); // global function
+                        $persentage = ($item->realisasi_member / $item->target_member)*100;
+                        $persentage = $gF->persen($persentage);
+                        $persentageWidth = $persentage + 30;
+                        return '
+                        <div class="mt-3 progress" style="width:100%;">
+                            <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
+                        </div>
+                        ';
+                    })
+                    ->rawColumns(['persentage'])
+                    ->make();
+        }
         
         return view('pages.admin.dashboard.index', compact('cat_referal_data','cat_referal','chart_inputer','cat_gen_age','cat_gen_age_data','cat_range_age','cat_range_age_data','chart_jobs','cat_gender','total_female_gender','total_male_gender','chart_member_registered','cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
     }
@@ -283,8 +309,15 @@ class DashboardController extends Controller
 
         // Daftar pencapaian lokasi / daerah
         $achievments   = $districtModel->achievementDistrict($regency_id);
+        $data_achievments = [];
+        // tampilkan yang hanya ada datanya saja / realisasi tidak kosong
+        foreach($achievments as $val){
+            if ($val->realisasi_member != 0) {
+                $data_achievments[] = $val;
+            }
+        }
         if (request()->ajax()) {
-            return DataTables::of($achievments)
+            return DataTables::of($data_achievments)
                     ->addColumn('persentage', function($item){
                         $gF   = app('GlobalProvider'); // global function
                         $persentage = ($item->realisasi_member / $item->total_target_member)*100;
@@ -391,8 +424,25 @@ class DashboardController extends Controller
 
          // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillage($district_id);
+        $total_target_member = $target_member / $total_village;
         if (request()->ajax()) {
-            return DataTables::of($achievments)->make();
+            return DataTables::of($achievments)
+                         ->addColumn('persentage', function($item) use($total_target_member){
+                            $gF   = app('GlobalProvider'); // global function
+                            $persentage = ($item->realisasi_member / $total_target_member)*100;
+                            $persentage = $gF->persen($persentage);
+                            $persentageWidth = $persentage + 30;
+                            return '
+                            <div class="mt-3 progress" style="width:100%;">
+                                <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
+                            </div>
+                            ';
+                        })
+                        ->addColumn('target', function() use($total_target_member){
+                            return $total_target_member;
+                        })
+                        ->rawColumns(['persentage','target'])
+                        ->make();
         }
 
         $referalModel = new Referal();

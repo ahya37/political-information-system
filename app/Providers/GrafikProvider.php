@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Charts\JobChart;
 use App\Charts\InputerChart;
 use Illuminate\Support\ServiceProvider;
+use Yajra\DataTables\Facades\DataTables;
 
 class GrafikProvider extends ServiceProvider
 {

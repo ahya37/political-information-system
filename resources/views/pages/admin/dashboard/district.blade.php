@@ -248,7 +248,9 @@
                                     <thead>
                                       <tr align="left">
                                       <th>Desa</th>
-                                      {{-- <th>Realisasi Jumlah Anggota</th> --}}
+                                     <th scope="col">Total Target / Desa</th>
+                                      <th>Realisasi Jumlah Anggota</th>
+                                      <th scope="col">Persentasi</th>
                                       <th>Pencapaian Hari Ini</th>
                                     </tr>
                                     </thead>
@@ -291,8 +293,10 @@
             },
             columns:[
                 {data: 'name', name:'name'},
-                // {data: 'realisasi_member', name:'realisasi_member',className: "text-right"},
-                {data: 'todays_achievement', name:'todays_achievement'}
+                {data: 'target', name:'target'},
+                {data: 'realisasi_member', name:'realisasi_member',className: "text-right"},
+                {data: 'persentage', name:'persentage'},
+                {data: 'todays_achievement', name:'todays_achievement',className: "text-right"}
 
             ],
               columnDefs: [

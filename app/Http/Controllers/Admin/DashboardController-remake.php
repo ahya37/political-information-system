@@ -595,8 +595,15 @@ class DashboardController extends Controller
 
         // Daftar pencapaian lokasi / daerah
         $achievments   = $districtModel->achievementDistrict($regency_id);
+        $data_achievments = [];
+        // tampilkan yang hanya ada datanya saja / realisasi tidak kosong
+        foreach($achievments as $val){
+            if ($val->realisasi_member != 0) {
+                $data_achievments[] = $val;
+            }
+        }
         if (request()->ajax()) {
-            return DataTables::of($achievments)
+            return DataTables::of($data_achievments)
                     ->addColumn('persentage', function($item){
                         $gF   = app('GlobalProvider'); // global function
                         $persentage = ($item->realisasi_member / $item->total_target_member)*100;

@@ -90,7 +90,7 @@ class District extends Model
                 count(a.id) as realisasi_member,
                 count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
                 from users as a
-                join villages as b on a.village_id = b.id
+                right join villages as b on a.village_id = b.id
                 join districts as c on b.district_id = c.id
                 where c.regency_id = $regency_id
                 group by c.id, c.name order by c.name asc";

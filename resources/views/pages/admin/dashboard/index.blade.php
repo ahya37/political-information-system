@@ -241,7 +241,7 @@
                         </div>
                     </div>
                   </div>
-                  {{-- <div class="row">
+                  <div class="row">
 
                     <div class="col-md-12">
                      <div class="card mb-2">
@@ -270,7 +270,7 @@
                        </div>
                      </div>
                    </div>
-                  </div> --}}
+                  </div>
                 </div>
               </div>
             </div>
@@ -290,6 +290,34 @@
 {!! $chart_jobs->script() !!}
 {!! $chart_inputer->script() !!}
 <script src="{{ asset('js/dashboard-nation.js') }}" ></script>
+<script>
+       var datatable = $('#achievment').DataTable({
+            processing: true,
+            language:{
+              processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
+            },
+            serverSide: true,
+            ordering: true,
+            ajax: {
+                url: '{!! url()->current() !!}',
+            },
+            columns:[
+                {data: 'name', name:'name'},
+                {data: 'total_district', name:'total_district', className: "text-right"},
+                {data: 'target_member', name:'target_member',className: "text-right"},
+                {data: 'realisasi_member', name:'realisasi_member',className: "text-right"},
+                {data: 'persentage', name:'persentage'},
+                {data: 'todays_achievement', name:'todays_achievement',className: "text-right"}
+
+            ],
+              columnDefs: [
+              {
+                targets: [1,2,3,5],
+                render: $.fn.dataTable.render.number('.', '.', 0, '')
+              }
+            ],
+        });
+</script>
 <script>
   // member calculate
       Highcharts.chart('province', {
