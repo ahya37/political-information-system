@@ -66,7 +66,7 @@ class DashboardController extends Controller
 
         // grafik data job
         $jobModel  = new Job();
-        $most_jobs = $jobModel->getMostJobs();
+        // $most_jobs = $jobModel->getMostJobs();
         $jobs      = $jobModel->getJobs();
         $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
         $chart_jobs= $ChartJobs['chart_jobs'];
