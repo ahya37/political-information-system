@@ -63,7 +63,15 @@ class DashboardController extends Controller
         // grafik data anggota terdaftar vs target
         $member_registered  = $userModel->getMemberRegisteredAll();
         $chart_member_registered = $GrafikProvider->getGrafikMemberRegistered($member_registered);
-        
+
+        // grafik data job
+        $jobModel  = new Job();
+        $most_jobs = $jobModel->getMostJobs();
+        $jobs      = $jobModel->getJobs();
+        $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
+        $chart_jobs= $ChartJobs['chart_jobs'];
+        $colors    = $ChartJobs['colors'];
+
         // grafik data jenis kelamin
         $gender     = $userModel->getGenders();
         $CatGender  = $GrafikProvider->getGrafikGender($gender);
@@ -71,7 +79,7 @@ class DashboardController extends Controller
         $total_male_gender  = $CatGender['total_male_gender'];
         $total_female_gender = $CatGender['total_female_gender'];
         
-        return view('pages.admin.dashboard.index', compact('cat_gender','total_female_gender','total_male_gender','chart_member_registered','cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
+        return view('pages.admin.dashboard.index', compact('chart_jobs','cat_gender','total_female_gender','total_male_gender','chart_member_registered','cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
     }
 
     public function province($province_id)
