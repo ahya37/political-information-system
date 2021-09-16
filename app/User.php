@@ -220,7 +220,7 @@ class User extends Authenticatable
         return $result;
     }
 
-    public function rangeAgea()
+    public function rangeAge()
     {
         $sql = "SELECT 
             CASE 
@@ -241,10 +241,6 @@ class User extends Authenticatable
             from 
             (
                 select date_berth, TIMESTAMPDIFF(YEAR, date_berth, CURDATE()) as age from users as a
-                join villages as b on a.village_id = b.id
-                join districts as c on b.district_id = c.id
-                join regencies as d on c.regency_id = d.id
-                join provinces as e on d.province_id = e.id
             ) as tb_age
             group by range_age order by range_age asc";
         $result = DB::select($sql);

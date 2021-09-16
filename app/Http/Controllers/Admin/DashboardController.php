@@ -78,8 +78,14 @@ class DashboardController extends Controller
         $cat_gender = $CatGender['cat_gender'];
         $total_male_gender  = $CatGender['total_male_gender'];
         $total_female_gender = $CatGender['total_female_gender'];
+
+        // range umur
+        $range_age     = $userModel->rangeAge();
+        $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
+        $cat_range_age = $CatRange['cat_range_age'];
+        $cat_range_age_data = $CatRange['cat_range_age_data'];
         
-        return view('pages.admin.dashboard.index', compact('chart_jobs','cat_gender','total_female_gender','total_male_gender','chart_member_registered','cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
+        return view('pages.admin.dashboard.index', compact('cat_range_age','cat_range_age_data','chart_jobs','cat_gender','total_female_gender','total_male_gender','chart_member_registered','cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
     }
 
     public function province($province_id)
