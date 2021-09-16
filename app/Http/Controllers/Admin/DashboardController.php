@@ -121,17 +121,9 @@ class DashboardController extends Controller
 
         // generasi umur
         $gen_age     = $userModel->generationAgeProvince($province_id);
-        $cat_gen_age = [];
-        $cat_gen_age_data = [];
-        foreach ($gen_age as $val) {
-            if (isset($val->gen_age) != null) {
-                # code...
-                $cat_gen_age[]      = $val->gen_age;
-                $cat_gen_age_data[] = [
-                    'y'    => $val->total
-                ];
-            }
-        }
+        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        $cat_gen_age = $GenAge['cat_gen_age'];
+        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
 
         // Daftar pencapaian lokasi / daerah
         $achievments   = $regencyModel->achievementProvince($province_id);
@@ -166,15 +158,9 @@ class DashboardController extends Controller
 
         // anggota dengan referal terbanyak
         $referal      = $referalModel->getReferalProvince($province_id);
-        $cat_referal      = [];
-        $cat_referal_data = [];
-        foreach ($referal as $val) {
-            $cat_referal[] = $val->name; 
-            $cat_referal_data[] = [
-                "y" => $val->total_referal,
-                "url" => route('admin-dashboard')
-            ];
-        }
+        $CatReferal   = $GrafikProvider->getGrafikReferal($referal);
+        $cat_referal      = $CatReferal['cat_referal'];
+        $cat_referal_data = $CatReferal['cat_referal_data'];
 
         return view('pages.admin.dashboard.province', compact('province','chart_member_registered','cat_gen_age_data','cat_gen_age','chart_inputer','most_jobs','colors','chart_jobs','cat_referal_data','cat_referal','cat_range_age','cat_range_age_data','total_male_gender','total_female_gender','regency','cat_gender','cat_regency_data','cat_regency','gF','total_member','persentage_target_member','target_member','total_village_filled','presentage_village_filled','total_village'));
     }
@@ -241,17 +227,9 @@ class DashboardController extends Controller
 
         // generasi umur
         $gen_age     = $userModel->generationAgeRegency($regency_id);
-        $cat_gen_age = [];
-        $cat_gen_age_data = [];
-        foreach ($gen_age as $val) {
-            if (isset($val->gen_age) != null) {
-                # code...
-                $cat_gen_age[]      = $val->gen_age;
-                $cat_gen_age_data[] = [
-                    'y'    => $val->total
-                ];
-            }
-        }
+        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        $cat_gen_age = $GenAge['cat_gen_age'];
+        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
 
         // Daftar pencapaian lokasi / daerah
         $achievments   = $districtModel->achievementDistrict($regency_id);
@@ -287,15 +265,9 @@ class DashboardController extends Controller
          // anggota dengan referal terbanyak
         $referalModel = new Referal();
         $referal      = $referalModel->getReferalRegency($regency_id);
-        $cat_referal      = [];
-        $cat_referal_data = [];
-        foreach ($referal as $val) {
-            $cat_referal[] = $val->name; 
-            $cat_referal_data[] = [
-                "y" => $val->total_referal,
-                "url" => route('admin-dashboard')
-            ];
-        }
+        $CatReferal   = $GrafikProvider->getGrafikReferal($referal);
+        $cat_referal      = $CatReferal['cat_referal'];
+        $cat_referal_data = $CatReferal['cat_referal_data'];
 
         return view('pages.admin.dashboard.regency', compact('cat_inputer','chart_inputer','cat_gen_age','cat_gen_age_data','chart_member_registered','cat_referal_data','cat_referal','cat_range_age_data','cat_range_age','total_male_gender','total_female_gender','regency','gender','cat_gender','chart_jobs','total_member','target_member','persentage_target_member','gF','total_village','total_village_filled','presentage_village_filled','cat_districts','cat_districts_data'));
     }
@@ -363,17 +335,9 @@ class DashboardController extends Controller
 
         // generasi umur
         $gen_age     = $userModel->generationAgeDistrict($district_id);
-        $cat_gen_age = [];
-        $cat_gen_age_data = [];
-        foreach ($gen_age as $val) {
-            if (isset($val->gen_age) != null) {
-                # code...
-                $cat_gen_age[]      = $val->gen_age;
-                $cat_gen_age_data[] = [
-                    'y'    => $val->total
-                ];
-            }
-        }
+        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        $cat_gen_age = $GenAge['cat_gen_age'];
+        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
 
          // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillage($district_id);
@@ -396,14 +360,10 @@ class DashboardController extends Controller
         // anggota dengan referal terbanyak
         $referalModel = new Referal();
         $referal      = $referalModel->getReferalDistrict($district_id);
-        $cat_referal      = [];
-        $cat_referal_data = [];
-        foreach ($referal as $val) {
-            $cat_referal[] = $val->name; 
-            $cat_referal_data[] = [
-                "y" => $val->total_referal
-            ];
-        }
+        $CatReferal   = $GrafikProvider->getGrafikReferal($referal);
+        $cat_referal      = $CatReferal['cat_referal'];
+        $cat_referal_data = $CatReferal['cat_referal_data'];
+
         return view('pages.admin.dashboard.district', compact('chart_inputer','cat_gen_age','cat_gen_age_data','chart_jobs','chart_member_registered','cat_referal_data','cat_referal','cat_range_age_data','cat_range_age','total_male_gender','total_female_gender','cat_gender','cat_districts','cat_districts_data','total_village_filled','presentage_village_filled','total_village','target_member','persentage_target_member','district','gF','total_member'));
     }
 
@@ -448,17 +408,9 @@ class DashboardController extends Controller
         
         // generasi umur
         $gen_age     = $userModel->generationAgeDistrict($district_id);
-        $cat_gen_age = [];
-        $cat_gen_age_data = [];
-        foreach ($gen_age as $val) {
-            if (isset($val->gen_age) != null) {
-                # code...
-                $cat_gen_age[]      = $val->gen_age;
-                $cat_gen_age_data[] = [
-                    'y'    => $val->total
-                ];
-            }
-        }
+        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        $cat_gen_age = $GenAge['cat_gen_age'];
+        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
 
         $referalModel = new Referal();
         // input admin terbanyak
@@ -476,14 +428,9 @@ class DashboardController extends Controller
         // anggota dengan referal terbanyak
         $referalModel = new Referal();
         $referal      = $referalModel->getReferalVillage($village_id);
-        $cat_referal      = [];
-        $cat_referal_data = [];
-        foreach ($referal as $val) {
-            $cat_referal[] = $val->name; 
-            $cat_referal_data[] = [
-                "y" => $val->total_referal
-            ];
-        }
+        $CatReferal   = $GrafikProvider->getGrafikReferal($referal);
+        $cat_referal      = $CatReferal['cat_referal'];
+        $cat_referal_data = $CatReferal['cat_referal_data'];
 
         // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillageFirst($village_id);

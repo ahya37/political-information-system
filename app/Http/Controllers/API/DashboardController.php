@@ -9,7 +9,7 @@ use App\Providers\GetRegencyId;
 
 class DashboardController extends Controller
 {
-    public function memberReportPerMountProvince($daterange)
+    public function memberReportPerMountProvince($daterange, $provinceID)
     {
         if ($daterange != '') {
             $date  = explode('+', $daterange);
@@ -18,7 +18,7 @@ class DashboardController extends Controller
         }
         // dd($start);
 
-        $province_id = 36;
+        $province_id = $provinceID;
         $userModel = new User();
         $member    = $userModel->getMemberRegisteredByDayProvince($province_id, $start, $end); 
        

@@ -180,4 +180,40 @@ class GrafikProvider extends ServiceProvider
         $data = ['cat_range_age' => $cat_range_age, 'cat_range_age_data' => $cat_range_age_data];
         return $data;
     }
+
+    public function getGrafikGenAge($gen_age)
+    {
+        $cat_gen_age = [];
+        $cat_gen_age_data = [];
+        foreach ($gen_age as $val) {
+            if (isset($val->gen_age) != null) {
+                # code...
+                $cat_gen_age[]      = $val->gen_age;
+                $cat_gen_age_data[] = [
+                    'y'    => $val->total
+                ];
+            }
+        }
+
+        $data = ['cat_gen_age' => $cat_gen_age,'cat_gen_age_data' => $cat_gen_age_data];
+        return $data;
+    }
+
+    public function getGrafikReferal($referal)
+    {
+        $cat_referal      = [];
+        $cat_referal_data = [];
+        foreach ($referal as $val) {
+            $cat_referal[] = $val->name; 
+            $cat_referal_data[] = [
+                "y" => $val->total_referal,
+                // "url" => route('admin-dashboard')
+            ];
+        }
+
+        $data = ['cat_referal' => $cat_referal,'cat_referal_data' => $cat_referal_data];
+        return $data;
+    }
+
+
 }
