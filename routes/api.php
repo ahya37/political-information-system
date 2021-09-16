@@ -30,6 +30,7 @@ Route::get('register/check', 'Auth\RegisterController@check')->name('api-registe
 Route::get('reveral/check', 'Auth\RegisterController@reveral')->name('api-reveral-check');
 Route::get('reveral/name/{code}', 'Auth\RegisterController@reveralName');
 
+Route::get('member/nation/{daterange}','API\DashboardController@memberReportPerMountNation');
 Route::get('member/province/{daterange}/{provinceID}','API\DashboardController@memberReportPerMountProvince');
 Route::get('member/regency/{daterange}/{regencyID}','API\DashboardController@memberReportPerMountRegency');
 Route::get('member/district/{daterange}/{districtID}','API\DashboardController@memberReportPerMountDistrict');

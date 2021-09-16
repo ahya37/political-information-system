@@ -224,7 +224,7 @@
                     </div>
                   </div>
                    <div class="col-md-12">
-                    {{-- <div class="card mb-2">
+                    <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Capaian Anggota Perhari</h6>
                         <div class="row">
@@ -240,7 +240,7 @@
                           </div>
                         </div>
                     </div>
-                  </div> --}}
+                  </div>
                   {{-- <div class="row">
 
                     <div class="col-md-12">
@@ -289,6 +289,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
 {!! $chart_jobs->script() !!}
 {!! $chart_inputer->script() !!}
+<script src="{{ asset('js/dashboard-nation.js') }}" ></script>
 <script>
   // member calculate
       Highcharts.chart('province', {

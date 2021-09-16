@@ -510,7 +510,18 @@ class User extends Authenticatable
                     join villages as b on a.village_id = b.id 
                     join districts as c on b.district_id = c.id
                     join regencies as d on c.regency_id = d.id
-                    where a.created_at between '".$start."' and '".$end."' and d.province_id = ".$province_id."
+                    where a.created_at between '".$start."' and '".$end."' and d.province_id = ".$province_id." 
+                    and a.village_id is not null
+                    group by day  order by DATE(a.created_at) asc";
+        $result = DB::select($sql);
+        return $result;
+    }
+
+    public function getMemberRegisteredByDayNation($start, $end)
+    {
+        $sql  = "select count(a.id) as total, DATE(a.created_at) as day from users as a
+                    where a.created_at between '".$start."' and '".$end."' 
+                    and a.village_id is not null
                     group by day  order by DATE(a.created_at) asc";
         $result = DB::select($sql);
         return $result;
@@ -523,6 +534,7 @@ class User extends Authenticatable
                     join districts as c on b.district_id = c.id
                     join regencies as d on c.regency_id = d.id
                     where a.created_at between '".$start."' and '".$end."' and d.id = $regency_id
+                    and a.village_id is not null
                     group by day  order by DATE(a.created_at) asc";
         $result = DB::select($sql);
         return $result;
@@ -534,6 +546,7 @@ class User extends Authenticatable
                     join villages as b on a.village_id = b.id 
                     join districts as c on b.district_id = c.id
                     where a.created_at between '".$start."' and '".$end."' and c.id = $district_id
+                    and a.village_id is not null
                     group by day  order by DATE(a.created_at) asc";
         $result = DB::select($sql);
         return $result;
@@ -544,6 +557,7 @@ class User extends Authenticatable
         $sql  = "select count(a.id) as total, DATE(a.created_at) as day from users as a
                     join villages as b on a.village_id = b.id 
                     where a.created_at between '".$start."' and '".$end."' and b.id = $village_id
+                    and a.village_id is not null
                     group by day  order by DATE(a.created_at) asc";
         $result = DB::select($sql);
         return $result;

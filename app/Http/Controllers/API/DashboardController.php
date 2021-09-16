@@ -9,6 +9,28 @@ use App\Providers\GetRegencyId;
 
 class DashboardController extends Controller
 {
+    public function memberReportPerMountNation($daterange)
+    {
+        if ($daterange != '') {
+            $date  = explode('+', $daterange);
+            $start = Carbon::parse($date[0])->format('Y-m-d');
+            $end   = Carbon::parse($date[1])->format('Y-m-d'); 
+        }
+        // dd($start);
+
+        $userModel = new User();
+        $member    = $userModel->getMemberRegisteredByDayNation($start, $end); 
+       
+        $data = [];
+        foreach ($member as $value) {
+            $data[] = [
+                'day' => date('d-m-Y', strtotime($value->day)),
+                'count' => $value->total
+            ];
+        }
+        return $data;
+    }
+
     public function memberReportPerMountProvince($daterange, $provinceID)
     {
         if ($daterange != '') {
