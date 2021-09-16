@@ -75,9 +75,12 @@ class GrafikProvider extends ServiceProvider
         $gF   = app('GlobalProvider'); // global function
         $cat_member_registered = [];
         foreach($member_registered as $val){
-            $cat_member_registered['label'][] = $val->name;
-            $cat_member_registered['data'][]  = $gF->persen(($val->realisasi_member / $val->target_member)*100);
-            $cat_member_registered['target'][] = $val->target_member;
+            if ($val->realisasi_member != 0) {
+                # code...
+                $cat_member_registered['label'][] = $val->name;
+                $cat_member_registered['data'][]  = $gF->persen(($val->realisasi_member / $val->target_member)*100);
+                $cat_member_registered['target'][] = $val->target_member;
+            }
         }
         $label_member_registered    = collect($cat_member_registered['label']);
         $colors           = $label_member_registered->map(function($item){return $rand_color = '#00FF00';});
@@ -213,6 +216,43 @@ class GrafikProvider extends ServiceProvider
 
         $data = ['cat_referal' => $cat_referal,'cat_referal_data' => $cat_referal_data];
         return $data;
+    }
+
+   public function getGrafikMemberRegisteredDistrict($member_registered)
+    {
+        $gF   = app('GlobalProvider'); // global function
+        $cat_member_registered = [];
+        foreach($member_registered as $val){
+            if ($val->realisasi_member != 0) {
+                # code...
+                $cat_member_registered['label'][] = $val->name;
+                $cat_member_registered['data'][]  = $gF->persen(($val->realisasi_member / $val->target_member)*100);
+                $cat_member_registered['target'][] = $gF->decimalFormat($val->target_member / $val->total_village);
+            }
+        }
+        $label_member_registered    = collect($cat_member_registered['label']);
+        $colors           = $label_member_registered->map(function($item){return $rand_color = '#00FF00';});
+        $colors_target    = $label_member_registered->map(function($item){return $rand_color = '#CC0000';});
+        $chart_member_registered    = app()->chartjs
+                                    ->name('registerGrafik')
+                                    ->type('bar')
+                                    ->labels($cat_member_registered['label'])
+                                    ->datasets([
+                                        [
+                                            "label" => "Terdaftar",
+                                            'backgroundColor' => $colors,
+                                            'data' =>  $cat_member_registered['data']
+                                        ],
+                                        [
+                                            "label" => "Target",
+                                            'backgroundColor' => $colors_target,
+                                            'data' => $cat_member_registered['target']
+                                        ]
+                                    ])
+                                    ->options([
+                                        'legend' => false,
+                                    ]);
+        return $chart_member_registered;
     }
 
 

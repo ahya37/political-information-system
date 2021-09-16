@@ -453,7 +453,7 @@ class User extends Authenticatable
                 count(a.id) as realisasi_member
                 from users as a
                 join villages as b on a.village_id = b.id
-                join districts as c on b.district_id = c.id
+                right join districts as c on b.district_id = c.id
                 join regencies as d on c.regency_id = d.id 
                 join provinces as e on d.province_id  = e.id 
                 group by e.id, e.name";
@@ -465,10 +465,13 @@ class User extends Authenticatable
     {
          $sql = "SELECT d.id, d.name,
                 count(DISTINCT(c.id)) * 5000 target_member,
-                count(a.id) as realisasi_member
+                count(a.id) as realisasi_member,
+                (
+                	SELECT  COUNT(id) from regencies where province_id = $province_id
+                ) as total_child
                 from users as a
                 join villages as b on a.village_id = b.id
-                join districts as c on b.district_id = c.id
+                right join districts as c on b.district_id = c.id
                 join regencies as d on c.regency_id = d.id 
                 where d.province_id = $province_id
                 group by d.id, d.name";
@@ -494,7 +497,10 @@ class User extends Authenticatable
     {
          $sql = "SELECT b.id, b.name,
                 count(DISTINCT(c.id)) * 5000 target_member,
-                count(a.id) as realisasi_member
+                count(a.id) as realisasi_member,
+                 (
+                	SELECT count(id) from villages  where district_id = $district_id
+                ) as total_village
                 from users as a
                 join villages as b on a.village_id = b.id
                 join districts as c on b.district_id = c.id

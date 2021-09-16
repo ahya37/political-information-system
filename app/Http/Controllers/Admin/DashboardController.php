@@ -31,6 +31,8 @@ class DashboardController extends Controller
     public function index()
     {
         $gF   = app('GlobalProvider'); // global function
+        $GrafikProvider = new GrafikProvider();
+
 
         $userModel        = new User();
         $total_member     = $userModel->where('village_id', '!=', NULL)->count();
@@ -57,8 +59,19 @@ class DashboardController extends Controller
                 "url" => route('admin-dashboard-province', $val->province_id)
             ];
         }
+
+        // grafik data anggota terdaftar vs target
+        $member_registered  = $userModel->getMemberRegisteredAll();
+        $chart_member_registered = $GrafikProvider->getGrafikMemberRegistered($member_registered);
         
-        return view('pages.admin.dashboard.index', compact('cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
+        // grafik data jenis kelamin
+        $gender     = $userModel->getGenders();
+        $CatGender  = $GrafikProvider->getGrafikGender($gender);
+        $cat_gender = $CatGender['cat_gender'];
+        $total_male_gender  = $CatGender['total_male_gender'];
+        $total_female_gender = $CatGender['total_female_gender'];
+        
+        return view('pages.admin.dashboard.index', compact('cat_gender','total_female_gender','total_male_gender','chart_member_registered','cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
     }
 
     public function province($province_id)
@@ -310,7 +323,7 @@ class DashboardController extends Controller
 
         // grafik data anggota terdaftar vs target
         $member_registered  = $userModel->getMemberRegisteredDistrct($district_id);
-        $chart_member_registered = $GrafikProvider->getGrafikMemberRegistered($member_registered);
+        $chart_member_registered = $GrafikProvider->getGrafikMemberRegisteredDistrict($member_registered);
 
         // grafik data job
         $jobModel = new Job();
