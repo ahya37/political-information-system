@@ -205,12 +205,13 @@
                                   <table id="data" class="table table-sm table-striped" width="100%">
                                     <thead>
                                       <tr>
-                                        <th>Nama</th>
-                                        <th>Kabupaten/Kota</th>
-                                        <th>Kecamatan</th>
-                                        <th>Desa</th>
-                                        <th>Referal Dari</th>
-                                        {{-- <th></th> --}}
+                                        <th>ID</th>
+                                        <th>NAMA</th>
+                                        <th>KABUPATEN / KOTA</th>
+                                        <th>KECAMATAN</th>
+                                        <th>DESA</th>
+                                        <th>REFERAL DARI</th>
+                                        <th>TERDAFTAR</th>
                                       </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -336,19 +337,20 @@
                 url: '{!! url()->current() !!}',
             },
             columns:[
+               {data: 'id', name:'id'},
                 {data: 'photo', name:'photo'},
                 {data: 'regency', name:'regency'},
                 {data: 'district', name:'district'},
                 {data: 'village', name:'village'},
                 {data: 'referal', name:'referal'},
-                // {data: 'saved_nasdem', name:'saved_nasdem'},
-                // {
-                //     data: 'action', 
-                //     name:'action',
-                //     orderable: false,
-                //     searchable: false,
-                //     width: '15%'
-                // },
+                {data: 'register', name:'register'},
+            ],
+            order: [[0, "desc"]],
+            columnDefs:[
+              {
+                "targets": [ 0 ],
+                "visible": false
+              }
             ]
         });
 

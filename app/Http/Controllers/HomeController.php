@@ -93,7 +93,10 @@ class HomeController extends Controller
                     ->addColumn('referal', function($item){
                         return $item->referal;
                     })
-                    ->rawColumns(['action','photo','referal'])
+                     ->addColumn('register', function($item){
+                        return date('d-m-Y', strtotime($item->created_at));
+                    })
+                    ->rawColumns(['action','photo','referal','register'])
                     ->make();
         }
 

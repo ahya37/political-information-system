@@ -17,6 +17,12 @@
             >
               Event
             </a>
+            <a
+              href="{{ route('member-registered-user') }}"
+              class="list-group-item list-group-item-action {{ (request()->is('user/registered*')) ? 'active' : '' }}"
+            >
+              Anggota Terdaftar
+            </a>
              <a class="list-group-item d-lg-none list-group-item-action" href="{{ route('logout') }}"
                     onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();">

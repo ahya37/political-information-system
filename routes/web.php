@@ -56,6 +56,9 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 
         Route::get('/event','EventController@index')->name('member-event');
         Route::get('/event/absen/{event_detail_id}','EventController@storeAbsen')->name('member-event-absen');
+        
+        Route::get('/registered','UserController@memberRegister')->name('member-registered-user');
+        
 
     });
 

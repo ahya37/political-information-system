@@ -153,12 +153,6 @@
                                     >
                                       Edit Profil
                                     </a>
-                                    <a
-                                      href="{{ route('user-profile-edit-referal', encrypt($profile->id)) }}"
-                                      class="btn btn-sm btn-sc-secondary btn-lg"
-                                    >
-                                      Edit Referal
-                                    </a>
 
                                   </div>
                                 </div>
@@ -204,10 +198,11 @@
                                   <table id="data" class="table table-sm table-striped">
                                     <thead>
                                       <tr>
-                                        <th scope="col">Nama</th>
-                                        <th scope="col">Kabupaten/Kota</th>
-                                        <th scope="col">Kecamatan</th>
-                                        <th scope="col">Desa</th>
+                                        <th>NAMA</th>
+                                        <th>KABUPATEN / KOTA</th>
+                                        <th>KECAMATAN</th>
+                                        <th>DESA</th>
+                                        <th>TERDAFTAR</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -226,6 +221,7 @@
                                         <td>{{ $row->village->district->regency->name ?? ''}}</td>
                                         <td>{{ $row->village->district->name ?? ''}}</td>
                                         <td>{{ $row->village->name ?? ''}}</td>
+                                        <td>{{ date('d-m-Y', strtotime($row->created_at))}}</td>
                                       </tr>
                                       @endforeach
                                     </tbody>

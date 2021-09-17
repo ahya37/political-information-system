@@ -50,7 +50,7 @@ class UserController extends Controller
         $id_user = decrypt($id);
         $userModel = new User();
         $profile = $userModel->with(['village'])->where('id', $id_user)->first();
-        $member  = $userModel->with(['village'])->where('user_id', $id_user)->whereNotIn('id', [$id_user])->get();
+        $member  = $userModel->with(['village'])->where('user_id', $id_user)->whereNotIn('id', [$id_user])->orderBy('id','DESC')->get();
 
         // referal langsung
         $referal_undirect = $userModel->getReferalUnDirect($id_user);
@@ -359,7 +359,7 @@ class UserController extends Controller
                     'user_id' => $user_referal->id
                     ]);
             }
-            return redirect()->route('member-mymember', ['id' => $id])->with('success','Referal telah diperbarui');
+            return redirect()->route('member-registered-user')->with('success','Referal telah diperbarui');
         }
     }
 
@@ -469,5 +469,51 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('home');
+    }
+
+    public function memberRegister()
+    {
+        $user_id  = Auth::user()->id;
+        $member   = User::with(['village.district.regency','reveral','create_by'])
+                    ->where('cby', $user_id)
+                    ->orderBy('created_at','DESC')
+                    ->get();
+
+            if (request()->ajax()) 
+            {
+                return DataTables::of($member)
+                        ->addColumn('action', function($item){
+                            return '
+                                <div class="btn-group">
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
+                                        <div class="dropdown-menu">
+                                             <a
+                                                href="'.route('user-profile-edit-referal', encrypt($item->id)).'"
+                                                class="btn "
+                                                >
+                                                Edit Referal
+                                                </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            ';
+                        })
+                        ->addColumn('photo', function($item){
+                            return '
+                                <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                                '.$item->name.'
+                            ';
+                        })
+                        ->addColumn('referal', function($item){
+                            return $item->referal;
+                        })
+                        ->addColumn('register', function($item){
+                            return date('d-m-Y', strtotime($item->created_at));
+                        })
+                        ->rawColumns(['action','photo','referal','register'])
+                        ->make();
+                    }
+                    return view('pages.member.member-register');
     }
 }

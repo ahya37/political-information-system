@@ -12,7 +12,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Edit Referal Anggota</h2>
+                <h2 class="dashboard-title">Edit Referal Anggota {{ $profile->name }}</h2>
                 <p class="dashboard-subtitle">
                     Informasi Detail Profil
                 </p>
