@@ -130,7 +130,7 @@
                       <div class="card-body">
                         <h6 class="text-center">Anggota Terdaftar VS Target (%)</h6>
                         <div>
-                          {{-- {!! $chart_member_registered->render() !!} --}}
+                          {!! $chart_member_registered->render() !!}
                         </div>
                       </div>
                     </div>
