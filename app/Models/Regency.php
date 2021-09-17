@@ -79,10 +79,10 @@ class Regency extends Model
                 count(a.name) as total_member
                 from users as a 
                 join villages as b on a.village_id = b.id 
-                join districts as c on b.district_id = c.id
+                right join districts as c on b.district_id = c.id
                 join regencies as d on c.regency_id = d.id
                 join provinces as e on d.province_id = e.id
-                GROUP by e.id, e.name";
+                GROUP by e.id, e.name HAVING COUNT(a.id) !=  0";
         return DB::select($sql);
     }
 
@@ -124,10 +124,10 @@ class Regency extends Model
             count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
             from users as a
             join villages as b on a.village_id = b.id
-            right  join districts as c on b.district_id = c.id
+            right join districts as c on b.district_id = c.id
             join regencies as d on c.regency_id = d.id 
             join provinces as e on d.province_id = e.id
-            group by e.id, e.name";
+            group by e.id, e.name HAVING COUNT(a.id) !=  0";
         return DB::select($sql);
     }
     

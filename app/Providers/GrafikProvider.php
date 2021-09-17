@@ -75,12 +75,10 @@ class GrafikProvider extends ServiceProvider
         $gF   = app('GlobalProvider'); // global function
         $cat_member_registered = [];
         foreach($member_registered as $val){
-            if ($val->realisasi_member != 0) {
-                # code...
                 $cat_member_registered['label'][] = $val->name;
                 $cat_member_registered['data'][]  = $gF->persen(($val->realisasi_member / $val->target_member)*100);
                 $cat_member_registered['target'][] = $val->target_member;
-            }
+            
         }
         $label_member_registered    = collect($cat_member_registered['label']);
         $colors           = $label_member_registered->map(function($item){return $rand_color = '#00FF00';});

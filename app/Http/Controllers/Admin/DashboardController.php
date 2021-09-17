@@ -62,6 +62,7 @@ class DashboardController extends Controller
 
         // grafik data anggota terdaftar vs target
         $member_registered  = $userModel->getMemberRegisteredAll();
+
         $chart_member_registered = $GrafikProvider->getGrafikMemberRegistered($member_registered);
 
         // grafik data job
@@ -110,15 +111,8 @@ class DashboardController extends Controller
 
         // Daftar pencapaian lokasi / daerah
         $achievments   = $regencyModel->achievements();
-        $data_achievments = [];
-        // tampilkan yang hanya ada datanya saja / realisasi tidak kosong
-        foreach($achievments as $val){
-            if ($val->realisasi_member != 0) {
-                $data_achievments[] = $val;
-            }
-        }
         if (request()->ajax()) {
-            return DataTables::of($data_achievments)
+            return DataTables::of($achievments)
                     ->addColumn('persentage', function($item){
                         $gF   = app('GlobalProvider'); // global function
                         $persentage = ($item->realisasi_member / $item->target_member)*100;
