@@ -94,14 +94,14 @@ class DashboardController extends Controller
 
         $referalModel = new Referal();
         // input admin terbanyak
-        // $inputer      = $referalModel->getInputers();
-        // $cat_inputer = [];
-        // foreach($inputer as $val){
-        //     $cat_inputer['label'][] = $val->name;
-        //     $cat_inputer['data'][]  = $val->total_data;
-        // }
+        $inputer      = $referalModel->getInputers();
+        $cat_inputer = [];
+        foreach($inputer as $val){
+            $cat_inputer['label'][] = $val->name;
+            $cat_inputer['data'][]  = $val->total_data;
+        }
         // get fungsi grafik admin input terbanyak
-        // $chart_inputer  = $GrafikProvider->getGrafikInputer($cat_inputer);
+        $chart_inputer  = $GrafikProvider->getGrafikInputer($cat_inputer);
 
         // anggota dengan referal terbanyak
         $referal      = $referalModel->getReferals();
@@ -127,7 +127,7 @@ class DashboardController extends Controller
                     ->rawColumns(['persentage'])
                     ->make();
         }
-        return view('pages.admin.dashboard.index', compact('cat_referal_data','cat_referal','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
+        return view('pages.admin.dashboard.index', compact('chart_inputer','cat_referal_data','cat_referal','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
         
         // return view('pages.admin.dashboard.index', compact('cat_referal_data','cat_referal','chart_inputer','cat_gen_age','cat_gen_age_data','cat_range_age','cat_range_age_data','chart_jobs','cat_gender','total_female_gender','total_male_gender','chart_member_registered','cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
     }
