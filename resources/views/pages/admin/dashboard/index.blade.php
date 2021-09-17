@@ -320,59 +320,7 @@
 </script>
 <script>
   // member calculate
-      Highcharts.chart('province', {
-         credits: {
-            enabled: false
-        },
-         legend: {enabled: false},
-          chart: {
-              type: 'column'
-          },
-          title: {
-              text: 'Anggota Terdaftar'
-          },
-          xAxis: {
-              categories: {!! json_encode($cat_province) !!},
-              crosshair: true
-          },
-          yAxis: {
-              min: 0,
-              title: {
-                  text: 'Jumlah'
-              }
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              },
-              series: {
-                    stacking: 'normal',
-                    borderRadius: 3,
-                    cursor: 'pointer',
-                    point: {
-                        events: {
-                            click: function(event) {
-                            // console.log(this.url);
-                            window.location.assign(this.url);
-                            }
-                        }
-                    }
-                }
-          },
-          series: [{
-              colorByPoint: true,
-              name:"",
-              data: {!! json_encode($cat_province_data) !!}
-
-          }]
-      });
+     
 
 
   // grafik anggota referal terbanyak
