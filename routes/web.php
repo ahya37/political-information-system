@@ -28,7 +28,9 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 
     Route::get('/profile', 'UserController@index')->name('user-profile');
     Route::get('/profile/edit/{id}', 'UserController@edit')->name('user-profile-edit');
+    Route::get('/profile/editreferal/{id}', 'UserController@editReferal')->name('user-profile-edit-referal');
     Route::post('/profile/update/{id}', 'UserController@update')->name('user-profile-update');
+    Route::post('/profile/update/referal/{id}', 'UserController@updateReferalMember')->name('user-profile-update-referal');
     Route::post('/profile/update/myprofile/{id}', 'UserController@updateMyProfile')->name('user-myprofile-update');
 
     Route::get('/profile/create', 'UserController@create')->name('user-create-profile');

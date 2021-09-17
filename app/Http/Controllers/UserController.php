@@ -8,6 +8,7 @@ use App\Menu;
 use App\User;
 use App\UserMenu;
 use App\AdminDistrict;
+use App\LogEditUser;
 use App\Models\District;
 use App\Providers\StrRandom;
 use Illuminate\Http\Request;
@@ -164,6 +165,13 @@ class UserController extends Controller
         return view('pages.profile.edit', compact('profile'));
     }
 
+    public function editReferal($id)
+    {
+        $id = decrypt($id);
+        $profile = app('UserModel')->getProfile($id);
+        return view('pages.profile.edit-referal', compact('profile'));
+    }
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -255,7 +263,8 @@ class UserController extends Controller
 
     public function updateMyProfile(Request $request, $id)
     {        
-        $user = User::where('id', $id)->first();
+        $userModel = new User();
+        $user      = $userModel->where('id', $id)->first();
 
         if ($request->hasFile('photo') || $request->hasFile('ktp')) {
             // delete foto lama
@@ -321,6 +330,36 @@ class UserController extends Controller
         }else{
             #jika anggotanya redireck ke dashoard anggotanya
             return redirect()->route('member-mymember', ['id' => $id]);
+        }
+    }
+
+    public function updateReferalMember(Request $request, $id)
+    {
+        $userModel = new User();
+        $user = $userModel->where('id', $id)->first();
+        $id = encrypt($id);
+
+         // cek referal jika tidak  terdaftar
+        $user_referal     = $userModel->select('code','id')->where('code', $request->code)->first();
+        if ($user_referal == null) {
+             return redirect()->back()->with(['error' => 'Kode Reveral yang anda gunakan tidak terdaftar']);
+        }else{
+
+            // jika referal itu milik user yang di edit, maka tolak
+            if ($user->id == $user_referal->id) {
+                return redirect()->back()->with(['error' => 'Anda tidak bisa mengubah referal dengan dirinya sendiri']);
+            }else{
+                // save log edit user beserta alasannya
+                LogEditUser::create([
+                    'user_id' => $user->id,
+                    'reason' => $request->reason
+                    ]);
+    
+                $user->update([
+                    'user_id' => $user_referal->id
+                    ]);
+            }
+            return redirect()->route('member-mymember', ['id' => $id])->with('success','Referal telah diperbarui');
         }
     }
 

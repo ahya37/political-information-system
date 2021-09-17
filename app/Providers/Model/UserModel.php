@@ -41,7 +41,8 @@ class UserModel extends ServiceProvider
                 ->leftJoin('provinces as e','d.province_id','=','e.id')
                 ->leftJoin('jobs as f','a.job_id','f.id')
                 ->leftJoin('educations as g','a.education_id','g.id')
-                ->select('a.*','f.id as job_id','g.id as education_id','b.name as village','b.id as village_id','c.name as district','c.id as district_id','d.name as regency','d.id as regency_id','e.name as province','e.id as province_id')
+                ->join('users as h','a.user_id','=','h.id')
+                ->select('a.*','f.id as job_id','g.id as education_id','b.name as village','b.id as village_id','c.name as district','c.id as district_id','d.name as regency','d.id as regency_id','e.name as province','e.id as province_id','h.code as referal_code')
                 ->where('a.id', $id)->first();
         return $sql;
     }

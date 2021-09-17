@@ -132,7 +132,7 @@
                           <nav>
                               <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                 <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true">Profil</a>
-                                <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-member" role="tab" aria-controls="nav-contact" aria-selected="false">Anggota Ku</a>
+                                <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-member" role="tab" aria-controls="nav-contact" aria-selected="false">Anggota Referal Ku</a>
                                 <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-kta" role="tab" aria-controls="nav-kta" aria-selected="false">KTA</a>
                                 <a class="nav-link" id="nav-rev-rev" data-toggle="tab" href="#nav-rev" role="tab" aria-controls="nav-kta" aria-selected="false">Reveral Ku</a>
 
@@ -152,6 +152,12 @@
                                       class="btn btn-sm btn-sc-primary btn-lg"
                                     >
                                       Edit Profil
+                                    </a>
+                                    <a
+                                      href="{{ route('user-profile-edit-referal', encrypt($profile->id)) }}"
+                                      class="btn btn-sm btn-sc-secondary btn-lg"
+                                    >
+                                      Edit Referal
                                     </a>
 
                                   </div>
