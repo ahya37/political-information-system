@@ -173,7 +173,7 @@
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Pekerjaan (%)</h6>
                        <div class="w-100">
-                           {{-- {!! $chart_jobs->container() !!} --}}
+                           {!! $chart_jobs->container() !!}
                         </div>
                       </div>
                       {{-- <div class="col-md-12 col-sm-12">
@@ -287,7 +287,7 @@
 <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
-{{-- {!! $chart_jobs->script() !!} --}}
+{!! $chart_jobs->script() !!}
 {!! $chart_inputer->script() !!}
 <script src="{{ asset('js/dashboard-nation.js') }}" ></script>
 <script>
