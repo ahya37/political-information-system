@@ -66,7 +66,7 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 });
 
 Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
-    Route::get('/login','LoginController@loginForm')->name('admin-login');
+    Route::get('auth/login','LoginController@loginForm')->name('admin-login');
     Route::post('/login','LoginController@login')->name('post-admin-login');
 
     Route::group(['middleware' => 'admin'], function(){
