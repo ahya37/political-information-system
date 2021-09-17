@@ -451,5 +451,15 @@
           }]
       });
 </script>
+<script>
+   // Gender
+      var donut_chart = Morris.Donut({
+          element: 'gender',
+          data: {!! json_encode($cat_gender) !!},
+          colors: ["#063df7","#EC407A"],
+          resize: true,
+          formatter: function (x) { return x + "%"}
+          });
+</script>
 
 @endpush
