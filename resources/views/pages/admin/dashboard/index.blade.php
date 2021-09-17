@@ -130,7 +130,7 @@
                       <div class="card-body">
                         <h6 class="text-center">Anggota Terdaftar VS Target (%)</h6>
                         <div>
-                          {!! $chart_member_registered->render() !!}
+                          {{-- {!! $chart_member_registered->render() !!} --}}
                         </div>
                       </div>
                     </div>
@@ -152,7 +152,7 @@
                             <span class="text-white">Laki-laki</span>
                             <br>
                             <span class="text-white">
-                              {{ $total_male_gender }}
+                              {{-- {{ $total_male_gender }} --}}
                             </span>
                           </div>
                         </div>
@@ -161,7 +161,7 @@
                             <span class="text-white">Perempuan</span>
                             <br>
                             <span class="text-white">
-                              {{ $total_female_gender }}
+                              {{-- {{ $total_female_gender }} --}}
                             </span>
                           </div>
                         </div>
@@ -173,7 +173,7 @@
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Pekerjaan (%)</h6>
                        <div class="w-100">
-                           {!! $chart_jobs->container() !!}
+                           {{-- {!! $chart_jobs->container() !!} --}}
                         </div>
                       </div>
                       {{-- <div class="col-md-12 col-sm-12">
@@ -206,7 +206,7 @@
                       </div>
                     </div>
                   </div>
-                   <div class="col-md-12">
+                   {{-- <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Admin Berdasarkan Input Terbanyak</h6>
@@ -215,7 +215,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> --}}
                   <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
@@ -287,8 +287,8 @@
 <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
-{!! $chart_jobs->script() !!}
-{!! $chart_inputer->script() !!}
+{{-- {!! $chart_jobs->script() !!} --}}
+{{-- {!! $chart_inputer->script() !!} --}}
 <script src="{{ asset('js/dashboard-nation.js') }}" ></script>
 <script>
        var datatable = $('#achievment').DataTable({
