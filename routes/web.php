@@ -71,39 +71,39 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
     Route::group(['middleware' => 'admin'], function(){
         Route::post('logout','LoginController@logout')->name('admin-logout');
-        Route::get('dashboard','DashboardController@index')->name('admin-dashboard');
-        Route::get('dashboard/province/{province_id}','DashboardController@province')->name('admin-dashboard-province');
-        Route::get('dashboard/regency/{regency_id}','DashboardController@regency')->name('admin-dashboard-regency');
-        Route::get('dashboard/regency/district/{district_id}','DashboardController@district')->name('admin-dashboard-district');
-        Route::get('dashboard/regency/district/village/{district_id}/{village_id}','DashboardController@village')->name('admin-dashboard-village');
+        Route::get('/dashboard/nation','DashboardController@index')->name('admin-dashboard');
+        Route::get('/dashboard/province/{province_id}','DashboardController@province')->name('admin-dashboard-province');
+        Route::get('/dashboard/regency/{regency_id}','DashboardController@regency')->name('admin-dashboard-regency');
+        Route::get('/dashboard/regency/district/{district_id}','DashboardController@district')->name('admin-dashboard-district');
+        Route::get('/dashboard/regency/district/village/{district_id}/{village_id}','DashboardController@village')->name('admin-dashboard-village');
 
-        Route::get('member','MemberController@index')->name('admin-member');
-        Route::get('member/create','MemberController@create')->name('admin-member-create');
-        Route::post('member/store','MemberController@store')->name('admin-member-store');
+        Route::get('/member','MemberController@index')->name('admin-member');
+        Route::get('/member/create','MemberController@create')->name('admin-member-create');
+        Route::post('/member/store','MemberController@store')->name('admin-member-store');
 
-        Route::get('member/profile/{id}','MemberController@profileMember')->name('admin-profile-member');
-        Route::get('member/profile/edit/{id}','MemberController@editMember')->name('admin-profile-member-edit');
-        Route::post('member/profile/update/{id}','MemberController@updateMember')->name('admin-profile-member-update');
+        Route::get('/member/profile/{id}','MemberController@profileMember')->name('admin-profile-member');
+        Route::get('/member/profile/edit/{id}','MemberController@editMember')->name('admin-profile-member-edit');
+        Route::post('/member/profile/update/{id}','MemberController@updateMember')->name('admin-profile-member-update');
 
         // report excel
-        Route::get('member/province/export','DashboardController@exportDataProvinceExcel')->name('report-member-province-excel');
-        Route::get('member/regency/export/{regency_id}','DashboardController@exportDataRegencyExcel')->name('report-member-regency-excel');
-        Route::get('member/district/export/{district_id}','DashboardController@exportDataDistrictExcel')->name('report-member-district-excel');
+        Route::get('/member/province/export','DashboardController@exportDataProvinceExcel')->name('report-member-province-excel');
+        Route::get('/member/regency/export/{regency_id}','DashboardController@exportDataRegencyExcel')->name('report-member-regency-excel');
+        Route::get('/member/district/export/{district_id}','DashboardController@exportDataDistrictExcel')->name('report-member-district-excel');
 
-        Route::get('member/card/download/{id}','MemberController@downloadCard')->name('admin-member-card-download');
+        Route::get('/member/card/download/{id}','MemberController@downloadCard')->name('admin-member-card-download');
 
         // Admin District
-        Route::get('admincontrol/district','AdminDistrictController@index')->name('admin-admincontroll-district');
-        Route::get('admincontrol/createadmin/district','AdminDistrictController@create')->name('admin-admincontroll-district-create');
-        Route::get('admincontrol/createadmin/district/save/{id}','AdminDistrictController@saveAdminDistrict')->name('admin-admincontroll-district-save');
+        Route::get('/admincontrol/district','AdminDistrictController@index')->name('admin-admincontroll-district');
+        Route::get('/admincontrol/createadmin/district','AdminDistrictController@create')->name('admin-admincontroll-district-create');
+        Route::get('/admincontrol/createadmin/district/save/{id}','AdminDistrictController@saveAdminDistrict')->name('admin-admincontroll-district-save');
 
         // Event
-        Route::get('event','EventController@index')->name('admin-event');
-        Route::get('event/create','EventController@create')->name('admin-event-create');
-        Route::post('event/store','EventController@store')->name('admin-event-store');
-        Route::get('event/add/member/{id}','EventController@addMemberEvent')->name('admin-event-addmember');
-        Route::post('event/add/member/store','EventController@storeAddMemberEvent')->name('admin-event-addmember-store');
-        Route::get('event/detail/{id}','EventController@evenDetials')->name('admin-event-addmember-detail');
+        Route::get('/event','EventController@index')->name('admin-event');
+        Route::get('/event/create','EventController@create')->name('admin-event-create');
+        Route::post('/event/store','EventController@store')->name('admin-event-store');
+        Route::get('/event/add/member/{id}','EventController@addMemberEvent')->name('admin-event-addmember');
+        Route::post('/event/add/member/store','EventController@storeAddMemberEvent')->name('admin-event-addmember-store');
+        Route::get('/event/detail/{id}','EventController@evenDetials')->name('admin-event-addmember-detail');
         Route::get('/event/gallery/{id}','EventController@galleryEvent')->name('admin-event-gallery');
 
 
