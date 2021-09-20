@@ -32,22 +32,22 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $gF   = app('GlobalProvider'); // global function
-        $GrafikProvider = new GrafikProvider();
+        // $gF   = app('GlobalProvider'); // global function
+        // $GrafikProvider = new GrafikProvider();
 
 
-        $userModel        = new User();
-        $total_member     = $userModel->where('village_id', '!=', NULL)->count();
+        // $userModel        = new User();
+        // $total_member     = $userModel->where('village_id', '!=', NULL)->count();
 
         $regencyModel     = new Regency();
-        $target_member    = $regencyModel->getRegency()->total_district * 5000;
-        $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
+        // $target_member    = $regencyModel->getRegency()->total_district * 5000;
+        // $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
 
-        $villageModel   = new Village();
-        $total_village  = $villageModel->getVillages()->total_village; // fungsi total desa di provinsi banten
-        $village_filled = $villageModel->getVillageFill(); // fungsi total desa di provinsi banten
-        $total_village_filled      = count($village_filled);
-        $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
+        // $villageModel   = new Village();
+        // $total_village  = $villageModel->getVillages()->total_village; // fungsi total desa di provinsi banten
+        // $village_filled = $villageModel->getVillageFill(); // fungsi total desa di provinsi banten
+        // $total_village_filled      = count($village_filled);
+        // $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
 
         // grafik data anggota terdaftar vs target
         // $member_registered  = $userModel->getMemberRegisteredAll();
@@ -69,11 +69,11 @@ class DashboardController extends Controller
         // $color_jobs    = $ChartJobs['color_jobs'];
 
         // grafik data jenis kelamin
-        $gender     = $userModel->getGenders();
-        $CatGender  = $GrafikProvider->getGrafikGender($gender);
-        $cat_gender = $CatGender['cat_gender'];
-        $total_male_gender  = $CatGender['total_male_gender'];
-        $total_female_gender = $CatGender['total_female_gender'];
+        // $gender     = $userModel->getGenders();
+        // $CatGender  = $GrafikProvider->getGrafikGender($gender);
+        // $cat_gender = $CatGender['cat_gender'];
+        // $total_male_gender  = $CatGender['total_male_gender'];
+        // $total_female_gender = $CatGender['total_female_gender'];
 
         // range umur
         // $range_age     = $userModel->rangeAge();
@@ -121,7 +121,7 @@ class DashboardController extends Controller
                     ->rawColumns(['persentage'])
                     ->make();
         }
-        return view('pages.admin.dashboard.index', compact('total_male_gender','total_female_gender','total_village','target_member','gF','total_member','persentage_target_member','total_village_filled','presentage_village_filled'));
+        return view('pages.admin.dashboard.index');
         
         // return view('pages.admin.dashboard.index', compact('cat_referal_data','cat_referal','chart_inputer','cat_gen_age','cat_gen_age_data','cat_range_age','cat_range_age_data','chart_jobs','cat_gender','total_female_gender','total_male_gender','chart_member_registered','cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
     }
