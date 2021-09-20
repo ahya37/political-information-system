@@ -181,6 +181,30 @@ $("#created_at").daterangepicker(
 
 // total member
 $(document).ready(function () {
+    // jumlah anggota card dashboard
+    $.ajax({
+        url: "/api/member/totalprovince",
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#total_member").text("loading...");
+            $("#total_member_persen").text("loading...");
+            $("#target_anggota").text("loading...");
+            $("#village_filled").text("loading...");
+            $("#village_filled_persen").text("loading...");
+            $("#total_village").text("loading...");
+        },
+        success: function (data) {
+            $("#total_member").text(data.total_member);
+            $("#total_member_persen").text(data.persentage_target_member);
+            $("#target_anggota").text(data.target_member);
+            $("#village_filled").text(data.total_village_filled);
+            $("#village_filled_persen").text(data.presentage_village_filled);
+            $("#total_village").text(data.total_village);
+        },
+    });
+
+    // anggota terdaftar
     $.ajax({
         url: "/api/member/rergister/province",
         method: "GET",
@@ -189,12 +213,19 @@ $(document).ready(function () {
             $("#loadProvince").removeClass("d-none");
         },
         success: function (data) {
+            const dataProvince = data.province;
+            const dataProvinceColor = data.colors;
             var label = [];
             var value = [];
-            for (var i in data) {
-                label.push(data[i].province);
-                value.push(data[i].total_member);
+            const colorsProvince = [];
+            for (var i in dataProvince) {
+                label.push(dataProvince[i].province);
+                value.push(dataProvince[i].total_member);
             }
+            for (var c in dataProvinceColor) {
+                colorsProvince.push(dataProvinceColor[c]);
+            }
+
             var province = document.getElementById("province");
             var provinceChart = new Chart(province, {
                 type: "bar",
@@ -203,7 +234,7 @@ $(document).ready(function () {
                     datasets: [
                         {
                             data: value,
-                            backgroundColor: "rgb(252, 116, 101)",
+                            backgroundColor: colorsProvince,
                         },
                     ],
                 },
@@ -225,27 +256,59 @@ $(document).ready(function () {
             $("#loadProvince").addClass("d-none");
         },
     });
-});
 
-// jumlah anggota
-$.ajax({
-    url: "/api/member/totalprovince",
-    method: "GET",
-    dataType: "json",
-    beforeSend: function () {
-        $("#total_member").text("loading...");
-        $("#total_member_persen").text("loading...");
-        $("#target_anggota").text("loading...");
-        $("#village_filled").text("loading...");
-        $("#village_filled_persen").text("loading...");
-        $("#total_village").text("loading...");
-    },
-    success: function (data) {
-        $("#total_member").text(data.total_member);
-        $("#total_member_persen").text(data.persentage_target_member);
-        $("#target_anggota").text(data.target_member);
-        $("#village_filled").text(data.total_village_filled);
-        $("#village_filled_persen").text(data.presentage_village_filled);
-        $("#total_village").text(data.total_village);
-    },
+    // anggota terdaftar vs target
+    $.ajax({
+        url: "/api/membervsterget/province",
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#LoadmemberRegister").removeClass("d-none");
+        },
+        success: function (data) {
+            const label = [];
+            const valueRegister = [];
+            const valueTarget = [];
+            for (const i in data) {
+                label.push(data[i].name);
+                valueRegister.push(data[i].realisasi_member);
+                valueTarget.push(data[i].target_member);
+            }
+            const memberRegistered = document.getElementById("memberRegister");
+            const dataMemberVsTarget = {
+                labels: label,
+                datasets: [
+                    {
+                        label: "Terdaftar",
+                        data: valueRegister,
+                        backgroundColor: "rgb(126, 252, 101)",
+                    },
+                    {
+                        label: "Target",
+                        data: valueTarget,
+                        backgroundColor: "rgb(247, 67, 67)",
+                    },
+                ],
+            };
+            const memberRegisteredChart = new Chart(memberRegistered, {
+                type: "bar",
+                data: dataMemberVsTarget,
+                options: {
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        ],
+                    },
+                },
+                legend: true,
+            });
+        },
+        complete: function () {
+            $("#LoadmemberRegister").addClass("d-none");
+        },
+    });
 });

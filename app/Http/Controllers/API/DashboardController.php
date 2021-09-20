@@ -129,7 +129,15 @@ class DashboardController extends Controller
     {
          $regencyModel     = new Regency();
          $province = $regencyModel->getTotalMember();
-         return response()->json($province);
+         $province_label = collect($province);
+         $colors = $province_label->map(function($item){
+            return $rand_color = '#' . substr(md5(mt_rand()),0,6);
+        });
+        $data = [
+            'province' => $province,
+            'colors' => $colors
+        ];
+        return response()->json($data);
     }
 
     public function getTotalMemberProvince()
@@ -159,6 +167,13 @@ class DashboardController extends Controller
         ];
         return response()->json($data);
 
+    }
+
+    public function getMemberVsTarget()
+    {
+        $userModel        = new User();
+        $member_registered  = $userModel->getMemberRegisteredAll();
+        return response()->json($member_registered);
     }
 
 }
