@@ -36,7 +36,7 @@ Route::get('member/regency/{daterange}/{regencyID}','API\DashboardController@mem
 Route::get('member/district/{daterange}/{districtID}','API\DashboardController@memberReportPerMountDistrict');
 Route::get('member/village/{daterange}/{villageID}','API\DashboardController@memberReportPerMountVillage');
 
-// cahrt anggota terdaftar nasional
+// chart dashboard nasional
 Route::get('member/rergister/national','API\DashboardController@getMemberNational');
 Route::get('member/totalnational','API\DashboardController@getTotalMemberNational');
 Route::get('membervsterget/national','API\DashboardController@getMemberVsTargetNational');
@@ -47,7 +47,13 @@ Route::get('member/genage/national','API\DashboardController@genAgeNational');
 Route::get('member/inputer/national','API\DashboardController@getInputerNational');
 Route::get('member/referal/national','API\DashboardController@getRegefalNational');
 
-// 
+// chart dashboard province
 Route::get('member/totalprovince/{province_id}','API\DashboardController@getTotalMemberProvince');
 Route::get('member/rergister/province/{province_id}','API\DashboardController@getMemberProvince');
-
+Route::get('membervsterget/province/{province_id}','API\DashboardController@getMemberVsTargetProvince');
+Route::get('member/gender/province/{province_id}','API\DashboardController@getGenderProvince');
+Route::get('member/jobs/province/{province_id}','API\DashboardController@getJobsProvince');
+Route::get('member/agegroup/province/{province_id}','API\DashboardController@getAgeGroupProvince');
+Route::get('member/genage/province/{province_id}','API\DashboardController@genAgeProvince');
+Route::get('member/inputer/province/{province_id}','API\DashboardController@getInputerProvince');
+Route::get('member/referal/province/{province_id}','API\DashboardController@getRegefalProvince');

@@ -286,3 +286,278 @@ $.ajax({
         $("#loadProvince").addClass("d-none");
     },
 });
+
+// anggota terdaftar vs target
+$.ajax({
+    url: "/api/membervsterget/province" + "/" + provinceID,
+    method: "GET",
+    dataType: "json",
+    beforeSend: function () {
+        $("#LoadmemberRegister").removeClass("d-none");
+    },
+    success: function (data) {
+        const label = [];
+        const valueRegister = [];
+        const valueTarget = [];
+        for (const i in data) {
+            label.push(data[i].name);
+            valueRegister.push(data[i].realisasi_member);
+            valueTarget.push(data[i].target_member);
+        }
+        const memberRegistered = document.getElementById("memberRegister");
+        const dataMemberVsTarget = {
+            labels: label,
+            datasets: [
+                {
+                    label: "Terdaftar",
+                    data: valueRegister,
+                    backgroundColor: "rgb(126, 252, 101)",
+                },
+                {
+                    label: "Target",
+                    data: valueTarget,
+                    backgroundColor: "rgb(247, 67, 67)",
+                },
+            ],
+        };
+        const memberRegisteredChart = new Chart(memberRegistered, {
+            type: "bar",
+            data: dataMemberVsTarget,
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: true,
+                            },
+                        },
+                    ],
+                },
+            },
+            legend: true,
+        });
+    },
+    complete: function () {
+        $("#LoadmemberRegister").addClass("d-none");
+    },
+});
+
+// gender
+$.ajax({
+    url: "/api/member/gender/province" + "/" + provinceID,
+    method: "GET",
+    dataType: "json",
+    beforeSend: function () {
+        $("#Loadgender").removeClass("d-none");
+    },
+    success: function (data) {
+        const donut_chart = Morris.Donut({
+            element: "gender",
+            data: data.cat_gender,
+            colors: ["#063df7", "#EC407A"],
+            resize: true,
+            formatter: function (x) {
+                return x + "%";
+            },
+        });
+        $("#totalMaleGender").text(data.total_male_gender);
+        $("#totalfemaleGender").text(data.total_female_gender);
+    },
+    complete: function () {
+        $("#Loadgender").addClass("d-none");
+    },
+});
+
+// Jobs
+$.ajax({
+    url: "/api/member/jobs/province" + "/" + provinceID,
+    method: "GET",
+    dataType: "json",
+    beforeSend: function () {
+        $("#Loadjobs").removeClass("d-none");
+    },
+    success: function (data) {
+        const label = data.chart_jobs_label;
+        const value = data.chart_jobs_data;
+        const colorJobs = data.color_jobs;
+        const jobs = document.getElementById("jobs");
+        const piechart = new Chart(jobs, {
+            type: "pie",
+            data: {
+                labels: label,
+                datasets: [
+                    {
+                        data: value,
+                        backgroundColor: colorJobs,
+                    },
+                ],
+            },
+            options: {
+                legend: false,
+            },
+        });
+    },
+    complete: function () {
+        $("#Loadjobs").addClass("d-none");
+    },
+});
+
+// kelompok umur
+$.ajax({
+    url: "/api/member/agegroup/province" + "/" + provinceID,
+    method: "GET",
+    dataType: "json",
+    beforeSend: function () {
+        $("#LoadageGroup").removeClass("d-none");
+    },
+    success: function (data) {
+        const ageGroup = document.getElementById("ageGroup");
+        const ageGroupChart = new Chart(ageGroup, {
+            type: "bar",
+            data: {
+                labels: data.cat_range_age,
+                datasets: [
+                    {
+                        data: data.cat_range_age_data,
+                        backgroundColor: "rgba(34, 167, 240, 1)",
+                    },
+                ],
+            },
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: true,
+                            },
+                        },
+                    ],
+                },
+                legend: false,
+            },
+        });
+    },
+    complete: function () {
+        $("#LoadageGroup").addClass("d-none");
+    },
+});
+
+//generasi umur
+$.ajax({
+    url: "/api/member/genage/province" + "/" + provinceID,
+    method: "GET",
+    dataType: "json",
+    beforeSend: function () {
+        $("#LoadageGen").removeClass("d-none");
+    },
+    success: function (data) {
+        const ageGen = document.getElementById("ageGen");
+        const ageGenChart = new Chart(ageGen, {
+            type: "bar",
+            data: {
+                labels: data.cat_gen_age,
+                datasets: [
+                    {
+                        data: data.cat_gen_age_data,
+                        backgroundColor: "rgba(34, 167, 240, 1)",
+                    },
+                ],
+            },
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: true,
+                            },
+                        },
+                    ],
+                },
+                legend: false,
+            },
+        });
+    },
+    complete: function () {
+        $("#LoadageGen").addClass("d-none");
+    },
+});
+
+// admin input terbanyak
+$.ajax({
+    url: "/api/member/inputer/province" + "/" + provinceID,
+    method: "GET",
+    dataType: "json",
+    beforeSend: function () {
+        $("#Loadinputer").removeClass("d-none");
+    },
+    success: function (data) {
+        const inputer = document.getElementById("inputer");
+        const inputerChart = new Chart(inputer, {
+            type: "bar",
+            data: {
+                labels: data.cat_inputer_label,
+                datasets: [
+                    {
+                        data: data.cat_inputer_data,
+                        backgroundColor: data.color_inputer,
+                    },
+                ],
+            },
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: true,
+                            },
+                        },
+                    ],
+                },
+                legend: false,
+            },
+        });
+    },
+    complete: function () {
+        $("#Loadinputer").addClass("d-none");
+    },
+});
+
+// anggota referal terbanyak
+$.ajax({
+    url: "/api/member/inputer/province" + "/" + provinceID,
+    method: "GET",
+    dataType: "json",
+    beforeSend: function () {
+        $("#Loadreferal").removeClass("d-none");
+    },
+    success: function (data) {
+        const referal = document.getElementById("referal");
+        const referalChart = new Chart(referal, {
+            type: "bar",
+            data: {
+                labels: data.cat_inputer_label,
+                datasets: [
+                    {
+                        data: data.cat_inputer_data,
+                        backgroundColor: data.color_inputer,
+                    },
+                ],
+            },
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: true,
+                            },
+                        },
+                    ],
+                },
+                legend: false,
+            },
+        });
+    },
+    complete: function () {
+        $("#Loadreferal").addClass("d-none");
+    },
+});

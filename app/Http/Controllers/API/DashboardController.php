@@ -214,7 +214,7 @@ class DashboardController extends Controller
     {
         $GrafikProvider = new GrafikProvider();
         $jobModel  = new Job();
-        $most_jobs = $jobModel->getMostJobs();
+        // $most_jobs = $jobModel->getMostJobs();
         $jobs      = $jobModel->getJobs();
         $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
         $chart_jobs_label= $ChartJobs['chart_jobs_label'];
@@ -250,12 +250,49 @@ class DashboardController extends Controller
 
     }
 
+    public function getAgeGroupProvince($province_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $range_age     = $userModel->rangeAgeProvince($province_id);
+        $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
+        $cat_range_age = $CatRange['cat_range_age'];
+        $cat_range_age_data = $CatRange['cat_range_age_data'];
+
+        $data = [
+            'cat_range_age' => $cat_range_age,
+            'cat_range_age_data' => $cat_range_age_data
+        ];
+
+        return response()->json($data);
+
+    }
+
     public function genAgeNational()
     {
         $GrafikProvider = new GrafikProvider();
         $userModel = new User();
 
         $gen_age     = $userModel->generationAges();
+        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        $cat_gen_age = $GenAge['cat_gen_age'];
+        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
+
+        $data = [
+            'cat_gen_age' => $cat_gen_age,
+            'cat_gen_age_data' => $cat_gen_age_data
+        ];
+        return response()->json($data);
+
+    }
+
+    public function genAgeProvince($province_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $gen_age     = $userModel->generationAgeProvince($province_id);
         $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
         $cat_gen_age = $GenAge['cat_gen_age'];
         $cat_gen_age_data = $GenAge['cat_gen_age_data'];
@@ -290,6 +327,28 @@ class DashboardController extends Controller
 
     }
 
+    public function getInputerProvince($province_id)
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getInputerProvince($province_id);
+        // get fungsi grafik admin input terbanyak
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer
+        ];
+        return response()->json($data);
+
+    }
+
     public function getRegefalNational()
     {
         $referalModel = new Referal();
@@ -297,6 +356,27 @@ class DashboardController extends Controller
 
         // input admin terbanyak
         $inputer      = $referalModel->getInputers();
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer,
+        ];
+        return response()->json($data);
+
+    }
+
+    public function getRegefalProvince($province_id)
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getInputerProvince($province_id);
         $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
         $cat_inputer_label = $ChartInputer['cat_inputer_label'];
         $cat_inputer_data = $ChartInputer['cat_inputer_data'];
@@ -359,6 +439,56 @@ class DashboardController extends Controller
             // 'colors' => $colors
         ];
         return response()->json($data);
+    }
+
+    public function getMemberVsTargetProvince($province_id)
+    {
+        $userModel        = new User();
+
+        $member_registered  = $userModel->getMemberRegistered($province_id);
+        return response()->json($member_registered);
+    }
+
+    public function getGenderProvince($province_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+        $GrafikProvider = new GrafikProvider();
+
+        $userModel = new User();
+        $gender     = $userModel->getGenderProvince($province_id);
+        $CatGender  = $GrafikProvider->getGrafikGender($gender);
+       
+        $cat_gender = $CatGender['cat_gender'];
+        $total_male_gender  = $CatGender['total_male_gender'];
+        $total_female_gender = $CatGender['total_female_gender'];
+
+        $data  = [
+            'cat_gender' => $cat_gender,
+            'total_male_gender' => $total_male_gender,
+            'total_female_gender' => $total_female_gender
+        ];
+        return response()->json($data);
+        
+    }
+
+    public function getJobsProvince($province_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $jobModel  = new Job();
+        $jobs      = $jobModel->getMostJobsProvince($province_id);
+        $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
+        $chart_jobs_label= $ChartJobs['chart_jobs_label'];
+        $chart_jobs_data= $ChartJobs['chart_jobs_data'];
+        $color_jobs    = $ChartJobs['color_jobs'];
+
+        $data = [
+
+            'chart_jobs_label' => $chart_jobs_label,
+            'chart_jobs_data'  => $chart_jobs_data,
+            'color_jobs' => $color_jobs,
+        ];
+        return response()->json($data);
+
     }
 
 }

@@ -132,9 +132,10 @@
                     <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Anggota Terdaftar VS Target (%)</h6>
-                        <div>
-                          {{-- {!! $chart_member_registered->render() !!} --}}
-                        </div>
+                         <div id="LoadmemberRegister" class="d-none lds-dual-ring hidden overlay">
+                          </div>
+                        <canvas id="memberRegister">
+                        </canvas>
                       </div>
                     </div>
                   </div>
@@ -147,6 +148,8 @@
                     <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Jenis Kelamin (%)</h6>
+                        <div id="Loadgender" class="d-none lds-dual-ring hidden overlay">
+                          </div>
                         <div id="gender"></div>
                       </div>
                       <div class="row">
@@ -154,8 +157,7 @@
                           <div class="card-body cart-gender-male text-center">
                             <span class="text-white">Laki-laki</span>
                             <br>
-                            <span class="text-white">
-                              {{-- {{ $total_male_gender }} --}}
+                            <span class="text-white" id="totalMaleGender">
                             </span>
                           </div>
                         </div>
@@ -163,8 +165,7 @@
                           <div class="card-body text-center cart-gender-female">
                             <span class="text-white">Perempuan</span>
                             <br>
-                            <span class="text-white">
-                              {{-- {{ $total_female_gender }} --}}
+                            <span class="text-white" id="totalfemaleGender">
                             </span>
                           </div>
                         </div>
@@ -175,8 +176,10 @@
                     <div class="card">
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Pekerjaan (%)</h6>
-                       <div class="w-100">
-                           {{-- {!! $chart_jobs->container() !!} --}}
+                       <div>
+                          <div id="Loadjobs" class="d-none lds-dual-ring hidden overlay">
+                          </div>
+                          <canvas width="" id="jobs"></canvas>
                         </div>
                       </div>
                       {{-- <div class="col-md-12 col-sm-12">
@@ -198,14 +201,24 @@
                   <div class="col-md-6 mt-3">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <div id="ageGroup"></div>
+                        <h6 class="text-center">Anggota Berdasarkan Kelompok Umur</h6>
+                        <div>
+                          <div id="LoadageGroup" class="d-none lds-dual-ring hidden overlay">
+                            </div>
+                          <canvas id="ageGroup"></canvas>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-6 mt-3">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <div id="ageGen"></div>
+                        <h6 class="text-center">Anggota Berdasarkan Generasi Umur</h6>
+                         <div id="LoadageGen" class="d-none lds-dual-ring hidden overlay">
+                          </div>
+                        <div>
+                          <canvas id="ageGen"></canvas>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -213,8 +226,10 @@
                     <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Admin Berdasarkan Input Terbanyak</h6>
-                        <div id="ex">
-                          {{-- {!! $chart_inputer->container() !!} --}}
+                        <div>
+                           <div id="Loadinputer" class="d-none lds-dual-ring hidden overlay">
+                          </div>
+                          <canvas id="inputer"></canvas>
                         </div>
                       </div>
                     </div>
@@ -222,7 +237,12 @@
                   <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <div id="referal"></div>
+                        <h6 class="text-center">Anggota Berdasarkan Referal Terbanyak</h6>
+                        <div>
+                          <div id="Loadreferal" class="d-none lds-dual-ring hidden overlay">
+                          </div>
+                          <canvas id="referal"></canvas>
+                        </div>
                       </div>
                     </div>
                   </div>
