@@ -50,23 +50,23 @@ class DashboardController extends Controller
         $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
 
         // grafik data anggota terdaftar vs target
-        $member_registered  = $userModel->getMemberRegisteredAll();
+        // $member_registered  = $userModel->getMemberRegisteredAll();
 
-        $MemberRegistered = $GrafikProvider->getGrafikMemberRegistered($member_registered);
-        $chart_member_registered_label= $MemberRegistered['cat_member_registered_label'];
-        $chart_member_registered_data = $MemberRegistered['cat_member_registered_data'];
-        $chart_member_registered_target = $MemberRegistered['cat_member_registered_target'];
-        $colors_register = $MemberRegistered['colors'];
-        $colors_target = $MemberRegistered['colors_target'];
+        // $MemberRegistered = $GrafikProvider->getGrafikMemberRegistered($member_registered);
+        // $chart_member_registered_label= $MemberRegistered['cat_member_registered_label'];
+        // $chart_member_registered_data = $MemberRegistered['cat_member_registered_data'];
+        // $chart_member_registered_target = $MemberRegistered['cat_member_registered_target'];
+        // $colors_register = $MemberRegistered['colors'];
+        // $colors_target = $MemberRegistered['colors_target'];
 
         // grafik data job
-        $jobModel  = new Job();
-        $most_jobs = $jobModel->getMostJobs();
-        $jobs      = $jobModel->getJobs();
-        $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
-        $chart_jobs_label= $ChartJobs['chart_jobs_label'];
-        $chart_jobs_data= $ChartJobs['chart_jobs_data'];
-        $color_jobs    = $ChartJobs['color_jobs'];
+        // $jobModel  = new Job();
+        // $most_jobs = $jobModel->getMostJobs();
+        // $jobs      = $jobModel->getJobs();
+        // $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
+        // $chart_jobs_label= $ChartJobs['chart_jobs_label'];
+        // $chart_jobs_data= $ChartJobs['chart_jobs_data'];
+        // $color_jobs    = $ChartJobs['color_jobs'];
 
         // grafik data jenis kelamin
         $gender     = $userModel->getGenders();
@@ -76,32 +76,32 @@ class DashboardController extends Controller
         $total_female_gender = $CatGender['total_female_gender'];
 
         // range umur
-        $range_age     = $userModel->rangeAge();
-        $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
-        $cat_range_age = $CatRange['cat_range_age'];
-        $cat_range_age_data = $CatRange['cat_range_age_data'];
+        // $range_age     = $userModel->rangeAge();
+        // $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
+        // $cat_range_age = $CatRange['cat_range_age'];
+        // $cat_range_age_data = $CatRange['cat_range_age_data'];
 
          // generasi umur
-        $gen_age     = $userModel->generationAges();
-        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
-        $cat_gen_age = $GenAge['cat_gen_age'];
-        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
+        // $gen_age     = $userModel->generationAges();
+        // $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        // $cat_gen_age = $GenAge['cat_gen_age'];
+        // $cat_gen_age_data = $GenAge['cat_gen_age_data'];
 
-        $referalModel = new Referal();
+        // $referalModel = new Referal();
         // input admin terbanyak
-        $inputer      = $referalModel->getInputers();
+        // $inputer      = $referalModel->getInputers();
         // get fungsi grafik admin input terbanyak
-        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
-        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
-        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
-        $color_inputer = $ChartInputer['colors'];
+        // $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        // $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        // $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        // $color_inputer = $ChartInputer['colors'];
 
         // anggota dengan referal terbanyak
-        $referal      = $referalModel->getReferals();
-        $CatReferal   = $GrafikProvider->getGrafikReferal($referal);
-        $cat_referal_label      = $CatReferal['cat_referal'];
-        $cat_referal_data = $CatReferal['cat_referal_data'];
-        $color_referals   = $CatReferal['color_referals'];
+        // $referal      = $referalModel->getReferals();
+        // $CatReferal   = $GrafikProvider->getGrafikReferal($referal);
+        // $cat_referal_label      = $CatReferal['cat_referal'];
+        // $cat_referal_data = $CatReferal['cat_referal_data'];
+        // $color_referals   = $CatReferal['color_referals'];
 
         // Daftar pencapaian lokasi / daerah
         $achievments   = $regencyModel->achievements();
@@ -121,7 +121,7 @@ class DashboardController extends Controller
                     ->rawColumns(['persentage'])
                     ->make();
         }
-        return view('pages.admin.dashboard.index', compact('chart_member_registered_target','colors_target','color_referals','colors_register','color_jobs','chart_member_registered_label','chart_member_registered_data','chart_jobs_label','chart_jobs_data','cat_gender','total_female_gender','total_male_gender','cat_range_age','cat_range_age_data','cat_gen_age','cat_gen_age_data','cat_inputer_label','cat_inputer_data','color_inputer','cat_referal_data','cat_referal_label','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
+        return view('pages.admin.dashboard.index', compact('total_male_gender','total_female_gender','total_village','target_member','gF','total_member','persentage_target_member','total_village_filled','presentage_village_filled'));
         
         // return view('pages.admin.dashboard.index', compact('cat_referal_data','cat_referal','chart_inputer','cat_gen_age','cat_gen_age_data','cat_range_age','cat_range_age_data','chart_jobs','cat_gender','total_female_gender','total_male_gender','chart_member_registered','cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
     }
