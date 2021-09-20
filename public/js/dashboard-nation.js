@@ -239,7 +239,4 @@ $.ajax({
         const totalMember = data;
         $("#total_member").text(totalMember);
     },
-    complete: function () {
-        $("#total_member").text();
-    },
 });
