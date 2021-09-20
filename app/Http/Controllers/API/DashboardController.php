@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\User;
 use Carbon\Carbon;
 use App\Models\Regency;
+use App\Models\Village;
 use App\Providers\GetRegencyId;
 use App\Http\Controllers\Controller;
 
@@ -133,9 +134,30 @@ class DashboardController extends Controller
 
     public function getTotalMemberProvince()
     {
+        $gF   = app('GlobalProvider'); // global function
+        
         $userModel        = new User();
-        $total_member     = $userModel->where('village_id', '!=', NULL)->count();
-        return response()->json($total_member);
+        $regencyModel     = new Regency();
+        $total_member     = $gF->decimalFormat($userModel->where('village_id', '!=', NULL)->count());
+        $targetMember     = $regencyModel->getRegency()->total_district * 5000;
+        $target_member    = (string) $targetMember;
+        $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
+
+        $villageModel   = new Village();
+        $total_village  = $villageModel->getVillages()->total_village; // fungsi total desa di provinsi banten
+        $village_filled = $villageModel->getVillageFill(); // fungsi total desa di provinsi banten
+        $total_village_filled      = count($village_filled);
+        $presentage_village_filled = $gF->persen(($total_village_filled / $total_village) * 100); // persentasi jumlah desa terisi
+
+        $data = [
+            'total_village' => $gF->decimalFormat($total_village),
+            'total_village_filled' => $gF->decimalFormat($total_village_filled),
+            'presentage_village_filled' => $presentage_village_filled,
+            'total_member' => $total_member,
+            'target_member' => $gF->decimalFormat($target_member),
+            'persentage_target_member' => $persentage_target_member
+        ];
+        return response()->json($data);
 
     }
 

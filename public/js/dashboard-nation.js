@@ -236,7 +236,11 @@ $.ajax({
         $("#total_member").text("loading...");
     },
     success: function (data) {
-        const totalMember = data;
-        $("#total_member").text(totalMember);
+        $("#total_member").text(data.total_member);
+        $("#total_member_persen").text(data.persentage_target_member);
+        $("#target_anggota").text(data.target_member);
+        $("#village_filled").text(data.total_village_filled);
+        $("#village_filled_persen").text(data.presentage_village_filled);
+        $("#total_village").text(data.total_village);
     },
 });
