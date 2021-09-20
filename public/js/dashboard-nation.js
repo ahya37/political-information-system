@@ -337,4 +337,40 @@ $(document).ready(function () {
             $("#Loadgender").addClass("d-none");
         },
     });
+
+    // Jobs
+    $.ajax({
+        url: "/api/member/jobs/province",
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#Loadjobs").removeClass("d-none");
+        },
+        success: function (data) {
+            const label = data.chart_jobs_label;
+            const value = data.chart_jobs_data;
+            const colorJobs = data.color_jobs;
+            const jobs = document.getElementById("jobs");
+            const piechart = new Chart(jobs, {
+                type: "pie",
+                data: {
+                    labels: label,
+                    datasets: [
+                        {
+                            data: value,
+                            backgroundColor: colorJobs,
+                        },
+                    ],
+                },
+                options: {
+                    legend: false,
+                },
+            });
+        },
+        complete: function () {
+            $("#Loadjobs").addClass("d-none");
+        },
+    });
+
+    // kelompok umur
 });

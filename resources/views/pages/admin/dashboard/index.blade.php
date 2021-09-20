@@ -5,7 +5,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/all.min.css') }}" />
+    <link rel="stylesheet" href="{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css}" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <link rel="stylesheet" href="{{ asset('assets/vendor/morris/morris.css') }}">
 @endpush
 @section('title','Dashboard')
@@ -180,6 +181,8 @@
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Pekerjaan (%)</h6>
                         <div>
+                          <div id="Loadjobs" class="d-none lds-dual-ring hidden overlay">
+                          </div>
                           <canvas width="" id="jobs"></canvas>
                         </div>
                       </div>
@@ -301,6 +304,7 @@
 <script src="{{ asset('assets/vendor/raphael/raphael-min.js') }}"></script>
 <script src="{{ asset('assets/vendor/morris/morris.min.js') }}"></script>
 <script type="{{ asset('assets/vendor/morris/morris.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/chart/Chart.min.js') }}"></script>  
 <script src="{{ asset('js/dashboard-nation.js') }}" ></script>
 

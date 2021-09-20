@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Job;
 use App\User;
 use Carbon\Carbon;
 use App\Models\Regency;
 use App\Models\Village;
 use App\Providers\GetRegencyId;
+use App\Providers\GrafikProvider;
 use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
@@ -179,25 +181,15 @@ class DashboardController extends Controller
     public function getGenderProvince()
     {
         $gF   = app('GlobalProvider'); // global function
+        $GrafikProvider = new GrafikProvider();
 
         $userModel = new User();
         $gender     = $userModel->getGenders();
-         $total_gender = 0;
-        foreach ($gender as $key => $value) {
-            $total_gender += $value->total;
-        }
-        $cat_gender = [];
-        $all_gender  = [];
-
-        foreach ($gender as  $val) {
-            $all_gender[]  = $val->total;
-            $cat_gender[] = [
-                "label" => $val->gender == 0 ? 'Laki-laki' : 'Perempuan',
-                "value"    => $gF->persen(($val->total/$total_gender)*100),
-            ];
-        }
-        $total_male_gender   =empty($all_gender[0]) ?  0 :  $all_gender[0];; // total gender pria
-        $total_female_gender = empty($all_gender[1]) ?  0 :  $all_gender[1]; // total gender wanita
+        $CatGender  = $GrafikProvider->getGrafikGender($gender);
+       
+        $cat_gender = $CatGender['cat_gender'];
+        $total_male_gender  = $CatGender['total_male_gender'];
+        $total_female_gender = $CatGender['total_female_gender'];
 
         $data  = [
             'cat_gender' => $cat_gender,
@@ -206,6 +198,27 @@ class DashboardController extends Controller
         ];
         return response()->json($data);
         
+    }
+
+    public function getJobsProvince()
+    {
+        $GrafikProvider = new GrafikProvider();
+        $jobModel  = new Job();
+        $most_jobs = $jobModel->getMostJobs();
+        $jobs      = $jobModel->getJobs();
+        $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
+        $chart_jobs_label= $ChartJobs['chart_jobs_label'];
+        $chart_jobs_data= $ChartJobs['chart_jobs_data'];
+        $color_jobs    = $ChartJobs['color_jobs'];
+
+        $data = [
+            
+            'chart_jobs_label' => $chart_jobs_label,
+            'chart_jobs_data'  => $chart_jobs_data,
+            'color_jobs' => $color_jobs,
+        ];
+        return response()->json($data);
+
     }
 
 }

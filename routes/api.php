@@ -41,3 +41,4 @@ Route::get('member/rergister/province','API\DashboardController@getMemberProvinc
 Route::get('member/totalprovince','API\DashboardController@getTotalMemberProvince');
 Route::get('membervsterget/province','API\DashboardController@getMemberVsTarget');
 Route::get('member/gender/province','API\DashboardController@getGenderProvince');
+Route::get('member/jobs/province','API\DashboardController@getJobsProvince');
