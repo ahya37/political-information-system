@@ -4,9 +4,9 @@
       href="{{ asset('assets/style/style.css') }}"
       rel="stylesheet"
     />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/all.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/vendor/morris/morris.css') }}">
 @endpush
 @section('title','Dashboard')
 @section('content')
@@ -292,14 +292,42 @@
 @endsection
 
 @push('addon-script')
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script type="text/javascript" src="{{ asset('assets/vendor/moments/moment.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/vendor/daterangepicker/daterangepicker.min.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/daterangepicker/daterangepicker.css') }}" />
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
+<script src="{{ asset('assets/vendor/raphael/raphael-min.js') }}"></script>
+<script src="{{ asset('assets/vendor/morris/morris.min.js') }}"></script>
+<script type="{{ asset('assets/vendor/morris/morris.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/chart/Chart.min.js') }}"></script>  
 <script src="{{ asset('js/dashboard-nation.js') }}" ></script>
+<script>
+       var datatable = $('#achievment').DataTable({
+            processing: true,
+            language:{
+              processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
+            },
+            serverSide: true,
+            ordering: true,
+            ajax: {
+                url: '{!! url()->current() !!}',
+            },
+            columns:[
+                {data: 'name', name:'name'},
+                {data: 'total_district', name:'total_district', className: "text-right"},
+                {data: 'target_member', name:'target_member',className: "text-right"},
+                {data: 'realisasi_member', name:'realisasi_member',className: "text-right"},
+                {data: 'persentage', name:'persentage'},
+                {data: 'todays_achievement', name:'todays_achievement',className: "text-right"}
+
+            ],
+              columnDefs: [
+              {
+                targets: [1,2,3,5],
+                render: $.fn.dataTable.render.number('.', '.', 0, '')
+              }
+            ],
+        });
+</script>
 
 @endpush
