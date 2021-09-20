@@ -41,7 +41,7 @@
                           Jumlah Anggota
                         </div>
                         <div class="dashboard-card-subtitle">
-                          {{-- <h4 class="text-white">{{ $gF->decimalFormat($total_member)}}</h4> --}}
+                          <h4 class="text-white" id="total_member"></h4>
                         </div>
                       </div>
                     </div>
@@ -53,6 +53,8 @@
                           % Jumlah Anggota
                         </div>
                         <div class="dashboard-card-subtitle">
+                          <div class="d-none lds-dual-ring hidden overlay total_member">
+                          </div>
                           {{-- <h4 class="text-white">{{ $gF->persen($persentage_target_member)}}</h4> --}}
                         </div>
                       </div>
@@ -156,7 +158,7 @@
                           <div class="card-body cart-gender-male text-center">
                             <span class="text-white">Laki-laki</span>
                             <br>
-                            <span class="text-white">
+                            <span class="text-white" id="totalMaleGender">
                               {{-- {{ $total_male_gender }} --}}
                             </span>
                           </div>
@@ -301,6 +303,7 @@
 <script type="{{ asset('assets/vendor/morris/morris.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/chart/Chart.min.js') }}"></script>  
 <script src="{{ asset('js/dashboard-nation.js') }}" ></script>
+
 <script>
        var datatable = $('#achievment').DataTable({
             processing: true,

@@ -131,4 +131,12 @@ class DashboardController extends Controller
          return response()->json($province);
     }
 
+    public function getTotalMemberProvince()
+    {
+        $userModel        = new User();
+        $total_member     = $userModel->where('village_id', '!=', NULL)->count();
+        return response()->json($total_member);
+
+    }
+
 }

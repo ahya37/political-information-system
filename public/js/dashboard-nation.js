@@ -226,3 +226,20 @@ $(document).ready(function () {
         },
     });
 });
+
+// jumlah anggota
+$.ajax({
+    url: "/api/member/totalprovince",
+    method: "GET",
+    dataType: "json",
+    beforeSend: function () {
+        $(".total_member").text("loading...");
+    },
+    success: function (data) {
+        const totalMember = data;
+        $("#total_member").text(totalMember);
+    },
+    complete: function () {
+        $(".total_member").text();
+    },
+});

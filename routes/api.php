@@ -38,3 +38,4 @@ Route::get('member/village/{daterange}/{villageID}','API\DashboardController@mem
 
 // cahrt anggota terdaftar province
 Route::get('member/rergister/province','API\DashboardController@getMemberProvince');
+Route::get('member/totalprovince','API\DashboardController@getTotalMemberProvince');
