@@ -223,6 +223,9 @@ $(document).ready(function () {
                 chart: {
                     type: "column",
                 },
+                title: {
+                    text: "Anggota Terdaftar",
+                },
                 xAxis: {
                     categories: data.cat_province,
                     crosshair: true,

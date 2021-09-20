@@ -117,7 +117,6 @@
                   <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <h6 class="text-center">Anggota Terdaftar</h6>
                         <div>
                           <div id="loadProvince" class="d-none lds-dual-ring hidden overlay">
                           </div>
