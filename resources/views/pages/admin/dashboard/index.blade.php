@@ -301,33 +301,5 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
 <script src="{{ asset('js/dashboard-nation.js') }}" ></script>
-<script>
-       var datatable = $('#achievment').DataTable({
-            processing: true,
-            language:{
-              processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
-            },
-            serverSide: true,
-            ordering: true,
-            ajax: {
-                url: '{!! url()->current() !!}',
-            },
-            columns:[
-                {data: 'name', name:'name'},
-                {data: 'total_district', name:'total_district', className: "text-right"},
-                {data: 'target_member', name:'target_member',className: "text-right"},
-                {data: 'realisasi_member', name:'realisasi_member',className: "text-right"},
-                {data: 'persentage', name:'persentage'},
-                {data: 'todays_achievement', name:'todays_achievement',className: "text-right"}
-
-            ],
-              columnDefs: [
-              {
-                targets: [1,2,3,5],
-                render: $.fn.dataTable.render.number('.', '.', 0, '')
-              }
-            ],
-        });
-</script>
 
 @endpush
