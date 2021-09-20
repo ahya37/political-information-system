@@ -373,4 +373,82 @@ $(document).ready(function () {
     });
 
     // kelompok umur
+    $.ajax({
+        url: "/api/member/agegroup/province",
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#LoadageGroup").removeClass("d-none");
+        },
+        success: function (data) {
+            const ageGroup = document.getElementById("ageGroup");
+            const ageGroupChart = new Chart(ageGroup, {
+                type: "bar",
+                data: {
+                    labels: data.cat_range_age,
+                    datasets: [
+                        {
+                            data: data.cat_range_age_data,
+                            backgroundColor: "rgba(34, 167, 240, 1)",
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        ],
+                    },
+                    legend: false,
+                },
+            });
+        },
+        complete: function () {
+            $("#LoadageGroup").addClass("d-none");
+        },
+    });
+
+    //generasi umur
+    $.ajax({
+        url: "/api/member/genage/province",
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#LoadageGen").removeClass("d-none");
+        },
+        success: function (data) {
+            const ageGen = document.getElementById("ageGen");
+            const ageGenChart = new Chart(ageGen, {
+                type: "bar",
+                data: {
+                    labels: data.cat_gen_age,
+                    datasets: [
+                        {
+                            data: data.cat_gen_age_data,
+                            backgroundColor: "rgba(34, 167, 240, 1)",
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        ],
+                    },
+                    legend: false,
+                },
+            });
+        },
+        complete: function () {
+            $("#LoadageGen").addClass("d-none");
+        },
+    });
 });

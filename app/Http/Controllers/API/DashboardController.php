@@ -212,10 +212,47 @@ class DashboardController extends Controller
         $color_jobs    = $ChartJobs['color_jobs'];
 
         $data = [
-            
+
             'chart_jobs_label' => $chart_jobs_label,
             'chart_jobs_data'  => $chart_jobs_data,
             'color_jobs' => $color_jobs,
+        ];
+        return response()->json($data);
+
+    }
+
+    public function getAgeGroup()
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $range_age     = $userModel->rangeAge();
+        $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
+        $cat_range_age = $CatRange['cat_range_age'];
+        $cat_range_age_data = $CatRange['cat_range_age_data'];
+
+        $data = [
+            'cat_range_age' => $cat_range_age,
+            'cat_range_age_data' => $cat_range_age_data
+        ];
+
+        return response()->json($data);
+
+    }
+
+    public function genAge()
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $gen_age     = $userModel->generationAges();
+        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        $cat_gen_age = $GenAge['cat_gen_age'];
+        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
+
+        $data = [
+            'cat_gen_age' => $cat_gen_age,
+            'cat_gen_age_data' => $cat_gen_age_data
         ];
         return response()->json($data);
 

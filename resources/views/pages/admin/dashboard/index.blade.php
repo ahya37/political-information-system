@@ -207,6 +207,8 @@
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Kelompok Umur</h6>
                         <div>
+                          <div id="LoadageGroup" class="d-none lds-dual-ring hidden overlay">
+                            </div>
                           <canvas id="ageGroup"></canvas>
                         </div>
                       </div>
@@ -216,6 +218,8 @@
                     <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Generasi Umur</h6>
+                         <div id="LoadageGen" class="d-none lds-dual-ring hidden overlay">
+                          </div>
                         <div>
                           <canvas id="ageGen"></canvas>
                         </div>
