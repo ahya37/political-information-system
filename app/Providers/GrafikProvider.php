@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Charts\JobChart;
-use App\Charts\InputerChart;
 use Illuminate\Support\ServiceProvider;
 
 class GrafikProvider extends ServiceProvider
@@ -33,76 +31,51 @@ class GrafikProvider extends ServiceProvider
         
     }
     
-    public function getGrafikInputer($cat_inputer)
+    public function getGrafikInputer($inputer)
     {
-        $chart_inputer    = ''; 
-        if ($cat_inputer != []) {
-            $label_inputer    = collect($cat_inputer['label']);
-            $data_inputer     = $cat_inputer['data'];
-            $colors           = $label_inputer->map(function($item){return $rand_color = '#' . substr(md5(mt_rand()),0,6);});
-            $chart_inputer    = new InputerChart();
-            $chart_inputer->labels($label_inputer);
-            $chart_inputer->dataset('','bar', $data_inputer)->backgroundColor($colors);
-            $chart_inputer->options([
-                   'legend' => false,
-                   'title' => [
-                       'display' => true,
-                       // 'text' => 'Admin Dengan Input Terbanyak'
-                   ]
-            ]);
-        }else{
-             $label_inputer    = collect($cat_inputer);
-             $data_inputer     = $cat_inputer;
-             $colors           = $label_inputer->map(function($item){return $rand_color = '#' . substr(md5(mt_rand()),0,6);});
-             $chart_inputer    = new InputerChart();
-             $chart_inputer->labels($label_inputer);
-             $chart_inputer->dataset('Jumlah','bar', $data_inputer)->backgroundColor($colors);
-             $chart_inputer->options([
-                   'legend' => false,
-                   'title' => [
-                       'display' => true,
-                       // 'text' => 'Admin Dengan Input Terbanyak'
-                   ]
-            ]);
-            
+        $cat_inputer = [];
+        foreach($inputer as $val){
+            $cat_inputer['label'][] = $val->name;
+            $cat_inputer['data'][]  = $val->total_data;
         }
+        $cat_inputer_label = collect($cat_inputer['label']); 
+        $colors            = $cat_inputer_label->map(function($item){return $rand_color = '#' . substr(md5(mt_rand()),0,6);});
 
-        return $chart_inputer;
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer['label'],
+            'cat_inputer_data' => $cat_inputer['data'],
+            'colors' => $colors
+        ];
+        return $data;
     }
 
     public function getGrafikMemberRegistered($member_registered)
     {
         $gF   = app('GlobalProvider'); // global function
-        $cat_member_registered = [];
+        $gF   = app('GlobalProvider'); // global function
+        $cat_member_registered_label = [];
+        $cat_member_registered_data = [];
+        $cat_member_registered_target = [];
         foreach($member_registered as $val){
-                $cat_member_registered['label'][] = $val->name;
-                $cat_member_registered['data'][]  = $gF->persen(($val->realisasi_member / $val->target_member)*100);
-                $cat_member_registered['target'][] = $val->target_member;
+                $cat_member_registered_label[] = $val->name;
+                $cat_member_registered_data[]  = $gF->persen(($val->realisasi_member / $val->target_member)*100);
+                $cat_member_registered_target[] = $val->target_member;
             
         }
-        $label_member_registered    = collect($cat_member_registered['label']);
+        $label_member_registered    = collect($cat_member_registered_label);
         $colors           = $label_member_registered->map(function($item){return $rand_color = '#00FF00';});
         $colors_target    = $label_member_registered->map(function($item){return $rand_color = '#CC0000';});
-        $chart_member_registered    = app()->chartjs
-                                    ->name('registerGrafik')
-                                    ->type('bar')
-                                    ->labels($cat_member_registered['label'])
-                                    ->datasets([
-                                        [
-                                            "label" => "Terdaftar",
-                                            'backgroundColor' => $colors,
-                                            'data' =>  $cat_member_registered['data']
-                                        ],
-                                        [
-                                            "label" => "Target",
-                                            'backgroundColor' => $colors_target,
-                                            'data' => $cat_member_registered['target']
-                                        ]
-                                    ])
-                                    ->options([
-                                        'legend' => false,
-                                    ]);
-        return $chart_member_registered;
+
+        $data = [
+            'cat_member_registered_label' => $cat_member_registered_label,
+            'cat_member_registered_data' => $cat_member_registered_data,
+            'cat_member_registered_target' => $cat_member_registered_target,
+            'colors' => $colors,
+            'colors_target' => $colors_target
+        ];
+        
+        return $data;
     }
 
     public function getGrafikJobs($jobs)
@@ -115,26 +88,16 @@ class GrafikProvider extends ServiceProvider
             $cat_jobs['data'][] = $gF->persen(($val->total_job / $sum_jobs)*100);
         }
 
-        $labels_jobs = collect($cat_jobs['label']);
-        $data_jobs   = $cat_jobs['data'];
-        $colors = $labels_jobs->map(function($item){
+        
+        $labels_job = collect($cat_jobs['label']);
+        $colors = $labels_job->map(function($item){
             return $rand_color = '#' . substr(md5(mt_rand()),0,6);
         });
-        $chart_jobs = new JobChart();
-        $chart_jobs->labels($labels_jobs);
-        $chart_jobs->dataset('Anggota Berdasarkan Pekerjaan','pie', $data_jobs)->backgroundColor($colors);
-        $chart_jobs->options([
-            'tooltip' => false,
-            'legend' => [
-                'position' => 'bottom',
-                'align' => 'right',
-                'display' => false,
-            ],
-            'title' => [
-                'display' => true,
-                ]
-            ]);
-        $data = ['colors' => $colors,'chart_jobs' =>  $chart_jobs];
+        $data  = [
+            'chart_jobs_label' => $cat_jobs['label'],
+            'chart_jobs_data' => $cat_jobs['data'],
+            'color_jobs'  =>  $colors
+        ];
         return $data;
     }
 
@@ -170,15 +133,15 @@ class GrafikProvider extends ServiceProvider
     public function getGrafikRangeAge($range_age)
     {
         $cat_range_age = [];
-        $cat_range_age_data = [];
         foreach ($range_age as $val) {
-            $cat_range_age[]      = $val->range_age;
-            $cat_range_age_data[] = [
-                'y'    => $val->total
-            ];
+            $cat_range_age['label'][]     = $val->range_age;
+            $cat_range_age['data'][] = $val->total;
         }
 
-        $data = ['cat_range_age' => $cat_range_age, 'cat_range_age_data' => $cat_range_age_data];
+        $data = [
+            'cat_range_age' => $cat_range_age['label'], 
+            'cat_range_age_data' => $cat_range_age['data']
+        ];
         return $data;
     }
 
@@ -189,30 +152,36 @@ class GrafikProvider extends ServiceProvider
         foreach ($gen_age as $val) {
             if (isset($val->gen_age) != null) {
                 # code...
-                $cat_gen_age[]      = $val->gen_age;
-                $cat_gen_age_data[] = [
-                    'y'    => $val->total
-                ];
+                $cat_gen_age['label'][] = $val->gen_age;
+                $cat_gen_age['data'][]  = $val->total;
             }
         }
 
-        $data = ['cat_gen_age' => $cat_gen_age,'cat_gen_age_data' => $cat_gen_age_data];
+        $data = [
+            'cat_gen_age' => $cat_gen_age['label'],
+            'cat_gen_age_data' => $cat_gen_age['data']
+        ];
         return $data;
     }
 
     public function getGrafikReferal($referal)
     {
         $cat_referal      = [];
-        $cat_referal_data = [];
         foreach ($referal as $val) {
-            $cat_referal[] = $val->name; 
-            $cat_referal_data[] = [
-                "y" => $val->total_referal,
-                // "url" => route('admin-dashboard')
-            ];
+            $cat_referal['label'][] = $val->name; 
+            $cat_referal['data'][]  = $val->total_referal;
         }
 
-        $data = ['cat_referal' => $cat_referal,'cat_referal_data' => $cat_referal_data];
+        $label_referal = collect($cat_referal['label']);
+        $colors = $label_referal->map(function($item){
+            return $rand_color = '#' . substr(md5(mt_rand()),0,6);
+        });
+
+        $data = [
+            'cat_referal' => $cat_referal['label'],
+            'cat_referal_data' => $cat_referal['data'],
+            'color_referals' => $colors
+        ];
         return $data;
     }
 
@@ -251,6 +220,26 @@ class GrafikProvider extends ServiceProvider
                                         'legend' => false,
                                     ]);
         return $chart_member_registered;
+    }
+
+    public function getGrafikTotalMember($province)
+    {
+        $cat_province= [];
+        foreach ($province as $val) {
+            $cat_province['label'][] = $val->province; 
+            $cat_province['data'][]  = $val->total_member;
+        }
+        $label_province = collect($cat_province['label']);
+        $colors = $label_province->map(function($item){
+            return $rand_color = '#' . substr(md5(mt_rand()),0,6);
+        });
+
+        $data = [
+            'label' => $cat_province['label'],
+            'data' => $cat_province['data'],
+            'colors_province' => $colors 
+        ];
+        return $data;
     }
 
 

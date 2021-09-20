@@ -73,7 +73,7 @@ class Regency extends Model
         return collect(\DB::select($sql))->first();
     }
 
-    public function getGrafikTotalMember()
+    public function getTotalMember()
     {
          $sql = "SELECT e.id  as province_id, e.name as province,
                 count(a.name) as total_member

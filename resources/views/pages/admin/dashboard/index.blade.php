@@ -116,7 +116,9 @@
                   <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <div id="province"></div>
+                        <div>
+                          <canvas id="province"></canvas>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -129,9 +131,9 @@
                     <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Anggota Terdaftar VS Target (%)</h6>
-                        <div>
-                          {!! $chart_member_registered->render() !!}
-                        </div>
+                        <canvas id="memberRegister">
+                          
+                        </canvas>
                       </div>
                     </div>
                   </div>
@@ -172,8 +174,8 @@
                     <div class="card">
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Pekerjaan (%)</h6>
-                       <div class="w-100">
-                           {!! $chart_jobs->container() !!}
+                        <div>
+                          <canvas width="" id="jobs"></canvas>
                         </div>
                       </div>
                       {{-- <div class="col-md-12 col-sm-12">
@@ -195,14 +197,20 @@
                   <div class="col-md-6 mt-3">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <div id="ageGroup"></div>
+                        <h6 class="text-center">Anggota Berdasarkan Kelompok Umur</h6>
+                        <div>
+                          <canvas id="ageGroup"></canvas>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-6 mt-3">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <div id="ageGen"></div>
+                        <h6 class="text-center">Anggota Berdasarkan Generasi Umur</h6>
+                        <div>
+                          <canvas id="ageGen"></canvas>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -210,8 +218,8 @@
                     <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Admin Berdasarkan Input Terbanyak</h6>
-                        <div id="ex">
-                          {!! $chart_inputer->container() !!}
+                        <div>
+                          <canvas id="inputer"></canvas>
                         </div>
                       </div>
                     </div>
@@ -219,7 +227,10 @@
                   <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <div id="referal"></div>
+                        <h6 class="text-center">Anggota Berdasarkan Referal Terbanyak</h6>
+                        <div>
+                          <canvas id="referal"></canvas>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -284,11 +295,8 @@
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-<script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
-{!! $chart_jobs->script() !!}
-{!! $chart_inputer->script() !!}
 <script src="{{ asset('js/dashboard-nation.js') }}" ></script>
 <script>
        var datatable = $('#achievment').DataTable({
@@ -319,151 +327,177 @@
         });
 </script>
 <script>
-  // member calculate
-     
-
-
-  // grafik anggota referal terbanyak
-      Highcharts.chart('referal', {
-         credits: {
-            enabled: false
+  // member province
+  const province = document.getElementById('province');
+  const provinceChart = new Chart(province, {
+    type: 'bar',
+    data : {
+      labels:  {!! json_encode($chart_province_label) !!},
+      datasets: [{
+          data: {!! json_encode($chart_province_data) !!},
+          backgroundColor: {!! json_encode($color_provinces) !!},
+        }]
+    },
+    options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true
+						}
+					}]
         },
-        legend: {enabled: false},
-          chart: {
-              type: 'column'
-          },
-          title: {
-              text: 'Anggota Berdasarkan Referal Terbanyak'
-          },
-          xAxis: {
-              categories: {!! json_encode($cat_referal) !!},
-              crosshair: true,
-          },
-          yAxis: {
-              min: 0,
-              title: {
-                  text: 'Jumlah'
-              }
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              },
-              series: {
-                    stacking: 'normal',
-                    borderRadius: 3,
-                }
-          },
-          series: [{
-              colorByPoint: true,
-              name:"",
-              data: {!! json_encode($cat_referal_data) !!},
+        legend: false
+			}
+  });
 
-          }]
-      });
-
-      // generation age
-      Highcharts.chart('ageGen', {
-          credits: {
-            enabled: false
+  // member terdaftar vs target
+const memberRegister = document.getElementById('memberRegister');
+    const data =  {
+        labels: {!! json_encode($chart_member_registered_label) !!},
+        datasets: [{
+            label: 'Terdaftar',
+            data: {!! json_encode($chart_member_registered_data) !!},
+            backgroundColor: {!! json_encode($colors_register) !!}
         },
-          chart: {
-              type: 'column'
-          },
-          legend: {enabled: false},
-          title: {
-              text: 'Anggota Berdasarkan Generasi Umur'
-          },
-          xAxis: {
-              categories: {!! json_encode($cat_gen_age) !!},
-              crosshair: true,
-          },
-          yAxis: {
-              min: 0,
-              title: false
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              },
-              series: {
-                    stacking: 'normal',
-                    borderRadius: 3,
-                }
-          },
-          series: [{
-              name:"",
-              data: {!! json_encode($cat_gen_age_data) !!},
+        {
+            label: 'Target',
+            data: {!! json_encode($chart_member_registered_target) !!},
+            backgroundColor: {!! json_encode($colors_target) !!}
+        }
+      ]
+    };
+  const memberRegisterGrafik = new Chart(memberRegister, {
+    type: 'bar',
+    data: data,
+    options: {
+          barValueSpacing: 20,
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      min: 0,
+                  }
+              }]
+          }
+      },
+      legend: false
+  });
 
-          }]
-      });
-
-      // age group
-       Highcharts.chart('ageGroup', {
-          credits: {
-            enabled: false
-        },
-          chart: {
-              type: 'column'
-          },
-          legend: {enabled: false},
-          title: {
-              text: 'Anggota Berdasarkan Kelompok Umur'
-          },
-          xAxis: {
-              categories: {!! json_encode($cat_range_age) !!},
-              crosshair: true,
-          },
-          yAxis: {
-              min: 0,
-              title: false
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              },
-              series: {
-                    stacking: 'normal',
-                    borderRadius: 3,
-                }
-          },
-          series: [{
-              name:"",
-              data: {!! json_encode($cat_range_age_data) !!},
-
-          }]
-      });
-</script>
-<script>
    // Gender
-      var donut_chart = Morris.Donut({
+      const donut_chart = Morris.Donut({
           element: 'gender',
           data: {!! json_encode($cat_gender) !!},
           colors: ["#063df7","#EC407A"],
           resize: true,
           formatter: function (x) { return x + "%"}
           });
-</script>
 
+    // Job
+    const jobs = document.getElementById("jobs")
+        const piechart = new Chart(jobs,{
+        type: 'pie',
+        data : {
+            labels:{!! json_encode($chart_jobs_label) !!},
+            datasets: [{
+              data:{!! json_encode($chart_jobs_data) !!},
+              backgroundColor:{!! json_encode($color_jobs) !!}
+            }],
+        },
+        options:{
+          legend: false  
+        }
+        });
+
+  // age group
+  const ageGroup = document.getElementById('ageGroup');
+  const ageGroupChart = new Chart(ageGroup, {
+    type: 'bar',
+    data : {
+      labels:  {!! json_encode($cat_range_age) !!},
+      datasets: [{
+          data: {!! json_encode($cat_range_age_data) !!},
+          backgroundColor: 'rgba(34, 167, 240, 1)',
+        }]
+    },
+    options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true
+						}
+					}]
+        },
+        legend: false
+			}
+  });
+
+  // gen Age
+  const ageGen = document.getElementById('ageGen');
+  const ageGenChart = new Chart(ageGen, {
+    type: 'bar',
+    data : {
+      labels:  {!! json_encode($cat_gen_age) !!},
+      datasets: [{
+          data: {!! json_encode($cat_gen_age_data) !!},
+          backgroundColor: 'rgba(34, 167, 240, 1)',
+        }]
+    },
+    options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true
+						}
+					}]
+        },
+        legend: false
+			}
+  });
+
+  // inputer
+  const inputer = document.getElementById('inputer');
+  const inputerChart = new Chart(inputer, {
+    type: 'bar',
+    data : {
+      labels:  {!! json_encode($cat_inputer_label) !!},
+      datasets: [{
+          data: {!! json_encode($cat_inputer_data) !!},
+          backgroundColor: {!! json_encode($color_inputer) !!},
+        }]
+    },
+    options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true
+						}
+					}]
+        },
+        legend: false
+			}
+  });
+
+  // referal
+  const referal = document.getElementById('referal');
+  const referalChart = new Chart(referal, {
+    type: 'bar',
+    data : {
+      labels:  {!! json_encode($cat_referal_label) !!},
+      datasets: [{
+          data: {!! json_encode($cat_referal_data) !!},
+          backgroundColor: {!! json_encode($color_referals) !!},
+        }]
+    },
+    options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true
+						}
+					}]
+        },
+        legend: false
+			}
+  });
+
+</script>
 @endpush
