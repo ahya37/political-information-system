@@ -33,7 +33,7 @@ class DashboardController extends Controller
     public function index()
     {
         // $gF   = app('GlobalProvider'); // global function
-        // $GrafikProvider = new GrafikProvider();
+        $GrafikProvider = new GrafikProvider();
 
 
         // $userModel        = new User();

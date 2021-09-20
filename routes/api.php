@@ -40,3 +40,4 @@ Route::get('member/village/{daterange}/{villageID}','API\DashboardController@mem
 Route::get('member/rergister/province','API\DashboardController@getMemberProvince');
 Route::get('member/totalprovince','API\DashboardController@getTotalMemberProvince');
 Route::get('membervsterget/province','API\DashboardController@getMemberVsTarget');
+Route::get('member/gender/province','API\DashboardController@getGenderProvince');

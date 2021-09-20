@@ -151,6 +151,8 @@
                     <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Jenis Kelamin (%)</h6>
+                        <div id="Loadgender" class="d-none lds-dual-ring hidden overlay">
+                          </div>
                         <div id="gender"></div>
                       </div>
                       <div class="row">
@@ -159,7 +161,6 @@
                             <span class="text-white">Laki-laki</span>
                             <br>
                             <span class="text-white" id="totalMaleGender">
-                              {{-- {{ $total_male_gender }} --}}
                             </span>
                           </div>
                         </div>
@@ -167,8 +168,7 @@
                           <div class="card-body text-center cart-gender-female">
                             <span class="text-white">Perempuan</span>
                             <br>
-                            <span class="text-white">
-                              {{-- {{ $total_female_gender }} --}}
+                            <span class="text-white" id="totalfemaleGender">
                             </span>
                           </div>
                         </div>

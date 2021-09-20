@@ -311,4 +311,30 @@ $(document).ready(function () {
             $("#LoadmemberRegister").addClass("d-none");
         },
     });
+
+    // gender
+    $.ajax({
+        url: "/api/member/gender/province",
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#Loadgender").removeClass("d-none");
+        },
+        success: function (data) {
+            const donut_chart = Morris.Donut({
+                element: "gender",
+                data: data.cat_gender,
+                colors: ["#063df7", "#EC407A"],
+                resize: true,
+                formatter: function (x) {
+                    return x + "%";
+                },
+            });
+            $("#totalMaleGender").text(data.total_male_gender);
+            $("#totalfemaleGender").text(data.total_female_gender);
+        },
+        complete: function () {
+            $("#Loadgender").addClass("d-none");
+        },
+    });
 });

@@ -176,4 +176,36 @@ class DashboardController extends Controller
         return response()->json($member_registered);
     }
 
+    public function getGenderProvince()
+    {
+        $gF   = app('GlobalProvider'); // global function
+
+        $userModel = new User();
+        $gender     = $userModel->getGenders();
+         $total_gender = 0;
+        foreach ($gender as $key => $value) {
+            $total_gender += $value->total;
+        }
+        $cat_gender = [];
+        $all_gender  = [];
+
+        foreach ($gender as  $val) {
+            $all_gender[]  = $val->total;
+            $cat_gender[] = [
+                "label" => $val->gender == 0 ? 'Laki-laki' : 'Perempuan',
+                "value"    => $gF->persen(($val->total/$total_gender)*100),
+            ];
+        }
+        $total_male_gender   =empty($all_gender[0]) ?  0 :  $all_gender[0];; // total gender pria
+        $total_female_gender = empty($all_gender[1]) ?  0 :  $all_gender[1]; // total gender wanita
+
+        $data  = [
+            'cat_gender' => $cat_gender,
+            'total_male_gender' => $total_male_gender,
+            'total_female_gender' => $total_female_gender
+        ];
+        return response()->json($data);
+        
+    }
+
 }
