@@ -117,6 +117,8 @@
                   <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
+                         <div id="loadProvince" class="d-none lds-dual-ring hidden overlay">
+                          </div>
                         <div id="districts"></div>
                       </div>
                     </div>

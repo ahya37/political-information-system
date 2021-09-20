@@ -141,7 +141,6 @@ class DashboardController extends Controller
                     "url" => route('admin-dashboard-province', $val->province_id)
                 ];
          }
-         $province_label = collect($province);
         //  $colors = $province_label->map(function($item){
         //     return $rand_color = '#' . substr(md5(mt_rand()),0,6);
         // });
@@ -337,6 +336,27 @@ class DashboardController extends Controller
             'total_member' => $total_member,
             'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $gF->persen($persentage_target_member)
+        ];
+        return response()->json($data);
+    }
+
+    public function getMemberProvince($province_id)
+    {
+        $regencyModel     = new Regency();
+        $regency = $regencyModel->getGrafikTotalMemberRegencyProvince($province_id);
+        $cat_regency      = [];
+        $cat_regency_data = [];
+        foreach ($regency as $val) {
+            $cat_regency[] = $val->regency; 
+            $cat_regency_data[] = [
+                "y" => $val->total_member,
+                "url" => route('admin-dashboard-regency', $val->regency_id)
+            ];
+        }
+        $data = [
+            'cat_regency' => $cat_regency,
+            'cat_regency_data' => $cat_regency_data,
+            // 'colors' => $colors
         ];
         return response()->json($data);
     }

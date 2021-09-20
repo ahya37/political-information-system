@@ -49,4 +49,5 @@ Route::get('member/referal/national','API\DashboardController@getRegefalNational
 
 // 
 Route::get('member/totalprovince/{province_id}','API\DashboardController@getTotalMemberProvince');
+Route::get('member/rergister/province/{province_id}','API\DashboardController@getMemberProvince');
 
