@@ -234,6 +234,11 @@ $.ajax({
     dataType: "json",
     beforeSend: function () {
         $("#total_member").text("loading...");
+        $("#total_member_persen").text("loading...");
+        $("#target_anggota").text("loading...");
+        $("#village_filled").text("loading...");
+        $("#village_filled_persen").text("loading...");
+        $("#total_village").text("loading...");
     },
     success: function (data) {
         $("#total_member").text(data.total_member);
