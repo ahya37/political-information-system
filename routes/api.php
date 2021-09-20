@@ -44,3 +44,6 @@ Route::get('member/gender/province','API\DashboardController@getGenderProvince')
 Route::get('member/jobs/province','API\DashboardController@getJobsProvince');
 Route::get('member/agegroup/province','API\DashboardController@getAgeGroup');
 Route::get('member/genage/province','API\DashboardController@genAge');
+Route::get('member/inputer/province','API\DashboardController@getInputerProvince');
+Route::get('member/referal/province','API\DashboardController@getRegefalProvince');
+

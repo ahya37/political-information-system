@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Job;
 use App\User;
+use App\Referal;
 use Carbon\Carbon;
 use App\Models\Regency;
 use App\Models\Village;
@@ -253,6 +254,49 @@ class DashboardController extends Controller
         $data = [
             'cat_gen_age' => $cat_gen_age,
             'cat_gen_age_data' => $cat_gen_age_data
+        ];
+        return response()->json($data);
+
+    }
+
+    public function getInputerProvince()
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getInputers();
+        // get fungsi grafik admin input terbanyak
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer
+        ];
+        return response()->json($data);
+
+    }
+
+    public function getRegefalProvince()
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getInputers();
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer,
         ];
         return response()->json($data);
 

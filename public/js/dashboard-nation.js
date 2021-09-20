@@ -451,4 +451,84 @@ $(document).ready(function () {
             $("#LoadageGen").addClass("d-none");
         },
     });
+
+    // admin input terbanyak
+    $.ajax({
+        url: "/api/member/inputer/province",
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#Loadinputer").removeClass("d-none");
+        },
+        success: function (data) {
+            const inputer = document.getElementById("inputer");
+            const inputerChart = new Chart(inputer, {
+                type: "bar",
+                data: {
+                    labels: data.cat_inputer_label,
+                    datasets: [
+                        {
+                            data: data.cat_inputer_data,
+                            backgroundColor: data.color_inputer,
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        ],
+                    },
+                    legend: false,
+                },
+            });
+        },
+        complete: function () {
+            $("#Loadinputer").addClass("d-none");
+        },
+    });
+
+    // anggota referal terbanyak
+    $.ajax({
+        url: "/api/member/inputer/province",
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#Loadreferal").removeClass("d-none");
+        },
+        success: function (data) {
+            const referal = document.getElementById("referal");
+            const referalChart = new Chart(referal, {
+                type: "bar",
+                data: {
+                    labels: data.cat_inputer_label,
+                    datasets: [
+                        {
+                            data: data.cat_inputer_data,
+                            backgroundColor: data.color_inputer,
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        ],
+                    },
+                    legend: false,
+                },
+            });
+        },
+        complete: function () {
+            $("#Loadreferal").addClass("d-none");
+        },
+    });
 });
