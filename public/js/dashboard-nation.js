@@ -183,7 +183,7 @@ $("#created_at").daterangepicker(
 $(document).ready(function () {
     // jumlah anggota card dashboard
     $.ajax({
-        url: "/api/member/totalprovince",
+        url: "/api/member/totalnational",
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -206,7 +206,7 @@ $(document).ready(function () {
 
     // anggota terdaftar
     $.ajax({
-        url: "/api/member/rergister/province",
+        url: "/api/member/rergister/national",
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -287,7 +287,7 @@ $(document).ready(function () {
 
     // anggota terdaftar vs target
     $.ajax({
-        url: "/api/membervsterget/province",
+        url: "/api/membervsterget/national",
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -342,7 +342,7 @@ $(document).ready(function () {
 
     // gender
     $.ajax({
-        url: "/api/member/gender/province",
+        url: "/api/member/gender/national",
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -368,7 +368,7 @@ $(document).ready(function () {
 
     // Jobs
     $.ajax({
-        url: "/api/member/jobs/province",
+        url: "/api/member/jobs/national",
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -402,7 +402,7 @@ $(document).ready(function () {
 
     // kelompok umur
     $.ajax({
-        url: "/api/member/agegroup/province",
+        url: "/api/member/agegroup/national",
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -442,7 +442,7 @@ $(document).ready(function () {
 
     //generasi umur
     $.ajax({
-        url: "/api/member/genage/province",
+        url: "/api/member/genage/national",
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -482,7 +482,7 @@ $(document).ready(function () {
 
     // admin input terbanyak
     $.ajax({
-        url: "/api/member/inputer/province",
+        url: "/api/member/inputer/national",
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -522,7 +522,7 @@ $(document).ready(function () {
 
     // anggota referal terbanyak
     $.ajax({
-        url: "/api/member/inputer/province",
+        url: "/api/member/inputer/national",
         method: "GET",
         dataType: "json",
         beforeSend: function () {

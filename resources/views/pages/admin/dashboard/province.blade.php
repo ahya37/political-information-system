@@ -33,7 +33,7 @@
                   </div>
                 </div>
               </div>
-              <div class="dashboard-content">
+             <div class="dashboard-content">
                 <div class="row">
                   <div class="col-md-4">
                     <div class="card mb-2 bg-info">
@@ -42,7 +42,7 @@
                           Jumlah Anggota
                         </div>
                         <div class="dashboard-card-subtitle">
-                          <h4 class="text-white">{{ $gF->decimalFormat($total_member)}}</h4>
+                          <h4 class="text-white" id="total_member"></h4>
                         </div>
                       </div>
                     </div>
@@ -54,7 +54,7 @@
                           % Jumlah Anggota
                         </div>
                         <div class="dashboard-card-subtitle">
-                          <h4 class="text-white">{{ $gF->persen($persentage_target_member)}}</h4>
+                          <h4 class="text-white" id="total_member_persen"></h4>
                         </div>
                       </div>
                     </div>
@@ -66,7 +66,7 @@
                           Target Anggota
                         </div>
                         <div class="dashboard-card-subtitle">
-                          <h4 class="text-white">{{ $gF->decimalFormat($target_member)}}</h4>
+                          <h4 class="text-white" id="target_anggota"></h4>
                         </div>
                       </div>
                     </div>
@@ -81,7 +81,7 @@
                           Jumlah Desa Terisi
                         </div>
                         <div class="dashboard-card-subtitle">
-                          <h4 class="text-white">{{ $gF->decimalFormat($total_village_filled) }}</h4>
+                          <h4 class="text-white" id="village_filled"></h4>
                         </div>
                       </div>
                     </div>
@@ -93,7 +93,7 @@
                           % Desa
                         </div>
                         <div class="dashboard-card-subtitle">
-                          <h4 class="text-white">{{ $gF->persen($presentage_village_filled)}}</h4>
+                          <h4 class="text-white" id="village_filled_persen"></h4>
                         </div>
                       </div>
                     </div>
@@ -105,7 +105,7 @@
                           Total Desa
                         </div>
                         <div class="dashboard-card-subtitle">
-                          <h4 class="text-white">{{ $gF->decimalFormat($total_village) }}</h4>
+                          <h4 class="text-white" id="total_village"></h4>
                         </div>
                       </div>
                     </div>
@@ -131,7 +131,7 @@
                       <div class="card-body">
                         <h6 class="text-center">Anggota Terdaftar VS Target (%)</h6>
                         <div>
-                          {!! $chart_member_registered->render() !!}
+                          {{-- {!! $chart_member_registered->render() !!} --}}
                         </div>
                       </div>
                     </div>
@@ -153,7 +153,7 @@
                             <span class="text-white">Laki-laki</span>
                             <br>
                             <span class="text-white">
-                              {{ $total_male_gender }}
+                              {{-- {{ $total_male_gender }} --}}
                             </span>
                           </div>
                         </div>
@@ -162,7 +162,7 @@
                             <span class="text-white">Perempuan</span>
                             <br>
                             <span class="text-white">
-                              {{ $total_female_gender }}
+                              {{-- {{ $total_female_gender }} --}}
                             </span>
                           </div>
                         </div>
@@ -174,7 +174,7 @@
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Pekerjaan (%)</h6>
                        <div class="w-100">
-                           {!! $chart_jobs->container() !!}
+                           {{-- {!! $chart_jobs->container() !!} --}}
                         </div>
                       </div>
                       {{-- <div class="col-md-12 col-sm-12">
@@ -212,7 +212,7 @@
                       <div class="card-body">
                         <h6 class="text-center">Admin Berdasarkan Input Terbanyak</h6>
                         <div id="ex">
-                          {!! $chart_inputer->container() !!}
+                          {{-- {!! $chart_inputer->container() !!} --}}
                         </div>
                       </div>
                     </div>
@@ -291,8 +291,8 @@
 <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
-{!! $chart_jobs->script() !!}
-{!! $chart_inputer->script() !!}
+{{-- {!! $chart_jobs->script() !!} --}}
+{{-- {!! $chart_inputer->script() !!} --}}
 {{-- {!! $chart_member_registered->script() !!} --}}
 <script src="{{ asset('js/dashboard-province.js') }}" ></script>
 <script>
@@ -323,211 +323,4 @@
             ],
         });
 </script>
- <script>
-      // member calculate
-      Highcharts.chart('districts', {
-        credits: {
-            enabled: false
-        },
-         legend: {enabled: false},
-
-          chart: {
-              type: 'column'
-          },
-          title: {
-              text: 'Anggota Terdaftar'
-          },
-          xAxis: {
-              categories: {!! json_encode($cat_regency) !!},
-              crosshair: true,
-          },
-          yAxis: {
-              min: 0,
-              title: {
-                  text: 'Jumlah'
-              }
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          responsive: {
-            rules:[{
-              condition:{
-                maxWidth:1,
-              }
-            }]
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              },
-              series: {
-                    stacking: 'normal',
-                    borderRadius: 3,
-                    cursor: 'pointer',
-                    point: {
-                        events: {
-                            click: function(event) {
-                            // console.log(this.url);
-                            window.location.assign(this.url);
-                            }
-                        }
-                    }
-                }
-          },
-          series: [{
-              colorByPoint: true,
-              name:"",
-              data: {!! json_encode($cat_regency_data) !!},
-
-          }]
-      });
-
-      // Gender
-      var donut_chart = Morris.Donut({
-          element: 'gender',
-          data: {!! json_encode($cat_gender) !!},
-          colors: ["#063df7","#EC407A"],
-          resize: true,
-          formatter: function (x) { return x + "%"}
-          });
-
-      // Build the chart     
-
-      // age group
-       Highcharts.chart('ageGroup', {
-          credits: {
-            enabled: false
-        },
-          chart: {
-              type: 'column'
-          },
-          legend: {enabled: false},
-          title: {
-              text: 'Anggota Berdasarkan Kelompok Umur'
-          },
-          xAxis: {
-              categories: {!! json_encode($cat_range_age) !!},
-              crosshair: true,
-          },
-          yAxis: {
-              min: 0,
-              title: false
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              },
-              series: {
-                    stacking: 'normal',
-                    borderRadius: 3,
-                }
-          },
-          series: [{
-              name:"",
-              data: {!! json_encode($cat_range_age_data) !!},
-
-          }]
-      });
-
-      // generation age
-      Highcharts.chart('ageGen', {
-          credits: {
-            enabled: false
-        },
-          chart: {
-              type: 'column'
-          },
-          legend: {enabled: false},
-          title: {
-              text: 'Anggota Berdasarkan Generasi Umur'
-          },
-          xAxis: {
-              categories: {!! json_encode($cat_gen_age) !!},
-              crosshair: true,
-          },
-          yAxis: {
-              min: 0,
-              title: false
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              },
-              series: {
-                    stacking: 'normal',
-                    borderRadius: 3,
-                }
-          },
-          series: [{
-              name:"",
-              data: {!! json_encode($cat_gen_age_data) !!},
-
-          }]
-      });
-
-      // grafik anggota referal terbanyak
-      Highcharts.chart('referal', {
-         credits: {
-            enabled: false
-        },
-        legend: {enabled: false},
-          chart: {
-              type: 'column'
-          },
-          title: {
-              text: 'Anggota Berdasarkan Referal Terbanyak'
-          },
-          xAxis: {
-              categories: {!! json_encode($cat_referal) !!},
-              crosshair: true,
-          },
-          yAxis: {
-              min: 0,
-              title: {
-                  text: 'Jumlah'
-              }
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              },
-              series: {
-                    stacking: 'normal',
-                    borderRadius: 3,
-                }
-          },
-          series: [{
-              colorByPoint: true,
-              name:"",
-              data: {!! json_encode($cat_referal_data) !!},
-
-          }]
-      });
-    </script>
 @endpush

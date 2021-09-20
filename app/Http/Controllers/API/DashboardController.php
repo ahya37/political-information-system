@@ -128,7 +128,7 @@ class DashboardController extends Controller
         return $data;
     }
 
-    public function getMemberProvince()
+    public function getMemberNational()
     {
          $regencyModel     = new Regency();
          $province = $regencyModel->getTotalMember();
@@ -153,7 +153,7 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
-    public function getTotalMemberProvince()
+    public function getTotalMemberNational()
     {
         $gF   = app('GlobalProvider'); // global function
         
@@ -182,14 +182,14 @@ class DashboardController extends Controller
 
     }
 
-    public function getMemberVsTarget()
+    public function getMemberVsTargetNational()
     {
         $userModel        = new User();
         $member_registered  = $userModel->getMemberRegisteredAll();
         return response()->json($member_registered);
     }
 
-    public function getGenderProvince()
+    public function getGenderNational()
     {
         $gF   = app('GlobalProvider'); // global function
         $GrafikProvider = new GrafikProvider();
@@ -211,7 +211,7 @@ class DashboardController extends Controller
         
     }
 
-    public function getJobsProvince()
+    public function getJobsNational()
     {
         $GrafikProvider = new GrafikProvider();
         $jobModel  = new Job();
@@ -232,7 +232,7 @@ class DashboardController extends Controller
 
     }
 
-    public function getAgeGroup()
+    public function getAgeGroupNational()
     {
         $GrafikProvider = new GrafikProvider();
         $userModel = new User();
@@ -251,7 +251,7 @@ class DashboardController extends Controller
 
     }
 
-    public function genAge()
+    public function genAgeNational()
     {
         $GrafikProvider = new GrafikProvider();
         $userModel = new User();
@@ -269,7 +269,7 @@ class DashboardController extends Controller
 
     }
 
-    public function getInputerProvince()
+    public function getInputerNational()
     {
         $referalModel = new Referal();
         $GrafikProvider = new GrafikProvider();
@@ -291,7 +291,7 @@ class DashboardController extends Controller
 
     }
 
-    public function getRegefalProvince()
+    public function getRegefalNational()
     {
         $referalModel = new Referal();
         $GrafikProvider = new GrafikProvider();
@@ -310,6 +310,35 @@ class DashboardController extends Controller
         ];
         return response()->json($data);
 
+    }
+
+    public function getTotalMemberProvince($province_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+        
+        $userModel        = new User();
+        $member           = $userModel->getMemberProvince($province_id);
+        $total_member     = count($member); // total anggota terdaftar
+
+        $regencyModel     = new Regency();
+        $target_member    = $regencyModel->getRegencyProvince($province_id)->total_district * 5000;
+        $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
+        
+        $villageModel   = new Village();
+        $total_village  = $villageModel->getVillagesProvince($province_id)->total_village; // fungsi total desa di provinsi banten
+        $village_filled = $villageModel->getVillageFillProvince($province_id); // fungsi total desa di provinsi banten
+        $total_village_filled      = count($village_filled);
+        $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
+
+        $data = [
+            'total_village' => $gF->decimalFormat($total_village),
+            'total_village_filled' => $gF->decimalFormat($total_village_filled),
+            'presentage_village_filled' => $gF->persen($presentage_village_filled),
+            'total_member' => $total_member,
+            'target_member' => $gF->decimalFormat($target_member),
+            'persentage_target_member' => $gF->persen($persentage_target_member)
+        ];
+        return response()->json($data);
     }
 
 }

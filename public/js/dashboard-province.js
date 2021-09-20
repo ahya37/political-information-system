@@ -183,3 +183,25 @@ $("#created_at").daterangepicker(
         });
     }
 );
+
+$.ajax({
+    url: "/api/member/totalprovince" + "/" + provinceID,
+    method: "GET",
+    dataType: "json",
+    beforeSend: function () {
+        $("#total_member").text("loading...");
+        $("#total_member_persen").text("loading...");
+        $("#target_anggota").text("loading...");
+        $("#village_filled").text("loading...");
+        $("#village_filled_persen").text("loading...");
+        $("#total_village").text("loading...");
+    },
+    success: function (data) {
+        $("#total_member").text(data.total_member);
+        $("#total_member_persen").text(data.persentage_target_member);
+        $("#target_anggota").text(data.target_member);
+        $("#village_filled").text(data.total_village_filled);
+        $("#village_filled_persen").text(data.presentage_village_filled);
+        $("#total_village").text(data.total_village);
+    },
+});
