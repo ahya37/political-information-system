@@ -178,3 +178,51 @@ $("#created_at").daterangepicker(
         });
     }
 );
+
+// total member
+$(document).ready(function () {
+    $.ajax({
+        url: "/api/member/rergister/province",
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#loadProvince").removeClass("d-none");
+        },
+        success: function (data) {
+            var label = [];
+            var value = [];
+            for (var i in data) {
+                label.push(data[i].province);
+                value.push(data[i].total_member);
+            }
+            var province = document.getElementById("province");
+            var provinceChart = new Chart(province, {
+                type: "bar",
+                data: {
+                    labels: label,
+                    datasets: [
+                        {
+                            data: value,
+                            backgroundColor: "rgb(252, 116, 101)",
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        ],
+                    },
+                    legend: false,
+                },
+            });
+        },
+        complete: function () {
+            $("#loadProvince").addClass("d-none");
+        },
+    });
+});

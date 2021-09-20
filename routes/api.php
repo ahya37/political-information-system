@@ -35,3 +35,6 @@ Route::get('member/province/{daterange}/{provinceID}','API\DashboardController@m
 Route::get('member/regency/{daterange}/{regencyID}','API\DashboardController@memberReportPerMountRegency');
 Route::get('member/district/{daterange}/{districtID}','API\DashboardController@memberReportPerMountDistrict');
 Route::get('member/village/{daterange}/{villageID}','API\DashboardController@memberReportPerMountVillage');
+
+// cahrt anggota terdaftar province
+Route::get('member/rergister/province','API\DashboardController@getMemberProvince');

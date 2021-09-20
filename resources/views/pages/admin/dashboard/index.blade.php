@@ -116,7 +116,10 @@
                   <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
+                        <h6 class="text-center">Anggota Terdaftar</h6>
                         <div>
+                          <div id="loadProvince" class="d-none lds-dual-ring hidden overlay">
+                          </div>
                           <canvas id="province"></canvas>
                         </div>
                       </div>
@@ -327,177 +330,154 @@
         });
 </script>
 <script>
-  // member province
-  const province = document.getElementById('province');
-  const provinceChart = new Chart(province, {
-    type: 'bar',
-    data : {
-      labels:  {!! json_encode($chart_province_label) !!},
-      datasets: [{
-          data: {!! json_encode($chart_province_data) !!},
-          backgroundColor: {!! json_encode($color_provinces) !!},
-        }]
-    },
-    options: {
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero:true
-						}
-					}]
-        },
-        legend: false
-			}
-  });
-
   // member terdaftar vs target
-const memberRegister = document.getElementById('memberRegister');
-    const data =  {
-        labels: {!! json_encode($chart_member_registered_label) !!},
-        datasets: [{
-            label: 'Terdaftar',
-            data: {!! json_encode($chart_member_registered_data) !!},
-            backgroundColor: {!! json_encode($colors_register) !!}
-        },
-        {
-            label: 'Target',
-            data: {!! json_encode($chart_member_registered_target) !!},
-            backgroundColor: {!! json_encode($colors_target) !!}
-        }
-      ]
-    };
-  const memberRegisterGrafik = new Chart(memberRegister, {
-    type: 'bar',
-    data: data,
-    options: {
-          barValueSpacing: 20,
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0,
-                  }
-              }]
-          }
-      },
-      legend: false
-  });
+// const memberRegister = document.getElementById('memberRegister');
+//     const data =  {
+//         labels: {!! json_encode($chart_member_registered_label) !!},
+//         datasets: [{
+//             label: 'Terdaftar',
+//             data: {!! json_encode($chart_member_registered_data) !!},
+//             backgroundColor: {!! json_encode($colors_register) !!}
+//         },
+//         {
+//             label: 'Target',
+//             data: {!! json_encode($chart_member_registered_target) !!},
+//             backgroundColor: {!! json_encode($colors_target) !!}
+//         }
+//       ]
+//     };
+//   const memberRegisterGrafik = new Chart(memberRegister, {
+//     type: 'bar',
+//     data: data,
+//     options: {
+//           barValueSpacing: 20,
+//           scales: {
+//               yAxes: [{
+//                   ticks: {
+//                       min: 0,
+//                   }
+//               }]
+//           }
+//       },
+//       legend: false
+//   });
 
    // Gender
-      const donut_chart = Morris.Donut({
-          element: 'gender',
-          data: {!! json_encode($cat_gender) !!},
-          colors: ["#063df7","#EC407A"],
-          resize: true,
-          formatter: function (x) { return x + "%"}
-          });
+      // const donut_chart = Morris.Donut({
+      //     element: 'gender',
+      //     data: {!! json_encode($cat_gender) !!},
+      //     colors: ["#063df7","#EC407A"],
+      //     resize: true,
+      //     formatter: function (x) { return x + "%"}
+      //     });
 
     // Job
-    const jobs = document.getElementById("jobs")
-        const piechart = new Chart(jobs,{
-        type: 'pie',
-        data : {
-            labels:{!! json_encode($chart_jobs_label) !!},
-            datasets: [{
-              data:{!! json_encode($chart_jobs_data) !!},
-              backgroundColor:{!! json_encode($color_jobs) !!}
-            }],
-        },
-        options:{
-          legend: false  
-        }
-        });
+    // const jobs = document.getElementById("jobs")
+    //     const piechart = new Chart(jobs,{
+    //     type: 'pie',
+    //     data : {
+    //         labels:{!! json_encode($chart_jobs_label) !!},
+    //         datasets: [{
+    //           data:{!! json_encode($chart_jobs_data) !!},
+    //           backgroundColor:{!! json_encode($color_jobs) !!}
+    //         }],
+    //     },
+    //     options:{
+    //       legend: false  
+    //     }
+    //     });
 
   // age group
-  const ageGroup = document.getElementById('ageGroup');
-  const ageGroupChart = new Chart(ageGroup, {
-    type: 'bar',
-    data : {
-      labels:  {!! json_encode($cat_range_age) !!},
-      datasets: [{
-          data: {!! json_encode($cat_range_age_data) !!},
-          backgroundColor: 'rgba(34, 167, 240, 1)',
-        }]
-    },
-    options: {
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero:true
-						}
-					}]
-        },
-        legend: false
-			}
-  });
+  // const ageGroup = document.getElementById('ageGroup');
+  // const ageGroupChart = new Chart(ageGroup, {
+  //   type: 'bar',
+  //   data : {
+  //     labels:  {!! json_encode($cat_range_age) !!},
+  //     datasets: [{
+  //         data: {!! json_encode($cat_range_age_data) !!},
+  //         backgroundColor: 'rgba(34, 167, 240, 1)',
+  //       }]
+  //   },
+  //   options: {
+	// 			scales: {
+	// 				yAxes: [{
+	// 					ticks: {
+	// 						beginAtZero:true
+	// 					}
+	// 				}]
+  //       },
+  //       legend: false
+	// 		}
+  // });
 
   // gen Age
-  const ageGen = document.getElementById('ageGen');
-  const ageGenChart = new Chart(ageGen, {
-    type: 'bar',
-    data : {
-      labels:  {!! json_encode($cat_gen_age) !!},
-      datasets: [{
-          data: {!! json_encode($cat_gen_age_data) !!},
-          backgroundColor: 'rgba(34, 167, 240, 1)',
-        }]
-    },
-    options: {
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero:true
-						}
-					}]
-        },
-        legend: false
-			}
-  });
+  // const ageGen = document.getElementById('ageGen');
+  // const ageGenChart = new Chart(ageGen, {
+  //   type: 'bar',
+  //   data : {
+  //     labels:  {!! json_encode($cat_gen_age) !!},
+  //     datasets: [{
+  //         data: {!! json_encode($cat_gen_age_data) !!},
+  //         backgroundColor: 'rgba(34, 167, 240, 1)',
+  //       }]
+  //   },
+  //   options: {
+	// 			scales: {
+	// 				yAxes: [{
+	// 					ticks: {
+	// 						beginAtZero:true
+	// 					}
+	// 				}]
+  //       },
+  //       legend: false
+	// 		}
+  // });
 
   // inputer
-  const inputer = document.getElementById('inputer');
-  const inputerChart = new Chart(inputer, {
-    type: 'bar',
-    data : {
-      labels:  {!! json_encode($cat_inputer_label) !!},
-      datasets: [{
-          data: {!! json_encode($cat_inputer_data) !!},
-          backgroundColor: {!! json_encode($color_inputer) !!},
-        }]
-    },
-    options: {
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero:true
-						}
-					}]
-        },
-        legend: false
-			}
-  });
+  // const inputer = document.getElementById('inputer');
+  // const inputerChart = new Chart(inputer, {
+  //   type: 'bar',
+  //   data : {
+  //     labels:  {!! json_encode($cat_inputer_label) !!},
+  //     datasets: [{
+  //         data: {!! json_encode($cat_inputer_data) !!},
+  //         backgroundColor: {!! json_encode($color_inputer) !!},
+  //       }]
+  //   },
+  //   options: {
+	// 			scales: {
+	// 				yAxes: [{
+	// 					ticks: {
+	// 						beginAtZero:true
+	// 					}
+	// 				}]
+  //       },
+  //       legend: false
+	// 		}
+  // });
 
   // referal
-  const referal = document.getElementById('referal');
-  const referalChart = new Chart(referal, {
-    type: 'bar',
-    data : {
-      labels:  {!! json_encode($cat_referal_label) !!},
-      datasets: [{
-          data: {!! json_encode($cat_referal_data) !!},
-          backgroundColor: {!! json_encode($color_referals) !!},
-        }]
-    },
-    options: {
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero:true
-						}
-					}]
-        },
-        legend: false
-			}
-  });
+  // const referal = document.getElementById('referal');
+  // const referalChart = new Chart(referal, {
+  //   type: 'bar',
+  //   data : {
+  //     labels:  {!! json_encode($cat_referal_label) !!},
+  //     datasets: [{
+  //         data: {!! json_encode($cat_referal_data) !!},
+  //         backgroundColor: {!! json_encode($color_referals) !!},
+  //       }]
+  //   },
+  //   options: {
+	// 			scales: {
+	// 				yAxes: [{
+	// 					ticks: {
+	// 						beginAtZero:true
+	// 					}
+	// 				}]
+  //       },
+  //       legend: false
+	// 		}
+  // });
 
 </script>
 @endpush

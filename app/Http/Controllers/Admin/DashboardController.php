@@ -49,14 +49,6 @@ class DashboardController extends Controller
         $total_village_filled      = count($village_filled);
         $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
 
-         // Grfaik Data member
-        $regencyModel     = new Regency();
-        $province = $regencyModel->getTotalMember();
-        $ChartTotalMember = $GrafikProvider->getGrafikTotalMember($province);
-        $chart_province_label = $ChartTotalMember['label'];
-        $chart_province_data = $ChartTotalMember['data'];
-        $color_provinces = $ChartTotalMember['colors_province'];
-
         // grafik data anggota terdaftar vs target
         $member_registered  = $userModel->getMemberRegisteredAll();
 
@@ -129,7 +121,7 @@ class DashboardController extends Controller
                     ->rawColumns(['persentage'])
                     ->make();
         }
-        return view('pages.admin.dashboard.index', compact('chart_member_registered_target','colors_target','color_referals','colors_register','color_jobs','chart_province_label','chart_province_data','color_provinces','chart_member_registered_label','chart_member_registered_data','chart_jobs_label','chart_jobs_data','cat_gender','total_female_gender','total_male_gender','cat_range_age','cat_range_age_data','cat_gen_age','cat_gen_age_data','cat_inputer_label','cat_inputer_data','color_inputer','cat_referal_data','cat_referal_label','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
+        return view('pages.admin.dashboard.index', compact('chart_member_registered_target','colors_target','color_referals','colors_register','color_jobs','chart_member_registered_label','chart_member_registered_data','chart_jobs_label','chart_jobs_data','cat_gender','total_female_gender','total_male_gender','cat_range_age','cat_range_age_data','cat_gen_age','cat_gen_age_data','cat_inputer_label','cat_inputer_data','color_inputer','cat_referal_data','cat_referal_label','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
         
         // return view('pages.admin.dashboard.index', compact('cat_referal_data','cat_referal','chart_inputer','cat_gen_age','cat_gen_age_data','cat_range_age','cat_range_age_data','chart_jobs','cat_gender','total_female_gender','total_male_gender','chart_member_registered','cat_province','cat_province_data','total_village','total_village_filled','presentage_village_filled','gF','total_member','target_member','persentage_target_member'));
     }

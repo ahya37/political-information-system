@@ -4,8 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\User;
 use Carbon\Carbon;
-use App\Http\Controllers\Controller;
+use App\Models\Regency;
 use App\Providers\GetRegencyId;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -121,6 +122,13 @@ class DashboardController extends Controller
             ];
         }
         return $data;
+    }
+
+    public function getMemberProvince()
+    {
+         $regencyModel     = new Regency();
+         $province = $regencyModel->getTotalMember();
+         return response()->json($province);
     }
 
 }
