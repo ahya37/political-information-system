@@ -75,7 +75,7 @@ class Regency extends Model
 
     public function getTotalMember()
     {
-         $sql = "SELECT e.name as province,
+         $sql = "SELECT e.id as province_id, e.name as province,
                 count(a.name) as total_member
                 from users as a 
                 join villages as b on a.village_id = b.id 

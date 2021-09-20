@@ -132,13 +132,23 @@ class DashboardController extends Controller
     {
          $regencyModel     = new Regency();
          $province = $regencyModel->getTotalMember();
+         $cat_province      = [];
+         $cat_province_data = [];
+         foreach ($province as $val) {
+                $cat_province[] = $val->province; 
+                $cat_province_data[] = [
+                    "y" => $val->total_member,
+                    "url" => route('admin-dashboard-province', $val->province_id)
+                ];
+         }
          $province_label = collect($province);
-         $colors = $province_label->map(function($item){
-            return $rand_color = '#' . substr(md5(mt_rand()),0,6);
-        });
+        //  $colors = $province_label->map(function($item){
+        //     return $rand_color = '#' . substr(md5(mt_rand()),0,6);
+        // });
         $data = [
-            'province' => $province,
-            'colors' => $colors
+            'cat_province' => $cat_province,
+            'cat_province_data' => $cat_province_data,
+            // 'colors' => $colors
         ];
         return response()->json($data);
     }

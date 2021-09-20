@@ -121,7 +121,7 @@
                         <div>
                           <div id="loadProvince" class="d-none lds-dual-ring hidden overlay">
                           </div>
-                          <canvas id="province"></canvas>
+                          <div id="province"></div>
                         </div>
                       </div>
                     </div>
@@ -308,7 +308,7 @@
 <script type="text/javascript" src="{{ asset('assets/vendor/moments/moment.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/vendor/daterangepicker/daterangepicker.min.js') }}"></script>
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/daterangepicker/daterangepicker.css') }}" />
-
+<script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
 <script src="{{ asset('assets/vendor/raphael/raphael-min.js') }}"></script>
 <script src="{{ asset('assets/vendor/morris/morris.min.js') }}"></script>
 <script type="{{ asset('assets/vendor/morris/morris.min.js') }}"></script>

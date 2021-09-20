@@ -16,10 +16,7 @@ use App\Exports\MemberExportDistrict;
 use App\Exports\MemberExportProvince;
 use App\Referal;
 use Yajra\DataTables\Facades\DataTables;
-use App\Charts\JobChart;
 use App\Providers\GrafikProvider;
-
-use function GuzzleHttp\json_encode;
 
 class DashboardController extends Controller
 {
@@ -32,76 +29,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        // $gF   = app('GlobalProvider'); // global function
-        $GrafikProvider = new GrafikProvider();
-
-
-        // $userModel        = new User();
-        // $total_member     = $userModel->where('village_id', '!=', NULL)->count();
-
         $regencyModel     = new Regency();
-        // $target_member    = $regencyModel->getRegency()->total_district * 5000;
-        // $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
-
-        // $villageModel   = new Village();
-        // $total_village  = $villageModel->getVillages()->total_village; // fungsi total desa di provinsi banten
-        // $village_filled = $villageModel->getVillageFill(); // fungsi total desa di provinsi banten
-        // $total_village_filled      = count($village_filled);
-        // $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
-
-        // grafik data anggota terdaftar vs target
-        // $member_registered  = $userModel->getMemberRegisteredAll();
-
-        // $MemberRegistered = $GrafikProvider->getGrafikMemberRegistered($member_registered);
-        // $chart_member_registered_label= $MemberRegistered['cat_member_registered_label'];
-        // $chart_member_registered_data = $MemberRegistered['cat_member_registered_data'];
-        // $chart_member_registered_target = $MemberRegistered['cat_member_registered_target'];
-        // $colors_register = $MemberRegistered['colors'];
-        // $colors_target = $MemberRegistered['colors_target'];
-
-        // grafik data job
-        // $jobModel  = new Job();
-        // $most_jobs = $jobModel->getMostJobs();
-        // $jobs      = $jobModel->getJobs();
-        // $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
-        // $chart_jobs_label= $ChartJobs['chart_jobs_label'];
-        // $chart_jobs_data= $ChartJobs['chart_jobs_data'];
-        // $color_jobs    = $ChartJobs['color_jobs'];
-
-        // grafik data jenis kelamin
-        // $gender     = $userModel->getGenders();
-        // $CatGender  = $GrafikProvider->getGrafikGender($gender);
-        // $cat_gender = $CatGender['cat_gender'];
-        // $total_male_gender  = $CatGender['total_male_gender'];
-        // $total_female_gender = $CatGender['total_female_gender'];
-
-        // range umur
-        // $range_age     = $userModel->rangeAge();
-        // $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
-        // $cat_range_age = $CatRange['cat_range_age'];
-        // $cat_range_age_data = $CatRange['cat_range_age_data'];
-
-         // generasi umur
-        // $gen_age     = $userModel->generationAges();
-        // $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
-        // $cat_gen_age = $GenAge['cat_gen_age'];
-        // $cat_gen_age_data = $GenAge['cat_gen_age_data'];
-
-        // $referalModel = new Referal();
-        // input admin terbanyak
-        // $inputer      = $referalModel->getInputers();
-        // get fungsi grafik admin input terbanyak
-        // $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
-        // $cat_inputer_label = $ChartInputer['cat_inputer_label'];
-        // $cat_inputer_data = $ChartInputer['cat_inputer_data'];
-        // $color_inputer = $ChartInputer['colors'];
-
-        // anggota dengan referal terbanyak
-        // $referal      = $referalModel->getReferals();
-        // $CatReferal   = $GrafikProvider->getGrafikReferal($referal);
-        // $cat_referal_label      = $CatReferal['cat_referal'];
-        // $cat_referal_data = $CatReferal['cat_referal_data'];
-        // $color_referals   = $CatReferal['color_referals'];
 
         // Daftar pencapaian lokasi / daerah
         $achievments   = $regencyModel->achievements();

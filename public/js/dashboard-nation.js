@@ -213,43 +213,68 @@ $(document).ready(function () {
             $("#loadProvince").removeClass("d-none");
         },
         success: function (data) {
-            const dataProvince = data.province;
-            const dataProvinceColor = data.colors;
-            var label = [];
-            var value = [];
-            const colorsProvince = [];
-            for (var i in dataProvince) {
-                label.push(dataProvince[i].province);
-                value.push(dataProvince[i].total_member);
-            }
-            for (var c in dataProvinceColor) {
-                colorsProvince.push(dataProvinceColor[c]);
-            }
+            // member calculate
+            Highcharts.chart("province", {
+                credits: {
+                    enabled: false,
+                },
+                legend: { enabled: false },
 
-            var province = document.getElementById("province");
-            var provinceChart = new Chart(province, {
-                type: "bar",
-                data: {
-                    labels: label,
-                    datasets: [
+                chart: {
+                    type: "column",
+                },
+                xAxis: {
+                    categories: data.cat_province,
+                    crosshair: true,
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: "Jumlah",
+                    },
+                },
+                tooltip: {
+                    headerFormat:
+                        '<span style="font-size:10px">{point.key}</span><table>',
+                    footerFormat: "</table>",
+                    shared: true,
+                    useHTML: true,
+                },
+                responsive: {
+                    rules: [
                         {
-                            data: value,
-                            backgroundColor: colorsProvince,
+                            condition: {
+                                maxWidth: 1,
+                            },
                         },
                     ],
                 },
-                options: {
-                    scales: {
-                        yAxes: [
-                            {
-                                ticks: {
-                                    beginAtZero: true,
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                    },
+                    series: {
+                        stacking: "normal",
+                        borderRadius: 3,
+                        cursor: "pointer",
+                        point: {
+                            events: {
+                                click: function (event) {
+                                    // console.log(this.url);
+                                    window.location.assign(this.url);
                                 },
                             },
-                        ],
+                        },
                     },
-                    legend: false,
                 },
+                series: [
+                    {
+                        colorByPoint: true,
+                        name: "",
+                        data: data.cat_province_data,
+                    },
+                ],
             });
         },
         complete: function () {
