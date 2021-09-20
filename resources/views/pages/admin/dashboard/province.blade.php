@@ -313,9 +313,6 @@
 <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
-{{-- {!! $chart_jobs->script() !!} --}}
-{{-- {!! $chart_inputer->script() !!} --}}
-{{-- {!! $chart_member_registered->script() !!} --}}
 <script src="{{ asset('js/dashboard-province.js') }}" ></script>
 <script>
        var datatable = $('#achievment').DataTable({

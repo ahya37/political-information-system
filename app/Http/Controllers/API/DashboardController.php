@@ -8,6 +8,7 @@ use App\Referal;
 use Carbon\Carbon;
 use App\Models\Regency;
 use App\Models\Village;
+use App\Models\District;
 use App\Providers\GetRegencyId;
 use App\Providers\GrafikProvider;
 use App\Http\Controllers\Controller;
@@ -152,6 +153,29 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
+    public function getMemberRegency($regency_id)
+    {
+        $districtModel    = new District();
+
+        $districts = $districtModel->getGrafikTotalMemberDistrictRegency($regency_id);
+        $cat_districts      = [];
+        $cat_districts_data = [];
+        foreach ($districts as $val) {
+            $cat_districts[] = $val->district; 
+            $cat_districts_data[] = [
+                "y" => $val->total_member,
+                "url" => route('admin-dashboard-district', $val->distric_id)
+            ];
+        }
+        
+        $data = [
+            'cat_districts' => $cat_districts,
+            'cat_districts_data' => $cat_districts_data,
+            // 'colors' => $colors
+        ];
+        return response()->json($data);
+    }
+
     public function getTotalMemberNational()
     {
         $gF   = app('GlobalProvider'); // global function
@@ -181,10 +205,50 @@ class DashboardController extends Controller
 
     }
 
+    public function getTotalMemberRegency($regency_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+
+        $userModel        = new User();
+        $member           = $userModel->getMemberRegency($regency_id);   
+        $total_member     = count($member); // total anggota terdaftar
+
+        $districtModel    = new District();
+        $targetMember    = $districtModel->where('regency_id',$regency_id)->get()->count() * 5000; // target anggota tercapai, per kecamatan 1000 target
+;
+        $target_member    = (string) $targetMember;
+        $persentage_target_member = ($total_member / $target_member) * 100;
+
+        $villageModel   = new Village();
+        $villages       = $villageModel->getVillagesRegency($regency_id); // fungsi total desa di kab
+        $total_village  = count($villages);
+        $village_filled = $villageModel->getVillageFilledRegency($regency_id); //fungsi total desa yang terisi 
+        $total_village_filled      = count($village_filled); // total desa yang terisi
+        $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
+
+        $data = [
+            'total_village' => $gF->decimalFormat($total_village),
+            'total_village_filled' => $gF->decimalFormat($total_village_filled),
+            'presentage_village_filled' => $gF->persen($presentage_village_filled),
+            'total_member' => $total_member,
+            'target_member' => $gF->decimalFormat($target_member),
+            'persentage_target_member' => $gF->persen($persentage_target_member)
+        ];
+        return response()->json($data);
+
+    }
+
     public function getMemberVsTargetNational()
     {
         $userModel        = new User();
         $member_registered  = $userModel->getMemberRegisteredAll();
+        return response()->json($member_registered);
+    }
+
+    public function getMemberVsTargetDistrict($regency_id)
+    {
+        $userModel        = new User();
+        $member_registered  = $userModel->getMemberRegisteredRegency($regency_id);
         return response()->json($member_registered);
     }
 
@@ -195,6 +259,28 @@ class DashboardController extends Controller
 
         $userModel = new User();
         $gender     = $userModel->getGenders();
+        $CatGender  = $GrafikProvider->getGrafikGender($gender);
+       
+        $cat_gender = $CatGender['cat_gender'];
+        $total_male_gender  = $CatGender['total_male_gender'];
+        $total_female_gender = $CatGender['total_female_gender'];
+
+        $data  = [
+            'cat_gender' => $cat_gender,
+            'total_male_gender' => $total_male_gender,
+            'total_female_gender' => $total_female_gender
+        ];
+        return response()->json($data);
+        
+    }
+
+    public function getGenderRegency($regency_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+        $GrafikProvider = new GrafikProvider();
+
+        $userModel = new User();
+        $gender     = $userModel->getGenderRegency($regency_id);
         $CatGender  = $GrafikProvider->getGrafikGender($gender);
        
         $cat_gender = $CatGender['cat_gender'];
@@ -231,12 +317,52 @@ class DashboardController extends Controller
 
     }
 
+    public function getJobsRegency($regency_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $jobModel  = new Job();
+        // $most_jobs = $jobModel->getMostJobs();
+        $jobs      = $jobModel->getJobRegency($regency_id);
+        $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
+        $chart_jobs_label= $ChartJobs['chart_jobs_label'];
+        $chart_jobs_data= $ChartJobs['chart_jobs_data'];
+        $color_jobs    = $ChartJobs['color_jobs'];
+
+        $data = [
+
+            'chart_jobs_label' => $chart_jobs_label,
+            'chart_jobs_data'  => $chart_jobs_data,
+            'color_jobs' => $color_jobs,
+        ];
+        return response()->json($data);
+
+    }
+
     public function getAgeGroupNational()
     {
         $GrafikProvider = new GrafikProvider();
         $userModel = new User();
 
         $range_age     = $userModel->rangeAge();
+        $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
+        $cat_range_age = $CatRange['cat_range_age'];
+        $cat_range_age_data = $CatRange['cat_range_age_data'];
+
+        $data = [
+            'cat_range_age' => $cat_range_age,
+            'cat_range_age_data' => $cat_range_age_data
+        ];
+
+        return response()->json($data);
+
+    }
+
+    public function getAgeGroupRegency($regency_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $range_age     = $userModel->rangeAgeRegency($regency_id);
         $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
         $cat_range_age = $CatRange['cat_range_age'];
         $cat_range_age_data = $CatRange['cat_range_age_data'];
@@ -275,6 +401,24 @@ class DashboardController extends Controller
         $userModel = new User();
 
         $gen_age     = $userModel->generationAges();
+        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        $cat_gen_age = $GenAge['cat_gen_age'];
+        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
+
+        $data = [
+            'cat_gen_age' => $cat_gen_age,
+            'cat_gen_age_data' => $cat_gen_age_data
+        ];
+        return response()->json($data);
+
+    }
+
+    public function genAgeRegency($regency_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $gen_age     = $userModel->generationAgeRegency($regency_id);
         $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
         $cat_gen_age = $GenAge['cat_gen_age'];
         $cat_gen_age_data = $GenAge['cat_gen_age_data'];
@@ -327,6 +471,28 @@ class DashboardController extends Controller
 
     }
 
+    public function getInputerRegency($regency_id)
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getInputerRegency($regency_id);
+        // get fungsi grafik admin input terbanyak
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer
+        ];
+        return response()->json($data);
+
+    }
+
     public function getInputerProvince($province_id)
     {
         $referalModel = new Referal();
@@ -356,6 +522,27 @@ class DashboardController extends Controller
 
         // input admin terbanyak
         $inputer      = $referalModel->getInputers();
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer,
+        ];
+        return response()->json($data);
+
+    }
+
+    public function getRegefalRegency($regency_id)
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getReferalRegency($regency_id);
         $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
         $cat_inputer_label = $ChartInputer['cat_inputer_label'];
         $cat_inputer_data = $ChartInputer['cat_inputer_data'];
