@@ -243,7 +243,7 @@
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Referal Terbanyak</h6>
                         <div>
-                          <div id="Loadinputer" class="d-none lds-dual-ring hidden overlay">
+                          <div id="Loadreferal" class="d-none lds-dual-ring hidden overlay">
                           </div>
                           <canvas id="referal"></canvas>
                         </div>
