@@ -68,3 +68,14 @@ Route::get('member/agegroup/regency/{regency_id}','API\DashboardController@getAg
 Route::get('member/genage/regency/{regency_id}','API\DashboardController@genAgeRegency');
 Route::get('member/inputer/regency/{regency_id}','API\DashboardController@getInputerRegency');
 Route::get('member/referal/regency/{regency_id}','API\DashboardController@getRegefalRegency');
+
+// chart dashboard district
+Route::get('member/totaldistrict/{district_id}','API\DashboardController@getTotalMemberDistrict');
+Route::get('member/rergister/district/{district_id}','API\DashboardController@getMemberDistrict');
+Route::get('membervsterget/district/{district_id}','API\DashboardController@getMemberVsTargetDistrict');
+Route::get('member/gender/district/{district_id}','API\DashboardController@getGenderDistrict');
+Route::get('member/jobs/district/{district_id}','API\DashboardController@getJobsDistrict');
+Route::get('member/agegroup/district/{district_id}','API\DashboardController@getAgeGroupDistrict');
+Route::get('member/genage/district/{district_id}','API\DashboardController@genAgeDistrtict');
+Route::get('member/inputer/district/{district_id}','API\DashboardController@getInputerDistrict');
+Route::get('member/referal/district/{district_id}','API\DashboardController@getRegefalDistrict');

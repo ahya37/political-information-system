@@ -111,7 +111,7 @@ class Referal extends Model
 
     public function getReferalDistrict($district_id)
     {
-        $sql = "SELECT b.id, b.name , count(b.id) as total_referal
+        $sql = "SELECT b.id, b.name , count(b.id) as total_data
                 from users as a
                 join users as b on a.user_id = b.id
                 left join villages as c on b.village_id = c.id

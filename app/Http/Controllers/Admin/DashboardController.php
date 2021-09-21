@@ -81,81 +81,13 @@ class DashboardController extends Controller
 
     public function regency($regency_id)
     {
-        // $gF   = app('GlobalProvider'); // global function
-        // $GrafikProvider = new GrafikProvider(); // fungsi untuk grafik yang berulang
-        
-        // kirimkan regency_id ke provider khusus API untuk Dashboard
-
         $regency          = Regency::with('province')->where('id', $regency_id)->first();
-        // $userModel        = new User();
-        // $member           = $userModel->getMemberRegency($regency_id);   
-        // $total_member     = count($member); // total anggota terdaftar
-
+    
         $districtModel    = new District();
-        // $target_member    = $districtModel->where('regency_id',$regency_id)->get()->count() * 5000; // target anggota tercapai, per kecamatan 1000 target
-        // $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
-        
-        // $villageModel   = new Village();
-        // $villages       = $villageModel->getVillagesRegency($regency_id); // fungsi total desa di kab
-        // $total_village  = count($villages);
-        // $village_filled = $villageModel->getVillageFilledRegency($regency_id); //fungsi total desa yang terisi 
-        // $total_village_filled      = count($village_filled); // total desa yang terisi
-        // $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
-
-        // Grfaik Data member
-        // $districts = $districtModel->getGrafikTotalMemberDistrictRegency($regency_id);
-        // $cat_districts      = [];
-        // $cat_districts_data = [];
-        // foreach ($districts as $val) {
-        //     $cat_districts[] = $val->district; 
-        //     $cat_districts_data[] = [
-        //         "y" => $val->total_member,
-        //         "url" => route('admin-dashboard-district', $val->distric_id)
-        //     ];
-        // }
-
-         // grafik data anggota terdaftar vs target
-        // $member_registered  = $userModel->getMemberRegisteredRegency($regency_id);
-        // $chart_member_registered = $GrafikProvider->getGrafikMemberRegistered($member_registered);
-
-        // grafik data job
-        // $jobModel = new Job();
-        // $most_jobs = $jobModel->getMostJobsRegency($regency_id);
-        // $jobs     = $jobModel->getJobRegency($regency_id);
-        // $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
-        // $chart_jobs= $ChartJobs['chart_jobs'];
-        // $colors    = $ChartJobs['colors'];
-
-         // grafik data jenis kelamin
-        // $gender = $userModel->getGenderRegency($regency_id);
-        // $CatGender  = $GrafikProvider->getGrafikGender($gender);
-        // $cat_gender = $CatGender['cat_gender'];
-        // $total_male_gender  = $CatGender['total_male_gender'];
-        // $total_female_gender = $CatGender['total_female_gender'];
-
-        // range umur
-        // $range_age     = $userModel->rangeAgeRegency($regency_id);
-        // $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
-        // $cat_range_age = $CatRange['cat_range_age'];
-        // $cat_range_age_data = $CatRange['cat_range_age_data'];
-
-        // generasi umur
-        // $gen_age     = $userModel->generationAgeRegency($regency_id);
-        // $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
-        // $cat_gen_age = $GenAge['cat_gen_age'];
-        // $cat_gen_age_data = $GenAge['cat_gen_age_data'];
-
         // Daftar pencapaian lokasi / daerah
         $achievments   = $districtModel->achievementDistrict($regency_id);
-        $data_achievments = [];
-        // tampilkan yang hanya ada datanya saja / realisasi tidak kosong
-        foreach($achievments as $val){
-            if ($val->realisasi_member != 0) {
-                $data_achievments[] = $val;
-            }
-        }
         if (request()->ajax()) {
-            return DataTables::of($data_achievments)
+            return DataTables::of($achievments)
                     ->addColumn('persentage', function($item){
                         $gF   = app('GlobalProvider'); // global function
                         $persentage = ($item->realisasi_member / $item->total_target_member)*100;
@@ -171,94 +103,26 @@ class DashboardController extends Controller
                     ->make();
         }
 
-        // $referalModel = new Referal();
-        // input admin terbanyak
-        // $inputer      = $referalModel->getInputerRegency($regency_id);
-        // $cat_inputer = [];
-        // foreach($inputer as $val){
-        //     $cat_inputer['label'][] = $val->name;
-        //     $cat_inputer['data'][]  = $val->total_data;
-        // }
-
-        // get fungsi grafik admin input terbanyak
-        // $chart_inputer  = $GrafikProvider->getGrafikInputer($cat_inputer);
-
-         // anggota dengan referal terbanyak
-        // $referalModel = new Referal();
-        // $referal      = $referalModel->getReferalRegency($regency_id);
-        // $CatReferal   = $GrafikProvider->getGrafikReferal($referal);
-        // $cat_referal      = $CatReferal['cat_referal'];
-        // $cat_referal_data = $CatReferal['cat_referal_data'];
-
         return view('pages.admin.dashboard.regency', compact('regency'));
     }
 
     public function district($district_id)
     {
-        $gF   = app('GlobalProvider'); // global function
-        $GrafikProvider = new GrafikProvider();
+        $districtModel    = new District();
 
-        $district   = District::with(['regency'])->where('id', $district_id)->first();
-        // jumlah anggota di kecamatan
+        $district   = $districtModel->with(['regency'])->where('id', $district_id)->first();
+        // // jumlah anggota di kecamatan
         $userModel  = new User();
         $member     = $userModel->getMemberDistrict($district_id);
         $total_member = count($member);
 
-        // perentasi anggot  di kecamatan
-        $districtModel    = new District();
+        // // perentasi anggot  di kecamatan
         $target_member    = $districtModel->where('id',$district_id)->get()->count() * 5000; // target anggota tercapai, per kecamatan 1000 target
-        $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
 
         $villageModel   = new Village();
         $villages       = $villageModel->getVillagesDistrct($district_id); // fungsi total desa di kab
         $total_village  = count($villages);
 
-        $village_filled = $villageModel->getVillageFilledDistrict($district_id); //fungsi total desa yang terisi 
-        $total_village_filled      = count($village_filled); // total desa yang terisi
-        $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
-
-        // Grfaik Data member
-        $districts = $districtModel->getGrafikTotalMemberDistrict($district_id);
-        $cat_districts      = [];
-        $cat_districts_data = [];
-        foreach ($districts as $val) {
-            $cat_districts[] = $val->district; 
-            $cat_districts_data[] = [
-                "y" => $val->total_member,
-                "url" => route('admin-dashboard-village', ['district_id' => $district_id,'village_id' => $val->village_id])
-            ];
-        }
-
-        // grafik data anggota terdaftar vs target
-        $member_registered  = $userModel->getMemberRegisteredDistrct($district_id);
-        $chart_member_registered = $GrafikProvider->getGrafikMemberRegisteredDistrict($member_registered);
-
-        // grafik data job
-        $jobModel = new Job();
-        $most_jobs = $jobModel->getMostJobsDistrict($district_id);
-        $jobs     = $jobModel->getJobDistrict($district_id);
-        $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
-        $chart_jobs= $ChartJobs['chart_jobs'];
-        $colors    = $ChartJobs['colors'];
-
-        // grafik data jenis kelamin
-        $gender = $userModel->getGenderDistrict($district_id);
-        $CatGender  = $GrafikProvider->getGrafikGender($gender);
-        $cat_gender = $CatGender['cat_gender'];
-        $total_male_gender  = $CatGender['total_male_gender'];
-        $total_female_gender = $CatGender['total_female_gender'];
-        
-        // range umur
-        $range_age     = $userModel->rangeAgeDistrict($district_id);
-        $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
-        $cat_range_age = $CatRange['cat_range_age'];
-        $cat_range_age_data = $CatRange['cat_range_age_data'];
-
-        // generasi umur
-        $gen_age     = $userModel->generationAgeDistrict($district_id);
-        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
-        $cat_gen_age = $GenAge['cat_gen_age'];
-        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
 
          // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillage($district_id);
@@ -283,26 +147,7 @@ class DashboardController extends Controller
                         ->make();
         }
 
-        $referalModel = new Referal();
-        // input admin terbanyak
-        $inputer      = $referalModel->getInputerDistrict($district_id);
-        $cat_inputer = [];
-        foreach($inputer as $val){
-            $cat_inputer['label'][] = $val->name;
-            $cat_inputer['data'][]  = $val->total_data;
-        }
-
-         // get fungsi grafik admin input terbanyak
-        $chart_inputer  = $GrafikProvider->getGrafikInputer($cat_inputer);
-
-        // anggota dengan referal terbanyak
-        $referalModel = new Referal();
-        $referal      = $referalModel->getReferalDistrict($district_id);
-        $CatReferal   = $GrafikProvider->getGrafikReferal($referal);
-        $cat_referal      = $CatReferal['cat_referal'];
-        $cat_referal_data = $CatReferal['cat_referal_data'];
-
-        return view('pages.admin.dashboard.district', compact('chart_inputer','cat_gen_age','cat_gen_age_data','chart_jobs','chart_member_registered','cat_referal_data','cat_referal','cat_range_age_data','cat_range_age','total_male_gender','total_female_gender','cat_gender','cat_districts','cat_districts_data','total_village_filled','presentage_village_filled','total_village','target_member','persentage_target_member','district','gF','total_member'));
+        return view('pages.admin.dashboard.district', compact('district'));
     }
 
     public function village($district_id, $village_id)
