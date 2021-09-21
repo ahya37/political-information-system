@@ -187,7 +187,7 @@ class DashboardController extends Controller
             $cat_districts[] = $val->district; 
             $cat_districts_data[] = [
                 "y" => $val->total_member,
-                "url" => route('admin-dashboard-district', ['district_id' => $district_id,'village_id' => $val->village_id])
+                "url" => route('admin-dashboard-village', ['district_id' => $district_id,'village_id' => $val->village_id])
             ];
         }
         
@@ -288,6 +288,33 @@ class DashboardController extends Controller
             'presentage_village_filled' => $presentage_village_filled,
             'total_member' => $total_member,
             'target_member' => $gF->decimalFormat($target_member),
+            'persentage_target_member' => $persentage_target_member
+        ];
+        return response()->json($data);
+
+    }
+
+    public function getTotalMemberVillage($district_id, $village_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+        $villageModel   = new Village();
+
+        $member     = $villageModel->getMemberVillage($village_id);
+        $total_member = count($member);
+
+         // total desa yg berada di kec, yg sama
+        $total_village = $villageModel->where('district_id', $district_id)->count();
+        $total_target_per_district = 5000;
+        $target_member  = $gF->decimalFormat($total_target_per_district / $total_village);
+        $persentage_target_member = $gF->persen(($total_member/$target_member)*100);
+        
+        // Daftar pencapaian lokasi / daerah
+        $achievments   = $villageModel->achievementVillageFirst($village_id);
+
+        $data = [
+            'achievments' => $gF->decimalFormat($achievments->todays_achievement ?? ''),
+            'total_member' => $gF->decimalFormat($total_member),
+            'target_member' => $target_member,
             'persentage_target_member' => $persentage_target_member
         ];
         return response()->json($data);
@@ -421,6 +448,28 @@ class DashboardController extends Controller
         
     }
 
+    public function getGenderVillage($village_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+        $GrafikProvider = new GrafikProvider();
+
+        $userModel = new User();
+        $gender     = $userModel->getGenderVillage($village_id);
+        $CatGender  = $GrafikProvider->getGrafikGender($gender);
+       
+        $cat_gender = $CatGender['cat_gender'];
+        $total_male_gender  = $CatGender['total_male_gender'];
+        $total_female_gender = $CatGender['total_female_gender'];
+
+        $data  = [
+            'cat_gender' => $cat_gender,
+            'total_male_gender' => $total_male_gender,
+            'total_female_gender' => $total_female_gender
+        ];
+        return response()->json($data);
+        
+    }
+
     public function getJobsNational()
     {
         $GrafikProvider = new GrafikProvider();
@@ -484,6 +533,27 @@ class DashboardController extends Controller
 
     }
 
+    public function getJobsVillage($village_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $jobModel  = new Job();
+        // $most_jobs = $jobModel->getMostJobs();
+        $jobs      = $jobModel->getJobVillage($village_id);
+        $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
+        $chart_jobs_label= $ChartJobs['chart_jobs_label'];
+        $chart_jobs_data= $ChartJobs['chart_jobs_data'];
+        $color_jobs    = $ChartJobs['color_jobs'];
+
+        $data = [
+
+            'chart_jobs_label' => $chart_jobs_label,
+            'chart_jobs_data'  => $chart_jobs_data,
+            'color_jobs' => $color_jobs,
+        ];
+        return response()->json($data);
+
+    }
+
     public function getAgeGroupNational()
     {
         $GrafikProvider = new GrafikProvider();
@@ -528,6 +598,25 @@ class DashboardController extends Controller
         $userModel = new User();
 
         $range_age     = $userModel->rangeAgeDistrict($district_id);
+        $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
+        $cat_range_age = $CatRange['cat_range_age'];
+        $cat_range_age_data = $CatRange['cat_range_age_data'];
+
+        $data = [
+            'cat_range_age' => $cat_range_age,
+            'cat_range_age_data' => $cat_range_age_data
+        ];
+
+        return response()->json($data);
+
+    }
+
+    public function getAgeGroupVillage($village_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $range_age     = $userModel->rangeAgeVillage($village_id);
         $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
         $cat_range_age = $CatRange['cat_range_age'];
         $cat_range_age_data = $CatRange['cat_range_age_data'];
@@ -614,6 +703,25 @@ class DashboardController extends Controller
 
     }
 
+     public function genAgeVillage($village_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $gen_age     = $userModel->generationAgeVillage($village_id);
+        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        $cat_gen_age = $GenAge['cat_gen_age'];
+        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
+
+        $data = [
+            'cat_gen_age' => $cat_gen_age,
+            'cat_gen_age_data' => $cat_gen_age_data
+        ];
+        return response()->json($data);
+
+    }
+
+
     public function genAgeProvince($province_id)
     {
         $GrafikProvider = new GrafikProvider();
@@ -683,6 +791,28 @@ class DashboardController extends Controller
 
         // input admin terbanyak
         $inputer      = $referalModel->getInputerDistrict($district_id);
+        // get fungsi grafik admin input terbanyak
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer
+        ];
+        return response()->json($data);
+
+    }
+
+    public function getInputerVillage($village_id)
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getInputerVillage($village_id);
         // get fungsi grafik admin input terbanyak
         $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
         $cat_inputer_label = $ChartInputer['cat_inputer_label'];
@@ -769,6 +899,27 @@ class DashboardController extends Controller
 
         // input admin terbanyak
         $inputer      = $referalModel->getReferalDistrict($district_id);
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer,
+        ];
+        return response()->json($data);
+
+    }
+
+    public function getRegefalVillage($village_id)
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getReferalVillage($village_id);
         $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
         $cat_inputer_label = $ChartInputer['cat_inputer_label'];
         $cat_inputer_data = $ChartInputer['cat_inputer_data'];
@@ -901,7 +1052,7 @@ class DashboardController extends Controller
     {
         $GrafikProvider = new GrafikProvider();
         $jobModel  = new Job();
-        $jobs      = $jobModel->getMostJobsProvince($province_id);
+        $jobs      = $jobModel->getJobProvince($province_id);
         $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
         $chart_jobs_label= $ChartJobs['chart_jobs_label'];
         $chart_jobs_data= $ChartJobs['chart_jobs_data'];

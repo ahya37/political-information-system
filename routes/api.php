@@ -79,3 +79,12 @@ Route::get('member/agegroup/district/{district_id}','API\DashboardController@get
 Route::get('member/genage/district/{district_id}','API\DashboardController@genAgeDistrtict');
 Route::get('member/inputer/district/{district_id}','API\DashboardController@getInputerDistrict');
 Route::get('member/referal/district/{district_id}','API\DashboardController@getRegefalDistrict');
+
+// chart dashboard district
+Route::get('member/totalvillage/{district_id}/{village_id}','API\DashboardController@getTotalMemberVillage');
+Route::get('member/gender/village/{village_id}','API\DashboardController@getGenderVillage');
+Route::get('member/jobs/village/{village_id}','API\DashboardController@getJobsVillage');
+Route::get('member/agegroup/village/{village_id}','API\DashboardController@getAgeGroupVillage');
+Route::get('member/genage/village/{village_id}','API\DashboardController@genAgeVillage');
+Route::get('member/inputer/village/{village_id}','API\DashboardController@getInputerVillage');
+Route::get('member/referal/village/{village_id}','API\DashboardController@getRegefalVillage');

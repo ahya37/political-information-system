@@ -44,7 +44,7 @@
                           Jumlah Anggota
                         </div>
                         <div class="dashboard-card-subtitle">
-                          <h4 class="text-white">{{ $gF->decimalFormat($total_member)}}</h4>
+                          <h4 class="text-white" id="total_member"></h4>
                         </div>
                       </div>
                     </div>
@@ -56,7 +56,7 @@
                           % Jumlah Anggota
                         </div>
                         <div class="dashboard-card-subtitle">
-                          <h4 class="text-white">{{ $gF->persen($persentage_target_member)}}</h4>
+                          <h4 class="text-white" id="total_member_persen"></h4>
                         </div>
                       </div>
                     </div>
@@ -68,7 +68,7 @@
                           Target Anggota
                         </div>
                         <div class="dashboard-card-subtitle">
-                          <h4 class="text-white">{{ $gF->decimalFormat($target_member)}}</h4>
+                          <h4 class="text-white" id="target_anggota"></h4>
                         </div>
                       </div>
                     </div>
@@ -79,8 +79,8 @@
                         <div class="dashboard-card-title text-white">
                           Pencapaian Hari Ini
                         </div>
-                        <div class="dashboard-card-subtitle">
-                          <h4 class="text-white">{{ $gF->decimalFormat($achievments->todays_achievement) ?? ''}}</h4>
+                         <div class="dashboard-card-subtitle">
+                          <h4 class="text-white" id="village_filled"></h4>
                         </div>
                       </div>
                     </div>
@@ -94,15 +94,16 @@
                     <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Jenis Kelamin (%)</h6>
+                        <div id="Loadgender" class="d-none lds-dual-ring hidden overlay">
+                          </div>
                         <div id="gender"></div>
                       </div>
-                       <div class="row">
-                          <div class="col-6">
+                      <div class="row">
+                        <div class="col-6">
                           <div class="card-body cart-gender-male text-center">
                             <span class="text-white">Laki-laki</span>
                             <br>
-                            <span class="text-white">
-                              {{ $total_male_gender }}
+                            <span class="text-white" id="totalMaleGender">
                             </span>
                           </div>
                         </div>
@@ -110,21 +111,22 @@
                           <div class="card-body text-center cart-gender-female">
                             <span class="text-white">Perempuan</span>
                             <br>
-                            <span class="text-white">
-                              {{ $total_female_gender }}
+                            <span class="text-white" id="totalfemaleGender">
                             </span>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>   
+                  </div>
                   
-                   <div class="col-md-6">
+                  <div class="col-md-6">
                     <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Anggota Berdasarkan Pekerjaan (%)</h6>
-                         <div class="w-100">
-                           {!! $chart_jobs->container() !!}
+                        <div>
+                          <div id="Loadjobs" class="d-none lds-dual-ring hidden overlay">
+                          </div>
+                          <canvas width="" id="jobs"></canvas>
                         </div>
                       </div>
                     </div>
@@ -133,15 +135,25 @@
                   <div class="col-md-6">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <div id="ageGroup"></div>
+                         <h6 class="text-center">Anggota Berdasarkan Kelompok Umur</h6>
+                        <div>
+                          <div id="LoadageGroup" class="d-none lds-dual-ring hidden overlay">
+                            </div>
+                          <canvas id="ageGroup"></canvas>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <div class="col-md-6">
+                  <div class="col-md-6 mt-3">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <div id="ageGen"></div>
+                        <h6 class="text-center">Anggota Berdasarkan Generasi Umur</h6>
+                         <div id="LoadageGen" class="d-none lds-dual-ring hidden overlay">
+                          </div>
+                        <div>
+                          <canvas id="ageGen"></canvas>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -150,8 +162,10 @@
                     <div class="card mb-2">
                       <div class="card-body">
                        <h6 class="text-center">Admin Berdasarkan Input Terbanyak</h6>
-                        <div id="inputer">
-                          {!! $chart_inputer->container() !!}
+                        <div>
+                           <div id="Loadinputer" class="d-none lds-dual-ring hidden overlay">
+                          </div>
+                          <canvas id="inputer"></canvas>
                         </div>
                       </div>
                     </div>
@@ -160,7 +174,12 @@
                    <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <div id="referal"></div>
+                        <h6 class="text-center">Anggota Berdasarkan Referal Terbanyak</h6>
+                        <div>
+                          <div id="Loadreferal" class="d-none lds-dual-ring hidden overlay">
+                          </div>
+                          <canvas id="referal"></canvas>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -180,6 +199,9 @@
                             <div class="col-12" id="divMemberPerMonth">
                               <canvas id="memberPerMonth"></canvas>
                             </div>
+                          <input type="hidden" value="{{ $village->id }}" id="villageID">
+                          <input type="hidden" value="{{ $village->district->id }}" id="districtID">
+
                         </div>
                       </div>
                     </div>
@@ -199,329 +221,6 @@
 <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
-{!! $chart_jobs->script() !!}
-{!! $chart_inputer->script() !!}
-<script>
-  $(document).ready(function(){
-    let start = moment().startOf('month');
-    let end   = moment().endOf('month');
-    let villageID = {!! json_encode($village->id) !!}
-    $.ajax({
-        url: '{{ url('api/member/village') }}/' + start.format('YYYY-MM-DD') + '+' + end.format('YYYY-MM-DD') + '/' + villageID,
-        method:'GET',
-        data: {first:self.first, last:self.last},
-        dataType:'json',
-        cache: false,
-        success:function(data){
-          if(data.length === 0){
-          }else{
-              var label = [];
-              var value = [];
-              var coloR = [];
-              var dynamicColors = function() {
-                    var r = Math.floor(Math.random() * 255);
-                    var g = Math.floor(Math.random() * 255);
-                    var b = Math.floor(Math.random() * 255);
-                    return "rgb(" + r + "," + g + "," + b + ")";
-                 };
-                for(var i in data){
-                  label.push(data[i].day);
-                  value.push(data[i].count);
-                  coloR.push(dynamicColors());
-                }
-              var ctx =  document.getElementById('memberPerMonth').getContext('2d');
-              var chart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                  labels: label,
-                  datasets:[{
-                    label: '',
-                    backgroundColor:  'rgb(54, 162, 235)',
-                    data: value,
-                    order: 1
-                  },{
-                    label: '',
-                    data: value,
-                    type: 'line',
-                    order: 2,
-                    borderColor: 'rgb(255, 99, 132)',
-                    borderWidth: 2,
-                    fill: false
-                  }
-                  ]
-                },
-                options:{
-                  legend: false,
-                  responsive: true,
-                }
-              });
-          }
-        }
-      });
-    $('#created_at').daterangepicker({
-      startDate: start,
-      endDate: end,
-      "locale": {
-        "format": "DD/MM/YYYY",
-        "separator": " - ",
-        "customRangeLabel": "Custom",
-        "daysOfWeek": [
-            "Min",
-            "Sen",
-            "Sel",
-            "Rab",
-            "Kam",
-            "Jum",
-            "Sab"
-        ],
-        "monthNames": [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "Mei",
-            "Jun",
-            "Jul",
-            "Agu",
-            "Sep",
-            "Okt",
-            "Nov",
-            "Des"
-        ],
-        "firstDay": 0
-    }
-    },function(first, last){
-      var self = this;
-      $.ajax({
-        url: '{{ url('api/member/district') }}/' + first.format('YYYY-MM-DD') + '+' + last.format('YYYY-MM-DD') + '/' + villageID,
-        method:'GET',
-        data: {first:self.first, last:self.last},
-        dataType:'json',
-        cache: false,
-        success:function(data){
-          if(data.length === 0){
-             $('#memberPerMonth').remove();
-              $('#divMemberPerMonth').append('<canvas id="memberPerMonth"></canvas>');
-                var ctx =  document.getElementById('memberPerMonth').getContext('2d');
-                startDay = first.format('YYYY-MM-DD');
-                lastDay  = last.format('YYYY-MM-DD');
-                var chart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                  labels: [startDay, lastDay],
-                  datasets:[{
-                    label: '',
-                    backgroundColor: 'rgb(54, 162, 235)',
-                    data: [0,0],
-                    order: 1
-                  },{
-                    label: '',
-                    data: [0,0],
-                    type: 'line',
-                    order: 2,
-                    borderColor: 'rgb(255, 99, 132)',
-                    borderWidth: 2,
-                    fill: false
-                  }
-                  ]
-                },
-                options:{
-                  legend: false,
-                  responsive: true,
-                }
-              });
-          }else{
-              var label = [];
-              var value = [];
-              var coloR = [];
-              var dynamicColors = function() {
-                    var r = Math.floor(Math.random() * 255);
-                    var g = Math.floor(Math.random() * 255);
-                    var b = Math.floor(Math.random() * 255);
-                    return "rgb(" + r + "," + g + "," + b + ")";
-                 };
-                for(var i in data){
-                  label.push(data[i].day);
-                  value.push(data[i].count);
-                  coloR.push(dynamicColors());
-                }
-                $('#memberPerMonth').remove();
-                $('#divMemberPerMonth').append('<canvas id="memberPerMonth"></canvas>');
-                var ctx =  document.getElementById('memberPerMonth').getContext('2d');
-                var chart = new Chart(ctx, {
-                  type: 'bar',
-                  data: {
-                    labels: label,
-                    datasets:[{
-                      label: '',
-                      backgroundColor: 'rgb(54, 162, 235)',
-                      data: value,
-                      order: 1
-                    },{
-                      label: '',
-                      data: value,
-                      type: 'line',
-                      order: 2,
-                      borderColor: 'rgb(255, 99, 132)',
-                      borderWidth: 2,
-                      fill: false
-                    }
-                    ]
-                  },
-                  options:{
-                    legend: false,
-                    responsive: true,
-                  }
-                });
-          }
-        }
-      })
-    });
-  })
-</script>
-<script>
-   // Gender
-     var donut_chart = Morris.Donut({
-          element: 'gender',
-          data: {!! json_encode($cat_gender) !!},
-          colors: ["#063df7","#EC407A"],
-          resize: true,
-          formatter: function (x) { return x + "%"}
-          });
-</script>
-<script>
-  // age group
-       Highcharts.chart('ageGroup', {
-          credits: {
-            enabled: false
-        },
-         legend: {enabled: false},
-          chart: {
-              type: 'column'
-          },
-          title: {
-              text: 'Anggota Berdasarkan Kelompok Umur'
-          },
-          xAxis: {
-              categories: {!! json_encode($cat_range_age) !!},
-              crosshair: true,
-          },
-          yAxis: {
-              min: 0,
-              title: false
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              },
-              series: {
-                    stacking: 'normal',
-                    borderRadius: 3,
-                }
-          },
-          series: [{
-              name:"",
-              data: {!! json_encode($cat_range_age_data) !!},
+<script src="{{ asset('js/dashboard-village.js') }}"></script>
 
-          }]
-      });
-
-      Highcharts.chart('ageGen', {
-         credits: {
-            enabled: false
-        },
-         legend: {enabled: false},
-          credits: {
-            enabled: false
-        },
-          chart: {
-              type: 'column'
-          },
-          legend: {enabled: false},
-          title: {
-              text: 'Anggota Berdasarkan Generasi Umur'
-          },
-          xAxis: {
-              categories: {!! json_encode($cat_gen_age) !!},
-              crosshair: true,
-          },
-          yAxis: {
-              min: 0,
-              title: false
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              },
-              series: {
-                    stacking: 'normal',
-                    borderRadius: 3,
-                }
-          },
-          series: [{
-              name:"",
-              data: {!! json_encode($cat_gen_age_data) !!},
-          }]
-      });
-
-      // grafik anggota referal terbanyak
-      Highcharts.chart('referal', {
-         credits: {
-            enabled: false
-        },
-         legend: {enabled: false},
-          chart: {
-              type: 'column'
-          },
-          title: {
-              text: 'Anggota Dengan Referal Terbanyak'
-          },
-          xAxis: {
-              categories: {!! json_encode($cat_referal) !!},
-              crosshair: true,
-          },
-          yAxis: {
-              min: 0,
-              title: {
-                  text: 'Jumlah'
-              }
-          },
-          tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-          },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              },
-              series: {
-                    stacking: 'normal',
-                    borderRadius: 3
-                }
-          },
-          series: [{
-              colorByPoint: true,
-              name:"",
-              data: {!! json_encode($cat_referal_data) !!},
-
-          }]
-      });
-</script>
 @endpush
