@@ -240,16 +240,42 @@ class DashboardController extends Controller
 
     public function getMemberVsTargetNational()
     {
+        $gF   = app('GlobalProvider'); // global function
+
         $userModel        = new User();
         $member_registered  = $userModel->getMemberRegisteredAll();
-        return response()->json($member_registered);
+        $chart_member_target = [];
+        foreach ($member_registered as $val) {
+            $chart_member_target['label'][] = $val->name;
+            $chart_member_target['target'][] = $val->target_member;
+            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+        }
+        $data = [
+            'label' => $chart_member_target['label'],
+            'persentage' => $chart_member_target['persentage'],
+            'value_target' =>  $chart_member_target['target'] 
+        ];
+        return response()->json($data);
     }
 
-    public function getMemberVsTargetDistrict($regency_id)
+    public function getMemberVsTargetRegency($regency_id)
     {
+        $gF   = app('GlobalProvider'); // global function
+
         $userModel        = new User();
         $member_registered  = $userModel->getMemberRegisteredRegency($regency_id);
-        return response()->json($member_registered);
+        $chart_member_target = [];
+        foreach ($member_registered as $val) {
+            $chart_member_target['label'][] = $val->name;
+            $chart_member_target['target'][] = $val->target_member;
+            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+        }
+        $data = [
+            'label' => $chart_member_target['label'],
+            'persentage' => $chart_member_target['persentage'],
+            'value_target' =>  $chart_member_target['target'] 
+        ];
+        return response()->json($data);
     }
 
     public function getGenderNational()
@@ -630,10 +656,23 @@ class DashboardController extends Controller
 
     public function getMemberVsTargetProvince($province_id)
     {
+        $gF   = app('GlobalProvider'); // global function
+
         $userModel        = new User();
 
         $member_registered  = $userModel->getMemberRegistered($province_id);
-        return response()->json($member_registered);
+        $chart_member_target = [];
+        foreach ($member_registered as $val) {
+            $chart_member_target['label'][] = $val->name;
+            $chart_member_target['target'][] = $val->target_member;
+            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+        }
+        $data = [
+            'label' => $chart_member_target['label'],
+            'persentage' => $chart_member_target['persentage'],
+            'value_target' =>  $chart_member_target['target'] 
+        ];
+        return response()->json($data);
     }
 
     public function getGenderProvince($province_id)

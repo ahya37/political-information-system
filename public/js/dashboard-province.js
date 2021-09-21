@@ -296,21 +296,16 @@ $.ajax({
         $("#LoadmemberRegister").removeClass("d-none");
     },
     success: function (data) {
-        const label = [];
-        const valueRegister = [];
-        const valueTarget = [];
-        for (const i in data) {
-            label.push(data[i].name);
-            valueRegister.push(data[i].realisasi_member);
-            valueTarget.push(data[i].target_member);
-        }
+        const label = data.label;
+        const valuePersentage = data.persentage;
+        const valueTarget = data.value_target;
         const memberRegistered = document.getElementById("memberRegister");
         const dataMemberVsTarget = {
             labels: label,
             datasets: [
                 {
                     label: "Terdaftar",
-                    data: valueRegister,
+                    data: valuePersentage,
                     backgroundColor: "rgb(126, 252, 101)",
                 },
                 {

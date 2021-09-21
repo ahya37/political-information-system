@@ -61,7 +61,7 @@ Route::get('member/referal/province/{province_id}','API\DashboardController@getR
 // chart dashboard regency
 Route::get('member/rergister/regency/{regency_id}','API\DashboardController@getMemberRegency');
 Route::get('member/totalregency/{regency_id}','API\DashboardController@getTotalMemberRegency');
-Route::get('membervsterget/regency/{regency_id}','API\DashboardController@getMemberVsTargetDistrict');
+Route::get('membervsterget/regency/{regency_id}','API\DashboardController@getMemberVsTargetRegency');
 Route::get('member/gender/regency/{regency_id}','API\DashboardController@getGenderRegency');
 Route::get('member/jobs/regency/{regency_id}','API\DashboardController@getJobsRegency');
 Route::get('member/agegroup/regency/{regency_id}','API\DashboardController@getAgeGroupRegency');
