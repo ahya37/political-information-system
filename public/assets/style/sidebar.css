@@ -1,0 +1,29 @@
+.custom-sidebar {
+    background-color: #5356a8 !important;
+    height: auto !important;
+}
+
+.custom-sidebar-heading {
+    background-color: #ffffff !important;
+}
+
+.custom-list-group {
+    color: #ffffff !important;
+}
+
+.custom-active-color {
+    color: #ffffff !important;
+}
+
+.nav-link[data-toggle].collapsed:after {
+    content: " ▾";
+}
+.nav-link[data-toggle]:not(.collapsed):after {
+    content: " ▴";
+}
+
+.list-group-item {
+    border: 0;
+    font-size: 16px;
+    color: #c5c5c5;
+}

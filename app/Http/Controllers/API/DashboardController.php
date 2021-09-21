@@ -931,7 +931,6 @@ class DashboardController extends Controller
             'color_inputer' => $color_inputer,
         ];
         return response()->json($data);
-
     }
 
     public function getRegefalProvince($province_id)

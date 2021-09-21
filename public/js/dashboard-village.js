@@ -405,6 +405,11 @@ $(document).ready(function () {
             $("#Loadreferal").removeClass("d-none");
         },
         success: function (data) {
+            if (data.length === 0) {
+                console.log("kosong");
+            } else {
+                console.log("ada");
+            }
             const referal = document.getElementById("referal");
             const referalChart = new Chart(referal, {
                 type: "bar",

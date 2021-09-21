@@ -14,6 +14,7 @@
     @stack('prepend-style')
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link href="{{ asset('assets/style/main.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/style/sidebar.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/loader.css') }}" rel="stylesheet" />
     @stack('addon-style')
   </head>
@@ -37,7 +38,7 @@
       <div class="container">
         <div class="row">
           <div class="col-12 text-center">
-            <p class="pt-4 pb-2">2020 Copyright Store. All Right Reserved</p>
+            <p class="">2020 Copyright Store. All Right Reserved</p>
           </div>
         </div>
       </div>
