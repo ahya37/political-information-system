@@ -1,5 +1,5 @@
 <div class="border-right custom-sidebar" id="sidebar-wrapper">
-          <div class="sidebar-heading custom-sidebar-heading text-center">
+           <div class="sidebar-heading custom-sidebar-heading text-center">
             <img src="{{ asset('assets/images/logo2-3.png') }}" width="170" />
           </div>
           <div class="list-group list-group-flush">
@@ -10,7 +10,7 @@
               Dashboard
             </a>
             <a
-              class="nav-link collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/member*')) ? 'active custom-active-color ' : '' }}"
+              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/member*')) ? 'active custom-active-color ' : '' }}"
               href="#Anggota"
               data-toggle="collapse"
               data-target="#Anggota"
@@ -38,7 +38,7 @@
             </div>
             
             <a
-              class="nav-link collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/admincontrol/district*')) ? 'active custom-active-color' : '' }}"
+              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/admincontrol/district*')) ? 'active custom-active-color' : '' }}"
               href="#admin"
               data-toggle="collapse"
               data-target="#admin"
@@ -64,7 +64,7 @@
               </ul>
             </div>
             <a
-              class="nav-link collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event*')) ? 'active custom-active-color' : '' }}"
+              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event*')) ? 'active custom-active-color' : '' }}"
               href="#submenu1"
               data-toggle="collapse"
               data-target="#submenu1"
