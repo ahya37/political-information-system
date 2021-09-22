@@ -184,7 +184,7 @@ class UserController extends Controller
         // set secara defualt menunya ketika mendaftar
         $menu_default = Menu::select('id','name')->get();
         // karena menu dashboard itu ada di array pertama maka kita hapus,
-        // karena saat mendaftar user tidak bisa mengakses menu dashboard jika bukan admin district 
+        // karena saat mendaftar user tidak bisa mengakses menu dashboard jika bukan di jadikan admin oleh administrator
         unset($menu_default[0]);
         foreach($menu_default as $val){
             UserMenu::create([

@@ -39,7 +39,10 @@ class AppServiceProvider extends ServiceProvider
                 // menus
                 $gF       = new GlobalProvider();
                 $userMenu = $gF->userMenus();
-                View::share(['userMenu' => $userMenu]);
+                View::share([
+                    'userMenu' => $userMenu,
+                    'gF'       => $gF
+                ]);
             }
         });
     }

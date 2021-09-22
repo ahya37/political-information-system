@@ -70,6 +70,13 @@ class GlobalProvider extends ServiceProvider
         return $user_menu;
     }
 
+    public function userSubmenus($menu_id)
+    {
+        $userMenuModel  = new UserMenu();
+        $user_submenu      = $userMenuModel->getUserSubmenus($menu_id);
+        return $user_submenu;
+    }
+
     public function mountFormat($data)
     {
         switch ($data) {
