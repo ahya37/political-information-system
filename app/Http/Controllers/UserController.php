@@ -468,6 +468,18 @@ class UserController extends Controller
             'status'        => 1
         ]);
 
+        // set secara defualt menunya ketika mendaftar
+        $menu_default = Menu::select('id','name')->get();
+        // karena menu dashboard itu ada di array pertama maka kita hapus,
+        // karena saat mendaftar user tidak bisa mengakses menu dashboard jika bukan di jadikan admin oleh administrator
+        unset($menu_default[0]);
+        foreach($menu_default as $val){
+            UserMenu::create([
+                'user_id' => $user->id,
+                'menu_id' => $val->id
+            ]);
+        }  
+        
         return redirect()->route('home');
     }
 

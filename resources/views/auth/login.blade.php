@@ -20,6 +20,7 @@
     <div class="page-content page-auth">
       <div class="section-store-auth" data-aos="fade-up">
         <div class="container">
+          @include('layouts.message')
           <div class="row align-items-center row-login">
             <div class="col-lg-6 text-center">
               <img src="{{ asset('assets/images/logo2.jpeg') }}" width="350" class="mb-4 mb-lg-none" />

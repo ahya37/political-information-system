@@ -28,12 +28,14 @@
                                   <table id="data" class="table table-sm table-striped" width="100%">
                                     <thead>
                                       <tr>
+                                        <th>ID</th>
                                         <th scope="col">Nama</th>
                                         <th scope="col">Kabupaten/Kota</th>
                                         <th scope="col">Kecamatan</th>
                                         <th scope="col">Desa</th>
                                         <th scope="col">Referal Dari</th>
                                         <th scope="col">Input Dari</th>
+                                        <th scope="col">Aksi</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -65,6 +67,7 @@
                 url: '{!! url()->current() !!}',
             },
             columns:[
+                {data:'id', name:'id'},
                 {data: 'photo', name:'photo'},
                 {data: 'village.district.regency.name', name:'village.district.regency.name'},
                 {data: 'village.district.name', name:'village.district.name'},
@@ -72,13 +75,20 @@
                 {data: 'reveral.name', name:'reveral.name'},
                 {data: 'create_by.name', name:'create_by.name'},
                 // {data: 'saved_nasdem', name:'saved_nasdem'},
-                // {
-                //     data: 'action', 
-                //     name:'action',
-                //     orderable: false,
-                //     searchable: false,
-                //     width: '15%'
-                // },
+                {
+                    data: 'action', 
+                    name:'action',
+                    orderable: false,
+                    searchable: false,
+                    width: '15%'
+                },
+            ],
+            order: [[0, "desc"]],
+            columnDefs:[
+              {
+                "targets": [ 0 ],
+                "visible": false
+              }
             ]
         });
     </script>

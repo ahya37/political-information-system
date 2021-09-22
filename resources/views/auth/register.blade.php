@@ -54,22 +54,6 @@
                           <label>Password</label>
                           <input type="password" name="password" required class="form-control" />
                         </div>
-                        {{-- <div class="form-group">
-                            <span class="required">*</span>
-                          <label>Reveral</label>
-                          <input id="code" 
-                            v-model="code"
-                            @change="checkForReveralAvailability()"
-                            type="text" 
-                            class="form-control @error('code') @enderror"
-                            :class="{'is_invalid' : this.code_unavailable}" 
-                            name="code" 
-                            value="{{ old('code') }}" 
-                            required
-                            >
-                            
-                        </div> --}}
-
                         <div class="form-group">
                             <button
                             type="submit"

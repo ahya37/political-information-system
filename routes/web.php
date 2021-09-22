@@ -79,6 +79,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         Route::get('/member','MemberController@index')->name('admin-member');
         Route::get('/member/create','MemberController@create')->name('admin-member-create');
+        Route::get('/member/create/account/{id}','MemberController@createAccount')->name('admin-member-create-account');
+        Route::post('/member/create/account/store/{id}','MemberController@storeAccount')->name('admin-member-create-account-store');
         Route::post('/member/store','MemberController@store')->name('admin-member-store');
 
         Route::get('/member/profile/{id}','MemberController@profileMember')->name('admin-profile-member');

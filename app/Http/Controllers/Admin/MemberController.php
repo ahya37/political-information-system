@@ -3,13 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use PDF;
+use App\Menu;
 use App\User;
+use App\UserMenu;
+use App\Mail\RegisterMail;
+use Illuminate\Support\Str;
 use App\Providers\StrRandom;
 use Illuminate\Http\Request;
+use App\Providers\GlobalProvider;
 use App\Providers\QrCodeProvider;
 use App\Http\Controllers\Controller;
-use App\Providers\GlobalProvider;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\Facades\DataTables;
 
 class MemberController extends Controller
@@ -24,17 +30,23 @@ class MemberController extends Controller
         {
             return DataTables::of($member)
                     ->addColumn('action', function($item){
+                        if ($item->status == 1 ) {
+                            return '
+                                <span class="badge badge-success">Akun Aktif</span>
+                            ';
+                        }elseif($item->activate_token != null ){
+                            return '
+                                <span class="badge badge-warning">Akun Non Veririfikasi</span>
+                            ';
+                        }
                         return '
                             <div class="btn-group">
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
                                     <div class="dropdown-menu">
-                                         <button type="button" class="dropdown-item" onclick="saved('.$item->id.')" id="'.$item->id.'" member="'.$item->name.'">
-                                                Sudah Tersimpan di Nasdem
-                                            </button>
-                                            <button type="button" class="dropdown-item text-danger" onclick="registered('.$item->id.')" id="'.$item->id.'" member="'.$item->name.'">
-                                                Sudah Terdaftar di Nasdem
-                                            </button>
+                                         <a href='.route('admin-member-create-account', encrypt($item->id)).' class="dropdown-item">
+                                                Buat Akun
+                                        </a> 
                                     </div>
                                 </div>
                             </div>
@@ -232,5 +244,34 @@ class MemberController extends Controller
         $profile = User::with('village')->where('id', $id)->first();
         $pdf = PDF::LoadView('pages.card', compact('profile','gF'))->setPaper('a4');
         return $pdf->download('e-kta-'.$profile->name.'.pdf');
+    }
+
+    public function createAccount($id)
+    {
+        $id = decrypt($id);
+
+        $user = User::select('id','name')->where('id', $id)->first();
+        return view('pages.admin.member.create-account', compact('user'));
+    }
+    
+    public function storeAccount(Request $request, $id)
+    {
+        $user = User::select('id','name')->where('id', $id)->first();
+        
+        $this->validate($request, [
+            'email' => 'required|email|unique:users'
+        ]);
+    
+        $user->update([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'activate_token' => Str::random(10),
+        ]);
+
+        // send link verifikasi ke email terkait
+        Mail::to($request->email)->send(new RegisterMail($user)); // send email untuk verifikasi akun       
+
+        return redirect()->route('admin-member')->with(['success' => 'Akun untuk '.$user->name.' telah dibuat']);
+        
     }
 }
