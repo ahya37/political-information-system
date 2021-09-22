@@ -82,7 +82,7 @@
                   <a
                     href="{{ route('admin-event-create') }}"
                     class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event/create')) ? 'active custom-active-color' : '' }}"
-                    ><span>Daftar Event</span></a>
+                    ><span>Buat Event Baru</span></a>
                 </li>
               </ul>
             </div>
