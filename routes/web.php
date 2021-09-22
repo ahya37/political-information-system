@@ -94,7 +94,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // Admin District
         Route::get('/admincontrol/district','AdminDistrictController@index')->name('admin-admincontroll-district');
-        Route::get('/admincontrol/createadmin/district','AdminDistrictController@create')->name('admin-admincontroll-district-create');
+        Route::get('/admincontrol/district/createadmin','AdminDistrictController@create')->name('admin-admincontroll-district-create');
         Route::get('/admincontrol/createadmin/district/save/{id}','AdminDistrictController@saveAdminDistrict')->name('admin-admincontroll-district-save');
 
         // Event

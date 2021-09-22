@@ -56,7 +56,7 @@
                   </a>
                    <a
                       href="{{ route('admin-admincontroll-district-create') }}"
-                      class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/admincontrol/createadmin/district')) ? 'active custom-active-color' : '' }}"
+                      class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/admincontrol/district/createadmin')) ? 'active custom-active-color' : '' }}"
                     >
                       Tambah Admin
                     </a>
