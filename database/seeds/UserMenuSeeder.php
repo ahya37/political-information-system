@@ -23,7 +23,7 @@ class UserMenuSeeder extends Seeder
             ['user_id' => 145, 'menu_id' => 4],
             ['user_id' => 35, 'menu_id' => 4],
             ['user_id' => 251, 'menu_id' => 4],
-            ['user_id' => 359,'menud_id' => 4],
+            ['user_id' => 359,'menu_id' => 4],
         ];
 
         foreach($data as $row){
