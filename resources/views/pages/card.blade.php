@@ -253,6 +253,13 @@
       margin-top: -60px;
       margin-bottom: 101.9px;
     }
+    .cap {
+      width: 30px;
+      /* height: 50px; */
+      margin-left: 261px;
+      margin-top: -16px;
+      margin-bottom: 101.9px;
+    }
     .name-label {
       width: 100%;
       height: 10px;
@@ -308,7 +315,7 @@
     .desc {
       width: 100%;
       margin-left: 4px;
-      margin-top: -100px;
+      margin-top: -200px;
 
       font-family: "Nunito", sans-serif;
       font-style: normal;
@@ -507,6 +514,7 @@
         <div class="name-lable3">KARTU TANDA ANGGOTA JALUR AAW</div>
         <div>
           <img class="logo2" src="{{ public_path('assets/images/logo2-3.png') }}" />
+          <img class="cap" src="{{ public_path('assets/images/cap.png') }}" />
         </div>
         <table class="desc" cellpadding="0" cellspacing="1">
           <tr>
