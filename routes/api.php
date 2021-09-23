@@ -88,3 +88,6 @@ Route::get('member/agegroup/village/{village_id}','API\DashboardController@getAg
 Route::get('member/genage/village/{village_id}','API\DashboardController@genAgeVillage');
 Route::get('member/inputer/village/{village_id}','API\DashboardController@getInputerVillage');
 Route::get('member/referal/village/{village_id}','API\DashboardController@getRegefalVillage');
+
+// event galleries
+Route::get('event/galleries/{eventId}','API\EventGalleryController@getDataEventGalleries');

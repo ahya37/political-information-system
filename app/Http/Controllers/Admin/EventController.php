@@ -150,8 +150,5 @@ class EventController extends Controller
         return view('pages.admin.event.detail', compact('title'));
     }
 
-    public function galleryEvent($id)
-    {
-        return view('pages.admin.event.gallery');
-    }
+    
 }
