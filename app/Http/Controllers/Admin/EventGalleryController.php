@@ -23,7 +23,7 @@ class EventGalleryController extends Controller
            ]);
         
         $file = $request->file('file')->store('assets/user/galleries','public');
-        
+
         EventGallery::create([
             'event_id' => $id,
             'title' => $request->title,
@@ -34,6 +34,12 @@ class EventGalleryController extends Controller
 
         return redirect()->back()->with(['success' => 'Galeri telah ditambahkan']);
 
+    }
+
+    public function detailEventGallery($id)
+    {
+        $event_gallery = EventGallery::where('id', $id)->first();
+        return view('pages.admin.gallery.detail', compact('event_gallery'));
     }
 
 }

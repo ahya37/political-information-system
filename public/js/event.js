@@ -1,7 +1,6 @@
 const eventId = $("#eventId").val();
 const storage = "/storage/";
-
-$.ajax({
+const _url = $.ajax({
     url: "/api/event/galleries" + "/" + eventId,
     method: "GET",
     cache: false,
@@ -27,7 +26,7 @@ $.ajax({
                     ">";
                 divEl += "<div class='p-4'>";
                 divEl +=
-                    "<a href='/detail" +
+                    "<a href='/admin/event/gallery/detail/" +
                     item.id +
                     "'> <div class='d-flex align-items-center  justify-content-between rounded-pill bg-primary px-3 py-2 mt-4'>";
                 divEl +=
