@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use App\Exports\MemberExportDistrict;
 use App\Exports\MemberExportNational;
 use App\Exports\MemberExportProvince;
+use App\Exports\MemberExportVillage;
 use Yajra\DataTables\Facades\DataTables;
 
 class DashboardController extends Controller
@@ -228,23 +229,28 @@ class DashboardController extends Controller
       return $this->excel->download(new MemberExportNational(),'Anggota-Nasional'.'.xls');
     }
 
-    public function exportDataProvinceExcel()
+    public function exportDataProvinceExcel($province_id)
     {
-      $province_id  = 36;
+      
       $province     = Province::select('name')->where('id', $province_id)->first();
-      return $this->excel->download(new MemberExportProvince($province_id),'Anggota-'.$province->name.'.xls');
+      return $this->excel->download(new MemberExportProvince($province_id),'Anggota-Provinsi-'.$province->name.'.xls');
     }
 
     public function exportDataRegencyExcel($regency_id)
     {
       $regency  = Regency::select('name')->where('id', $regency_id)->first();
-      return $this->excel->download(new MemberExportRegency($regency_id),'Anggota-'.$regency->name.'.xls');
+      return $this->excel->download(new MemberExportRegency($regency_id),'Anggota-Kabkot-'.$regency->name.'.xls');
     }
 
     public function exportDataDistrictExcel($district_id)
     {
       $district = District::select('name')->where('id', $district_id)->first();
-      return $this->excel->download(new MemberExportDistrict($district_id),'Anggota-'.$district->name.'.xls');
+      return $this->excel->download(new MemberExportDistrict($district_id),'Anggota-Kecamatan-'.$district->name.'.xls');
+    }
+    public function exportDataVillageExcel($village_id)
+    {
+      $village = Village::select('name')->where('id', $village_id)->first();
+      return $this->excel->download(new MemberExportVillage($village_id),'Anggota-Desa-'.$village->name.'.xls');
     }
 
     public function downloadKTA($id)

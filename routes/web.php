@@ -89,9 +89,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // report excel
         Route::get('/member/national/export','DashboardController@exportDataNationalExcel')->name('report-member-national-excel');
-        Route::get('/member/province/export','DashboardController@exportDataProvinceExcel')->name('report-member-province-excel');
+        Route::get('/member/province/export/{province_id}','DashboardController@exportDataProvinceExcel')->name('report-member-province-excel');
         Route::get('/member/regency/export/{regency_id}','DashboardController@exportDataRegencyExcel')->name('report-member-regency-excel');
         Route::get('/member/district/export/{district_id}','DashboardController@exportDataDistrictExcel')->name('report-member-district-excel');
+        Route::get('/member/village/export/{village_id}','DashboardController@exportDataVillageExcel')->name('report-member-village-excel');
 
         Route::get('/member/card/download/{id}','MemberController@downloadCard')->name('admin-member-card-download');
 
