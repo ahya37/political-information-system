@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use PDF;
 use App\Job;
 use App\User;
+use App\Referal;
 use App\Models\Regency;
 use App\Models\Village;
 use App\Models\District;
 use App\Models\Province;
-use PDF;
 use Maatwebsite\Excel\Excel;
+use App\Providers\GrafikProvider;
 use App\Exports\MemberExportRegency;
 use App\Http\Controllers\Controller;
 use App\Exports\MemberExportDistrict;
+use App\Exports\MemberExportNational;
 use App\Exports\MemberExportProvince;
-use App\Referal;
 use Yajra\DataTables\Facades\DataTables;
-use App\Providers\GrafikProvider;
 
 class DashboardController extends Controller
 {
@@ -220,6 +221,11 @@ class DashboardController extends Controller
 
         return view('pages.admin.dashboard.village', compact('village'));
 
+    }
+
+    public function exportDataNationalExcel()
+    {
+      return $this->excel->download(new MemberExportNational(),'Anggota-Nasional'.'.xls');
     }
 
     public function exportDataProvinceExcel()

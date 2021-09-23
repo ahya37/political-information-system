@@ -1,5 +1,4 @@
 const dataLabel = $("#cat_province").val();
-console.log(dataLabel);
 const dataValue = $("#cat_province_data").val();
 const data = {
     labels: dataLabel,

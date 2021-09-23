@@ -28,7 +28,7 @@
                 <div class="dashboard-content">
                   <div class="row mb-2">
                     <div class="col-md-12 col-sm-2 text-right">
-                        <a href="{{ route('report-member-province-excel') }}" class="btn btn-sm btn-sc-primary text-white"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
+                        <a href="{{ route('report-member-national-excel') }}" class="btn btn-sm btn-sc-primary text-white"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
                     </div>
                   </div>
                 </div>
