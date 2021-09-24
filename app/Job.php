@@ -27,7 +27,7 @@ class Job extends Model
         $sql = "SELECT e.name, COUNT(e.name) as total_job
                 FROM users as d
                 join jobs as e on d.job_id = e.id
-                GROUP by e.name";
+                GROUP by e.name order by COUNT(e.name) desc";
         return DB::select($sql);
     }
 
@@ -40,7 +40,7 @@ class Job extends Model
                 join jobs as e on d.job_id = e.id
                 join regencies as f on b.regency_id = f.id
                 where f.province_id = $province_id
-                GROUP by e.name";
+                GROUP by e.name order by COUNT(e.name) desc";
         return DB::select($sql);
     }
 

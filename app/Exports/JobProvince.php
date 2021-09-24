@@ -9,18 +9,26 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class JobNational implements FromCollection,  WithHeadings, WithEvents
+class JobProvince implements FromCollection, WithHeadings, WithEvents
 {
     /**
     * @return \Illuminate\Support\Collection
     */
     use Exportable;
 
+    public $province;
+
+    public function __construct(int $province)
+    {
+        $this->province = $province;
+    }
+
     public function collection()
     {
+        $province_id = $this->province;
         $jobModel  = new Job();
-        $data      = $jobModel->getJobs();
-        $result    = collect($data);
+        $jobs      = $jobModel->getJobProvince($province_id);
+        $result    = collect($jobs);
         return $result;
     }
 

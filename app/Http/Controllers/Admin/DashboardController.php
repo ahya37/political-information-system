@@ -11,6 +11,7 @@ use App\Models\Village;
 use App\Models\District;
 use App\Models\Province;
 use App\Exports\JobNational;
+use App\Exports\JobProvince;
 use Maatwebsite\Excel\Excel;
 use App\Providers\GrafikProvider;
 use App\Exports\MemberExportRegency;
@@ -155,68 +156,9 @@ class DashboardController extends Controller
 
     public function village($district_id, $village_id)
     {
-    //    $gF   = app('GlobalProvider'); // global function
-    //    $GrafikProvider = new GrafikProvider();
        
        $villageModel = new Village();
        $village = $villageModel->with('district.regency.province')->where('id', $village_id)->first();
-
-        //get anggota yang berada di desa tersebut
-        // $members = $villageModel->getMemberVillage($village_id);
-        // $total_member = count($members);
-
-        // total desa yg berada di kec, yg sama
-        // $total_village = $villageModel->where('district_id', $district_id)->count();
-        // $total_target_per_district = 5000;
-        // $target_member  = $gF->decimalFormat($total_target_per_district / $total_village);
-        // $persentage_target_member = $gF->persen(($total_member/$target_member)*100);  
-        
-        // $userModel = new User();
-        // $gender    = $userModel->getGenderVillage($village_id);
-        // $CatGender  = $GrafikProvider->getGrafikGender($gender);
-        // $cat_gender = $CatGender['cat_gender'];
-        // $total_male_gender  = $CatGender['total_male_gender'];
-        // $total_female_gender = $CatGender['total_female_gender'];
-
-        // grafik data job
-        // $jobModel = new Job();
-        // $most_jobs = $jobModel->getMostJobsVillage($village_id);
-        // $jobs     = $jobModel->getJobVillage($village_id);
-        // $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
-        // $chart_jobs= $ChartJobs['chart_jobs'];
-        // $colors    = $ChartJobs['colors'];
-        
-        // range umur
-        // $range_age     = $userModel->rangeAgeVillage($village_id);
-        // $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
-        // $cat_range_age = $CatRange['cat_range_age'];
-        // $cat_range_age_data = $CatRange['cat_range_age_data'];
-        
-        // generasi umur
-        // $gen_age     = $userModel->generationAgeDistrict($district_id);
-        // $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
-        // $cat_gen_age = $GenAge['cat_gen_age'];
-        // $cat_gen_age_data = $GenAge['cat_gen_age_data'];
-
-        // $referalModel = new Referal();
-        // input admin terbanyak
-        // $inputer      = $referalModel->getInputerVillage($village_id);
-        // $cat_inputer = [];
-        // foreach($inputer as $val){
-        //     $cat_inputer['label'][] = $val->name;
-        //     $cat_inputer['data'][]  = $val->total_data;
-        // }
-
-        // get fungsi grafik admin input terbanyak
-        // $GrafikProvider = new GrafikProvider();
-        // $chart_inputer  = $GrafikProvider->getGrafikInputer($cat_inputer);
-
-        // anggota dengan referal terbanyak
-        // $referalModel = new Referal();
-        // $referal      = $referalModel->getReferalVillage($village_id);
-        // $CatReferal   = $GrafikProvider->getGrafikReferal($referal);
-        // $cat_referal      = $CatReferal['cat_referal'];
-        // $cat_referal_data = $CatReferal['cat_referal_data'];
 
         // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillageFirst($village_id);
@@ -260,6 +202,11 @@ class DashboardController extends Controller
     public function exportJobsNationalExcel()
     {
       return $this->excel->download(new JobNational(),'Profesi-Nasional'.'.xls');
+    }
+    public function exportJobsProvinceExcel($province_id)
+    {
+        $province     = Province::select('name')->where('id', $province_id)->first();
+        return $this->excel->download(new JobProvince($province_id),'Profesi-'.$province->name.'.xls');
     }
 
     public function downloadKTA($id)

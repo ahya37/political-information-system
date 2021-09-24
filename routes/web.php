@@ -116,6 +116,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // report profesi nasional
         Route::get('/member/jobs/national','DashboardController@exportJobsNationalExcel')->name('report-jobnational-excel');
+        // report profesi province
+        Route::get('/member/jobs/province/{province_id}','DashboardController@exportJobsProvinceExcel')->name('report-jobprovince-excel');
 
 
     });

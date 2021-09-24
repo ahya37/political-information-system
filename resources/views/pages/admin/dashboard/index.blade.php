@@ -28,7 +28,7 @@
                   <div class="row mb-2">
                     <div class="col-md-12 col-sm-2">
                       <div class="row">
-                        <div class="col-1">
+                        {{-- <div class="col-1">
                               <div class="dropdown show">
                               <a class="btn btn-sm border border-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 PDF
@@ -37,14 +37,14 @@
                                   <a href="{{ route('report-member-national-excel') }}" class="dropdown-item"><i class="fa fa-download" aria-hidden="true"></i>Anggota</a>
                               </div>
                           </div>
-                        </div>
+                        </div> --}}
                         <div class="col-2">
                           <div class="dropdown show">
                             <a class="btn btn-sm border border-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               Excel
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <a href="{{ route('report-member-national-excel') }}" class="dropdown-item"><i class="fa fa-download" aria-hidden="true"></i>Anggota</a>
+                            <a href="{{ route('report-member-national-excel') }}" class="dropdown-item"><i class="fa fa-download" aria-hidden="true"></i>Anggota Terdaftar</a>
                             <a href="{{ route('report-jobnational-excel') }}" class="dropdown-item"><i class="fa fa-download" aria-hidden="true"></i>Profesi</a>
                             </div>
                           </div>
