@@ -12,6 +12,7 @@ use App\Models\District;
 use App\Models\Province;
 use App\Exports\JobNational;
 use App\Exports\JobProvince;
+use App\Exports\JobRegency;
 use Maatwebsite\Excel\Excel;
 use App\Providers\GrafikProvider;
 use App\Exports\MemberExportRegency;
@@ -203,10 +204,17 @@ class DashboardController extends Controller
     {
       return $this->excel->download(new JobNational(),'Profesi-Nasional'.'.xls');
     }
+
     public function exportJobsProvinceExcel($province_id)
     {
         $province     = Province::select('name')->where('id', $province_id)->first();
         return $this->excel->download(new JobProvince($province_id),'Profesi-'.$province->name.'.xls');
+    }
+
+    public function exportJobsRegencyExcel($regency_id)
+    {
+      $regency  = Regency::select('name')->where('id', $regency_id)->first();
+      return $this->excel->download(new JobRegency($regency_id),'Anggota-Kabkot-'.$regency->name.'.xls');
     }
 
     public function downloadKTA($id)
