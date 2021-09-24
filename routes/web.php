@@ -87,13 +87,6 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/member/profile/edit/{id}','MemberController@editMember')->name('admin-profile-member-edit');
         Route::post('/member/profile/update/{id}','MemberController@updateMember')->name('admin-profile-member-update');
 
-        // report excel
-        Route::get('/member/national/export','DashboardController@exportDataNationalExcel')->name('report-member-national-excel');
-        Route::get('/member/province/export/{province_id}','DashboardController@exportDataProvinceExcel')->name('report-member-province-excel');
-        Route::get('/member/regency/export/{regency_id}','DashboardController@exportDataRegencyExcel')->name('report-member-regency-excel');
-        Route::get('/member/district/export/{district_id}','DashboardController@exportDataDistrictExcel')->name('report-member-district-excel');
-        Route::get('/member/village/export/{village_id}','DashboardController@exportDataVillageExcel')->name('report-member-village-excel');
-
         Route::get('/member/card/download/{id}','MemberController@downloadCard')->name('admin-member-card-download');
 
         // Admin District
@@ -113,6 +106,16 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/event/gallery/{id}','EventGalleryController@index')->name('admin-event-gallery');
         Route::post('/event/gallery/store/{id}','EventGalleryController@store')->name('admin-event-gallery-store');
         Route::get('/event/gallery/detail/{id}','EventGalleryController@detailEventGallery');
+
+         // report excel
+        Route::get('/member/national/export','DashboardController@exportDataNationalExcel')->name('report-member-national-excel');
+        Route::get('/member/province/export/{province_id}','DashboardController@exportDataProvinceExcel')->name('report-member-province-excel');
+        Route::get('/member/regency/export/{regency_id}','DashboardController@exportDataRegencyExcel')->name('report-member-regency-excel');
+        Route::get('/member/district/export/{district_id}','DashboardController@exportDataDistrictExcel')->name('report-member-district-excel');
+        Route::get('/member/village/export/{village_id}','DashboardController@exportDataVillageExcel')->name('report-member-village-excel');
+
+        // report profesi nasional
+        Route::get('/member/jobs/national','DashboardController@exportJobsNationalExcel')->name('report-jobnational-excel');
 
 
     });

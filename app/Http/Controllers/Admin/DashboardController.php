@@ -10,14 +10,15 @@ use App\Models\Regency;
 use App\Models\Village;
 use App\Models\District;
 use App\Models\Province;
+use App\Exports\JobNational;
 use Maatwebsite\Excel\Excel;
 use App\Providers\GrafikProvider;
 use App\Exports\MemberExportRegency;
+use App\Exports\MemberExportVillage;
 use App\Http\Controllers\Controller;
 use App\Exports\MemberExportDistrict;
 use App\Exports\MemberExportNational;
 use App\Exports\MemberExportProvince;
-use App\Exports\MemberExportVillage;
 use Yajra\DataTables\Facades\DataTables;
 
 class DashboardController extends Controller
@@ -224,6 +225,7 @@ class DashboardController extends Controller
 
     }
 
+    // report member function
     public function exportDataNationalExcel()
     {
       return $this->excel->download(new MemberExportNational(),'Anggota-Nasional'.'.xls');
@@ -247,10 +249,17 @@ class DashboardController extends Controller
       $district = District::select('name')->where('id', $district_id)->first();
       return $this->excel->download(new MemberExportDistrict($district_id),'Anggota-Kecamatan-'.$district->name.'.xls');
     }
+
     public function exportDataVillageExcel($village_id)
     {
       $village = Village::select('name')->where('id', $village_id)->first();
       return $this->excel->download(new MemberExportVillage($village_id),'Anggota-Desa-'.$village->name.'.xls');
+    }
+
+    // report jobs function
+    public function exportJobsNationalExcel()
+    {
+      return $this->excel->download(new JobNational(),'Profesi-Nasional'.'.xls');
     }
 
     public function downloadKTA($id)

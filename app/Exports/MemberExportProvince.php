@@ -42,16 +42,16 @@ class MemberExportProvince implements FromCollection, WithHeadings, WithEvents
     public function headings(): array
     {
         return [
-            'Nama',
-            'Kabupaten / Kota',
-            'Kecamatan',
-            'Desa',
-            'Alamat',
+            'NAMA',
+            'KABUPATEN / KOTA',
+            'KECAMATAN',
+            'DESA',
+            'ALAMAT',
             'RT',
             'RW',
-            'Telpon',
-            'Whatsapp',
-            'Reveral'
+            'TELEPON',
+            'WHATSAPP',
+            'REFERAL'
         ];
     }
 

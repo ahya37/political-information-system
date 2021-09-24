@@ -40,16 +40,16 @@ class MemberExportDistrict implements FromCollection, WithHeadings, WithEvents
     public function headings(): array
     {
         return [
-            'Nama',
-            'Alamat',
+            'NAMA',
+            'ALAMAT',
             'RT',
             'RW',
-            'Desa',
-            'Kecamatan',
-            'Kabupaten / Kota',
-            'Telpon',
-            'Whatsapp',
-            'Referal'
+            'DESA',
+            'KECAMATAN',
+            'KABUPATEN / KOTA',
+            'TELEPON',
+            'WHATSAPP',
+            'REFERAL'
         ];
     }
 

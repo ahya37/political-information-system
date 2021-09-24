@@ -38,16 +38,16 @@ class MemberExportRegency implements FromCollection, WithHeadings, WithEvents
     public function headings(): array
     {
         return [
-            'Nama',
-            'Kecamatan',
-            'Kabupaten / Kota',
-            'Desa',
-            'Alamat',
+            'NAMA',
+            'KECAMATAN',
+            'KABUPATEN / KOTA',
+            'DESA',
+            'ALAMAT',
             'RT',
             'RW',
-            'Telpon',
-            'Whatsapp',
-            'Referal'
+            'TELEPON',
+            'WHATSAPP',
+            'REFERAL'
         ];
     }
 

@@ -37,17 +37,17 @@ class MemberExportNational implements FromCollection, WithHeadings, WithEvents
     public function headings(): array
     {
         return [
-            'Nama',
-            'Provinsi',
-            'Kabupaten / Kota',
-            'Kecamatan',
-            'Desa',
-            'Alamat',
+            'NAMA',
+            'PPROVINSI',
+            'KABUPATEN / KOTA',
+            'KECAMATAN',
+            'DESA',
+            'ALAMAT',
             'RT',
             'RW',
-            'Telpon',
-            'Whatsapp',
-            'Reveral'
+            'TELEPON',
+            'WHATSAPP',
+            'REFERAL'
         ];
     }
 

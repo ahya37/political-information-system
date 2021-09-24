@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use App\Models\Regency;
 use App\Models\Village;
 use App\Models\District;
-use App\Providers\GetRegencyId;
 use App\Providers\GrafikProvider;
 use App\Http\Controllers\Controller;
 
