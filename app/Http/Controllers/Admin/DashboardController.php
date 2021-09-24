@@ -14,6 +14,7 @@ use App\Models\Province;
 use App\Exports\JobNational;
 use App\Exports\JobProvince;
 use App\Exports\JobRegency;
+use App\Exports\JobVillage;
 use Maatwebsite\Excel\Excel;
 use App\Providers\GrafikProvider;
 use App\Exports\MemberExportRegency;
@@ -222,6 +223,12 @@ class DashboardController extends Controller
     {
       $district = District::select('name')->where('id', $district_id)->first();
       return $this->excel->download(new JobDistrict($district_id),'Profesi-Kecamatan-'.$district->name.'.xls');
+    }
+
+    public function exportJobsVillageExcel($village_id)
+    {
+      $village = Village::select('name')->where('id', $village_id)->first();
+      return $this->excel->download(new JobVillage($village_id),'Profesi-Desa-'.$village->name.'.xls');
     }
 
 
