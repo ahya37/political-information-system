@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\JobDistrict;
 use PDF;
 use App\Job;
 use App\User;
@@ -214,8 +215,15 @@ class DashboardController extends Controller
     public function exportJobsRegencyExcel($regency_id)
     {
       $regency  = Regency::select('name')->where('id', $regency_id)->first();
-      return $this->excel->download(new JobRegency($regency_id),'Anggota-Kabkot-'.$regency->name.'.xls');
+      return $this->excel->download(new JobRegency($regency_id),'Profesi-Kabkot-'.$regency->name.'.xls');
     }
+
+    public function exportJobsDistrictExcel($district_id)
+    {
+      $district = District::select('name')->where('id', $district_id)->first();
+      return $this->excel->download(new JobDistrict($district_id),'Profesi-Kecamatan-'.$district->name.'.xls');
+    }
+
 
     public function downloadKTA($id)
     {

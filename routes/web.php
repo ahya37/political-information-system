@@ -118,8 +118,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/member/jobs/national','DashboardController@exportJobsNationalExcel')->name('report-jobnational-excel');
         // report profesi province
         Route::get('/member/jobs/province/{province_id}','DashboardController@exportJobsProvinceExcel')->name('report-jobprovince-excel');
-        // report profesi province
+        // report profesi regency
         Route::get('/member/jobs/regency/{regency_id}','DashboardController@exportJobsRegencyExcel')->name('report-jobregency-excel');
+        // report profesi district
+        Route::get('/member/jobs/district/{district_id}','DashboardController@exportJobsDistrictExcel')->name('report-jobdistrict-excel');
 
 
     });
