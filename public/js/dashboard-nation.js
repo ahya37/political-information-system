@@ -581,6 +581,7 @@ $("#achievment").DataTable({
     ajax: {
         url: "/api/member/achievment/national",
         method: "GET",
+        cache: false,
         beforeSend: function () {
             BeforeSend("Loadachievment");
         },
