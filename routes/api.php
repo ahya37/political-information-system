@@ -37,6 +37,7 @@ Route::get('member/district/{daterange}/{districtID}','API\DashboardController@m
 Route::get('member/village/{daterange}/{villageID}','API\DashboardController@memberReportPerMountVillage');
 
 // chart dashboard nasional
+Route::get('member/achievment/national','API\DashboardController@getAchievmentsNational');
 Route::get('member/rergister/national','API\DashboardController@getMemberNational');
 Route::get('member/totalnational','API\DashboardController@getTotalMemberNational');
 Route::get('membervsterget/national','API\DashboardController@getMemberVsTargetNational');

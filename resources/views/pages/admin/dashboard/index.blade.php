@@ -290,18 +290,19 @@
                   </div>
                   <div class="row">
 
-                    {{-- <div class="col-md-12">
+                    <div class="col-md-12">
                      <div class="card mb-2">
                        <div class="card-body">
                          <div class="dashboard-card-title">
                            Daftar Pencapaian Lokasi / Daerah
                          </div>
                          <div class="dashboard-card-subtitle">
+                           
                            <div class="table-responsive mt-2">
                                <table id="achievment" class="table table-sm table-striped">
                                    <thead>
                                      <tr>
-                                     <th scope="col">Kabupaten/Kota</th>
+                                     <th scope="col">Provinsi</th>
                                      <th scope="col">Total Kecamatan</th>
                                      <th scope="col">Total Target / Kabupaten</th>
                                      <th scope="col">Realisasi Jumlah Anggota</th>
@@ -309,14 +310,20 @@
                                      <th scope="col">Pencapaian Hari Ini</th>
                                    </tr>
                                    </thead>
-                                   <tbody>
+                                   <tbody id="dataachievment">
                                    </tbody>
+                                   <tfoot>
+                                     <tr>
+                                       <td colspan="5" id="Loadachievment" class="d-none lds-dual-ring hidden overlay">
+                                       </td>
+                                      </tr>
+                                   </tfoot>
                                  </table>
                             </div>
                          </div>
                        </div>
                      </div>
-                   </div> --}}
+                   </div>
                   </div>
                 </div>
               </div>
@@ -335,34 +342,4 @@
 <script type="text/javascript" src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/chart/Chart.min.js') }}"></script>  
 <script src="{{ asset('js/dashboard-nation.js') }}" ></script>
-
-{{-- <script>
-       var datatable = $('#achievment').DataTable({
-            processing: true,
-            language:{
-              processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
-            },
-            serverSide: true,
-            ordering: true,
-            ajax: {
-                url: '{!! url()->current() !!}',
-            },
-            columns:[
-                {data: 'name', name:'name'},
-                {data: 'total_district', name:'total_district', className: "text-right"},
-                {data: 'target_member', name:'target_member',className: "text-right"},
-                {data: 'realisasi_member', name:'realisasi_member',className: "text-right"},
-                {data: 'persentage', name:'persentage'},
-                {data: 'todays_achievement', name:'todays_achievement',className: "text-right"}
-
-            ],
-              columnDefs: [
-              {
-                targets: [1,2,3,5],
-                render: $.fn.dataTable.render.number('.', '.', 0, '')
-              }
-            ],
-        });
-</script> --}}
-
 @endpush

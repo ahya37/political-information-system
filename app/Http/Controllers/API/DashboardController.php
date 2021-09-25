@@ -128,6 +128,13 @@ class DashboardController extends Controller
         return $data;
     }
 
+    public function getAchievmentsNational()
+    {
+        $regencyModel     = new Regency();
+        $achievments   = $regencyModel->achievements();
+        return response()->json($achievments);
+    }
+
     public function getMemberNational()
     {
          $regencyModel     = new Regency();

@@ -574,6 +574,73 @@ $(document).ready(function () {
     });
 });
 
+// target pencapaian perhari
+$("#achievment").DataTable({
+    // processing: true,
+    serverSide: true,
+    ajax: {
+        url: "/api/member/achievment/national",
+        method: "GET",
+        beforeSend: function () {
+            BeforeSend("Loadachievment");
+        },
+        success: function (data) {
+            var html = "";
+            for (var i in data) {
+                const persentage =
+                    (data[i].realisasi_member / data[i].target_member) * 100;
+                const persentageWidth = persen(persentage);
+
+                html +=
+                    "<tr>" +
+                    "<td>" +
+                    data[i].name +
+                    "</td>" +
+                    "<td class='text-right'>" +
+                    data[i].total_district +
+                    "</td>" +
+                    "<td class='text-right'>" +
+                    decimalFormat(data[i].target_member) +
+                    "</td>" +
+                    "<td class='text-right'>" +
+                    data[i].realisasi_member +
+                    "</td>" +
+                    "<td class='text-right'>" +
+                    "<div class='mt-3 progress' style='width:100%'>" +
+                    "<span class='progress-bar progress-bar-striped bg-success' role='progressbar' style='width:" +
+                    persentageWidth +
+                    "%' aria-valuemin='" +
+                    persen(persentage) +
+                    "' aria-valuenow='" +
+                    persen(persentage) +
+                    "' aria-valuemax='" +
+                    persen(persentage) +
+                    "'><strong>" +
+                    persen(persentage) +
+                    "</strong></span>" +
+                    "</div>" +
+                    "</td>" +
+                    "<td class='text-right'>" +
+                    data[i].todays_achievement +
+                    "</td>" +
+                    "</tr>";
+            }
+            $("#dataachievment").html(html);
+        },
+        complete: function () {
+            Complete("Loadachievment");
+        },
+    },
+});
+
+function persen(data) {
+    return parseFloat(data).toFixed(1) + "%";
+}
+
+function decimalFormat(data) {
+    return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
 // funsgsi efect loader
 function BeforeSend(idLoader) {
     $("#" + idLoader + "").removeClass("d-none");
