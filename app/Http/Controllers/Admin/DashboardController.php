@@ -37,25 +37,6 @@ class DashboardController extends Controller
     public function index()
     {
         $regencyModel     = new Regency();
-
-        // Daftar pencapaian lokasi / daerah
-        // $achievments   = $regencyModel->achievements();
-        // if (request()->ajax()) {
-        //     return DataTables::of($achievments)
-        //             ->addColumn('persentage', function($item){
-        //                 $gF   = app('GlobalProvider'); // global function
-        //                 $persentage = ($item->realisasi_member / $item->target_member)*100;
-        //                 $persentage = $gF->persen($persentage);
-        //                 $persentageWidth = $persentage + 30;
-        //                 return '
-        //                 <div class="mt-3 progress" style="width:100%;">
-        //                     <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
-        //                 </div>
-        //                 ';
-        //             })
-        //             ->rawColumns(['persentage'])
-        //             ->make();
-        // }
         return view('pages.admin.dashboard.index');
     }
 

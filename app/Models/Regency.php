@@ -127,7 +127,7 @@ class Regency extends Model
             right join districts as c on b.district_id = c.id
             join regencies as d on c.regency_id = d.id 
             join provinces as e on d.province_id = e.id
-            group by e.id, e.name HAVING COUNT(a.id) !=  0";
+            group by e.id, e.name HAVING COUNT(a.id) !=  0 order by e.name asc";
         return DB::select($sql);
     }
     

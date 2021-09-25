@@ -186,6 +186,7 @@ $(document).ready(function () {
         url: "/api/member/totalnational",
         method: "GET",
         dataType: "json",
+        cache: false,
         beforeSend: function () {
             $("#total_member").text("loading...");
             $("#total_member_persen").text("loading...");
@@ -209,6 +210,7 @@ $(document).ready(function () {
         url: "/api/member/rergister/national",
         method: "GET",
         dataType: "json",
+        cache: false,
         beforeSend: function () {
             BeforeSend("loadProvince");
         },
@@ -358,6 +360,7 @@ $(document).ready(function () {
         url: "/api/member/gender/national",
         method: "GET",
         dataType: "json",
+        cache: false,
         beforeSend: function () {
             $("#Loadgender").removeClass("d-none");
         },
@@ -384,6 +387,7 @@ $(document).ready(function () {
         url: "/api/member/jobs/national",
         method: "GET",
         dataType: "json",
+        cache: false,
         beforeSend: function () {
             $("#Loadjobs").removeClass("d-none");
         },
@@ -418,6 +422,7 @@ $(document).ready(function () {
         url: "/api/member/agegroup/national",
         method: "GET",
         dataType: "json",
+        cache: false,
         beforeSend: function () {
             $("#LoadageGroup").removeClass("d-none");
         },
@@ -458,6 +463,7 @@ $(document).ready(function () {
         url: "/api/member/genage/national",
         method: "GET",
         dataType: "json",
+        cache: false,
         beforeSend: function () {
             $("#LoadageGen").removeClass("d-none");
         },
@@ -498,6 +504,7 @@ $(document).ready(function () {
         url: "/api/member/inputer/national",
         method: "GET",
         dataType: "json",
+        cache: false,
         beforeSend: function () {
             $("#Loadinputer").removeClass("d-none");
         },
@@ -538,6 +545,7 @@ $(document).ready(function () {
         url: "/api/member/inputer/national",
         method: "GET",
         dataType: "json",
+        cache: false,
         beforeSend: function () {
             $("#Loadreferal").removeClass("d-none");
         },
