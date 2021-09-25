@@ -290,7 +290,7 @@
                   </div>
                   <div class="row">
 
-                    <div class="col-md-12">
+                    {{-- <div class="col-md-12">
                      <div class="card mb-2">
                        <div class="card-body">
                          <div class="dashboard-card-title">
@@ -316,7 +316,7 @@
                          </div>
                        </div>
                      </div>
-                   </div>
+                   </div> --}}
                   </div>
                 </div>
               </div>
@@ -336,7 +336,7 @@
 <script src="{{ asset('assets/vendor/chart/Chart.min.js') }}"></script>  
 <script src="{{ asset('js/dashboard-nation.js') }}" ></script>
 
-<script>
+{{-- <script>
        var datatable = $('#achievment').DataTable({
             processing: true,
             language:{
@@ -363,6 +363,6 @@
               }
             ],
         });
-</script>
+</script> --}}
 
 @endpush
