@@ -210,7 +210,7 @@ $(document).ready(function () {
         method: "GET",
         dataType: "json",
         beforeSend: function () {
-            $("#loadProvince").removeClass("d-none");
+            BeforeSend("loadProvince");
         },
         success: function (data) {
             // member calculate
@@ -281,59 +281,77 @@ $(document).ready(function () {
             });
         },
         complete: function () {
-            $("#loadProvince").addClass("d-none");
+            Complete("loadProvince");
         },
     });
 
     // anggota terdaftar vs target
-    $.ajax({
-        url: "/api/membervsterget/national",
-        method: "GET",
-        dataType: "json",
-        beforeSend: function () {
-            $("#LoadmemberRegister").removeClass("d-none");
-        },
-        success: function (data) {
-            const label = data.label;
-            const valuePersentage = data.persentage;
-            const valueTarget = data.value_target;
-            const memberRegistered = document.getElementById("memberRegister");
-            const dataMemberVsTarget = {
-                labels: label,
-                datasets: [
-                    {
-                        label: "Terdaftar",
-                        data: valuePersentage,
-                        backgroundColor: "rgb(126, 252, 101)",
-                    },
-                    {
-                        label: "Target",
-                        data: valueTarget,
-                        backgroundColor: "rgb(247, 67, 67)",
-                    },
-                ],
-            };
-            const memberRegisteredChart = new Chart(memberRegistered, {
-                type: "bar",
-                data: dataMemberVsTarget,
-                options: {
-                    scales: {
-                        yAxes: [
-                            {
-                                ticks: {
-                                    beginAtZero: true,
-                                },
-                            },
-                        ],
-                    },
-                },
-                legend: true,
+    async function getMemberVsTarget() {
+        BeforeSend("LoadmemberRegister");
+        try {
+            const memberTarget = await getMemberTargetValue();
+            ChartMemberTargetUi(memberTarget);
+        } catch (err) {
+            console.log(err);
+        }
+        Complete("LoadmemberRegister");
+    }
+
+    getMemberVsTarget();
+
+    function getMemberTargetValue() {
+        return fetch("/api/membervsterget/national")
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then((response) => {
+                if (response.Response === "False") {
+                    throw new Error(response.Error);
+                }
+                return response;
             });
-        },
-        complete: function () {
-            $("#LoadmemberRegister").addClass("d-none");
-        },
-    });
+    }
+
+    function ChartMemberTargetUi(memberTarget) {
+        const label = memberTarget.label;
+        const valuePersentage = memberTarget.persentage;
+        const valueTarget = memberTarget.value_target;
+        const memberRegistered = document.getElementById("memberRegister");
+        const dataMemberVsTarget = {
+            labels: label,
+            datasets: [
+                {
+                    label: "Terdaftar",
+                    data: valuePersentage,
+                    backgroundColor: "rgb(126, 252, 101)",
+                },
+                {
+                    label: "Target",
+                    data: valueTarget,
+                    backgroundColor: "rgb(247, 67, 67)",
+                },
+            ],
+        };
+        new Chart(memberRegistered, {
+            type: "bar",
+            data: dataMemberVsTarget,
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: true,
+                            },
+                        },
+                    ],
+                },
+            },
+            legend: true,
+        });
+    }
 
     // gender
     $.ajax({
@@ -555,3 +573,12 @@ $(document).ready(function () {
         },
     });
 });
+
+// funsgsi efect loader
+function BeforeSend(idLoader) {
+    $("#" + idLoader + "").removeClass("d-none");
+}
+
+function Complete(idLoader) {
+    $("#" + idLoader + "").addClass("d-none");
+}
