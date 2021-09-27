@@ -17,6 +17,27 @@
                 <p class="dashboard-subtitle">
                 </p>
               </div>
+              <div class="row mt-4">
+                <div class="col-12">
+                  <div class="card shadow bg-white rounded">
+                    <div class="card-body">
+                     <div class="col-4">
+                       <form>
+                         <div class="form-group">
+                           <i class="fa fa-filter" aria-hidden="true"></i>
+                           <label>Berdasarkan</label>
+                           <select class="form-control form-control-sm">
+                             <option>--</option>
+                             <option>Daftar Mandiri</option>
+                             <option>Didaftarkan</option>
+                           </select>
+                         </div>
+                       </form>
+                     </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
                 
                 <div class="row">

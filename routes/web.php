@@ -124,6 +124,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/member/jobs/district/{district_id}','DashboardController@exportJobsDistrictExcel')->name('report-jobdistrict-excel');
         // report profesi jobs
         Route::get('/member/jobs/village/{village_id}','DashboardController@exportJobsVillageExcel')->name('report-jobvillage-excel');
+        
+        Route::get('/villagefilled/national','VillageController@villafeFilledNational')->name('villagefilled-national');
 
 
     });

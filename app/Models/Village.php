@@ -147,5 +147,18 @@ class Village extends Model
         return collect(\DB::select($sql))->first();
     }
 
+    public function getVillageFilledNational()
+    {
+        $sql = "SELECT a.id, a.name as village, b.name as district, c.name as regency, d.name as province,
+                COUNT(e.id) as total_member
+                FROM villages as a
+                join districts as b on a.district_id = b.id 
+                join regencies as c on b.regency_id = c.id 
+                join provinces as d on c.province_id = d.id
+                join users as e on a.id = e.village_id
+                GROUP  by a.id,  a.name, b.name , c.name , d.name order by a.name ASC";
+        return DB::select($sql);
+    }
+
 
 }
