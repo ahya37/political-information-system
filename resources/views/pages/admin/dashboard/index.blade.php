@@ -253,7 +253,7 @@
                         <div>
                            <div id="Loadinputer" class="d-none lds-dual-ring hidden overlay">
                           </div>
-                          <div style="width: 100%; height:50vh;margin:auto" >
+                          <div style="width: 80%; height:50vh;margin: 20px auto" >
                             <canvas id="inputer"></canvas>
                           </div>
                         </div>
