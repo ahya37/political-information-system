@@ -430,6 +430,7 @@ $(document).ready(function () {
         success: function (data) {
             const ageGroup = document.getElementById("ageGroup");
             const ageGroupChart = new Chart(ageGroup, {
+                responsive: true,
                 type: "bar",
                 data: {
                     labels: data.cat_range_age,
@@ -471,6 +472,7 @@ $(document).ready(function () {
         success: function (data) {
             const ageGen = document.getElementById("ageGen");
             const ageGenChart = new Chart(ageGen, {
+                responsive: true,
                 type: "bar",
                 data: {
                     labels: data.cat_gen_age,
@@ -512,6 +514,7 @@ $(document).ready(function () {
         success: function (data) {
             const inputer = document.getElementById("inputer");
             const inputerChart = new Chart(inputer, {
+                responsive: true,
                 type: "bar",
                 data: {
                     labels: data.cat_inputer_label,
@@ -553,6 +556,7 @@ $(document).ready(function () {
         success: function (data) {
             const referal = document.getElementById("referal");
             const referalChart = new Chart(referal, {
+                responsive: true,
                 type: "bar",
                 data: {
                     labels: data.cat_inputer_label,
