@@ -439,6 +439,14 @@ $(document).ready(function () {
                         {
                             data: data.cat_range_age_data,
                             backgroundColor: "rgba(34, 167, 240, 1)",
+                            font: function (context) {
+                                var width = context.chart.width;
+                                var size = Math.round(width / 32);
+                                return {
+                                    size: size,
+                                    weight: 600,
+                                };
+                            },
                         },
                     ],
                 },
