@@ -249,7 +249,7 @@ $(document).ready(function () {
                     rules: [
                         {
                             condition: {
-                                maxWidth: 1,
+                                maxWidth: 500,
                             },
                         },
                     ],
@@ -338,6 +338,7 @@ $(document).ready(function () {
             ],
         };
         new Chart(memberRegistered, {
+            responsive: true,
             type: "bar",
             data: dataMemberVsTarget,
             options: {
