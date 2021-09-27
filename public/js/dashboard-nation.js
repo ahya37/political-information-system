@@ -294,7 +294,7 @@ $(document).ready(function () {
             const memberTarget = await getMemberTargetValue();
             ChartMemberTargetUi(memberTarget);
         } catch (err) {
-            console.log(err);
+            // console.log(err);
         }
         Complete("LoadmemberRegister");
     }
@@ -338,10 +338,11 @@ $(document).ready(function () {
             ],
         };
         new Chart(memberRegistered, {
-            responsive: true,
             type: "bar",
             data: dataMemberVsTarget,
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     yAxes: [
                         {

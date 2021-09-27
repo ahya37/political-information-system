@@ -157,7 +157,9 @@
                         <h6 class="text-center">Anggota Terdaftar VS Target (%)</h6>
                         <div id="LoadmemberRegister" class="d-none lds-dual-ring hidden overlay">
                           </div>
-                        <canvas id="memberRegister"></canvas>
+                          <div style="width: 100%; height:80vh" >
+                            <canvas id="memberRegister"></canvas>
+                          </div>
                       </div>
                     </div>
                   </div>
