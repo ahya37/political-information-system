@@ -429,7 +429,9 @@ $(document).ready(function () {
             $("#LoadageGroup").removeClass("d-none");
         },
         success: function (data) {
-            const ageGroup = document.getElementById("ageGroup");
+            const ageGroup = document
+                .getElementById("ageGroup")
+                .getContext("2d");
             const ageGroupChart = new Chart(ageGroup, {
                 responsive: true,
                 type: "bar",
