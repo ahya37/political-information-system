@@ -538,6 +538,11 @@ $(document).ready(function () {
                         ],
                     },
                     legend: false,
+                    layout: {
+                        padding: {
+                            bottom: 50,
+                        },
+                    },
                 },
             });
         },
