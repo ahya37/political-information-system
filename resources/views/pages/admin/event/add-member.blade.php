@@ -29,11 +29,11 @@
                                     <table id="data" class="table table-sm table-striped" width="100%">
                                       <thead>
                                         <tr>
-                                          <th scope="col">Pilih</th>
-                                          <th scope="col">Nama</th>
-                                          <th scope="col">Kab/Kot</th>
-                                          <th scope="col">Kecamatan</th>
-                                          <th scope="col">Desa/Kel</th>
+                                          <th scope="col">PILIH</th>
+                                          <th scope="col">NAMA</th>
+                                          <th scope="col">KAB/KOT</th>
+                                          <th scope="col">KECAMATAN</th>
+                                          <th scope="col">DESA/KEL</th>
                                         </tr>
                                       </thead>
                                       <tbody></tbody>

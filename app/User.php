@@ -566,14 +566,14 @@ class User extends Authenticatable
 
     public function getMemberForEvent()
     {
-        $sql  = "SELECT b.id, a.id as user_id, a.name, f.name as provincy, e.name  as regency, d.name as district, c.name as village
+        $sql  = "SELECT b.id, b.event_id, a.id as user_id, a.name, f.name as provincy, e.name  as regency, d.name as district, c.name as village
                 from users as a
                 left join event_details as b on a.id = b.user_id
                 left join villages as c on a.village_id = c.id
                 left join districts as d on c.district_id = d.id 
                 left join regencies as e on d.regency_id = e.id
                 left join provinces as f on e.province_id  = f.id
-                where b.id is null and a.email is not null and a.password is not NULL";
+                where a.email is not null and a.password is not NULL order by a.id asc";
         $result = DB::select($sql);
         return $result;
     }

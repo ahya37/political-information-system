@@ -66,9 +66,15 @@ class EventController extends Controller
             if (request()->ajax()) {
                 return DataTables::of($members)
                         ->addColumn('pilih', function($item) use ($event_id){
+                            // jika event_id != id pada event, maka aktifkan kotak pilihnya
+                            if ($item->event_id != $event_id) {
+                                return '
+                                <input type="checkbox" name="user_id[]" value="'.$item->user_id.'" class="form-control-sm">
+                                <input type="hidden" name="event_id" value="'.$event_id.'" >
+                                ';
+                            }
                             return '
-                            <input type="checkbox" name="user_id[]" value="'.$item->user_id.'" class="form-control-sm">
-                            <input type="hidden" name="event_id" value="'.$event_id.'" >
+                                <span class="fa fa-check"></span>
                             ';
                         })
                         ->addColumn('district', function($item){
