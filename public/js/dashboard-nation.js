@@ -515,7 +515,6 @@ $(document).ready(function () {
         success: function (data) {
             const inputer = document.getElementById("inputer");
             const inputerChart = new Chart(inputer, {
-                responsive: true,
                 type: "bar",
                 data: {
                     labels: data.cat_inputer_label,
