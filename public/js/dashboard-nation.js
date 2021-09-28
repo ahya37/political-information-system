@@ -523,8 +523,9 @@ $(document).ready(function () {
             $("#Loadinputer").removeClass("d-none");
         },
         success: function (data) {
-            const inputer = document.getElementById("inputer");
+            const inputer = document.getElementById("inputer").getContext('2d');
             const inputerChart = new Chart(inputer, {
+                responsive: true,
                 type: "bar",
                 data: {
                     labels: data.cat_inputer_label,
@@ -536,8 +537,7 @@ $(document).ready(function () {
                     ],
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    
                     scales: {
                         yAxes: [
                             {
@@ -548,11 +548,6 @@ $(document).ready(function () {
                         ],
                     },
                     legend: false,
-                    layout: {
-                        padding: {
-                            bottom: 50,
-                        },
-                    },
                 },
             });
         },
