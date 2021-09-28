@@ -862,16 +862,16 @@ class DashboardController extends Controller
         $GrafikProvider = new GrafikProvider();
 
         // input admin terbanyak
-        $inputer      = $referalModel->getReferals();
-        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
-        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
-        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
-        $color_inputer = $ChartInputer['colors'];
+        $referal      = $referalModel->getReferals();
+        $ChartRefereal = $GrafikProvider->getGrafikReferal($referal);
+        $cat_referal_label = $ChartRefereal['cat_referal'];
+        $cat_referal_data = $ChartRefereal['cat_referal_data'];
+        $color_referals = $ChartRefereal['color_referals'];
 
         $data = [
-            'cat_inputer_label' => $cat_inputer_label,
-            'cat_inputer_data' => $cat_inputer_data,
-            'color_inputer' => $color_inputer,
+            'cat_referal_label' => $cat_referal_label,
+            'cat_referal_data' => $cat_referal_data,
+            'color_referals' => $color_referals,
         ];
         return response()->json($data);
 

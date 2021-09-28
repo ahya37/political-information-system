@@ -523,7 +523,7 @@ $(document).ready(function () {
             $("#Loadinputer").removeClass("d-none");
         },
         success: function (data) {
-            const inputer = document.getElementById("inputer").getContext('2d');
+            const inputer = document.getElementById("inputer").getContext("2d");
             const inputerChart = new Chart(inputer, {
                 responsive: true,
                 type: "bar",
@@ -537,7 +537,6 @@ $(document).ready(function () {
                     ],
                 },
                 options: {
-                    
                     scales: {
                         yAxes: [
                             {
@@ -558,7 +557,7 @@ $(document).ready(function () {
 
     // anggota referal terbanyak
     $.ajax({
-        url: "/api/member/inputer/national",
+        url: "/api/member/referal/national",
         method: "GET",
         dataType: "json",
         cache: false,
@@ -571,11 +570,11 @@ $(document).ready(function () {
                 responsive: true,
                 type: "bar",
                 data: {
-                    labels: data.cat_inputer_label,
+                    labels: data.cat_referal_label,
                     datasets: [
                         {
-                            data: data.cat_inputer_data,
-                            backgroundColor: data.color_inputer,
+                            data: data.cat_referal_data,
+                            backgroundColor: data.color_referals,
                         },
                     ],
                 },
