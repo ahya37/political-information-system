@@ -15,7 +15,7 @@ class Referal extends Model
                 where a.village_id is not null and b.level != 1
                 group by b.name, b.id
                 order by count(b.id) desc
-                limit 10";
+                limit 5";
         return DB::select($sql);
     }
 
@@ -47,7 +47,7 @@ class Referal extends Model
                 and  not b.level = 1
                 group by b.name, b.id
                 order by count(b.id) desc
-                limit 10";
+                limit 5";
         return DB::select($sql);
     }
 
@@ -59,7 +59,7 @@ class Referal extends Model
                 where a.village_id is not null and  b.level != 1
                 group by b.name, b.id
                 order by count(b.id) desc
-                limit 10";
+                limit 5";
         return DB::select($sql);
     }
 
@@ -90,7 +90,7 @@ class Referal extends Model
                 and  not b.level = 1
                 group by b.name, b.id
                 order by count(b.id) desc
-                limit 10";
+                limit 5";
         return DB::select($sql);
     }
 
@@ -105,7 +105,7 @@ class Referal extends Model
                 and  not b.`level` = 1 
                 group by b.name, b.id
                 order by count(b.id) desc 
-                limit 10";
+                limit 5";
         return DB::select($sql);
     }
 
@@ -133,7 +133,7 @@ class Referal extends Model
                 and  not b.level = 1
                 group by b.name, b.id
                 order by count(b.id) desc
-                limit 10";
+                limit 5";
         return DB::select($sql);
     }
 
@@ -147,7 +147,7 @@ class Referal extends Model
                 and  not b.`level` = 1 
                 group by b.name, b.id
                 order by count(b.id) desc
-                limit 10";
+                limit 5";
         return DB::select($sql);
     }
 
