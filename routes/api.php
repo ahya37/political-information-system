@@ -92,3 +92,5 @@ Route::get('member/referal/village/{village_id}','API\DashboardController@getReg
 
 // event galleries
 Route::get('event/galleries/{eventId}','API\EventGalleryController@getDataEventGalleries');
+
+Route::get('memberall','API\MemberController@members')->name('all-members');

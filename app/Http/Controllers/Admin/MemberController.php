@@ -20,15 +20,15 @@ use Yajra\DataTables\Facades\DataTables;
 
 class MemberController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $member = User::with(['village.district.regency','reveral','create_by'])
                     ->whereNotNull('nik')
-                    ->whereNotIn('level',[1])
-                    ->orderBy('name','ASC')->get();
+                    ->whereNotIn('level',[1]);
         if (request()->ajax()) 
         {
             return DataTables::of($member)
+                    ->addIndexColumn()
                     ->addColumn('action', function($item){
                         if ($item->status == 1 ) {
                             return '
@@ -72,8 +72,16 @@ class MemberController extends Controller
 
                     //    }
                     // })
+                    ->filter(function($instance){
+                        if (request()->filter == '1') {
+                            $instance->where('status', request()->filter);
+                        }
+                        if (request()->filter == '0') {
+                            $instance->where('status', request()->filter);
+                        }
+                    })
                     ->rawColumns(['action','photo','referal'])
-                    ->make();
+                    ->make(true);
         }
         return view('pages.admin.member.index');
     }
