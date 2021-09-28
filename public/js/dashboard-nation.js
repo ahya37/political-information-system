@@ -618,7 +618,7 @@ $("#achievment").DataTable({
 
                 html +=
                     "<tr>" +
-                    "<td>" +
+                    "<td width='100'>" +
                     data[i].name +
                     "</td>" +
                     "<td class='text-right'>" +
