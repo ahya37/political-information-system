@@ -862,7 +862,7 @@ class DashboardController extends Controller
         $GrafikProvider = new GrafikProvider();
 
         // input admin terbanyak
-        $inputer      = $referalModel->getInputers();
+        $inputer      = $referalModel->getReferals();
         $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
         $cat_inputer_label = $ChartInputer['cat_inputer_label'];
         $cat_inputer_data = $ChartInputer['cat_inputer_data'];
