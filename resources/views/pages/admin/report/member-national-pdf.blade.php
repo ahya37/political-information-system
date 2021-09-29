@@ -74,7 +74,6 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Foto</th>
                         <th>Nama</th>
                         <th>Desa</th>
                         <th>Kecamatan</th>
