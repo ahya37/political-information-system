@@ -89,7 +89,7 @@
                     <tr>
                         <td>{{ $no++ }}</td>
                         <td>
-                            <img width="50" src="{{ asset('/storage/', $row->photos) }}">
+                            <img width="50" src="{{ asset('storage/', $row->photo) }}">
                         </td>
                         <td>{{ strtoupper($row->name) }}</td>
                         <td>{{ $row->village->name ?? '' }}</td>
