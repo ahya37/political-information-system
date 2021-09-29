@@ -126,6 +126,14 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/member/jobs/village/{village_id}','DashboardController@exportJobsVillageExcel')->name('report-jobvillage-excel');
         
         Route::get('/villagefilled/national','VillageController@villafeFilledNational')->name('villagefilled-national');
+        Route::get('/villagefilled/province/{province_id}','VillageController@villafeFilledProvince')->name('villagefilled-province');
+        Route::get('/villagefilled/regency/{regency_id}','VillageController@villafeFilledRegency')->name('villagefilled-regency');
+        Route::get('/villagefilled/district/{district_id}','VillageController@villafeFilledDistrict')->name('villagefilled-district');
+        
+        Route::get('/member/province/{province_id}','MemberController@memberProvince')->name('members-province');
+        Route::get('/member/regency/{regency_id}','MemberController@memberRegency')->name('members-regency');
+        Route::get('/member/district/{district_id}','MemberController@memberDistrict')->name('members-district');
+        Route::get('/member/village/{village_id}','MemberController@memberVillage')->name('members-village');
 
 
     });

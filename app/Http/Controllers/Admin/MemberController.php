@@ -6,6 +6,7 @@ use PDF;
 use App\Menu;
 use App\User;
 use App\UserMenu;
+use App\Models\Province;
 use App\Mail\RegisterMail;
 use Illuminate\Support\Str;
 use App\Providers\StrRandom;
@@ -13,6 +14,9 @@ use Illuminate\Http\Request;
 use App\Providers\GlobalProvider;
 use App\Providers\QrCodeProvider;
 use App\Http\Controllers\Controller;
+use App\Models\District;
+use App\Models\Regency;
+use App\Models\Village;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -63,15 +67,6 @@ class MemberController extends Controller
                     ->addColumn('referal', function($item){
                         return $item->referal;
                     })
-                    // ->addColumn('saved_nasdem', function($item){
-                    //    if ($item->saved_nasdem == 1) {
-                    //        return '<img src="'.asset('assets/images/check-saved.svg').'">';
-                    //    }elseif ($item->saved_nasdem == 2) {
-                    //        return '<img src="'.asset('assets/images/check-registered.svg').'">';
-                    //    }else{
-
-                    //    }
-                    // })
                     ->filter(function($instance){
                         if (request()->filter == '1') {
                             $instance->where('status', request()->filter);
@@ -281,5 +276,134 @@ class MemberController extends Controller
 
         return redirect()->route('admin-member')->with(['success' => 'Akun untuk '.$user->name.' telah dibuat']);
         
+    }
+
+    public function memberProvince($province_id)
+    {
+        $province = Province::select('name')->where('id', $province_id)->first();
+
+        $member = User::with(['village.district.regency.province','reveral','create_by'])
+                    ->whereHas('village', function($village) use ($province_id){
+                        $village->whereHas('district', function($district) use ($province_id){
+                            $district->whereHas('regency', function($regency) use ($province_id) {
+                                $regency->where('province_id', $province_id);
+                            });
+                        });
+                    })
+                    ->whereNotNull('nik')
+                    ->whereNotIn('level',[1])->get();
+
+        if (request()->ajax()) 
+        {
+            return DataTables::of($member)
+                    ->addIndexColumn()
+                    ->addColumn('photo', function($item){
+                        return '
+                        <a href="'.route('admin-profile-member', encrypt($item->id)).'">
+                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                            '.$item->name.'
+                        </a>
+                        ';
+                    })
+                    ->addColumn('referal', function($item){
+                        return $item->referal;
+                    })
+                    ->rawColumns(['action','photo','referal'])
+                    ->make(true);
+        }
+        return view('pages.admin.member.member-province', compact('province'));
+    }
+
+    public function memberRegency($regency_id)
+    {
+        $regency = Regency::select('name')->where('id', $regency_id)->first();
+        $member = User::with(['village.district.regency.province','reveral','create_by'])
+                    ->whereHas('village', function($village) use ($regency_id){
+                        $village->whereHas('district', function($district) use ($regency_id){
+                            $district->where('regency_id', $regency_id);
+                        });
+                    })
+                    ->whereNotNull('nik')
+                    ->whereNotIn('level',[1])->get();
+
+        if (request()->ajax()) 
+        {
+            return DataTables::of($member)
+                    ->addIndexColumn()
+                    ->addColumn('photo', function($item){
+                        return '
+                        <a href="'.route('admin-profile-member', encrypt($item->id)).'">
+                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                            '.$item->name.'
+                        </a>
+                        ';
+                    })
+                    ->addColumn('referal', function($item){
+                        return $item->referal;
+                    })
+                    ->rawColumns(['action','photo','referal'])
+                    ->make(true);
+        }
+        return view('pages.admin.member.member-regency', compact('regency'));
+    }
+
+    public function memberDistrict($district_id)
+    {
+        $district = District::select('name')->where('id', $district_id)->first();
+        $member = User::with(['village.district.regency.province','reveral','create_by'])
+                    ->whereHas('village', function($village) use ($district_id){
+                        $village->where('district_id', $district_id);
+                    })
+                    ->whereNotNull('nik')
+                    ->whereNotIn('level',[1])->get();
+
+        if (request()->ajax()) 
+        {
+            return DataTables::of($member)
+                    ->addIndexColumn()
+                    ->addColumn('photo', function($item){
+                        return '
+                        <a href="'.route('admin-profile-member', encrypt($item->id)).'">
+                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                            '.$item->name.'
+                        </a>
+                        ';
+                    })
+                    ->addColumn('referal', function($item){
+                        return $item->referal;
+                    })
+                    ->rawColumns(['action','photo','referal'])
+                    ->make(true);
+        }
+        return view('pages.admin.member.member-district', compact('district'));
+    }
+
+    public function memberVillage($village_id)
+    {
+        $village = Village::select('name')->where('id', $village_id)->first();
+        $member = User::with(['village.district.regency.province','reveral','create_by'])
+                    ->where('village_id', $village_id)
+                    ->whereNotNull('nik')
+                    ->whereNotIn('level',[1])->get();
+
+        if (request()->ajax()) 
+        {
+            return DataTables::of($member)
+                    ->addIndexColumn()
+                    ->addColumn('photo', function($item){
+                        return '
+                        <a href="'.route('admin-profile-member', encrypt($item->id)).'">
+                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                            '.$item->name.'
+                        </a>
+                        ';
+                    })
+                    ->addColumn('referal', function($item){
+                        return $item->referal;
+                    })
+                    ->rawColumns(['action','photo','referal'])
+                    ->make(true);
+        }
+        return view('pages.admin.member.member-village', compact('village'));
     }
 }

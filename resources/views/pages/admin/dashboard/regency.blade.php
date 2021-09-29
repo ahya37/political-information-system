@@ -57,14 +57,16 @@
                 <div class="row">
                   <div class="col-md-4">
                     <div class="card mb-2 bg-info">
-                      <div class="card-body">
-                        <div class="dashboard-card-title text-white">
-                          Jumlah Anggota
+                      <a href="{{ route('members-regency', $regency->id) }}">
+                        <div class="card-body">
+                          <div class="dashboard-card-title text-white">
+                            Jumlah Anggota
+                          </div>
+                          <div class="dashboard-card-subtitle">
+                            <h4 class="text-white" id="total_member"></h4>
+                          </div>
                         </div>
-                        <div class="dashboard-card-subtitle">
-                          <h4 class="text-white" id="total_member"></h4>
-                        </div>
-                      </div>
+                      </a>
                     </div>
                   </div>
                   <div class="col-md-4">
@@ -96,14 +98,16 @@
                 <div class="row">
                   <div class="col-md-4">
                     <div class="card mb-2 bg-info">
-                      <div class="card-body">
-                        <div class="dashboard-card-title text-white">
-                          Jumlah Desa Terisi
+                      <a href="{{ route('villagefilled-regency', $regency->id) }}">
+                        <div class="card-body">
+                          <div class="dashboard-card-title text-white">
+                            Jumlah Desa Terisi
+                          </div>
+                          <div class="dashboard-card-subtitle">
+                            <h4 class="text-white" id="village_filled"></h4>
+                          </div>
                         </div>
-                        <div class="dashboard-card-subtitle">
-                          <h4 class="text-white" id="village_filled"></h4>
-                        </div>
-                      </div>
+                      </a>
                     </div>
                   </div>
                   <div class="col-md-4">

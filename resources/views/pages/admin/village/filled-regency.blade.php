@@ -12,7 +12,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Desa Terisi Nasional</h2>
+                <h2 class="dashboard-title">Daftar Desa Terisi {{ $regency->name }}</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
