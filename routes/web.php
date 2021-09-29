@@ -134,7 +134,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/member/regency/{regency_id}','MemberController@memberRegency')->name('members-regency');
         Route::get('/member/district/{district_id}','MemberController@memberDistrict')->name('members-district');
         Route::get('/member/village/{village_id}','MemberController@memberVillage')->name('members-village');
-
+        
+        Route::get('/pdf/member/national','MemberController@reportMemberPdf')->name('pdf-members-national');
 
     });
 });

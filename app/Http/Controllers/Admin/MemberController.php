@@ -406,4 +406,17 @@ class MemberController extends Controller
         }
         return view('pages.admin.member.member-village', compact('village'));
     }
+
+    public function reportMemberPdf()
+    {
+        $member = User::with(['village'])
+                    ->whereNotNull('nik')
+                    ->whereNotIn('level',[1])
+                    ->orderBy('name',)
+                    ->get();
+        $title = 'Anggota-Nasional'; 
+        $no = 1;
+        $pdf   = PDF::loadView('pages.admin.report.member-national-pdf', compact('member','title','no'));
+        return $pdf->stream();
+    }
 }
