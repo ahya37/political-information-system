@@ -34,7 +34,7 @@
                                 PDF
                               </a>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                  <a href="{{ route('pdf-members-national') }}" class="dropdown-item"><i class="fa fa-download" aria-hidden="true"></i>Daftar Anggota</a>
+                                  <a href="{{ route('pdf-members-national') }}" target="_blank" class="dropdown-item"><i class="fa fa-download" aria-hidden="true"></i>Daftar Anggota</a>
                               </div>
                           </div>
                         </div>

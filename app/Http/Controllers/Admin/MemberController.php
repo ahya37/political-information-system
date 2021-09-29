@@ -417,6 +417,6 @@ class MemberController extends Controller
         $title = 'Anggota-Nasional'; 
         $no = 1;
         $pdf   = PDF::loadView('pages.admin.report.member-national-pdf', compact('member','title','no'));
-        return $pdf->stream();
+        return $pdf->download();
     }
 }
