@@ -88,9 +88,9 @@
                     @foreach ($member as $row)
                     <tr>
                         <td>{{ $no++ }}</td>
-                        <td>
+                        {{-- <td>
                             <img width="50" src="{{ asset('storage/'. $row->photo) }}">
-                        </td>
+                        </td> --}}
                         <td>{{ strtoupper($row->name) }}</td>
                         <td>{{ $row->village->name ?? '' }}</td>
                         <td>{{ $row->village->district->name ?? '' }}</td>
