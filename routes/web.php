@@ -89,10 +89,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         Route::get('/member/card/download/{id}','MemberController@downloadCard')->name('admin-member-card-download');
 
-        // Admin District
-        Route::get('/admincontrol/district','AdminDistrictController@index')->name('admin-admincontroll-district');
-        Route::get('/admincontrol/district/createadmin','AdminDistrictController@create')->name('admin-admincontroll-district-create');
-        Route::get('/admincontrol/createadmin/district/save/{id}','AdminDistrictController@saveAdminDistrict')->name('admin-admincontroll-district-save');
+        // Admin Control
+        Route::get('/admincontrol','AdminController@index')->name('admin-admincontroll-district');
+        Route::get('/admincontrol/district/createadmin','AdminController@create')->name('admin-admincontroll-district-create');
+        Route::get('/admincontrol/createadmin/district/save/{id}','AdminController@saveAdminDistrict')->name('admin-admincontroll-district-save');
 
         // Event
         Route::get('/event','EventController@index')->name('admin-event');

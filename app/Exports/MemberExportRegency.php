@@ -29,7 +29,7 @@ class MemberExportRegency implements FromCollection, WithHeadings, WithEvents
                 join districts as c on b.district_id = c.id
                 join users as e on a.user_id = e.id
                 join regencies as d on c.regency_id = d.id
-                where c.regency_id = $regency_id and not a.level = 1
+                where c.regency_id = $regency_id 
                 order by c.name";
         $result = collect(\DB::select($sql));
         return $result;

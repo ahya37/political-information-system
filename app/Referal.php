@@ -12,7 +12,7 @@ class Referal extends Model
         $sql = "SELECT b.id, b.name , count(b.id) as total_referal
                 from users as a
                 join users as b on a.user_id = b.id
-                where a.village_id is not null and b.level != 1
+                where a.village_id is not null
                 group by b.name, b.id
                 order by count(b.id) desc
                 limit 5";
@@ -28,7 +28,6 @@ class Referal extends Model
                 left join districts as   d on c.district_id = d.id 
                 left join regencies as e on d.regency_id = e.id
                 where e.province_id = $province_id 
-                and  not b.level = 1
                 group by b.name, b.id
                 order by count(b.id) desc
                 limit 10";
@@ -44,7 +43,6 @@ class Referal extends Model
                 left join districts as   d on c.district_id = d.id 
                 left join regencies as e on d.regency_id = e.id
                 where e.province_id = $province_id 
-                and  not b.level = 1
                 group by b.name, b.id
                 order by count(b.id) desc
                 limit 5";
@@ -56,7 +54,7 @@ class Referal extends Model
         $sql = "SELECT b.id, b.name , count(b.id) as total_data
                 from users as a
                 join users as b on a.cby = b.id
-                where a.village_id is not null and  b.level != 1
+                where a.village_id is not null 
                 group by b.name, b.id
                 order by count(b.id) desc
                 limit 5";
@@ -72,7 +70,6 @@ class Referal extends Model
                 left join districts as   d on c.district_id = d.id 
                 left join regencies as e on d.regency_id = e.id
                 where e.id = $regency_id 
-                and  not b.level = 1
                 group by b.name, b.id
                 order by count(b.id) desc
                 limit 10";
@@ -87,7 +84,6 @@ class Referal extends Model
                 left join villages as c on b.village_id = c.id
                 left join districts as   d on c.district_id = d.id 
                 where d.id = $district_id
-                and  not b.level = 1
                 group by b.name, b.id
                 order by count(b.id) desc
                 limit 5";
@@ -102,7 +98,6 @@ class Referal extends Model
                 left join villages as c on b.village_id = c.id
                 left join districts as d on c.district_id = d.id 
                 where d.regency_id = $regency_id
-                and  not b.`level` = 1 
                 group by b.name, b.id
                 order by count(b.id) desc 
                 limit 5";
@@ -116,7 +111,6 @@ class Referal extends Model
                 join users as b on a.user_id = b.id
                 left join villages as c on b.village_id = c.id
                 where c.district_id = $district_id
-                and  not b.`level` = 1 
                 group by b.name, b.id
                 order by count(b.id) desc
                 limit 10";
@@ -130,7 +124,6 @@ class Referal extends Model
                 join users as b on a.cby = b.id
                 left join villages as c on b.village_id = c.id
                 where c.id = $village_id
-                and  not b.level = 1
                 group by b.name, b.id
                 order by count(b.id) desc
                 limit 5";
@@ -144,7 +137,6 @@ class Referal extends Model
                 join users as b on a.user_id = b.id
                 left join villages as c on b.village_id = c.id
                 where c.id = $village_id
-                and  not b.`level` = 1 
                 group by b.name, b.id
                 order by count(b.id) desc
                 limit 5";

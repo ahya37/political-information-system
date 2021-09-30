@@ -12,7 +12,6 @@ class MemberController extends Controller
     {
              $members = User::with(['village.district.regency','reveral','create_by'])
                         ->whereNotNull('nik')
-                        ->whereNotIn('level',[1])
                         ->orderBy('name','ASC')->get();
             return datatables ($members)->toJson();
     }

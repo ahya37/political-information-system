@@ -28,7 +28,6 @@ class MemberExportNational implements FromCollection, WithHeadings, WithEvents
                 join regencies as d on c.regency_id = d.id
                 join provinces as e on d.province_id  = e.id 
                 join users as f on a.user_id = f.id
-                where not a.level = 1
                 order by e.name ASC ";
         $result = collect(\ DB::select($sql));
         return $result;

@@ -29,7 +29,9 @@
                                     <thead>
                                       <tr>
                                         <th scope="col">Nama</th>
-                                        <th scope="col">Daerah/Kecamatan</th>
+                                        <th scope="col">Daerah</th>
+                                        <th scope="col">Level Admin</th>
+                                        <th scope="col">Total Data</th>
                                       </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -60,7 +62,9 @@
             },
             columns:[
               {data:'name', name:'name'},
-              {data:'district', name:'district'}
+              {data:'area', name:'area'},
+              {data:'level', name:'level'},
+              {data:'total_data', name:'total_data'}
             ]
         });
     </script>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Admin;
 use PDF;
 use App\Menu;
 use App\User;
@@ -27,8 +28,7 @@ class MemberController extends Controller
     public function index(Request $request)
     {
         $member = User::with(['village.district.regency','reveral','create_by'])
-                    ->whereNotNull('nik')
-                    ->whereNotIn('level',[1]);
+                    ->whereNotNull('nik');
         if (request()->ajax()) 
         {
             return DataTables::of($member)
@@ -94,7 +94,7 @@ class MemberController extends Controller
                'phone_number' => 'numeric',
            ]);
 
-           $cby_id = User::select('id')->where('level', 1)->first();
+           $cby_id = Admin::select('id')->first();
            
            $cek_nik = User::select('nik')->where('nik', $request->nik)->first();
            #cek nik jika sudah terpakai
@@ -291,7 +291,7 @@ class MemberController extends Controller
                         });
                     })
                     ->whereNotNull('nik')
-                    ->whereNotIn('level',[1])->get();
+                    ->get();
 
         if (request()->ajax()) 
         {
@@ -324,7 +324,7 @@ class MemberController extends Controller
                         });
                     })
                     ->whereNotNull('nik')
-                    ->whereNotIn('level',[1])->get();
+                    ->get();
 
         if (request()->ajax()) 
         {
@@ -355,7 +355,7 @@ class MemberController extends Controller
                         $village->where('district_id', $district_id);
                     })
                     ->whereNotNull('nik')
-                    ->whereNotIn('level',[1])->get();
+                    ->get();
 
         if (request()->ajax()) 
         {
@@ -384,7 +384,7 @@ class MemberController extends Controller
         $member = User::with(['village.district.regency.province','reveral','create_by'])
                     ->where('village_id', $village_id)
                     ->whereNotNull('nik')
-                    ->whereNotIn('level',[1])->get();
+                    ->get();
 
         if (request()->ajax()) 
         {
@@ -411,7 +411,6 @@ class MemberController extends Controller
     {
         $member = User::with(['village'])
                     ->whereNotNull('nik')
-                    ->whereNotIn('level',[1])
                     ->orderBy('name',)
                     ->get();
         $title = 'Anggota-Nasional'; 

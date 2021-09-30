@@ -33,7 +33,7 @@ class MemberExportProvince implements FromCollection, WithHeadings, WithEvents
                 join districts as c on b.district_id = c.id
                 join regencies as d on c.regency_id = d.id
                 join users as e on a.user_id = e.id
-                where d.province_id = $province_id and not a.level = 1
+                where d.province_id = $province_id
                 order by d.name";
         $result = collect(\ DB::select($sql));
         return $result;
