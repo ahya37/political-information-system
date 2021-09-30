@@ -11,6 +11,7 @@ use App\Models\Village;
 use App\Models\District;
 use App\Providers\GrafikProvider;
 use App\Http\Controllers\Controller;
+use App\Models\Province;
 
 class DashboardController extends Controller
 {
@@ -1071,6 +1072,22 @@ class DashboardController extends Controller
         ];
         return response()->json($data);
 
+    }
+
+    public function getTotalRegioanNational()
+    {
+        $gF   = app('GlobalProvider'); // global function
+
+        $province = Province::count();
+        $regency  = Regency::count();
+        $district = District::count();
+        $village  = Village::count();
+
+        $data = 'Indonesia Memiliki '. $gF->decimalFormat($province).' Provinsi, '.$gF->decimalFormat($regency).' Kabupaten/Kota, '.$gF->decimalFormat($district).' Kecamatan, dan '.$gF->decimalFormat($village).' Desa';
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 
 }
