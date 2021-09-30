@@ -67,12 +67,6 @@
               {data:'total_data', name:'total_data'}
             ],
             order: [[3, "desc"]],
-                columnDefs:[
-                  {
-                    "targets": [ 0 ],
-                    "visible": false
-                  }
-                ]
         });
     </script>
 @endpush
