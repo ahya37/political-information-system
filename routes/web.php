@@ -136,6 +136,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/member/village/{village_id}','MemberController@memberVillage')->name('members-village');
         
         Route::get('/pdf/member/national','MemberController@reportMemberPdf')->name('pdf-members-national');
+        Route::get('/pdf/member/province/{province_id}','MemberController@reportMemberProvincePdf')->name('pdf-members-province');
+        Route::get('/pdf/member/regency/{regency_id}','MemberController@reportMemberRegencyPdf')->name('pdf-members-regency');
+        Route::get('/pdf/member/district/{district_id}','MemberController@reportMemberDistrictPdf')->name('pdf-members-district');
+        Route::get('/pdf/member/village/{village_id}','MemberController@reportMemberVillagePdf')->name('pdf-members-village');
 
     });
 });

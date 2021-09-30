@@ -415,7 +415,77 @@ class MemberController extends Controller
                     ->get();
         $title = 'Anggota-Nasional'; 
         $no = 1;
-        $pdf   = PDF::loadView('pages.admin.report.member-national-pdf', compact('member','title','no'));
-        return $pdf->download();
+        $pdf   = PDF::loadView('pages.admin.report.member-national-pdf', compact('member','title','no'))->setPaper('landscape');
+        return $pdf->download($title.'.pdf');
+    }
+
+    public function reportMemberProvincePdf($province_id)
+    {
+        $province = Province::select('name')->where('id', $province_id)->first();
+        $member = User::with(['village'])
+                    ->whereHas('village', function($village) use ($province_id){
+                        $village->whereHas('district', function($district) use ($province_id){
+                            $district->whereHas('regency', function($regency) use ($province_id){
+                                $regency->where('province_id', $province_id);
+                            });
+                        });
+                    })
+                    ->whereNotNull('nik')
+                    ->orderBy('name',)
+                    ->get();
+        $title = 'Anggota-Province-'. $province->name; 
+        $no = 1;
+        $pdf   = PDF::loadView('pages.admin.report.member-province-pdf', compact('member','title','no','province'));
+        return $pdf->download($title.'.pdf');
+    }
+
+    public function reportMemberRegencyPdf($regency_id)
+    {
+        $regency = Regency::select('name')->where('id', $regency_id)->first();
+        $member = User::with(['village'])
+                    ->whereHas('village', function($village) use ($regency_id){
+                        $village->whereHas('district', function($district) use ($regency_id){
+                            $district->where('regency_id', $regency_id);
+                        });
+                    })
+                    ->whereNotNull('nik')
+                    ->orderBy('name',)
+                    ->get();
+        $title = 'Anggota-'. $regency->name; 
+        $no = 1;
+        $pdf   = PDF::loadView('pages.admin.report.member-regency-pdf', compact('member','title','no','regency'));
+        return $pdf->download($title.'.pdf');
+    }
+
+    public function reportMemberDistrictPdf($district_id)
+    {
+        $district = District::select('name')->where('id', $district_id)->first();
+        $member = User::with(['village'])
+                    ->whereHas('village', function($village) use ($district_id){
+                        $village->where('district_id', $district_id);
+                    })
+                    ->whereNotNull('nik')
+                    ->orderBy('name',)
+                    ->get();
+        $title = 'Anggota-'. $district->name; 
+        $no = 1;
+        $pdf   = PDF::loadView('pages.admin.report.member-district-pdf', compact('member','title','no','district'));
+        return $pdf->download($title.'.pdf');
+    }
+
+    public function reportMemberVillagePdf($village_id)
+    {
+        $village = Village::select('name')->where('id', $village_id)->first();
+        $member = User::with(['village'])
+                    ->whereHas('village', function($village) use ($village_id){
+                        $village->where('id', $village_id);
+                    })
+                    ->whereNotNull('nik')
+                    ->orderBy('name',)
+                    ->get();
+        $title = 'Anggota-Desa-'. $village->name; 
+        $no = 1;
+        $pdf   = PDF::loadView('pages.admin.report.member-village-pdf', compact('member','title','no','village'));
+        return $pdf->download($title.'.pdf');
     }
 }
