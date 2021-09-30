@@ -31,7 +31,7 @@
                                         <th scope="col">Nama</th>
                                         <th scope="col">Daerah</th>
                                         <th scope="col">Level Admin</th>
-                                        <th scope="col">Total Data</th>
+                                        <th scope="col">Jumlah Anggota</th>
                                       </tr>
                                     </thead>
                                     <tbody></tbody>
