@@ -1090,4 +1090,46 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function getTotalRegioanProvince($province_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+
+        $provinceModel = new Province();
+        $regional       = $provinceModel->getTotalRegion($province_id);
+       
+        $data = 'Provinsi '.$regional->province.' Memiliki '.$gF->decimalFormat($regional->regency).' Kabupaten/Kota, '.$gF->decimalFormat($regional->district).' Kecamatan, dan '.$gF->decimalFormat($regional->village).' Desa';
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function getTotalRegioanRegency($regency_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+
+        $regencyModel = new Regency();
+        $regional     = $regencyModel->getTotalRegion($regency_id);
+       
+        $data = $regional->regency.' Memiliki '.$gF->decimalFormat($regional->district).' Kecamatan, dan '.$gF->decimalFormat($regional->village).' Desa';
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function getTotalRegioanDistrict($district_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+
+        $districtModel = new District();
+        $regional     = $districtModel->getTotalRegion($district_id);
+       
+        $data = 'KECAMATAN '. $regional->district.' Memiliki '.$gF->decimalFormat($regional->village).' Desa';
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
 }

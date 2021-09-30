@@ -569,4 +569,35 @@ $(document).ready(function () {
             $("#Loadreferal").addClass("d-none");
         },
     });
+
+    // informasi data jumlah region nasonal
+    async function gerTotalRegional() {
+        try {
+            const totalRegional = await getDataTotalRegional();
+            const getTotalRegional = totalRegional.data;
+            infoTotalRegionalUi(getTotalRegional);
+        } catch (err) {}
+    }
+
+    gerTotalRegional();
+    function getDataTotalRegional() {
+        return fetch("/api/totalregional/district/" + districtID)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then((response) => {
+                if (response.Response === "False") {
+                }
+                return response;
+            });
+    }
+
+    function infoTotalRegionalUi(getTotalRegional) {
+        let div = document.getElementById("infoTotalRegion");
+        let text = document.createTextNode(getTotalRegional);
+        div.appendChild(text);
+    }
 });

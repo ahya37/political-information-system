@@ -98,3 +98,6 @@ Route::get('admins','API\AdminController@getAdmin');
 
 // total reginal
 Route::get('totalregional/nation','API\DashboardController@getTotalRegioanNational');
+Route::get('totalregional/province/{province_id}','API\DashboardController@getTotalRegioanProvince');
+Route::get('totalregional/regency/{regency_id}','API\DashboardController@getTotalRegioanRegency');
+Route::get('totalregional/district/{district_id}','API\DashboardController@getTotalRegioanDistrict');

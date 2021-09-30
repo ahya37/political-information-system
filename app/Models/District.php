@@ -96,4 +96,13 @@ class District extends Model
                 group by c.id, c.name HAVING count(a.id) != 0  order by c.name asc";
         return DB::select($sql);
     }
+
+     public function getTotalRegion($district_id)
+    {
+        $sql = "SELECT b.name as district, COUNT(DISTINCT(c.id)) as village 
+                from districts as b 
+                join villages as c on b.id = c.district_id
+                where b.id = $district_id GROUP BY b.name ";
+        return collect(\ DB::select($sql))->first();
+    }
 }

@@ -35,5 +35,16 @@ class Province extends Model
         return $this->hasMany(Regency::class);
     }
 
+    public function getTotalRegion($province_id)
+    {
+        $sql = "SELECT d.name as province, COUNT(DISTINCT(a.id)) as regency, COUNT(DISTINCT(b.id)) as district, COUNT(c.id) as village 
+                from regencies as a 
+                join districts as b on a.id = b.regency_id 
+                join villages as c on b.id = c.district_id 
+                join provinces as d on a.province_id = d.id
+                where a.province_id = $province_id GROUP by d.name";
+        return collect(\ DB::select($sql))->first();
+    }
+
     
 }
