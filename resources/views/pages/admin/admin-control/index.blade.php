@@ -32,6 +32,7 @@
                                         <th scope="col">Daerah</th>
                                         <th scope="col">Level Admin</th>
                                         <th scope="col">Jumlah Anggota</th>
+                                        <th scope="col">Aksi</th>
                                       </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -61,10 +62,11 @@
                 url: '{!! url()->current() !!}',
             },
             columns:[
-              {data:'name', name:'name'},
+              {data:'photo', name:'photo'},
               {data:'area', name:'area'},
               {data:'level', name:'level'},
-              {data:'total_data', name:'total_data'}
+              {data:'total_data', name:'total_data'},
+              {data:'action', name:'action'}
             ],
             order: [[3, "desc"]],
         });

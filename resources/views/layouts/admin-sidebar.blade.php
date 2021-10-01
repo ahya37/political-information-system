@@ -49,13 +49,13 @@
               <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
                   <a
-                    href="{{ route('admin-admincontroll-district') }}"
+                    href="{{ route('admin-admincontroll') }}"
                     class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/admincontrol/district')) ? 'active custom-active-color' : '' }}"
                   >
                     Daftar Admin
                   </a>
                    <a
-                      href="{{ route('admin-admincontroll-district-create') }}"
+                      href="{{ route('admin-admincontroll-create') }}"
                       class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/admincontrol/district/createadmin')) ? 'active custom-active-color' : '' }}"
                     >
                       Tambah Admin

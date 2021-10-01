@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Buat Anggota Baru')
+@section('title','Tambah Admin Baru')
 @push('addon-style')
 <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
@@ -19,6 +19,7 @@
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
                 <div class="row mt-4">
+                    @include('layouts.message')
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-body">
