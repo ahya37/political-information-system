@@ -22,7 +22,7 @@ class Admin extends Authenticatable
                 join regencies as e on d.regency_id = e.id 
                 join provinces as f on e.province_id = f.id
                 where a.village_id is not null 
-                group by b.id, b.name, b.level, d.name, e.name, f.name
+                group by b.photo, b.id, b.name, b.level, d.name, e.name, f.name
                 order by count(b.id) desc";
         return DB::select($sql);
     }
