@@ -32,6 +32,7 @@
                                                 <label>
                                                     Mengatur level admin untuk hak akses pada sistem
                                                 </label>
+                                                <input type="hidden" name="type" value="update">
                                                 <select name="level" required class="form-control" required>
                                                   <option value="3" {{ $user->level == 3 ? 'selected' : '' }}> Provinsi / Kab / Kot / TK.I</option>
                                                   <option value="2" {{ $user->level == 2 ? 'selected' : '' }}>Korwil / Dapil / TK. II</option>
