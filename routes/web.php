@@ -38,7 +38,7 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
     Route::post('/profile/reveral/store/{id}', 'UserController@storeReveral')->name('user-store-reveral');
 
     Route::get('/member/download','UserController@memberReportPdf')->name('user-member-downloadpdf');
-    Route::get('/dashboarddistrict','HomeController@dashboardAdminDistrict')->name('member-dashboard');
+    Route::get('member/dashboard','HomeController@dashboardAdminUser')->name('member-dashboard');
 
     Route::group(['prefix' => 'member'], function(){
         Route::get('index','UserController@indexMember')->name('member-index');

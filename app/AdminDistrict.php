@@ -18,11 +18,4 @@ class AdminDistrict extends Model
         return $result;
     }
 
-    public function getDataDistrictIdbyAdmin($user_id)
-    {
-         $sql = "SELECT a.district_id from admin_districts as a
-                where a.user_id = $user_id";
-        $result = collect(\DB::select($sql))->first();
-        return $result;
-    }
 }

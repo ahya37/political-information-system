@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\AdminDistrict;
 use App\Job;
 use App\User;
 use App\Referal;
+use App\AdminDistrict;
+use App\Models\Regency;
 use App\Models\Village;
 use App\Models\District;
+use App\Models\Province;
 use Illuminate\Http\Request;
 use App\Providers\GlobalProvider;
 use Illuminate\Support\Facades\Auth;
@@ -105,113 +107,128 @@ class HomeController extends Controller
         return view('home', compact('gF','profile','member','total_referal','referal_undirect','referal_direct'));
     }
 
-    public function dashboardAdminDistrict()
+    public function dashboardAdminUser()
     {
-        $district_id = $this->getDistrictIdbyAdmin(); // get district_id berdasarkan user_id admin yg login
-        
-        $district    = District::with(['regency'])->where('id', $district_id)->first();
-        // jumlah anggota di kecamatan
+        $user_id = Auth::user()->id;
+        $user = User::with('village')->where('id', $user_id)->first();
+        $level = $user->level;
+        $district_id =  $user->village->district->id;
+        $regency_id  =  $user->village->district->regency->id;
+        $province_id  =  $user->village->district->regency->province->id;
+
+        // jika admin level = 1
+        if ($level == 1) {
+
+            return $this->dashboardLevelOne($district_id);
+
+        }elseif ($level == 2) {
+            
+            return $this->dashboardLevelTwo($regency_id);
+
+        }elseif ($level == 3) {
+            
+            return $this->dashboardLevelTree($province_id);
+
+        }
+    }
+
+    public function dashboardLevelOne($district_id)
+    {
+        $districtModel    = new District();
+
+        $district   = $districtModel->with(['regency'])->where('id', $district_id)->first();
+        // // jumlah anggota di kecamatan
         $userModel  = new User();
         $member     = $userModel->getMemberDistrict($district_id);
         $total_member = count($member);
 
-        // perentasi anggot  di kecamatan
-        $districtModel    = new District();
+        // // perentasi anggot  di kecamatan
         $target_member    = $districtModel->where('id',$district_id)->get()->count() * 5000; // target anggota tercapai, per kecamatan 1000 target
-        $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
 
         $villageModel   = new Village();
         $villages       = $villageModel->getVillagesDistrct($district_id); // fungsi total desa di kab
         $total_village  = count($villages);
 
-        $village_filled = $villageModel->getVillageFilledDistrict($district_id); //fungsi total desa yang terisi 
-        $total_village_filled      = count($village_filled); // total desa yang terisi
-        $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
-
-        // Grfaik Data member
-        $districts = $districtModel->getGrafikTotalMemberDistrict($district_id);
-        $cat_districts      = [];
-        $cat_districts_data = [];
-        foreach ($districts as $val) {
-            $cat_districts[] = $val->district; 
-            $cat_districts_data[] = [
-                "y" => $val->total_member,
-                "url" => route('admin-dashboard-district', $val->distric_id)
-            ];
-        }
-
-        // grafik data job
-        $jobModel = new Job();
-        $jobs     = $jobModel->getJobDistrict($district_id);
-        $cat_jobs =[];
-        foreach ($jobs as  $val) {
-            $cat_jobs[] = [
-                "name" => $val->name,
-                "y"    => $val->total_job
-            ];
-        }
-        
-        // grafik data jenis kelamin
-        $gender = $userModel->getGenderDistrict($district_id);
-        $cat_gender =[];
-        $all_gender = [];
-
-        // untuk menghitung jumlah keseluruhan jenis kelamin L/P
-        $total_gender = 0;
-        foreach ($gender as $key => $value) {
-            $total_gender += $value->total;
-        }
-        
-        foreach ($gender as  $val) {
-            $all_gender[]  = $val->total;
-            $cat_gender[] = [
-                "name" => $val->gender == 0 ? 'Pria' : 'Wanita',
-                "y"    => ($val->total/$total_gender)*100
-            ];
-        }
-
-        $total_male_gender   = empty($all_gender[0]) ?  0 :  $all_gender[0];; // total gender pria
-        $total_female_gender = empty($all_gender[1]) ?  0 :  $all_gender[1]; // total gender wanita
-        
-        // range umur
-        $range_age     = $userModel->rangeAgeDistrict($district_id);
-        $cat_range_age = [];
-        $cat_range_age_data = [];
-        foreach ($range_age as $val) {
-            $cat_range_age[]      = $val->range_age;
-            $cat_range_age_data[] = [
-                'y'    => $val->total
-            ];
-        }
-
-        $gF   = app('GlobalProvider'); // global function
 
          // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillage($district_id);
+        $total_target_member = $target_member / $total_village;
         if (request()->ajax()) {
-            return DataTables::of($achievments)->make();
+            return DataTables::of($achievments)
+                         ->addColumn('persentage', function($item) use($total_target_member){
+                            $gF   = app('GlobalProvider'); // global function
+                            $persentage = ($item->realisasi_member / $total_target_member)*100;
+                            $persentage = $gF->persen($persentage);
+                            $persentageWidth = $persentage + 30;
+                            return '
+                            <div class="mt-3 progress" style="width:100%;">
+                                <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
+                            </div>
+                            ';
+                        })
+                        ->addColumn('target', function() use($total_target_member){
+                            return $total_target_member;
+                        })
+                        ->rawColumns(['persentage','target'])
+                        ->make();
         }
+        return view('pages.dashboard.district', compact('district'));
 
-        // anggota dengan referal terbanyak
-        $referalModel = new Referal();
-        $referal      = $referalModel->getReferalDistrict($district_id);
-        $cat_referal      = [];
-        $cat_referal_data = [];
-        foreach ($referal as $val) {
-            $cat_referal[] = $val->name; 
-            $cat_referal_data[] = [
-                "y" => $val->total_referal
-            ];
-        }
-        return view('pages.admin-district.dashboard-district',compact('district_id','cat_referal_data','cat_referal','cat_range_age_data','cat_range_age','total_male_gender','total_female_gender','cat_gender','cat_jobs','cat_districts','cat_districts_data','total_village_filled','presentage_village_filled','total_village','target_member','persentage_target_member','district','gF','total_member'));
     }
 
-    public function getDistrictIdbyAdmin()
+    public function dashboardLevelTwo($regency_id)
     {
-        $user_id = Auth::user()->id;
-        $adminDistrtictModel = new AdminDistrict();
-        $district_id         = $adminDistrtictModel->getDataDistrictIdbyAdmin($user_id)->district_id;
-        return $district_id;
+        $regency          = Regency::with('province')->where('id', $regency_id)->first();
+    
+        $districtModel    = new District();
+        // Daftar pencapaian lokasi / daerah
+        $achievments   = $districtModel->achievementDistrict($regency_id);
+        if (request()->ajax()) {
+            return DataTables::of($achievments)
+                    ->addColumn('persentage', function($item){
+                        $gF   = app('GlobalProvider'); // global function
+                        $persentage = ($item->realisasi_member / $item->total_target_member)*100;
+                        $persentage = $gF->persen($persentage);
+                        $persentageWidth = $persentage + 30;
+                        return '
+                        <div class="mt-3 progress" style="width:100%;">
+                            <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
+                        </div>
+                        ';
+                    })
+                    ->rawColumns(['persentage'])
+                    ->make();
+        }
+
+        return view('pages.dashboard.regency', compact('regency'));
+
+    }
+
+    public function dashboardLevelTree($province_id)
+    {
+        $province    = Province::select('id','name')->where('id', $province_id)->first();
+        $regencyModel= new Regency();
+
+        // Daftar pencapaian lokasi / daerah
+        $achievments   = $regencyModel->achievementProvince($province_id);
+        if (request()->ajax()) {
+            return DataTables::of($achievments)
+                    ->addColumn('persentage', function($item){
+                        $gF   = app('GlobalProvider'); // global function
+                        $persentage = ($item->realisasi_member / $item->target_member)*100;
+                        $persentage = $gF->persen($persentage);
+                        $persentageWidth = $persentage + 30;
+                        return '
+                        <div class="mt-3 progress" style="width:100%;">
+                            <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
+                        </div>
+                        ';
+                    })
+                    ->rawColumns(['persentage'])
+                    ->make();
+        }
+
+        return view('pages.dashboard.province', compact('province'));
     }
 
 }
