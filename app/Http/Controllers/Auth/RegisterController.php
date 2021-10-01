@@ -80,7 +80,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'activate_token' => Str::random(10),
             'password' => Hash::make($data['password']),
-            'level' => 1
+            'level' => 0
         ]);
 
         Mail::to($data['email'])->send(new RegisterMail($user)); // send email untuk verifikasi akun

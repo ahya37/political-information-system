@@ -59,13 +59,37 @@ class AdminController extends Controller
 
     public function create()
     {
-        $members = [];
-        if (request()->district_id != '') {
-            $district_id = request()->district_id;
-            $userModel = new User();
-            $members   = $userModel->getMemberForCreateAdmin($district_id);
-    
+        $members = User::with(['village.district.regency'])->where('status', 1)->get();
+        if (request()->ajax()) 
+        {
+            return DataTables::of($members)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($item){
+                        return '
+                            <div class="btn-group">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
+                                    <div class="dropdown-menu">
+                                         <a href='.route('admin-member-create-account', encrypt($item->id)).' class="dropdown-item">
+                                                Admin
+                                        </a> 
+                                    </div>
+                                </div>
+                            </div>
+                        ';
+                    })
+                    ->addColumn('photo', function($item){
+                        return '
+                        <a href="'.route('admin-profile-member', encrypt($item->id)).'">
+                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                            '.$item->name.'
+                        </a>
+                        ';
+                    })
+                    ->rawColumns(['action','photo'])
+                    ->make(true);
         }
+       
         return view('pages.admin.admin-control.create', compact('members'));
     }
 
