@@ -59,7 +59,9 @@ class AdminController extends Controller
 
     public function create()
     {
-        $members = User::with(['village.district.regency'])->where('status', 1)->get();
+        $members = User::with(['village.district.regency'])
+                    ->whereNotNull('village_id')
+                    ->where('status', 1)->get();
         if (request()->ajax()) 
         {
             return DataTables::of($members)
