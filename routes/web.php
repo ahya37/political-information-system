@@ -58,7 +58,10 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/event/absen/{event_detail_id}','EventController@storeAbsen')->name('member-event-absen');
         
         Route::get('/registered','UserController@memberRegister')->name('member-registered-user');
-        
+
+        Route::get('/province/{province_id}','MemberController@memberProvince')->name('adminuser-members-province');
+        Route::get('/villagefilled/province/{province_id}','VillageController@villafeFilledProvince')->name('adminuser-villagefilled-province');
+        Route::get('/villagefilled/regency/{regency_id}','VillageController@villafeFilledRegency')->name('adminuser-villagefilled-regency');
 
     });
 

@@ -69,7 +69,7 @@
                 <div class="row">
                   <div class="col-md-4">
                     <div class="card mb-2 bg-info">
-                      <a href="{{ route('members-province', $province->id) }}">
+                      <a href="{{ route('adminuser-members-province', encrypt($province->id)) }}">
                         <div class="card-body">
                           <div class="dashboard-card-title text-white">
                             Jumlah Anggota
@@ -110,7 +110,7 @@
                 <div class="row">
                   <div class="col-md-4">
                     <div class="card mb-2 bg-info">
-                      <a href="{{ route('villagefilled-province', $province->id) }}">
+                      <a href="{{ route('adminuser-villagefilled-province', $province->id) }}">
                         <div class="card-body">
                           <div class="dashboard-card-title text-white">
                             Jumlah Desa Terisi
