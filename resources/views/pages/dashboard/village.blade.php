@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @push('addon-style')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
     <link
@@ -20,10 +20,9 @@
                 <h2 class="dashboard-title mb-4">Dashboard</h2>
                 <nav aria-label="breadcrumb">
                   <ol class="breadcrumb">
-                     <li class="breadcrumb-item"><a href="{{ route('admin-dashboard-province', $village->district->regency->province->id) }}">Provinsi {{ $village->district->regency->province->name }}</a></li>
-
-                          <li class="breadcrumb-item"><a href="{{ route('admin-dashboard-regency', $village->district->regency->id) }}">{{ $village->district->regency->name }}</a></li>
-                          <li class="breadcrumb-item active"><a href="{{ route('admin-dashboard-district', $village->district->id) }}">KECAMATAN {{ $village->district->name }}</a></li>
+                     <li class="breadcrumb-item"><a href="{{ route('member-dashboard') }}">Provinsi {{ $village->district->regency->province->name }}</a></li>
+                          <li class="breadcrumb-item"><a href="{{ route('adminuser-dashboard-regency', $village->district->regency->id) }}">{{ $village->district->regency->name }}</a></li>
+                          <li class="breadcrumb-item active"><a href="{{ route('adminuser-dashboard-district', $village->district->id) }}">KECAMATAN {{ $village->district->name }}</a></li>
                           <li class="breadcrumb-item active" aria-current="page">DESA {{ $village->name }}</a></li>
                   </ol>
                 </nav>

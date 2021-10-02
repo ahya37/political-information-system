@@ -1132,4 +1132,71 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function getMemberProvinceAdminUser($province_id)
+    {
+        $regencyModel     = new Regency();
+        $regency = $regencyModel->getGrafikTotalMemberRegencyProvince($province_id);
+        $cat_regency      = [];
+        $cat_regency_data = [];
+        foreach ($regency as $val) {
+            $cat_regency[] = $val->regency; 
+            $cat_regency_data[] = [
+                "y" => $val->total_member,
+                "url" => route('adminuser-dashboard-regency', $val->regency_id)
+            ];
+        }
+        $data = [
+            'cat_regency' => $cat_regency,
+            'cat_regency_data' => $cat_regency_data,
+            // 'colors' => $colors
+        ];
+        return response()->json($data);
+    }
+
+    public function getMemberRegencyAdminUser($regency_id)
+    {
+        $districtModel    = new District();
+
+        $districts = $districtModel->getGrafikTotalMemberDistrictRegency($regency_id);
+        $cat_districts      = [];
+        $cat_districts_data = [];
+        foreach ($districts as $val) {
+            $cat_districts[] = $val->district; 
+            $cat_districts_data[] = [
+                "y" => $val->total_member,
+                "url" => route('adminuser-dashboard-district', $val->distric_id)
+            ];
+        }
+        
+        $data = [
+            'cat_districts' => $cat_districts,
+            'cat_districts_data' => $cat_districts_data,
+            // 'colors' => $colors
+        ];
+        return response()->json($data);
+    }
+
+    public function getMemberDistrictAdminUser($district_id)
+    {
+        $districtModel    = new District();
+
+        $districts = $districtModel->getGrafikTotalMemberDistrict($district_id);;
+        $cat_districts      = [];
+        $cat_districts_data = [];
+        foreach ($districts as $val) {
+            $cat_districts[] = $val->district; 
+            $cat_districts_data[] = [
+                "y" => $val->total_member,
+                "url" => route('adminuser-dashboard-village', ['district_id' => $district_id,'village_id' => $val->village_id])
+            ];
+        }
+        
+        $data = [
+            'cat_districts' => $cat_districts,
+            'cat_districts_data' => $cat_districts_data,
+            // 'colors' => $colors
+        ];
+        return response()->json($data);
+    }
+
 }

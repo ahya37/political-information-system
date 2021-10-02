@@ -101,3 +101,7 @@ Route::get('totalregional/nation','API\DashboardController@getTotalRegioanNation
 Route::get('totalregional/province/{province_id}','API\DashboardController@getTotalRegioanProvince');
 Route::get('totalregional/regency/{regency_id}','API\DashboardController@getTotalRegioanRegency');
 Route::get('totalregional/district/{district_id}','API\DashboardController@getTotalRegioanDistrict');
+
+Route::get('adminuser/member/rergister/province/{province_id}','API\DashboardController@getMemberProvinceAdminUser');
+Route::get('adminuser/member/rergister/regency/{regency_id}','API\DashboardController@getMemberRegencyAdminUser');
+Route::get('adminuser/member/rergister/district/{district_id}','API\DashboardController@getMemberDistrictAdminUser');

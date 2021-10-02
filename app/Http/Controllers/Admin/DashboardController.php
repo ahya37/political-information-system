@@ -16,7 +16,6 @@ use App\Exports\JobProvince;
 use App\Exports\JobRegency;
 use App\Exports\JobVillage;
 use Maatwebsite\Excel\Excel;
-use App\Providers\GrafikProvider;
 use App\Exports\MemberExportRegency;
 use App\Exports\MemberExportVillage;
 use App\Http\Controllers\Controller;
@@ -36,7 +35,6 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $regencyModel     = new Regency();
         return view('pages.admin.dashboard.index');
     }
 
@@ -63,7 +61,6 @@ class DashboardController extends Controller
                     ->rawColumns(['persentage'])
                     ->make();
         }
-
         return view('pages.admin.dashboard.province', compact('province'));
     }
 
@@ -220,4 +217,5 @@ class DashboardController extends Controller
         return $pdf->stream('kta.pdf');
 
     }
+
 }

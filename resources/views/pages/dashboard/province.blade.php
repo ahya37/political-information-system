@@ -20,40 +20,9 @@
                 <h2 class="dashboard-title mb-4">Dashboard</h2>
                  <nav aria-label="breadcrumb">
                   <ol class="breadcrumb">
-                     {{-- <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('admin-dashboard') }}">NASIONAL</a></li> --}}
                      <li class="breadcrumb-item">PROVINSI {{ $province->name }}</li>
                   </ol>
                 </nav>
-
-                {{-- <div class="dashboard-content">
-                  <div class="row mb-2">
-                    <div class="col-md-12">
-                      <div class="row">
-                        <div class="col-md-1 col-sm-1">
-                              <div class="dropdown show">
-                              <a class="btn btn-sm border border-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                PDF
-                              </a>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                  <a href="{{ route('pdf-members-province', $province->id) }}" class="dropdown-item">Daftar Anggota</a>
-                              </div>
-                          </div>
-                        </div>
-                        <div class="col-md-2 col-sm-2">
-                          <div class="dropdown show">
-                            <a class="btn btn-sm border border-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Excel
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <a href="{{ route('report-member-province-excel', $province->id) }}" class="dropdown-item">Anggota Terdaftar</a>
-                            <a href="{{ route('report-jobprovince-excel', $province->id) }}" class="dropdown-item">Profesi</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> --}}
               </div>
               <div class="dashboard-content">
                 <div class="row">
@@ -153,7 +122,7 @@
                   <div class="col-md-12">
                     <div class="card mb-2">
                       <div class="card-body">
-                         <div id="loadProvince" class="d-none lds-dual-ring hidden overlay">
+                         <div id="loadProvinceAdminUser" class="d-none lds-dual-ring hidden overlay">
                           </div>
                         <div id="districts"></div>
                       </div>
@@ -218,20 +187,7 @@
                           <canvas width="" id="jobs"></canvas>
                         </div>
                       </div>
-                      {{-- <div class="col-md-12 col-sm-12">
-                        <small>Kategori Pekerjaan Terbanyak</small>
-                        <div class="row">
-                          @foreach ($most_jobs as $row)
-                          <div class="col-md-2 col-sm-2 mt-3 mb-2">
-                           <div class="btn btn-primary w-20" data-toggle="tooltip" data-placement="top" title="{{ $row->name }} : {{ $row->total_job }}">
-                            <small>
-                              {{ $row->total_job }}
-                            </small>
-                          </div>
-                          </div>
-                          @endforeach
-                       </div>
-                      </div> --}}
+                      
                     </div>
                   </div>
                   <div class="col-md-6 mt-3">
@@ -349,7 +305,7 @@
 <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
-<script src="{{ asset('js/dashboard-province.js') }}" ></script>
+<script src="{{ asset('js/dashboard-province-admin-user.js') }}" ></script>
 <script>
        var datatable = $('#achievment').DataTable({
             processing: true,

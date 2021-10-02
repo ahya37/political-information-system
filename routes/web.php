@@ -63,6 +63,12 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/villagefilled/province/{province_id}','VillageController@villafeFilledProvince')->name('adminuser-villagefilled-province');
         Route::get('/villagefilled/regency/{regency_id}','VillageController@villafeFilledRegency')->name('adminuser-villagefilled-regency');
 
+        Route::get('/dashboard/regency/{regency_id}','DashboardController@regency')->name('adminuser-dashboard-regency');
+        Route::get('/dashboard/regency/district/{district_id}','DashboardController@district')->name('adminuser-dashboard-district');
+        Route::get('/dashboard/regency/district/village/{district_id}/{village_id}','DashboardController@village')->name('adminuser-dashboard-village');
+
+
+
     });
 
 
