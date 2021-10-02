@@ -150,6 +150,7 @@ class AdminController extends Controller
     public function editSettingAdminUser($id)
     {
         $user_id = decrypt($id);
+        dd($user_id);
         $user    = User::select('id','name','level')->where('id', $user_id)->first();
         return view('pages.admin.admin-control.edit-set-admin', compact('user'));
     }
