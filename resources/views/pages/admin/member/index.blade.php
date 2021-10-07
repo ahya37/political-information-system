@@ -30,6 +30,7 @@
                              <option value="all">Semua</option>
                              <option value="1">Akun Aktif</option>
                              <option value="0">Tidak Aktif</option>
+                             <option value="referalUp">Referal Terbanyak</option>
                            </select>
                          </div>
                        </form>
@@ -76,7 +77,6 @@
 
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
-{{-- <script src="{{ asset('js/member-nation.js') }}" ></script> --}}
 
 
     <script>

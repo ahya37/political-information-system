@@ -26,6 +26,12 @@
                   >
                     Anggota Terdaftar
                   </a>
+                  <a
+                    href="{{ route('admin-member-potensial') }}"
+                    class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ (request()->is('admin/member/potensial')) ? 'active custom-active-color ' : '' }}"
+                  >
+                    Anggota Potensial
+                  </a>
                   </a>
                    <a
                     href="{{ route('admin-member-create') }}"

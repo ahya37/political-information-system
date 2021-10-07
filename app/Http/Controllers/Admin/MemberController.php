@@ -88,6 +88,7 @@ class MemberController extends Controller
 
     public function store(Request $request)
     {
+        return $request->all();
            $this->validate($request, [
                'photo' => 'required|mimes:png,jpg,jpeg',
                'ktp' => 'required|mimes:png,jpg,jpeg',
@@ -487,5 +488,24 @@ class MemberController extends Controller
         $no = 1;
         $pdf   = PDF::loadView('pages.admin.report.member-village-pdf', compact('member','title','no','village'));
         return $pdf->download($title.'.pdf');
+    }
+
+    public function cropImage()
+    {
+        return view('pages.admin.member.crop');
+    }
+
+    public function memberPotensial()
+    {
+        return view('pages.admin.member.member-potensial');
+    }
+
+    public function memberByReferal($user_id)
+    {
+        $userModel = new User(); 
+        $user = $userModel->select('id','name')->where('id', $user_id)->first();
+        $districtModel = new District();
+        $districts = $districtModel->getDistrictByReferalMember($user_id);
+        return view('pages.admin.member.member-by-refeal', compact('user','districts','userModel'));
     }
 }

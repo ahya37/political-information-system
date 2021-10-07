@@ -5,15 +5,28 @@ selectFillter.addEventListener("change", async function () {
     try {
         const selectKeyWord = selectFillter.value;
         const members = await getMembers(selectKeyWord);
-        updateMemberUi(members);
+
+        updateMemberUi(members, selectKeyWord);
+
+        if (selectKeyWord === "referal") {
+            $("#nama").text("Nama");
+            $("#jml").text("Jumlah Referal");
+            $("#aksi").text("Aksi");
+        }
+        if (selectKeyWord === "input") {
+            $("#jml").text();
+            $("#nama").text("Nama");
+            $("#jml").text("Jumlah Input");
+            $("#aksi").text("Aksi");
+        }
     } catch (err) {
-        alert(err);
+        console.log(err);
     }
 });
 
 // get api data
-function getMembers(keyword) {
-    return fetch("/api/memberall" + "/" + keyword)
+function getMembers(selectKeyWord) {
+    return fetch(`/api/memberreferalup/${selectKeyWord}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -28,33 +41,55 @@ function getMembers(keyword) {
 }
 
 // get update ui
-function updateMemberUi(members) {
+function updateMemberUi(members, selectKeyWord) {
     let divHtml = "";
     members.forEach((m) => {
-        divHtml += showDivHtml(m);
+        divHtml += showDivHtml(m, selectKeyWord);
     });
     const divHtmlContainer = document.getElementById("showData");
     divHtmlContainer.innerHTML = divHtml;
 }
 
 // get ui
-function showDivHtml(m) {
-    return `
-    <tr>
-    <td>
-    <a href="/admin/member/profile/${m.id}">
-    <img class="rounded" width="40" src="/storage/${m.photo}">
-    ${m.name}
-    </a>
-    </td>
-    <td>${m.village.district.regency.name}</td>
-    <td>${m.village.district.name}</td>
-    <td>${m.village.name}</td>
-    <td>${m.reveral.name}</td>
-    <td>${m.create_by.name}</td>
-    <td>${m.create_by}</td>
-    <td>
-    </td>
-    </tr>
-    `;
+function showDivHtml(m, selectKeyWord) {
+    if (selectKeyWord === "referal") {
+        return `
+        <tr>
+        <td>${m.name}</td>
+        <td>${m.total}</td>
+        <td>
+        <div class="btn-group">
+            <div class="dropdown">
+            <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
+            <div class="dropdown-menu">
+                <a href='/admin/member/by_referal/${m.id}'  class="dropdown-item">
+                Detail
+                </a> 
+            </div>
+            </div>
+            </div>
+            </td>
+        </tr>
+        `;
+    }
+    if (selectKeyWord === "input") {
+        return `
+        <tr>
+        <td>${m.name}</td>
+        <td>${m.total}</td>
+        <td>
+        <div class="btn-group">
+            <div class="dropdown">
+            <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
+            <div class="dropdown-menu">
+                <a href='/admin/'  class="dropdown-item">
+                Detail
+                </a> 
+            </div>
+            </div>
+            </div>
+        </td>
+        </tr>
+        `;
+    }
 }

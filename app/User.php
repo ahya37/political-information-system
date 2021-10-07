@@ -68,6 +68,14 @@ class User extends Authenticatable
         return $this->belongsTo(User::class,'user_id');
     }
 
+    public function referalMember()
+    {
+        // relasi untuk maping anggota yang mereferal padanya
+        return $this->belongsTo(User::class,'id','user_id');
+    }
+
+    
+
     public function eventDetail()
     {
         return $this->belongsTo(EventDetail::class,'id','user_id');
@@ -636,6 +644,39 @@ class User extends Authenticatable
             group by gen_age order by gen_age asc";
         $result = DB::select($sql);
         return $result;
+    }
+
+    public function getMemberInput()
+    {
+        $sql = "SELECT a.id, a.name, e.name as regency, d.name as district, c.name as village, a.photo, COUNT(a.user_id) as total FROM users as a
+                join users as b on a.id = b.cby
+                join villages as c on a.village_id = c.id 
+                join districts as d on c.district_id = d.id 
+                join regencies as e on d.regency_id = e.id
+                group by a.id, a.name, e.name, d.name , c.name , a.photo 
+                order by COUNT(a.user_id) desc";
+        return DB::select($sql);
+    }
+    public function getMemberReferal()
+    {
+        $sql = "SELECT a.id, a.name, e.name as regency, d.name as district, c.name as village, a.photo, COUNT(case when b.id != b.user_id then a.user_id end) as total FROM users as a
+                join users as b on a.id = b.user_id
+                join villages as c on a.village_id = c.id 
+                join districts as d on c.district_id = d.id 
+                join regencies as e on d.regency_id = e.id
+                group by a.id, a.name, e.name, d.name , c.name , a.photo 
+                order by COUNT(a.user_id) desc";
+        return DB::select($sql);
+    }
+
+    public function getListMemberByDistrictId($district_id)
+    {
+        $sql = "SELECT a.id, a.name, e.name as regency, d.name as district, c.name as village, a.photo FROM users as a
+                join villages as c on a.village_id = c.id 
+                join districts as d on c.district_id = d.id 
+                join regencies as e on d.regency_id = e.id
+                where d.id = $district_id order by a.name";
+        return DB::select($sql);
     }
 
 }

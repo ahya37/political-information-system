@@ -87,6 +87,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/dashboard/regency/district/village/{district_id}/{village_id}','DashboardController@village')->name('admin-dashboard-village');
 
         Route::get('/member','MemberController@index')->name('admin-member');
+        Route::get('/member/potensial','MemberController@memberPotensial')->name('admin-member-potensial');
         Route::get('/member/create','MemberController@create')->name('admin-member-create');
         Route::get('/member/create/account/{id}','MemberController@createAccount')->name('admin-member-create-account');
         Route::post('/member/create/account/store/{id}','MemberController@storeAccount')->name('admin-member-create-account-store');
@@ -152,6 +153,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/pdf/member/district/{district_id}','MemberController@reportMemberDistrictPdf')->name('pdf-members-district');
         Route::get('/pdf/member/village/{village_id}','MemberController@reportMemberVillagePdf')->name('pdf-members-village');
 
+        Route::get('/crop','MemberController@cropImage');
+
+        // get page anggota berdasarkan pereferalnya
+        Route::get('member/by_referal/{user_id}','MemberController@memberByReferal')->name('admin-member-by-referal');
     });
 });
 

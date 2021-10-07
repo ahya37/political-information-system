@@ -105,4 +105,14 @@ class District extends Model
                 where b.id = $district_id GROUP BY b.name ";
         return collect(\ DB::select($sql))->first();
     }
+
+    public function getDistrictByReferalMember($user_id)
+    {
+        $sql = "SELECT a.id as id, a.name as district FROM districts as a
+                join villages as b on a.id = b.district_id 
+                join users as c on b.id = c.village_id
+                where c.user_id = $user_id
+                group by  a.id, a.name order by a.name asc";
+        return DB::select($sql);
+    }
 }

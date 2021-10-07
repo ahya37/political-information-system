@@ -3,16 +3,24 @@
 namespace App\Http\Controllers\API;
 
 use App\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use GuzzleHttp\Psr7\Request;
 
 class MemberController extends Controller
 {
-    public function members()
+    public function memberReferalUp($selectKeyWord)
     {
-             $members = User::with(['village.district.regency','reveral','create_by'])
-                        ->whereNotNull('nik')
-                        ->orderBy('name','ASC')->get();
-            return datatables ($members)->toJson();
+        $memberModel = new User();
+        if ($selectKeyWord == 'referal') {
+            
+                 $members    = $memberModel->getMemberReferal();
+                 return response()->json($members);
+             }
+        
+        if ($selectKeyWord == 'input') {
+                 $members    = $memberModel->getMemberInput();
+                 return response()->json($members);
+             }
+        
     }
 }
