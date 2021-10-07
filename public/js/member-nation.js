@@ -5,6 +5,7 @@ selectFillter.addEventListener("change", async function () {
     try {
         const selectKeyWord = selectFillter.value;
         const members = await getMembers(selectKeyWord);
+        console.log(members);
 
         updateMemberUi(members, selectKeyWord);
 
