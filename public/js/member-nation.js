@@ -1,5 +1,3 @@
-// filter anggota terdaftar
-// get event changer
 const selectFillter = document.getElementById("filterMember");
 selectFillter.addEventListener("change", async function () {
     BeforeSend("Loadachievment");
@@ -65,7 +63,7 @@ function showDivHtml(m, selectKeyWord) {
             <div class="dropdown-menu">
                 <a href='/admin/member/by_referal/${m.id}'  class="dropdown-item">
                 Detail
-                </a> 
+                </a>
             </div>
             </div>
             </div>
@@ -85,7 +83,7 @@ function showDivHtml(m, selectKeyWord) {
             <div class="dropdown-menu">
                 <a href='/admin/'  class="dropdown-item">
                 Detail
-                </a> 
+                </a>
             </div>
             </div>
             </div>
@@ -95,7 +93,29 @@ function showDivHtml(m, selectKeyWord) {
     }
 }
 
-// funsgsi efect loader
+// const selectFillter = document.getElementById("filterMember");
+// selectFillter.addEventListener("change", function () {
+//     const selectKeyWord = selectFillter.value;
+//     $.ajax({
+//         url: "/api/memberreferalup/" + selectKeyWord,
+//         method: "GET",
+//         cache: false,
+//         success: function (data) {
+//             showTable(data);
+//         },
+//     });
+// });
+
+// function showTable(data) {
+//     $("#achievment").DataTable({
+//         dataShowTable(data);
+//     });
+// }
+
+function dataShowTable(data) {
+    return console.log("data: ", data);
+}
+
 function BeforeSend(idLoader) {
     $("#" + idLoader + "").removeClass("d-none");
 }

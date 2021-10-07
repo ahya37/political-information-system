@@ -35,7 +35,7 @@
                                     <div class="collapse" id="district{{ $row->id }}" aria-expanded="false">
                                     @php
                                         $district_id = $row->id;
-                                        $members     = $userModel->getListMemberByDistrictId($district_id);
+                                        $members     = $userModel->getListMemberByDistrictId($district_id, $user->id);
                                     @endphp
                                     <div class="table-responsive mt-3">
                                             <table id="" class="data table table-sm table-striped" width="100%">
