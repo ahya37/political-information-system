@@ -2,10 +2,10 @@
 // get event changer
 const selectFillter = document.getElementById("filterMember");
 selectFillter.addEventListener("change", async function () {
+    BeforeSend("Loadachievment");
     try {
         const selectKeyWord = selectFillter.value;
         const members = await getMembers(selectKeyWord);
-        console.log(members);
 
         updateMemberUi(members, selectKeyWord);
 
@@ -23,8 +23,8 @@ selectFillter.addEventListener("change", async function () {
     } catch (err) {
         console.log(err);
     }
+    Complete("Loadachievment");
 });
-
 // get api data
 function getMembers(selectKeyWord) {
     return fetch(`/api/memberreferalup/${selectKeyWord}`)
@@ -93,4 +93,13 @@ function showDivHtml(m, selectKeyWord) {
         </tr>
         `;
     }
+}
+
+// funsgsi efect loader
+function BeforeSend(idLoader) {
+    $("#" + idLoader + "").removeClass("d-none");
+}
+
+function Complete(idLoader) {
+    $("#" + idLoader + "").addClass("d-none");
 }

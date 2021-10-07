@@ -1,6 +1,10 @@
 @extends('layouts.admin')
 @section('title','Anggota Potensial')
 @push('addon-style')
+ <link
+      href="{{ asset('assets/style/style.css') }}"
+      rel="stylesheet"
+    />
          <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
       <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 
@@ -58,6 +62,12 @@
                                     <tbody id="showData">
                                      
                                     </tbody>
+                                    <tfoot>
+                                     <tr>
+                                       <td colspan="5" id="Loadachievment" class="d-none lds-dual-ring hidden overlay">
+                                       </td>
+                                      </tr>
+                                   </tfoot>
                                   </table>
                         </div>
                       </div>
