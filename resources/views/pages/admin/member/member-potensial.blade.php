@@ -49,7 +49,7 @@
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
-                        <div id="members"></div>
+                        <div  id="Loadachievment" class="d-none lds-dual-ring hidden overlay"></div>
                        <div class="table-responsive">
                                   <table id="data"  class="table table-sm table-striped" width="100%">
                                     <thead>
@@ -62,12 +62,6 @@
                                     <tbody id="showData">
                                      
                                     </tbody>
-                                    <tfoot>
-                                     <tr>
-                                       <td colspan="5" id="Loadachievment" class="d-none lds-dual-ring hidden overlay">
-                                       </td>
-                                      </tr>
-                                   </tfoot>
                                   </table>
                         </div>
                       </div>
