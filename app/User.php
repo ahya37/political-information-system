@@ -659,7 +659,8 @@ class User extends Authenticatable
     }
     public function getMemberReferal()
     {
-        $sql = "SELECT a.id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, a.photo, COUNT(case when b.id != b.user_id then a.user_id end) as total FROM users as a
+        $sql = "SELECT a.id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, a.photo, 
+                COUNT(case when b.id != b.user_id then a.user_id end) as total FROM users as a
                 join users as b on a.id = b.user_id
                 join villages as c on a.village_id = c.id 
                 join districts as d on c.district_id = d.id 

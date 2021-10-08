@@ -38,12 +38,12 @@ function showDataTableReferal(data) {
                     <td>
                         <div class="badge badge-pill badge-primary">
                         <i class="fa fa-phone"></i>
-                        ${data[i].phone_number}
                         </div>
+                        ${data[i].phone_number}
                         <br>
                         <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
-                        ${data[i].whatsapp}
                         </div>
+                        ${data[i].whatsapp}
                     </td>
                     <td>
                     <div class="btn-group">
@@ -103,12 +103,12 @@ function showDataTableInput(data) {
                     <td>
                         <div class="badge badge-pill badge-primary">
                         <i class="fa fa-phone"></i>
-                        ${data[i].phone_number}
                         </div>
+                        ${data[i].phone_number}
                         <br>
                         <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
-                        ${data[i].whatsapp}
                         </div>
+                        ${data[i].whatsapp}
                     </td>
                     <td>
                     <div class="btn-group">
