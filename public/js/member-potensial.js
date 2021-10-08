@@ -23,7 +23,7 @@ function showDataTableReferal(data) {
     for (var i in data) {
         html += `
                     <tr>
-                    <td>
+                    <td width="30%">
                     <a href="/admin/member/profile/${data[i].id}">
                             <img  class="rounded" width="40" src="/storage/${data[i].photo}">
                             ${data[i].name}
@@ -88,7 +88,7 @@ function showDataTableInput(data) {
     for (var i in data) {
         html += `
                     <tr>
-                    <td>
+                    <td width="30%">
                     <a href="/admin/member/profile/${data[i].id}">
                             <img  class="rounded" width="40" src="/storage/${data[i].photo}">
                             ${data[i].name}
