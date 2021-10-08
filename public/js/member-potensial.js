@@ -29,10 +29,10 @@ function showDataTableReferal(data) {
                             ${data[i].name}
                         </a>
                     </td>
-                    <td class="text-right">
+                    <td>
                      <div class="badge badge-pill badge-success">
-                     ${data[i].total}
-                     <i class="fa fa-user ml-2"></i></div>
+                     ${data[i].total} 
+                     </div>
                     </td>
                     <td>${data[i].district}, ${data[i].regency}</td>
                     <td>
@@ -94,10 +94,10 @@ function showDataTableInput(data) {
                             ${data[i].name}
                         </a>
                     </td>
-                    <td class="text-center">
+                    <td>
                      <div class="badge badge-pill badge-success">
                      ${data[i].total}
-                     <i class="fa fa-user ml-2"></i></div>
+                     </div>
                     </td>
                     <td>${data[i].district}, ${data[i].regency}</td>
                     <td>
