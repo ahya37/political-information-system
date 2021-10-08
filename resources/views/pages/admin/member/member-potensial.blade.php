@@ -47,7 +47,7 @@
                                                 <tr>
                                                     <th scope="col">NAMA</th>
                                                     <th scope="col">JUMLAH</th>
-                                                    <th scope="col">ALAMAT LENGKAP</th>
+                                                    <th scope="col">ALAMAT</th>
                                                     <th scope="col">KONTAK</th>
                                                     <th scope="col">Aksi</th>
                                                 </tr>
