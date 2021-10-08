@@ -648,12 +648,12 @@ class User extends Authenticatable
 
     public function getMemberInput()
     {
-        $sql = "SELECT a.id, a.name, e.name as regency, d.name as district, c.name as village, a.photo, COUNT(a.user_id) as total FROM users as a
+        $sql = "SELECT a.id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, a.photo, COUNT(a.user_id) as total FROM users as a
                 join users as b on a.id = b.cby
                 join villages as c on a.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
-                group by a.id, a.name, e.name, d.name , c.name , a.photo 
+                group by a.id, a.name, e.name, d.name , a.photo , a.phone_number, a.whatsapp
                 order by COUNT(a.user_id) desc limit 10";
         return DB::select($sql);
     }
@@ -676,6 +676,16 @@ class User extends Authenticatable
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
                 where d.id = $district_id and a.user_id = $user_id  order by a.name";
+        return DB::select($sql);
+    }
+
+    public function getListMemberByDistrictIdInput($district_id, $user_id)
+    {
+        $sql = "SELECT a.id, a.name, e.name as regency, d.name as district, c.name as village, a.photo FROM users as a
+                join villages as c on a.village_id = c.id 
+                join districts as d on c.district_id = d.id 
+                join regencies as e on d.regency_id = e.id
+                where d.id = $district_id and a.cby = $user_id  order by a.name";
         return DB::select($sql);
     }
 

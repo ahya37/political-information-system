@@ -83,7 +83,9 @@
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">NAMA</th>
-                                                    <th scope="col">Jumlah Anggota</th>
+                                                    <th scope="col">JUMLAH</th>
+                                                    <th scope="col">ALAMAT</th>
+                                                    <th scope="col">KONTAK</th>
                                                     <th scope="col">Aksi</th>
                                                 </tr>
                                                 </thead>

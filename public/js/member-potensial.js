@@ -23,16 +23,27 @@ function showDataTableReferal(data) {
     for (var i in data) {
         html += `
                     <tr>
-                    <td>${data[i].name}</td>
-                    <td>${data[i].total}</td>
+                    <td>
+                    <a href="/admin/member/profile/${data[i].id}">
+                            <img  class="rounded" width="40" src="/storage/${data[i].photo}">
+                            ${data[i].name}
+                        </a>
+                    </td>
+                    <td class="text-right">
+                     <div class="badge badge-pill badge-success">
+                     ${data[i].total}
+                     <i class="fa fa-user ml-2"></i></div>
+                    </td>
                     <td>${data[i].district}, ${data[i].regency}</td>
                     <td>
-                        <p>
+                        <div class="badge badge-pill badge-primary">
                         <i class="fa fa-phone"></i>
                         ${data[i].phone_number}
-                        </p>
-                        <p><i class="fa fa-whatsapp"></i>
-                        ${data[i].whatsapp}</p>
+                        </div>
+                        <br>
+                        <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+                        ${data[i].whatsapp}
+                        </div>
                     </td>
                     <td>
                     <div class="btn-group">
@@ -77,14 +88,34 @@ function showDataTableInput(data) {
     for (var i in data) {
         html += `
                     <tr>
-                    <td>${data[i].name}</td>
-                    <td>${data[i].total}</td>
+                    <td>
+                    <a href="/admin/member/profile/${data[i].id}">
+                            <img  class="rounded" width="40" src="/storage/${data[i].photo}">
+                            ${data[i].name}
+                        </a>
+                    </td>
+                    <td class="text-center">
+                     <div class="badge badge-pill badge-success">
+                     ${data[i].total}
+                     <i class="fa fa-user ml-2"></i></div>
+                    </td>
+                    <td>${data[i].district}, ${data[i].regency}</td>
+                    <td>
+                        <div class="badge badge-pill badge-primary">
+                        <i class="fa fa-phone"></i>
+                        ${data[i].phone_number}
+                        </div>
+                        <br>
+                        <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+                        ${data[i].whatsapp}
+                        </div>
+                    </td>
                     <td>
                     <div class="btn-group">
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
                                     <div class="dropdown-menu">
-                                         <a href='/admin/member/by_referal/${data[i].id}' class="dropdown-item">
+                                         <a href='/admin/member/by_input/${data[i].id}' class="dropdown-item">
                                                 Detail
                                         </a> 
                                     </div>

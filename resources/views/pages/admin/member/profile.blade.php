@@ -167,7 +167,7 @@
                                       @foreach ($member as $row)
                                       <tr>
                                         <td>
-                                          <a href="{{ route('admin-profile-member', encrypt($row->id)) }}">
+                                          <a href="{{ route('admin-profile-member', $row->id) }}">
                                             <img
                                               src="{{ asset('storage/'.$row->photo) }}"
                                               class="rounded"

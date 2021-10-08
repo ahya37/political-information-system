@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title',"Anggota Dari Referal $user->name")
+@section('title',"Anggota Input Dari $user->name")
 @push('addon-style')
          <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
       <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -13,7 +13,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Anggota Referal Dari: {{ $user->name }}</h2>
+                <h2 class="dashboard-title">Anggota Input Dari : {{ $user->name }}</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
@@ -35,7 +35,7 @@
                                     <div class="collapse" id="district{{ $row->id }}" aria-expanded="false">
                                     @php
                                         $district_id = $row->id;
-                                        $members     = $userModel->getListMemberByDistrictId($district_id, $user->id);
+                                        $members     = $userModel->getListMemberByDistrictIdInput($district_id, $user->id);
                                     @endphp
                                     <div class="table-responsive mt-3">
                                             <table id="" class="data table table-sm table-striped" width="100%">
@@ -50,7 +50,7 @@
                                                     @foreach ($members as $member)
                                                         <tr>
                                                             <td>
-                                                                <a href="{{ route('admin-profile-member', encrypt($member->id)) }}">
+                                                                <a href="{{ route('admin-profile-member', $member->id) }}">
                                                                     <img class="rounded" width="40"  src="{{ asset('storage/'.$member->photo) }}">
                                                                     {{ $member->name }}
                                                                 </a>

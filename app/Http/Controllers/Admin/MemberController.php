@@ -48,7 +48,7 @@ class MemberController extends Controller
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
                                     <div class="dropdown-menu">
-                                         <a href='.route('admin-member-create-account', encrypt($item->id)).' class="dropdown-item">
+                                         <a href='.route('admin-member-create-account',$item->id).' class="dropdown-item">
                                                 Buat Akun
                                         </a> 
                                     </div>
@@ -58,7 +58,7 @@ class MemberController extends Controller
                     })
                     ->addColumn('photo', function($item){
                         return '
-                        <a href="'.route('admin-profile-member', encrypt($item->id)).'">
+                        <a href="'.route('admin-profile-member', $item->id).'">
                             <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
                             '.$item->name.'
                         </a>
@@ -155,7 +155,7 @@ class MemberController extends Controller
 
     public function profileMember($id)
     {
-        $id_user = decrypt($id);
+        $id_user = $id;
         $userModel = new User();
         $profile = $userModel->with(['village'])->where('id', $id_user)->first();
         $member  = $userModel->with(['village','reveral'])->where('user_id', $id_user)->whereNotIn('id', [$id_user])->get();
@@ -507,5 +507,14 @@ class MemberController extends Controller
         $districtModel = new District();
         $districts = $districtModel->getDistrictByReferalMember($user_id);
         return view('pages.admin.member.member-by-refeal', compact('user','districts','userModel'));
+    }
+
+    public function memberByInput($user_id)
+    {
+        $userModel = new User(); 
+        $user = $userModel->select('id','name')->where('id', $user_id)->first();
+        $districtModel = new District();
+        $districts = $districtModel->getDistrictByInputMember($user_id);
+        return view('pages.admin.member.member-by-input', compact('user','districts','userModel'));
     }
 }
