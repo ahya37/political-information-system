@@ -6,7 +6,8 @@
       rel="stylesheet"
     />
          <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
-      <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      
 
 @endpush
 @section('content')
@@ -45,7 +46,9 @@
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">NAMA</th>
-                                                    <th scope="col">Jumlah Anggota</th>
+                                                    <th scope="col">JUMLAH</th>
+                                                    <th scope="col">ALAMAT LENGKAP</th>
+                                                    <th scope="col">KONTAK</th>
                                                     <th scope="col">Aksi</th>
                                                 </tr>
                                                 </thead>

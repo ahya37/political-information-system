@@ -25,6 +25,15 @@ function showDataTableReferal(data) {
                     <tr>
                     <td>${data[i].name}</td>
                     <td>${data[i].total}</td>
+                    <td>${data[i].district}, ${data[i].regency}</td>
+                    <td>
+                        <p>
+                        <i class="fa fa-phone"></i>
+                        ${data[i].phone_number}
+                        </p>
+                        <p><i class="fa fa-whatsapp"></i>
+                        ${data[i].whatsapp}</p>
+                    </td>
                     <td>
                     <div class="btn-group">
                                 <div class="dropdown">
