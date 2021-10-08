@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Anggota Potensial')
+@section('title',"Anggota Potensial")
 @push('addon-style')
  <link
       href="{{ asset('assets/style/style.css') }}"
@@ -17,65 +17,87 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Anggota Potensial</h2>
+                <h2 class="dashboard-title">Anggota Potensial </h2>
                 <p class="dashboard-subtitle">
+                  Berdasarkan Referal dan Input
                 </p>
               </div>
               <div class="row mt-4">
                 <div class="col-12">
-                  <div class="card shadow bg-white rounded">
+                  <div class="card shadow bg-white rounded mb-3">
                     <div class="card-body">
-                     <div class="col-4">
-                       <form>
-                         <div class="form-group">
-                           <i class="fa fa-filter" aria-hidden="true"></i>
-                           <label>Berdasarkan</label>
-                           <select id="filterMember" name="filter" class="form-control form-control-sm">
-                             <option value="">--</option>
-                             <option value="referal">Referal</option>
-                             <option value="input">Input</option>
-                           </select>
-                         </div>
-                       </form>
-                     </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="dashboard-content mt-4" id="transactionDetails">
-                
-                <div class="row">
-                  <div class="col-12">
-                    @include('layouts.message')
-                    <div class="card">
-                      <div class="card-body">
-                        <div  id="Loadachievment" class="d-none lds-dual-ring hidden overlay"></div>
-                       <div class="table-responsive">
-                                  <table id="data"  class="table table-sm table-striped" width="100%">
-                                    <thead>
-                                      <tr>
-                                        <th scope="col" id="nama"></th>
-                                        <th scope="col" id="jml"></th>
-                                        <th scope="col" id="aksi"></th>
-                                      </tr>
-                                    </thead>
-                                    <tbody id="showData">
-                                     
-                                    </tbody>
-                                  </table>
+                      <div class="col-12">
+                          <div id="LoadReferal" class="d-none lds-dual-ring hidden overlay"></div>
+                                <a
+                                    class="nav-link-cs collapsed  "
+                                    href="#referal"
+                                    data-toggle="collapse"
+                                    data-target="#referal"
+                                    style="color: #000000; text-decoration:none"
+                                    >
+                                    Referal </a
+                                    >
+                                    <div class="collapse" id="referal" aria-expanded="false">
+                                   
+                                    <div class="table-responsive mt-3">
+                                            <table id="referalData" class="data table table-sm table-striped" width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">NAMA</th>
+                                                    <th scope="col">Jumlah Anggota</th>
+                                                    <th scope="col">Aksi</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="showReferalData">
+                                                   
+                                                </tbody>
+                                            </table>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
+                        <div class="card shadow bg-white rounded mb-3">
+                              <div class="card-body">
+                              <div class="col-12">
+                               <div id="LoadInput" class="d-none lds-dual-ring hidden overlay"></div>
+                                      <a
+                                          class="nav-link-cs collapsed  "
+                                          href="#input"
+                                          data-toggle="collapse"
+                                          data-target="#input"
+                                          style="color: #000000; text-decoration:none"
+                                          >
+                                          Input </a
+                                          >
+                                          <div class="collapse" id="input" aria-expanded="false">
+                                        
+                                          <div class="table-responsive mt-3">
+                                              <table id="inputData" class="data table table-sm table-striped" width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">NAMA</th>
+                                                    <th scope="col">Jumlah Anggota</th>
+                                                    <th scope="col">Aksi</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="showInputData">
+                                                   
+                                                </tbody>
+                                            </table>
+                                          </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
                 </div>
               </div>
+              
             </div>
           </div>
 @endsection
 
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
-<script src="{{ asset('js/member-nation.js') }}" ></script>
-<script>
-</script>
+<script src="{{ asset('js/member-potensial.js') }}"></script>
 @endpush

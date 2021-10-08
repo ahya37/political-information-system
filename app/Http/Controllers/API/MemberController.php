@@ -8,19 +8,17 @@ use GuzzleHttp\Psr7\Request;
 
 class MemberController extends Controller
 {
-    public function memberReferalUp($selectKeyWord)
+    public function memberPotentialReferal()
     {
         $memberModel = new User();
-        if ($selectKeyWord == 'referal') {
-            
-                 $members    = $memberModel->getMemberReferal();
-                 return response()->json($members);
-             }
-        
-        if ($selectKeyWord == 'input') {
-                 $members    = $memberModel->getMemberInput();
-                 return response()->json($members);
-             }
-        
+        $members    = $memberModel->getMemberReferal();
+        return response()->json($members);
+    }
+
+    public function memberPotentialInput()
+    {
+        $memberModel = new User();
+        $members    = $memberModel->getMemberInput();
+        return response()->json($members);
     }
 }

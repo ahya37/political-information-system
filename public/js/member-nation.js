@@ -93,25 +93,6 @@ function showDivHtml(m, selectKeyWord) {
     }
 }
 
-// const selectFillter = document.getElementById("filterMember");
-// selectFillter.addEventListener("change", function () {
-//     const selectKeyWord = selectFillter.value;
-//     $.ajax({
-//         url: "/api/memberreferalup/" + selectKeyWord,
-//         method: "GET",
-//         cache: false,
-//         success: function (data) {
-//             showTable(data);
-//         },
-//     });
-// });
-
-// function showTable(data) {
-//     $("#achievment").DataTable({
-//         dataShowTable(data);
-//     });
-// }
-
 function dataShowTable(data) {
     return console.log("data: ", data);
 }
