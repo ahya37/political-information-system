@@ -27,7 +27,6 @@
                   <div class="card shadow bg-white rounded mb-3">
                     <div class="card-body">
                       <div class="col-12">
-                          <div id="LoadReferal" class="d-none lds-dual-ring hidden overlay"></div>
                                 <a
                                     class="nav-link-cs collapsed  "
                                     href="#referal"
@@ -37,6 +36,8 @@
                                     >
                                     Referal </a
                                     >
+                          <div id="LoadReferal" class="d-none lds-dual-ring hidden overlay"></div>
+
                                     <div class="collapse" id="referal" aria-expanded="false">
                                    
                                     <div class="table-responsive mt-3">
@@ -60,7 +61,6 @@
                         <div class="card shadow bg-white rounded mb-3">
                               <div class="card-body">
                               <div class="col-12">
-                               <div id="LoadInput" class="d-none lds-dual-ring hidden overlay"></div>
                                       <a
                                           class="nav-link-cs collapsed  "
                                           href="#input"
@@ -70,6 +70,8 @@
                                           >
                                           Input </a
                                           >
+                               <div id="LoadInput" class="d-none lds-dual-ring hidden overlay"></div>
+
                                           <div class="collapse" id="input" aria-expanded="false">
                                         
                                           <div class="table-responsive mt-3">
