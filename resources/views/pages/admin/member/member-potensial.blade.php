@@ -37,6 +37,7 @@
                                     >
                                     Referal </a
                                     >
+                                    <span id="LoadReferal" class="d-none lds-dual-ring hidden overlay"></span>
 
                                     <div class="collapse" id="referal" aria-expanded="false">
                                    
@@ -54,14 +55,6 @@
                                                 <tbody id="showReferalData">
                                                    
                                                 </tbody>
-                                                <tfoot>
-                                                  <tr>
-                                                    <td>
-                                                      <div id="LoadReferal" class="d-none lds-dual-ring hidden overlay"></div>
-                                                    </td>
-                                                  </tr>
-
-                                                </tfoot>
                                             </table>
                                     </div>
                                     </div>
@@ -80,6 +73,8 @@
                                           >
                                           Input </a
                                           >
+                                            <span id="LoadInput" class="d-none lds-dual-ring hidden overlay"></span>
+
 
                                           <div class="collapse" id="input" aria-expanded="false">
                                         
@@ -95,14 +90,6 @@
                                                 <tbody id="showInputData">
                                                    
                                                 </tbody>
-                                                <tfoot>
-                                                  <tr>
-                                                    <td>
-                                                      <div id="LoadInput" class="d-none lds-dual-ring hidden overlay"></div>
-
-                                                    </td>
-                                                  </tr>
-                                                </tfoot>
                                             </table>
                                           </div>
                                           </div>
