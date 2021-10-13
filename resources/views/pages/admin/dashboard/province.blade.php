@@ -317,8 +317,8 @@
                                    <thead>
                                      <tr>
                                      <th scope="col">Kabupaten/Kota</th>
-                                     <th scope="col">Total Kecamatan</th>
                                      <th scope="col">Total Target / Kabupaten</th>
+                                     <th scope="col">Total Kecamatan</th>
                                      <th scope="col">Realisasi Jumlah Anggota</th>
                                      <th scope="col">Persentasi</th>
                                      <th scope="col">Pencapaian Hari Ini</th>
@@ -363,8 +363,8 @@
             },
             columns:[
                 {data: 'name', name:'name'},
-                {data: 'total_district', name:'total_district', className: "text-right"},
                 {data: 'target_member', name:'target_member',className: "text-right"},
+                {data: 'total_district', name:'total_district', className: "text-right"},
                 {data: 'realisasi_member', name:'realisasi_member',className: "text-right"},
                 {data: 'persentage', name:'persentage'},
                 {data: 'todays_achievement', name:'todays_achievement',className: "text-right"}

@@ -26,6 +26,8 @@ class Village extends Model
      * @var string
      */
     protected $table = 'villages';
+    protected $guarded = [];
+    public  $timestamps = false;
 
     /**
      * The attributes that should be hidden for arrays.
@@ -119,12 +121,13 @@ class Village extends Model
     public function achievementVillage($district_id)
     {
         $sql = "SELECT b.id, b.name,
+                b.target as target_member,
                 COUNT(a.id) as realisasi_member, 
                 count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
                 from users as a
                 join villages as b on a.village_id = b.id
                 where b.district_id = $district_id
-                group by b.id, b.name";
+                group by b.id, b.name, b.target";
         return DB::select($sql);
     }
 
@@ -202,5 +205,11 @@ class Village extends Model
         return DB::select($sql);
     }
 
+    public function getUpdateTargetVillage($district_id , $total_target_village)
+    {
 
+        $sql = "UPDATE villages set target = $total_target_village  where district_id = $district_id";
+        return DB::update($sql);
+    }
+    
 }

@@ -320,9 +320,9 @@
                                     <thead>
                                       <tr>
                                       <th scope="col">Kecamatan</th>
+                                      <th scope="col">Target Anggota / Kecamatan</th>
                                       <th scope="col">Total Desa</th>
-                                      <th scope="col">Target Anggota / Desa</th>
-                                      <th scope="col">Total Target</th>
+                                      <th scope="col">Total Target / Desa</th>
                                       <th scope="col">Realisasi Jumlah Anggota</th>
                                       <th scope="col">Persentasi</th>
                                       <th scope="col">Pencapaian Hari Ini</th>
@@ -367,8 +367,8 @@
             },
             columns:[
                 {data: 'name', name:'name'},
-                {data: 'total_village', name:'total_village', className: "text-right"},
                 {data: 'target_member', name:'target_member',className: "text-right"},
+                {data: 'total_village', name:'total_village', className: "text-right"},
                 {data: 'total_target_member', name:'total_target_member',className: "text-right"},
                 {data: 'realisasi_member', name:'realisasi_member',className: "text-right"},
                 {data: 'persentage', name:'persentage'},

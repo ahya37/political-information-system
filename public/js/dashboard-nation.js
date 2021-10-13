@@ -352,6 +352,15 @@ $(document).ready(function () {
                         },
                     ],
                 },
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            return tooltipItem.yLabel
+                                .toFixed(1)
+                                .replace(/\d(?=(\d{3})+\.)/g, "$&.");
+                        },
+                    },
+                },
             },
             legend: true,
         });
@@ -622,10 +631,10 @@ $("#achievment").DataTable({
                     data[i].name +
                     "</td>" +
                     "<td class='text-right'>" +
-                    data[i].total_district +
+                    decimalFormat(data[i].target_member) +
                     "</td>" +
                     "<td class='text-right'>" +
-                    decimalFormat(data[i].target_member) +
+                    data[i].total_district +
                     "</td>" +
                     "<td class='text-right'>" +
                     data[i].realisasi_member +

@@ -451,14 +451,14 @@ class User extends Authenticatable
     public function getMemberRegisteredAll()
     {
          $sql = "SELECT e.id, e.name,
-                count(DISTINCT(c.id)) * 5000 target_member,
+                e.target as target_member,
                 count(a.id) as realisasi_member
                 from users as a
                 join villages as b on a.village_id = b.id
                 right join districts as c on b.district_id = c.id
                 join regencies as d on c.regency_id = d.id 
                 join provinces as e on d.province_id  = e.id 
-                group by e.id, e.name HAVING COUNT(a.id) !=  0";
+                group by e.id, e.name, e.target HAVING COUNT(a.id) !=  0";
         $result = DB::select($sql);
         return $result;
     }
@@ -466,7 +466,7 @@ class User extends Authenticatable
     public function getMemberRegistered($province_id)
     {
          $sql = "SELECT d.id, d.name,
-                count(DISTINCT(c.id)) * 5000 target_member,
+                d.target as target_member,
                 count(a.id) as realisasi_member,
                 (
                 	SELECT  COUNT(id) from regencies where province_id = $province_id
@@ -476,7 +476,7 @@ class User extends Authenticatable
                 right join districts as c on b.district_id = c.id
                 join regencies as d on c.regency_id = d.id 
                 where d.province_id = $province_id
-                group by d.id, d.name  HAVING  count(a.id) != 0";
+                group by d.id, d.name , d.target HAVING  count(a.id) != 0";
         $result = DB::select($sql);
         return $result;
     }
@@ -484,13 +484,13 @@ class User extends Authenticatable
     public function getMemberRegisteredRegency($regency_id)
     {
          $sql = "SELECT c.id, c.name,
-                count(DISTINCT(c.id)) * 5000 target_member,
+                c.target as target_member,
                 count(a.id) as realisasi_member
                 from users as a
                 join villages as b on a.village_id = b.id
                 join districts as c on b.district_id = c.id
                 where c.regency_id = $regency_id
-                group by c.id, c.name";
+                group by c.id, c.name, c.target";
         $result = DB::select($sql);
         return $result;
     }
@@ -498,7 +498,7 @@ class User extends Authenticatable
     public function getMemberRegisteredDistrct($district_id)
     {
          $sql = "SELECT b.id, b.name,
-                count(DISTINCT(c.id)) * 5000 target_member,
+                b.target as target_member,
                 count(a.id) as realisasi_member,
                  (
                 	SELECT count(id) from villages  where district_id = $district_id
@@ -507,7 +507,7 @@ class User extends Authenticatable
                 join villages as b on a.village_id = b.id
                 join districts as c on b.district_id = c.id
                 where c.id = $district_id
-                group by b.id, b.name  HAVING count(a.id) != 0";
+                group by b.id, b.name, b.target  HAVING count(a.id) != 0";
         $result = DB::select($sql);
         return $result;
     }

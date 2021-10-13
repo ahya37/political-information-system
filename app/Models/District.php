@@ -27,6 +27,8 @@ class District extends Model
      * @var string
      */
     protected $table = 'districts';
+    protected $guarded = [];
+    public  $timestamps = false;
 
     /**
      * The attributes that should be hidden for arrays.
@@ -85,15 +87,15 @@ class District extends Model
     {
         $sql = "SELECT c.id, c.name,
                 count(DISTINCT(b.id)) as total_village,
-                ceil(5000 / count(DISTINCT(b.id))) target_member,
-                ceil(5000 / count(DISTINCT(b.id))) * count(DISTINCT(b.id))  as total_target_member,
+                c.target as target_member,
+                CEIL(c.target /  count(DISTINCT(b.id)))  as total_target_member,
                 count(a.id) as realisasi_member,
                 count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
                 from users as a
                 right join villages as b on a.village_id = b.id
                 join districts as c on b.district_id = c.id
                 where c.regency_id = $regency_id
-                group by c.id, c.name HAVING count(a.id) != 0  order by c.name asc";
+                group by c.id, c.name, c.target HAVING count(a.id) != 0  order by c.name asc";
         return DB::select($sql);
     }
 

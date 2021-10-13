@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Job;
 use App\User;
 use App\Referal;
+use App\TargetNumber;
 use Carbon\Carbon;
 use App\Models\Regency;
 use App\Models\Village;
@@ -212,8 +213,8 @@ class DashboardController extends Controller
         
         $userModel        = new User();
         $regencyModel     = new Regency();
+        $targetMember     = $gF->calculateTargetNational();
         $total_member     = $gF->decimalFormat($userModel->where('village_id', '!=', NULL)->count());
-        $targetMember     = $regencyModel->getRegency()->total_district * 5000;
         $target_member    = (string) $targetMember;
         $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
 
@@ -243,8 +244,8 @@ class DashboardController extends Controller
         $member           = $userModel->getMemberRegency($regency_id);   
         $total_member     = count($member); // total anggota terdaftar
 
-        $districtModel    = new District();
-        $targetMember    = $districtModel->where('regency_id',$regency_id)->get()->count() * 5000; // target anggota tercapai, per kecamatan 1000 target
+        $regencyModel     = Regency::select('target')->where('id', $regency_id)->first();
+        $targetMember    = $regencyModel->target; // target anggota tercapai, per kecamatan 1000 target
 ;
         $target_member    = (string) $targetMember;
         $persentage_target_member = ($total_member / $target_member) * 100;
@@ -277,8 +278,8 @@ class DashboardController extends Controller
         $total_member = count($member);
         
         // perentasi anggot  di kecamatan
-        $districtModel    = new District();
-        $target_member    = $districtModel->where('id',$district_id)->get()->count() * 5000; // target anggota tercapai, per kecamatan 1000 target
+        $districtModel    = District::select('target')->where('id', $district_id)->first();
+        $target_member    = $districtModel->target; // target anggota tercapai, per kecamatan 1000 target
         $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
 
         $villageModel   = new Village();
@@ -310,9 +311,9 @@ class DashboardController extends Controller
         $total_member = count($member);
 
          // total desa yg berada di kec, yg sama
-        $total_village = $villageModel->where('district_id', $district_id)->count();
-        $total_target_per_district = 5000;
-        $target_member  = $gF->decimalFormat($total_target_per_district / $total_village);
+        $targetMmemberModel = $villageModel->select('target')->where('id', $village_id)->first();
+        $total_target_per_district = $targetMmemberModel->target;
+        $target_member  = $gF->decimalFormat($total_target_per_district);
         $persentage_target_member = $gF->persen(($total_member/$target_member)*100);
         
         // Daftar pencapaian lokasi / daerah
@@ -331,13 +332,14 @@ class DashboardController extends Controller
     public function getMemberVsTargetNational()
     {
         $gF   = app('GlobalProvider'); // global function
+        $targetMember = $gF->calculateTargetNational();
 
         $userModel        = new User();
         $member_registered  = $userModel->getMemberRegisteredAll();
         $chart_member_target = [];
         foreach ($member_registered as $val) {
             $chart_member_target['label'][] = $val->name;
-            $chart_member_target['target'][] = $val->target_member;
+            $chart_member_target['target'][] =  $val->target_member;
             $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
         }
         $data = [
@@ -372,12 +374,13 @@ class DashboardController extends Controller
     {
         $gF   = app('GlobalProvider'); // global function
 
+
         $userModel        = new User();
         $member_registered  = $userModel->getMemberRegisteredDistrct($district_id);
         $chart_member_target = [];
         foreach ($member_registered as $val) {
             $chart_member_target['label'][] = $val->name;
-            $chart_member_target['target'][] = $val->target_member;
+            $chart_member_target['target'][] = $gF->decimalFormat($val->target_member);
             $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
         }
         $data = [
@@ -969,8 +972,8 @@ class DashboardController extends Controller
         $member           = $userModel->getMemberProvince($province_id);
         $total_member     = count($member); // total anggota terdaftar
 
-        $regencyModel     = new Regency();
-        $target_member    = $regencyModel->getRegencyProvince($province_id)->total_district * 5000;
+        $provinceModel    = Province::select('target')->where('id', $province_id)->first();
+        $target_member    = $provinceModel->target;
         $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
         
         $villageModel   = new Village();

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\UserMenu;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
+use App\TargetNumber;
 
 class GlobalProvider extends ServiceProvider
 {
@@ -117,5 +118,27 @@ class GlobalProvider extends ServiceProvider
                 return 'DES';
                 break;
         }
+    }
+
+    public function calculateTargetNational()
+    {
+         $targetMemberModel= new TargetNumber();
+         $target =  $targetMemberModel->getTotalTargetMemberNational()->target;
+         return $target;
+    }
+
+    public function calculateTargetProvince()
+    {
+         $targetMemberModel= new TargetNumber();
+         $target =  $targetMemberModel->getTotalTargetMemberNational()->target;
+         return $target;
+    }
+    public function calculateTargetRegency()
+    {
+
+    }
+    public function calculateTargetVillage()
+    {
+
     }
 }

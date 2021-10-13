@@ -324,7 +324,7 @@
                                      <tr>
                                      <th scope="col">Provinsi</th>
                                      <th scope="col">Total Kecamatan</th>
-                                     <th scope="col">Total Target / Kabupaten</th>
+                                     <th scope="col">Total Target </th>
                                      <th scope="col">Realisasi Jumlah Anggota</th>
                                      <th scope="col">Persentasi</th>
                                      <th scope="col">Pencapaian Hari Ini</th>

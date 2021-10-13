@@ -158,6 +158,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         // get page anggota berdasarkan pereferalnya
         Route::get('member/by_referal/{user_id}','MemberController@memberByReferal')->name('admin-member-by-referal');
         Route::get('member/by_input/{user_id}','MemberController@memberByInput')->name('admin-member-by-input');
+        
+        // setting
+        Route::get('setting/targetmember','SettingController@settingTargetMember')->name('admin-setting-targetmember');
+        Route::post('setting/save','SettingController@updateTargetMember')->name('admin-setting-targetmember-store');
     });
 });
 

@@ -75,7 +75,7 @@ class DashboardController extends Controller
             return DataTables::of($achievments)
                     ->addColumn('persentage', function($item){
                         $gF   = app('GlobalProvider'); // global function
-                        $persentage = ($item->realisasi_member / $item->total_target_member)*100;
+                        $persentage = ($item->realisasi_member / $item->target_member)*100;
                         $persentage = $gF->persen($persentage);
                         $persentageWidth = $persentage + 30;
                         return '
@@ -96,27 +96,15 @@ class DashboardController extends Controller
         $districtModel    = new District();
 
         $district   = $districtModel->with(['regency'])->where('id', $district_id)->first();
-        // // jumlah anggota di kecamatan
-        $userModel  = new User();
-        $member     = $userModel->getMemberDistrict($district_id);
-        $total_member = count($member);
-
-        // // perentasi anggot  di kecamatan
-        $target_member    = $districtModel->where('id',$district_id)->get()->count() * 5000; // target anggota tercapai, per kecamatan 1000 target
 
         $villageModel   = new Village();
-        $villages       = $villageModel->getVillagesDistrct($district_id); // fungsi total desa di kab
-        $total_village  = count($villages);
-
-
          // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillage($district_id);
-        $total_target_member = $target_member / $total_village;
         if (request()->ajax()) {
             return DataTables::of($achievments)
-                         ->addColumn('persentage', function($item) use($total_target_member){
+                         ->addColumn('persentage', function($item){
                             $gF   = app('GlobalProvider'); // global function
-                            $persentage = ($item->realisasi_member / $total_target_member)*100;
+                            $persentage = ($item->realisasi_member / $item->target_member)*100;
                             $persentage = $gF->persen($persentage);
                             $persentageWidth = $persentage + 30;
                             return '
@@ -125,8 +113,8 @@ class DashboardController extends Controller
                             </div>
                             ';
                         })
-                        ->addColumn('target', function() use($total_target_member){
-                            return $total_target_member;
+                        ->addColumn('target', function($item){
+                            return $item->target_member;
                         })
                         ->rawColumns(['persentage','target'])
                         ->make();

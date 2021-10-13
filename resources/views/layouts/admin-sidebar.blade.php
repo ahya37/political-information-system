@@ -92,6 +92,27 @@
                 </li>
               </ul>
             </div>
+
+            <a
+              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event*')) ? 'active custom-active-color' : '' }}"
+              href="#setting"
+              data-toggle="collapse"
+              data-target="#setting"
+              >
+              <span class="d-none d-sm-inline"></span>Pengaturan</a
+            >
+            <div class="collapse" id="setting" aria-expanded="false">
+              <ul class="flex-column pl-2 nav">
+                <li class="nav-item">
+                  <a
+                    href="{{ route('admin-setting-targetmember') }}"
+                    class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/targetmember')) ? 'active custom-active-color' : '' }}"
+                    ><span>Target Anggota</span></a
+                  >
+                </li>
+              </ul>
+            </div>
+            
             <a class="list-group-item d-lg-none custom-sidebar list-group-item-action custom-active-color" href="{{ route('admin-logout') }}"
                     onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();">

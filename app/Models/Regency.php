@@ -26,6 +26,8 @@ class Regency extends Model
      * @var string
      */
     protected $table = 'regencies';
+    protected $guarded = [];
+    public  $timestamps = false;
 
     /**
      * The attributes that should be hidden for arrays.
@@ -103,7 +105,7 @@ class Regency extends Model
     {
         $sql = "SELECT d.id, d.name,
             count(DISTINCT(c.id)) as total_district,
-            count(DISTINCT(c.id)) * 5000 target_member,
+            d.target as target_member,
             count(a.id) as realisasi_member,
             count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
             from users as a
@@ -111,7 +113,7 @@ class Regency extends Model
             right join districts as c on b.district_id = c.id
             join regencies as d on c.regency_id = d.id 
             where d.province_id = $province_id
-            group by d.id, d.name";
+            group by d.id, d.name, d.target HAVING count(a.id) != 0";
         return DB::select($sql);
     }
 
@@ -119,7 +121,7 @@ class Regency extends Model
     {
         $sql = "SELECT e.id, e.name,
             count(DISTINCT(c.id)) as total_district,
-            count(DISTINCT(c.id)) * 5000 target_member,
+            e.target as target_member,
             count(a.id) as realisasi_member,
             count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
             from users as a
@@ -127,7 +129,7 @@ class Regency extends Model
             right join districts as c on b.district_id = c.id
             join regencies as d on c.regency_id = d.id 
             join provinces as e on d.province_id = e.id
-            group by e.id, e.name HAVING COUNT(a.id) !=  0 order by e.name asc";
+            group by e.id, e.name,e.target HAVING COUNT(a.id) !=  0 order by e.name asc";
         return DB::select($sql);
     }
 

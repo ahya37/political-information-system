@@ -106,3 +106,6 @@ Route::get('totalregional/district/{district_id}','API\DashboardController@getTo
 Route::get('adminuser/member/rergister/province/{province_id}','API\DashboardController@getMemberProvinceAdminUser');
 Route::get('adminuser/member/rergister/regency/{regency_id}','API\DashboardController@getMemberRegencyAdminUser');
 Route::get('adminuser/member/rergister/district/{district_id}','API\DashboardController@getMemberDistrictAdminUser');
+
+
+Route::post('/target','API\AdminController@generateTarget');
