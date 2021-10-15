@@ -87,7 +87,6 @@ class MemberController extends Controller
 
     public function store(Request $request)
     {
-        return $request->all();
            $this->validate($request, [
                'photo' => 'required|mimes:png,jpg,jpeg',
                'ktp' => 'required|mimes:png,jpg,jpeg',
@@ -492,6 +491,11 @@ class MemberController extends Controller
     public function cropImage()
     {
         return view('pages.admin.member.crop');
+    }
+
+    public function saveCropImage(Request $request)
+    {
+       dd($request->ktp);
     }
 
     public function memberPotensial()

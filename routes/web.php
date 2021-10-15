@@ -154,6 +154,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/pdf/member/village/{village_id}','MemberController@reportMemberVillagePdf')->name('pdf-members-village');
 
         Route::get('/crop','MemberController@cropImage');
+        Route::post('/cropsave','MemberController@saveCropImage')->name('cropsave');
 
         // get page anggota berdasarkan pereferalnya
         Route::get('member/by_referal/{user_id}','MemberController@memberByReferal')->name('admin-member-by-referal');
