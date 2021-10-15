@@ -32,7 +32,6 @@ class MemberController extends Controller
         if (request()->ajax()) 
         {
             return DataTables::of($member)
-                    ->addIndexColumn()
                     ->addColumn('action', function($item){
                         if ($item->status == 1 ) {
                             return '
@@ -517,4 +516,5 @@ class MemberController extends Controller
         $districts = $districtModel->getDistrictByInputMember($user_id);
         return view('pages.admin.member.member-by-input', compact('user','districts','userModel'));
     }
+
 }

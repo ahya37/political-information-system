@@ -30,7 +30,6 @@
                              <option value="all">Semua</option>
                              <option value="1">Akun Aktif</option>
                              <option value="0">Tidak Aktif</option>
-                             <option value="referalUp">Referal Terbanyak</option>
                            </select>
                          </div>
                        </form>
