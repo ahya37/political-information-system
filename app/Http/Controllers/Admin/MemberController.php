@@ -256,7 +256,6 @@ class MemberController extends Controller
 
     public function createAccount($id)
     {
-        $id = decrypt($id);
 
         $user = User::select('id','name')->where('id', $id)->first();
         return view('pages.admin.member.create-account', compact('user'));
