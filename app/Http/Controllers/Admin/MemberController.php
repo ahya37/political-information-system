@@ -69,6 +69,9 @@ class MemberController extends Controller
                     ->addColumn('input', function($item){
                         return $item->input;
                     })
+                    ->addColumn('registered', function($item){
+                        return date('d-m-Y', strtotime($item->created_at));
+                    })
                     ->filter(function($instance){
                         if (request()->filter == '1') {
                             $instance->where('status', request()->filter);

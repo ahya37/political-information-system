@@ -58,6 +58,7 @@
                                         <th scope="col">DESA</th>
                                         <th scope="col">REFERAL DARI</th>
                                         <th scope="col">INPUT Dari</th>
+                                        <th scope="col">TERDAFTAR</th>
                                         <th scope="col">AKSI</th>
                                       </tr>
                                     </thead>
@@ -104,6 +105,7 @@
                     {data: 'village', name:'village'},
                     {data: 'referal', name:'referal'},
                     {data: 'input', name:'input'},
+                    {data: 'registered', name:'registered'},
                     // {data: 'saved_nasdem', name:'saved_nasdem'},
                     {
                         data: 'action', 
