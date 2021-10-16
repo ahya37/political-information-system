@@ -17,7 +17,7 @@
                 <p class="dashboard-subtitle">
                 </p>
               </div>
-              <div class="row mt-4">
+              {{-- <div class="row mt-4">
                 <div class="col-12">
                   <div class="card shadow bg-white rounded">
                     <div class="card-body">
@@ -37,7 +37,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> --}}
               <div class="dashboard-content mt-4" id="transactionDetails">
                 
                 <div class="row">
@@ -51,13 +51,14 @@
                                     <thead>
                                       <tr>
                                         <th>ID</th>
-                                        <th scope="col">Nama</th>
-                                        <th scope="col">Kabupaten/Kota</th>
-                                        <th scope="col">Kecamatan</th>
-                                        <th scope="col">Desa</th>
-                                        <th scope="col">Referal Dari</th>
-                                        <th scope="col">Input Dari</th>
-                                        <th scope="col">Aksi</th>
+                                        <th></th>
+                                        <th scope="col">NAMA</th>
+                                        <th scope="col">KABUPATEN/KOTA</th>
+                                        <th scope="col">KECAMATAN</th>
+                                        <th scope="col">DESA</th>
+                                        <th scope="col">REFERAL DARI</th>
+                                        <th scope="col">INPUT Dari</th>
+                                        <th scope="col">AKSI</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -97,11 +98,12 @@
                 columns:[
                     {data:'id', name:'id'},
                     {data: 'photo', name:'photo'},
-                    {data: 'village.district.regency.name', name:'village.district.regency.name'},
-                    {data: 'village.district.name', name:'village.district.name'},
-                    {data: 'village.name', name:'village.name'},
-                    {data: 'reveral.name', name:'reveral.name'},
-                    {data: 'create_by.name', name:'create_by.name'},
+                    {data: 'name', name:'name'},
+                    {data: 'regency', name:'regency'},
+                    {data: 'district', name:'district'},
+                    {data: 'village', name:'village'},
+                    {data: 'referal', name:'referal'},
+                    {data: 'input', name:'input'},
                     // {data: 'saved_nasdem', name:'saved_nasdem'},
                     {
                         data: 'action', 
@@ -111,7 +113,7 @@
                         width: '15%'
                     },
                 ],
-                order: [[0, "desc"]],
+                aaSorting: [[0, "desc"]],
                 columnDefs:[
                   {
                     "targets": [ 0 ],

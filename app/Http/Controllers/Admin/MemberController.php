@@ -27,8 +27,9 @@ class MemberController extends Controller
 {
     public function index(Request $request)
     {
-        $member = User::with(['village.district.regency','reveral','create_by'])
-                    ->whereNotNull('nik');
+        $userModel = new User();
+        $member = $userModel->getDataMemberWhereNikIsNotNull();
+
         if (request()->ajax()) 
         {
             return DataTables::of($member)
@@ -59,12 +60,14 @@ class MemberController extends Controller
                         return '
                         <a href="'.route('admin-profile-member', $item->id).'">
                             <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
-                            '.$item->name.'
                         </a>
                         ';
                     })
                     ->addColumn('referal', function($item){
                         return $item->referal;
+                    })
+                    ->addColumn('input', function($item){
+                        return $item->input;
                     })
                     ->filter(function($instance){
                         if (request()->filter == '1') {
@@ -74,7 +77,7 @@ class MemberController extends Controller
                             $instance->where('status', request()->filter);
                         }
                     })
-                    ->rawColumns(['action','photo','referal'])
+                    ->rawColumns(['action','photo','referal','input'])
                     ->make(true);
         }
         return view('pages.admin.member.index');

@@ -690,4 +690,16 @@ class User extends Authenticatable
         return DB::select($sql);
     }
 
+    public function getDataMemberWhereNikIsNotNull()
+    {
+         $sql = "SELECT a.activate_token, a.id, a.photo, a.name, d.name as regency, c.name as district, b.name as village, e.name as referal, f.name as input, a.created_at, a.status from users as a
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id 
+                join regencies as d on c.regency_id = d.id
+                join users as e on a.user_id = e.id 
+                join users as f on a.cby = f.id
+                where a.nik is not NULL order by a.id DESC";
+        return DB::select($sql);
+    }
+
 }
