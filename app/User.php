@@ -654,7 +654,7 @@ class User extends Authenticatable
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
                 group by a.id, a.name, e.name, d.name , a.photo , a.phone_number, a.whatsapp
-                order by COUNT(a.user_id) desc limit 10";
+                order by COUNT(a.user_id) desc";
         return DB::select($sql);
     }
     public function getMemberReferal()
@@ -666,7 +666,7 @@ class User extends Authenticatable
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
                 group by a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
-                order by COUNT(a.user_id) desc limit 10";
+                order by COUNT(a.user_id) desc";
         return DB::select($sql);
     }
 
