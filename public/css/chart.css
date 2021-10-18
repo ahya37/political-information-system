@@ -1,0 +1,14 @@
+.graphBox {
+    width: 100% !important;
+    grid-template-columns: 1fr !important;
+}
+
+.graphBox .box {
+    padding: 20px !important;
+}
+@media (max-width: 991px) {
+    .graphBox {
+        grid-template-columns: 1fr !important;
+        height: auto !important;
+    }
+}

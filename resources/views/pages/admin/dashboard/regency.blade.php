@@ -6,6 +6,24 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  {{-- <style rel="stylesheet" href={{ asset('css/chart.css') }}></style> --}}
+  <style>
+    .graphBox {
+    width: 100% !important;
+    grid-template-columns: 1fr !important;
+}
+
+.graphBox .box {
+    padding: 20px !important;
+}
+@media (max-width: 991px) {
+    .graphBox {
+        grid-template-columns: 1fr !important;
+        height: auto !important;
+    }
+}
+
+  </style>
 @endpush
 @section('title','Dashboard - Kab/Kot')
 @section('content')
@@ -170,9 +188,11 @@
                         <h6 class="text-center">Anggota Terdaftar VS Target (%)</h6>
                         <div id="LoadmemberRegister" class="d-none lds-dual-ring hidden overlay">
                           </div>
-                        <canvas id="memberRegister">
-                          
-                        </canvas>
+                          <div class="graphBox">
+                            <div class="box">
+                              <canvas id="memberRegister"></canvas>
+                            </div>
+                          </div>
                       </div>
                     </div>
                   </div>
