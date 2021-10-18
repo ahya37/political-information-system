@@ -312,9 +312,7 @@ $(document).ready(function () {
             const label = data.label;
             const valuePersentage = data.persentage;
             const valueTarget = data.value_target;
-            const memberRegistered = document
-                .getElementById("memberRegister")
-                .getContext("2d");
+            const memberRegistered = document.getElementById("memberRegister");
             const dataMemberVsTarget = {
                 labels: label,
                 datasets: [
@@ -334,7 +332,6 @@ $(document).ready(function () {
                 type: "bar",
                 data: dataMemberVsTarget,
                 options: {
-                    responsive: true,
                     scales: {
                         yAxes: [
                             {
