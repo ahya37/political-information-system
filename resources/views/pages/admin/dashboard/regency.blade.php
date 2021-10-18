@@ -299,7 +299,7 @@
                         <div>
                            <div id="Loadinputer" class="d-none lds-dual-ring hidden overlay">
                           </div>
-                          <canvas id="inputer"></canvas>
+                          <canvas id="inputer" width="600" height="250"></canvas>
                         </div>
                       </div>
                     </div>
@@ -311,7 +311,7 @@
                         <div>
                           <div id="Loadreferal" class="d-none lds-dual-ring hidden overlay">
                           </div>
-                          <canvas id="referal"></canvas>
+                          <canvas id="referal" width="600" height="250"></canvas>
                         </div>
                       </div>
                     </div>
