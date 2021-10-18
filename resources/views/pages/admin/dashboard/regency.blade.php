@@ -199,18 +199,6 @@
                 </div>
               </div>
 
-              {{-- <div class="dashboard-content mt-3">
-                  <div class="col-lg-12 col-sm-12">
-                    <div class="card mb-2">
-                      <div class="card-body">
-                         <div class="wrapper"> 
-                          <canvas id="chart" width="600" height="250"></canvas> 
-                        </div>  
-                      </div>
-                    </div>
-                  </div>
-              </div> --}}
-
 
               <div class="dashboard-content mt-3">
                 <div class="row">
@@ -387,55 +375,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script> 
  
 <script src="{{ asset('js/dashboard-regency.js') }}" ></script>
-<script type="text/javascript">
-    window.onload=function(){//from ww  w. j a  va 2  s. c o m
-var labels = ['Bayah','Wanasalam','Malingping','Cihara','Rangkasbitung','Cijaku','Cilograng','Cikulur','Cileles','Gunung Kencana','Sobang','Cibadak','Kalanganya','Cigemblong','Panggarangan','Cibeber'];
-var data = [0,1,2,3,2,3,0.5,8,4,2,5,5,5,5,5,5];
-var chart = new Chart('chart', {
-  type: 'bar',
-  data: {
-    labels: labels,
-    datasets: [{
-      backgroundColor: '#ccddee',
-      borderColor: '#5566aa',
-      data: data
-    }]
-  },
-  options: {
-     legend: false,
-    tooltip: false,
-    layout: {
-       padding: 24
-    },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-        backgroundColor: null,
-        borderColor: null,
-        borderRadius: 4,
-        borderWidth: 1,
-        color: '#223388',
-        font: function(context) {
-          var width = context.chart.width;
-          var size = Math.round(width / 32);
-           return {
-             size: size,
-            weight: 600
-          };
-        },
-        offset: 4,
-        padding: 0,
-        formatter: function(value) {
-           return Math.round(value * 10) / 10
-        }
-      }
-    }
-  }
-});
-    }
-
-      </script> 
 <script>
        var datatable = $('#achievment').DataTable({
             processing: true,
