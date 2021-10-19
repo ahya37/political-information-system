@@ -180,22 +180,22 @@
                 </div>
               </div>
 
-              <div class="dashboard-content mt-3">
+               <div class="dashboard-content mt-3">
                 <div class="row">
-                  <div class="col-md-12 col-sm-12">
+                  <div class="col-lg-12 col-sm-12">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <h6 class="text-center">Anggota Terdaftar VS Target (%)</h6>
                         <div id="LoadmemberRegister" class="d-none lds-dual-ring hidden overlay">
                           </div>
-                           <div class="wrapper" width="100%"> 
-                              <canvas id="memberRegister" width="600" height="250"></canvas> 
-                           </div> 
+                         <div class="wrapper" width="100%"> 
+                          <canvas id="memberRegister" width="600" height="250"></canvas> 
+                        </div>  
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+
 
               <div class="dashboard-content mt-3">
                 <div class="row">
@@ -394,7 +394,7 @@
      	datasets: [
           {
              label: "Terdaftar",
-             data: [12, 19, 3, 23, 2, 3,4,4,5,6,2,3,5,6,7,8,9],
+             data: [0.7, 2, 3, 3, 2, 0.9,1,2,1,3,3,4,2,2,4,3,2],
              backgroundColor: [
                "rgb(126, 252, 101)",
                "rgb(126, 252, 101)",
