@@ -97,7 +97,7 @@ class Regency extends Model
                 join districts as c on b.district_id = c.id
                 join regencies as d on c.regency_id = d.id
                 where d.province_id = $province_id
-                GROUP by d.id, d.name";
+                GROUP by d.id, d.name order by d.name asc";
         return DB::select($sql);
     }
 

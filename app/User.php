@@ -476,7 +476,7 @@ class User extends Authenticatable
                 right join districts as c on b.district_id = c.id
                 join regencies as d on c.regency_id = d.id 
                 where d.province_id = $province_id
-                group by d.id, d.name , d.target HAVING  count(a.id) != 0";
+                group by d.id, d.name , d.target HAVING  count(a.id) != 0 order by d.name asc";
         $result = DB::select($sql);
         return $result;
     }
@@ -507,7 +507,7 @@ class User extends Authenticatable
                 join villages as b on a.village_id = b.id
                 join districts as c on b.district_id = c.id
                 where c.id = $district_id
-                group by b.id, b.name, b.target  HAVING count(a.id) != 0";
+                group by b.id, b.name, b.target  HAVING count(a.id) != 0 order by b.name asc";
         $result = DB::select($sql);
         return $result;
     }
