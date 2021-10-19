@@ -320,11 +320,15 @@ $(document).ready(function () {
                         label: "Terdaftar",
                         data: valuePersentage,
                         backgroundColor: "rgb(126, 252, 101)",
+                        borderWidth: 1,
+                        maxBarThickness: 18,
                     },
                     {
                         label: "Target",
                         data: valueTarget,
                         backgroundColor: "rgb(247, 67, 67)",
+                        borderWidth: 1,
+                        maxBarThickness: 18,
                     },
                 ],
             };
@@ -332,6 +336,8 @@ $(document).ready(function () {
                 type: "bar",
                 data: dataMemberVsTarget,
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         yAxes: [
                             {

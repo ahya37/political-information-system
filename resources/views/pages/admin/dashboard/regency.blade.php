@@ -188,11 +188,23 @@
                         <h6 class="text-center">Anggota Terdaftar VS Target (%)</h6>
                         <div id="LoadmemberRegister" class="d-none lds-dual-ring hidden overlay">
                           </div>
-                          <div class="graphBox">
-                            <div class="box">
-                              <canvas id="memberRegister" width="600" height="200"></canvas>
-                            </div>
-                          </div>
+                           <div class="wrapper" width="100%"> 
+                              <canvas id="memberRegister" width="600" height="250"></canvas> 
+                           </div> 
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dashboard-content mt-3">
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12">
+                    <div class="card mb-2">
+                      <div class="card-body">
+                         <div class="wrapper" width="100%"> 
+                          <canvas id="myChart" width="600" height="250"></canvas> 
+                        </div>  
                       </div>
                     </div>
                   </div>
@@ -375,6 +387,87 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script> 
  
 <script src="{{ asset('js/dashboard-regency.js') }}" ></script>
+<script type="text/javascript">
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var xx = {
+      labels: ["BAYAH", "CIBADAK", "CIBEBER", "CIGEMBLONG", "CIHARA","CIJAKU","CILOGRANG", "CIKULUR","CIPANAS","GUNUNGKENCANA","KALANGANAYR","MALINGPING","PANGGARANGAN","RANGKASBITUNG","SOBANG","WANASALAM","WARUNGGUNUNG"],
+     	datasets: [
+          {
+             label: "Terdaftar",
+             data: [12, 19, 3, 23, 2, 3,4,4,5,6,2,3,5,6,7,8,9],
+             backgroundColor: [
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+               "rgb(126, 252, 101)",
+             ],
+             borderWidth: 1,
+             maxBarThickness:18,
+          },
+          {
+            label: 'Target',
+            data: [12, 19, 3, 23, 2, 3,4,4,5,6,2,3,5,6,7,8,9],
+            backgroundColor: [
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            "rgb(247, 67, 67)",
+            ],
+            borderWidth: 1,
+            maxBarThickness:18,
+        }
+      ]
+    }
+		var myChart = new Chart(ctx, {
+			type: 'bar',
+			data:xx,
+			options: {
+        responsive: true,
+        maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true,
+						}
+          }],
+          xAxes: [{
+						ticks: {
+							autoSkip: false,
+                    maxRotation: 45,
+                    minRotation: 20
+						}
+          }]
+          
+				}
+			}
+		});
+</script> 
 <script>
        var datatable = $('#achievment').DataTable({
             processing: true,
