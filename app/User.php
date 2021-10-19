@@ -490,7 +490,7 @@ class User extends Authenticatable
                 join villages as b on a.village_id = b.id
                 join districts as c on b.district_id = c.id
                 where c.regency_id = $regency_id
-                group by c.id, c.name, c.target";
+                group by c.id, c.name, c.target order by c.name asc";
         $result = DB::select($sql);
         return $result;
     }

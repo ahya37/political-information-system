@@ -67,7 +67,7 @@ class District extends Model
                 join villages as b on a.village_id = b.id 
                 join districts as c on b.district_id = c.id 
                 where c.regency_id = $regency_id
-                GROUP by  c.name, c.id";
+                GROUP by  c.name, c.id order by c.name asc";
         return DB::select($sql);
     }
 
