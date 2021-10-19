@@ -351,6 +351,15 @@ $(document).ready(function () {
                             },
                         },
                     ],
+                    xAxes: [
+                        {
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 45,
+                                minRotation: 20,
+                            },
+                        },
+                    ],
                 },
                 tooltips: {
                     callbacks: {

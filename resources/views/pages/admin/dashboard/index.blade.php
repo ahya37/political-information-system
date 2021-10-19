@@ -155,7 +155,9 @@
                         <div>
                           <div id="loadProvince" class="d-none lds-dual-ring hidden overlay">
                           </div>
-                          <div id="province"></div>
+                          <div class="wrapper" width="100%"> 
+                            <div id="province" ></div>
+                        </div> 
                         </div>
                       </div>
                     </div>
@@ -171,9 +173,9 @@
                         <h6 class="text-center">Anggota Terdaftar VS Target (%)</h6>
                         <div id="LoadmemberRegister" class="d-none lds-dual-ring hidden overlay">
                           </div>
-                          <div style="width: 100%; height:50vh;margin:auto" >
-                            <canvas id="memberRegister"></canvas>
-                          </div>
+                          <div class="wrapper" width="100%"> 
+                          <canvas id="memberRegister" width="600" height="250"></canvas> 
+                        </div> 
                       </div>
                     </div>
                   </div>

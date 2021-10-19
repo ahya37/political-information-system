@@ -332,7 +332,6 @@ class DashboardController extends Controller
     public function getMemberVsTargetNational()
     {
         $gF   = app('GlobalProvider'); // global function
-        $targetMember = $gF->calculateTargetNational();
 
         $userModel        = new User();
         $member_registered  = $userModel->getMemberRegisteredAll();
