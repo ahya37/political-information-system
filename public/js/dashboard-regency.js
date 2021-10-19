@@ -615,4 +615,70 @@ $(document).ready(function () {
         let text = document.createTextNode(getTotalRegional);
         div.appendChild(text);
     }
+
+    // anggota terdaftar vs target
+    $.ajax({
+        url: "/api/membervsterget/regency" + "/" + regencyID,
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#LoadmemberRegister").removeClass("d-none");
+        },
+        success: function (data) {
+            const label = data.label;
+            const valuePersentage = data.persentage;
+            const valueTarget = data.value_target;
+            const memberRegistered = document.getElementById("memberRegister");
+
+            var ctx = document.getElementById("myChart").getContext("2d");
+            var xx = {
+                labels: label,
+                datasets: [
+                    {
+                        label: "Terdaftar",
+                        data: valuePersentage,
+                        backgroundColor: "rgb(126, 252, 101)",
+                        borderWidth: 1,
+                        maxBarThickness: 18,
+                    },
+                    {
+                        label: "Target",
+                        data: valueTarget,
+                        backgroundColor: "rgb(247, 67, 67)",
+                        borderWidth: 1,
+                        maxBarThickness: 18,
+                    },
+                ],
+            };
+            var myChart = new Chart(ctx, {
+                type: "bar",
+                data: xx,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        ],
+                        xAxes: [
+                            {
+                                ticks: {
+                                    autoSkip: false,
+                                    maxRotation: 45,
+                                    minRotation: 20,
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
+        },
+        complete: function () {
+            $("#LoadmemberRegister").addClass("d-none");
+        },
+    });
 });
