@@ -199,21 +199,6 @@
 
               <div class="dashboard-content mt-3">
                 <div class="row">
-                  <div class="col-lg-12 col-sm-12">
-                    <div class="card mb-2">
-                      <div class="card-body">
-                         <div class="wrapper" width="100%"> 
-                          <canvas id="myChart" width="600" height="250"></canvas> 
-                        </div>  
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="dashboard-content mt-3">
-                <div class="row">
                   <div class="col-md-6">
                     <div class="card mb-2">
                       <div class="card-body">
