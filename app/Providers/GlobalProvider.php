@@ -133,12 +133,23 @@ class GlobalProvider extends ServiceProvider
          $target =  $targetMemberModel->getTotalTargetMemberNational()->target;
          return $target;
     }
-    public function calculateTargetRegency()
+    
+    public function cropImage($request)
     {
+        $path_img = public_path('storage/assets/user/ktp/');
 
-    }
-    public function calculateTargetVillage()
-    {
+        $data = $request->file;
+        $image_array_1 = explode(";", $data);
+        $image_array_2 = explode(",", $image_array_1[1]);
+        $base64 = base64_decode($image_array_2[1]);
+        $imageName = uniqid().'.jpg';
+        $fileName  = $path_img.$imageName;
 
+        #simpan ke tb
+        $file  = 'assets/user/ktp/'.$imageName;
+        #simpan ke direktori
+        file_put_contents($fileName, $base64);
+
+        return $file;
     }
 }

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Admin;
 use PDF;
 use App\Menu;
 use App\User;
+use App\Admin;
+use App\Crop;
 use App\UserMenu;
+use App\Models\Regency;
+use App\Models\Village;
+use App\Models\District;
 use App\Models\Province;
 use App\Mail\RegisterMail;
 use Illuminate\Support\Str;
@@ -15,12 +19,11 @@ use Illuminate\Http\Request;
 use App\Providers\GlobalProvider;
 use App\Providers\QrCodeProvider;
 use App\Http\Controllers\Controller;
-use App\Models\District;
-use App\Models\Regency;
-use App\Models\Village;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class MemberController extends Controller
@@ -500,7 +503,12 @@ class MemberController extends Controller
 
     public function saveCropImage(Request $request)
     {
-       dd($request->ktp);
+        $gF = new GlobalProvider();
+        $result_image = $gF->cropImage($request);
+
+        return redirect()->back();
+        
+
     }
 
     public function memberPotensial()
