@@ -3,6 +3,9 @@
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fengyuanchen.github.io/cropperjs/css/cropper.css" />
+    <link href="{{ asset('css/crop-init.css') }}" rel="stylesheet" />
+
 @endpush
 @section('content')
 <!-- Section Content -->
@@ -263,11 +266,8 @@
                                              <div class="mb-2">
                                                 <img src="{{ asset('storage/'.$profile->photo) ?? ''}}" width="100" class="img-thumbnail">
                                               </div>
-                                            <input
-                                            type="file"
-                                            name="photo"
-                                            class="form-control"
-                                            />
+                                            <input type="file"  class="form-control" id="upload_image_photo">
+                                             <input type="hidden" name="photo" id="result_photo" >
                                         </div>
                                         <div class="form-group">
                                                 <span class="required">*</span>
@@ -275,11 +275,8 @@
                                              <div class="mb-2">
                                                 <img src="{{ asset('storage/'.$profile->ktp) ?? ''}}" width="100" class="img-thumbnail">
                                               </div>
-                                            <input
-                                            type="file"
-                                            name="ktp"
-                                            class="form-control"
-                                            />
+                                            <input type="file" name="crop_image_ktp" class="form-control" id="upload_image_ktp">
+                                            <input type="hidden" name="ktp" id="result_ktp" >
                                         </div>
                                     <div class="form-group">
                                     <small class="required"><i>(*) Wajib isi</i></small>
@@ -303,6 +300,47 @@
               </div>
             </div>
           </div>
+@push('prepend-script')
+<div class="modal fade" id="crop_ktp" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                <div class="container">
+                    <div class="modal-content">
+                       
+                        <div class="modal-body">
+                                    <div class="col-md-11 col-sm-12">
+                                        <img src="" id="sample_image_ktp" />
+                                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btn_crop_photo" class="btn btn-primary">Konfirmasi</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+</div>
+
+<div class="modal fade" id="crop_photo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                            <div class="container">
+
+                    <div class="modal-content">
+                       
+                        <div class="modal-body">
+                                    <div class="col-md-11  col-sm-12">
+                                        <img src="" id="sample_image_photo" />
+                                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btn_crop_photo" class="btn btn-primary">Konfirmasi</button>
+                        </div>
+                    </div>
+                </div>
+                            </div>
+
+            </div> 
+@endpush
 @endsection
 
 @push('addon-script')
@@ -311,6 +349,7 @@
 <script src="https://unpkg.com/vue-toasted"></script>
 <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
+<script src="https://fengyuanchen.github.io/cropperjs/js/cropper.js"></script> 
 <script>
       $(document).ready(function(){
         jQuery('#datetimepicker6').datetimepicker({
@@ -318,6 +357,99 @@
             format:'d-m-Y'
             });
             $.datetimepicker.setLocale('id');
+
+                // crop ktp
+                var $modal = $("#crop_ktp");
+                var crop_image = document.getElementById("sample_image_ktp");
+                var cropper;
+                $("#upload_image_ktp").change(function (event) {
+                    var files = event.target.files;
+                    var done = function (url) {
+                        crop_image.src = url;
+                        $modal.modal("show");
+                    };
+                    if (files && files.length > 0) {
+                        reader = new FileReader();
+                        reader.onload = function (event) {
+                            done(reader.result);
+                        };
+                        reader.readAsDataURL(files[0]);
+                    }
+                });
+                $modal
+                    .on("shown.bs.modal", function () {
+                        cropper = new Cropper(crop_image, {
+                            viewMode: 3,
+                            preview: ".preview",
+                        });
+                    })
+                    .on("hidden.bs.modal", function () {
+                        cropper.destroy();
+                        cropper.null;
+                    });
+                $("#btn_crop_ktp").click(function () {
+                    canvas = cropper.getCroppedCanvas({
+                        width: 400,
+                        height: 400,
+                    });
+                    canvas.toBlob(function (blob) {
+                        url = URL.createObjectURL(blob);
+                        var reader = new FileReader();
+                        reader.readAsDataURL(blob);
+                        reader.onloadend = function () {
+                            var base64data = reader.result;
+                            $("#result_ktp").val(base64data);
+                        };
+                    });
+                    $modal.modal("hide");
+                });
+
+            // crop photo
+            var $modal_photo = $("#crop_photo");
+            var crop_image_photo = document.getElementById("sample_image_photo");
+            var cropper_photo;
+            $("#upload_image_photo").change(function (event) {
+                var files_photo = event.target.files;
+                var done = function (url_photo) {
+                    crop_image_photo.src = url_photo;
+                    $modal_photo.modal("show");
+                };
+                if (files_photo && files_photo.length > 0) {
+                    reader_photo = new FileReader();
+                    reader_photo.onload = function (event) {
+                        done(reader_photo.result);
+                    };
+                    reader_photo.readAsDataURL(files_photo[0]);
+                }
+            });
+            $modal_photo
+                .on("shown.bs.modal", function () {
+                    cropper_photo = new Cropper(crop_image_photo, {
+                        viewMode: 3,
+                        preview: ".previewphoto",
+                    });
+                })
+                .on("hidden.bs.modal", function () {
+                    cropper_photo.destroy();
+                    cropper_photo.null;
+                });
+            $("#btn_crop_photo").click(function () {
+                canvas_photo = cropper_photo.getCroppedCanvas({
+                    width: 400,
+                    height: 400,
+                });
+                canvas_photo.toBlob(function (blob) {
+                    url_photo = URL.createObjectURL(blob);
+                    var reader_photo = new FileReader();
+                    reader_photo.readAsDataURL(blob);
+                    reader_photo.onloadend = function () {
+                        var base64data_photo = reader_photo.result;
+                        console.log(base64data_photo);
+                        $("#result_photo").val(base64data_photo);
+                    };
+                });
+                $modal_photo.modal("hide");
+            });
     });
 
       Vue.use(Toasted);

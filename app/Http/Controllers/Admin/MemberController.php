@@ -97,8 +97,6 @@ class MemberController extends Controller
     public function store(Request $request)
     {
            $this->validate($request, [
-               'photo' => 'required|mimes:png,jpg,jpeg',
-               'ktp' => 'required|mimes:png,jpg,jpeg',
                'phone_number' => 'numeric',
            ]);
 
@@ -116,8 +114,12 @@ class MemberController extends Controller
               if ($cek_code == null) {
                  return redirect()->back()->with(['error' => 'Kode Reveral yang anda gunakan tidak terdaftar']);
               }else{
-                  $photo = $request->file('photo')->store('assets/user/photo','public');
-                  $ktp   = $request->file('ktp')->store('assets/user/ktp','public');
+                  
+                  $request_ktp = $request->ktp;
+                  $request_photo = $request->photo;
+                  $gF = new GlobalProvider();
+                  $ktp = $gF->cropImageKtp($request_ktp);
+                  $photo = $gF->cropImagePhoto($request_photo);
        
                   $strRandomProvider = new StrRandom();
                   $string            = $strRandomProvider->generateStrRandom();
@@ -185,9 +187,10 @@ class MemberController extends Controller
             'nik' => 'required'
         ]);
 
+
         $user = User::where('id', $id)->first();
 
-        if ($request->hasFile('photo') || $request->hasFile('ktp')) {
+        if ($request->photo != null || $request->ktp != null) {
             // delete foto lama
             $path = public_path();
             if ($request->photo != null) {
@@ -197,8 +200,14 @@ class MemberController extends Controller
                 File::delete($path.'/storage/'.$user->ktp);
             }
 
-            $photo = $request->photo != null ? $request->file('photo')->store('assets/user/photo','public') : $user->photo;
-            $ktp   = $request->ktp   != null ? $request->file('ktp')->store('assets/user/ktp','public') : $user->ktp;
+            // $photo = $request->photo != null ? $request->file('photo')->store('assets/user/photo','public') : $user->photo;
+            // $ktp   = $request->ktp   != null ? $request->file('ktp')->store('assets/user/ktp','public') : $user->ktp;
+
+            $request_ktp = $request->ktp;
+            $request_photo = $request->photo;
+            $gF = new GlobalProvider();
+            $ktp = $request->ktp != null ?  $gF->cropImageKtp($request_ktp) : $user->ktp;
+            $photo = $request->photo != null ? $gF->cropImagePhoto($request_photo) : $user->photo;
 
             $user->update([
                 'nik'  => $request->nik,
@@ -244,7 +253,6 @@ class MemberController extends Controller
             ]);
         }
 
-        $id = encrypt($id);
         return redirect()->route('admin-profile-member', ['id' => $id]);
     }
 
@@ -503,10 +511,20 @@ class MemberController extends Controller
 
     public function saveCropImage(Request $request)
     {
-        $gF = new GlobalProvider();
-        $result_image = $gF->cropImage($request);
+        $ktp = $request->ktp;
+        $photo = $request->photo;
 
-        return redirect()->back();
+        $gF = new GlobalProvider();
+        $crop_ktp = $gF->cropImageKtp($ktp);
+        $crop_photo = $gF->cropImagePhoto($photo);
+
+        $data = [
+            'ktp' => $crop_ktp, 
+            'photo' => $crop_photo, 
+        ];
+
+        return $data;
+
         
 
     }

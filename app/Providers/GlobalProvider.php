@@ -134,11 +134,11 @@ class GlobalProvider extends ServiceProvider
          return $target;
     }
     
-    public function cropImage($request)
+    public function cropImageKtp($ktp)
     {
         $path_img = public_path('storage/assets/user/ktp/');
 
-        $data = $request->file;
+        $data = $ktp;
         $image_array_1 = explode(";", $data);
         $image_array_2 = explode(",", $image_array_1[1]);
         $base64 = base64_decode($image_array_2[1]);
@@ -147,6 +147,25 @@ class GlobalProvider extends ServiceProvider
 
         #simpan ke tb
         $file  = 'assets/user/ktp/'.$imageName;
+        #simpan ke direktori
+        file_put_contents($fileName, $base64);
+
+        return $file;
+    }
+
+    public function cropImagePhoto($photo)
+    {
+        $path_img = public_path('storage/assets/user/photo/');
+
+        $data = $photo;
+        $image_array_1 = explode(";", $data);
+        $image_array_2 = explode(",", $image_array_1[1]);
+        $base64 = base64_decode($image_array_2[1]);
+        $imageName = uniqid().'.jpg';
+        $fileName  = $path_img.$imageName;
+
+        #simpan ke tb
+        $file  = 'assets/user/photo/'.$imageName;
         #simpan ke direktori
         file_put_contents($fileName, $base64);
 

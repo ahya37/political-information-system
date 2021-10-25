@@ -3,6 +3,8 @@
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fengyuanchen.github.io/cropperjs/css/cropper.css" />
+    <link href="{{ asset('css/crop-init.css') }}" rel="stylesheet" />
 @endpush
 @section('content')
 <!-- Section Content -->
@@ -278,25 +280,17 @@
                                                     >
                                             </div>
                                         <hr class="mb-4 mt-4">
-                                    <div class="form-group">
-                                                <span class="required">*</span>
+                                        <div class="form-group">
+                                            <span class="required">*</span>
                                             <label>Foto</label>
-                                            <input
-                                            type="file"
-                                            name="photo"
-                                            class="form-control"
-                                            required
-                                            />
+                                             <input type="file" name="crop_image_photo" class="form-control" id="upload_image_photo">
+                                             <input type="hidden" name="photo" id="result_photo" required>
                                         </div>
                                         <div class="form-group">
-                                                <span class="required">*</span>
-                                            <label>Foto KTP</label>
-                                            <input
-                                            type="file"
-                                            name="ktp"
-                                            class="form-control"
-                                            required
-                                            />
+                                            <span class="required">*</span>
+                                            <label>KTP</label>
+                                            <input type="file" name="crop_image_ktp" class="form-control" id="upload_image_ktp">
+                                            <input type="hidden" name="ktp" id="result_ktp" required>
                                         </div>
                                     <div class="form-group">
                                     <small class="required"><i>(*) Wajib isi</i></small>
@@ -322,188 +316,52 @@
           </div>
 @endsection
 
+@push('prepend-script')
+<div class="modal fade" id="crop_ktp" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                <div class="container">
+                    <div class="modal-content">
+                      
+                        <div class="modal-body">
+                                    <div class="col-md-10 col-sm-12">
+                                        <img src="" id="sample_image_ktp" class="img-crop" />
+                                    </div>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btn_crop_ktp" class="btn btn-primary">Konfirmasi</button>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+</div>
+<div class="modal fade" id="crop_photo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                            <div class="container">
+                    <div class="modal-content">
+                        
+                        <div class="modal-body">
+                                    <div class="col-md-11 col-sm-12">
+                                        <img src="" id="sample_image_photo"  class="img-crop" />
+                                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btn_crop_photo" class="btn btn-primary">Konfirmasi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+@endpush
+
 @push('addon-script')
 {{-- <script src="{{asset('assets/select2/dist/js/select2.min.js')}}"></script> --}}
 <script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
 <script src="https://unpkg.com/vue-toasted"></script>
 <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
-<script>
-    $(document).ready(function(){
-        jQuery('#datetimepicker6').datetimepicker({
-            timepicker:false,
-            format:'d-m-Y'
-            });
-            $.datetimepicker.setLocale('id');
-    });
-    
-        Vue.use(Toasted);
-
-        var register = new Vue({
-            el:"#register",
-            mounted(){
-                AOS.init();
-                this.getProvincesData();
-                this.getRegenciesData();
-                this.getDistrictsData();
-                this.getVillagesData();
-                this.getJobsData();
-                this.getEducationsData();
-            },
-            data(){
-                return{
-                    provinces: null,
-                    regencies: null,
-                    districts: null,
-                    villages:null,
-                    jobs: null,
-                    educations:null,
-                    education_id:null,
-                    job_id: null,
-                    provinces_id: null,
-                    regencies_id: null,
-                    districts_id: null,
-                    villages_id: null,
-                    checkedEmail: false,
-                    nik:null,
-                    code:"",
-                    code_unavailable: true
-                }
-            },
-            methods:{
-              getEducationsData(){
-                var self = this;
-                axios.get('{{ route('api-educations') }}')
-                .then(function(response){
-                  self.educations = response.data
-                })
-              },
-              getJobsData(){
-                var self = this;
-                axios.get('{{ route('api-jobs') }}')
-                .then(function(response){
-                  self.jobs = response.data
-                })
-              },
-              getProvincesData(){
-                        var self = this;
-                        axios.get('{{ route('api-provinces') }}')
-                        .then(function(response){
-                            self.provinces = response.data
-                        })
-                    },
-              getRegenciesData(){
-                        var self = this;
-                        axios.get('{{ url('api/regencies') }}/' + self.provinces_id)
-                        .then(function(response){
-                            self.regencies = response.data
-                        })
-                    },
-              getDistrictsData(){
-                    var self = this;
-                    axios.get('{{ url('api/districts') }}/' + self.regencies_id)
-                        .then(function(response){
-                            self.districts = response.data
-                        })
-              },
-              getVillagesData(){
-                    var self = this;
-                    axios.get('{{ url('api/villages') }}/' + self.districts_id)
-                        .then(function(response){
-                            self.villages = response.data
-                        })
-              },
-              checkForNikAvailability: function(){
-                var self = this;
-                axios.get('{{ route('api-nik-check') }}', {
-                  params:{
-                    nik:this.nik
-                  }
-                })
-                  .then(function (response) {
-                    if(response.data == 'Available'){
-                        self.$toasted.show(
-                            "NIK telah tersedia, silahkan lanjut langkah selanjutnya!",
-                            {
-                              position: "top-center",
-                              className: "rounded",
-                              duration: 2000,
-                            }
-                        );
-                        self.nik_unavailable = false;
-                    }else{
-                        self.$toasted.error(
-                          "Maaf, NIK telah terdaftar pada sistem",
-                          {
-                            position: "top-center",
-                            className: "rounded",
-                            duration: 2000,
-                          }
-                      );
-                      self.nik_unavailable = true;
-                    }
-                      // handle success
-                      console.log(response);
-                    });
-              },
-
-               checkForReveralAvailability: function(){
-                  var self = this;
-                  axios.get('{{ route('api-reveral-check') }}', {
-                  params:{
-                      code:this.code
-                  }
-                  })
-                  .then(function (response) {
-
-                      if(response.data == 'Available'){
-
-                        // get name where code
-                          axios.get('{{ url('api/reveral/name') }}/' + this.code.value)
-                                  .then(function(res){   
-                                    self.$toasted.success(
-                                        "Reveral tersedia atas Nama " + res.data.name,
-                                        {
-                                        position: "top-center",
-                                        className: "rounded",
-                                        duration: 3000,
-                                        }
-                                    );
-                                  });
-                          self.code_unavailable = true;
-
-                      }else{
-                          self.$toasted.error(
-                          "Reveral tidak tersedia.",
-                          {
-                              position: "top-center",
-                              className: "rounded",
-                              duration: 3000,
-                          }
-                      );
-                      self.code_unavailable = false;
-
-                      }
-                      // handle success
-                      // console.log(response);
-                      });
-              },
-        },
-        watch:{
-                provinces_id: function(val,oldval){
-                    this.regencies_id = null;
-                    this.getRegenciesData();
-                },
-                 regencies_id: function(val,oldval){
-                    this.districts_id = null;
-                    this.getDistrictsData();
-                },
-                districts_id: function(val,oldval){
-                    this.villages_id = null;
-                    this.getVillagesData();
-                },
-            },
-        });
-        
-    </script>
+<script src="https://fengyuanchen.github.io/cropperjs/js/cropper.js"></script> 
+<script src="{{ asset('js/create-member.init.js') }}"></script>
 @endpush
