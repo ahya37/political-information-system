@@ -90,7 +90,6 @@ $(document).ready(function () {
             reader_photo.readAsDataURL(blob);
             reader_photo.onloadend = function () {
                 var base64data_photo = reader_photo.result;
-                console.log(base64data_photo);
                 $("#result_photo").val(base64data_photo);
             };
         });
@@ -205,7 +204,6 @@ var register = new Vue({
                         self.nik_unavailable = true;
                     }
                     // handle success
-                    console.log(response);
                 });
         },
 
@@ -243,7 +241,6 @@ var register = new Vue({
                         self.code_unavailable = false;
                     }
                     // handle success
-                    // console.log(response);
                 });
         },
     },

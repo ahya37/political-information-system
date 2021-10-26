@@ -4,10 +4,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://fengyuanchen.github.io/cropperjs/css/cropper.css" />
     <style>
-    img {
-        display: block;
-        max-width: 100%;
-    }
+
     .preview {
         overflow: hidden;
         width: 160px; 
@@ -54,19 +51,12 @@
   <div class="modal fade" id="crop_ktp" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Crop Image Before Upload</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
+                       
                         <div class="modal-body">
                             <div class="img-container">
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <img src="" id="sample_image_ktp" />
+                                    <div class="">
+                                        <img src="" class="col-md-10 col-sm-10 w-100" id="sample_image_ktp" />
                                     </div>
-                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -80,20 +70,12 @@
 <div class="modal fade" id="crop_photo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Crop Image Before Upload</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
+                       
                         <div class="modal-body">
                             <div class="img-container">
                                 <div class="row">
-                                    <div class="col-md-10">
-                                        <img src="" id="sample_image_photo" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="previewphoto"></div>
+                                    <div class="">
+                                        <img src="" class="col-md-10 col-sm-10 w-100" id="sample_image_photo" />
                                     </div>
                                 </div>
                             </div>

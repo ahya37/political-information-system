@@ -302,44 +302,40 @@
           </div>
 @push('prepend-script')
 <div class="modal fade" id="crop_ktp" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                <div class="container">
-                    <div class="modal-content">
-                       
-                        <div class="modal-body">
-                                    <div class="col-md-11 col-sm-12">
-                                        <img src="" id="sample_image_ktp" />
-                                    </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" id="btn_crop_photo" class="btn btn-primary">Konfirmasi</button>
-
-                        </div>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="container">
+            <div class="modal-content">
+                      
+                <div class="modal-body">
+                    <div class="">
+                        <img src="" id="sample_image_ktp" class="col-md-10 col-sm-12 w-100" />
                     </div>
+                            
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn_crop_ktp" class="btn btn-primary">Konfirmasi</button>
                 </div>
             </div>
-
+        </div>
+    </div>
 </div>
-
 <div class="modal fade" id="crop_photo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                            <div class="container">
-
-                    <div class="modal-content">
-                       
-                        <div class="modal-body">
-                                    <div class="col-md-11  col-sm-12">
-                                        <img src="" id="sample_image_photo" />
-                                    </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" id="btn_crop_photo" class="btn btn-primary">Konfirmasi</button>
-                        </div>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="container">
+            <div class="modal-content">
+                            
+                <div class="modal-body">
+                    <div class="">
+                        <img src="" id="sample_image_photo"  class="col-md-10 col-sm-12 w-100" />
                     </div>
                 </div>
-                            </div>
-
-            </div> 
+                <div class="modal-footer">
+                    <button type="button" id="btn_crop_photo" class="btn btn-primary">Konfirmasi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endpush
 @endsection
 
