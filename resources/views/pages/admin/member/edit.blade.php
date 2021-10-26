@@ -103,11 +103,11 @@
                                                 <span class="required">*</span>
                                                 <label>Status Pekerjaan</label>
                                                 <select class="form-control" id="pekerjaan" name="job_id" required
-                                            autocomplete="off" v-model="job_id" v-if="jobs">
-                                                <option disabled value="">-Pilih status pekerjaan-</option>
-                                            <option v-for="job in jobs" :value="job.id">@{{ job.name }}</option>
-
-                                        </select>
+                                                    autocomplete="off" v-model="job_id" v-if="jobs">
+                                                        <option disabled value="">-Pilih status pekerjaan-</option>
+                                                    <option v-for="job in jobs" :value="job.id">@{{ job.name }}</option>
+                                                </select>
+                                                <input type="hidden" value="{{ $profile->job_id }}" id="jobId">
                                             </div>
                                             <div class="col-6">
                                                 <span class="required">*</span>
@@ -146,6 +146,7 @@
                                                 <option disabled value="">-Pilih pendidikan-</option>
                                                 <option v-for="education in educations" :value="education.id">@{{ education.name }}</option>
                                                 </select>
+                                                <input type="hidden" value="{{ $profile->education_id }}" id="educationId">
                                             </div>
                                         </div>
                                     </div>
@@ -191,6 +192,7 @@
                                                 <label>Provinsi</label>
                                                 <select id="provinces_id" class="form-control" v-model="provinces_id" v-if="provinces">
                                                 <option v-for="province in provinces" :value="province.id">@{{ province.name }}</option>
+                                                <input type="hidden" id="provinceId" value="{{ $profile->province_id }}">
                                             </select>
                                             </div>
                                             <div class="col-6">
@@ -198,6 +200,7 @@
                                                 <select id="regencies_id" class="form-control select2" v-model="regencies_id" v-if="regencies">
                                                 <option v-for="regency in regencies" :value="regency.id">@{{ regency.name }}</option>
                                                 </select>
+                                                <input type="hidden" id="regencyId" value="{{ $profile->regency_id }}">
                                             </div>
                                             </div>
                                     </div>
@@ -209,6 +212,7 @@
                                                 <select id="districts_id" class="form-control" v-model="districts_id" v-if="districts">
                                                 <option v-for="district in districts" :value="district.id">@{{ district.name }}</option>
                                             </select>
+                                            <input type="hidden" id="districtId" value="{{ $profile->district_id }}">
                                             </div>
                                             <div class="col-6">
                                                 <span class="required">*</span>
@@ -216,6 +220,7 @@
                                                 <select name="village_id" id="villages_id" required class="form-control" v-model="villages_id" v-if="districts">
                                                 <option v-for="village in villages" :value="village.id">@{{ village.name }}</option>
                                                 </select>
+                                                <input type="hidden" id="villageId" value="{{ $profile->village_id }}">
                                             </div>
                                             </div>
                                         </div>
@@ -346,195 +351,5 @@
 <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
 <script src="https://fengyuanchen.github.io/cropperjs/js/cropper.js"></script> 
-<script>
-      $(document).ready(function(){
-        jQuery('#datetimepicker6').datetimepicker({
-            timepicker:false,
-            format:'d-m-Y'
-            });
-            $.datetimepicker.setLocale('id');
-
-                // crop ktp
-                var $modal = $("#crop_ktp");
-                var crop_image = document.getElementById("sample_image_ktp");
-                var cropper;
-                $("#upload_image_ktp").change(function (event) {
-                    var files = event.target.files;
-                    var done = function (url) {
-                        crop_image.src = url;
-                        $modal.modal("show");
-                    };
-                    if (files && files.length > 0) {
-                        reader = new FileReader();
-                        reader.onload = function (event) {
-                            done(reader.result);
-                        };
-                        reader.readAsDataURL(files[0]);
-                    }
-                });
-                $modal
-                    .on("shown.bs.modal", function () {
-                        cropper = new Cropper(crop_image, {
-                            viewMode: 3,
-                            preview: ".preview",
-                        });
-                    })
-                    .on("hidden.bs.modal", function () {
-                        cropper.destroy();
-                        cropper.null;
-                    });
-                $("#btn_crop_ktp").click(function () {
-                    canvas = cropper.getCroppedCanvas({
-                        width: 400,
-                        height: 400,
-                    });
-                    canvas.toBlob(function (blob) {
-                        url = URL.createObjectURL(blob);
-                        var reader = new FileReader();
-                        reader.readAsDataURL(blob);
-                        reader.onloadend = function () {
-                            var base64data = reader.result;
-                            $("#result_ktp").val(base64data);
-                        };
-                    });
-                    $modal.modal("hide");
-                });
-
-            // crop photo
-            var $modal_photo = $("#crop_photo");
-            var crop_image_photo = document.getElementById("sample_image_photo");
-            var cropper_photo;
-            $("#upload_image_photo").change(function (event) {
-                var files_photo = event.target.files;
-                var done = function (url_photo) {
-                    crop_image_photo.src = url_photo;
-                    $modal_photo.modal("show");
-                };
-                if (files_photo && files_photo.length > 0) {
-                    reader_photo = new FileReader();
-                    reader_photo.onload = function (event) {
-                        done(reader_photo.result);
-                    };
-                    reader_photo.readAsDataURL(files_photo[0]);
-                }
-            });
-            $modal_photo
-                .on("shown.bs.modal", function () {
-                    cropper_photo = new Cropper(crop_image_photo, {
-                        viewMode: 3,
-                        preview: ".previewphoto",
-                    });
-                })
-                .on("hidden.bs.modal", function () {
-                    cropper_photo.destroy();
-                    cropper_photo.null;
-                });
-            $("#btn_crop_photo").click(function () {
-                canvas_photo = cropper_photo.getCroppedCanvas({
-                    width: 400,
-                    height: 400,
-                });
-                canvas_photo.toBlob(function (blob) {
-                    url_photo = URL.createObjectURL(blob);
-                    var reader_photo = new FileReader();
-                    reader_photo.readAsDataURL(blob);
-                    reader_photo.onloadend = function () {
-                        var base64data_photo = reader_photo.result;
-                        console.log(base64data_photo);
-                        $("#result_photo").val(base64data_photo);
-                    };
-                });
-                $modal_photo.modal("hide");
-            });
-    });
-
-      Vue.use(Toasted);
-      var register = new Vue({
-        el: "#register",
-        mounted() {
-          AOS.init();
-          this.getProvincesData();
-          this.getRegenciesData();
-          this.getDistrictsData();
-          this.getVillagesData();
-          this.getJobsData();
-          this.getEducationsData();
-        },
-        data(){
-          return  {
-            provinces: null,
-            regencies: null,
-            districts: null,
-            villages:null,
-            jobs: null,
-            educations:null,
-            education_id:"{{ $profile->education_id }}",
-            job_id: "{{ $profile->job_id }}",
-            provinces_id: "{{ $profile->province_id }}",
-            regencies_id: "{{ $profile->regency_id }}",
-            districts_id: "{{ $profile->district_id }}",
-            villages_id: "{{ $profile->village_id }}",
-
-          }
-        },
-        methods:{
-              getEducationsData(){
-                var self = this;
-                axios.get('{{ route('api-educations') }}')
-                .then(function(response){
-                  self.educations = response.data
-                })
-              },
-              getJobsData(){
-                var self = this;
-                axios.get('{{ route('api-jobs') }}')
-                .then(function(response){
-                  self.jobs = response.data
-                })
-              },
-              getProvincesData(){
-                        var self = this;
-                        axios.get('{{ route('api-provinces') }}')
-                        .then(function(response){
-                            self.provinces = response.data
-                        })
-                    },
-              getRegenciesData(){
-                        var self = this;
-                        axios.get('{{ url('api/regencies') }}/' + self.provinces_id)
-                        .then(function(response){
-                            self.regencies = response.data
-                        })
-                    },
-              getDistrictsData(){
-                    var self = this;
-                    axios.get('{{ url('api/districts') }}/' + self.regencies_id)
-                        .then(function(response){
-                            self.districts = response.data
-                        })
-              },
-              getVillagesData(){
-                    var self = this;
-                    axios.get('{{ url('api/villages') }}/' + self.districts_id)
-                        .then(function(response){
-                            self.villages = response.data
-                        })
-              },
-        },
-        watch:{
-                provinces_id: function(val,oldval){
-                    this.regencies_id = null;
-                    this.getRegenciesData();
-                },
-                 regencies_id: function(val,oldval){
-                    this.districts_id = null;
-                    this.getDistrictsData();
-                },
-                districts_id: function(val,oldval){
-                    this.villages_id = null;
-                    this.getVillagesData();
-                },
-            },
-      });
-    </script>
+<script src="{{ asset('js/edit-member.init.js') }}"></script>
 @endpush
