@@ -200,9 +200,6 @@ class MemberController extends Controller
                 File::delete($path.'/storage/'.$user->ktp);
             }
 
-            // $photo = $request->photo != null ? $request->file('photo')->store('assets/user/photo','public') : $user->photo;
-            // $ktp   = $request->ktp   != null ? $request->file('ktp')->store('assets/user/ktp','public') : $user->ktp;
-
             $request_ktp = $request->ktp;
             $request_photo = $request->photo;
             $gF = new GlobalProvider();

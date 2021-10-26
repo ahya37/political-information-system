@@ -97,8 +97,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
            $this->validate($request, [
-               'photo' => 'required|mimes:png,jpg,jpeg',
-               'ktp' => 'required|mimes:png,jpg,jpeg',
+               'phone_number' => 'numeric',
            ]);
            
            $cek_nik = User::select('nik')->where('nik', $request->nik)->first();
@@ -113,8 +112,12 @@ class UserController extends Controller
               if ($cek_code == null) {
                  return redirect()->back()->with(['error' => 'Kode Reveral yang anda gunakan tidak terdaftar']);
               }else{
-                  $photo = $request->file('photo')->store('assets/user/photo','public');
-                  $ktp   = $request->file('ktp')->store('assets/user/ktp','public');
+
+                  $request_ktp = $request->ktp;
+                  $request_photo = $request->photo;
+                  $gF = new GlobalProvider();
+                  $ktp = $gF->cropImageKtp($request_ktp);
+                  $photo = $gF->cropImagePhoto($request_photo);
        
                   $strRandomProvider = new StrRandom();
                   $string            = $strRandomProvider->generateStrRandom();
@@ -266,7 +269,7 @@ class UserController extends Controller
         $userModel = new User();
         $user      = $userModel->where('id', $id)->first();
 
-        if ($request->hasFile('photo') || $request->hasFile('ktp')) {
+        if ($request->photo != null || $request->ktp != null) {
             // delete foto lama
             $path = public_path();
             if ($request->photo != null) {
@@ -276,8 +279,12 @@ class UserController extends Controller
                 File::delete($path.'/storage/'.$user->ktp);
             }
 
-            $photo = $request->photo != null ? $request->file('photo')->store('assets/user/photo','public') : $user->photo;
-            $ktp   = $request->ktp   != null ? $request->file('ktp')->store('assets/user/ktp','public') : $user->ktp;
+
+            $request_ktp = $request->ktp;
+            $request_photo = $request->photo;
+            $gF = new GlobalProvider();
+            $ktp = $request->ktp != null ?  $gF->cropImageKtp($request_ktp) : $user->ktp;
+            $photo = $request->photo != null ? $gF->cropImagePhoto($request_photo) : $user->photo;
 
             $user->update([
                 'name' => strtoupper($request->name),

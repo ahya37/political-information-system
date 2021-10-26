@@ -361,5 +361,5 @@
 <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
 <script src="https://fengyuanchen.github.io/cropperjs/js/cropper.js"></script> 
-<script src="{{ asset('js/create-member.init.js') }}"></script>
+<script src="{{ asset('js/create-member-init.js') }}"></script>
 @endpush
