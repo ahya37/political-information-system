@@ -91,21 +91,21 @@
                 serverSide: true,
                 ordering: true,
                 ajax: {
-                    url: "{{ route('admin-member') }}",
+                    url: "/admin/member/json",
                     data: function(d) {
                       d.filter = $('#filterMember').val();
                     }
                 },
                 columns:[
                     {data:'id', name:'id'},
-                    {data: 'photo', name:'photo',orderable: true, searchable: true,},
-                    {data: 'name', name:'name', orderable: true, searchable: true,},
-                    {data: 'regency', name:'regency',orderable: true, searchable: true,},
-                    {data: 'district', name:'district',orderable: true, searchable: true,},
-                    {data: 'village', name:'village',orderable: true, searchable: true,},
-                    {data: 'referal', name:'referal',orderable: true, searchable: true,},
-                    {data: 'input', name:'input',orderable: true, searchable: true,},
-                    {data: 'registered', name:'registered',orderable: true, searchable: true,},
+                    {data: 'photo', name:'photo'},
+                    {data: 'name', name:'name'},
+                    {data: 'regency', name:'regency'},
+                    {data: 'district', name:'district'},
+                    {data: 'village', name:'village'},
+                    {data: 'referal', name:'referal'},
+                    {data: 'input', name:'input'},
+                    {data: 'registered', name:'registered'},
                     // {data: 'saved_nasdem', name:'saved_nasdem'},
                     {
                         data: 'action', 
