@@ -109,3 +109,6 @@ Route::get('adminuser/member/rergister/district/{district_id}','API\DashboardCon
 
 
 Route::post('/target','API\AdminController@generateTarget');
+
+#search member
+Route::post('/searchmember','API\MemberController@getSearchMember');

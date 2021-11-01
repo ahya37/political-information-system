@@ -21,4 +21,12 @@ class MemberController extends Controller
         $members    = $memberModel->getMemberInput();
         return response()->json($members);
     }
+
+    public function getSearchMember()
+    {
+        $data = request()->data;
+        $memberModel = new User();
+        $members    = $memberModel->getSearchMember($data);
+        return response()->json($members);
+    }
 }

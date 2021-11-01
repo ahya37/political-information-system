@@ -702,4 +702,16 @@ class User extends Authenticatable
         return DB::select($sql);
     }
 
+    public function getSearchMember($data)
+    {
+        $sql = "SELECT a.code, a.id, a.photo, a.name, d.name as regency, c.name as district, b.name as village from users as a
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id 
+                join regencies as d on c.regency_id = d.id
+                join users as e on a.user_id = e.id 
+                where a.nik is not NULL and a.name like '%$data%'  order by a.id DESC";
+        $result = DB::select($sql);
+        return $result;
+    }
+
 }

@@ -17,6 +17,25 @@
   </head>
 
   <body style="background-color: #0C0D36">
+    <div class="container">
+      <nav class="navbar">
+      <a class="navbar-brand"></a>
+      <form class="form-inline">
+        <input id="searchMember" class="form-control mr-sm-2" type="search" name="search"   placeholder="Ketik Nama untuk cari anggota" aria-label="Search">
+      </form>
+    </nav>
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+      </div>
+      <div id="result" class="col-md-6 col-sm-12 d-none">
+          <span id="Loadachievment" class="d-none lds-dual-ring hidden overlay"></span>
+          <div class="card" >
+            <div class="card-body" id="showData">
+            </div>
+          </div>
+        </div>
+    </div>
+    </div>
   <div class="page-content page-auth d-flex justify-content-center">
       <div class="section-store-auth" data-aos="fade-down">
         <div class="container">
@@ -95,12 +114,14 @@
     </footer>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="/vendor/jquery/jquery.slim.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/vendor/jquery/jquery.slim.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
     <script src="https://unpkg.com/vue-toasted"></script>
     <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
+    <script src="{{ asset('js/search-member.js') }}"></script>
+
 
     <script>
         Vue.use(Toasted);
@@ -161,6 +182,6 @@
             }
         })
     </script>
-    <script src="/script/navbar-scroll.js"></script>
+    <script src="{{ asset('assets/script/navbar-scroll.js') }}"></script>
   </body>
 </html>
