@@ -317,7 +317,7 @@
 @endsection
 
 @push('prepend-script')
-<div class="modal fade" id="crop_ktp" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="crop_ktp" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" data-backdrop='static' data-keyboard='false'>
     <div class="modal-dialog modal-lg" role="document">
         <div class="container">
             <div class="modal-content">
@@ -335,7 +335,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="crop_photo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="crop_photo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" data-backdrop='static' data-keyboard='false'>
     <div class="modal-dialog modal-lg" role="document">
         <div class="container">
             <div class="modal-content">

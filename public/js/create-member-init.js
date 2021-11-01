@@ -48,6 +48,7 @@ $(document).ready(function () {
             };
         });
         $modal.modal("hide");
+        $modal.modal({ backdrop: "static", keyboard: false });
     });
 
     // crop photo
@@ -94,6 +95,7 @@ $(document).ready(function () {
             };
         });
         $modal_photo.modal("hide");
+        $modal_photo.modal({ backdrop: "static", keyboard: false });
     });
 });
 
