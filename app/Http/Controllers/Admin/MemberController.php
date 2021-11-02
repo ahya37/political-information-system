@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
-use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\Facades\DataTables;
 
 class MemberController extends Controller
@@ -452,50 +451,6 @@ class MemberController extends Controller
         return view('pages.admin.member.crop');
     }
 
-    public function jsonMember()
-    {
-        $userModel = new User();
-        $member = $userModel->getDataMemberWhereNikIsNotNull();
-        return DataTables::of($member)
-                    ->addColumn('photo', function($item){
-                        return '
-                        <a href="'.route('admin-profile-member', $item->id).'">
-                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
-                        </a>
-                        ';
-                    })
-                    ->addColumn('action', function($item){
-                        if ($item->status == 1 ) {
-                            return '
-                                <span class="badge badge-success">Akun Aktif</span>
-                            ';
-                        }elseif($item->activate_token != null ){
-                            return '
-                                <span class="badge badge-warning">Akun Non Veririfikasi</span>
-                            ';
-                        }
-                        return '
-                            <div class="btn-group">
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
-                                    <div class="dropdown-menu">
-                                         <a href='.route('admin-member-create-account',$item->id).' class="dropdown-item">
-                                                Buat Akun
-                                        </a> 
-                                    </div>
-                                </div>
-                            </div>
-                        ';
-                    })
-                     ->addColumn('input', function($item){
-                        return $item->input;
-                    })
-                     ->addColumn('registered', function($item){
-                        return date('d-m-Y', strtotime($item->created_at));
-                    })
-                    ->rawColumns(['photo','action','registered','input'])
-                    ->make(true);
-    }
 
     public function saveCropImage(Request $request)
     {

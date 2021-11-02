@@ -37,7 +37,6 @@
                                     >
                                     Referal </a
                                     >
-                                    <span id="LoadReferal" class="d-none lds-dual-ring hidden overlay"></span>
 
                                     <div class="collapse" id="referal" aria-expanded="false">
                                    
@@ -45,6 +44,7 @@
                                             <table id="referalData" class="data table table-sm table-striped" width="100%">
                                                 <thead>
                                                 <tr>
+                                                    <th scope="col"></th>
                                                     <th scope="col">NAMA</th>
                                                     <th scope="col">JUMLAH</th>
                                                     <th scope="col">ALAMAT</th>
@@ -73,15 +73,13 @@
                                           >
                                           Input </a
                                           >
-                                            <span id="LoadInput" class="d-none lds-dual-ring hidden overlay"></span>
-
-
                                           <div class="collapse" id="input" aria-expanded="false">
                                         
                                           <div class="table-responsive mt-3">
                                               <table id="inputData" class="data table table-sm table-striped" width="100%">
                                                 <thead>
                                                 <tr>
+                                                    <th scope="col"></th>
                                                     <th scope="col">NAMA</th>
                                                     <th scope="col">JUMLAH</th>
                                                     <th scope="col">ALAMAT</th>
@@ -107,5 +105,5 @@
 
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
-<script src="{{ asset('js/member-potensial.js') }}"></script>
+<script src="{{ asset('js/member-potensial2.js') }}"></script>
 @endpush

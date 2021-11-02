@@ -22,7 +22,7 @@
                     @foreach ($districts as $row)
                   <div class="card shadow bg-white rounded mb-3">
                         <div class="card-body">
-                        <div class="col-12">
+                        <div class="col-md-12 col-sm-12">
                                 <a
                                     class="nav-link-cs collapsed  "
                                     href="#district"
@@ -50,7 +50,7 @@
                                                     @foreach ($members as $member)
                                                         <tr>
                                                             <td>
-                                                                <a href="{{ route('admin-profile-member', encrypt($member->id)) }}">
+                                                                <a href="{{ route('admin-profile-member', $member->id) }}">
                                                                     <img class="rounded" width="40"  src="{{ asset('storage/'.$member->photo) }}">
                                                                     {{ $member->name }}
                                                                 </a>

@@ -17,27 +17,6 @@
                 <p class="dashboard-subtitle">
                 </p>
               </div>
-              {{-- <div class="row mt-4">
-                <div class="col-12">
-                  <div class="card shadow bg-white rounded">
-                    <div class="card-body">
-                     <div class="col-4">
-                       <form>
-                         <div class="form-group">
-                           <i class="fa fa-filter" aria-hidden="true"></i>
-                           <label>Berdasarkan</label>
-                           <select id="filterMember" name="filter" class="form-control form-control-sm">
-                             <option value="all">Semua</option>
-                             <option value="1">Akun Aktif</option>
-                             <option value="0">Tidak Aktif</option>
-                           </select>
-                         </div>
-                       </form>
-                     </div>
-                    </div>
-                  </div>
-                </div>
-              </div> --}}
               <div class="dashboard-content mt-4" id="transactionDetails">
                 
                 <div class="row">
@@ -78,58 +57,5 @@
 
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
-
-
-    <script>
-       $(function () {
-
-         var table = $('#data').DataTable({
-                processing: true,
-                language:{
-                  processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
-                },
-                serverSide: true,
-                ordering: true,
-                ajax: {
-                    url: "/admin/member/json",
-                    data: function(d) {
-                      d.filter = $('#filterMember').val();
-                    }
-                },
-                columns:[
-                    {data:'id', name:'id'},
-                    {data: 'photo', name:'photo'},
-                    {data: 'name', name:'name'},
-                    {data: 'regency', name:'regency'},
-                    {data: 'district', name:'district'},
-                    {data: 'village', name:'village'},
-                    {data: 'referal', name:'referal'},
-                    {data: 'input', name:'input'},
-                    {data: 'registered', name:'registered'},
-                    // {data: 'saved_nasdem', name:'saved_nasdem'},
-                    {
-                        data: 'action', 
-                        name:'action',
-                        orderable: false,
-                        searchable: false,
-                        width: '15%'
-                    },
-                ],
-                aaSorting: [[0, "desc"]],
-                columnDefs:[
-                  {
-                    "targets": [ 0 ],
-                    "visible": false
-                  }
-                ]
-            });
-
-            // filter
-            $('#filterMember').change(function(){
-              table.draw();
-            });
-
-          });
-    </script>
-    
+<script src="{{ asset('js/member-index.js') }}"></script>
 @endpush

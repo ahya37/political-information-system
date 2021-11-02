@@ -93,7 +93,6 @@ Route::get('member/referal/village/{village_id}','API\DashboardController@getReg
 // event galleries
 Route::get('event/galleries/{eventId}','API\EventGalleryController@getDataEventGalleries');
 
-Route::get('member/potensial/referal','API\MemberController@memberPotentialReferal');
 Route::get('member/potensial/input','API\MemberController@memberPotentialInput');
 Route::get('admins','API\AdminController@getAdmin');
 
