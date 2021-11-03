@@ -70,6 +70,32 @@
               </ul>
             </div>
             <a
+              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/dapil*')) ? 'active custom-active-color' : '' }}"
+              href="#dapil"
+              data-toggle="collapse"
+              data-target="#dapil"
+              >
+              <span class="d-none d-sm-inline"></span>Dapil</a
+            >
+            <div class="collapse" id="dapil" aria-expanded="false">
+              <ul class="flex-column pl-2 nav">
+                <li class="nav-item">
+                  <a
+                    href="{{ route('admin-dapil') }}"
+                    class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/admincontrol/district')) ? 'active custom-active-color' : '' }}"
+                  >
+                    Daftar Dapil
+                  </a>
+                   <a
+                      href="{{ route('admin-dapil-create') }}"
+                      class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/dapil/create')) ? 'active custom-active-color' : '' }}"
+                    >
+                      Tambah Dapil
+                    </a>
+                </li>
+              </ul>
+            </div>
+            <a
               class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event*')) ? 'active custom-active-color' : '' }}"
               href="#submenu1"
               data-toggle="collapse"

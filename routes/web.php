@@ -166,6 +166,16 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         // setting
         Route::get('setting/targetmember','SettingController@settingTargetMember')->name('admin-setting-targetmember');
         Route::post('setting/save','SettingController@updateTargetMember')->name('admin-setting-targetmember-store');
+        
+        // Dapil
+        Route::get('/dapil','DapilController@index')->name('admin-dapil');
+        Route::get('/dapil/create','DapilController@create')->name('admin-dapil-create');
+        Route::post('/dapil/save','DapilController@store')->name('admin-dapil-save');
+        Route::get('/dapil/detail/{id}','DapilController@detail')->name('admin-dapil-detail');
+        Route::get('/dapil/districts/{regency_id}','Datatable\DapilDatatableController@dtDistrict');
+        Route::get('/dapil/createdapilarea/{regency_id}/{dapil_id}','DapilController@createDapilArea')->name('admin-dapil-createarea');
+        Route::post('/dapil/savedapilarea/{dapil_id}','DapilController@saveDapilArea')->name('admin-dapil-savearea');
+
     });
 });
 

@@ -127,4 +127,12 @@ class District extends Model
                 group by  a.id, a.name order by a.name asc";
         return DB::select($sql);
     }
+
+    public function getDistrictDapilByRegency($regency_id)
+    {
+        $sql = "SELECT a.id as district_id, a.name, b.id from districts as a
+                left join dapil_areas as b on a.id = b.district_id
+                where a.regency_id = $regency_id and b.id is NULL order by a.name ASC";
+        return DB::select($sql);
+    }
 }
