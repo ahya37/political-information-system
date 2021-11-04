@@ -35,6 +35,7 @@
                               </a>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                   <a href="{{ route('pdf-members-national') }}" class="dropdown-item"><i class="fa fa-download" aria-hidden="true"></i>Daftar Anggota</a>
+                                  <a href="{{ route('pdf-most-referalnational') }}" class="dropdown-item"><i class="fa fa-download" aria-hidden="true"></i>Anggota Referal Terbanyak</a>
                               </div>
                           </div>
                         </div>
@@ -46,6 +47,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <a href="{{ route('report-member-national-excel') }}" class="dropdown-item"><i class="fa fa-download" aria-hidden="true"></i>Anggota Terdaftar</a>
                             <a href="{{ route('report-jobnational-excel') }}" class="dropdown-item"><i class="fa fa-download" aria-hidden="true"></i>Profesi</a>
+                            <a href="{{ route('report-mostreferal-excel') }}" class="dropdown-item"><i class="fa fa-download" aria-hidden="true"></i>Anggota Referal Terbanyak</a>
                             </div>
                           </div>
                         </div>

@@ -7,6 +7,7 @@ use App\Menu;
 use App\User;
 use App\Admin;
 use App\Crop;
+use App\Exports\MemberMostReferal;
 use App\UserMenu;
 use App\Models\Regency;
 use App\Models\Village;
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Excel;
 
 class MemberController extends Controller
 {
@@ -494,5 +496,15 @@ class MemberController extends Controller
         $districts = $districtModel->getDistrictByInputMember($user_id);
         return view('pages.admin.member.member-by-input', compact('user','districts','userModel'));
     }
+
+    public function memberByReferalNationalPDF()
+    {
+        $userModel = new User();
+        $members = $userModel->getMemberReferal();
+        $no = 1;
+        $pdf = PDF::LoadView('pages.report.member-referal', compact('members','no','userModel'))->setPaper('a4');
+        return  $pdf->stream('ANGGOTA REFERAL TERBANYAK.pdf');
+    }
+
 
 }

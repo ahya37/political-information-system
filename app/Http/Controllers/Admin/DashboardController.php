@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\JobDistrict;
 use PDF;
 use App\Job;
 use App\User;
@@ -11,11 +10,13 @@ use App\Models\Regency;
 use App\Models\Village;
 use App\Models\District;
 use App\Models\Province;
-use App\Exports\JobNational;
-use App\Exports\JobProvince;
 use App\Exports\JobRegency;
 use App\Exports\JobVillage;
+use App\Exports\JobDistrict;
+use App\Exports\JobNational;
+use App\Exports\JobProvince;
 use Maatwebsite\Excel\Excel;
+use App\Exports\MemberMostReferal;
 use App\Exports\MemberExportRegency;
 use App\Exports\MemberExportVillage;
 use App\Http\Controllers\Controller;
@@ -197,13 +198,17 @@ class DashboardController extends Controller
       return $this->excel->download(new JobVillage($village_id),'Profesi-Desa-'.$village->name.'.xls');
     }
 
-
     public function downloadKTA($id)
     {
         $profile = User::with(['village'])->where('id', $id)->first();
         $pdf = PDF::loadView('pages.admin.member.card', compact('profile'))->setPaper('a4');
         return $pdf->stream('kta.pdf');
 
+    }
+
+    public function memberByReferalNationalExcel()
+    {
+        return $this->excel->download(new MemberMostReferal(),'ANGGOTA REFERAL TERBANYAK.xls');
     }
 
 }

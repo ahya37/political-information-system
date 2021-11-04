@@ -74,6 +74,19 @@ class MemberDatatableController extends Controller
                         </div>
                         ';
                     })
+                    ->addColumn('totalReferalUndirect', function($item){
+                        $userModel = new User();
+                        $id_user = $item->id;
+                        $referal_undirect = $userModel->getReferalUnDirect($id_user);
+                        $referal_undirect = $referal_undirect->total == NULL ? 0 : $referal_undirect->total;
+                        return '
+                         <div class="badge badge-pill badge-warning">
+                            '.
+                            $referal_undirect
+                            .' 
+                        </div>
+                        ';
+                    })
                     ->addColumn('contact', function($item){
                         return '
                           <div class="badge badge-pill badge-primary">
@@ -103,7 +116,7 @@ class MemberDatatableController extends Controller
                             </div>
                         ';
                     })
-                    ->rawColumns(['photo','action','totalReferal','address','contact'])
+                    ->rawColumns(['photo','action','totalReferal','address','contact','totalReferalUndirect'])
                     ->make(true);
     }
     public function dTableMemberPotentialInput()

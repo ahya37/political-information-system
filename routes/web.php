@@ -125,6 +125,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/member/regency/export/{regency_id}','DashboardController@exportDataRegencyExcel')->name('report-member-regency-excel');
         Route::get('/member/district/export/{district_id}','DashboardController@exportDataDistrictExcel')->name('report-member-district-excel');
         Route::get('/member/village/export/{village_id}','DashboardController@exportDataVillageExcel')->name('report-member-village-excel');
+        Route::get('/member/mostreferalnationalexcel','DashboardController@memberByReferalNationalExcel')->name('report-mostreferal-excel');
 
         // report profesi nasional
         Route::get('/member/jobs/national','DashboardController@exportJobsNationalExcel')->name('report-jobnational-excel');
@@ -147,6 +148,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/member/district/{district_id}','MemberController@memberDistrict')->name('members-district');
         Route::get('/member/village/{village_id}','MemberController@memberVillage')->name('members-village');
         
+        Route::get('/pdf/member/mostreferalnationalpdf','MemberController@memberByReferalNationalPDF')->name('pdf-most-referalnational');
         Route::get('/pdf/member/national','MemberController@reportMemberPdf')->name('pdf-members-national');
         Route::get('/pdf/member/province/{province_id}','MemberController@reportMemberProvincePdf')->name('pdf-members-province');
         Route::get('/pdf/member/regency/{regency_id}','MemberController@reportMemberRegencyPdf')->name('pdf-members-regency');
