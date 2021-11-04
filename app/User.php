@@ -672,10 +672,11 @@ class User extends Authenticatable
 
     public function getListMemberByDistrictId($district_id, $user_id)
     {
-        $sql = "SELECT a.id, a.name, e.name as regency, d.name as district, c.name as village, a.photo FROM users as a
+        $sql = "SELECT  a.id, a.name,c.name as village, d.name as district, e.name as regency, f.name as province, a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo FROM users as a
                 join villages as c on a.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
+                join provinces as f on e.province_id = f.id
                 where d.id = $district_id and a.user_id = $user_id  order by a.name";
         return DB::select($sql);
     }

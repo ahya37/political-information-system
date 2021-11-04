@@ -23,15 +23,30 @@
                   <div class="card shadow bg-white rounded mb-3">
                         <div class="card-body">
                         <div class="col-md-12 col-sm-12">
-                                <a
-                                    class="nav-link-cs collapsed  "
-                                    href="#district"
-                                    data-toggle="collapse"
-                                    data-target="#district{{ $row->id }}"
-                                    style="color: #000000; text-decoration:none"
-                                    >
-                                    KECAMATAN : {{ $row->district }}</a
-                                    >
+                                <div class="row">
+                                  <div  class="col-md-10 col-sm-10">
+                                    <a
+                                        class="nav-link-cs collapsed  "
+                                        href="#district"
+                                        data-toggle="collapse"
+                                        data-target="#district{{ $row->id }}"
+                                        style="color: #000000; text-decoration:none"
+                                        >
+                                        KECAMATAN : {{ $row->district }}</a
+                                        >
+                                  </div>
+                                  <div class="col-md-2 col-sm-2 float-right">
+                                    <div class="dropdown show">
+                                      <a class="btn btn-sm btn-sc-primary text-white border-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Download
+                                      </a>
+                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                          <a href="{{ route('admin-member-by-referal-downloadpdf', ['user_id' => $user->id,'district_id' => $row->id]) }}" class="dropdown-item">PDF</a>
+                                          <a href="{{ route('admin-member-by-referal-downloadexcel', ['user_id' => $user->id,'district_id' => $row->id]) }}" class="dropdown-item">Excel</a>
+                                      </div>
+                                  </div>
+                                  </div>
+                                </div>
                                     <div class="collapse" id="district{{ $row->id }}" aria-expanded="false">
                                     @php
                                         $district_id = $row->id;

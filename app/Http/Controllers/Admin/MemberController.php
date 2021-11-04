@@ -7,6 +7,7 @@ use App\Menu;
 use App\User;
 use App\Admin;
 use App\Crop;
+use App\Exports\MemberByReferalInDistrict;
 use App\Exports\MemberMostReferal;
 use App\UserMenu;
 use App\Models\Regency;
@@ -30,6 +31,11 @@ use Maatwebsite\Excel\Excel;
 
 class MemberController extends Controller
 {
+    public $excel;
+    public function __construct(Excel $excel)
+    {
+        $this->excel = $excel;
+    }
     public function index(Request $request)
     {
         return view('pages.admin.member.index');
@@ -503,7 +509,26 @@ class MemberController extends Controller
         $members = $userModel->getMemberReferal();
         $no = 1;
         $pdf = PDF::LoadView('pages.report.member-referal', compact('members','no','userModel'))->setPaper('a4');
-        return  $pdf->stream('ANGGOTA REFERAL TERBANYAK.pdf');
+        return  $pdf->download('ANGGOTA REFERAL TERBANYAK.pdf');
+    }
+
+    public function memberByReferalDownloadExcel($user_id, $district_id)
+    {
+        
+        $member = User::select('name')->where('id', $user_id)->first();
+        $district = District::select('name')->where('id', $district_id)->first();
+        return $this->excel->download(new MemberByReferalInDistrict($district_id, $user_id), 'ANGGOTA REFERAL DARI '.$member->name.' DI KECAMATAN '.$district->name.'.xls');
+    }
+
+    public function memberByReferalDownloadPDF($user_id, $district_id)
+    {
+        $userModel = new User();
+        $user = $userModel->select('name')->where('id', $user_id)->first();
+        $district = District::select('name')->where('id', $district_id)->first();
+        $no = 1;
+        $members  = $userModel->getListMemberByDistrictId($district_id, $user_id);
+        $pdf = PDF::LoadView('pages.report.member-referal-in-district', compact('members','no','district','user'))->setPaper('a4');
+        return  $pdf->stream('ANGGOTA REFERAL DARI '.$user->name.' DI KECAMATAN '.$district->name.'.pdf');
     }
 
 

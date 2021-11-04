@@ -163,6 +163,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // get page anggota berdasarkan pereferalnya
         Route::get('member/by_referal/{user_id}','MemberController@memberByReferal')->name('admin-member-by-referal');
+        Route::get('member/by_referal/downloadexcel/{user_id}/{district_id}','MemberController@memberByReferalDownloadExcel')->name('admin-member-by-referal-downloadexcel');
+        Route::get('member/by_referal/downloadpdf/{user_id}/{district_id}','MemberController@memberByReferalDownloadPDF')->name('admin-member-by-referal-downloadpdf');
         Route::get('member/by_input/{user_id}','MemberController@memberByInput')->name('admin-member-by-input');
         
         // setting

@@ -4,7 +4,6 @@
             <table cellspacing='0'>
                 <thead>
                     <tr align="center">
-                        <th><b>NO</b></th>
                         <th><b>NAMA</b></th>
                         <th><b>ALAMAT LENGKAP</b></th>
                         <th><b>REFERAL LANGSUNG</b></th>
@@ -21,7 +20,6 @@
                        $referal_undirect = $referal_undirect->total == NULL ? 0 : $referal_undirect->total;
                    @endphp
                    <tr>
-                       <td>{{ $no++ }}</td>
                        <td>{{ $row->name }}</td>
                        <td>{{ $row->village.', '. $row->district.', '. $row->regency }}</td>
                        <td align="center">{{ $row->total }}</td>

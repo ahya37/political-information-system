@@ -15,9 +15,7 @@ class MemberMostReferal implements FromView
     {
         $userModel = new User();
         $members   = $userModel->getMemberReferal();
-        $no = 1;
         return view('pages.report.member-referal-excel', [
-            'no' => $no,
             'members' => $members,
             'userModel' => $userModel
         ]);
