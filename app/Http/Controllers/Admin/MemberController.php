@@ -528,7 +528,7 @@ class MemberController extends Controller
         $no = 1;
         $members  = $userModel->getListMemberByDistrictId($district_id, $user_id);
         $pdf = PDF::LoadView('pages.report.member-referal-in-district', compact('members','no','district','user'))->setPaper('a4');
-        return  $pdf->stream('ANGGOTA REFERAL DARI '.$user->name.' DI KECAMATAN '.$district->name.'.pdf');
+        return  $pdf->download('ANGGOTA REFERAL DARI '.$user->name.' DI KECAMATAN '.$district->name.'.pdf');
     }
 
 
