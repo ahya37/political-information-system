@@ -32,7 +32,7 @@ $(function () {
                 width: "15%",
             },
         ],
-        aaSorting: [[0, "desc"]],
+        aaSorting: [[2, "desc"]],
     });
 });
 
@@ -61,6 +61,6 @@ $(function () {
                 width: "15%",
             },
         ],
-        aaSorting: [[0, "desc"]],
+        aaSorting: [[2, "desc"]],
     });
 });
