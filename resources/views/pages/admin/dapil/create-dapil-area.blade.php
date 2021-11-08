@@ -68,6 +68,8 @@
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script>
-    $('#data').DataTable();
+    $('#data').DataTable({
+       "bPaginate": false,
+    });
 </script>
 @endpush

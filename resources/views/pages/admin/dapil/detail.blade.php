@@ -33,7 +33,7 @@
                                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                                         <div class="col-md-12 col-sm-12">
                                              <a
-                                                href="{{ route('register') }}"
+                                                href="{{ route('admin-caleg-create', $dapil->dapil_id) }}"
                                                 class="btn btn-sc-primary btn-block mt-4 col-lg-3 col-sm-2"
                                                 >
                                                 <i class="fa fa-plus"></i> Tambah Caleg
@@ -65,9 +65,10 @@
                                             <div class="row">
                                                     <div class="col-md-12 col-sm-12 mt-3">
                                                         <div class="table-responsive">
-                                                            <table id="data" class="table table-sm table-striped" width="100%">
+                                                            <table id="dapilareas" class="table table-sm table-striped" width="100%">
                                                                 <thead>
                                                                 <tr>
+                                                                    <th scope="col">ID</th>
                                                                     <th scope="col">Daerah</th>
                                                                 </tr>
                                                                 </thead>
@@ -90,4 +91,5 @@
 
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+<script src="{{ asset('js/dapil-detail.js') }}"></script>
 @endpush

@@ -2,20 +2,16 @@
 
 namespace App\Http\Controllers\Admin\Datatable;
 
-use App\Models\District;
+use App\Dapil;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 
 class DapilDatatableController extends Controller
 {
-    public function dtDistrict($regency_id)
+    public function dtDapilAreas($id)
     {
-        $districts = District::where('regency_id', $regency_id)->orderBy('name','ASC')->get();
-        return DataTables::of($districts)
-                ->addColumn('select', function($item){
-                    return '<input type="checkbox" value="'.$item->id.'" name="district[]">';
-                })
-                ->rawColumns(['select'])
-                ->make(true);
+        $dapilModel  = new Dapil();
+        $dapil_areas = $dapilModel->getDataDapilAreas($id);
+        return DataTables::of($dapil_areas)->make(true);
     }
 }

@@ -111,3 +111,5 @@ Route::post('/target','API\AdminController@generateTarget');
 
 #search member
 Route::post('/searchmember','API\MemberController@getSearchMember');
+Route::post('/searchmemberforcaleg','API\MemberController@getSearchMemberForCaleg');
+Route::post('/memberbyid','API\MemberController@getMemberById');

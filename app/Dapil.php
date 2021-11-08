@@ -27,7 +27,7 @@ class Dapil extends Model
         $result = DB::select($sql);
         return $result; 
     }
-
+    
     public function getDapilDetailById($id)
     {
         $sql = "SELECT b.id as regency_id , a.id as dapil_id, a.name as dapil_name , b.name as regency from dapils as a
@@ -35,5 +35,13 @@ class Dapil extends Model
                 where a.id = $id";
         $result = collect(\DB::select($sql))->first();
         return $result;
+    }
+
+    public function getDataDapilAreas($id)
+    {
+        $sql = "SELECT a.id, b.name as district from dapil_areas as a
+                join districts as b on a.district_id  = b.id where a.dapil_id = $id";
+        $result = DB::select($sql);
+        return $result; 
     }
 }
