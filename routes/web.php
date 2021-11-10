@@ -182,8 +182,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         
         // Caleg
         Route::get('/dapil/caleg/create/{dapil_id}','CalegController@create')->name('admin-caleg-create');
-
-
+        Route::post('/dapil/caleg/save/{dapil_id}','CalegController@save')->name('admin-caleg-save');
     });
 });
 

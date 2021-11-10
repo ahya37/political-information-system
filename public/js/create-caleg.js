@@ -52,8 +52,11 @@ function updateMemberUi(members, searchValue) {
 }
 
 function showDivHtml(m, searchValue) {
-    return `
-            <option value="${m.id}">${m.name}</option>
+    return `<a    onclick='selectData(${m.id})' class="col-12">
+                <img  class="rounded mt-2" width="40" src="/storage/${m.photo}">
+                    ${m.name}: <strong>${m.code}</strong>
+            </a>
+            <br>
             `;
 }
 
@@ -66,17 +69,17 @@ function Complete(idLoader) {
 }
 
 async function selectData(id) {
-    $("#searchMember").val(id);
-
+    let searchMember = $("#searchMember");
+    searchMember.val(id);
+    BeforeSend("LoadachievmentResult");
     try {
+        $("#resultById").empty();
         const detailMember = await getMemberById(id);
-        console.log("detail member: ", detailMember);
-    } catch (err) {
-        console.log("err: ", err);
-    }
-
-    $("#resultview").removeClass("d-none");
-    $("#showData").hide();
+        updateMemberUiById(detailMember);
+    } catch (err) {}
+    Complete("LoadachievmentResult");
+    // $("#resultview").removeClass("d-none");
+    // $("#showData").hide();
 }
 
 function getMemberById(id) {
@@ -88,7 +91,76 @@ function getMemberById(id) {
         },
         body: JSON.stringify({ data: id }),
     }).then((response) => {
-        console.log(response);
         return response.json();
     });
+}
+
+function updateMemberUiById(detailMember) {
+    let searchMemberResult = $("#searchMemberResult");
+    searchMemberResult.val(detailMember.id);
+
+    let searchMember = $("#searchMember");
+    searchMember.val(detailMember.name);
+
+    let htmlResult = $("#resultById").append(
+        `
+            <div class="col-12 text-center mt-4">
+                <img src="/storage/${
+                    detailMember.photo
+                }" width="200" class="rounded mb-3 img-thumbnail">
+            </div>
+            <div class="row mt-4">
+                <div class="col-4">
+                    <div class="product-title">NIK</div>
+                    <div class="product-subtitle">${detailMember.nik}</div>
+                    <div class="product-title">NAMA</div>
+                    <div class="product-subtitle">${detailMember.name}</div>
+                    <div class="product-title">DESA</div>
+                    <div class="product-subtitle">${
+                        detailMember.village.name ?? ""
+                    }</div>
+                    <div class="product-title">KECAMATAN</div>
+                    <div class="product-subtitle">${
+                        detailMember.village.district.name ?? ""
+                    }</div>
+                    <div class="product-title">KABUPATEN / KOTA</div>
+                    <div class="product-subtitle">${
+                        detailMember.village.district.regency.name ?? ""
+                    }</div>
+                    <div class="product-title">PROVINSI</div>
+                    <div class="product-subtitle">${
+                        detailMember.village.district.regency.province.name ??
+                        ""
+                    }</div>
+                    <div class="product-title">ALAMAT</div>
+                    <div class="product-subtitle">${detailMember.address}</div>
+                </div>
+                 <div class="col-4">
+                    <div class="product-title">Status Pekerjaan</div>
+                    <div class="product-subtitle">${detailMember.job.name}</div>
+                    <div class="product-title">Pendidikan</div>
+                    <div class="product-subtitle">${
+                        detailMember.education.name
+                    }</div>
+                    <div class="product-title">Agama</div>
+                    <div class="product-subtitle">${
+                        detailMember.religion ?? ""
+                    }</div>
+                </div>
+                 <div class="col-4">
+                    <div class="product-title">Telpon</div>
+                    <div class="product-subtitle">${
+                        detailMember.phone_number
+                    }</div>
+                    <div class="product-title">Whatsapp</div>
+                    <div class="product-subtitle">${detailMember.whatsapp}</div>
+                    <div class="product-title">EMail</div>
+                    <div class="product-subtitle">${
+                        detailMember.email ?? ""
+                    }</div>
+                 </div>
+            </div>
+        `
+    );
+    return htmlResult;
 }

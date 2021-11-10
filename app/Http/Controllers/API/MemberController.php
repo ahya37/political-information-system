@@ -22,13 +22,18 @@ class MemberController extends Controller
         $data = request()->data;
         $memberModel = new User();
         $members    = $memberModel->getSearchMember($data);
+        $data = [];
+        foreach($members as $val)
+        {
+            $data[] = $val->name;
+        }
         return response()->json($members);
     }
     
     public function getMemberById()
     {
         $user_id = request()->data;
-        $members = User::select('id','name')->where('id', $user_id)->first();
+        $members = User::with(['village.district.regency.province','job','education'])->where('id', $user_id)->first();
         return response()->json($members);
 
     }

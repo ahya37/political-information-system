@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Caleg extends Model
 {
-    protected $table = 'dapils';
+    protected $table = 'dapil_calegs';
     public $timestamps = false;
     protected $guarded = [];
 }
