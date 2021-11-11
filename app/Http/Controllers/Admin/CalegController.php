@@ -32,6 +32,9 @@ class CalegController extends Controller
            'user_id' => $request->id,
         ]);
 
+        // registrasikan menu akses
+
         return redirect()->route('admin-dapil-detail', ['id' => $dapil_id])->with(['success' => 'Caleg telah ditambahkan']);
     }
+    
 }

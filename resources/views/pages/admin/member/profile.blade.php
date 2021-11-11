@@ -122,30 +122,30 @@
                                         <div class="product-title">Nama</div>
                                         <div class="product-subtitle">{{ $profile->name}}</div>
                                         <div class="product-title">Desa</div>
-                                        <div class="product-subtitle">{{ $profile->village->name}}</div>
+                                        <div class="product-subtitle">{{ $profile->village->name ?? ''}}</div>
                                         <div class="product-title">Kecamatan</div>
-                                        <div class="product-subtitle">{{ $profile->village->district->name}}</div>
+                                        <div class="product-subtitle">{{ $profile->village->district->name ?? ''}}</div>
                                         <div class="product-title">Kabupaten/Kota</div>
-                                        <div class="product-subtitle">{{ $profile->village->district->regency->name}}</div>
+                                        <div class="product-subtitle">{{ $profile->village->district->regency->name ?? ''}}</div>
                                         <div class="product-title">Provinsi</div>
-                                        <div class="product-subtitle">{{ $profile->village->district->regency->province->name}}</div>
+                                        <div class="product-subtitle">{{ $profile->village->district->regency->province->name ?? ''}}</div>
                                         <div class="product-title">Alamat</div>
                                         <div class="product-subtitle">{{ $profile->address}}, {{'RT '. $profile->rt}}, {{'RW '. $profile->rw}}</div>
                                     </div>
                                     <div class="col-4">
                                       <div class="product-title">Status Pekerjaan</div>
-                                      <div class="product-subtitle">{{ $profile->job->name }}</div>
+                                      <div class="product-subtitle">{{ $profile->job->name ?? ''}}</div>
                                       <div class="product-title">Pendidikan</div>
-                                      <div class="product-subtitle">{{ $profile->education->name }}</div>
+                                      <div class="product-subtitle">{{ $profile->education->name ?? ''}}</div>
                                       <div class="product-title">Agama</div>
                                       <div class="product-subtitle">{{ $profile->religion ?? '' }}</div>
                                       
                                     </div>
                                     <div class="col-4">
                                       <div class="product-title">Telpon</div>
-                                      <div class="product-subtitle">{{ $profile->phone_number }}</div>
+                                      <div class="product-subtitle">{{ $profile->phone_number ?? ''}}</div>
                                       <div class="product-title">Whatsapp</div>
-                                      <div class="product-subtitle">{{ $profile->whatsapp }}</div>
+                                      <div class="product-subtitle">{{ $profile->whatsapp ?? ''}}</div>
                                       <div class="product-title">EMail</div>
                                       <div class="product-subtitle">{{ $profile->email ?? '' }}</div>
                                       

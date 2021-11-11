@@ -44,4 +44,17 @@ class Dapil extends Model
         $result = DB::select($sql);
         return $result; 
     }
+
+    public function getDataDapilCalegs($dapil_id)
+    {
+        $sql = "SELECT a.id as user_id, b.id, a.phone_number, a.whatsapp, a.name, a.photo, a.address, c.name as village, d.name as district, e.name as regency, f.name as province from users a
+                join dapil_calegs b on a.id = b.user_id
+                join villages as c on a.village_id = c.id
+                join districts as d on c.district_id = d.id 
+                join regencies as e on d.regency_id = e.id
+                join provinces as f on e.province_id = f.id
+                where b.dapil_id = $dapil_id";
+        $result = DB::select($sql);
+        return $result; 
+    }
 }

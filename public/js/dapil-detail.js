@@ -26,3 +26,31 @@ $(function () {
         ],
     });
 });
+
+$(function () {
+    var table = $("#dapilcalegs").DataTable({
+        processing: true,
+        language: {
+            processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+        },
+        serverSide: true,
+        ordering: true,
+        ajax: {
+            url: `/admin/dapil/dapilcalegs/${dapilId}`,
+        },
+        columns: [
+            { data: "id", name: "id" },
+            { data: "photo", name: "photo" },
+            { data: "name", name: "name" },
+            { data: "fulladdress", name: "fulladdress" },
+            { data: "contact", name: "contact" },
+        ],
+        aaSorting: [[0, "desc"]],
+        columnDefs: [
+            {
+                targets: [0],
+                visible: false,
+            },
+        ],
+    });
+});
