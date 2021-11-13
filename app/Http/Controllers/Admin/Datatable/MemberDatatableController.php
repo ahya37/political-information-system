@@ -178,7 +178,7 @@ class MemberDatatableController extends Controller
         return DataTables::of($member)
                     ->addColumn('photo', function($item){
                         return '
-                        <a href="'.route('admin-profile-member', $item->id).'">
+                        <a href="'.route('member-mymember', encrypt($item->id)).'">
                             <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
                         </a>
                         ';
@@ -243,7 +243,7 @@ class MemberDatatableController extends Controller
         return DataTables::of($member)
                     ->addColumn('photo', function($item){
                         return '
-                        <a href="'.route('admin-profile-member', $item->id).'">
+                        <a href="'.route('member-mymember', encrypt($item->id)).'">
                             <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
                         </a>
                         ';

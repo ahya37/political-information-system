@@ -119,7 +119,10 @@ class MemberController extends Controller
         $id_user = $id;
         $userModel = new User();
         $profile = $userModel->with(['village'])->where('id', $id_user)->first();
-        $member  = $userModel->with(['village','reveral'])->where('user_id', $id_user)->whereNotIn('id', [$id_user])->get();
+        $member  = $userModel->with(['village','reveral'])->where('user_id', $id_user)
+                             ->whereNotIn('id', [$id_user])
+                             ->whereNotNull('village_id')
+                             ->get();
         $referal_direct = $userModel->getReferalDirect($id_user);
 
         $referal_direct = $referal_direct->total == NULL ? 0 : $referal_direct->total; // referal langsung
