@@ -4,6 +4,12 @@
       href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"
       rel="stylesheet"
     />
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link
+      href="{{ asset('assets/style/style.css') }}"
+      rel="stylesheet"
+    />
     <style>
       #idcard {
         width: 565px;
@@ -75,15 +81,47 @@
               <div class="dashboard-content">
                 <div class="row">
                   <div class="col-md-3">
-                      <div class="card mb-2">
-                        <div class="card-body">
-                          <div class="dashboard-card-title">Jumlah Anggota</div>
-                          <div class="dashboard-card-subtitle">
-                            <h5>{{ $total_member }}</h5>
+                      <div class="card mb-2 text-white bg-info">
+                        <div class="card-body ">
+                          <div class="dashboard-card-title text-white">E-KTA</div>
+                          <div class="dashboard-card-subtitle text-white">
+                            <h6>
+                              {{ $profile->village->district->regency->province->id }}-{{$gF->cutStringCardRegency($profile->village->district->regency->id) }}-{{$gF->cutStringCardDistrict($profile->village->district->id) }}-{{$gF->cutStringCardVillage($profile->village->id) }}-{{ $profile->number }}
+                            </h6>
                           </div>
                         </div>
                       </div>
                     </div>
+                    <div class="col-md-3">
+                      <div class="card mb-2 text-white cd-card-primary">
+                        <div class="card-body">
+                          <div class="dashboard-card-title text-white">Referal Langsung</div>
+                          <div class="dashboard-card-subtitle">
+                            <h5 class="text-white">{{ $referal_direct }}</h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                     <div class="col-md-3">
+                      <div class="card mb-2 text-white cd-card-primary">
+                        <div class="card-body">
+                          <div class="dashboard-card-title text-white">Referal Tidak Langsung</div>
+                          <div class="dashboard-card-subtitle">
+                            <h5 class="text-white">{{ $referal_undirect }}</h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                     <div class="col-md-3">
+                          <div class="card mb-2 text-white cs-card-danger">
+                            <div class="card-body">
+                              <div class="dashboard-card-title text-white">Total Referal</div>
+                              <div class="dashboard-card-subtitle">
+                                <h5 class="text-white">{{ $total_member }}</h5>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                 </div>
                 <div class="row">
                   <div class="col-md-12">
@@ -93,8 +131,9 @@
                               <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                 <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true">Profil</a>
                                 <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-member" role="tab" aria-controls="nav-contact" aria-selected="false">Anggota Referal Ku</a>
+                                <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-member-potential" role="tab" aria-controls="nav-contact" aria-selected="false">Anggota Potensial Ku</a>
                                 <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-kta" role="tab" aria-controls="nav-kta" aria-selected="false">KTA</a>
-                                <a class="nav-link" id="nav-rev-rev" data-toggle="tab" href="#nav-rev" role="tab" aria-controls="nav-kta" aria-selected="false">Reveral Ku</a>
+                                <a class="nav-link" id="nav-rev-rev" data-toggle="tab" href="#nav-rev" role="tab" aria-controls="nav-kta" aria-selected="false">Referal Ku</a>
                               </div>
                             </nav>
                             <div class="tab-content" id="nav-tabContent">
@@ -154,13 +193,13 @@
                               </div>
                               <div class="tab-pane fade mt-4" id="nav-member" role="tabpanel" aria-labelledby="nav-contact-tab">
                                 <div class="table-responsive">
-                                  <table id="data" class="table table-sm table-striped">
+                                  <table id="data" class="table table-sm table-striped display">
                                     <thead>
                                       <tr>
-                                        <th scope="col">Nama</th>
-                                        <th scope="col">Kabupaten/Kota</th>
-                                        <th scope="col">Kecamatan</th>
-                                        <th scope="col">Desa</th>
+                                        <th scope="col">NAMA</th>
+                                        <th scope="col">KABUPATEN/KOTA</th>
+                                        <th scope="col">KECAMATAN</th>
+                                        <th scope="col">DESA</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -184,6 +223,81 @@
                                     </tbody>
                                   </table>
                                 </div>
+                              </div>
+                              <div class="tab-pane fade mt-4" id="nav-member-potential" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                <div class="card shadow bg-white rounded mb-3">
+                                <div class="card-body">
+                                  <div class="col-12">
+                                <a
+                                    class="nav-link-cs collapsed  "
+                                    href="#referal"
+                                    data-toggle="collapse"
+                                    data-target="#referal"
+                                    style="color: #000000; text-decoration:none"
+                                    >
+                                    Aktif Dalam Referal </a
+                                    >
+
+                                    <div class="collapse" id="referal" aria-expanded="false">
+                                   
+                                    <div class="table-responsive mt-3">
+                                            <table id="referalData" class="data table table-sm table-striped" width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col"></th>
+                                                    <th scope="col">NAMA</th>
+                                                    <th scope="col">REFERAL LANGSUNG</th>
+                                                    <th scope="col">REFERAL TIDAK LANGSUNG</th>
+                                                    <th scope="col">ALAMAT</th>
+                                                    <th scope="col">KONTAK</th>
+                                                    <th scope="col">Aksi</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="showReferalData">
+                                                   
+                                                </tbody>
+                                            </table>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                            <div class="card shadow bg-white rounded mb-3">
+                              <div class="card-body">
+                              <div class="col-12">
+                                      <a
+                                          class="nav-link-cs collapsed  "
+                                          href="#input"
+                                          data-toggle="collapse"
+                                          data-target="#input"
+                                          style="color: #000000; text-decoration:none"
+                                          >
+                                          Aktif Dalam Input Data </a
+                                          >
+                                          <div class="collapse" id="input" aria-expanded="false">
+                                        
+                                          <div class="table-responsive mt-3">
+                                              <table id="inputData" class="data table table-sm table-striped" width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col"></th>
+                                                    <th scope="col">NAMA</th>
+                                                    <th scope="col">JUMLAH</th>
+                                                    <th scope="col">ALAMAT</th>
+                                                    <th scope="col">KONTAK</th>
+                                                    <th scope="col">Aksi</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="showInputData">
+                                                   
+                                                </tbody>
+                                            </table>
+                                          </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
                               </div>
                               <div class="tab-pane fade mt-4" id="nav-kta" role="tabpanel" aria-labelledby="nav-contact-tab">
                                 <div class="col-12 text-right mb-4">
@@ -289,8 +403,9 @@
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script>
       $(document).ready(function () {
-        $("#data").DataTable();
+        $("table.display").DataTable();
       });
 </script>
+<script src="{{ asset('js/member-potensial2-by-member.js') }}"></script>
     
 @endpush

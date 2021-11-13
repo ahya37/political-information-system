@@ -254,10 +254,10 @@
       margin-bottom: 101.9px;
     }
     .cap {
-      width: 30px;
+      width: 35px;
       /* height: 50px; */
       margin-left: 261px;
-      margin-top: -16px;
+      margin-top: -17px;
       margin-bottom: 101.9px;
     }
     .name-label {
@@ -315,7 +315,7 @@
     .desc {
       width: 100%;
       margin-left: 4px;
-      margin-top: -200px;
+      margin-top: -210px;
 
       font-family: "Nunito", sans-serif;
       font-style: normal;

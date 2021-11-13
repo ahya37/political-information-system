@@ -120,10 +120,15 @@ class MemberController extends Controller
         $userModel = new User();
         $profile = $userModel->with(['village'])->where('id', $id_user)->first();
         $member  = $userModel->with(['village','reveral'])->where('user_id', $id_user)->whereNotIn('id', [$id_user])->get();
+        $referal_direct = $userModel->getReferalDirect($id_user);
+
+        $referal_direct = $referal_direct->total == NULL ? 0 : $referal_direct->total; // referal langsung
+        $referal_undirect = $userModel->getReferalUnDirect($id_user);
+        $referal_undirect = $referal_undirect->total == NULL ? 0 : $referal_undirect->total; // referal tidak langsung
         $total_member = count($member);
 
         $gF = new GlobalProvider();
-        return view('pages.admin.member.profile', compact('gF','profile','member','total_member'));
+        return view('pages.admin.member.profile', compact('gF','profile','member','total_member','referal_direct','referal_undirect'));
     }
 
     public function editMember($id)

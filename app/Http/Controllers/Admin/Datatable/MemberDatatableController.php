@@ -170,4 +170,121 @@ class MemberDatatableController extends Controller
                     ->rawColumns(['photo','action','totalInput','address','contact'])
                     ->make(true);
     }
+
+     public function dTableMemberPotentialReferalByMember($id_user)
+    {
+        $userModel = new User();
+        $member = $userModel->getMemberReferalByMember($id_user);
+        return DataTables::of($member)
+                    ->addColumn('photo', function($item){
+                        return '
+                        <a href="'.route('admin-profile-member', $item->id).'">
+                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                        </a>
+                        ';
+                    })
+                    ->addColumn('totalReferal', function($item){
+                        return '
+                         <div class="badge badge-pill badge-success">
+                            '.$item->total.' 
+                        </div>
+                        ';
+                    })
+                    ->addColumn('totalReferalUndirect', function($item){
+                        $userModel = new User();
+                        $id_user = $item->id;
+                        $referal_undirect = $userModel->getReferalUnDirect($id_user);
+                        $referal_undirect = $referal_undirect->total == NULL ? 0 : $referal_undirect->total;
+                        return '
+                         <div class="badge badge-pill badge-warning">
+                            '.
+                            $referal_undirect
+                            .' 
+                        </div>
+                        ';
+                    })
+                    ->addColumn('contact', function($item){
+                        return '
+                          <div class="badge badge-pill badge-primary">
+                            <i class="fa fa-phone"></i>
+                            </div>
+                            '.$item->phone_number.'
+                            <br>
+                            <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+                            </div>
+                            '.$item->whatsapp.'
+                        ';
+                    })
+                    ->addColumn('address', function($item){
+                        return $item->district.','.$item->regency;
+                    })
+                    ->addColumn('action', function($item){
+                        return '
+                            <div class="btn-group">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
+                                    <div class="dropdown-menu">
+                                         <a href='.route('admin-member-by-referal',$item->id).' class="dropdown-item">
+                                                Detail
+                                        </a> 
+                                    </div>
+                                </div>
+                            </div>
+                        ';
+                    })
+                    ->rawColumns(['photo','action','totalReferal','address','contact','totalReferalUndirect'])
+                    ->make(true);
+    }
+
+     public function dTableMemberPotentialInputByMember($id_user)
+    {
+        $userModel = new User();
+        $member = $userModel->getMemberInputByMember($id_user);
+        return DataTables::of($member)
+                    ->addColumn('photo', function($item){
+                        return '
+                        <a href="'.route('admin-profile-member', $item->id).'">
+                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                        </a>
+                        ';
+                    })
+                    ->addColumn('totalInput', function($item){
+                        return '
+                         <div class="badge badge-pill badge-success">
+                            '.$item->total.' 
+                        </div>
+                        ';
+                    })
+                     ->addColumn('address', function($item){
+                        return $item->district.','.$item->regency;
+                    })
+                    ->addColumn('action', function($item){
+                        return '
+                            <div class="btn-group">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
+                                    <div class="dropdown-menu">
+                                         <a href='.route('admin-member-by-input',$item->id).' class="dropdown-item">
+                                                Detail
+                                        </a> 
+                                    </div>
+                                </div>
+                            </div>
+                        ';
+                    })
+                    ->addColumn('contact', function($item){
+                        return '
+                          <div class="badge badge-pill badge-primary">
+                            <i class="fa fa-phone"></i>
+                            </div>
+                            '.$item->phone_number.'
+                            <br>
+                            <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+                            </div>
+                            '.$item->whatsapp.'
+                        ';
+                    })
+                    ->rawColumns(['photo','action','totalInput','address','contact'])
+                    ->make(true);
+    }
 }

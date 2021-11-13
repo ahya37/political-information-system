@@ -135,6 +135,7 @@
                               <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                 <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true">Profil</a>
                                 <a class="nav-link" id="nav-member-tab" data-toggle="tab" href="#nav-member" role="tab" aria-controls="nav-contact" aria-selected="false">Anggota Referal Ku</a>
+                                <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-member-potential" role="tab" aria-controls="nav-contact" aria-selected="false">Anggota Potensial Ku</a>
                                 <a class="nav-link" id="nav-kta-tab" data-toggle="tab" href="#nav-kta" role="tab" aria-controls="nav-kta" aria-selected="false">KTA</a>
                                 <a class="nav-link" id="nav-rev-rev" data-toggle="tab" href="#nav-rev" role="tab" aria-controls="nav-kta" aria-selected="false">Reveral Ku</a>
 
@@ -155,7 +156,7 @@
                                     >
                                       Edit Profil
                                     </a>
-
+                                    <input type="hidden" id="user_id" value="{{ Auth::user()->id ?? '' }}">
                                   </div>
                                 </div>
                                 <div class="row mt-4">
@@ -217,6 +218,80 @@
                                     <tbody></tbody>
                                   </table>
                                 </div>
+                              </div>
+                              <div class="tab-pane fade mt-4" id="nav-member-potential" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                <div class="card shadow bg-white rounded mb-3">
+                                <div class="card-body">
+                                  <div class="col-12">
+                                <a
+                                    class="nav-link-cs collapsed  "
+                                    href="#referal"
+                                    data-toggle="collapse"
+                                    data-target="#referal"
+                                    style="color: #000000; text-decoration:none"
+                                    >
+                                    Aktif Dalam Referal </a
+                                    >
+
+                                    <div class="collapse" id="referal" aria-expanded="false">
+                                   
+                                    <div class="table-responsive mt-3">
+                                            <table id="referalData" class="data table table-sm table-striped" width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col"></th>
+                                                    <th scope="col">NAMA</th>
+                                                    <th scope="col">REFERAL LANGSUNG</th>
+                                                    <th scope="col">REFERAL TIDAK LANGSUNG</th>
+                                                    <th scope="col">ALAMAT</th>
+                                                    <th scope="col">KONTAK</th>
+                                                    <th scope="col">Aksi</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="showReferalData">
+                                                   
+                                                </tbody>
+                                            </table>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow bg-white rounded mb-3">
+                              <div class="card-body">
+                              <div class="col-12">
+                                      <a
+                                          class="nav-link-cs collapsed  "
+                                          href="#input"
+                                          data-toggle="collapse"
+                                          data-target="#input"
+                                          style="color: #000000; text-decoration:none"
+                                          >
+                                          Aktif Dalam Input Data </a
+                                          >
+                                          <div class="collapse" id="input" aria-expanded="false">
+                                        
+                                          <div class="table-responsive mt-3">
+                                              <table id="inputData" class="data table table-sm table-striped" width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col"></th>
+                                                    <th scope="col">NAMA</th>
+                                                    <th scope="col">JUMLAH</th>
+                                                    <th scope="col">ALAMAT</th>
+                                                    <th scope="col">KONTAK</th>
+                                                    <th scope="col">Aksi</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="showInputData">
+                                                   
+                                                </tbody>
+                                            </table>
+                                          </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
                               </div>
 
                               <div class="tab-pane fade mt-4" id="nav-kta" role="tabpanel" aria-labelledby="nav-kta-tab">
@@ -321,7 +396,7 @@
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-{{-- <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script> --}}
+<script src="{{ asset('js/member-potensial2-by-member-login.js') }}"></script>
 <script>
       // $(document).ready(function () {
       //   $("#data").DataTable();
@@ -353,72 +428,6 @@
               }
             ]
         });
-
-        // sweatealert
-
-        function registered(id){
-          var member = $('#'+id+'').attr("member");
-          swal({
-            title: "Sudah terdaftar di sistem Nasdem Sebelumnya ?",
-            text: member,
-            icon: "warning",
-            buttons: ["Batal", "Ya"],
-            dangerMode: true,
-            }).then((willDetele)=> {
-            if (willDetele) {
-              $.ajax({
-              url: "{{ url('/user/member/registered') }}" + '/' +id,
-              type: "GET",
-              success: function(data){
-                swal("Berhasil diproses!", {
-                icon: "success",
-                }).then(function(){
-                window.location.reload();
-                });
-              },
-              error : function(){
-                swal({
-                title: 'Gagal diproses!',
-                icon:'error',
-                timer: '1500'
-                });
-              }
-            });
-          }
-          });
-        }
-
-        function saved(id){
-          var member = $('#'+id+'').attr("member");
-          swal({
-            title: "Data sudah terinput dan tersimpan di Sistem Nasdem ?",
-            text: member,
-            icon: "warning",
-            buttons: ["Batal", "Ya"],
-            dangerMode: true,
-            }).then((willDetele)=> {
-            if (willDetele) {
-              $.ajax({
-              url: "{{ url('/user/member/saved') }}" + '/' +id,
-              type: "GET",
-              success: function(data){
-                swal("Berhasil diproses!", {
-                icon: "success",
-                }).then(function(){
-                window.location.reload();
-                });
-              },
-              error : function(){
-                swal({
-                title: 'Gagal diproses!',
-                icon:'error',
-                timer: '1500'
-                });
-              }
-            });
-          }
-          });
-        }
 </script>
     
 @endpush

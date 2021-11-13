@@ -67,7 +67,8 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/dashboard/regency/district/{district_id}','DashboardController@district')->name('adminuser-dashboard-district');
         Route::get('/dashboard/regency/district/village/{district_id}/{village_id}','DashboardController@village')->name('adminuser-dashboard-village');
 
-
+        Route::get('/dtmemberpotentialreferalByMember/{id_user}','Admin\Datatable\MemberDatatableController@dTableMemberPotentialReferalByMember');
+        Route::get('/dtmemberpotentialinputByMember/{id_user}','Admin\Datatable\MemberDatatableController@dTableMemberPotentialInputByMember');
 
     });
 
@@ -158,7 +159,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/crop','MemberController@cropImage');
         Route::get('/member/dtmember','Datatable\MemberDatatableController@dTableMember');
         Route::get('/member/dtmemberpotentialreferal','Datatable\MemberDatatableController@dTableMemberPotentialReferal');
+        Route::get('/member/dtmemberpotentialreferalByMember/{id_user}','Datatable\MemberDatatableController@dTableMemberPotentialReferalByMember');
         Route::get('/member/dtmemberpotentialinput','Datatable\MemberDatatableController@dTableMemberPotentialInput');
+        Route::get('/member/dtmemberpotentialinputByMember/{id_user}','Datatable\MemberDatatableController@dTableMemberPotentialInputByMember');
         Route::post('/cropsave','MemberController@saveCropImage')->name('cropsave');
 
         // get page anggota berdasarkan pereferalnya
