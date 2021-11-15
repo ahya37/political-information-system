@@ -109,7 +109,7 @@
         
          <footer>
              <small>
-                 Dicetak Oleh : {{ auth()->guard('admin')->user()->name }}
+                 {{-- Dicetak Oleh : {{ auth()->guard('admin')->user()->name }} --}}
              </small>
         </footer>
 </body>

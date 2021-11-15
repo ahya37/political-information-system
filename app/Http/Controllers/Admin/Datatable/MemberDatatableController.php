@@ -171,7 +171,7 @@ class MemberDatatableController extends Controller
                     ->make(true);
     }
 
-     public function dTableMemberPotentialReferalByMember($id_user)
+    public function dTableMemberPotentialReferalByMember($id_user)
     {
         $userModel = new User();
         $member = $userModel->getMemberReferalByMember($id_user);
@@ -224,7 +224,7 @@ class MemberDatatableController extends Controller
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
                                     <div class="dropdown-menu">
-                                         <a href='.route('admin-member-by-referal',$item->id).' class="dropdown-item">
+                                         <a href='.route('by-referal',$item->id).' class="dropdown-item">
                                                 Detail
                                         </a> 
                                     </div>
@@ -264,7 +264,7 @@ class MemberDatatableController extends Controller
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
                                     <div class="dropdown-menu">
-                                         <a href='.route('admin-member-by-input',$item->id).' class="dropdown-item">
+                                         <a href='.route('by-input',$item->id).' class="dropdown-item">
                                                 Detail
                                         </a> 
                                     </div>

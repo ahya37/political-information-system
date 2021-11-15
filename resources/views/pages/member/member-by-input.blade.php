@@ -1,5 +1,5 @@
-@extends('layouts.admin')
-@section('title',"Anggota Dari Referal $user->name")
+@extends('layouts.app')
+@section('title',"Anggota Input Dari $user->name")
 @push('addon-style')
          <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
       <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -13,7 +13,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Anggota Referal Dari: {{ $user->name }}</h2>
+                <h2 class="dashboard-title">Anggota Input Dari : {{ $user->name }}</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
@@ -22,35 +22,20 @@
                     @foreach ($districts as $row)
                   <div class="card shadow bg-white rounded mb-3">
                         <div class="card-body">
-                        <div class="col-md-12 col-sm-12">
-                                <div class="row">
-                                  <div  class="col-md-10 col-sm-10">
-                                    <a
-                                        class="nav-link-cs collapsed  "
-                                        href="#district"
-                                        data-toggle="collapse"
-                                        data-target="#district{{ $row->id }}"
-                                        style="color: #000000; text-decoration:none"
-                                        >
-                                        KECAMATAN : {{ $row->district }}</a
-                                        >
-                                  </div>
-                                  <div class="col-md-2 col-sm-2 float-right">
-                                    <div class="dropdown show">
-                                      <a class="btn btn-sm btn-sc-primary text-white border-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Download
-                                      </a>
-                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                          <a href="{{ route('by-referal-downloadpdf', ['user_id' => $user->id,'district_id' => $row->id]) }}" class="dropdown-item">PDF</a>
-                                          <a href="{{ route('by-referal-downloadexcel', ['user_id' => $user->id,'district_id' => $row->id]) }}" class="dropdown-item">Excel</a>
-                                      </div>
-                                  </div>
-                                  </div>
-                                </div>
+                        <div class="col-12">
+                                <a
+                                    class="nav-link-cs collapsed  "
+                                    href="#district"
+                                    data-toggle="collapse"
+                                    data-target="#district{{ $row->id }}"
+                                    style="color: #000000; text-decoration:none"
+                                    >
+                                    KECAMATAN : {{ $row->district }}</a
+                                    >
                                     <div class="collapse" id="district{{ $row->id }}" aria-expanded="false">
                                     @php
                                         $district_id = $row->id;
-                                        $members     = $userModel->getListMemberByDistrictId($district_id, $user->id);
+                                        $members     = $userModel->getListMemberByDistrictIdInput($district_id, $user->id);
                                     @endphp
                                     <div class="table-responsive mt-3">
                                             <table id="" class="data table table-sm table-striped" width="100%">

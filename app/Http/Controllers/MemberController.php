@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Models\District;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -44,5 +45,23 @@ class MemberController extends Controller
                     ->make(true);
         }
         return view('pages.member.member-province', compact('province'));
+    }
+
+    public function memberByReferal($user_id)
+    {
+        $userModel = new User(); 
+        $user = $userModel->select('id','name')->where('id', $user_id)->first();
+        $districtModel = new District();
+        $districts = $districtModel->getDistrictByReferalMember($user_id);
+        return view('pages.member.member-by-refeal', compact('user','districts','userModel'));
+    }
+
+    public function memberByInput($user_id)
+    {
+        $userModel = new User(); 
+        $user = $userModel->select('id','name')->where('id', $user_id)->first();
+        $districtModel = new District();
+        $districts = $districtModel->getDistrictByInputMember($user_id);
+        return view('pages.member.member-by-input', compact('user','districts','userModel'));
     }
 }

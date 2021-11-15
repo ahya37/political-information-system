@@ -19,6 +19,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('/by_referal/downloadexcel/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadExcel')->name('by-referal-downloadexcel');
+Route::get('/by_referal/downloadpdf/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadPDF')->name('by-referal-downloadpdf');
 
 Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
     Route::get('/home', 'HomeController@index')->name('home');
@@ -69,6 +71,10 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 
         Route::get('/dtmemberpotentialreferalByMember/{id_user}','Admin\Datatable\MemberDatatableController@dTableMemberPotentialReferalByMember');
         Route::get('/dtmemberpotentialinputByMember/{id_user}','Admin\Datatable\MemberDatatableController@dTableMemberPotentialInputByMember');
+
+        // get page anggota berdasarkan pereferalnya
+        Route::get('/by_referal/{user_id}','MemberController@memberByReferal')->name('by-referal');
+        Route::get('/by_input/{user_id}','MemberController@memberByInput')->name('by-input');
 
     });
 
@@ -166,8 +172,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // get page anggota berdasarkan pereferalnya
         Route::get('member/by_referal/{user_id}','MemberController@memberByReferal')->name('admin-member-by-referal');
-        Route::get('member/by_referal/downloadexcel/{user_id}/{district_id}','MemberController@memberByReferalDownloadExcel')->name('admin-member-by-referal-downloadexcel');
-        Route::get('member/by_referal/downloadpdf/{user_id}/{district_id}','MemberController@memberByReferalDownloadPDF')->name('admin-member-by-referal-downloadpdf');
+        // Route::get('member/by_referal/downloadexcel/{user_id}/{district_id}','MemberController@memberByReferalDownloadExcel')->name('admin-member-by-referal-downloadexcel');
+        // Route::get('member/by_referal/downloadpdf/{user_id}/{district_id}','MemberController@memberByReferalDownloadPDF')->name('admin-member-by-referal-downloadpdf');
         Route::get('member/by_input/{user_id}','MemberController@memberByInput')->name('admin-member-by-input');
         
         // setting
