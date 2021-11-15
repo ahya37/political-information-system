@@ -398,7 +398,7 @@
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="{{ asset('js/member-potensial2-by-member-login.js') }}"></script>
+<script src="{{ asset('/js/member-potensial2-by-member-login.js') }}"></script>
 <script>
       // $(document).ready(function () {
       //   $("#data").DataTable();

@@ -52,7 +52,7 @@
     <script>
       AOS.init();
     </script>
-    <script src="{{ asset('/script/navbar-scroll.js') }}"></script>
+    <script src="{{ asset('/assets/script/navbar-scroll.js') }}"></script>
     <script>
       $("#menu-toggle").click(function (e) {
         e.preventDefault();
