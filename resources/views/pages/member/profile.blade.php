@@ -4,6 +4,8 @@
       href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link
       href="{{ asset('assets/style/style.css') }}"
       rel="stylesheet"
