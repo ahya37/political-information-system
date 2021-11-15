@@ -198,6 +198,7 @@ $("#referalOfMount", async function () {
             mounthSelected,
             yearSelected
         );
+        updateReferalByMounth(resultReferalByMounth);
     } catch (err) {}
 });
 // After ChangeDate
@@ -210,7 +211,7 @@ $("#referalOfMount").on("changeDate", async function (selected) {
             mounthSelected,
             yearSelected
         );
-        updateReferalByMounthUi(resultReferalByMounth);
+        updateReferalByMounth(resultReferalByMounth);
     } catch (err) {}
 });
 
@@ -227,10 +228,24 @@ function getReferalByMount(mounthSelected, yearSelected) {
     });
 }
 
-function updateReferalByMounthUi(resultReferalByMounth) {
-    return `
-            
-            `;
+function updateReferalByMounth(resultReferalByMounth) {
+    let divHtmlReferalByMounth = "";
+    resultReferalByMounth.forEach((m) => {
+        divHtmlReferalByMounth += showDivHtmlReferalByMounth(m);
+    });
+
+    const divHtmlReferalByMounthContainer = document.getElementById(
+        "showReferalDataReferalByMounth"
+    );
+    divHtmlReferalByMounthContainer.innerHTML = divHtmlReferalByMounth;
+}
+
+function showDivHtmlReferalByMounth(m) {
+    return `<tr>
+            <td>${m.name}</td>
+            <td>${m.referal}</td>
+            <td>${m.referal_undirect === null ? 0 : m.referal_undirect}</td>
+            </tr>`;
 }
 
 // total member

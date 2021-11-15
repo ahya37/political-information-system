@@ -360,10 +360,20 @@
                         </div>
                       </div>
                       <div class="row">
-                          <div class="col-12" id="divMemberPerMonth">
-                            <canvas id="referalOfMountResult">DATA</canvas>
+                          <div class="table-responsive mt-3">
+                            <table id="" class="data table table-sm table-striped" width="100%">
+                              <thead>
+                                <tr>
+                                  <th scope="col">NAMA</th>
+                                  <th scope="col">REFERAL LANGSUNG</th>
+                                  <th scope="col">REFERAL TIDAK LANGSUNG</th>
+                                </tr>
+                                </thead>
+                                <tbody id="showReferalDataReferalByMounth">
+                                </tbody>
+                              </table>
                           </div>
-                        </div>
+                      </div>
                     </div>
                   </div>
                    </div>
