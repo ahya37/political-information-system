@@ -21,6 +21,7 @@ Route::get('/', function () {
 
 Route::get('/by_referal/downloadexcel/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadExcel')->name('by-referal-downloadexcel');
 Route::get('/by_referal/downloadpdf/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadPDF')->name('by-referal-downloadpdf');
+Route::post('/admin/dashboard/referalbymount','Admin\DashboardController@referalByMountAdmin');
 
 Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
     Route::get('/home', 'HomeController@index')->name('home');
@@ -193,6 +194,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/dapil/caleg/create/{dapil_id}','CalegController@create')->name('admin-caleg-create');
         Route::post('/dapil/caleg/save/{dapil_id}','CalegController@save')->name('admin-caleg-save');
         Route::get('/dapil/dapilcalegs/{id}','Datatable\DapilDatatableController@dtDapilCalegs');
+        
     });
 });
 

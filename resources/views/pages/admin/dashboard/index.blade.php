@@ -6,7 +6,7 @@
     />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}"/>
     <link rel="stylesheet" href="{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css}" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="{{ asset('assets/vendor/morris/morris.css') }}">
 @endpush
 @section('title','Dashboard')
@@ -348,17 +348,38 @@
                        </div>
                      </div>
                    </div>
+                   <div class="col-md-12 col-sm-12">
+                     <div class="card mb-2">
+                      <div class="card-body">
+                        <h6 class="text-center">Anggota Referal Terbanyak Perbulan</h6>
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="input-group mb-3 col-md-4 float-right">
+                                <input type="text" id="referalOfMount" name="referalOfMount " class="form-control datepicker">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-12" id="divMemberPerMonth">
+                            <canvas id="referalOfMountResult">DATA</canvas>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                   </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+ </div>
 @endsection
 
 @push('addon-script')
 <script type="text/javascript" src="{{ asset('assets/vendor/moments/moment.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/vendor/daterangepicker/daterangepicker.min.js') }}"></script>
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/daterangepicker/daterangepicker.css') }}" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
 <script src="{{ asset('assets/vendor/raphael/raphael-min.js') }}"></script>
 <script src="{{ asset('assets/vendor/morris/morris.min.js') }}"></script>

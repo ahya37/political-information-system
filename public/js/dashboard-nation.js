@@ -179,6 +179,60 @@ $("#created_at").daterangepicker(
     }
 );
 
+// anggota referal terbanyak perbulan
+$(".datepicker").datepicker({
+    format: "MM",
+    viewMode: "months",
+    minViewMode: "months",
+    autoClose: true,
+});
+
+// Data Default
+$("#referalOfMount", async function () {
+    let date = new Date();
+    const mounthSelected = date.getMonth() + 1;
+    const yearSelected = date.getFullYear();
+
+    try {
+        const resultReferalByMounth = await getReferalByMount(
+            mounthSelected,
+            yearSelected
+        );
+    } catch (err) {}
+});
+// After ChangeDate
+$("#referalOfMount").on("changeDate", async function (selected) {
+    const mounthSelected = selected.date.getMonth() + 1;
+    const yearSelected = selected.date.getFullYear();
+
+    try {
+        const resultReferalByMounth = await getReferalByMount(
+            mounthSelected,
+            yearSelected
+        );
+        updateReferalByMounthUi(resultReferalByMounth);
+    } catch (err) {}
+});
+
+function getReferalByMount(mounthSelected, yearSelected) {
+    return fetch("/api/dashboard/referalbymount", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ mounth: mounthSelected, year: yearSelected }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+
+function updateReferalByMounthUi(resultReferalByMounth) {
+    return `
+            
+            `;
+}
+
 // total member
 $(document).ready(function () {
     // jumlah anggota card dashboard

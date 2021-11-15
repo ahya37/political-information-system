@@ -1201,4 +1201,24 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
+    public function referalByMountAdmin()
+    {
+      $mounth       = request()->mounth;
+      $year         = request()->year;
+      $referalModel = new Referal();
+      $referal      = $referalModel->getReferealByMounthAdmin($mounth, $year);
+      $userModel = new User();
+      $referal_undirect = '';
+      $data = [];
+      foreach ($referal as $val) {
+          $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $data[] = [ 
+             'name' => $val->name,
+             'referal' => $val->referal,
+             'referal_undirect' => $referal_undirect->total
+          ];
+      }
+      return response()->json($data);
+    }
+
 }

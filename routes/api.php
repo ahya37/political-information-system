@@ -113,3 +113,5 @@ Route::post('/target','API\AdminController@generateTarget');
 Route::post('/searchmember','API\MemberController@getSearchMember');
 Route::post('/searchmemberforcaleg','API\MemberController@getSearchMemberForCaleg');
 Route::post('/memberbyid','API\MemberController@getMemberById');
+
+Route::post('/dashboard/referalbymount','API\DashboardController@referalByMountAdmin');

@@ -143,4 +143,13 @@ class Referal extends Model
         return DB::select($sql);
     }
 
+    public function getReferealByMounthAdmin($mounth, $year)
+    {
+        $sql = "SELECT a.id as user_id, a.name, COUNT(b.user_id) as referal from users as a  
+                join users as b on a.id = b.user_id 
+                where MONTH(b.created_at) = $mounth and YEAR(b.created_at) = $year
+                group by a.id, a.name order by COUNT(b.user_id) desc";
+        return DB::select($sql);
+    }
+
 }
