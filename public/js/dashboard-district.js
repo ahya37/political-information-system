@@ -1,7 +1,7 @@
+const districtID = $("#districtID").val();
 $(document).ready(function () {
     let start = moment().startOf("month");
     let end = moment().endOf("month");
-    let districtID = $("#districtID").val();
     $.ajax({
         url:
             "/api/member/district/" +
@@ -610,3 +610,112 @@ $(document).ready(function () {
         div.appendChild(text);
     }
 });
+
+// anggota referal terbanyak perbulan
+$(".datepicker").datepicker({
+    format: "MM",
+    viewMode: "months",
+    minViewMode: "months",
+    autoClose: true,
+});
+
+// Data Default
+$("#referalOfMount", async function () {
+    let date = new Date();
+    const mounthSelected = date.getMonth() + 1;
+    const yearSelected = date.getFullYear();
+    BeforeSend("LoadaReferalByMounth");
+    try {
+        const resultReferalByMounth = await getReferalByMount(
+            mounthSelected,
+            yearSelected
+        );
+        updateReferalByMounth(resultReferalByMounth);
+    } catch (err) {}
+    Complete("LoadaReferalByMounth");
+});
+// After ChangeDate
+$("#referalOfMount").on("changeDate", async function (selected) {
+    const mounthSelected = selected.date.getMonth() + 1;
+    const yearSelected = selected.date.getFullYear();
+    BeforeSend("LoadaReferalByMounth");
+    try {
+        const resultReferalByMounth = await getReferalByMount(
+            mounthSelected,
+            yearSelected
+        );
+        updateReferalByMounth(resultReferalByMounth);
+    } catch (err) {}
+    Complete("LoadaReferalByMounth");
+});
+
+function getReferalByMount(mounthSelected, yearSelected) {
+    return fetch("/api/dashboard/referalbymounthdistrict", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            mounth: mounthSelected,
+            year: yearSelected,
+            district_id: districtID,
+        }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+
+function updateReferalByMounth(resultReferalByMounth) {
+    let divHtmlReferalByMounth = "";
+    resultReferalByMounth.forEach((m) => {
+        divHtmlReferalByMounth += showDivHtmlReferalByMounth(m);
+    });
+
+    const divHtmlReferalByMounthContainer = document.getElementById(
+        "showReferalDataReferalByMounth"
+    );
+    divHtmlReferalByMounthContainer.innerHTML = divHtmlReferalByMounth;
+}
+
+function showDivHtmlReferalByMounth(m) {
+    return `<tr>
+            <td class="text-center">${m.no}</td>
+            <td>
+                <img  class="rounded" width="40" src="/storage/${m.photo}">
+            </td>
+            <td>${m.name}</td>
+            <td class="text-center">
+            <div class="badge badge-pill badge-success">
+                ${m.referal}
+            </div>
+            </td>
+            <td class="text-center">
+             <div class="badge badge-pill badge-warning">
+             ${m.referal_undirect === null ? 0 : m.referal_undirect}
+             </div>
+            </td>
+             <td>
+                ${m.village},<br> ${m.district}, <br> ${m.regency}
+            </td>
+             <td>
+                <div class="badge badge-pill badge-primary">
+                    <i class="fa fa-phone"></i>
+                </div>
+                ${m.phone}
+                <br/>
+               <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+               </div>
+                 ${m.whatsapp}
+            </td>
+            </tr>`;
+}
+
+// funsgsi efect loader
+function BeforeSend(idLoader) {
+    $("#" + idLoader + "").removeClass("d-none");
+}
+
+function Complete(idLoader) {
+    $("#" + idLoader + "").addClass("d-none");
+}

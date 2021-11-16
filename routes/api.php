@@ -118,3 +118,4 @@ Route::post('/memberbyid','API\MemberController@getMemberById');
 Route::post('/dashboard/referalbymount','API\DashboardController@referalByMountAdmin');
 Route::post('/dashboard/referalbymonthprovince','API\DashboardController@referalByMountAdminProvince');
 Route::post('/dashboard/referalbymounthregency','API\DashboardController@referalByMountAdminRegency');
+Route::post('/dashboard/referalbymounthdistrict','API\DashboardController@referalByMountAdminDistrict');
