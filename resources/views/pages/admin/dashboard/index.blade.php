@@ -365,7 +365,7 @@
                           <div class="table-responsive mt-3">
                             <table id="" class="data table table-sm table-striped" width="100%">
                               <thead>
-                                <tr>
+                               
                                   <th scope="col"></th>
                                   <th scope="col">NAMA</th>
                                   <th scope="col">REFERAL LANGSUNG</th>
@@ -373,11 +373,12 @@
                                   <th scope="col">ALAMAT</th>
                                   <th scope="col">KONTAK</th>
                                 </tr>
+                                 <tr>
+                                    <th colspan="6" id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay"></th>
+                                  </tr>
+                                <tr>
                                 </thead>
                                 <tbody id="showReferalDataReferalByMounth">
-                                  <tr>
-                                    <td colspan="6" id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay"></td>
-                                  </tr>
                                 </tbody>
                               </table>
                           </div>
