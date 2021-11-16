@@ -736,7 +736,11 @@ $("#achievment").DataTable({
                     data[i].name +
                     "</td>" +
                     "<td class='text-right'>" +
-                    decimalFormat(data[i].target_member) +
+                    decimalFormat(
+                        data[i].target_member === null
+                            ? 0
+                            : data[i].target_member
+                    ) +
                     "</td>" +
                     "<td class='text-right'>" +
                     data[i].total_district +
