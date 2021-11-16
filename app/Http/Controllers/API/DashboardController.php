@@ -1213,8 +1213,14 @@ class DashboardController extends Controller
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
           $data[] = [ 
+             'photo' => $val->photo,
              'name' => $val->name,
-             'referal' => $val->referal,
+             'village' => $val->village,
+             'district' => $val->district,
+             'regency' => $val->regency,
+             'referal' => $val->total,
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
              'referal_undirect' => $referal_undirect->total
           ];
       }

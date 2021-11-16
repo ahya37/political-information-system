@@ -192,7 +192,7 @@ $("#referalOfMount", async function () {
     let date = new Date();
     const mounthSelected = date.getMonth() + 1;
     const yearSelected = date.getFullYear();
-
+    BeforeSend("LoadaReferalByMounth");
     try {
         const resultReferalByMounth = await getReferalByMount(
             mounthSelected,
@@ -200,12 +200,13 @@ $("#referalOfMount", async function () {
         );
         updateReferalByMounth(resultReferalByMounth);
     } catch (err) {}
+    Complete("LoadaReferalByMounth");
 });
 // After ChangeDate
 $("#referalOfMount").on("changeDate", async function (selected) {
     const mounthSelected = selected.date.getMonth() + 1;
     const yearSelected = selected.date.getFullYear();
-
+    BeforeSend("LoadaReferalByMounth");
     try {
         const resultReferalByMounth = await getReferalByMount(
             mounthSelected,
@@ -213,6 +214,7 @@ $("#referalOfMount").on("changeDate", async function (selected) {
         );
         updateReferalByMounth(resultReferalByMounth);
     } catch (err) {}
+    Complete("LoadaReferalByMounth");
 });
 
 function getReferalByMount(mounthSelected, yearSelected) {
@@ -242,9 +244,33 @@ function updateReferalByMounth(resultReferalByMounth) {
 
 function showDivHtmlReferalByMounth(m) {
     return `<tr>
+            <td>
+                <img  class="rounded" width="40" src="/storage/${m.photo}">
+            </td>
             <td>${m.name}</td>
-            <td>${m.referal}</td>
-            <td>${m.referal_undirect === null ? 0 : m.referal_undirect}</td>
+            <td class="text-center">
+            <div class="badge badge-pill badge-success">
+                ${m.referal}
+            </div>
+            </td>
+            <td class="text-center">
+             <div class="badge badge-pill badge-warning">
+             ${m.referal_undirect === null ? 0 : m.referal_undirect}
+             </div>
+            </td>
+             <td>
+                ${m.village},<br> ${m.district}, <br> ${m.regency}
+            </td>
+             <td>
+                <div class="badge badge-pill badge-primary">
+                    <i class="fa fa-phone"></i>
+                </div>
+                ${m.phone}
+                <br/>
+               <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+               </div>
+                 ${m.whatsapp}
+            </td>
             </tr>`;
 }
 
