@@ -363,7 +363,7 @@
                       </div>
                       <div class="row">
                           <div class="table-responsive mt-3">
-                            <table id="" class="data table table-sm table-striped" width="100%">
+                            <table id="dtshowReferalDataReferalByMounth" class="data table table-sm table-striped" width="100%">
                               <thead>
                                
                                   <th scope="col">NO</th>
