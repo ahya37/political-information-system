@@ -153,7 +153,7 @@ class Referal extends Model
                 join regencies as e on d.regency_id = e.id
                 where MONTH(b.created_at) = $mounth and YEAR(b.created_at) = $year
                 group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
-                order by COUNT(a.user_id) desc";
+                order by COUNT(a.user_id) desc limit 10";
         return DB::select($sql);
     }
 
