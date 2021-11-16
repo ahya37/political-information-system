@@ -337,9 +337,9 @@ class DashboardController extends Controller
         $member_registered  = $userModel->getMemberRegisteredAll();
         $chart_member_target = [];
         foreach ($member_registered as $val) {
-            $chart_member_target['label'][] = $val->name;
-            $chart_member_target['target'][] =  $val->target_member;
-            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+            $chart_member_target['label'][] = $val->name ?? 0;
+            $chart_member_target['target'][] =  $val->target_member ?? 0;
+            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100) ?? 0;
         }
         $data = [
             'label' => $chart_member_target['label'],
