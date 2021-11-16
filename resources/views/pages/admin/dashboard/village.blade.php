@@ -6,6 +6,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 @endpush
 @section('title','Dashboard - Kab/Kot-Kecamatan')
@@ -230,6 +232,45 @@
                       </div>
                     </div>
                   </div>
+
+                  <div class="col-md-12 col-sm-12">
+                     <div class="card mb-2">
+                      <div class="card-body">
+                        <h6 class="text-center">Anggota Referal Terbanyak Perbulan</h6>
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="input-group mb-3 col-md-4 float-right">
+                                <input type="text" id="referalOfMount" name="referalOfMount " class="form-control datepicker">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                          <div class="table-responsive mt-3">
+                            <table id="dtshowReferalDataReferalByMounth" class="data table table-sm table-striped" width="100%">
+                              <thead>
+                               
+                                  <th scope="col">NO</th>
+                                  <th scope="col"></th>
+                                  <th scope="col">NAMA</th>
+                                  <th scope="col">REFERAL LANGSUNG</th>
+                                  <th scope="col">REFERAL TIDAK LANGSUNG</th>
+                                  <th scope="col">ALAMAT</th>
+                                  <th scope="col">KONTAK</th>
+                                </tr>
+                                 <tr>
+                                    <th colspan="7" id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay"></th>
+                                  </tr>
+                                <tr>
+                                </thead>
+                                <tbody id="showReferalDataReferalByMounth">
+                                </tbody>
+                              </table>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                   </div>
               </div>
             </div>
               
@@ -240,6 +281,8 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
