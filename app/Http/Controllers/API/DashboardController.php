@@ -1229,4 +1229,33 @@ class DashboardController extends Controller
       return response()->json($data);
     }
 
+    public function referalByMountAdminProvince()
+    {
+      $mounth       = request()->mounth;
+      $year         = request()->year;
+      $province_id  = request()->province_id;
+      $referalModel = new Referal();
+      $referal      = $referalModel->getReferealByMounthAdminProvince($mounth, $year, $province_id);
+      $userModel = new User();
+      $referal_undirect = '';
+      $data = [];
+      $no = 1;
+      foreach ($referal as $val) {
+          $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $val->village,
+             'district' => $val->district,
+             'regency' => $val->regency,
+             'referal' => $val->total,
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+             'referal_undirect' => $referal_undirect->total
+          ];
+      }
+      return response()->json($data);
+    }
+
 }

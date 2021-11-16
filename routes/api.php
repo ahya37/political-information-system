@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,3 +116,4 @@ Route::post('/searchmemberforcaleg','API\MemberController@getSearchMemberForCale
 Route::post('/memberbyid','API\MemberController@getMemberById');
 
 Route::post('/dashboard/referalbymount','API\DashboardController@referalByMountAdmin');
+Route::post('/dashboard/referalbymonthprovince','API\DashboardController@referalByMountAdminProvince');

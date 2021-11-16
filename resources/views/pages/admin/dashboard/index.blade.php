@@ -350,6 +350,7 @@
                        </div>
                      </div>
                    </div>
+
                    <div class="col-md-12 col-sm-12">
                      <div class="card mb-2">
                       <div class="card-body">
@@ -361,7 +362,7 @@
                           </div>
                         </div>
                       </div>
-                      
+
                       <div class="row">
                           <div class="table-responsive mt-3">
                             <table id="dtshowReferalDataReferalByMounth" class="data table table-sm table-striped" width="100%">
@@ -388,6 +389,7 @@
                     </div>
                   </div>
                    </div>
+                   
                   </div>
                 </div>
               </div>

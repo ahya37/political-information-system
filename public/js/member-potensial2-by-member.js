@@ -1,9 +1,7 @@
 // get id from url
-const userIdByLoginMember = $("#user_id").val();
 
 const query = document.URL;
 const userId = query.substring(query.lastIndexOf("/") + 1);
-const userID = userId === "home" ? userIdByLoginMember : userId;
 $(function () {
     var table = $("#referalData").DataTable({
         processing: true,
