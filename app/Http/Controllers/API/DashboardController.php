@@ -338,8 +338,8 @@ class DashboardController extends Controller
         $chart_member_target = [];
         foreach ($member_registered as $val) {
             $chart_member_target['label'][] = $val->name;
-            $chart_member_target['target'][] =  $val->target_member ?? 0;
-            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100) ?? 0;
+            $chart_member_target['target'][] =  $val->target_member;
+            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
         }
         $data = [
             'label' => $chart_member_target['label'],
@@ -358,8 +358,8 @@ class DashboardController extends Controller
         $chart_member_target = [];
         foreach ($member_registered as $val) {
             $chart_member_target['label'][] = $val->name;
-            $chart_member_target['target'][] = $val->target_member ?? 0;
-            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100) ?? 0;
+            $chart_member_target['target'][] = $val->target_member;
+            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
         }
         $data = [
             'label' => $chart_member_target['label'],
@@ -1214,7 +1214,7 @@ class DashboardController extends Controller
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
           $data[] = [ 
-             'no' => $no ++,
+              'no' => $no ++,
              'photo' => $val->photo,
              'name' => $val->name,
              'village' => $val->village,
