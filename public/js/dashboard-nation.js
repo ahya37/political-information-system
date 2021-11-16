@@ -244,6 +244,7 @@ function updateReferalByMounth(resultReferalByMounth) {
 
 function showDivHtmlReferalByMounth(m) {
     return `<tr>
+            <td>${m.no}</td>
             <td>
                 <img  class="rounded" width="40" src="/storage/${m.photo}">
             </td>

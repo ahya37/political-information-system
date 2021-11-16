@@ -1210,9 +1210,11 @@ class DashboardController extends Controller
       $userModel = new User();
       $referal_undirect = '';
       $data = [];
+      $no = 1;
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
           $data[] = [ 
+             'no' => $no ++,
              'photo' => $val->photo,
              'name' => $val->name,
              'village' => $val->village,
