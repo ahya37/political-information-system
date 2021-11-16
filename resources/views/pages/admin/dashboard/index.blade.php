@@ -375,7 +375,7 @@
                                   <th scope="col">KONTAK</th>
                                 </tr>
                                  <tr>
-                                    <th colspan="6" id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay"></th>
+                                    <th colspan="7" id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay"></th>
                                   </tr>
                                 <tr>
                                 </thead>
