@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}"/>
     <link rel="stylesheet" href="{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css}" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="{{ asset('assets/vendor/morris/morris.css') }}">
 @endpush
@@ -375,13 +375,10 @@
                                 </tr>
                                 </thead>
                                 <tbody id="showReferalDataReferalByMounth">
+                                  <tr>
+                                    <td colspan="6" id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay"></td>
+                                  </tr>
                                 </tbody>
-                                 <tfoot>
-                                     <tr>
-                                       <td colspan="5" id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay">
-                                       </td>
-                                      </tr>
-                                   </tfoot>
                               </table>
                           </div>
                       </div>
