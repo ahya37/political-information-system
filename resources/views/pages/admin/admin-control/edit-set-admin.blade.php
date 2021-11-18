@@ -30,7 +30,7 @@
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
                                                 <label>
-                                                    Mengatur level admin untuk hak akses pada sistem
+                                                    Mengatur level admin untuk hak akses Dashboard pada sistem
                                                 </label>
                                                 <input type="hidden" name="type" value="update">
                                                 <select name="level" required class="form-control" required>

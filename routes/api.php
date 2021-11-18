@@ -120,3 +120,5 @@ Route::post('/dashboard/referalbymonthprovince','API\DashboardController@referal
 Route::post('/dashboard/referalbymounthregency','API\DashboardController@referalByMountAdminRegency');
 Route::post('/dashboard/referalbymounthdistrict','API\DashboardController@referalByMountAdminDistrict');
 Route::post('/dashboard/referalbymounthvillage','API\DashboardController@referalByMountAdminVillage');
+
+Route::get('/dashboard/adminregional','TestController@testAdminRegionalVillage');

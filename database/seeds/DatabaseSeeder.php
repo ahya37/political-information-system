@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
         // $this->call(JobSeeder::class);
         // $this->call(AdminSeeder::class);
         // $this->call(MenuSeeder::class);
-        $this->call(UserMenuSeeder::class);
+        // $this->call(UserMenuSeeder::class);
+        $this->call(AdminRegionalVillage::class);
 
     }
 }

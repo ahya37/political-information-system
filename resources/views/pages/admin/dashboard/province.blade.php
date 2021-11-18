@@ -346,7 +346,7 @@
                         <div class="row">
                           <div class="col-12">
                             <div class="input-group mb-3 col-md-4 float-right">
-                                <input type="text" id="referalOfMount" name="referalOfMount " class="form-control datepicker">
+                                <input type="text" id="referalOfMount" name="referalOfMount" value="{{ date('M') }}" class="form-control datepicker">
                           </div>
                         </div>
                       </div>
