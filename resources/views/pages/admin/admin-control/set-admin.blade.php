@@ -3,8 +3,8 @@
 @push('addon-style')
 <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
-{{-- <link href="{{ asset('assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet"> --}}
-{{-- <link href="{{ asset('assets/vendor/select2/css/select2.min.css')}}" rel="stylesheet"> --}}
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 @endpush
 @section('content')
 <!-- Section Content -->
@@ -114,7 +114,5 @@
 @endsection
 
 @push('addon-script')
-{{-- <script src="{{ asset('assets/vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script> --}}
-{{-- <script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script> --}}
 <script src="{{ asset('js/admin-control.js') }}"></script>
 @endpush

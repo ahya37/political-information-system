@@ -40,11 +40,14 @@ function updateMemberUiProvince(provinces) {
 }
 
 function showDivHtml(provinces) {
-    return `            
+    return `
             <a    onclick='selectData(${provinces.id})' class="col-12">
-                    ${provinces.name}
-            </a>
-            <br>
+                    <div class="card mt-2">
+                    <div class="card-body">
+                    <i class="fa fa-check"></i> ${provinces.name}
+                    </div>
+                    </div>            
+                    </a>
             `;
 }
 
@@ -111,11 +114,14 @@ function updateMemberUiRegency(regencies) {
 }
 
 function showDivHtmlRegency(regencies) {
-    return `            
-            <a  onclick='selectDataRegency(${regencies.id})' class="col-12">
-                    ${regencies.view}
-            </a>
-            <br>
+    return `   
+                <a    onclick='selectDataRegency(${regencies.id})' class="col-12">
+                    <div class="card mt-2">
+                    <div class="card-body">
+                    <i class="fa fa-check"></i> ${regencies.view}
+                    </div>
+                    </div>            
+                    </a>
             `;
 }
 
