@@ -156,10 +156,13 @@ searchDistrict.addEventListener("keyup", async function () {
     if (searchDistrictValue === null || searchDistrictValue === "") {
         $("#showDataDistrict").empty();
     } else {
+        BeforeSend("LoadDistrict");
+
         try {
             const district = await getDistrict(searchDistrictValue);
             updateMemberUiDistrict(district);
         } catch (err) {}
+        Complete("LoadDistrict");
     }
 });
 
@@ -200,6 +203,8 @@ function showDivHtmlDistrict(m) {
 async function selectDataDistrict(id) {
     let formDistrict = $("#formDistrict");
     let formDistrictResult = $("#formDistrictResult");
+    BeforeSend("LoadDistrict");
+
     try {
         const district = await getDistrictById(id);
         formDistrict.val(
@@ -208,6 +213,7 @@ async function selectDataDistrict(id) {
         formDistrictResult.val(district.id);
         $("#showDataDistrict").empty();
     } catch (err) {}
+    Complete("LoadDistrict");
 }
 function getDistrictById(id) {
     return fetch(`/api/searchdistrictById`, {
@@ -229,10 +235,12 @@ searchVIllage.addEventListener("keyup", async function () {
     if (searchVIllageValue === null || searchVIllageValue === "") {
         $("#showDataVillage").empty();
     } else {
+        BeforeSend("LoadVillage");
         try {
             const village = await getVillage(searchVIllageValue);
             updateMemberUiVillage(village);
         } catch (err) {}
+        Complete("LoadVillage");
     }
 });
 function getVillage(searchVIllageValue) {
@@ -272,6 +280,7 @@ function showDivHtmlVillage(m) {
 async function selectDataVillage(id) {
     let formVillage = $("#formVillage");
     let formVillageResult = $("#formVillageResult");
+    BeforeSend("LoadVillage");
     try {
         const village = await getVillageById(id);
         formVillage.val(
@@ -280,6 +289,7 @@ async function selectDataVillage(id) {
         formVillageResult.val(village.id);
         $("#showDataVillage").empty();
     } catch (err) {}
+    Complete("LoadVillage");
 }
 function getVillageById(id) {
     return fetch(`/api/searchVillageById`, {

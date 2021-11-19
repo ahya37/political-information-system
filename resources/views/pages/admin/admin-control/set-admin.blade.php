@@ -89,12 +89,16 @@
                                       <div class="form-group">
                                         <input type="text" name="type" id="formDistrict" placeholder="Kecamatan" class="form-control">
                                         <input type="hidden" name="districtId"  id="formDistrictResult" required class="form-control form-control-sm" />
-                                         <div id="showDataDistrict"></div>
+                                         <div id="showDataDistrict">
+                                            <span id="LoadDistrict" class="d-none lds-dual-ring hidden overlay"></span>
+                                         </div>
                                       </div>
                                       <div class="form-group">
                                           <input type="text" name="type" id="formVillage" placeholder="Desa" class="form-control">
                                           <input type="hidden" name="villageId"  id="formVillageResult" required class="form-control form-control-sm" />
-                                         <div id="showDataVillage"></div>
+                                         <div id="showDataVillage">
+                                            <span id="LoadVillage" class="d-none lds-dual-ring hidden overlay"></span>
+                                         </div>
                                       </div>
                                       <div class="form-group">
                                           <button
