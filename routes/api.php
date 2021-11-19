@@ -20,8 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('searchprovinces', 'API\LocationController@getSearchProvince');
 Route::post('searchregencies', 'API\LocationController@getSearchRegency');
+Route::post('searchdistricts', 'API\LocationController@getSearchDistrict');
+Route::post('searchvillage', 'API\LocationController@getSearchVillage');
 Route::post('searchprovincesById', 'API\LocationController@getSearchProvinceById');
 Route::post('searchregencyById', 'API\LocationController@getSearchRegencyById');
+Route::post('searchdistrictById', 'API\LocationController@getSearchDistrictById');
+Route::post('searchVillageById', 'API\LocationController@getSearchVillageById');
 
 
 Route::get('jobs','Auth\RegisterController@jobs')->name('api-jobs');
