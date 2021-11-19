@@ -1,10 +1,10 @@
 const minlength = 3;
 const search = document.getElementById("searchMember");
-search.addEventListener("keypress", function (event) {
-    if (event.which == "13") {
-        event.preventDefault();
-    }
-});
+// search.addEventListener("keypress", function (event) {
+//     if (event.which == "13") {
+//         event.preventDefault();
+//     }
+// });
 search.addEventListener("keyup", async function () {
     BeforeSend("Loadachievment");
     try {

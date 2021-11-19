@@ -483,6 +483,7 @@ class UserController extends Controller
         $user_id  = Auth::user()->id;
         $member   = User::with(['village.district.regency','reveral','create_by'])
                     ->where('cby', $user_id)
+                    ->whereNotIn('id',[$user_id])
                     ->orderBy('created_at','DESC')
                     ->get();
 

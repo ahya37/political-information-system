@@ -1,8 +1,10 @@
 @extends('layouts.admin')
 @section('title','Seting Admin')
 @push('addon-style')
-    <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
+{{-- <link href="{{ asset('assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet"> --}}
+{{-- <link href="{{ asset('assets/vendor/select2/css/select2.min.css')}}" rel="stylesheet"> --}}
 @endpush
 @section('content')
 <!-- Section Content -->
@@ -69,97 +71,37 @@
                                           Mengatur pemetaan admin setiap daerah
                                       </label>
                                   </div>
-                                <div class="col-md-12 col-sm-12">
-                                        {{-- <div class="row mb-2">
-                                          <div class="col-md-3 col-sm-3">
-                                                <input type="checkbox" name="type" id="provinceCheck" onchange="valueChangeAdminArea()"> Provinsi
-                                            </div>
-                                          <div class="col-md-3 col-sm-3">
-                                                <input type="checkbox" name="type" id="regency" > Kabupaten / Kota
-                                            </div>
-                                          <div class="col-md-3 col-sm-3">
-                                                <input type="checkbox" name="type" id="district" > Kecamatan
-                                            </div>
-                                          <div class="col-md-3 col-sm-3">
-                                                <input type="checkbox" name="type" id="village" > Desa
-                                            </div>
-                                        </div> --}}
-                                        <form>
-                                         <div class="row">
-                                           <div class="col-md-8 col-sm-12">
-                                               <div class="form-group">
-                                                 <input type="text" name="type" id="formProvince" placeholder="Provinsi" class="form-control">
-                                               </div>
-                                             </div>
-                                              <div class="col-md-4 col-sm-6">
-                                                <div class="form-group">
-                                                  <button
-                                                    type="submit"
-                                                    class="btn btn-sc-primary text-white  btn-block w-00"
-                                                    >
-                                                    Simpan
-                                                </div>
-                                             </div>
-                                            </div>
-                                          </form>
-                                         
-                                         <form>
-                                           <div class="row mt-2">
-                                             <div class="col-md-8 col-sm-6">
-                                                  <div class="form-group">
-                                                    <input type="text" name="type" id="formRegency" placeholder="Kabupaten" class="form-control">
-                                                  </div>
-                                                </div>
-                                                 <div class="col-md-4 col-sm-6">
-                                                   <div class="form-group">
-                                                     <button
-                                                       type="submit"
-                                                       class="btn btn-sc-primary text-white  btn-block w-00"
-                                                       >
-                                                       Simpan
-                                                   </div>
-                                                </div>
-                                              </div>
-                                         </form>
-
-                                         <form>
-                                           <div class="row mt-2">
-                                                <div class="col-md-8 col-sm-6">
-                                                  <div class="form-group">
-                                                    <input type="text" name="type" id="formDistrict" placeholder="Kecamatan" class="form-control">
-                                                  </div>
-                                                </div>
-                                                 <div class="col-md-4 col-sm-6">
-                                                   <div class="form-group">
-                                                     <button
-                                                       type="submit"
-                                                       class="btn btn-sc-primary text-white  btn-block w-00"
-                                                       >
-                                                       Simpan
-                                                   </div>
-                                                </div>
-                                              </div>
-                                         </form>
-
-                                         <form>
-                                           <div class="row mt-2">
-                                                <div class="col-md-8 col-sm-6">
-                                                  <div class="form-group">
-                                                    <input type="text" name="type" id="formVillage" placeholder="Desa" class="form-control">
-                                                  </div>
-                                                </div>
-                                                <div class="col-md-4 col-sm-6">
-                                                  <div class="form"></div>
-                                                    <button
-                                                      type="submit"
-                                                      class="btn btn-sc-primary text-white  btn-block w-00"
-                                                      >
-                                                      Simpan
-                                                </div>
-                                            </div>
-                                         </form>
-
-                                    </div>
+                                  <div class="col-md-12 col-sm-12">
+                                    <form>
+                                      <div class="form-group">
+                                         <input type="text" name="type" id="formProvince" placeholder="Provinsi" class="form-control">
+                                        <input type="hidden" name="id"  id="formProvinceResult" required class="form-control form-control-sm" />
+                                        <div id="LoadProvince" class="d-none lds-dual-ring hidden overlay">
+                                        </div>
+                                         <div id="showDataProvince">
+                                         </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <input type="text" name="type" id="formRegency" placeholder="Kabupaten" class="form-control">
+                                        <input type="hidden" name="id"  id="formRegencyResult" required class="form-control form-control-sm" />
+                                         <div id="showDataRegency"></div>
+                                      </div>
+                                      <div class="form-group">
+                                        <input type="text" name="type" id="formDistrict" placeholder="Kecamatan" class="form-control">
+                                      </div>
+                                      <div class="form-group">
+                                          <input type="text" name="type" id="formVillage" placeholder="Desa" class="form-control">
+                                      </div>
+                                      <div class="form-group">
+                                          <button
+                                            type="submit"
+                                            class="btn btn-sc-primary text-white  btn-block w-00 mt-4"
+                                            >
+                                            Simpan
+                                        </button>
+                                      </div>
+                                    </form>
+                                  </div>
                                 </div>
                             </div>
                         </div>
@@ -172,10 +114,7 @@
 @endsection
 
 @push('addon-script')
-<script src="https://unpkg.com/vue-toasted"></script>
-<script type="javascript" src="{{ asset('js/admin-control.js') }}"></script>
-<script>
-    AOS.init();
-</script>
-
+{{-- <script src="{{ asset('assets/vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script> --}}
+<script src="{{ asset('js/admin-control.js') }}"></script>
 @endpush

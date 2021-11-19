@@ -18,6 +18,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('searchprovinces', 'API\LocationController@getSearchProvince');
+Route::post('searchregencies', 'API\LocationController@getSearchRegency');
+Route::post('searchprovincesById', 'API\LocationController@getSearchProvinceById');
+Route::post('searchregencyById', 'API\LocationController@getSearchRegencyById');
+
+
 Route::get('jobs','Auth\RegisterController@jobs')->name('api-jobs');
 Route::get('educations','Auth\RegisterController@educations')->name('api-educations');
 Route::get('register/check', 'Auth\RegisterController@check')->name('api-register-check');
