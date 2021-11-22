@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\User;
 use App\Admin;
 use App\UserMenu;
-use App\AdminDistrict;
 use Illuminate\Http\Request;
+use App\AdminRegionalDistrict;
+use App\AdminRegionalVillage;
 use App\Providers\GlobalProvider;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminController extends Controller
@@ -153,4 +155,211 @@ class AdminController extends Controller
         $user    = User::select('id','name','level')->where('id', $user_id)->first();
         return view('pages.admin.admin-control.edit-set-admin', compact('user'));
     }
+
+    public function saveMappingAdminArea(Request $request, $user_id)
+    {
+        $district_id = $request->districtId;
+        $village_id  = $request->villageId;
+        $adminDistrictSave = false;
+        $adminVillageSave = false;
+
+        $adminRegionalDistrictModel = new  AdminRegionalDistrict();
+        $adminDistrict = $adminRegionalDistrictModel
+                        ->where('district_id', $district_id)
+                        ->where('user_id', $user_id)
+                        ->count();
+
+        $adminRegionalVillageModel = new AdminRegionalVillage();
+
+        if ($district_id != null) { // cek jika district_id terisi / tidak kosong
+            if ($adminDistrict < 1 ) { // cek apakah district_id sudah terdata pada admin area itu
+             $adminDistrictSave =  $adminRegionalDistrictModel->create([
+                    'district_id' => $district_id,
+                    'user_id' => $user_id
+                ]);
+            }
+        }
+
+        $adminVillage = $adminRegionalVillageModel
+                        ->where('village_id', $village_id)
+                        ->where('user_id', $user_id)
+                        ->count();
+
+        if ($village_id != null) {
+            if ($adminVillage < 1) {
+               $adminVillageSave =  $adminRegionalVillageModel->create([
+                    'village_id' => $village_id,
+                    'user_id' => $user_id
+                ]);
+            }
+        }
+
+        if ($adminVillageSave == true ||  $adminDistrictSave == true) {
+            return redirect()->back()->with(['success' => 'Berhasil Membuat Admin']);
+        }else{
+            return redirect()->back()->with(['warning' => 'Gagal Membuat Admin, Anda sudah terdaftar di daerah tersebut']);
+            
+        }
+    }
+
+    public function createMappingAdminArea()
+    {
+        return view('pages.member.set-admin');
+    }
+
+    public function dtAdminAreaDistrcit()
+    {
+        $user_id = Auth::user()->id;
+        $adminRegionalDistrict = new AdminRegionalDistrict();
+        $adminDistrict = $adminRegionalDistrict->getAdminRegionalDistrictByMember($user_id);
+        // admin district
+        if (request()->ajax()) 
+        {
+            return DataTables::of($adminDistrict)
+                        ->addColumn('status', function($item){
+                            if ($item->status == 0) {
+                                return '<span class="badge badge-danger">Menunggu Persetujuan</span>';
+                            }else{
+                                return '<span class="badge badge-success">Aktif</span>';
+                            }
+                        })
+                        ->rawColumns(['status'])
+                        ->make(true);
+        }
+    }
+
+    public function dtAdminAreaVillage()
+    {
+        $user_id = Auth::user()->id;
+        $adminRegionalVillageModel = new AdminRegionalVillage();
+        $adminVillage = $adminRegionalVillageModel->getAdminRegionalVillageByMember($user_id);
+
+        // admin village
+        if (request()->ajax()) 
+        {
+            return DataTables::of($adminVillage)
+                        ->addColumn('status', function($item){
+                            if ($item->status == 0) {
+                                return '<span class="badge badge-danger">Menunggu Persetujuan</span>';
+                            }else{
+                                return '<span class="badge badge-success">Aktif</span>';
+                            }
+                        })
+                        ->rawColumns(['status'])
+                        ->make(true);
+        }
+
+    }
+
+    public function showListAdminSubmission()
+    {
+        return view('pages.admin.admin-control.submission');
+    }
+
+    public function dtAdminAreaDistrcitAdmin()
+    {
+        $adminRegionalDistrict = new AdminRegionalDistrict();
+        $adminDistrict = $adminRegionalDistrict->getAdminRegionalDistrict();
+        // admin district
+        if (request()->ajax()) 
+        {
+            return DataTables::of($adminDistrict)
+                        ->addColumn('photo', function($item){
+                            return '
+                                    <a href="'.route('admin-profile-member', $item->user_id).'">
+                                        <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                                    </a>
+                                    ';
+                        })
+                        ->addColumn('status', function($item){
+                            if ($item->status == 0) {
+                                return '<span class="badge badge-danger">Menunggu Persetujuan</span>';
+                            }else{
+                                return '<span class="badge badge-success">Aktif</span>';
+                            }
+                        })
+                        ->addColumn('action', function($item){
+                            return '<div class="btn-group">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
+                                            <div class="dropdown-menu">
+                                                <button data-toggle="tooltip"  data-id="'.$item->ardId.'" data-name="'.$item->member.'" district="'.$item->district.'" userId="'.$item->user_id.'" data-original-title="accDistrict" class="ml-1 btn btn-sm btn-success accAdminDistrict">ACC</button>
+                                            </div>
+                                        </div>
+                                    </div>';
+                        })
+                        ->rawColumns(['status','action','photo'])
+                        ->make(true);
+        }
+    }
+
+    public function dtAdminAreaVillageAdmin()
+    {
+        $adminRegionalVillageModel = new AdminRegionalVillage();
+        $adminVillage = $adminRegionalVillageModel->getAdminRegionalVillage();
+
+        // admin village
+        if (request()->ajax()) 
+        {
+            return DataTables::of($adminVillage)
+                        ->addColumn('status', function($item){
+                            if ($item->status == 0) {
+                                return '<span class="badge badge-danger">Menunggu Persetujuan</span>';
+                            }else{
+                                return '<span class="badge badge-success">Aktif</span>';
+                            }
+                        })
+                        ->rawColumns(['status'])
+                        ->make(true);
+        }
+
+    }
+
+    public function  accAdminDistrict()
+    {
+        $ardId = request()->ardId;
+        $token = request()->_token;
+        $user_id = request()->userId;
+
+        if ($token != null) {
+            $adminDistrict = AdminRegionalDistrict::where('id', $ardId)->first();
+            $adminDistrict->update(['status' => 1]);
+
+            $user = User::where('id', $user_id)->first();
+            // jika user tersebut level dan user_menunya belum ter setting
+            if ($user->level == 0) {
+                // set level admin untuk hak akses infomasi dashboard tingkat korcam / kordes
+                $user->update(['level' => 1]);
+                // tambahkan user_id tersebut ke tbl user_menu untuk mendapatkan akses dashboard
+                UserMenu::create([
+                    'user_id' => $user_id,
+                    'menu_id' => 1
+                    ]);
+            }                       
+            
+            //  Return response
+            if ($adminDistrict) {
+                $success = true;
+                $message = "Berhasil ACC!";
+
+            }else{
+                $success = false;
+                $message = "Gagal ACC!";
+            }
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+            ]);
+           
+        }else{
+             $success = false;
+             $message = "Gagal ACC!";
+            
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+            ]);
+        }
+    }
+
 }

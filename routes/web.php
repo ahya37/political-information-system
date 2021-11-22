@@ -77,14 +77,24 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/by_referal/{user_id}','MemberController@memberByReferal')->name('by-referal');
         Route::get('/by_input/{user_id}','MemberController@memberByInput')->name('by-input');
 
+        // Admin submission
+        Route::get('/adminsubmission','Admin\AdminController@createMappingAdminArea')->name('member-adminsubmission');
+        Route::get('/dtadminsubmissiondistrict','Admin\AdminController@dtAdminAreaDistrcit');
+        Route::get('/dtadminsubmissionvillage','Admin\AdminController@dtAdminAreaVillage');
+        Route::post('/savemappingadminarea/{user_id}','Admin\AdminController@saveMappingAdminArea')->name('member-savemappingadminarea');
+
+
     });
 
 
 });
 
+
 Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
     Route::get('/auth','LoginController@loginForm')->name('admin-login');
     Route::post('/login','LoginController@login')->name('post-admin-login');
+    Route::post('/accadmindistrict','AdminController@accAdminDistrict');
+
 
     Route::group(['middleware' => 'admin'], function(){
         Route::post('logout','LoginController@logout')->name('admin-logout');
@@ -194,6 +204,12 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/dapil/caleg/create/{dapil_id}','CalegController@create')->name('admin-caleg-create');
         Route::post('/dapil/caleg/save/{dapil_id}','CalegController@save')->name('admin-caleg-save');
         Route::get('/dapil/dapilcalegs/{id}','Datatable\DapilDatatableController@dtDapilCalegs');
+
+        // set mapping admin area
+        Route::post('/savemappingadminarea/{user_id}','AdminController@saveMappingAdminArea')->name('admin-savemappingadminarea');
+        Route::get('/showadminsubmission','AdminController@showListAdminSubmission')->name('admin-showadminsubmission');
+        Route::get('/dtadminsubmissiondistrict','AdminController@dtAdminAreaDistrcitAdmin');
+        Route::get('/dtadminsubmissionvillage','AdminController@dtAdminAreaVillageAdmin');
         
     });
 });

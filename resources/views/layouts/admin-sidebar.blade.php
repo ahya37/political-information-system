@@ -66,6 +66,12 @@
                     >
                       Tambah Admin
                     </a>
+                   <a
+                      href="{{ route('admin-showadminsubmission') }}"
+                      class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/admincontrol/showadminsubmission')) ? 'active custom-active-color' : '' }}"
+                    >
+                      Pengajuan Admin
+                    </a>
                 </li>
               </ul>
             </div>

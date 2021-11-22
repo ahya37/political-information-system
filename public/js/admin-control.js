@@ -303,7 +303,6 @@ function getVillageById(id) {
         return response.json();
     });
 }
-
 function BeforeSend(idLoader) {
     $("#" + idLoader + "").removeClass("d-none");
 }

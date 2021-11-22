@@ -61,7 +61,6 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-md-7 col-sm-12">
-                      @include('layouts.message')
                       @csrf
                       <div class="card">
                         <div class="card-body">
@@ -72,7 +71,8 @@
                                       </label>
                                   </div>
                                   <div class="col-md-12 col-sm-12">
-                                    <form>
+                                    <form action="{{ route('admin-savemappingadminarea',  $user->id) }}" method="POST" enctype="multipart/form-data">
+                                      @csrf
                                       {{-- <div class="form-group">
                                          <input type="text" name="type" id="formProvince" placeholder="Provinsi" class="form-control">
                                         <input type="hidden" name="id"  id="formProvinceResult" required class="form-control form-control-sm" />
@@ -87,15 +87,15 @@
                                          <div id="showDataRegency"></div>
                                       </div> --}}
                                       <div class="form-group">
-                                        <input type="text" name="type" id="formDistrict" placeholder="Kecamatan" class="form-control">
-                                        <input type="hidden" name="districtId"  id="formDistrictResult" required class="form-control form-control-sm" />
+                                        <input type="text" name="type" id="formDistrict" placeholder="Kecamatan" class="form-control" autocomplete="off">
+                                        <input type="text" name="districtId"  id="formDistrictResult"  class="form-control form-control-sm" />
                                          <div id="showDataDistrict">
                                             <span id="LoadDistrict" class="d-none lds-dual-ring hidden overlay"></span>
                                          </div>
                                       </div>
                                       <div class="form-group">
-                                          <input type="text" name="type" id="formVillage" placeholder="Desa" class="form-control">
-                                          <input type="hidden" name="villageId"  id="formVillageResult" required class="form-control form-control-sm" />
+                                          <input type="text" name="type" id="formVillage" placeholder="Desa" class="form-control" autocomplete="off">
+                                          <input type="text" name="villageId"  id="formVillageResult"  class="form-control form-control-sm" />
                                          <div id="showDataVillage">
                                             <span id="LoadVillage" class="d-none lds-dual-ring hidden overlay"></span>
                                          </div>
@@ -106,6 +106,12 @@
                                             class="btn btn-sc-primary text-white  btn-block w-00 mt-4"
                                             >
                                             Ajukan
+                                        </button>
+                                          <button
+                                            type="reset"
+                                            class="btn btn-danger text-white  btn-block w-00 mt-4"
+                                            >
+                                            Cancel
                                         </button>
                                       </div>
                                     </form>
