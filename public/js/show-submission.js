@@ -86,7 +86,7 @@ $(function () {
 
         Swal.fire({
             title: "ACC",
-            text: `${userId} untuk ${district}`,
+            text: `${name} untuk ${district}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
