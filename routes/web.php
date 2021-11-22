@@ -94,6 +94,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
     Route::get('/auth','LoginController@loginForm')->name('admin-login');
     Route::post('/login','LoginController@login')->name('post-admin-login');
     Route::post('/accadmindistrict','AdminController@accAdminDistrict');
+    Route::post('/accadminvillage','AdminController@accAdminVillage');
 
 
     Route::group(['middleware' => 'admin'], function(){

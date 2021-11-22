@@ -302,6 +302,12 @@ class AdminController extends Controller
         if (request()->ajax()) 
         {
             return DataTables::of($adminVillage)
+                        ->addColumn('photo', function($item){
+                            return '
+                                <a href="'.route('admin-profile-member', $item->user_id).'">
+                                    <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                                </a>';
+                        })
                         ->addColumn('status', function($item){
                             if ($item->status == 0) {
                                 return '<span class="badge badge-danger">Menunggu Persetujuan</span>';
@@ -309,7 +315,17 @@ class AdminController extends Controller
                                 return '<span class="badge badge-success">Aktif</span>';
                             }
                         })
-                        ->rawColumns(['status'])
+                         ->addColumn('action', function($item){
+                            return '<div class="btn-group">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
+                                            <div class="dropdown-menu">
+                                                <button data-toggle="tooltip"  data-id="'.$item->arvId.'" data-name="'.$item->member.'" village="'.$item->village.'" userId="'.$item->user_id.'" data-original-title="accVillage" class="ml-1 btn btn-sm btn-success accAdminVillage">ACC</button>
+                                            </div>
+                                        </div>
+                                    </div>';
+                        })
+                        ->rawColumns(['status','photo','action'])
                         ->make(true);
         }
 
@@ -361,5 +377,53 @@ class AdminController extends Controller
             ]);
         }
     }
+
+    public function  accAdminVillage()
+    {
+        $arvId = request()->arvId;
+        $token = request()->_token;
+        $user_id = request()->userId;
+
+        if ($token != null) {
+            $adminVillage = AdminRegionalVillage::where('id', $arvId)->first();
+            $adminVillage->update(['status' => 1]);
+
+            $user = User::where('id', $user_id)->first();
+            // jika user tersebut level dan user_menunya belum ter setting
+            if ($user->level == 0) {
+                // set level admin untuk hak akses infomasi dashboard tingkat korcam / kordes
+                $user->update(['level' => 1]);
+                // tambahkan user_id tersebut ke tbl user_menu untuk mendapatkan akses dashboard
+                UserMenu::create([
+                    'user_id' => $user_id,
+                    'menu_id' => 1
+                    ]);
+            }                       
+            
+            //  Return response
+            if ($adminVillage) {
+                $success = true;
+                $message = "Berhasil ACC!";
+
+            }else{
+                $success = false;
+                $message = "Gagal ACC!";
+            }
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+            ]);
+           
+        }else{
+             $success = false;
+             $message = "Gagal ACC!";
+            
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+            ]);
+        }
+    }
+    
 
 }

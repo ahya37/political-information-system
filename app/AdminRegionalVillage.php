@@ -21,8 +21,9 @@ class AdminRegionalVillage extends Model
 
     public function getAdminRegionalVillage()
     {
-        $sql = "SELECT a.name, b.status from villages as a 
-                join admin_regional_village as b  on a.id = b.village_id ";
+        $sql = "SELECT c.id as user_id, c.photo, c.name as member, b.id as arvId, a.name as village, b.status from villages as a 
+                join admin_regional_village as b  on a.id = b.village_id
+                join users as c on b.user_id = c.id";
         return DB::select($sql);
     }
 
