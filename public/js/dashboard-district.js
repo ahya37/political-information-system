@@ -711,6 +711,27 @@ function showDivHtmlReferalByMounth(m) {
             </tr>`;
 }
 
+// list admin area
+let tbadminVillage = $("#listadminArea").DataTable({
+    processing: true,
+    language: {
+        processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+    },
+    serverSide: true,
+    ordering: true,
+    ajax: {
+        url: `/admin/dtlistadminareadistrict/${districtID}`,
+    },
+    columns: [
+        { data: "photo", name: "photo" },
+        { data: "name", name: "name" },
+        { data: "referal", name: "address" },
+        { data: "address", name: "address" },
+        { data: "contact", name: "contact" },
+    ],
+    aaSorting: [[1, "desc"]],
+});
+
 // funsgsi efect loader
 function BeforeSend(idLoader) {
     $("#" + idLoader + "").removeClass("d-none");

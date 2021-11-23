@@ -26,4 +26,16 @@ class AdminRegionalDistrict extends Model
                 join users as c on b.user_id = c.id ";
         return DB::select($sql);
     }
+
+    public function getListAdminDistrict($district_id)
+    {
+        $sql = "SELECT a.id as user_id , a.code as referal, a.name, a.photo, a.phone_number , a.whatsapp, c.name  as village , d.name as district, e.name as regency, f.name as province from users as a
+                join admin_regional_district as b on a.id = b.user_id
+                join villages as c on a.village_id = c.id 
+                join districts as d on c.district_id = d.id 
+                join regencies as e  on d.regency_id = e.id 
+                join provinces as f on e.province_id = f.id 
+                where b.district_id = $district_id";
+        return DB::select($sql);
+    }
 }

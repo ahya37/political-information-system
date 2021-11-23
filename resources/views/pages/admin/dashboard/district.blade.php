@@ -365,6 +365,29 @@
                     </div>
                   </div>
                    </div>
+
+                    <div class="col-md-12 col-sm-12">
+                     <div class="card mb-2">
+                      <div class="card-body">
+                        <h6 class="text-center">Admin</h6>
+                        <div class="row">
+                           <div class="table-responsive mt-3">
+                            <table id="listadminArea" class="data table table-sm table-striped" width="100%">
+                              <thead>
+                                <tr>
+                                  <th scope="col"></th>
+                                  <th scope="col">NAMA</th>
+                                  <th scope="col">REFERAL</th>
+                                  <th scope="col">ALAMAT</th>
+                                  <th scope="col">KONTAK</th>
+                                </tr>
+                                </thead>
+                              </table>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                   </div>
                   </div>
               </div>
             </div>
@@ -382,8 +405,6 @@
 <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
-{{-- {!! $chart_jobs->script() !!} --}}
-{{-- {!! $chart_inputer->script() !!} --}}
 <script src="{{ asset('js/dashboard-district.js') }}"></script>
 <script>
      var datatable = $('#achievment').DataTable({
