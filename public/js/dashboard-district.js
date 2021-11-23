@@ -725,7 +725,7 @@ let tbadminVillage = $("#listadminArea").DataTable({
     columns: [
         { data: "photo", name: "photo" },
         { data: "name", name: "name" },
-        { data: "referal", name: "address" },
+        { data: "referal", name: "referal" },
         { data: "address", name: "address" },
         { data: "contact", name: "contact" },
     ],

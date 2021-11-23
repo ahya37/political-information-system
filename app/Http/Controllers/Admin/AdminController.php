@@ -458,5 +458,39 @@ class AdminController extends Controller
         }
 
     }
+
+    public function dtListAdminAreaVillage($villageID)
+    {
+        $adminRegionalVillageModel = new AdminRegionalVillage();
+        $adminVillage = $adminRegionalVillageModel->getListAdminVillage($villageID);
+
+        // admin district
+        if (request()->ajax()) 
+        {
+            return DataTables::of($adminVillage)
+                        ->addColumn('photo', function($item){
+                                        return '
+                                            <a href="'.route('admin-profile-member', $item->user_id).'">
+                                                <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                                            </a>';
+                        })
+                        ->addColumn('address', function($item){
+                             return $item->village.',<br>'.$item->district.',<br>'.$item->regency.',<br>'.$item->province;
+                        })
+                        ->addColumn('contact', function($item){
+                            return '<div class="badge badge-pill badge-primary">
+                                        <i class="fa fa-phone"></i>
+                                        </div>
+                                       '.$item->phone_number.'
+                                        <br/>
+                                        <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+                                        </div>
+                                        '.$item->whatsapp.' ';
+                        })
+                        ->rawColumns(['photo','address','contact'])
+                        ->make(true);
+        }
+
+    }
     
 }

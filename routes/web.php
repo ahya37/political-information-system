@@ -212,6 +212,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/dtadminsubmissiondistrict','AdminController@dtAdminAreaDistrcitAdmin');
         Route::get('/dtadminsubmissionvillage','AdminController@dtAdminAreaVillageAdmin');
         Route::get('/dtlistadminareadistrict/{districtID}','AdminController@dtListAdminAreaDistrict');
+        Route::get('/dtlistadminareavillage/{villageID}','AdminController@dtListAdminAreaVillage');
         
     });
 });

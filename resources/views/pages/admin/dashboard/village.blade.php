@@ -271,6 +271,29 @@
                     </div>
                   </div>
                    </div>
+
+                    <div class="col-md-12 col-sm-12">
+                     <div class="card mb-2">
+                      <div class="card-body">
+                        <h6 class="text-center">Admin</h6>
+                        <div class="row">
+                           <div class="table-responsive mt-3">
+                            <table id="listadminArea" class="data table table-sm table-striped" width="100%">
+                              <thead>
+                                <tr>
+                                  <th scope="col"></th>
+                                  <th scope="col">NAMA</th>
+                                  <th scope="col">REFERAL</th>
+                                  <th scope="col">ALAMAT</th>
+                                  <th scope="col">KONTAK</th>
+                                </tr>
+                                </thead>
+                              </table>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                   </div>
               </div>
             </div>
               
