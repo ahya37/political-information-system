@@ -23,6 +23,9 @@ Route::get('/by_referal/downloadexcel/{user_id}/{district_id}','Admin\MemberCont
 Route::get('/by_referal/downloadpdf/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadPDF')->name('by-referal-downloadpdf');
 Route::post('/admin/dashboard/referalbymount','Admin\DashboardController@referalByMountAdmin');
 
+Route::get('/testgetfigure','TestController@testGretFigure');
+
+
 Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
     Route::get('/home', 'HomeController@index')->name('home');
 
@@ -213,6 +216,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/dtadminsubmissionvillage','AdminController@dtAdminAreaVillageAdmin');
         Route::get('/dtlistadminareadistrict/{districtID}','AdminController@dtListAdminAreaDistrict');
         Route::get('/dtlistadminareavillage/{villageID}','AdminController@dtListAdminAreaVillage');
+
         
     });
 });

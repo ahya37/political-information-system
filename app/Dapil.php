@@ -57,4 +57,16 @@ class Dapil extends Model
         $result = DB::select($sql);
         return $result; 
     }
+
+    public function getRegencyDapil()
+    {
+        $sql = "SELECT b.id , b.name from dapils as a
+                join regencies as b on a.regency_id = b.id
+                group by b.id, b.name 
+                ";
+        $result = DB::select($sql);
+        return $result;
+    }
+
+
 }

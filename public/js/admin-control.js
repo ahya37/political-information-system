@@ -1,155 +1,96 @@
-const minlength = 3;
+const selectArea = $("#selectArea");
+const selectListArea = $("#selectListArea");
+selectArea.hide();
+selectListArea.hide();
 
-// search provinsi
-// const search = document.getElementById("formProvince");
-// search.addEventListener("keyup", async function () {
-//     const searchProvinceValue = this.value;
-//     if (searchProvinceValue === null || searchProvinceValue === "") {
-//         $("#showDataProvince").empty();
-//     } else {
-//         BeforeSend("LoadProvince");
-//         try {
-//             const provinces = await getProvince(searchProvinceValue);
-//             updateMemberUiProvince(provinces);
-//         } catch (err) {}
-//         Complete("LoadProvince");
-//     }
-// });
+const selectAdminDapil = document.getElementById("adminDapil");
+selectAdminDapil.addEventListener("change", async function () {
+    try {
+        const selectAdminDapilValue = selectAdminDapil.value;
+        if (selectAdminDapilValue === "2") {
+            selectArea.show();
+            const dapilRegencies = await getDapilRegency();
+            selectArea.empty();
+            selectArea.append("<option value=''>-Pilih Daerah-</option>");
+            getDapilRegencyUi(dapilRegencies);
+        } else {
+            selectArea.hide();
+            selectListArea.hide();
+        }
+    } catch {}
+});
 
-// function getProvince(searchProvinceValue) {
-//     if (searchProvinceValue.length >= minlength) {
-//         return fetch(`/api/searchprovinces`, {
-//             method: "POST",
-//             headers: {
-//                 Accept: "application/json",
-//                 "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify({ data: searchProvinceValue }),
-//         }).then((response) => {
-//             return response.json();
-//         });
-//     }
-// }
+function getDapilRegency() {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    return fetch(`/api/getregencydapil`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({ token: CSRF_TOKEN }),
+    }).then((response) => {
+        return response.json();
+    });
+}
 
-// function updateMemberUiProvince(provinces) {
-//     let divHtml = "";
-//     divHtml += showDivHtml(provinces);
+function getDapilRegencyUi(dapilRegencies) {
+    let divHtmldapil = "";
+    dapilRegencies.forEach((m) => {
+        divHtmldapil += showDivHtmlDapil(m);
+    });
+    const divHtmldapilContainer = $("#selectArea");
+    divHtmldapilContainer.append(divHtmldapil);
+}
 
-//     const divHtmlContainer = document.getElementById("showDataProvince");
-//     divHtmlContainer.innerHTML = divHtml;
-// }
+function showDivHtmlDapil(m) {
+    return `<option value="${m.id}">${m.name}</option>`;
+}
 
-// function showDivHtml(provinces) {
-//     return `
-//             <a    onclick='selectData(${provinces.id})' class="col-12">
-//                     <div class="card mt-2">
-//                     <div class="card-body">
-//                     <i class="fa fa-check"></i> ${provinces.name}
-//                     </div>
-//                     </div>
-//                     </a>
-//             `;
-// }
+// get list dapil names
+selectArea.on("change", async function () {
+    try {
+        const selectAreaValue = $(this).children("option:selected").val();
+        if (selectAreaValue !== "") {
+            selectListArea.show();
+            const listDapils = await getDapilNames(selectAreaValue);
+            selectListArea.empty();
+            selectListArea.append("<option value=''>-Pilih Dapil-</option>");
+            getDapilNamesUi(listDapils);
+        } else {
+            selectListArea.hide();
+        }
+    } catch {}
+});
 
-// async function selectData(id) {
-//     let formProvince = $("#formProvince");
-//     let formProvinceResult = $("#formProvinceResult");
-//     // formProvince.val(id);
-//     try {
-//         const province = await getProvinceById(id);
-//         formProvince.val(province.name);
-//         formProvinceResult.val(province.id);
-//         $("#showDataProvince").empty();
-//     } catch (err) {}
-// }
+function getDapilNames(selectAreaValue) {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    return fetch(`/api/getlistdapil`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({ token: CSRF_TOKEN, regencyId: selectAreaValue }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+function getDapilNamesUi(listDapils) {
+    let divListDapil = "";
+    listDapils.forEach((m) => {
+        divListDapil += showDivHtmlListDapil(m);
+    });
+    const divListDapilContainer = $("#selectListArea");
+    divListDapilContainer.append(divListDapil);
+}
 
-// function getProvinceById(id) {
-//     return fetch(`/api/searchprovincesById`, {
-//         method: "POST",
-//         headers: {
-//             Accept: "application/json",
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ data: id }),
-//     }).then((response) => {
-//         return response.json();
-//     });
-// }
-
-// // search regency
-// const searchRegency = document.getElementById("formRegency");
-// searchRegency.addEventListener("keyup", async function () {
-//     const searchRegencyValue = this.value;
-//     if (searchRegencyValue === null || searchRegencyValue === "") {
-//         $("#showDataRegency").empty();
-//     } else {
-//         try {
-//             const regencies = await getRegency(searchRegencyValue);
-//             updateMemberUiRegency(regencies);
-//         } catch (err) {}
-//     }
-// });
-
-// function getRegency(searchRegencyValue) {
-//     if (searchRegencyValue.length >= minlength) {
-//         return fetch(`/api/searchregencies`, {
-//             method: "POST",
-//             headers: {
-//                 Accept: "application/json",
-//                 "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify({ data: searchRegencyValue }),
-//         }).then((response) => {
-//             return response.json();
-//         });
-//     }
-// }
-
-// function updateMemberUiRegency(regencies) {
-//     let divHtml = "";
-//     divHtml += showDivHtmlRegency(regencies);
-
-//     const divHtmlContainer = document.getElementById("showDataRegency");
-//     divHtmlContainer.innerHTML = divHtml;
-// }
-
-// function showDivHtmlRegency(regencies) {
-//     return `
-//                 <a    onclick='selectDataRegency(${regencies.id})' class="col-12">
-//                     <div class="card mt-2">
-//                     <div class="card-body">
-//                     <i class="fa fa-check"></i> ${regencies.view}
-//                     </div>
-//                     </div>
-//                     </a>
-//             `;
-// }
-
-// async function selectDataRegency(id) {
-//     let formRegency = $("#formRegency");
-//     let formRegencyResult = $("#formRegencyResult");
-//     try {
-//         const regency = await getRegencyById(id);
-//         formRegency.val(regency.name);
-//         formRegencyResult.val(regency.id);
-//         $("#showDataRegency").empty();
-//     } catch (err) {}
-// }
-
-// function getRegencyById(id) {
-//     return fetch(`/api/searchregencyById`, {
-//         method: "POST",
-//         headers: {
-//             Accept: "application/json",
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ data: id }),
-//     }).then((response) => {
-//         return response.json();
-//     });
-// }
+function showDivHtmlListDapil(m) {
+    return `<option value="${m.id}">${m.name}</option>`;
+}
 
 // search district
+const minlength = 3;
 const searchDistrict = document.getElementById("formDistrict");
 searchDistrict.addEventListener("keyup", async function () {
     const searchDistrictValue = this.value;

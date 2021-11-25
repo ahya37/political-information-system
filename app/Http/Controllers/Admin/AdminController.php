@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use App\Admin;
+use App\AdminDapil;
 use App\UserMenu;
 use Illuminate\Http\Request;
 use App\AdminRegionalDistrict;
 use App\AdminRegionalVillage;
+use App\DapilArea;
 use App\Providers\GlobalProvider;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -140,6 +142,15 @@ class AdminController extends Controller
                 'menu_id' => 1
                 ]);
 
+                if ($request->dapil_id != null) {
+                    // simpan dapil_id ke table admin_dapils 
+                    AdminDapil::create([
+                        'dapil_id' => $request->dapil_id,
+                        'admin_user_id' => $user->id
+                    ]);
+                }
+            
+
         // jika type form update
         }elseif($request->type == 'update') {
             $user->update(['level' => $request->level]);
@@ -163,6 +174,15 @@ class AdminController extends Controller
         $adminDistrictSave = false;
         $adminVillageSave = false;
 
+        // cari kecamatan terpilih berada di dapil mana
+        $dapilAreamodel = new DapilArea();
+        $dapilArea      = $dapilAreamodel->getSearchDapilByDistrict($district_id);
+        if ($dapilArea == null) {
+            return redirect()->back()->with(['warning' => 'Kecamatan terpilih belum terdaftar didapil']);
+        }
+
+        // simpan 
+        
         $adminRegionalDistrictModel = new  AdminRegionalDistrict();
         $adminDistrict = $adminRegionalDistrictModel
                         ->where('district_id', $district_id)

@@ -132,3 +132,7 @@ Route::post('/dashboard/referalbymounthdistrict','API\DashboardController@refera
 Route::post('/dashboard/referalbymounthvillage','API\DashboardController@referalByMountAdminVillage');
 
 Route::get('/dashboard/adminregional','TestController@testAdminRegionalVillage');
+
+// get daerah kabupaten yang sudah tersimpan di tb dapils
+Route::post('/getregencydapil','API\DapilController@getRegencyDapil');
+Route::post('/getlistdapil','API\DapilController@getListDapil');

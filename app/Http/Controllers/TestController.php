@@ -3,30 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\AdminRegionalVillage;
+use App\GroupFigureVillage;
 use App\User;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
-   public function testAdminRegionalVillage()
+   public function testGretFigure()
    {
-       $adminRegionalVillage = AdminRegionalVillage::with(['village'])->where('village_id', 3602011002)->get();
-       
+       $groupFigure = GroupFigureVillage::all();
        $data = [];
-       foreach ($adminRegionalVillage as $val) {
-           $user_id = explode(',', $val->user_id);
-           $members = [];
-
-           foreach ($user_id as $value) {
-               $members[] = User::select('id','photo','name')->where('id', $value)->first();
+       foreach ($groupFigure as $value) {
+           $user = json_decode($value->user);
+           $member = [];
+           foreach ($user as $val) {
+               $member[] = User::select('id','name','photo','phone_number','whatsapp')->where('id', $val->user_id)->first();
            }
-
            $data[] = [
-               'village_id' => $val->village_id,
-               'name' => $val->village->name,
-               'members' => $members
+               'village_id' => $value->village_id,
+               'user' => $member
            ];
        }
-       return response()->json(['data' => $data]);
+       return response()->json($data);
    }
 }

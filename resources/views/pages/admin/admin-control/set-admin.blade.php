@@ -35,11 +35,28 @@
                                                     Mengatur level admin untuk hak akses informasi Dashbaord
                                                 </label>
                                                 <input type="hidden" name="type" value="add">
-                                                <select name="level" required class="form-control" required>
+                                                <select name="level" id="adminDapil" required class="form-control" required>
                                                     <option value="">-Pilih Level Admin-</option>
                                                     <option value="1">Korcam / Kordes</option>
                                                     <option value="2">Korwil / Dapil / TK. II</option>
                                                     <option value="3"> Provinsi / Kab / Kot / TK.I</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="level" id="selectArea"  class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="dapil_id" id="selectListArea"  class="form-control">
                                                 </select>
                                             </div>
                                         </div>
@@ -88,14 +105,14 @@
                                       </div> --}}
                                       <div class="form-group">
                                         <input type="text" name="type" id="formDistrict" placeholder="Kecamatan" class="form-control" autocomplete="off">
-                                        <input type="text" name="districtId"  id="formDistrictResult"  class="form-control form-control-sm" />
+                                        <input type="hidden" name="districtId"  id="formDistrictResult"  class="form-control form-control-sm" />
                                          <div id="showDataDistrict">
                                             <span id="LoadDistrict" class="d-none lds-dual-ring hidden overlay"></span>
                                          </div>
                                       </div>
                                       <div class="form-group">
                                           <input type="text" name="type" id="formVillage" placeholder="Desa" class="form-control" autocomplete="off">
-                                          <input type="text" name="villageId"  id="formVillageResult"  class="form-control form-control-sm" />
+                                          <input type="hidden" name="villageId"  id="formVillageResult"  class="form-control form-control-sm" />
                                          <div id="showDataVillage">
                                             <span id="LoadVillage" class="d-none lds-dual-ring hidden overlay"></span>
                                          </div>
