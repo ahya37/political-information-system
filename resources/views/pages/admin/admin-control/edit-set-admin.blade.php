@@ -1,8 +1,10 @@
 @extends('layouts.admin')
-@section('title','Edit Admin')
+@section('title','Seting Admin')
 @push('addon-style')
-    <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 @endpush
 @section('content')
 <!-- Section Content -->
@@ -12,7 +14,7 @@
           >
             <div class="container-fluid">
                 <div class="dashboard-heading">
-                    <h2 class="dashboard-title">Edit Admin Untuk {{ $user->name }}</h2>
+                    <h2 class="dashboard-title">Tambah Area Admin Untuk {{ $user->name }}</h2>
                 <p class="dashboard-subtitle">
                 </p>
             </div>
@@ -30,14 +32,48 @@
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
                                                 <label>
-                                                    Mengatur level admin untuk hak akses Dashboard pada sistem
+                                                    Mengatur level admin untuk hak akses informasi Dashbaord
                                                 </label>
-                                                <input type="hidden" name="type" value="update">
-                                                <select name="level" required class="form-control" required>
-                                                  <option value="3" {{ $user->level == 3 ? 'selected' : '' }}> Provinsi / Kab / Kot / TK.I</option>
-                                                  <option value="2" {{ $user->level == 2 ? 'selected' : '' }}>Korwil / Dapil / TK. II</option>
-                                                    <option value="1" {{ $user->level == 1 ? 'selected' : '' }}>Korcam / Kordes</option>
+                                                <input type="hidden" name="type" value="add">
+                                                <select name="level" id="adminDapil" required class="form-control" required>
+                                                    <option value="">-Pilih Level Admin-</option>
+                                                    <option value="1">Korcam / Kordes</option>
+                                                    <option value="2">Korwil / Dapil / TK. II</option>
+                                                    {{-- <option value="3"> Provinsi / Kab / Kot / TK.I</option> --}}
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="" id="selectArea"  class="form-control" required>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="dapil_id" id="selectListArea"  class="form-control" required>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="district_id" id="selectDistrictId"  class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <small style="color: red">Tidak perlu memilih kecamatan jika admin adalah Korwil/Dapil</small>
                                             </div>
                                         </div>
                                     </div>
@@ -56,15 +92,13 @@
                     </form>
                   </div>
                 </div>
+                
+                </div>
               </div>
             </div>
           </div>
 @endsection
 
 @push('addon-script')
-<script src="https://unpkg.com/vue-toasted"></script>
-<script>
-    AOS.init();
-</script>
-
+<script src="{{ asset('js/admin-control.js') }}"></script>
 @endpush

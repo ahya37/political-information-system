@@ -136,3 +136,4 @@ Route::get('/dashboard/adminregional','TestController@testAdminRegionalVillage')
 // get daerah kabupaten yang sudah tersimpan di tb dapils
 Route::post('/getregencydapil','API\DapilController@getRegencyDapil');
 Route::post('/getlistdapil','API\DapilController@getListDapil');
+Route::post('/getlistdistrictdapil','API\DapilController@getListDistrict');

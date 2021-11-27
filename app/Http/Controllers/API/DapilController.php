@@ -27,4 +27,15 @@ class DapilController extends Controller
             return response()->json($listDapil);
         }
     }
+
+    public function getListDistrict()
+    {
+        $token = request()->token;
+        $dapilId = request()->dapilId;
+        $dapilModel = new Dapil();
+        if ($token == true) {
+            $listDistricts = $dapilModel->getDataListDistrict($dapilId);
+            return response()->json($listDistricts);
+        }
+    }
 }

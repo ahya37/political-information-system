@@ -39,7 +39,7 @@
                                                     <option value="">-Pilih Level Admin-</option>
                                                     <option value="1">Korcam / Kordes</option>
                                                     <option value="2">Korwil / Dapil / TK. II</option>
-                                                    <option value="3"> Provinsi / Kab / Kot / TK.I</option>
+                                                    {{-- <option value="3"> Provinsi / Kab / Kot / TK.I</option> --}}
                                                 </select>
                                             </div>
                                         </div>
@@ -47,7 +47,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12 ">
-                                                <select name="level" id="selectArea"  class="form-control">
+                                                <select name="" id="selectArea"  class="form-control" required>
                                                 </select>
                                             </div>
                                         </div>
@@ -56,8 +56,24 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12 ">
-                                                <select name="dapil_id" id="selectListArea"  class="form-control">
+                                                <select name="dapil_id" id="selectListArea"  class="form-control" required>
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="district_id" id="selectDistrictId"  class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <small style="color: red">Tidak perlu memilih kecamatan jika admin adalah Korwil/Dapil</small>
                                             </div>
                                         </div>
                                     </div>
@@ -76,68 +92,7 @@
                     </form>
                   </div>
                 </div>
-                <div class="row mt-4">
-                    <div class="col-md-7 col-sm-12">
-                      @csrf
-                      <div class="card">
-                        <div class="card-body">
-                          <div class="row row-login">
-                                  <div class="col-md-12 col-sm-12">
-                                      <label>
-                                          Mengatur pemetaan admin setiap daerah
-                                      </label>
-                                  </div>
-                                  <div class="col-md-12 col-sm-12">
-                                    <form action="{{ route('admin-savemappingadminarea',  $user->id) }}" method="POST" enctype="multipart/form-data">
-                                      @csrf
-                                      {{-- <div class="form-group">
-                                         <input type="text" name="type" id="formProvince" placeholder="Provinsi" class="form-control">
-                                        <input type="hidden" name="id"  id="formProvinceResult" required class="form-control form-control-sm" />
-                                        <div id="LoadProvince" class="d-none lds-dual-ring hidden overlay">
-                                        </div>
-                                         <div id="showDataProvince">
-                                         </div>
-                                      </div> --}}
-                                      {{-- <div class="form-group">
-                                        <input type="text" name="type" id="formRegency" placeholder="Kabupaten" class="form-control">
-                                        <input type="hidden" name="id"  id="formRegencyResult" required class="form-control form-control-sm" />
-                                         <div id="showDataRegency"></div>
-                                      </div> --}}
-                                      <div class="form-group">
-                                        <input type="text" name="type" id="formDistrict" placeholder="Kecamatan" class="form-control" autocomplete="off">
-                                        <input type="hidden" name="districtId"  id="formDistrictResult"  class="form-control form-control-sm" />
-                                         <div id="showDataDistrict">
-                                            <span id="LoadDistrict" class="d-none lds-dual-ring hidden overlay"></span>
-                                         </div>
-                                      </div>
-                                      <div class="form-group">
-                                          <input type="text" name="type" id="formVillage" placeholder="Desa" class="form-control" autocomplete="off">
-                                          <input type="hidden" name="villageId"  id="formVillageResult"  class="form-control form-control-sm" />
-                                         <div id="showDataVillage">
-                                            <span id="LoadVillage" class="d-none lds-dual-ring hidden overlay"></span>
-                                         </div>
-                                      </div>
-                                      <div class="form-group">
-                                          <button
-                                            type="submit"
-                                            class="btn btn-sc-primary text-white  btn-block w-00 mt-4"
-                                            >
-                                            Ajukan
-                                        </button>
-                                          <button
-                                            type="reset"
-                                            class="btn btn-danger text-white  btn-block w-00 mt-4"
-                                            >
-                                            Cancel
-                                        </button>
-                                      </div>
-                                    </form>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                      </div>
-                  </div>
+                
                 </div>
               </div>
             </div>

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\User;
 use App\Admin;
 use App\AdminDapil;
+use App\AdminDapilDistrict;
 use App\UserMenu;
 use Illuminate\Http\Request;
 use App\AdminRegionalDistrict;
 use App\AdminRegionalVillage;
+use App\Dapil;
 use App\DapilArea;
 use App\Providers\GlobalProvider;
 use App\Http\Controllers\Controller;
@@ -42,16 +44,6 @@ class AdminController extends Controller
                            return  '<span class="badge badge-info">Hanya Input</span>';
                         }
                     })
-                    ->addColumn('area', function($item){
-                        if ($item->level == 1 || $item->level == 0) {
-                            return $item->district;
-
-                        }elseif ($item->level == 2) {
-                            return $item->regency;
-                        }elseif ($item->level == 3) {
-                            return $item->province;
-                        }
-                    })
                     ->addColumn('total_data', function($item){
                         $gF = new GlobalProvider();
                         return $gF->decimalFormat($item->total_data);
@@ -63,7 +55,7 @@ class AdminController extends Controller
                                     <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
                                     <div class="dropdown-menu">
                                          <a href='.route('admin-admincontroll-setting-edit', encrypt($item->user_id)).' class="dropdown-item">
-                                                Edit
+                                                Detail 
                                         </a> 
                                     </div>
                                 </div>
@@ -131,25 +123,33 @@ class AdminController extends Controller
 
     public function storeSettingAdminUser(Request $request, $id)
     {
-        // jika type form add
+        // jika type form
         $user = User::where('id', $id)->first();
         if ($request->type == 'add') {
             $user->update(['level' => $request->level]);
-
             // tambahkan user_id tersebut ke tbl user_menu untuk mendapatkan akses dashboard
             UserMenu::create([
                 'user_id' => $user->id,
                 'menu_id' => 1
                 ]);
 
-                if ($request->dapil_id != null) {
-                    // simpan dapil_id ke table admin_dapils 
+                 // jika level = 1 , korcam kordes
+                $level = $request->level;
+                if ($level == '1') {
+                    // simpan ke tabel admin_dapil_district
+                    AdminDapilDistrict::create([
+                        'dapil_id' => $request->dapil_id,
+                        'district_id' => $request->district_id,
+                        'admin_user_id' => $user->id
+                    ]);
+                // jika level = 2, korwil / dapil TK.II
+                }elseif($level == '2'){
+                    // simpan ke tabel admin_dapils
                     AdminDapil::create([
                         'dapil_id' => $request->dapil_id,
                         'admin_user_id' => $user->id
                     ]);
                 }
-            
 
         // jika type form update
         }elseif($request->type == 'update') {
@@ -163,63 +163,47 @@ class AdminController extends Controller
     public function editSettingAdminUser($id)
     {
         $user_id = decrypt($id);
-        $user    = User::select('id','name','level')->where('id', $user_id)->first();
-        return view('pages.admin.admin-control.edit-set-admin', compact('user'));
+        $user = User::select('id','name')->where('id', $user_id)->first();
+
+        // cek ke table admin_dapils where user_id
+        $adminDapil = AdminDapil::where('admin_user_id', $user_id)->first();
+            // jika ada dan dia admin korwil, redirect ke page admin_dapils
+        if ($adminDapil != null) {
+            // get data dapil_area berdasarkan dapil_id
+            $dapilModel = new Dapil();
+            $listDapils = $dapilModel->getDataDapilByDapilId($adminDapil->dapil_id);
+            return view('pages.admin.admin-control.detail-admin-dapil', compact('user','listDapils'));
+        }
+
+        // cek ke table admin_dapil_areas where user_id
+        $adminDapilDistrict = AdminDapilDistrict::where('admin_user_id', $user_id)->first();
+            // jika dia admin korcam, redirect ke page admin_dapil_districts
+        if ($adminDapilDistrict != null ) {
+            return view('pages.admin.admin-control.detail-admin-dapil-area',compact('user'));
+        }
+
     }
 
     public function saveMappingAdminArea(Request $request, $user_id)
     {
+       
         $district_id = $request->districtId;
-        $village_id  = $request->villageId;
-        $adminDistrictSave = false;
-        $adminVillageSave = false;
 
         // cari kecamatan terpilih berada di dapil mana
-        $dapilAreamodel = new DapilArea();
-        $dapilArea      = $dapilAreamodel->getSearchDapilByDistrict($district_id);
-        if ($dapilArea == null) {
-            return redirect()->back()->with(['warning' => 'Kecamatan terpilih belum terdaftar didapil']);
-        }
+        // $dapilAreamodel = new DapilArea();
+        // $dapilArea      = $dapilAreamodel->getSearchDapilByDistrict($district_id);
+        // if ($dapilArea == null) {
+        //     return redirect()->back()->with(['warning' => 'Kecamatan terpilih belum terdaftar didapil']);
+        // }
 
-        // simpan 
+        // simpan dapil_id ke table admin_dapils
+        // AdminDapil::create([
+        //     'dapil_id' => $dapilArea->dapil_id,
+        //     'admin_user_id' => $user_id
+        // ]);
         
-        $adminRegionalDistrictModel = new  AdminRegionalDistrict();
-        $adminDistrict = $adminRegionalDistrictModel
-                        ->where('district_id', $district_id)
-                        ->where('user_id', $user_id)
-                        ->count();
-
-        $adminRegionalVillageModel = new AdminRegionalVillage();
-
-        if ($district_id != null) { // cek jika district_id terisi / tidak kosong
-            if ($adminDistrict < 1 ) { // cek apakah district_id sudah terdata pada admin area itu
-             $adminDistrictSave =  $adminRegionalDistrictModel->create([
-                    'district_id' => $district_id,
-                    'user_id' => $user_id
-                ]);
-            }
-        }
-
-        $adminVillage = $adminRegionalVillageModel
-                        ->where('village_id', $village_id)
-                        ->where('user_id', $user_id)
-                        ->count();
-
-        if ($village_id != null) {
-            if ($adminVillage < 1) {
-               $adminVillageSave =  $adminRegionalVillageModel->create([
-                    'village_id' => $village_id,
-                    'user_id' => $user_id
-                ]);
-            }
-        }
-
-        if ($adminVillageSave == true ||  $adminDistrictSave == true) {
-            return redirect()->back()->with(['success' => 'Berhasil Membuat Admin']);
-        }else{
-            return redirect()->back()->with(['warning' => 'Gagal Membuat Admin, Anda sudah terdaftar di daerah tersebut']);
-            
-        }
+        
+        return redirect()->back()->with(['success' => 'Berhasil Membuat Admin']);
     }
 
     public function createMappingAdminArea()

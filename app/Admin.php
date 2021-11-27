@@ -16,11 +16,11 @@ class Admin extends Authenticatable
     {
          $sql = "SELECT b.photo, b.id as user_id,  b.name, b.level, d.name as district, e.name as regency, f.name as province, count(b.id) as total_data
                 from users as a
-                join users as b on a.cby = b.id
-                join villages as c on b.village_id = c.id
-                join districts as d on c.district_id = d.id 
-                join regencies as e on d.regency_id = e.id 
-                join provinces as f on e.province_id = f.id
+               left  join users as b on a.cby = b.id
+                left join villages as c on b.village_id = c.id
+                left join districts as d on c.district_id = d.id 
+                left join regencies as e on d.regency_id = e.id 
+                left join provinces as f on e.province_id = f.id
                 where a.village_id is not null 
                 group by b.photo, b.id, b.name, b.level, d.name, e.name, f.name
                 order by count(b.id) desc";

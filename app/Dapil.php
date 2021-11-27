@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class Dapil extends Model
 {
@@ -64,6 +64,24 @@ class Dapil extends Model
                 join regencies as b on a.regency_id = b.id
                 group by b.id, b.name 
                 ";
+        $result = DB::select($sql);
+        return $result;
+    }
+
+    public function getDataListDistrict($dapilId)
+    {
+        $sql = "SELECT b.name, b.id as district_id, a.dapil_id from dapil_areas as a
+                join districts as b on a.district_id = b.id 
+                where a.dapil_id = $dapilId";
+        $result = DB::select($sql);
+        return $result;
+    }
+
+    public function getDataDapilByDapilId($dapilId)
+    {
+        $sql = "SELECT a.id as dapil_id, a.name as dapil_name, b.name as regency from dapils as a
+                join regencies as b on a.regency_id = b.id
+                where a.id = $dapilId";
         $result = DB::select($sql);
         return $result;
     }
