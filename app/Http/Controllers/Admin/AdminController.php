@@ -72,9 +72,8 @@ class AdminController extends Controller
 
     public function storeSettingAdminUser(Request $request, $id)
     {
-        // jika type form
-        $user = User::where('id', $id)->first();
-        if ($request->type == 'add') {
+            // jika type form
+            $user = User::where('id', $id)->first();
             $user->update(['level' => $request->level]);
             // tambahkan user_id tersebut ke tbl user_menu untuk mendapatkan akses dashboard
             UserMenu::create([
@@ -82,28 +81,35 @@ class AdminController extends Controller
                 'menu_id' => 1
                 ]);
 
-                 // jika level = 1 , korcam kordes
+                // jika level = 1 , korcam kordes
                 $level = $request->level;
                 if ($level == '1') {
+                    $saveAdminDapil =  AdminDapil::create([
+                        'dapil_id' => $request->dapil_id,
+                        'admin_user_id' => $user->id
+                    ]);
                     // simpan ke tabel admin_dapil_district
                     AdminDapilDistrict::create([
-                        'dapil_id' => $request->dapil_id,
+                        'admin_dapils_id' => $saveAdminDapil->id,
                         'district_id' => $request->district_id,
-                        'admin_user_id' => $user->id
                     ]);
                 // jika level = 2, korwil / dapil TK.II
                 }elseif($level == '2'){
-                    // simpan ke tabel admin_dapils
-                    AdminDapil::create([
+                    $saveAdminDapil =  AdminDapil::create([
                         'dapil_id' => $request->dapil_id,
                         'admin_user_id' => $user->id
                     ]);
-                }
 
-        // jika type form update
-        }elseif($request->type == 'update') {
-            $user->update(['level' => $request->level]);
-        }
+                    // get  district_id di dapil_areas
+                    $dapilAreas = DapilArea::where('dapil_id', $request->dapil_id)->get();
+                    foreach($dapilAreas as $val)
+                    {
+                        $adminDapilDistrict = new AdminDapilDistrict();
+                        $adminDapilDistrict->admin_dapils_id = $saveAdminDapil->id;
+                        $adminDapilDistrict->district_id = $val->district_id;
+                        $adminDapilDistrict->save();
+                    } 
+                }
 
         return redirect()->route('admin-admincontroll')->with(['success' => 'Admin telah dibuat']);
 

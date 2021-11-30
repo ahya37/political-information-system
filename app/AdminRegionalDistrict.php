@@ -29,13 +29,15 @@ class AdminRegionalDistrict extends Model
 
     public function getListAdminDistrict($district_id)
     {
-        $sql = "SELECT a.id as user_id , a.code as referal, a.name, a.photo, a.phone_number , a.whatsapp, c.name  as village , d.name as district, e.name as regency, f.name as province from users as a
-                join admin_regional_district as b on a.id = b.user_id
-                join villages as c on a.village_id = c.id 
-                join districts as d on c.district_id = d.id 
-                join regencies as e  on d.regency_id = e.id 
-                join provinces as f on e.province_id = f.id 
-                where b.district_id = $district_id";
+        $sql = "SELECT f.id as user_id, f.photo, f.name, f.code as referal, g.name as village, h.name as district, i.name as regency, j.name as province, whatsapp , f.phone_number from admin_dapils as a
+            join admin_dapil_district as b on a.id = b.admin_dapils_id
+            join districts as c on b.district_id = c.id
+            join users as f on a.admin_user_id = f.id
+            join villages as g on f.village_id = g.id 
+            join districts as h on g.district_id = h.id 
+            join regencies as i on h.regency_id = i.id
+            join provinces as j on i.province_id = j.id 
+            where c.id = $district_id";
         return DB::select($sql);
     }
 }

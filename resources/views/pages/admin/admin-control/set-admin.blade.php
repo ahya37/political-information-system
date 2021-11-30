@@ -34,7 +34,6 @@
                                                 <label>
                                                     Mengatur level admin untuk hak akses informasi Dashbaord
                                                 </label>
-                                                <input type="hidden" name="type" value="add">
                                                 <select name="level" id="adminDapil" required class="form-control" required>
                                                     <option value="">-Pilih Level Admin-</option>
                                                     <option value="1">Korcam / Kordes</option>

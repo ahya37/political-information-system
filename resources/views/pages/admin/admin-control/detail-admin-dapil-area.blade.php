@@ -25,6 +25,7 @@
                       @csrf
                       <div class="card">
                         <div class="card-body">
+                          <a class="btn btn-sm btn-sc-primary text-white">Tambah Area</a>
                          <div class="table-responsive mt-3">
                             <table id="showData" class="data table table-sm table-striped showData" width="100%">
                               <thead>
