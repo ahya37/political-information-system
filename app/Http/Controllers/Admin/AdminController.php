@@ -21,57 +21,6 @@ class AdminController extends Controller
 {
     public function index()
     {
-
-        $adminModel = new Admin();
-        $admins    = $adminModel->getAdmins();
-        if (request()->ajax()) 
-        {
-
-            return DataTables::of($admins)
-                    ->addIndexColumn()
-                    ->addColumn('level', function($item){
-                        if ($item->level == 1) {
-                            return
-                            '<span class="badge badge-success">Korcam / Kordes</span>';
-
-                        }elseif ($item->level == 2) {
-                            return
-                            '<span class="badge badge-success">Korwil / Dapil / Caleg / TK.II </span>';
-                        }elseif ($item->level == 3) {
-                            return
-                            '<span class="badge badge-success">Provinsi Kabupaten/ Kota/ Caleg Tk. I</span>';
-                        }elseif($item->level == 0){
-                           return  '<span class="badge badge-info">Hanya Input</span>';
-                        }
-                    })
-                    ->addColumn('total_data', function($item){
-                        $gF = new GlobalProvider();
-                        return $gF->decimalFormat($item->total_data);
-                    })
-                    ->addColumn('action', function($item){
-                        return '
-                            <div class="btn-group">
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
-                                    <div class="dropdown-menu">
-                                         <a href='.route('admin-admincontroll-setting-edit', encrypt($item->user_id)).' class="dropdown-item">
-                                                Detail 
-                                        </a> 
-                                    </div>
-                                </div>
-                            </div>
-                        ';
-                    })
-                    ->addColumn('photo', function($item){
-                        return '
-                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
-                            '.$item->name.'
-                        ';
-                    })
-                    ->rawColumns(['level','area','total_data','action','photo'])
-                    ->make();
-        }
-
         return view('pages.admin.admin-control.index');
     }
 
@@ -497,6 +446,59 @@ class AdminController extends Controller
                         ->make(true);
         }
 
+    }
+
+    public function dtListAdmin()
+    {
+        $adminModel = new Admin();
+        $admins    = $adminModel->getAdmins();
+        if (request()->ajax()) 
+        {
+
+            return DataTables::of($admins)
+                    ->addIndexColumn()
+                    ->addColumn('level', function($item){
+                        if ($item->level == 1) {
+                            return
+                            '<span class="badge badge-success">Korcam / Kordes</span>';
+
+                        }elseif ($item->level == 2) {
+                            return
+                            '<span class="badge badge-success">Korwil / Dapil / Caleg / TK.II </span>';
+                        }elseif ($item->level == 3) {
+                            return
+                            '<span class="badge badge-success">Provinsi Kabupaten/ Kota/ Caleg Tk. I</span>';
+                        }elseif($item->level == 0){
+                           return  '<span class="badge badge-info">Hanya Input</span>';
+                        }
+                    })
+                    ->addColumn('total_data', function($item){
+                        $gF = new GlobalProvider();
+                        return $gF->decimalFormat($item->total_data);
+                    })
+                    ->addColumn('action', function($item){
+                        return '
+                            <div class="btn-group">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
+                                    <div class="dropdown-menu">
+                                         <a href='.route('admin-admincontroll-setting-edit', encrypt($item->user_id)).' class="dropdown-item">
+                                                Detail 
+                                        </a> 
+                                    </div>
+                                </div>
+                            </div>
+                        ';
+                    })
+                    ->addColumn('photo', function($item){
+                        return '
+                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                            '.$item->name.'
+                        ';
+                    })
+                    ->rawColumns(['level','area','total_data','action','photo'])
+                    ->make();
+        }
     }
     
 }
