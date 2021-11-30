@@ -86,5 +86,17 @@ class Dapil extends Model
         return $result;
     }
 
+    public function getDataDistrictByDapilId($dapilId)
+    {
+        $sql = "SELECT c.name, COUNT(a.id) as total from users as a
+                join villages as b on a.village_id = b.id
+                join districts as c on b.district_id = c.id
+                join dapil_areas as d on c.id = d.district_id
+                where d.dapil_id = $dapilId
+                group by c.name";
+        $result = DB::select($sql);
+        return $result;
+    }
+
 
 }

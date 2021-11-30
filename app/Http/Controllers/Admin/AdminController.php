@@ -172,14 +172,16 @@ class AdminController extends Controller
             // get data dapil_area berdasarkan dapil_id
             $dapilModel = new Dapil();
             $listDapils = $dapilModel->getDataDapilByDapilId($adminDapil->dapil_id);
-            return view('pages.admin.admin-control.detail-admin-dapil', compact('user','listDapils'));
+            return view('pages.admin.admin-control.detail-admin-dapil', compact('user','listDapils','dapilModel'));
         }
 
         // cek ke table admin_dapil_areas where user_id
-        $adminDapilDistrict = AdminDapilDistrict::where('admin_user_id', $user_id)->first();
+        $adminDapilDistrictModel = new AdminDapilDistrict();
+        $adminDapilDistrict = $adminDapilDistrictModel->where('admin_user_id', $user_id)->first();
             // jika dia admin korcam, redirect ke page admin_dapil_districts
         if ($adminDapilDistrict != null ) {
-            return view('pages.admin.admin-control.detail-admin-dapil-area',compact('user'));
+            $listDistrict = $adminDapilDistrictModel->getListDistrict($adminDapilDistrict->id);
+            return view('pages.admin.admin-control.detail-admin-dapil-area',compact('user','listDistrict'));
         }
 
     }

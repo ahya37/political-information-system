@@ -2,6 +2,7 @@
 @section('title','Detail Admin Area Kecamatan')
 @push('addon-style')
 <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
 <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 @endpush
@@ -24,7 +25,22 @@
                       @csrf
                       <div class="card">
                         <div class="card-body">
-                         
+                         <div class="table-responsive mt-3">
+                            <table id="showData" class="data table table-sm table-striped showData" width="100%">
+                              <thead>
+                                <tr>
+                                  <th>KECAMATAN</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @foreach ($listDistrict as $val)
+                                  <tr>
+                                    <td>{{ $val->district }}</td>
+                                  </tr> 
+                                @endforeach
+                              </tbody>
+                              </table>
+                              </div>
                         </div>
                       </div>
                   </div>
@@ -37,4 +53,8 @@
 @endsection
 
 @push('addon-script')
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+<script>
+$('#showData').DataTable();
+</script>
 @endpush
