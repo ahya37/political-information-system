@@ -28,7 +28,6 @@ class AdminController extends Controller
     {
         $members = User::with(['village.district.regency'])
                     ->whereNotNull('village_id')
-                    ->where('level',0)
                     ->where('status', 1)->get();
         if (request()->ajax()) 
         {
@@ -122,22 +121,10 @@ class AdminController extends Controller
 
         // cek ke table admin_dapils where user_id
         $adminDapil = AdminDapil::where('admin_user_id', $user_id)->first();
-            // jika ada dan dia admin korwil, redirect ke page admin_dapils
-        if ($adminDapil != null) {
-            // get data dapil_area berdasarkan dapil_id
-            $dapilModel = new Dapil();
-            $listDapils = $dapilModel->getDataDapilByDapilId($adminDapil->dapil_id);
-            return view('pages.admin.admin-control.detail-admin-dapil', compact('user','listDapils','dapilModel'));
-        }
-
-        // cek ke table admin_dapil_areas where user_id
-        $adminDapilDistrictModel = new AdminDapilDistrict();
-        $adminDapilDistrict = $adminDapilDistrictModel->where('admin_user_id', $user_id)->first();
-            // jika dia admin korcam, redirect ke page admin_dapil_districts
-        if ($adminDapilDistrict != null ) {
-            $listDistrict = $adminDapilDistrictModel->getListDistrict($adminDapilDistrict->id);
-            return view('pages.admin.admin-control.detail-admin-dapil-area',compact('user','listDistrict'));
-        }
+        $dapilModel = new Dapil();
+        $listDapils = $dapilModel->getDataDapilByDapilId($adminDapil->dapil_id);
+        return view('pages.admin.admin-control.detail-admin-dapil', compact('user','listDapils','dapilModel'));
+        
 
     }
 
