@@ -97,15 +97,13 @@ class User extends Authenticatable
         return DB::select($sql);
     }
 
-    public function getMemberRegency($regency_id, $userID)
+    public function getMemberRegency($regency_id)
     {
         $sql = "SELECT a.name
                 from users as a 
                 join villages as b on a.village_id = b.id 
-                join districts as c on b.district_id = c.id
-                join admin_dapil_district as d on  c.id = d.district_id
-                join admin_dapils as e on d.admin_dapils_id = e.id 
-                where c.regency_id = $regency_id and e.admin_user_id = $userID GROUP  by a.name ";
+                join districts as c on b.district_id = c.id 
+                where c.regency_id = $regency_id";
         return DB::select($sql);
     }
 

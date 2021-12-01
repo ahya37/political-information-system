@@ -59,16 +59,14 @@ class District extends Model
         return $this->hasMany(Village::class);
     }
 
-    public function getGrafikTotalMemberDistrictRegency($regency_id, $userID)
+    public function getGrafikTotalMemberDistrictRegency($regency_id)
     {
         $sql = "SELECT c.id as distric_id, c.name as district,
-                count(DISTINCT(a.name)) as total_member
+                count(a.name) as total_member
                 from users as a 
                 join villages as b on a.village_id = b.id 
                 join districts as c on b.district_id = c.id 
-                join admin_dapil_district as d on c.id = d.district_id
-                join admin_dapils as e on d.admin_dapils_id = e.id
-                where c.regency_id = $regency_id and e.admin_user_id = $userID
+                where c.regency_id = $regency_id
                 GROUP by  c.name, c.id order by c.name asc";
         return DB::select($sql);
     }
@@ -101,7 +99,7 @@ class District extends Model
         return DB::select($sql);
     }
 
-    public function getTotalRegion($district_id)
+     public function getTotalRegion($district_id)
     {
         $sql = "SELECT b.name as district, COUNT(DISTINCT(c.id)) as village 
                 from districts as b 

@@ -72,7 +72,7 @@ Route::get('member/referal/province/{province_id}','API\DashboardController@getR
 
 // chart dashboard regency
 Route::get('member/rergister/regency/{regency_id}','API\DashboardController@getMemberRegency');
-Route::get('member/totalregency/{regency_id}/{userID}','API\DashboardController@getTotalMemberRegency');
+Route::get('member/totalregency/{regency_id}','API\DashboardController@getTotalMemberRegency');
 Route::get('membervsterget/regency/{regency_id}','API\DashboardController@getMemberVsTargetRegency');
 Route::get('member/gender/regency/{regency_id}','API\DashboardController@getGenderRegency');
 Route::get('member/jobs/regency/{regency_id}','API\DashboardController@getJobsRegency');
@@ -110,11 +110,11 @@ Route::get('admins','API\AdminController@getAdmin');
 // total reginal
 Route::get('totalregional/nation','API\DashboardController@getTotalRegioanNational');
 Route::get('totalregional/province/{province_id}','API\DashboardController@getTotalRegioanProvince');
-Route::get('totalregional/regency/{regency_id}/{userID}','API\DashboardController@getTotalRegioanRegency');
+Route::get('totalregional/regency/{regency_id}','API\DashboardController@getTotalRegioanRegency');
 Route::get('totalregional/district/{district_id}','API\DashboardController@getTotalRegioanDistrict');
 
 Route::get('adminuser/member/rergister/province/{province_id}','API\DashboardController@getMemberProvinceAdminUser');
-Route::get('adminuser/member/rergister/regency/{regency_id}/{userID}','API\DashboardController@getMemberRegencyAdminUser');
+Route::get('adminuser/member/rergister/regency/{regency_id}','API\DashboardController@getMemberRegencyAdminUser');
 Route::get('adminuser/member/rergister/district/{district_id}','API\DashboardController@getMemberDistrictAdminUser');
 
 
