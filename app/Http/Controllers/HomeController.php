@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AdminDapil;
 use App\Job;
 use App\User;
 use App\Referal;
@@ -110,10 +111,17 @@ class HomeController extends Controller
     public function dashboardAdminUser()
     {
         $user_id = Auth::user()->id;
+        // query admin_dapils where admin_user_id = $user_id
+        $adminDapilModel = new AdminDapil();
+        $adminDapil      = $adminDapilModel->getAdminDapilByUserId($user_id);
+            // get dapil_id
+            // get regency_id
+
+
         $user = User::with('village')->where('id', $user_id)->first();
         $level = $user->level;
         $district_id =  $user->village->district->id;
-        $regency_id  =  $user->village->district->regency->id;
+        $regency_id  =   $adminDapil->regency_id;
         $province_id  =  $user->village->district->regency->province->id;
 
         // jika admin level = 1
@@ -178,8 +186,8 @@ class HomeController extends Controller
 
     public function dashboardLevelTwo($regency_id)
     {
+        $user_id          = Auth::user()->id;
         $regency          = Regency::with('province')->where('id', $regency_id)->first();
-    
         $districtModel    = new District();
         // Daftar pencapaian lokasi / daerah
         $achievments   = $districtModel->achievementDistrict($regency_id);
@@ -200,7 +208,7 @@ class HomeController extends Controller
                     ->make();
         }
 
-        return view('pages.dashboard.regency', compact('regency'));
+        return view('pages.dashboard.regency', compact('regency','user_id'));
 
     }
 

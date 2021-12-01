@@ -71,19 +71,25 @@ class AdminController extends Controller
 
     public function storeSettingAdminUser(Request $request, $id)
     {
+            $adminDapilModel = new AdminDapil();
+            $userMenuModel   = new UserMenu();
             // jika type form
             $user = User::where('id', $id)->first();
             $user->update(['level' => $request->level]);
-            // tambahkan user_id tersebut ke tbl user_menu untuk mendapatkan akses dashboard
-            UserMenu::create([
-                'user_id' => $user->id,
-                'menu_id' => 1
-                ]);
+            // cek apakah sudah ter set menu_id =1 
+            $cekMenu  = $userMenuModel->where('user_id', $user->id)->count();
+            if ($cekMenu == 0) {
+                // tambahkan user_id tersebut ke tbl user_menu untuk mendapatkan akses dashboard
+                $userMenuModel->create([
+                    'user_id' => $user->id,
+                    'menu_id' => 1
+                    ]);
+            }
 
                 // jika level = 1 , korcam kordes
                 $level = $request->level;
                 if ($level == '1') {
-                    $saveAdminDapil =  AdminDapil::create([
+                    $saveAdminDapil = $adminDapilModel->create([
                         'dapil_id' => $request->dapil_id,
                         'admin_user_id' => $user->id
                     ]);
@@ -94,10 +100,16 @@ class AdminController extends Controller
                     ]);
                 // jika level = 2, korwil / dapil TK.II
                 }elseif($level == '2'){
-                    $saveAdminDapil =  AdminDapil::create([
-                        'dapil_id' => $request->dapil_id,
-                        'admin_user_id' => $user->id
-                    ]);
+                    // cek apakah sudah terdaftar di admin_dapil
+                    $memberAdmin = $adminDapilModel->where('admin_user_id', $user->id)->count();
+                    if ($memberAdmin == 0) {
+                        $saveAdminDapil =  $adminDapilModel->create([
+                            'dapil_id' => $request->dapil_id,
+                            'admin_user_id' => $user->id
+                        ]);
+                    }else{
+                        return redirect()->back()->with(['warning' => 'Sudah menjadi admin']);
+                    }
 
                     // get  district_id di dapil_areas
                     $dapilAreas = DapilArea::where('dapil_id', $request->dapil_id)->get();

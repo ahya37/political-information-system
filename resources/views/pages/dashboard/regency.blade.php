@@ -17,12 +17,7 @@
             <div class="container-fluid">
               <div class="dashboard-heading">
                 <h2 class="dashboard-title mb-4">Dashboard</h2>
-                 <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb">
-                     <li class="breadcrumb-item"><a href="{{ route('member-dashboard') }}">Provinsi {{ $regency->province->name }}</a></li>
-                      <li class="breadcrumb-item active" aria-current="page">{{ $regency->name }}</li>
-                  </ol>
-                </nav>
+                <input type="hidden" value="{{ $user_id }}" id="userID">
               </div>
               <div class="dashboard-content">
                 <div class="row">

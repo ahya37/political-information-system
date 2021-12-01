@@ -1,7 +1,9 @@
 $(document).ready(function () {
+    const userID = $("#userID").val();
+
     let start = moment().startOf("month");
     let end = moment().endOf("month");
-    let regencyID = $("#regencyID").val();
+    const regencyID = $("#regencyID").val();
     $.ajax({
         url:
             "/api/member/regency/" +
@@ -199,7 +201,7 @@ $(document).ready(function () {
 
     // anggota terdaftar
     $.ajax({
-        url: "/api/adminuser/member/rergister/regency" + "/" + regencyID,
+        url: `/api/adminuser/member/rergister/regency/${regencyID}/${userID}`,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -279,7 +281,7 @@ $(document).ready(function () {
     });
 
     $.ajax({
-        url: "/api/member/totalregency" + "/" + regencyID,
+        url: `/api/member/totalregency/${regencyID}/${userID}`,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -581,7 +583,7 @@ $(document).ready(function () {
 
     gerTotalRegional();
     function getDataTotalRegional() {
-        return fetch("/api/totalregional/regency/" + regencyID)
+        return fetch(`/api/totalregional/regency/${regencyID}/${userID}`)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(response.statusText);

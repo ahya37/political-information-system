@@ -236,17 +236,17 @@ class DashboardController extends Controller
 
     }
 
-    public function getTotalMemberRegency($regency_id)
+    public function getTotalMemberRegency($regency_id, $userID)
     {
         $gF   = app('GlobalProvider'); // global function
 
         $userModel        = new User();
-        $member           = $userModel->getMemberRegency($regency_id);   
+        $member           = $userModel->getMemberRegency($regency_id, $userID);   
         $total_member     = count($member); // total anggota terdaftar
 
         $regencyModel     = Regency::select('target')->where('id', $regency_id)->first();
         $targetMember    = $regencyModel->target; // target anggota tercapai, per kecamatan 1000 target
-;
+
         $target_member    = (string) $targetMember;
         $persentage_target_member = ($total_member / $target_member) * 100;
 
@@ -1106,14 +1106,14 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function getTotalRegioanRegency($regency_id)
+    public function getTotalRegioanRegency($regency_id, $userID)
     {
         $gF   = app('GlobalProvider'); // global function
 
         $regencyModel = new Regency();
-        $regional     = $regencyModel->getTotalRegion($regency_id);
+        $regional     = $regencyModel->getTotalRegion($regency_id, $userID);
        
-        $data = $regional->regency.' Memiliki '.$gF->decimalFormat($regional->district).' Kecamatan, dan '.$gF->decimalFormat($regional->village).' Desa';
+        $data = $regional->regency. ', '.$regional->dapil_name.' Memiliki '.$gF->decimalFormat($regional->district).' Kecamatan, dan '.$gF->decimalFormat($regional->village).' Desa';
         return response()->json([
             'success' => true,
             'data' => $data
@@ -1155,11 +1155,11 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
-    public function getMemberRegencyAdminUser($regency_id)
+    public function getMemberRegencyAdminUser($regency_id, $userID)
     {
         $districtModel    = new District();
 
-        $districts = $districtModel->getGrafikTotalMemberDistrictRegency($regency_id);
+        $districts = $districtModel->getGrafikTotalMemberDistrictRegency($regency_id, $userID);
         $cat_districts      = [];
         $cat_districts_data = [];
         foreach ($districts as $val) {

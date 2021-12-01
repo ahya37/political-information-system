@@ -18,13 +18,6 @@
             <div class="container-fluid">
               <div class="dashboard-heading">
                 <h2 class="dashboard-title mb-4">Dashboard</h2>
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb">
-                     <li class="breadcrumb-item"><a href="{{ route('member-dashboard') }}">Provinsi {{ $district->regency->province->name }}</a></li>
-                          <li class="breadcrumb-item"><a href="{{ route('adminuser-dashboard-regency', $district->regency->id) }}">{{ $district->regency->name }}</a></li>
-                          <li class="breadcrumb-item active" aria-current="page">KECAMATAN {{ $district->name }}</li>
-                  </ol>
-                </nav>
                  
               </div>
               <div class="dashboard-content">
