@@ -20,4 +20,15 @@ class AdminDapil extends Model
         $result = collect(\ DB::select($sql))->first();
         return $result;
     }
+
+    public function getCekDapilArea($arvId)
+    {
+        $sql = "SELECT a.village_id, d.dapil_id from admin_regional_village as a
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id
+                join dapil_areas as d on c.id = d.district_id 
+                where a.id = $arvId";
+        $result = collect(\ DB::select($sql))->first();
+        return $result;
+    }
 }

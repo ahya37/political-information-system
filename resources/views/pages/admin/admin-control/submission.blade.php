@@ -55,6 +55,7 @@
                                                    <th scope="col"></th>
                                                     <th scope="col">NAMA</th>
                                                     <th scope="col">DESA</th>
+                                                    <th scope="col">KECAMATAN</th>
                                                     <th scope="col">STATUS</th>
                                                     <th scope="col">ACTION</th>
                                                 </tr>

@@ -6,6 +6,7 @@ use App\User;
 use App\Admin;
 use App\AdminDapil;
 use App\AdminDapilDistrict;
+use App\AdminDapilVillage;
 use App\UserMenu;
 use Illuminate\Http\Request;
 use App\AdminRegionalDistrict;
@@ -73,6 +74,8 @@ class AdminController extends Controller
     {
             $adminDapilModel = new AdminDapil();
             $userMenuModel   = new UserMenu();
+            $AdminDapilDistrictMode = new AdminDapilDistrict();
+
             // jika type form
             $user = User::where('id', $id)->first();
             $user->update(['level' => $request->level]);
@@ -89,15 +92,24 @@ class AdminController extends Controller
                 // jika level = 1 , korcam kordes
                 $level = $request->level;
                 if ($level == '1') {
-                    $saveAdminDapil = $adminDapilModel->create([
-                        'dapil_id' => $request->dapil_id,
-                        'admin_user_id' => $user->id
-                    ]);
-                    // simpan ke tabel admin_dapil_district
-                    AdminDapilDistrict::create([
-                        'admin_dapils_id' => $saveAdminDapil->id,
-                        'district_id' => $request->district_id,
-                    ]);
+                    // cek apakah sudah terdaftar di admin_dapil
+                    $memberAdmin = $adminDapilModel->where('admin_user_id', $user->id)->count();
+                    if ($memberAdmin == 0) {
+                        $saveAdminDapil =  $adminDapilModel->create([
+                            'dapil_id' => $request->dapil_id,
+                            'admin_user_id' => $user->id
+                        ]);
+                    }else{
+                        // jika ada, get id nya
+                        $adminDapilId = $adminDapilModel->select('id')->where('admin_user_id', $user->id)->first();
+                        // simpan ke tabel admin_dapil_district
+                        $AdminDapilDistrictMode->create([
+                            'admin_dapils_id' => $adminDapilId->id,
+                            'district_id' => $request->district_id,
+                        ]);
+                    }
+
+
                 // jika level = 2, korwil / dapil TK.II
                 }elseif($level == '2'){
                     // cek apakah sudah terdaftar di admin_dapil
@@ -343,6 +355,7 @@ class AdminController extends Controller
         $arvId = request()->arvId;
         $token = request()->_token;
         $user_id = request()->userId;
+        $adminDapilModel = new AdminDapil();
 
         if ($token != null) {
             $adminVillage = AdminRegionalVillage::where('id', $arvId)->first();
@@ -358,12 +371,28 @@ class AdminController extends Controller
                     'user_id' => $user_id,
                     'menu_id' => 1
                     ]);
-            }                       
+            }
+            
+            // cek kecamatan berdasarkan desa terpilih
+            // cek kecamatan berada di dapil mana
+            $cekAdminArea = $adminDapilModel->getCekDapilArea($arvId);
+            $dapilId = $cekAdminArea->dapil_id;
+            // get dapil_id nya
+            // save dapil_id dan admin_user_id ke table admin_dapil
+            $saveAdminDapil =  $adminDapilModel->create([
+                'dapil_id' => $dapilId,
+                'admin_user_id' => $user_id
+            ]);
+            // save village_id dan admin_dapil_id ke tble admin_dapil_village
+           AdminDapilVillage::create([
+                'admin_dapil_id' =>  $saveAdminDapil->id,
+                'village_id' => $adminVillage->village_id
+            ]);            
             
             //  Return response
             if ($adminVillage) {
                 $success = true;
-                $message = "Berhasil ACC!";
+                $message = "Berhasil Acc";
 
             }else{
                 $success = false;

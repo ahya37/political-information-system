@@ -99,7 +99,6 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
     Route::post('/accadmindistrict','AdminController@accAdminDistrict');
     Route::post('/accadminvillage','AdminController@accAdminVillage');
 
-
     Route::group(['middleware' => 'admin'], function(){
         Route::post('logout','LoginController@logout')->name('admin-logout');
         Route::get('/dashboard/nation','DashboardController@index')->name('admin-dashboard');

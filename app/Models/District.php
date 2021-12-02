@@ -99,7 +99,7 @@ class District extends Model
         return DB::select($sql);
     }
 
-     public function getTotalRegion($district_id)
+    public function getTotalRegion($district_id)
     {
         $sql = "SELECT b.name as district, COUNT(DISTINCT(c.id)) as village 
                 from districts as b 

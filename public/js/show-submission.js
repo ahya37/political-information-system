@@ -41,6 +41,7 @@ $(function () {
             { data: "photo", name: "photo" },
             { data: "member", name: "member" },
             { data: "village", name: "village" },
+            { data: "district", name: "district" },
             { data: "status", name: "status" },
             { data: "action", name: "action" },
         ],
@@ -120,6 +121,7 @@ $(function () {
                     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr(
                         "content"
                     );
+
                     $.ajax({
                         type: "POST",
                         url: `/admin/accadminvillage`,
