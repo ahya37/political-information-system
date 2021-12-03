@@ -534,5 +534,44 @@ class AdminController extends Controller
                     ->make();
         }
     }
+
+    public function dtListMemberInputerByDistrict($districtID)
+    {
+        $userModel = new User();
+        $memberInputer = $userModel->getMemberInputerByDistrict($districtID);
+        // anggota berdasarkan input di district
+        if (request()->ajax()) 
+        {
+            return DataTables::of($memberInputer)
+                        ->addColumn('photo', function($item){
+                                        return '
+                                            <a href="'.route('admin-profile-member', $item->user_id).'">
+                                                <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                                            </a>';
+                        })
+                        ->addColumn('address', function($item){
+                             return $item->village.',<br>'.$item->district.',<br>'.$item->regency.',<br>'.$item->province;
+                        })
+                        ->addColumn('totalData', function($item){
+                            return '<div class="badge badge-pill badge-success">
+                                        '.$item->total_data.'
+                                    </div>
+                                       ';
+                        })
+                        ->addColumn('contact', function($item){
+                            return '<div class="badge badge-pill badge-primary">
+                                        <i class="fa fa-phone"></i>
+                                        </div>
+                                       '.$item->phone_number.'
+                                        <br/>
+                                        <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+                                        </div>
+                                        '.$item->whatsapp.' ';
+                        })
+                        ->rawColumns(['photo','address','contact','totalData'])
+                        ->make(true);
+        }
+
+    }
     
 }

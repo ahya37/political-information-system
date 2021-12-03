@@ -611,7 +611,7 @@ $(document).ready(function () {
     }
 });
 
-// anggota referal terbanyak perbulan
+// datepicker config
 $(".datepicker").datepicker({
     format: "MM",
     viewMode: "months",
@@ -619,6 +619,28 @@ $(".datepicker").datepicker({
     autoClose: true,
 });
 
+// anggota input terbanyak
+$("#dtshowInputerDataInputerByMounth").DataTable({
+    processing: true,
+    language: {
+        processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+    },
+    serverSide: true,
+    ordering: true,
+    ajax: {
+        url: `/admin/dtlistmemberinputerbydistrict/${districtID}`,
+    },
+    columns: [
+        { data: "photo", name: "photo" },
+        { data: "member", name: "member" },
+        { data: "totalData", name: "totalData", className: "text-center" },
+        { data: "address", name: "address" },
+        { data: "contact", name: "contact" },
+    ],
+    aaSorting: [[2, "desc"]],
+});
+
+// anggota referal terbanyak perbulan
 // Data Default
 $("#referalOfMount", async function () {
     let date = new Date();

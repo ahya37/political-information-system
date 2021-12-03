@@ -78,15 +78,13 @@ class Referal extends Model
 
      public function getInputerDistrict($district_id)
     {
-        $sql = "SELECT b.id, b.name , count(b.id) as total_data
-                from users as a
+        $sql = "SELECT b.id, b.name, COUNT(DISTINCT (a.id)) as total_data from users as a
                 join users as b on a.cby = b.id
-                left join villages as c on b.village_id = c.id
-                left join districts as   d on c.district_id = d.id 
-                where d.id = $district_id
-                group by b.name, b.id
-                order by count(b.id) desc
-                limit 5";
+                join admin_dapils as c on b.id = c.admin_user_id
+                join admin_dapil_district as d on c.id = d.admin_dapils_id
+                join villages as e on a.village_id = e.id
+                where e.district_id = $district_id and d.district_id =  $district_id group by b.id, b.name
+                order by COUNT(DISTINCT (a.id)) desc limit 10";
         return DB::select($sql);
     }
 

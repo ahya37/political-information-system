@@ -742,4 +742,19 @@ class User extends Authenticatable
         return DB::select($sql);
     }
 
+    public function getMemberInputerByDistrict($districtID)
+    {
+         $sql = "SELECT c.id as user_id, c.name as member, COUNT(a.id) as total_data, c.photo, d.name as village, e.name as district, f.name as regency, g.name as province, c.phone_number , c.whatsapp from users as a
+                join villages as b on a.village_id = b.id
+                join users as c on a.cby = c.id 
+                join villages as d on c.village_id = d.id 
+                join districts as e on d.district_id = e.id 
+                join regencies as f on e.regency_id = f.id 
+                join provinces as g on f.province_id = g.id
+                where b.district_id = $districtID
+                group by c.id, c.name, c.photo, d.name, e.name , f.name , c.photo , c.phone_number , c.whatsapp , g.name
+                order by COUNT(a.id) desc";
+        return DB::select($sql);
+    }
+
 }
