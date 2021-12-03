@@ -115,16 +115,15 @@ class Referal extends Model
         return DB::select($sql);
     }
 
-     public function getInputerVillage($village_id)
+    public function getInputerVillage($village_id)
     {
-        $sql = "SELECT b.id, b.name , count(b.id) as total_data
-                from users as a
-                join users as b on a.cby = b.id
-                left join villages as c on b.village_id = c.id
-                where c.id = $village_id
-                group by b.name, b.id
-                order by count(b.id) desc
-                limit 5";
+        $sql = "select b.id, b.name , COUNT(a.id) as total_data from  users as a
+                join users as b on a.cby = b.id  
+                join admin_dapils as c on b.id = c.admin_user_id
+                join admin_dapil_village as d on c.id = d.admin_dapil_id 
+                join villages as e on a.village_id = e.id 
+                where d.village_id = $village_id and e.id = $village_id
+                group by b.id, b.name order by COUNT(a.id) desc limit 5";
         return DB::select($sql);
     }
 
