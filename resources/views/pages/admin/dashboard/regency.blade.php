@@ -383,6 +383,7 @@
                                   <th scope="col">NAMA</th>
                                   <th scope="col">REFERAL LANGSUNG</th>
                                   <th scope="col">REFERAL TIDAK LANGSUNG</th>
+                                  <th scope="col">TOTAL REFERAL</th>
                                   <th scope="col">ALAMAT</th>
                                   <th scope="col">KONTAK</th>
                                 </tr>

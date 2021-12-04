@@ -1213,6 +1213,7 @@ class DashboardController extends Controller
       $no = 1;
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $totalReferal     = $val->total + $referal_undirect->total;
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
@@ -1223,7 +1224,8 @@ class DashboardController extends Controller
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
-             'referal_undirect' => $referal_undirect->total
+             'referal_undirect' => $referal_undirect->total,
+             'total_referal' => $totalReferal
           ];
       }
       return response()->json($data);
@@ -1242,6 +1244,7 @@ class DashboardController extends Controller
       $no = 1;
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $totalReferal     = $val->total + $referal_undirect->total;
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
@@ -1252,7 +1255,8 @@ class DashboardController extends Controller
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
-             'referal_undirect' => $referal_undirect->total
+             'referal_undirect' => $referal_undirect->total,
+             'total_referal' => $totalReferal
           ];
       }
       return response()->json($data);
@@ -1271,6 +1275,7 @@ class DashboardController extends Controller
       $no = 1;
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $totalReferal     = $val->total + $referal_undirect->total;
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
@@ -1281,7 +1286,8 @@ class DashboardController extends Controller
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
-             'referal_undirect' => $referal_undirect->total
+             'referal_undirect' => $referal_undirect->total,
+             'total_referal' => $totalReferal
           ];
       }
       return response()->json($data);
@@ -1300,6 +1306,7 @@ class DashboardController extends Controller
       $no = 1;
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $totalReferal     = $val->total + $referal_undirect->total;
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
@@ -1310,7 +1317,8 @@ class DashboardController extends Controller
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
-             'referal_undirect' => $referal_undirect->total
+             'referal_undirect' => $referal_undirect->total,
+             'total_referal' => $totalReferal
           ];
       }
       return response()->json($data);
@@ -1329,6 +1337,7 @@ class DashboardController extends Controller
       $no = 1;
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $totalReferal     = $val->total + $referal_undirect->total;
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
@@ -1339,7 +1348,8 @@ class DashboardController extends Controller
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
-             'referal_undirect' => $referal_undirect->total
+             'referal_undirect' => $referal_undirect->total,
+             'total_referal' => $totalReferal
           ];
       }
       return response()->json($data);

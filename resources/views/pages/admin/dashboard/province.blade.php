@@ -361,6 +361,7 @@
                                   <th scope="col">NAMA</th>
                                   <th scope="col">REFERAL LANGSUNG</th>
                                   <th scope="col">REFERAL TIDAK LANGSUNG</th>
+                                  <th scope="col">TOTAL REFERAL</th>
                                   <th scope="col">ALAMAT</th>
                                   <th scope="col">KONTAK</th>
                                 </tr>
@@ -383,11 +384,11 @@
                       <div class="card-body">
                         <h6 class="text-center">Anggota Input Terbanyak</h6>
                         <div class="row">
-                          {{-- <div class="col-12">
+                          <div class="col-12">
                             <div class="input-group mb-3 col-md-4 float-right">
                                 <input type="text" id="inputerByMonth" name="referalOfMount " class="form-control datepicker">
                           </div>
-                        </div> --}}
+                        </div>
                       </div>
 
                       <div class="row">
