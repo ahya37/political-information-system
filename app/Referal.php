@@ -63,16 +63,13 @@ class Referal extends Model
 
     public function getInputerRegency($regency_id)
     {
-        $sql = "SELECT b.id, b.name , count(b.id) as total_data
-                from users as a
-                join users as b on a.cby = b.id
-                left join villages as c on b.village_id = c.id
-                left join districts as   d on c.district_id = d.id 
-                left join regencies as e on d.regency_id = e.id
-                where e.id = $regency_id 
-                group by b.name, b.id
-                order by count(b.id) desc
-                limit 10";
+        $sql = "select b.id, b.name,  COUNT(DISTINCT (a.id)) as total_data from users as a
+                join users as b on a.cby = b.id  
+                join admin_dapils as c on b.id = c.admin_user_id
+                join villages as d on a.village_id = d.id
+                join districts as e on d.district_id = e.id
+                where e.regency_id = 3602
+                group by b.id , b.name order by  COUNT(DISTINCT (a.id)) desc limit 10";
         return DB::select($sql);
     }
 
