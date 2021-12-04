@@ -565,6 +565,27 @@ $.ajax({
     },
 });
 
+// anggota input terbanyak
+$("#dtshowInputerDataInputerByMounth").DataTable({
+    processing: true,
+    language: {
+        processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+    },
+    serverSide: true,
+    ordering: true,
+    ajax: {
+        url: `/admin/dtlistmemberinputerbyprovince/${provinceID}`,
+    },
+    columns: [
+        { data: "photo", name: "photo" },
+        { data: "member", name: "member" },
+        { data: "totalData", name: "totalData", className: "text-center" },
+        { data: "address", name: "address" },
+        { data: "contact", name: "contact" },
+    ],
+    aaSorting: [[2, "desc"]],
+});
+
 // informasi data jumlah region nasonal
 async function gerTotalRegional() {
     try {
