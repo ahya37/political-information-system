@@ -1262,6 +1262,63 @@ class DashboardController extends Controller
       return response()->json($data);
     }
 
+    public function referalByMountAdminProvinceDefault()
+    {
+      $province_id  = request()->province_id;
+      $referalModel = new Referal();
+      $referal      = $referalModel->getReferealByDefaultProvince($province_id);
+      $userModel = new User();
+      $referal_undirect = '';
+      $data = [];
+      $no = 1;
+      foreach ($referal as $val) {
+          $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $totalReferal     = $val->total + $referal_undirect->total;
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $val->village,
+             'district' => $val->district,
+             'regency' => $val->regency,
+             'referal' => $val->total,
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+             'referal_undirect' => $referal_undirect->total,
+             'total_referal' => $totalReferal
+          ];
+      }
+      return response()->json($data);
+    }
+
+    public function referalByMountAdminByDefault()
+    {
+      $referalModel = new Referal();
+      $referal      = $referalModel->getReferealByDefault();
+      $userModel = new User();
+      $referal_undirect = '';
+      $data = [];
+      $no = 1;
+      foreach ($referal as $val) {
+          $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $totalReferal     = $val->total + $referal_undirect->total;
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $val->village,
+             'district' => $val->district,
+             'regency' => $val->regency,
+             'referal' => $val->total,
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+             'referal_undirect' => $referal_undirect->total,
+             'total_referal' => $totalReferal
+          ];
+      }
+      return response()->json($data);
+    }
+
     public function referalByMountAdminRegency()
     {
       $mounth       = request()->mounth;

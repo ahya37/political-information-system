@@ -632,15 +632,30 @@ $("#referalOfMount", async function () {
     const yearSelected = date.getFullYear();
     BeforeSend("LoadaReferalByMounth");
     try {
-        const resultReferalByMounth = await getReferalByMount(
-            mounthSelected,
-            yearSelected
-        );
+        const resultReferalByMounth = await getReferalByDefault(provinceID);
+        console.log("data: ", resultReferalByMounth);
 
         updateReferalByMounth(resultReferalByMounth);
     } catch (err) {}
     Complete("LoadaReferalByMounth");
 });
+
+// akumulasi sebelum pilih bulan
+function getReferalByDefault() {
+    return fetch("/api/dashboard/referalbymonthprovincedefault", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            province_id: provinceID,
+        }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+
 // After ChangeDate
 $("#referalOfMount").on("changeDate", async function (selected) {
     const mounthSelected = selected.date.getMonth() + 1;

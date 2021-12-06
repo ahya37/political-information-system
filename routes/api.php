@@ -126,7 +126,9 @@ Route::post('/searchmemberforcaleg','API\MemberController@getSearchMemberForCale
 Route::post('/memberbyid','API\MemberController@getMemberById');
 
 Route::post('/dashboard/referalbymount','API\DashboardController@referalByMountAdmin');
+Route::post('/dashboard/referalbydefault','API\DashboardController@referalByMountAdminByDefault');
 Route::post('/dashboard/referalbymonthprovince','API\DashboardController@referalByMountAdminProvince');
+Route::post('/dashboard/referalbymonthprovincedefault','API\DashboardController@referalByMountAdminProvinceDefault');
 Route::post('/dashboard/referalbymounthregency','API\DashboardController@referalByMountAdminRegency');
 Route::post('/dashboard/referalbymounthdistrict','API\DashboardController@referalByMountAdminDistrict');
 Route::post('/dashboard/referalbymounthvillage','API\DashboardController@referalByMountAdminVillage');
