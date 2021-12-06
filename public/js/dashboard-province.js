@@ -625,6 +625,16 @@ $(".datepicker").datepicker({
     autoClose: true,
 });
 
+// akumulasi sebelum pilih bulan
+async function acumulate() {
+    BeforeSend("LoadaReferalByMounth");
+    try {
+        const resultReferalByMounth = await getReferalByDefault();
+        updateReferalByMounth(resultReferalByMounth);
+    } catch (err) {}
+    Complete("LoadaReferalByMounth");
+}
+
 // Data Default
 $("#referalOfMount", async function () {
     let date = new Date();

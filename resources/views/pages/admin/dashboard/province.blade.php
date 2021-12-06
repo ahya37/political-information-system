@@ -345,7 +345,8 @@
                         <h6 class="text-center">Anggota Referal Terbanyak Perbulan</h6>
                         <div class="row">
                           <div class="col-12">
-                            <div class="input-group mb-3 col-md-4 float-right">
+                            <div class="input-group mb-3 col-md-3 float-right">
+                              <button onclick="acumulate()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
                                 <input type="text" id="referalOfMount" name="referalOfMount" value="{{ date('M') }}" class="form-control datepicker">
                           </div>
                         </div>
@@ -383,13 +384,13 @@
                      <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Anggota Input Terbanyak</h6>
-                        <div class="row">
+                        {{-- <div class="row">
                           <div class="col-12">
                             <div class="input-group mb-3 col-md-4 float-right">
                                 <input type="text" id="inputerByMonth" name="referalOfMount " class="form-control datepicker">
                           </div>
                         </div>
-                      </div>
+                      </div> --}}
 
                       <div class="row">
                           <div class="table-responsive mt-3">

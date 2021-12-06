@@ -201,9 +201,14 @@ $("#referalOfMount", async function () {
 });
 
 // akumulasi sebelum pilih bulan
+// akumulasi sebelum pilih bulan
 async function acumulate() {
-    const resultReferalByMounth = await getReferalByDefault();
-    updateReferalByMounth(resultReferalByMounth);
+    BeforeSend("LoadaReferalByMounth");
+    try {
+        const resultReferalByMounth = await getReferalByDefault();
+        updateReferalByMounth(resultReferalByMounth);
+    } catch (err) {}
+    Complete("LoadaReferalByMounth");
 }
 
 function getReferalByDefault() {
