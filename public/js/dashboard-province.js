@@ -637,13 +637,9 @@ async function acumulate() {
 
 // Data Default
 $("#referalOfMount", async function () {
-    let date = new Date();
-    const mounthSelected = date.getMonth() + 1;
-    const yearSelected = date.getFullYear();
     BeforeSend("LoadaReferalByMounth");
     try {
         const resultReferalByMounth = await getReferalByDefault(provinceID);
-        console.log("data: ", resultReferalByMounth);
 
         updateReferalByMounth(resultReferalByMounth);
     } catch (err) {}

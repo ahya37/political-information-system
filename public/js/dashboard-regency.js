@@ -649,21 +649,39 @@ $(".datepicker").datepicker({
 
 // Data Default
 $("#referalOfMount", async function () {
-    let date = new Date();
-    const mounthSelected = date.getMonth() + 1;
-    const yearSelected = date.getFullYear();
     BeforeSend("LoadaReferalByMounth");
     try {
-        const resultReferalByMounth = await getReferalByMount(
-            mounthSelected,
-            yearSelected,
-            regencyID
-        );
-        console.log("data: ", resultReferalByMounth);
+        const resultReferalByMounth = await getReferalByDefault(regencyID);
         updateReferalByMounth(resultReferalByMounth);
     } catch (err) {}
     Complete("LoadaReferalByMounth");
 });
+// akumulasi sebelum pilih bulan
+async function acumulate() {
+    BeforeSend("LoadaReferalByMounth");
+    try {
+        const resultReferalByMounth = await getReferalByDefault();
+        updateReferalByMounth(resultReferalByMounth);
+    } catch (err) {}
+    Complete("LoadaReferalByMounth");
+}
+
+// akumulasi sebelum pilih bulan
+function getReferalByDefault() {
+    return fetch("/api/dashboard/referalbymounthregencydefault", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            regency_id: regencyID,
+        }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+
 // After ChangeDate
 $("#referalOfMount").on("changeDate", async function (selected) {
     const mounthSelected = selected.date.getMonth() + 1;
