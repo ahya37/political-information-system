@@ -132,6 +132,7 @@ Route::post('/dashboard/referalbymonthprovincedefault','API\DashboardController@
 Route::post('/dashboard/referalbymounthregency','API\DashboardController@referalByMountAdminRegency');
 Route::post('/dashboard/referalbymounthregencydefault','API\DashboardController@referalByMountAdminRegencyDefault');
 Route::post('/dashboard/referalbymounthdistrict','API\DashboardController@referalByMountAdminDistrict');
+Route::post('/dashboard/referalbymounthdistrictdefault','API\DashboardController@referalByMountAdminDistrictDefault');
 Route::post('/dashboard/referalbymounthvillage','API\DashboardController@referalByMountAdminVillage');
 
 Route::get('/dashboard/adminregional','TestController@testAdminRegionalVillage');
