@@ -527,7 +527,7 @@ $.ajax({
 
 // anggota referal terbanyak
 $.ajax({
-    url: "/api/member/inputer/province" + "/" + provinceID,
+    url: "/api/member/referal/province" + "/" + provinceID,
     method: "GET",
     dataType: "json",
     beforeSend: function () {

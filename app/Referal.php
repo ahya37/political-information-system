@@ -21,7 +21,7 @@ class Referal extends Model
 
     public function getReferalProvince($province_id)
     {
-        $sql = "SELECT b.id, b.name , count(b.id) as total_referal
+        $sql = "SELECT b.id, b.name , count(b.id) as total_data
                 from users as a
                 join users as b on a.user_id = b.id
                 left join villages as c on b.village_id = c.id
@@ -30,7 +30,7 @@ class Referal extends Model
                 where e.province_id = $province_id 
                 group by b.name, b.id
                 order by count(b.id) desc
-                limit 10";
+                limit 5";
         return DB::select($sql);
     }
 
