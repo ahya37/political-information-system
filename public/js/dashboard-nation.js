@@ -201,7 +201,6 @@ $("#referalOfMount", async function () {
 });
 
 // akumulasi sebelum pilih bulan
-// akumulasi sebelum pilih bulan
 async function acumulate() {
     BeforeSend("LoadaReferalByMounth");
     try {

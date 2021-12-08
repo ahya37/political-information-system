@@ -27,6 +27,21 @@ class LocationController extends Controller
         return District::where('regency_id', $regency_id)->orderBy('name','ASC')->get();
     }
 
+    public function getDistricts()
+    {
+        $districts =  District::where('regency_id', request()->regency_id)->orderBy('name','ASC')->get();
+        return response()->json(['status' => 'success', 'data'=> $districts]);
+
+    }
+
+    public function getVillages()
+    {
+        $villages =  Village::where('district_id', request()->district_id)->orderBy('name','ASC')->get();
+        return response()->json(['status' => 'success', 'data'=> $villages ]);
+
+    }
+
+
     public function villages(Request $request, $district_id)
     {
         return Village::where('district_id', $district_id)->orderBy('name','ASC')->get();

@@ -829,4 +829,29 @@ class User extends Authenticatable
         return DB::select($sql);
     }
 
+    public function getDataMemberByRegency($regency_id)
+    {
+        $sql = "SELECT a.id as user_id, a.name, a.photo from users as a
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id 
+                where c.regency_id = $regency_id";
+        return DB::select($sql);
+    }
+
+    public function getDataMemberByDistrict($district_id)
+    {
+        $sql = "SELECT a.id as user_id, a.name, a.photo from users as a
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id 
+                where c.id = $district_id";
+        return DB::select($sql);
+    }
+
+    public function getDataMemberByVillage($villages_id)
+    {
+        $sql = "SELECT a.id as user_id, a.name, a.photo from users as a
+                where a.village_id = $villages_id";
+        return DB::select($sql);
+    }
+
 }

@@ -27,6 +27,11 @@ Route::post('searchregencyById', 'API\LocationController@getSearchRegencyById');
 Route::post('searchdistrictById', 'API\LocationController@getSearchDistrictById');
 Route::post('searchVillageById', 'API\LocationController@getSearchVillageById');
 
+Route::post('getdistricts', 'API\LocationController@getDistricts');
+Route::post('getvillages', 'API\LocationController@getVillages');
+Route::post('getmemberbyregency', 'API\MemberController@getMemberByRegency');
+Route::post('getmemberbydistrict', 'API\MemberController@getMemberByDistrict');
+Route::post('getmemberbyvillage', 'API\MemberController@getMemberByVillage');
 
 Route::get('jobs','Auth\RegisterController@jobs')->name('api-jobs');
 Route::get('educations','Auth\RegisterController@educations')->name('api-educations');
@@ -142,3 +147,5 @@ Route::get('/dashboard/adminregional','TestController@testAdminRegionalVillage')
 Route::post('/getregencydapil','API\DapilController@getRegencyDapil');
 Route::post('/getlistdapil','API\DapilController@getListDapil');
 Route::post('/getlistdistrictdapil','API\DapilController@getListDistrict');
+
+// get kabkot untuk create event

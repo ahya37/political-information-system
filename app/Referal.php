@@ -171,6 +171,7 @@ class Referal extends Model
                 join villages as c on a.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
+                where b.village_id is not null
                 group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
                 order by COUNT(a.user_id) desc limit 10";
         return DB::select($sql);

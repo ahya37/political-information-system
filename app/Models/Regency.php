@@ -133,7 +133,7 @@ class Regency extends Model
         return DB::select($sql);
     }
 
-     public function getTotalRegion($regency_id)
+    public function getTotalRegion($regency_id)
     {
         $sql = "SELECT a.name as regency,COUNT(DISTINCT(b.id)) as district, COUNT(c.id) as village 
                 from regencies as a 
@@ -141,6 +141,18 @@ class Regency extends Model
                 join villages as c on b.id = c.district_id
                 where a.id = $regency_id GROUP BY a.name ";
         return collect(\ DB::select($sql))->first();
+    }
+
+    public function getSelectRegencies()
+    {
+        $sql = "SELECT a.id as regency_id, a.name from regencies as a
+                join districts as b on a.id = b.regency_id 
+                join villages as c on b.id = c.district_id
+                join users as d on c.id = d.village_id
+                GROUP by a.id, a.name";
+        $result = DB::select($sql);
+        return $result;
+
     }
     
     

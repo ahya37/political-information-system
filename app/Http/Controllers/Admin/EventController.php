@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\User;
 use App\Event;
 use App\EventDetail;
+use App\Models\Regency;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\User;
 use Yajra\DataTables\Facades\DataTables;
 
 class EventController extends Controller
@@ -63,31 +64,33 @@ class EventController extends Controller
         $memberModel = new User();
         $members     = $memberModel->getMemberForEvent($event_id);
 
-            if (request()->ajax()) {
-                return DataTables::of($members)
-                        ->addColumn('pilih', function($item) use ($event_id){
-                            // jika event_id != id pada event, maka aktifkan kotak pilihnya
-                            if ($item->event_id != $event_id) {
-                                return '
-                                <input type="checkbox" name="user_id[]" value="'.$item->user_id.'" class="form-control-sm">
-                                <input type="hidden" name="event_id" value="'.$event_id.'" >
-                                ';
-                            }
-                            return '
-                                <span class="fa fa-check"></span>
-                            ';
-                        })
-                        ->addColumn('district', function($item){
-                            return $item->village;
-                        })
-                         ->addColumn('regency', function($item){
-                            return $item->district;
-                        })
-                        ->rawColumns(['pilih','district','regency'])
-                        ->make();
+            // if (request()->ajax()) {
+            //     return DataTables::of($members)
+            //             ->addColumn('pilih', function($item) use ($event_id){
+            //                 // jika event_id != id pada event, maka aktifkan kotak pilihnya
+            //                 if ($item->event_id != $event_id) {
+            //                     return '
+            //                     <input type="checkbox" name="user_id[]" value="'.$item->user_id.'" class="form-control-sm">
+            //                     <input type="hidden" name="event_id" value="'.$event_id.'" >
+            //                     ';
+            //                 }
+            //                 return '
+            //                     <span class="fa fa-check"></span>
+            //                 ';
+            //             })
+            //             ->addColumn('district', function($item){
+            //                 return $item->village;
+            //             })
+            //              ->addColumn('regency', function($item){
+            //                 return $item->district;
+            //             })
+            //             ->rawColumns(['pilih','district','regency'])
+            //             ->make();
 
-                    }
-        return view('pages.admin.event.add-member');
+            //         }
+        $regencyModel = new Regency();
+        $regencies     = $regencyModel->getSelectRegencies();
+        return view('pages.admin.event.add-participant', compact('regencies'));
     }
 
     public function storeAddMemberEvent(Request $request)
