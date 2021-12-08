@@ -774,18 +774,14 @@ class User extends Authenticatable
 
     public function getMemberInputerByRegency($regencyID)
     {
-         $sql = "SELECT a.id as user_id, a.name as member, a.photo, a.phone_number, a.whatsapp,
-                c.name as village, d.name as district, e.name as regency,  f.name as province,
+         $sql = "SELECT a.id as user_id, a.village_id, a.name as member, a.photo, a.phone_number, a.whatsapp,
                 COUNT(DISTINCT (b.id)) as total_data from users as a
                 join users as b on a.id = b.cby
-                join villages as c on a.village_id = c.id 
+                join villages as c on b.village_id = c.id 
                 join districts as d on c.district_id = d.id
                 join regencies as e on d.regency_id = e.id 
-                join provinces as f on e.province_id = f.id
-                join villages as g on b.village_id = g.id 
-                join districts as h on g.district_id = h.id 
-                where h.regency_id = $regencyID
-                GROUP by a.id, a.name, c.name, d.name , f.name ,e.name, a.photo, a.phone_number, a.whatsapp
+                where e.id = $regencyID
+                GROUP by a.id, a.name, a.photo, a.phone_number, a.whatsapp, village_id
                 order by COUNT(DISTINCT (b.id)) desc";
         return DB::select($sql);
     }
