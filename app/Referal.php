@@ -173,7 +173,7 @@ class Referal extends Model
                 join regencies as e on d.regency_id = e.id
                 where b.village_id is not null
                 group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
-                order by COUNT(a.user_id) desc limit 10";
+                order by COUNT(a.user_id) desc";
         return DB::select($sql);
     }
 
@@ -187,7 +187,7 @@ class Referal extends Model
                 join regencies as e on d.regency_id = e.id
                 where e.province_id = $province_id
                 group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
-                order by COUNT(a.user_id) desc limit 10";
+                order by COUNT(a.user_id) desc";
         return DB::select($sql);
     }
 
@@ -215,7 +215,7 @@ class Referal extends Model
                 join regencies as e on d.regency_id = e.id
                 where e.id = $regency_id
                 group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
-                order by COUNT(a.user_id) desc limit 10";
+                order by COUNT(a.user_id) desc";
         return DB::select($sql);
     }
 
@@ -243,7 +243,7 @@ class Referal extends Model
                 join regencies as e on d.regency_id = e.id
                 where  d.id = $district_id
                 group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
-                order by COUNT(a.user_id) desc limit 10";
+                order by COUNT(a.user_id) desc";
         return DB::select($sql);
     }
 
@@ -271,7 +271,7 @@ class Referal extends Model
                 join regencies as e on d.regency_id = e.id
                 where c.id = $village_id
                 group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
-                order by COUNT(a.user_id) desc limit 10";
+                order by COUNT(a.user_id) desc";
         return DB::select($sql);
     }
 
