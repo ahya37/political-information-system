@@ -771,9 +771,6 @@ class User extends Authenticatable
                 join districts as d on c.district_id = d.id
                 join regencies as e on d.regency_id = e.id 
                 join provinces as f on e.province_id = f.id
-                join villages as g on b.village_id = g.id 
-                join districts as h on g.district_id = h.id
-                join regencies as i on h.regency_id = i.id 
                 GROUP by a.id, a.name, c.name, d.name , f.name ,e.name, a.photo, a.phone_number, a.whatsapp
                 order by COUNT(DISTINCT (b.id)) desc";
         return DB::select($sql);
