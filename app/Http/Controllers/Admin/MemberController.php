@@ -53,6 +53,7 @@ class MemberController extends Controller
            ]);
 
            $cby_id = Admin::select('id')->first();
+           $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
            
            $cek_nik = User::select('nik')->where('nik', $request->nik)->first();
            #cek nik jika sudah terpakai
@@ -99,7 +100,7 @@ class MemberController extends Controller
                       'address'      => strtoupper($request->address),
                       'photo'        => $photo,
                       'ktp'          => $ktp,
-                      'cby'          => $cby_id->id,
+                      'cby'          => $cby->id,
                   ]);
    
                   #generate qrcode
