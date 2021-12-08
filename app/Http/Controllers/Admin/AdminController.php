@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use App\Admin;
-use App\AdminDapil;
-use App\AdminDapilDistrict;
-use App\AdminDapilVillage;
-use App\UserMenu;
-use Illuminate\Http\Request;
-use App\AdminRegionalDistrict;
-use App\AdminRegionalVillage;
 use App\Dapil;
+use App\UserMenu;
 use App\DapilArea;
+use App\AdminDapil;
+use App\Models\Village;
+use App\AdminDapilVillage;
+use App\AdminDapilDistrict;
+use Illuminate\Http\Request;
+use App\AdminRegionalVillage;
+use App\AdminRegionalDistrict;
 use App\Providers\GlobalProvider;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -540,6 +541,8 @@ class AdminController extends Controller
         $userModel = new User();
         $memberInputer = $userModel->getMemberInputerByProvince($provinceID);
         // anggota berdasarkan input di district
+        $villageModel  =  new Village();
+
         if (request()->ajax()) 
         {
             return DataTables::of($memberInputer)
@@ -549,8 +552,9 @@ class AdminController extends Controller
                                                 <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
                                             </a>';
                         })
-                        ->addColumn('address', function($item){
-                             return $item->village.',<br>'.$item->district.',<br>'.$item->regency.',<br>'.$item->province;
+                        ->addColumn('address', function($item){ 
+                            $village = Village::with(['district.regency.province'])->where('id', $item->village_id)->first(); 
+                             return $village->district->name .'<br>'.$village->district->name.',<br>'.$village->district->regency->name.',<br>'.$village->district->regency->province->name;
                         })
                         ->addColumn('totalData', function($item){
                             return '<div class="badge badge-pill badge-success">

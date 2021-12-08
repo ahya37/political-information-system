@@ -985,7 +985,7 @@ class DashboardController extends Controller
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
             'presentage_village_filled' => $gF->persen($presentage_village_filled),
-            'total_member' => $total_member,
+            'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $gF->persen($persentage_target_member)
         ];
