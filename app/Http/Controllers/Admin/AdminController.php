@@ -671,7 +671,8 @@ class AdminController extends Controller
                                             </a>';
                         })
                         ->addColumn('address', function($item){
-                             return $item->village.',<br>'.$item->district.',<br>'.$item->regency.',<br>'.$item->province;
+                             $village = Village::with(['district.regency.province'])->where('id', $item->village_id)->first(); 
+                             return $village->district->name .'<br>'.$village->district->name.',<br>'.$village->district->regency->name.',<br>'.$village->district->regency->province->name;
                         })
                         ->addColumn('totalData', function($item){
                             return '<div class="badge badge-pill badge-success">
@@ -710,7 +711,8 @@ class AdminController extends Controller
                                             </a>';
                         })
                         ->addColumn('address', function($item){
-                             return $item->village.',<br>'.$item->district.',<br>'.$item->regency.',<br>'.$item->province;
+                             $village = Village::with(['district.regency.province'])->where('id', $item->village_id)->first(); 
+                             return $village->district->name .'<br>'.$village->district->name.',<br>'.$village->district->regency->name.',<br>'.$village->district->regency->province->name;
                         })
                         ->addColumn('totalData', function($item){
                             return '<div class="badge badge-pill badge-success">
