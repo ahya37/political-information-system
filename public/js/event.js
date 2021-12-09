@@ -1,3 +1,5 @@
+const eventId = $("#eventId").val();
+const storage = "/storage/";
 // create event
 $(".select2").select2();
 let CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
@@ -22,23 +24,15 @@ $("#regencies_id").on("change", async function () {
         },
     });
 
-    // call data member
-    // $.ajax({
-    //     url: "/api/getmemberbyregency",
-    //     type: "POST",
-    //     data: { regency_id: regencyID, token: CSRF_TOKEN },
-    //     success: function (data) {
-    //         console.log("data anggota kabupaten:", data);
-    //     },
-    // });
+    BeforeSend("Loadachievment");
     try {
         const dataMemberByRegency = await getDataMemberByRegency(
             regencyID,
             CSRF_TOKEN
         );
-        console.log("data anggota kabupaten:", dataMemberByRegency);
         updateMemberUi(dataMemberByRegency);
     } catch (err) {}
+    Complete("Loadachievment");
 });
 
 function getDataMemberByRegency(regencyID) {
@@ -64,14 +58,13 @@ function getDataMemberByRegency(regencyID) {
         });
 }
 
-function updateMemberUi(dataMemberByRegency) {}
-
-$("#districts_id").on("change", function () {
+$("#districts_id").on("change", async function () {
     // call village
+    let districtID = $(this).val();
     $.ajax({
         url: "/api/getvillages",
         type: "POST",
-        data: { district_id: $(this).val() },
+        data: { district_id: districtID },
         success: function (html) {
             $("#villages_id").empty();
             $("#villages_id").append('<option value="">Pilih Desa</option>');
@@ -84,31 +77,150 @@ $("#districts_id").on("change", function () {
     });
 
     // call data member
-    $.ajax({
-        url: "/api/getmemberbydistrict",
-        type: "POST",
-        data: { district_id: $(this).val(), token: CSRF_TOKEN },
-        success: function (data) {
-            console.log("data anggota kecamatan:", data);
-        },
-    });
+    BeforeSend("Loadachievment");
+    try {
+        const dataMemberByRegency = await getDataMemberByDistrict(
+            districtID,
+            CSRF_TOKEN
+        );
+        updateMemberUi(dataMemberByRegency);
+    } catch (err) {}
+    Complete("Loadachievment");
 });
 
-$("#villages_id").on("change", function () {
-    // call data member
-    $.ajax({
-        url: "/api/getmemberbyvillage",
-        type: "POST",
-        data: { villages_id: $(this).val(), token: CSRF_TOKEN },
-        success: function (data) {
-            console.log("data anggota desa:", data);
+function getDataMemberByDistrict(districtID) {
+    return fetch(`/api/getmemberbydistrict`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
         },
-    });
+        body: JSON.stringify({ district_id: districtID, token: CSRF_TOKEN }),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then((response) => {
+            if (response.Response === "False") {
+                throw new Error(response.statusText);
+            }
+            return response;
+        });
+}
+
+$("#villages_id").on("change", async function () {
+    // call data member
+
+    let villageID = $(this).val();
+    BeforeSend("Loadachievment");
+    try {
+        const dataMemberByRegency = await getDataMemberByVillage(
+            villageID,
+            CSRF_TOKEN
+        );
+        updateMemberUi(dataMemberByRegency);
+    } catch (err) {}
+    Complete("Loadachievment");
 });
+
+function getDataMemberByVillage(villageID) {
+    return fetch(`/api/getmemberbyvillage`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ villages_id: villageID, token: CSRF_TOKEN }),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then((response) => {
+            if (response.Response === "False") {
+                throw new Error(response.statusText);
+            }
+            return response;
+        });
+}
+
+function updateMemberUi(dataMemberByRegency) {
+    let divHtml = "";
+    dataMemberByRegency.forEach((m) => {
+        divHtml += showDivHtml(m);
+    });
+
+    const divHtmlContainer = document.getElementById("showData");
+    divHtmlContainer.innerHTML = divHtml;
+}
+function showDivHtml(m) {
+    return `
+            <div class="card-body shadow mb-3 border">
+              <div class="row">
+              <div class="col-md-10 col-sm-10">
+              <img  class="rounded mr-2" width="40" src="/storage/${m.photo}">
+              ${m.name}
+              </div>
+              <div class="col-md-2 col-sm-2 ">
+              <button type="button" name="${m.name}" id="${m.user_id}" onClick="add(${m.user_id})" class="btn btn-sm btn-sc-primary float-right">+</button>
+              </div>
+              </div>
+            </div>
+            `;
+}
+
+// button add peserta event
+function add(user_id) {
+    const name = $(`#${user_id}`).attr("name");
+    Swal.fire({
+        title: "Tambahkan Peserta",
+        text: `${name}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!",
+    }).then(
+        function (e) {
+            if (e.value === true) {
+                $.ajax({
+                    type: "POST",
+                    url: `/admin/addparticipantevent`,
+                    data: {
+                        _token: CSRF_TOKEN,
+                        userId: user_id,
+                        eventId: eventId,
+                    },
+                    dataType: "JSON",
+                    success: function (data) {
+                        if (data.success === true) {
+                            swal("Done!", data.message, "success");
+                            tbadminDistrict.draw();
+                        } else {
+                            swal("Error!", data.message, "error");
+                        }
+                    },
+                    error: function (data) {
+                        console.log("error", data);
+                    },
+                });
+            } else {
+                e.dismiss;
+            }
+        },
+        function (dismiss) {
+            return false;
+        }
+    );
+}
 
 // data event
-const eventId = $("#eventId").val();
-const storage = "/storage/";
+
 const _url = $.ajax({
     url: "/api/event/galleries" + "/" + eventId,
     method: "GET",
@@ -153,3 +265,11 @@ const _url = $.ajax({
         $("#loadResult").addClass("d-none");
     },
 });
+
+function BeforeSend(idLoader) {
+    $("#" + idLoader + "").removeClass("d-none");
+}
+
+function Complete(idLoader) {
+    $("#" + idLoader + "").addClass("d-none");
+}

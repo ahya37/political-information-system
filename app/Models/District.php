@@ -135,4 +135,17 @@ class District extends Model
                 where a.regency_id = $regency_id and b.id is NULL order by a.name ASC";
         return DB::select($sql);
     }
+
+    public function getDataDistrictByRegencyId($regency_id)
+    {
+        $sql = "SELECT a.id, a.name from districts as a
+                join villages as b on a.id = b.district_id
+                join districts as c on b.district_id = c.id
+                join users as d on b.id = d.village_id
+                where c.regency_id = $regency_id and d.nik is not NULL and d.email is not null and d.status = 1
+                group by a.id , a.name order by a.name asc";
+        return DB::select($sql);
+    }
+
+
 }

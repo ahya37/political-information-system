@@ -211,5 +211,14 @@ class Village extends Model
         $sql = "UPDATE villages set target = $total_target_village  where district_id = $district_id";
         return DB::update($sql);
     }
+
+    public function getDataVillageByDistrictId($district_id)
+    {
+         $sql = "SELECT a.id, a.name from villages as a
+                join users as b on a.id = b.village_id
+                where a.district_id = $district_id and b.nik is not NULL and b.email is not null and b.status = 1
+                group by a.id , a.name order by a.name asc";
+        return DB::select($sql);
+    }
     
 }

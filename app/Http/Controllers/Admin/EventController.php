@@ -107,6 +107,30 @@ class EventController extends Controller
         
     }
 
+    public function storeAddMemberEventAjax()
+    {
+        $user_id = request()->userId;
+        $token   = request()->_token;
+        $evenId   = decrypt(request()->eventId);
+
+        if ($token != null) {
+            
+            if ($evenId) {
+                $success = true;
+                $message = $evenId;
+
+            }else{
+                $success = false;
+                $message = "Gagal ACC!";
+            }
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+            ]);
+        }
+        
+    }
+
     public function store(Request $request)
     {
         $this->validate($request, [

@@ -864,7 +864,7 @@ class User extends Authenticatable
         $sql = "SELECT a.id as user_id, a.name, a.photo from users as a
                 join villages as b on a.village_id = b.id 
                 join districts as c on b.district_id = c.id 
-                where c.regency_id = $regency_id";
+                where c.regency_id = $regency_id and a.village_id is not NULL and a.nik is not NULL and a.email is not null and a.status = 1";
         return DB::select($sql);
     }
 
@@ -873,14 +873,14 @@ class User extends Authenticatable
         $sql = "SELECT a.id as user_id, a.name, a.photo from users as a
                 join villages as b on a.village_id = b.id 
                 join districts as c on b.district_id = c.id 
-                where c.id = $district_id";
+                where c.id = $district_id and a.village_id is not NULL and a.nik is not NULL and a.email is not null and a.status = 1";
         return DB::select($sql);
     }
 
     public function getDataMemberByVillage($villages_id)
     {
         $sql = "SELECT a.id as user_id, a.name, a.photo from users as a
-                where a.village_id = $villages_id";
+                where a.village_id = $villages_id and a.village_id is not NULL and a.nik is not NULL and a.email is not null and a.status = 1";
         return DB::select($sql);
     }
 
