@@ -124,10 +124,10 @@ class Referal extends Model
 
     public function getReferalVillage($village_id)
     {
-        $sql = "SELECT b.id, b.name , count(b.id) as total_data
+        $sql = "SELECT b.id, b.name , count(a.id) as total_data
                 from users as a
                 join users as b on a.user_id = b.id
-                left join villages as c on b.village_id = c.id
+                left join villages as c on a.village_id = c.id
                 where c.id = $village_id
                 group by b.name, b.id
                 order by count(b.id) desc
@@ -269,7 +269,7 @@ class Referal extends Model
                 join villages as c on a.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
-                where c.id = $village_id
+                where b.village_id = $village_id
                 group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
                 order by COUNT(a.user_id) desc";
         return DB::select($sql);

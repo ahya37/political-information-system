@@ -1272,7 +1272,7 @@ class DashboardController extends Controller
       $data = [];
       $no = 1;
       foreach ($referal as $val) {
-          $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $referal_undirect = $userModel->getReferalUnDirectProvince($val->user_id, $province_id);
           $totalReferal     = $val->total + $referal_undirect->total;
           $data[] = [ 
               'no' => $no ++,
@@ -1359,7 +1359,7 @@ class DashboardController extends Controller
       $data = [];
       $no = 1;
       foreach ($referal as $val) {
-          $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $referal_undirect = $userModel->getReferalUnDirectRegency($val->user_id, $regency_id);
           $totalReferal     = $val->total + $referal_undirect->total;
           $data[] = [ 
               'no' => $no ++,
@@ -1420,7 +1420,7 @@ class DashboardController extends Controller
       $data = [];
       $no = 1;
       foreach ($referal as $val) {
-          $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $referal_undirect = $userModel->getReferalUnDirectDistrict($val->user_id, $district_id);
           $totalReferal     = $val->total + $referal_undirect->total;
           $data[] = [ 
               'no' => $no ++,
@@ -1481,7 +1481,7 @@ class DashboardController extends Controller
       $data = [];
       $no = 1;
       foreach ($referal as $val) {
-          $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+          $referal_undirect = $userModel->getReferalUnDirectVillage($val->user_id, $village_id);
           $totalReferal     = $val->total + $referal_undirect->total;
           $data[] = [ 
               'no' => $no ++,

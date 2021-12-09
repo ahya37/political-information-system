@@ -180,6 +180,51 @@ class User extends Authenticatable
         return $result;
     }
 
+    public function getReferalUnDirectVillage($id_user, $village_id)
+    {
+        $sql = "SELECT sum(if(user_id != $id_user ,1,0)) as total from users  where user_id in (
+                    SELECT id from users where user_id = $id_user
+                ) and not id = $id_user and village_id = $village_id";
+        $result = collect(\DB::select($sql))->first();
+        return $result;
+    }
+
+    public function getReferalUnDirectProvince($id_user, $province_id)
+    {
+        $sql = "SELECT sum(if(user_id != $id_user ,1,0)) as total from users as a
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id 
+                join regencies as d on c.regency_id = d.id 
+                where a.user_id in (
+                                    SELECT id from users where user_id = $id_user
+                                ) and not a.id = $id_user and d.province_id = $province_id";
+        $result = collect(\DB::select($sql))->first();
+        return $result;
+    }
+
+    public function getReferalUnDirectRegency($id_user, $regency_id)
+    {
+        $sql = "SELECT sum(if(user_id != $id_user ,1,0)) as total from users as a
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id
+                where a.user_id in (
+                                    SELECT id from users where user_id = $id_user
+                                ) and not a.id = $id_user and c.regency_id = $regency_id";
+        $result = collect(\DB::select($sql))->first();
+        return $result;
+    }
+
+    public function getReferalUnDirectDistrict($id_user, $district_id)
+    {
+        $sql = "SELECT sum(if(user_id != $id_user ,1,0)) as total from users as a
+                join villages as b on a.village_id = b.id 
+                where a.user_id in (
+                                    SELECT id from users where user_id = $id_user
+                                ) and not a.id = $id_user and b.district_id = $district_id";
+        $result = collect(\DB::select($sql))->first();
+        return $result;
+    }
+
     public function getReferalDirect($id_user)
     {
         $sql = "SELECT sum(if(user_id = $id_user ,1,0)) as total from users  where user_id in (
