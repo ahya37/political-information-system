@@ -1,4 +1,7 @@
-const eventId = $("#eventId").val();
+const query = document.URL;
+const eventId = query.substring(query.lastIndexOf("/") + 1);
+
+// const eventId = $("#eventId").val();
 const storage = "/storage/";
 // create event
 $(".select2").select2();
@@ -167,7 +170,7 @@ function showDivHtml(m) {
               ${m.name}
               </div>
               <div class="col-md-2 col-sm-2 ">
-              <button type="button" name="${m.name}" id="${m.user_id}" onClick="add(${m.user_id})" class="btn btn-sm btn-sc-primary float-right">+</button>
+              <button type="button" name="${m.name}" id="${m.user_id}" onClick="add(${m.user_id})" class="btn btn-sm btn-sc-primary float-right"><i class="fa fa-plus"></i></button>
               </div>
               </div>
             </div>
@@ -184,13 +187,14 @@ function add(user_id) {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes!",
+        confirmButtonText: "Ya!",
     }).then(
         function (e) {
             if (e.value === true) {
+                console.log(eventId);
                 $.ajax({
                     type: "POST",
-                    url: `/admin/addparticipantevent`,
+                    url: `/api/addparticipantevent`,
                     data: {
                         _token: CSRF_TOKEN,
                         userId: user_id,
@@ -200,13 +204,12 @@ function add(user_id) {
                     success: function (data) {
                         if (data.success === true) {
                             swal("Done!", data.message, "success");
-                            tbadminDistrict.draw();
                         } else {
-                            swal("Error!", data.message, "error");
+                            swal("Warning!", data.message, "warning");
                         }
                     },
                     error: function (data) {
-                        console.log("error", data);
+                        swal("Error!", data.message, "error");
                     },
                 });
             } else {

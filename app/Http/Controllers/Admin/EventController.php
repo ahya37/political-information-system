@@ -111,22 +111,43 @@ class EventController extends Controller
     {
         $user_id = request()->userId;
         $token   = request()->_token;
-        $evenId   = decrypt(request()->eventId);
+        $even_Id   = decrypt(request()->eventId);
+        $eventDetailModel = new EventDetail();
 
         if ($token != null) {
-            
-            if ($evenId) {
-                $success = true;
-                $message = $evenId;
 
-            }else{
+            $memberOfEvent = $eventDetailModel::where('user_id', $user_id)
+                                                ->where('event_id',$even_Id)->count();
+            if ($memberOfEvent > 0) {
+
                 $success = false;
-                $message = "Gagal ACC!";
-            }
-            return response()->json([
+                $message = "Sudah terdaftar";
+
+                return response()->json([
                 'success' => $success,
                 'message' => $message,
             ]);
+            }else{
+
+                $event =  EventDetail::create([
+                    'user_id' => $user_id,
+                    'event_id' => $even_Id
+                ]);
+                
+                if ($event) {
+                    $success = true;
+                    $message = "Berhasil menambahkan";
+    
+                }else{
+                    $success = false;
+                    $message = "Gagal menambahkan";
+                }
+                return response()->json([
+                    'success' => $success,
+                    'message' => $message,
+                ]);
+            }
+
         }
         
     }

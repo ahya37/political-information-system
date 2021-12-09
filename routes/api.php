@@ -149,5 +149,4 @@ Route::post('/getlistdapil','API\DapilController@getListDapil');
 Route::post('/getlistdistrictdapil','API\DapilController@getListDistrict');
 
 // get kabkot untuk create event
-
 Route::post('addparticipantevent','Admin\EventController@storeAddMemberEventAjax');
