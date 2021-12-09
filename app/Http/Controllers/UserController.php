@@ -8,6 +8,7 @@ use App\Menu;
 use App\User;
 use App\UserMenu;
 use App\AdminDistrict;
+use App\Figure;
 use App\LogEditUser;
 use App\Models\District;
 use App\Providers\StrRandom;
@@ -480,6 +481,7 @@ class UserController extends Controller
 
     public function memberRegister()
     {
+        $figure   = Figure::all();
         $user_id  = Auth::user()->id;
         $member   = User::with(['village.district.regency','reveral','create_by'])
                     ->where('cby', $user_id)
@@ -502,6 +504,15 @@ class UserController extends Controller
                                                 >
                                                 Edit Referal
                                                 </a>
+                                                <button
+                                               type="button" 
+                                                class="btn"
+                                                data-toggle="modal" data-target="#setFigure"
+                                                data-whatever="'.$item->id.'"
+                                                data-name="'.$item->name.'"
+                                                >
+                                                Tokoh
+                                                </button>
                                         </div>
                                     </div>
                                 </div>
@@ -522,6 +533,8 @@ class UserController extends Controller
                         ->rawColumns(['action','photo','referal','register'])
                         ->make();
                     }
-                    return view('pages.member.member-register');
+                    return view('pages.member.member-register', compact('figure'));
     }
+    
+
 }

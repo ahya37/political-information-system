@@ -85,6 +85,9 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/dtadminsubmissiondistrict','Admin\AdminController@dtAdminAreaDistrcit');
         Route::get('/dtadminsubmissionvillage','Admin\AdminController@dtAdminAreaVillage');
         Route::post('/savemappingadminarea/{user_id}','Admin\AdminController@saveMappingAdminArea')->name('member-savemappingadminarea');
+        
+        // set figure
+        Route::post('/savesetfigure','MemberController@saveFigurMember')->name('savesetfigures');
 
 
     });

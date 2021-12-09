@@ -64,4 +64,9 @@ class MemberController extends Controller
         $districts = $districtModel->getDistrictByInputMember($user_id);
         return view('pages.member.member-by-input', compact('user','districts','userModel'));
     }
+
+    public function saveFigurMember(Request $request)
+    {
+        return $request->all();
+    }
 }
