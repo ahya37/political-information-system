@@ -15,6 +15,8 @@ class CreateFigureDetailsTable extends Migration
     {
         Schema::create('figure_details', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }

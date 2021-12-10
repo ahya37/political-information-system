@@ -235,15 +235,15 @@ class Referal extends Model
 
     public function getReferealByMounthAdminDistrictDefault($district_id)
     {
-        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, c.name as village, a.photo, 
-                COUNT(case when b.id != b.user_id then a.user_id end) as total FROM users as a
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, a.photo, 
+                COUNT(b.id) as total FROM users as a
                 join users as b on a.id = b.user_id
-                join villages as c on a.village_id = c.id 
+                join villages as c on b.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
                 where  d.id = $district_id
                 group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
-                order by COUNT(a.user_id) desc";
+                order by COUNT(b.id) desc";
         return DB::select($sql);
     }
 
