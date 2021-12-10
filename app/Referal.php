@@ -99,13 +99,13 @@ class Referal extends Model
 
     public function getReferalDistrict($district_id)
     {
-        $sql = "SELECT b.id, b.name , count(b.id) as total_data
+        $sql = "SELECT b.id, b.name , count(a.id) as total_data
                 from users as a
                 join users as b on a.user_id = b.id
-                left join villages as c on b.village_id = c.id
+                left join villages as c on a.village_id = c.id
                 where c.district_id = $district_id
                 group by b.name, b.id
-                order by count(b.id) desc
+                order by count(a.id) desc
                 limit 10";
         return DB::select($sql);
     }
@@ -130,7 +130,7 @@ class Referal extends Model
                 left join villages as c on a.village_id = c.id
                 where c.id = $village_id
                 group by b.name, b.id
-                order by count(b.id) desc
+                order by count(a.id) desc
                 limit 5";
         return DB::select($sql);
     }
@@ -221,15 +221,15 @@ class Referal extends Model
 
     public function getReferealByMounthAdminDistrict($mounth, $year, $district_id)
     {
-        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, c.name as village, a.photo, 
-                COUNT(case when b.id != b.user_id then a.user_id end) as total FROM users as a
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, a.photo, 
+                COUNT(b.id) as total FROM users as a
                 join users as b on a.id = b.user_id
-                join villages as c on a.village_id = c.id 
+                join villages as c on b.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
                 where MONTH(b.created_at) = $mounth and YEAR(b.created_at) = $year and d.id = $district_id
-                group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
-                order by COUNT(a.user_id) desc limit 10";
+                group by a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc limit 10";
         return DB::select($sql);
     }
 
@@ -242,7 +242,7 @@ class Referal extends Model
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
                 where  d.id = $district_id
-                group by c.name, a.id, a.name, a.photo, a.phone_number, a.whatsapp 
+                group by a.id, a.name, a.photo, a.phone_number, a.whatsapp 
                 order by COUNT(b.id) desc";
         return DB::select($sql);
     }
@@ -263,15 +263,15 @@ class Referal extends Model
 
     public function getReferealByMounthAdminVillageDefault($village_id)
     {
-        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, c.name as village, a.photo, 
-                COUNT(case when b.id != b.user_id then a.user_id end) as total FROM users as a
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, a.photo, 
+                COUNT(b.id) as total FROM users as a
                 join users as b on a.id = b.user_id
-                join villages as c on a.village_id = c.id 
+                join villages as c on b.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
                 where b.village_id = $village_id
-                group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
-                order by COUNT(a.user_id) desc";
+                group by a.id, a.name, a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc";
         return DB::select($sql);
     }
 
