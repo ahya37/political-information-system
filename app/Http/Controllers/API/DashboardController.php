@@ -210,11 +210,15 @@ class DashboardController extends Controller
     public function getTotalMemberNational()
     {
         $gF   = app('GlobalProvider'); // global function
-        
+        $referalModel = new Referal();
+        $referal      = $referalModel->getReferealByDefault();
+        $total_member     = collect($referal)->sum(function($q){
+            return $q->total;
+        });
         $userModel        = new User();
         $regencyModel     = new Regency();
         $targetMember     = $gF->calculateTargetNational();
-        $total_member     = $gF->decimalFormat($userModel->where('village_id', '!=', NULL)->count());
+        // $total_member     = $gF->decimalFormat($userModel->where('village_id', '!=', NULL)->count());
         $target_member    = (string) $targetMember;
         $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
 
@@ -228,7 +232,7 @@ class DashboardController extends Controller
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
             'presentage_village_filled' => $presentage_village_filled,
-            'total_member' => $total_member,
+            'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $persentage_target_member
         ];
@@ -1214,13 +1218,14 @@ class DashboardController extends Controller
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
           $totalReferal     = $val->total + $referal_undirect->total;
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
              'name' => $val->name,
-             'village' => $val->village,
-             'district' => $val->district,
-             'regency' => $val->regency,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
@@ -1245,13 +1250,14 @@ class DashboardController extends Controller
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
           $totalReferal     = $val->total + $referal_undirect->total;
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
              'name' => $val->name,
-             'village' => $val->village,
-             'district' => $val->district,
-             'regency' => $val->regency,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
@@ -1274,13 +1280,14 @@ class DashboardController extends Controller
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirectProvince($val->user_id, $province_id);
           $totalReferal     = $val->total + $referal_undirect->total;
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
              'name' => $val->name,
-             'village' => $val->village,
-             'district' => $val->district,
-             'regency' => $val->regency,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
@@ -1302,13 +1309,14 @@ class DashboardController extends Controller
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
           $totalReferal     = $val->total + $referal_undirect->total;
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
              'name' => $val->name,
-             'village' => $val->village,
-             'district' => $val->district,
-             'regency' => $val->regency,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
@@ -1333,13 +1341,14 @@ class DashboardController extends Controller
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
           $totalReferal     = $val->total + $referal_undirect->total;
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
              'name' => $val->name,
-             'village' => $val->village,
-             'district' => $val->district,
-             'regency' => $val->regency,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
@@ -1361,13 +1370,14 @@ class DashboardController extends Controller
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirectRegency($val->user_id, $regency_id);
           $totalReferal     = $val->total + $referal_undirect->total;
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
              'name' => $val->name,
-             'village' => $val->village,
-             'district' => $val->district,
-             'regency' => $val->regency,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
@@ -1456,13 +1466,14 @@ class DashboardController extends Controller
       foreach ($referal as $val) {
           $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
           $totalReferal     = $val->total + $referal_undirect->total;
+           $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
           $data[] = [ 
               'no' => $no ++,
              'photo' => $val->photo,
              'name' => $val->name,
-             'village' => $val->village,
-             'district' => $val->district,
-             'regency' => $val->regency,
+              'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
              'referal' => $val->total,
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,

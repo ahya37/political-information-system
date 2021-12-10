@@ -316,6 +316,7 @@ $(document).ready(function () {
             $("#total_village").text("loading...");
         },
         success: function (data) {
+            console.log("total:", data.total_member);
             $("#total_member").text(data.total_member);
             $("#total_member_persen").text(data.persentage_target_member);
             $("#target_anggota").text(data.target_member);
