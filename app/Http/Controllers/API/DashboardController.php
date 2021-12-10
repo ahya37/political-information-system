@@ -210,15 +210,15 @@ class DashboardController extends Controller
     public function getTotalMemberNational()
     {
         $gF   = app('GlobalProvider'); // global function
-        $referalModel = new Referal();
-        $referal      = $referalModel->getReferealByDefault();
-        $total_member     = collect($referal)->sum(function($q){
-            return $q->total;
-        });
+        // $referalModel = new Referal();
+        // $referal      = $referalModel->getReferealByDefault();
+        // $total_member     = collect($referal)->sum(function($q){
+        //     return $q->total;
+        // });
         $userModel        = new User();
         $regencyModel     = new Regency();
         $targetMember     = $gF->calculateTargetNational();
-        // $total_member     = $gF->decimalFormat($userModel->where('village_id', '!=', NULL)->count());
+        $total_member     = $gF->decimalFormat($userModel->where('village_id', '!=', NULL)->count());
         $target_member    = (string) $targetMember;
         $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
 
