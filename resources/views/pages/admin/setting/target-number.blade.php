@@ -63,6 +63,24 @@
                                             </div>
                                         </div>
                                     <div class="form-group">
+                                            <div class="row">
+                                            <div class="col-md-6 col-sm-12">
+                                                <span class="required">*</span>
+                                                <label>Desa</label>
+                                                <select name="village_id" id="villages_id" required class="form-control" v-model="villages_id" v-if="districts">
+                                                <option v-for="village in villages" :value="village.id">@{{ village.name }}</option>
+                                                </select>
+                                            </select>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <span class="required">*</span>
+                                                <label>Target</label>
+                                                <input class="form-control" type="number" name="targetVill">
+                                            </select>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    <div class="form-group">
                                         <button
                                         type="submit"
                                         class="btn btn-sc-primary text-white  btn-block w-00 mt-4"
@@ -98,15 +116,18 @@
                 this.getProvincesData();
                 this.getRegenciesData();
                 this.getDistrictsData();
+                this.getVillagesData();
             },
             data(){
                 return{
                     provinces: null,
                     regencies: null,
                     districts: null,
+                    villages: null,
                     provinces_id: 36,
                     regencies_id: null,
                     districts_id: null,
+                    villages_id: null,
                 }
             },
             methods:{
@@ -131,6 +152,14 @@
                             self.districts = response.data
                         })
               },
+              getVillagesData() {
+                var self = this;
+                axios
+                    .get('{{ url('/api/villages') }}/' + self.districts_id)
+                    .then(function (response) {
+                        self.villages = response.data;
+                    });
+            },
 
         },
         watch:{
@@ -141,6 +170,10 @@
                  regencies_id: function(val,oldval){
                     this.districts_id = null;
                     this.getDistrictsData();
+                },
+                 districts_id: function (val, oldval) {
+                    this.villages_id = null;
+                    this.getVillagesData();
                 },
             },
         });

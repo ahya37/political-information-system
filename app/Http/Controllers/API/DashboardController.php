@@ -318,7 +318,7 @@ class DashboardController extends Controller
         $targetMmemberModel = $villageModel->select('target')->where('id', $village_id)->first();
         $total_target_per_district = $targetMmemberModel->target;
         $target_member  = $gF->decimalFormat($total_target_per_district);
-        $persentage_target_member = $gF->persen(($total_member/$target_member)*100);
+        $persentage_target_member = ($total_member/$total_target_per_district)*100;
         
         // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillageFirst($village_id);
@@ -327,7 +327,7 @@ class DashboardController extends Controller
             'achievments' => $gF->decimalFormat($achievments->todays_achievement ?? ''),
             'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $target_member,
-            'persentage_target_member' => $persentage_target_member
+            'persentage_target_member' => $gF->persen($persentage_target_member)
         ];
         return response()->json($data);
 
@@ -377,13 +377,12 @@ class DashboardController extends Controller
     {
         $gF   = app('GlobalProvider'); // global function
 
-
         $userModel        = new User();
         $member_registered  = $userModel->getMemberRegisteredDistrct($district_id);
         $chart_member_target = [];
         foreach ($member_registered as $val) {
             $chart_member_target['label'][] = $val->name;
-            $chart_member_target['target'][] = $gF->decimalFormat($val->target_member);
+            $chart_member_target['target'][] = $val->target_member;
             $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
         }
         $data = [

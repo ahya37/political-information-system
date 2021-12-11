@@ -317,7 +317,7 @@ $(document).ready(function () {
                 labels: label,
                 datasets: [
                     {
-                        label: "Terdaftar",
+                        label: "Terdaftar (%)",
                         data: valuePersentage,
                         backgroundColor: "rgb(126, 252, 101)",
                     },
@@ -787,4 +787,8 @@ function BeforeSend(idLoader) {
 
 function Complete(idLoader) {
     $("#" + idLoader + "").addClass("d-none");
+}
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

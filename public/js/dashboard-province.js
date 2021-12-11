@@ -303,7 +303,7 @@ $.ajax({
             labels: label,
             datasets: [
                 {
-                    label: "Terdaftar",
+                    label: "Terdaftar (%)",
                     data: valuePersentage,
                     backgroundColor: "rgb(126, 252, 101)",
                 },
