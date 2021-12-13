@@ -344,7 +344,8 @@ class DashboardController extends Controller
         foreach ($member_registered as $val) {
             $chart_member_target['label'][] = $val->name;
             $chart_member_target['target'][] =  $val->target_member;
-            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+            // $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+            $chart_member_target['persentage'][] = $val->realisasi_member;
         }
         $data = [
             'label' => $chart_member_target['label'],
@@ -364,7 +365,8 @@ class DashboardController extends Controller
         foreach ($member_registered as $val) {
             $chart_member_target['label'][] = $val->name;
             $chart_member_target['target'][] = $val->target_member;
-            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+            // $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+            $chart_member_target['persentage'][] = $val->realisasi_member;
         }
         $data = [
             'label' => $chart_member_target['label'],
@@ -1028,7 +1030,8 @@ class DashboardController extends Controller
         foreach ($member_registered as $val) {
             $chart_member_target['label'][] = $val->name;
             $chart_member_target['target'][] = $val->target_member;
-            $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+            // $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+            $chart_member_target['persentage'][] = $val->realisasi_member;
         }
         $data = [
             'label' => $chart_member_target['label'],
