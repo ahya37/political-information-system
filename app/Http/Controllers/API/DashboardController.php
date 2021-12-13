@@ -1255,6 +1255,11 @@ class DashboardController extends Controller
       $province_id  = request()->province_id;
       $referalModel = new Referal();
       $referal      = $referalModel->getReferealByMounthAdminProvince($mounth, $year, $province_id);
+      $referalCalculate = collect($referal)->sum(function($q){
+          return $q->total;
+      });
+       $gF = new GlobalProvider();
+
       $userModel = new User();
       $referal_undirect = '';
       $data = [];
@@ -1277,7 +1282,12 @@ class DashboardController extends Controller
              'total_referal' => $totalReferal
           ];
       }
-      return response()->json($data);
+      $result = [
+          'referal_acumulate' => $gF->decimalFormat($referalCalculate),
+          'data' => $data
+      ];
+
+      return response()->json($result);
     }
 
     public function referalByMountAdminProvinceDefault()
@@ -1285,6 +1295,12 @@ class DashboardController extends Controller
       $province_id  = request()->province_id;
       $referalModel = new Referal();
       $referal      = $referalModel->getReferealByDefaultProvince($province_id);
+      $referalCalculate = collect($referal)->sum(function($q){
+          return $q->total;
+      });
+
+      $gF = new GlobalProvider();
+
       $userModel = new User();
       $referal_undirect = '';
       $data = [];
@@ -1307,7 +1323,11 @@ class DashboardController extends Controller
              'total_referal' => $totalReferal
           ];
       }
-      return response()->json($data);
+      $result = [
+          'referal_acumulate' => $gF->decimalFormat($referalCalculate),
+          'data' => $data
+      ];
+      return response()->json($result);
     }
 
     public function referalByMountAdminByDefault()
@@ -1341,7 +1361,6 @@ class DashboardController extends Controller
              'phone' => $val->phone_number,
              'referal_undirect' => $referal_undirect->total,
              'total_referal' => $totalReferal,
-             'referal_calculate' => $referalCalculate
           ];
       }
       $result = [
