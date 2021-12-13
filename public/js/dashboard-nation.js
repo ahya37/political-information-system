@@ -452,6 +452,7 @@ $(document).ready(function () {
     function ChartMemberTargetUi(memberTarget) {
         const label = memberTarget.label;
         const valuePersentage = memberTarget.persentage;
+        console.log("data:", valuePersentage);
         const valueTarget = memberTarget.value_target;
         const memberRegistered = document.getElementById("memberRegister");
         const dataMemberVsTarget = {
@@ -493,15 +494,15 @@ $(document).ready(function () {
                         },
                     ],
                 },
-                tooltips: {
-                    callbacks: {
-                        label: function (tooltipItem, data) {
-                            return tooltipItem.yLabel
-                                .toFixed(1)
-                                .replace(/\d(?=(\d{3})+\.)/g, "$&.");
-                        },
-                    },
-                },
+                // tooltips: {
+                //     callbacks: {
+                //         label: function (tooltipItem, data) {
+                //             return tooltipItem.yLabel
+                //                 .toFixed(1)
+                //                 .replace(/\d(?=(\d{3})+\.)/g, "$&.");
+                //         },
+                //     },
+                // },
             },
             legend: true,
         });
