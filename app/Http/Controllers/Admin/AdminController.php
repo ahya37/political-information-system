@@ -100,6 +100,12 @@ class AdminController extends Controller
                             'dapil_id' => $request->dapil_id,
                             'admin_user_id' => $user->id
                         ]);
+
+                        $AdminDapilDistrictMode->create([
+                            'admin_dapils_id' => $saveAdminDapil->id,
+                            'district_id' => $request->district_id,
+                        ]);
+                        
                     }else{
                         // jika ada, get id nya
                         $adminDapilId = $adminDapilModel->select('id')->where('admin_user_id', $user->id)->first();
@@ -109,7 +115,6 @@ class AdminController extends Controller
                             'district_id' => $request->district_id,
                         ]);
                     }
-
 
                 // jika level = 2, korwil / dapil TK.II
                 }elseif($level == '2'){

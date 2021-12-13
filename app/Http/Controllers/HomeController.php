@@ -57,7 +57,6 @@ class HomeController extends Controller
 
         $profile = $userModel->with(['village','education'])->where('id', $id_user)->first();
         $member = $userModel->getDataByTotalReferalDirect($id_user); // berfungsi juga untuk menampilkan data total referal
-
           // referal
         $referal_undirect = $userModel->getReferalUnDirect($id_user);
         $referal_undirect = $referal_undirect->total == NULL ? 0 : $referal_undirect->total;
@@ -145,7 +144,7 @@ class HomeController extends Controller
         $districtModel    = new District();
 
         $district   = $districtModel->with(['regency'])->where('id', $district_id)->first();
-        // // jumlah anggota di kecamatan
+        // jumlah anggota di kecamatan
         $userModel  = new User();
         $member     = $userModel->getMemberDistrict($district_id);
         $total_member = count($member);
@@ -156,7 +155,6 @@ class HomeController extends Controller
         $villageModel   = new Village();
         $villages       = $villageModel->getVillagesDistrct($district_id); // fungsi total desa di kab
         $total_village  = count($villages);
-
 
          // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillage($district_id);
