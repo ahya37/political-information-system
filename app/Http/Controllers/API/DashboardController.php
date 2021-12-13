@@ -5,14 +5,15 @@ namespace App\Http\Controllers\API;
 use App\Job;
 use App\User;
 use App\Referal;
-use App\TargetNumber;
 use Carbon\Carbon;
+use App\TargetNumber;
 use App\Models\Regency;
 use App\Models\Village;
 use App\Models\District;
+use App\Models\Province;
+use App\Providers\GlobalProvider;
 use App\Providers\GrafikProvider;
 use App\Http\Controllers\Controller;
-use App\Models\Province;
 
 class DashboardController extends Controller
 {
@@ -1210,6 +1211,13 @@ class DashboardController extends Controller
       $year         = request()->year;
       $referalModel = new Referal();
       $referal      = $referalModel->getReferealByMounthAdmin($mounth, $year);
+      $gF = new GlobalProvider();
+
+      // total referal per bulan 
+      $referalCalculateByMonth = collect($referal)->sum(function($q){
+          return $q->total;
+      });
+
       $userModel = new User();
       $referal_undirect = '';
       $data = [];
@@ -1229,10 +1237,15 @@ class DashboardController extends Controller
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
              'referal_undirect' => $referal_undirect->total,
-             'total_referal' => $totalReferal
+             'total_referal' => $totalReferal,
+             
           ];
       }
-      return response()->json($data);
+      $result = [
+          'referalCalculate' => $gF->decimalFormat($referalCalculateByMonth),
+          'data' => $data
+      ];
+      return response()->json($result);
     }
 
     public function referalByMountAdminProvince()
@@ -1301,6 +1314,13 @@ class DashboardController extends Controller
     {
       $referalModel = new Referal();
       $referal      = $referalModel->getReferealByDefault();
+      $gF   = new GlobalProvider();
+
+      //  jumlah referal secara defautl / akumulasi
+      $referalCalculate = collect($referal)->sum(function($q){
+          return $q->total;
+      });
+
       $userModel = new User();
       $referal_undirect = '';
       $data = [];
@@ -1320,10 +1340,15 @@ class DashboardController extends Controller
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
              'referal_undirect' => $referal_undirect->total,
-             'total_referal' => $totalReferal
+             'total_referal' => $totalReferal,
+             'referal_calculate' => $referalCalculate
           ];
       }
-      return response()->json($data);
+      $result = [
+          'referal_acumulate' => $gF->decimalFormat($referalCalculate),
+          'data' => $data
+      ];
+      return response()->json($result);
     }
 
     public function referalByMountAdminRegency()
