@@ -643,20 +643,26 @@ $("#dtshowInputerDataInputerByMounth").DataTable({
 // anggota referal terbanyak perbulan
 // Data Default
 $("#referalOfMount", async function () {
+    $("#totalReferalByMonth").empty();
     BeforeSend("LoadaReferalByMounth");
     try {
-        const resultReferalByMounth = await getReferalByDefault();
-        updateReferalByMounth(resultReferalByMounth);
+        const referalByMounth = await getReferalByDefault();
+        const resultReferalByMounth = referalByMounth.data;
+        const calculate = referalByMounth.referal_acumulate;
+        updateReferalByMounth(resultReferalByMounth, calculate);
     } catch (err) {}
     Complete("LoadaReferalByMounth");
 });
 
 // akumulasi sebelum pilih bulan
 async function acumulate() {
+    $("#totalReferalByMonth").empty();
     BeforeSend("LoadaReferalByMounth");
     try {
-        const resultReferalByMounth = await getReferalByDefault();
-        updateReferalByMounth(resultReferalByMounth);
+        const referalByMounth = await getReferalByDefault();
+        const resultReferalByMounth = referalByMounth.data;
+        const calculate = referalByMounth.referal_acumulate;
+        updateReferalByMounth(resultReferalByMounth, calculate);
     } catch (err) {}
     Complete("LoadaReferalByMounth");
 }
@@ -681,13 +687,16 @@ function getReferalByDefault() {
 $("#referalOfMount").on("changeDate", async function (selected) {
     const mounthSelected = selected.date.getMonth() + 1;
     const yearSelected = selected.date.getFullYear();
+    $("#totalReferalByMonth").empty();
     BeforeSend("LoadaReferalByMounth");
     try {
-        const resultReferalByMounth = await getReferalByMount(
+        const referalByMounth = await getReferalByMount(
             mounthSelected,
             yearSelected
         );
-        updateReferalByMounth(resultReferalByMounth);
+        const resultReferalByMounth = referalByMounth.data;
+        const calculate = referalByMounth.referal_acumulate;
+        updateReferalByMounth(resultReferalByMounth, calculate);
     } catch (err) {}
     Complete("LoadaReferalByMounth");
 });
@@ -709,7 +718,9 @@ function getReferalByMount(mounthSelected, yearSelected) {
     });
 }
 
-function updateReferalByMounth(resultReferalByMounth) {
+function updateReferalByMounth(resultReferalByMounth, calculate) {
+    $("#totalReferalByMonth").append(`Total : <strong>${calculate}</strong>`);
+
     let divHtmlReferalByMounth = "";
     resultReferalByMounth.forEach((m) => {
         divHtmlReferalByMounth += showDivHtmlReferalByMounth(m);

@@ -1457,6 +1457,11 @@ class DashboardController extends Controller
       $district_id  = request()->district_id;
       $referalModel = new Referal();
       $referal      = $referalModel->getReferealByMounthAdminDistrict($mounth, $year, $district_id);
+      $referalCalculate = collect($referal)->sum(function($q){
+          return $q->total;
+      });
+      $gF = new GlobalProvider();
+
       $userModel = new User();
       $referal_undirect = '';
       $data = [];
@@ -1480,7 +1485,12 @@ class DashboardController extends Controller
              'total_referal' => $totalReferal
           ];
       }
-      return response()->json($data);
+      $result = [
+          'referal_acumulate' => $gF->decimalFormat($referalCalculate),
+          'data' => $data
+      ];
+
+      return response()->json($result);
     }
 
     public function referalByMountAdminDistrictDefault()
@@ -1489,6 +1499,11 @@ class DashboardController extends Controller
       $district_id  = request()->district_id;
       $referalModel = new Referal();
       $referal      = $referalModel->getReferealByMounthAdminDistrictDefault($district_id);
+      $referalCalculate = collect($referal)->sum(function($q){
+          return $q->total;
+      });
+      $gF = new GlobalProvider();
+
       $userModel = new User();
       $referal_undirect = '';
       $data = [];
@@ -1511,7 +1526,11 @@ class DashboardController extends Controller
              'total_referal' => $totalReferal
           ];
       }
-      return response()->json($data);
+      $result = [
+          'referal_acumulate' => $gF->decimalFormat($referalCalculate),
+          'data' => $data
+      ];
+      return response()->json($result);
     }
 
     public function referalByMountAdminVillage()
