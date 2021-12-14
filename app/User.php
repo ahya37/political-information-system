@@ -858,6 +858,7 @@ class User extends Authenticatable
                 order by COUNT(DISTINCT (b.id)) desc";
         return DB::select($sql);
     }
+    
 
     public function getDataMemberByRegency($regency_id)
     {
@@ -881,6 +882,14 @@ class User extends Authenticatable
     {
         $sql = "SELECT a.id as user_id, a.name, a.photo from users as a
                 where a.village_id = $villages_id and a.village_id is not NULL and a.nik is not NULL and a.email is not null and a.status = 1";
+        return DB::select($sql);
+    }
+
+    public function getMemberFigure($villageID)
+    {
+         $sql = "SELECT a.id as user_id, a.village_id, a.name as member, c.name as figure, a.photo, a.phone_number, a.whatsapp from users as a
+                join figure_detail as b on a.id = b.user_id
+                join figure as c on b.figure_id = c.id where a.village_id = $villageID";
         return DB::select($sql);
     }
 

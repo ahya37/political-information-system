@@ -456,6 +456,27 @@ $("#dtshowInputerDataInputerByMounth").DataTable({
     aaSorting: [[2, "desc"]],
 });
 
+// figure
+$("#dtshowFigure").DataTable({
+    processing: true,
+    language: {
+        processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+    },
+    serverSide: true,
+    ordering: true,
+    ajax: {
+        url: `/admin/dtlistmemberfigure/${villageID}`,
+    },
+    columns: [
+        { data: "photo", name: "photo" },
+        { data: "member", name: "member" },
+        { data: "figure", name: "figure" },
+        { data: "address", name: "address" },
+        { data: "contact", name: "contact" },
+    ],
+    aaSorting: [[2, "desc"]],
+});
+
 // anggota referal terbanyak perbulan
 $(".datepicker").datepicker({
     format: "MM",

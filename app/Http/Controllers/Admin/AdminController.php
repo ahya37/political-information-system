@@ -740,5 +740,39 @@ class AdminController extends Controller
         }
 
     }
+
+    public function dtListMemberFigure($villageID)
+    {
+        $userModel = new User();
+        $memberInputer = $userModel->getMemberFigure($villageID);
+        // anggota berdasarkan input di district
+        if (request()->ajax()) 
+        {
+            return DataTables::of($memberInputer)
+                        ->addColumn('photo', function($item){
+                                        return '
+                                            <a href="'.route('admin-profile-member', $item->user_id).'">
+                                                <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                                            </a>';
+                        })
+                        ->addColumn('address', function($item){
+                             $village = Village::with(['district.regency.province'])->where('id', $item->village_id)->first(); 
+                             return $village->district->name .'<br>'.$village->district->name.',<br>'.$village->district->regency->name.',<br>'.$village->district->regency->province->name;
+                        })
+                        ->addColumn('contact', function($item){
+                            return '<div class="badge badge-pill badge-primary">
+                                        <i class="fa fa-phone"></i>
+                                        </div>
+                                       '.$item->phone_number.'
+                                        <br/>
+                                        <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+                                        </div>
+                                        '.$item->whatsapp.' ';
+                        })
+                        ->rawColumns(['photo','address','contact'])
+                        ->make(true);
+        }
+
+    }
     
 }

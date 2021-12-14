@@ -225,6 +225,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/dtlistadminareavillage/{villageID}','AdminController@dtListAdminAreaVillage');
         Route::get('/dtlistadmin','AdminController@dtListAdmin');
 
+        // figure
+        Route::get('/dtlistmemberfigure/{villageID}','AdminController@dtListMemberFigure');
+
+
         
     });
 });

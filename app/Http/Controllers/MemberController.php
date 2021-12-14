@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\FigureDetail;
 use App\User;
 use App\Models\District;
 use App\Models\Province;
@@ -67,6 +68,14 @@ class MemberController extends Controller
 
     public function saveFigurMember(Request $request)
     {
-        return $request->all();
+        $figureId = $request->figureId;
+        foreach ($figureId as $key => $value) {
+            $figureDetail = new FigureDetail();
+            $figureDetail->user_id = $request->userid;
+            $figureDetail->figure_id = $value;
+            $figureDetail->save();
+        }
+
+        return redirect()->back()->with(['success' => 'Anggota berpengaruh telah dibuat']);
     }
 }

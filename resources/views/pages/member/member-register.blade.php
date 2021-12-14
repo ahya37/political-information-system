@@ -66,7 +66,7 @@
       <form action="{{ route('savesetfigures') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="modal-body">
-              <input type="hidden" name="uid" id="uid" class="form-control" id="recipient-name">
+              <input type="hidden" name="userid" id="uid" class="form-control" id="recipient-name">
               @foreach ($figure as $fig)
               <div class="form-group">
                 <input type="checkbox" name="figureId[]" value="{{ $fig->id }}"> {{ $fig->name }}
