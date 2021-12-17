@@ -308,7 +308,7 @@ class RewardController extends Controller
                     'user_id' => $userId,
                     'point' => $point,
                     'nominal' => $nominal,
-                    'referal' => $referal,
+                    'total_data' => $referal,
                     'range' => '[{"date" : '.$date.',"days" : '.$daterange.',"category" : '.$month.'}]',
                     'code' => Str::random(5)
             ]);
