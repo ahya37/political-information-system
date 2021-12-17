@@ -141,7 +141,7 @@ function referalPointUi(
     totalNominal,
     totalReferalCalculate
 ) {
-    $("#mode").append(`Kelipatan : ${mode} Orang / Referal`);
+    $("#mode").append(`Kelipatan : ${mode} Referal`);
     $("#days").append(`<strong>Dalam ${dataDays} Hari</strong>`);
     $("#monthCategory").append(`${monthCategory}`);
     $("#totalPoint").append(`Total Poin : ${totalPoint}`);

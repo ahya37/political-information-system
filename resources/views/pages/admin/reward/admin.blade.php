@@ -52,7 +52,7 @@
                                     <tr>
                                       <th scope="col"></th>
                                       <th scope="col">NAMA</th>
-                                      <th scope="col">REFERAL</th>
+                                      <th scope="col">INPUT</th>
                                       <th scope="col">POIN</th>
                                       <th scope="col">NOMINAL</th>
                                       <th scope="col">AKSI</th>
