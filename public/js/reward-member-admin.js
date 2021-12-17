@@ -35,7 +35,7 @@ $("#data", async function () {
 function getReferalPointDefault(start, end) {
     let range = start.format("YYYY-MM-DD") + "+" + end.format("YYYY-MM-DD");
 
-    return fetch(`/api/rewardefault/${range}`)
+    return fetch(`/api/admin/member/rewardefault/${range}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(response.statusText);

@@ -177,24 +177,24 @@ class RewardController extends Controller
             $referalModel = new Referal();
             $referalPoint = $referalModel->getPointMemberAdmin($start, $end);
             $totalReferal = collect($referalPoint)->sum(function($q){
-                return $q->total_referal;
+                return $q->total_input;
             });
              
             
 
             $data = [];
             foreach ($referalPoint as $key => $val) {
-                $totalReferalByMember = $val->total_referal - $val->referal_inpoint;
-                if ($gF->getPointMemberAdmin($totalReferalByMember, $days) > 0) {
+                $totalInputMember = $val->total_input - $val->input_inpoint;
+                if ($gF->getPointMemberAdmin($totalInputMember, $days) > 0) {
                     # code...
                     $data[] = [
                         'userId' => $val->id,
                         'photo' => $val->photo,
                         'name' => $val->name,
-                        'totalReferal' => $totalReferalByMember,
-                        'poin' => $gF->getPointMemberAdmin($totalReferalByMember, $days),
-                        'nominal' => $gF->decimalFormat($gF->getPointNominal($gF->getPointMemberAdmin($totalReferalByMember, $days))),
-                        'totalNominal' => $gF->getPointNominal($gF->getPointMemberAdmin($totalReferalByMember, $days)),
+                        'totalReferal' => $totalInputMember,
+                        'poin' => $gF->getPointMemberAdmin($totalInputMember, $days),
+                        'nominal' => $gF->decimalFormat($gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days))),
+                        'totalNominal' => $gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days)),
                         'days' => $days,
                         'date' => $start.'/'.$end,
                         'month' => $monthCategory
@@ -224,6 +224,70 @@ class RewardController extends Controller
             ];
             return $result;
         }
+    }
+
+    public function getPoinByMonthMemberAdminDefaul($daterange)
+    {
+            $gF = new GlobalProvider();
+            $range = $daterange;
+
+            if ($range != '') {
+                $date  = explode('+', $range);
+                $start = Carbon::parse($date[0])->format('Y-m-d');
+                $end   = Carbon::parse($date[1])->format('Y-m-d'); 
+            }
+
+            // jumlah hari
+            $days = $gF->getDaysTotal($start, $end);
+            $monthCategory = $gF->getMonthCategoryMemberAdmin($days);
+            $mode = $gF->getPointModeMemberAdmin($days);
+            
+            $referalModel = new Referal();
+            $referalPoint = $referalModel->getPointMemberAdmin($start, $end);
+            $totalReferal = collect($referalPoint)->sum(function($q){
+                return $q->total_input;
+            });
+
+            $data = [];
+            foreach ($referalPoint as $key => $val) {
+                $totalInputMember = $val->total_input - $val->input_inpoint;
+                if ($gF->getPointMemberAdmin($totalInputMember, $days) > 0) {
+                    # code...
+                    $data[] = [
+                        'userId' => $val->id,
+                        'photo' => $val->photo,
+                        'name' => $val->name,
+                        'totalReferal' => $totalInputMember,
+                        'poin' => $gF->getPointMemberAdmin($totalInputMember, $days),
+                        'nominal' => $gF->decimalFormat($gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days))),
+                        'totalNominal' => $gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days)),
+                        'days' => $days,
+                        'date' => $start.'/'.$end,
+                        'month' => $monthCategory
+                    ];
+                }
+            }
+            $totalPoint = collect($data)->sum(function($q){
+                return $q['poin'];
+            });
+            $totalNominal = collect($data)->sum(function($q){
+                return $q['totalNominal'];
+            });
+             $totalReferalCalculate = collect($data)->sum(function($q){
+                return $q['totalReferal'];
+            });
+
+            $result = [
+                'days' => $days,
+                'monthCategory' => $monthCategory,
+                'mode' => $mode,
+                'totalReferal' => $totalReferal,
+                'totalPoint' => $totalPoint,
+                'totalNominal' => $totalNominal,
+                'totalReferalCalculate' => $totalReferalCalculate,
+                'data' => $data
+            ];
+            return $result;
     }
 
     public function saveVoucherHistory()

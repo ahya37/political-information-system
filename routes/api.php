@@ -156,6 +156,7 @@ Route::get('/rewardefault/{daterange}','Admin\RewardController@getPoinByMonthDef
 Route::post('/reward/{daterange}','Admin\RewardController@getPoinByMonth');
 
 // reward member admin
+Route::get('/admin/member/rewardefault/{daterange}','Admin\RewardController@getPoinByMonthMemberAdminDefaul');
 Route::post('/admin/member/reward/{daterange}','Admin\RewardController@getPoinByMonthMemberAdmin');
 
 Route::post('/savevoucher','Admin\RewardController@saveVoucherHistory');
