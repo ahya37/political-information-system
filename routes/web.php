@@ -25,7 +25,6 @@ Route::post('/admin/dashboard/referalbymount','Admin\DashboardController@referal
 
 Route::get('/testgetfigure','TestController@testGretFigure');
 
-
 Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
     Route::get('/home', 'HomeController@index')->name('home');
 
@@ -101,6 +100,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
     Route::post('/login','LoginController@login')->name('post-admin-login');
     Route::post('/accadmindistrict','AdminController@accAdminDistrict');
     Route::post('/accadminvillage','AdminController@accAdminVillage');
+
+    // voucher / reward
 
     Route::group(['middleware' => 'admin'], function(){
         Route::post('logout','LoginController@logout')->name('admin-logout');
@@ -227,6 +228,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // figure
         Route::get('/dtlistmemberfigure/{villageID}','AdminController@dtListMemberFigure');
+
+        // Reward
+        Route::get('/reward','RewardController@index')->name('admin-reward');
+        Route::get('/rewardadmin','RewardController@indexAdmin')->name('admin-rewardadmin');
 
 
         

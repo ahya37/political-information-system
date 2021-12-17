@@ -150,3 +150,12 @@ Route::post('/getlistdistrictdapil','API\DapilController@getListDistrict');
 
 // get kabkot untuk create event
 Route::post('addparticipantevent','Admin\EventController@storeAddMemberEventAjax');
+
+// reward anggota biasa
+Route::get('/rewardefault/{daterange}','Admin\RewardController@getPoinByMonthDefault');
+Route::post('/reward/{daterange}','Admin\RewardController@getPoinByMonth');
+
+// reward member admin
+Route::post('/admin/member/reward/{daterange}','Admin\RewardController@getPoinByMonthMemberAdmin');
+
+Route::post('/savevoucher','Admin\RewardController@saveVoucherHistory');

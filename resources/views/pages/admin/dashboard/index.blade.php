@@ -443,7 +443,6 @@
 <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
 <script src="{{ asset('assets/vendor/raphael/raphael-min.js') }}"></script>
 <script src="{{ asset('assets/vendor/morris/morris.min.js') }}"></script>
-<script type="{{ asset('assets/vendor/morris/morris.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/chart/Chart.min.js') }}"></script>  
 <script src="{{ asset('js/dashboard-nation.js') }}" ></script>

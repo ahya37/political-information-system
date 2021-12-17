@@ -39,6 +39,12 @@
                    >
                     Buat Anggota Baru
                   </a>
+                   <a
+                    href="{{ route('admin-reward') }}"
+                    class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/reward')) ? 'active custom-active-color' : '' }}"
+                   >
+                    Reward
+                  </a>
                 </li>
               </ul>
             </div>
@@ -72,6 +78,12 @@
                     >
                       Pengajuan Admin
                     </a>
+                     <a
+                    href="{{ route('admin-rewardadmin') }}"
+                    class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/rewardadmin')) ? 'active custom-active-color' : '' }}"
+                   >
+                    Reward
+                  </a>
                 </li>
               </ul>
             </div>
