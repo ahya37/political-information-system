@@ -88,6 +88,8 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         // set figure
         Route::post('/savesetfigure','MemberController@saveFigurMember')->name('savesetfigures');
 
+        // reward
+        Route::get('/reward','RewardController@index')->name('member-reward');
 
     });
 

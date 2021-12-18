@@ -163,11 +163,9 @@ class RewardController extends Controller
         if (request()->daterange != '') {
             $range = request()->daterange;
 
-            if ($range != '') {
-                $date  = explode('+', $range);
-                $start = Carbon::parse($date[0])->format('Y-m-d');
-                $end   = Carbon::parse($date[1])->format('Y-m-d'); 
-            }
+            $date  = explode('+', $range);
+            $start = Carbon::parse($date[0])->format('Y-m-d');
+            $end   = Carbon::parse($date[1])->format('Y-m-d'); 
 
             // jumlah hari
             $days = $gF->getDaysTotal($start, $end);

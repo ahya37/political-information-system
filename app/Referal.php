@@ -286,4 +286,26 @@ class Referal extends Model
         return DB::select($sql);
     }
 
+    public function getPointByMemberAccount($start, $end, $userId)
+    {
+        $sql = "SELECT COUNT(b.id) as total_input, c.total_data as input_inpoint from users as a
+                join users as b on a.id = b.cby
+                left join voucher_history as c on a.id = c.user_id
+                where b.created_at BETWEEN '$start' and '$end' and a.id = $userId
+                GROUP BY c.total_data";
+        $result =  collect(\DB::select($sql))->first();
+        return $result;
+    }
+
+    public function getPointByMemberAccountReferal($start, $end, $userId)
+    {
+        $sql = "SELECT COUNT(b.id) as total_input, c.total_data as referal_inpoint from users as a
+                join users as b on a.id = b.user_id
+                left join voucher_history as c on a.id = c.user_id
+                where b.created_at BETWEEN '$start' and '$end' and a.id = $userId
+                GROUP BY c.total_data";
+        $result =  collect(\DB::select($sql))->first();
+        return $result;
+    }
+
 }

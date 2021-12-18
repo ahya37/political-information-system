@@ -1,0 +1,111 @@
+@extends('layouts.app')
+@section('title','Reward')
+@push('addon-style')
+ <link
+      href="{{ asset('assets/style/style.css') }}"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/daterangepicker/daterangepicker.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
+@endpush
+@section('content')
+<!-- Section Content -->
+ <div
+            class="section-content section-dashboard-home mb-4"
+            data-aos="fade-up"
+          >
+            <div class="container-fluid">
+              <div class="dashboard-heading">
+                <h2 class="dashboard-title">Reward</h2>
+                <p class="dashboard-subtitle">
+                </p>
+              </div>
+              <div class="dashboard-content mt-4" id="transactionDetails">
+                <div class="row">
+                  <div class="col-md-12 col-sm-12">
+                    @include('layouts.message')
+                    <div class="card">
+                      <div class="card-body">
+                          <div class="row">
+                              <div class="col-md-4 col-sm-4">
+                                  <div class="row">
+                                      <div class="col-md-12 col-sm-12">
+                                          <div class="input-group">
+                                            <button id="created_at" class="btn btn-sm btn-sc-primary text-white">Tanggal</button>
+                                                {{-- <input type="text" id="created_at" name="date" class="form-control"> --}}
+                                                <input type="hidden" value="{{ Auth::user()->code }}" id="uid" >
+                                          </div>
+                                      </div>
+                                      <div class="col-md-12 col-sm-12 mt-2">
+                                          <div class="card shadow">
+                                              <div class="card body bg-success">
+                                                  <div class="row ml-1 mt-1">
+                                                  <div class="col-md-6 col-sm-6">
+                                                    <small class="card-title  text-white">Poin</small>
+                                                  </div>
+                                                  <div class="col-md-6 col-sm-6">
+                                                    <div class="card-title  text-white"  id="point"></div>
+                                                  </div>
+                                                </div>
+                                                <div class="row ml-1 mt-1">
+                                                  <div class="col-md-6 col-sm-6">
+                                                    <small class="card-title  text-white">Input</small>
+                                                  </div>
+                                                  <div class="col-md-6 col-sm-6">
+                                                    <div class="card-title  text-white"  id="totalData"></div>
+                                                  </div>
+                                                </div>
+                                                <div class="row ml-1 mt-1">
+                                                  <div class="col-md-6 col-sm-6">
+                                                    <small class="card-title  text-white">Nominal</small>
+                                                  </div>
+                                                  <div class="col-md-6 col-sm-6">
+                                                    <div class="card-title  text-white"  id="nominal"></div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <span id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay"></span>
+                                              <div class="card-footer">
+                                                  <div id="days"></div>
+                                                  <div id="monthCategory"></div>
+                                                  <div id="mode"></div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-md-8 col-sm-8">
+                                  
+                              </div>
+                          </div>
+                          {{-- <div class="row">
+                            <div class="col-md-4 col-sm-4">
+                                <div class="input-group mb-6 col-md-12 col-sm-12">
+                                  <input type="text" id="created_at" name="date" class="form-control">
+                               </div>
+                               <div class="col-md-12 col-sm-12">
+                                   Data
+                               </div>
+                            </div>
+                          </div> --}}
+                          
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+@endsection
+
+@push('addon-script')
+<script type="text/javascript" src="{{ asset('assets/vendor/moments/moment.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/vendor/daterangepicker/daterangepicker.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+<script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+<script type="text/javascript" src={{ asset('js/reward-member.js') }}></script>
+@endpush
