@@ -55,7 +55,7 @@ class RewardController extends Controller
                     $inpoint = $level == 0 ? $inputPoint->referal_inpoint : $inputPoint->input_inpoint; 
                     $totalInputMember = $inputPoint->total_input - $inpoint;
                     
-                    $nominal = $level == 0 ? $gF->decimalFormat($gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days))) : $gF->decimalFormat($gF->getPointNominal($gF->getPoint($totalInputMember, $days)));
+                    $nominal = $level == 0 ? $gF->decimalFormat($gF->getPointNominal($gF->getPoint($totalInputMember, $days))) : $gF->decimalFormat($gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days)));
                     $point   = $level == 0 ? $gF->getPoint($totalInputMember, $days) : $gF->getPointMemberAdmin($totalInputMember, $days);
         
                     $result = [
