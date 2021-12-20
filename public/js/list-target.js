@@ -58,7 +58,7 @@ function showDivHtml(m) {
                                 </div>
       
                                           <div class="collapse" id="referal${m.province_id}" aria-expanded="false">
-                                             <div class="card-body">Name</div>
+                                             <div class="card-body">Dalam Pengembangan</div>
                                           </div>
                                       </div>
                                   </div>
