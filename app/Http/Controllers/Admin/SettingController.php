@@ -91,11 +91,14 @@ class SettingController extends Controller
     public function getListTarget()
     {
         $provinceModel = new Province();
+        $regencyModel  = new Regency();
+
         $target        = $provinceModel->getListTarget();
 
         $data = [];
         foreach ($target as $key => $val) {
-            $regency  = Regency::where('province_id', $val->province_id)->get();
+            $regency  = $regencyModel->getListTargetRegency($val->province_id);
+            
             $data[] = [
                 'province_id' => $val->province_id,
                 'province' => $val->province,

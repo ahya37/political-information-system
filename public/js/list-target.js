@@ -3,6 +3,7 @@ async function getListTarget() {
     try {
         const target = await getListDataTarget();
         const dataTarget = target.data;
+        console.log("data:", dataTarget);
         listTargetUI(dataTarget);
     } catch (err) {}
     Complete("Loadachievment");
@@ -45,20 +46,49 @@ function showDivHtml(m) {
                                             class="nav-link-cs collapsed  "
                                             href="#referal"
                                             data-toggle="collapse"
-                                            data-target="#referal${m.province_id}"
+                                            data-target="#referal${
+                                                m.province_id
+                                            }"
                                             style="color: #000000; text-decoration:none"
                                             >
                                             ${m.province} 
                                         </a>
                                     </div>
                                     <div class="col-md-4 col-sm-4">
-                                        Target : ${m.target} 
+                                        Target : [On Progress]
                                     </div>
                                     
                                 </div>
       
-                                          <div class="collapse" id="referal${m.province_id}" aria-expanded="false">
-                                             <div class="card-body">Dalam Pengembangan</div>
+                                          <div class="collapse" id="referal${
+                                              m.province_id
+                                          }" aria-expanded="false">
+                                          ${m.regencies.map(
+                                              (reg) =>
+                                                  `<div class="card-body shadow">
+                                                    <div class="col-md-12 col-sm-12">
+                                                    <div class="row">
+                                                      <div class="col-md-9 col-sm-9">
+                                                          <a  class="nav-link-cs collapsed" 
+                                                              href="#referalreg" data-toggle="collapse"
+                                                              data-target="#referalreg${reg.regency_id}" 
+                                                              style="color: #000000; text-decoration:none">
+                                                              ${reg.name}
+                                                          </a>
+                                                      </div>
+                                                      <div class="col-md-3 col-sm-3">
+                                                         Target : [On Progress]
+                                                      </div>
+                                                    </div>
+                                                        <div class="collapse" 
+                                                            id="#referalreg${reg.regency_id}" 
+                                                            aria-expanded="false">
+                                                            OK
+                                                        </div>
+                                                    </div>
+                                                  </div>
+                                                  `
+                                          )}
                                           </div>
                                       </div>
                                   </div>

@@ -154,6 +154,20 @@ class Regency extends Model
         return $result;
 
     }
+
+    public function getListTargetRegency($province_id)
+    {
+        $sql = "SELECT d.id as regency_id, d.name, d.target
+                from users as a 
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id
+                join regencies as d on c.regency_id = d.id
+                where d.province_id = $province_id
+                GROUP by d.id, d.name, d.target order by d.name asc";
+        $result = DB::select($sql);
+        return $result;
+
+    }
     
     
 }
