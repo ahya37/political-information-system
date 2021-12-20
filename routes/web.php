@@ -198,7 +198,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         
         // setting
         Route::get('setting/targetmember','SettingController@settingTargetMember')->name('admin-setting-targetmember');
-        Route::post('setting/save','SettingController@updateTargetMember')->name('admin-setting-targetmember-store');
+        Route::post('setting/save','SettingController@updateTarget')->name('admin-setting-targetmember-store');
         
         // Dapil
         Route::get('/dapil','DapilController@index')->name('admin-dapil');
@@ -234,6 +234,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         // Reward
         Route::get('/reward','RewardController@index')->name('admin-reward');
         Route::get('/rewardadmin','RewardController@indexAdmin')->name('admin-rewardadmin');
+
+        // target
+        Route::get('/target','SettingController@listTarget')->name('admin-list-target');
 
 
         

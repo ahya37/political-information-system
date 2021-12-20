@@ -67,7 +67,7 @@
                                             <div class="col-md-6 col-sm-12">
                                                 <span class="required">*</span>
                                                 <label>Desa</label>
-                                                <select name="village_id" id="villages_id" required class="form-control" v-model="villages_id" v-if="districts">
+                                                <select name="village_id" id="villages_id"  class="form-control" v-model="villages_id" v-if="districts">
                                                 <option v-for="village in villages" :value="village.id">@{{ village.name }}</option>
                                                 </select>
                                             </select>

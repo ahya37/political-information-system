@@ -25,7 +25,6 @@ class DashboardController extends Controller
             $end   = Carbon::parse($date[1])->format('Y-m-d'); 
         }
         // dd($start);
-
         $userModel = new User();
         $member    = $userModel->getMemberRegisteredByDayNation($start, $end); 
        

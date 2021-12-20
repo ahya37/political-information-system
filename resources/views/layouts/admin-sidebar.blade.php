@@ -151,7 +151,14 @@
                   <a
                     href="{{ route('admin-setting-targetmember') }}"
                     class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/targetmember')) ? 'active custom-active-color' : '' }}"
-                    ><span>Target Anggota</span></a
+                    ><span>Atur Target Anggota</span></a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    href="{{ route('admin-list-target') }}"
+                    class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/targetmember')) ? 'active custom-active-color' : '' }}"
+                    ><span>Daftar Target Anggota</span></a
                   >
                 </li>
               </ul>

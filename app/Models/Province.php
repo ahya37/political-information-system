@@ -48,5 +48,18 @@ class Province extends Model
         return collect(\ DB::select($sql))->first();
     }
 
+    public function getListTarget()
+    {
+        $sql = "SELECT e.id as province_id, e.name as province, e.target
+                from users as a 
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id
+                join regencies as d on c.regency_id = d.id
+                join provinces as e on d.province_id = e.id
+                GROUP by e.id, e.name, e.target order by e.name asc";
+        $result = DB::select($sql);
+        return $result;
+    }
+
     
 }

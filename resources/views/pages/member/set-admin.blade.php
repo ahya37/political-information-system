@@ -122,7 +122,7 @@
 @endsection
 
 @push('addon-script')
-<script src="{{ asset('js/admin-control.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+{{-- <script src="{{ asset('js/admin-control-member.js') }}"></script> --}}
 <script src="{{ asset('js/admin-submission.js') }}"></script>
 @endpush
