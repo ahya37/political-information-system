@@ -97,7 +97,7 @@ class SettingController extends Controller
 
         $data = [];
         foreach ($target as $key => $val) {
-            $regency  = $regencyModel->getListTargetRegency($val->province_id);
+            $regency  = $regencyModel->with(['districts.villages'])->where('province_id', $val->province_id)->get();
             
             $data[] = [
                 'province_id' => $val->province_id,
