@@ -41,7 +41,7 @@ class Referal extends Model
                 join districts as e on d.district_id = e.id
                 join regencies as f on e.regency_id = f.id 
                 where f.province_id = $province_id
-                group by b.id , b.name order by  COUNT(DISTINCT (a.id)) desc limit 10";
+                group by b.id , b.name order by  COUNT(DISTINCT (a.id)) desc limit 5";
         return DB::select($sql);
     }
 
@@ -65,7 +65,7 @@ class Referal extends Model
                 join villages as d on a.village_id = d.id
                 join districts as e on d.district_id = e.id
                 where e.regency_id = 3602
-                group by b.id , b.name order by  COUNT(DISTINCT (a.id)) desc limit 10";
+                group by b.id , b.name order by  COUNT(DISTINCT (a.id)) desc limit 5";
         return DB::select($sql);
     }
 
@@ -77,7 +77,7 @@ class Referal extends Model
                 join admin_dapil_district as d on c.id = d.admin_dapils_id
                 join villages as e on a.village_id = e.id
                 where e.district_id = $district_id and d.district_id =  $district_id group by b.id, b.name
-                order by COUNT(DISTINCT (a.id)) desc limit 10";
+                order by COUNT(DISTINCT (a.id)) desc limit 5";
         return DB::select($sql);
     }
 
