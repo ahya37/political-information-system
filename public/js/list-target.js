@@ -34,34 +34,69 @@ function listTargetUI(dataTarget) {
     const divHtmlContainer = document.getElementById("showData");
     divHtmlContainer.innerHTML = divHtml;
 }
+function formatNumber(num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function number_format(number, decimals, decPoint, thousandsSep) {
+    number = (number + "").replace(/[^0-9+\-Ee.]/g, "");
+    var n = !isFinite(+number) ? 0 : +number;
+    var prec = !isFinite(+decimals) ? 0 : Math.abs(decimals);
+    var sep = typeof thousandsSep === "undefined" ? "." : thousandsSep;
+    var dec = typeof decPoint === "undefined" ? "." : decPoint;
+    var s = "";
+
+    var toFixedFix = function (n, prec) {
+        var k = Math.pow(10, prec);
+        return "" + (Math.round(n * k) / k).toFixed(prec);
+    };
+
+    // @todo: for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : "" + Math.round(n)).split(".");
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || "").length < prec) {
+        s[1] = s[1] || "";
+        s[1] += new Array(prec - s[1].length + 1).join("0");
+    }
+
+    return s.join(dec);
+}
 
 function showDivHtml(m) {
     return `
-                          <tr>
-                            <td colspan="4">${m.province}</td><td>${
-        m.target
-    }</td>
+                          <tr class="table-primary">
+                            <td colspan="4">${
+                                m.province
+                            }</td><td>${number_format(m.target)}</td>
                           </tr>
                           ${m.regencies.map(
                               (reg) =>
                                   `
-                                <tr>
+                                <tr class="table-info">
                                     <td></td><td colspan="3">${
                                         reg.name
-                                    }</td><td>${reg.target}</td>
+                                    }</td><td>${number_format(reg.target)}</td>
                                 </tr>
                                 ${reg.districts.map(
                                     (dist) =>
                                         `
-                                        <tr>
+                                        <tr class="table-success">
                                             <td></td><td></td><td colspan="2">KECAMATAN ${
                                                 dist.name
-                                            }</td><td>${dist.target}</td>
+                                            }</td><td>${number_format(
+                                            dist.target
+                                        )}</td>
                                         </tr>
                                         ${dist.villages.map(
                                             (vill) =>
-                                                `<tr>
-                                                    <td></td><td></td><td></td><td>DESA ${vill.name}</td><td>${vill.target}</td>
+                                                `<tr class="table-secondary">
+                                                    <td></td><td></td><td></td><td>DESA ${
+                                                        vill.name
+                                                    }</td><td>${number_format(
+                                                    vill.target
+                                                )}</td>
                                                 </tr>
                                                 `
                                         )}
@@ -78,21 +113,4 @@ function BeforeSend(idLoader) {
 
 function Complete(idLoader) {
     $("#" + idLoader + "").addClass("d-none");
-}
-
-function formatRupiah(angka, prefix) {
-    var number_string = angka.replace(/[^,\d]/g, "").toString(),
-        split = number_string.split(","),
-        sisa = split[0].length % 3,
-        rupiah = split[0].substr(0, sisa),
-        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-    // tambahkan titik jika yang di input sudah menjadi angka ribuan
-    if (ribuan) {
-        separator = sisa ? "." : "";
-        rupiah += separator + ribuan.join(".");
-    }
-
-    rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
-    return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
 }
