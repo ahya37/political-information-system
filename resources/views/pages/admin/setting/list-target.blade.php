@@ -20,9 +20,27 @@
               </div>
               <div class="row mt-4">
                   <div class="col-md-12 col-sm-12">
-                    <span id="Loadachievment" class="d-none lds-dual-ring hidden overlay"></span>
-                    <div id="showData">
-                        
+                    <div >  
+                      <div class="card">
+                        <div class="card-body">
+                          <table class="table table-sm table-bordered">
+                            <thead>
+                              <tr>
+                                <th colspan="4">Daerah</th>
+                                <th>Target</th>
+                              </tr>
+                              
+                            </thead>
+                            <tbody id="showData">
+                              <tr>
+                                <td colspan="5">
+                                  <span id="Loadachievment" class="d-none lds-dual-ring hidden overlay"></span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     </div>
                 </div>
               </div>
