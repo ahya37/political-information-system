@@ -110,11 +110,12 @@ class District extends Model
 
     public function getDistrictByReferalMember($user_id)
     {
-        $sql = "SELECT a.id as id, a.name as district FROM districts as a
+        $sql = "SELECT a.id as id, a.name as district, COUNT(d.id) as total_member FROM districts as a
                 join villages as b on a.id = b.district_id 
                 join users as c on b.id = c.village_id
+                join users as d on c.user_id = d.id
                 where c.user_id = $user_id and c.id != $user_id
-                group by  a.id, a.name order by a.name asc";
+                group by  a.id, a.name order by COUNT(d.id) desc ";
         return DB::select($sql);
     }
 
@@ -145,6 +146,15 @@ class District extends Model
                 where c.regency_id = $regency_id and d.nik is not NULL and d.email is not null and d.status = 1
                 group by a.id , a.name order by a.name asc";
         return DB::select($sql);
+    }
+
+    public function getTotalMemberByReferal($user_id)
+    {
+        $sql = "SELECT COUNT(c.id) as total_member FROM districts as a
+                join villages as b on a.id = b.district_id 
+                join users as c on b.id = c.village_id
+                where c.user_id = $user_id and c.id != $user_id";
+        return collect(\ DB::select($sql))->first();
     }
 
 

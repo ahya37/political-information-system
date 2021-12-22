@@ -23,6 +23,7 @@ Route::get('/by_referal/downloadexcel/{user_id}/{district_id}','Admin\MemberCont
 Route::get('/by_referal/downloadpdf/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadPDF')->name('by-referal-downloadpdf');
 Route::post('/admin/dashboard/referalbymount','Admin\DashboardController@referalByMountAdmin');
 
+
 Route::get('/testgetfigure','TestController@testGretFigure');
 
 Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
@@ -237,6 +238,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // target
         Route::get('/target','SettingController@listTarget')->name('admin-list-target');
+
+        // anggota potensial download
+        Route::get('/by_referal/downloadpdfall/{user_id}','MemberController@memberByReferalAllDownloadPDF')->name('by-referal-downloadpdfall');
+        Route::get('/by_referal/downloadexcelall/{user_id}','MemberController@memberByReferalDownloadExcelAll')->name('by-referal-downloadexcelall');
+
 
 
         

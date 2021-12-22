@@ -7,6 +7,7 @@ use App\Menu;
 use App\User;
 use App\Admin;
 use App\Crop;
+use App\Exports\MemberByReferalAll;
 use App\Exports\MemberByReferalInDistrict;
 use App\Exports\MemberMostReferal;
 use App\UserMenu;
@@ -500,7 +501,8 @@ class MemberController extends Controller
         $user = $userModel->select('id','name')->where('id', $user_id)->first();
         $districtModel = new District();
         $districts = $districtModel->getDistrictByReferalMember($user_id);
-        return view('pages.admin.member.member-by-refeal', compact('user','districts','userModel'));
+        $totalMember = $districtModel->getTotalMemberByReferal($user_id);
+        return view('pages.admin.member.member-by-refeal', compact('user','districts','userModel','totalMember'));
     }
 
     public function memberByInput($user_id)
@@ -523,10 +525,15 @@ class MemberController extends Controller
 
     public function memberByReferalDownloadExcel($user_id, $district_id)
     {
-        
         $member = User::select('name')->where('id', $user_id)->first();
         $district = District::select('name')->where('id', $district_id)->first();
         return $this->excel->download(new MemberByReferalInDistrict($district_id, $user_id), 'ANGGOTA REFERAL DARI '.$member->name.' DI KECAMATAN '.$district->name.'.xls');
+    }
+
+    public function memberByReferalDownloadExcelAll($user_id)
+    {
+        $member = User::select('name')->where('id', $user_id)->first();
+        return $this->excel->download(new MemberByReferalAll($user_id), 'ANGGOTA REFERAL DARI '.$member->name.'.xls');
     }
 
     public function memberByReferalDownloadPDF($user_id, $district_id)
@@ -538,6 +545,16 @@ class MemberController extends Controller
         $members  = $userModel->getListMemberByDistrictId($district_id, $user_id);
         $pdf = PDF::LoadView('pages.report.member-referal-in-district', compact('members','no','district','user'))->setPaper('a4');
         return  $pdf->download('ANGGOTA REFERAL DARI '.$user->name.' DI KECAMATAN '.$district->name.'.pdf');
+    }
+
+    public function memberByReferalAllDownloadPDF($user_id)
+    {
+        $userModel = new User();
+        $user = $userModel->select('name')->where('id', $user_id)->first();
+        $no = 1;
+        $members  = $userModel->getListMemberByUserAll($user_id);
+        $pdf = PDF::LoadView('pages.report.member-referal-all', compact('members','no','user'))->setPaper('a4');
+        return  $pdf->download('ANGGOTA REFERAL DARI '.$user->name.'.pdf');
     }
 
 
