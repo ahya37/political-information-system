@@ -104,7 +104,7 @@ class Referal extends Model
                 where c.district_id = $district_id
                 group by b.name, b.id
                 order by count(a.id) desc
-                limit 10";
+                limit 5";
         return DB::select($sql);
     }
 
