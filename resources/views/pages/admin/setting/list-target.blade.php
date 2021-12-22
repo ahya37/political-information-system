@@ -23,7 +23,7 @@
                     <div >  
                       <div class="card">
                         <div class="card-body">
-                          <table class="table table-sm table-bordered">
+                          <table class="table table-sm table-hover">
                             <thead>
                               <tr>
                                 <th colspan="4">Daerah</th>
