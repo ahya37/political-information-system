@@ -44,7 +44,7 @@ class RewardController extends Controller
             $mode = 0;
 
             $referalModel = new Referal();
-            $referalPoint = $referalModel->getPointByThisMonth($year, $month);
+            $referalPoint = $referalModel->getPointByThisMonth($month, $year);
             $totalReferal = collect($referalPoint)->sum(function($q){
                 return $q->total_referal;
             });

@@ -276,7 +276,7 @@ class Referal extends Model
         return DB::select($sql);
     }
 
-    public function getPointByThisMonth($year, $month)
+    public function getPointByThisMonth($month, $year)
     {
         $sql = "SELECT a.id, a.name, a.photo, COUNT(b.id) as total_referal, c.total_data as referal_inpoint from users as a
                 join users as b on a.id = b.user_id

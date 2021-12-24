@@ -364,24 +364,24 @@ class GlobalProvider extends ServiceProvider
         // // jika dalam 1 bulan = $data / 100 = $poin
         $fourMonth = $data / 100;
         
-        $point = '';
-        if ($data >= $const1) {
-            $point = $oneMonth;
-        }
-        if ($data < $const2) {
-            $point = $oneMonth;
-        }
-        if ($data < $const3) {
-            $point = $twoMonth;
-        }
+        // $point = '';
+        // if ($data >= $const1) {
+        //     $point = $oneMonth;
+        // }
+        // if ($data < $const2) {
+        //     $point = $oneMonth;
+        // }
+        // if ($data < $const3) {
+        //     $point = $twoMonth;
+        // }
 
-        // $point = [
-        //     '0' => floor($oneMonth),
-        //     '1' => floor($twoMonth),
-        //     '2' => floor($fourMonth)
-        // ];
+        $point = [
+            '0' => floor($oneMonth),
+            '1' => floor($twoMonth),
+            '2' => floor($fourMonth)
+        ];
 
-        return floor($point);
+        return $point[0];
         
         // poin = totalReferal / 50 
         

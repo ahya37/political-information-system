@@ -104,7 +104,6 @@ $("#date").on("changeDate", async function (selected) {
 
     try {
         const referalPoint = await getReferalPoint(range);
-        console.log(referalPoint);
         const dataReferalPoint = referalPoint.data;
         const dataDays = referalPoint.days;
         const monthCategory = referalPoint.monthCategory;
