@@ -176,7 +176,7 @@ class GlobalProvider extends ServiceProvider
 
     public function getPoint($data, $days)
     {
-        if ($days >= 30 AND $days < 60 OR $days < 30) {
+        if ($days >= 30 OR $days < 60 OR $days < 30) {
             // jika jumlah hari 30 / 1 bulan
             if ($data == 0) {
                 $point = '0';
@@ -184,7 +184,7 @@ class GlobalProvider extends ServiceProvider
                 $point = $data / 50;
                 return floor($point);
             }
-        }elseif ($days >= 60 AND $days < 120) {
+        }elseif ($days >= 60 OR $days < 120) {
             // jika jumlah hari 60 / 2 bulan
              if ($data == 0) {
                 $point = '0';
@@ -250,7 +250,7 @@ class GlobalProvider extends ServiceProvider
         }elseif ($days >= 60 AND $days < 120) {
            return 'Kategori 2 bulan';
         }elseif ($days >= 120) {
-           return 'Kategori 4 bulan';
+           return 4;
         }
     }
 
@@ -321,5 +321,76 @@ class GlobalProvider extends ServiceProvider
         $space = abs($dateStart - $dateEnd);
         return floor($space/(60*60*24));
     }
+    
+    public function calPoint($data)
+    {
+        //     if ($days >= 30 OR $days < 60 OR $days < 30) {
+        //        // jika jumlah hari 30 / 1 bulan
+        //        if ($data == 0) {
+        //            $point = '0';
+        //        }elseif ($data != 0) {
+        //            $point = $data / 50;
+        //            return floor($point);
+        //        }
+        //    }
 
+        // rangeMonth = 1,2,4
+        // $data = 
+
+
+
+        // if ($data = 50) {
+        //     $point = $data / 50;
+        // }elseif ($data < 75) {
+        //     $point = $data / 50;
+        // }elseif ($data = 75) {
+        //     $point = $data / 75;
+        // }elseif ($data < 100) {
+        //     $point = $data / 75;
+        // }elseif ($data = 100) {
+        //     $point = $data / 100;
+        // }
+
+        $const1 = 50;
+        $const2 = 75;
+        $const3 = 100;
+        
+        // jika dalam 1 bulan = $data / 50 =  $poin
+        $oneMonth = $data / 50;
+      
+        // // jika dalam 1 bulan = $data / 75 =  $poin
+        $twoMonth = $data / 75;
+
+        // // jika dalam 1 bulan = $data / 100 = $poin
+        $fourMonth = $data / 100;
+        
+        $point = '';
+        if ($data >= $const1) {
+            $point = $oneMonth;
+        }
+        if ($data < $const2) {
+            $point = $oneMonth;
+        }
+        if ($data < $const3) {
+            $point = $twoMonth;
+        }
+
+        // $point = [
+        //     '0' => floor($oneMonth),
+        //     '1' => floor($twoMonth),
+        //     '2' => floor($fourMonth)
+        // ];
+
+        return floor($point);
+        
+        // poin = totalReferal / 50 
+        
+        // poin * 100
+    }
+
+    public function callNominal($data)
+    {
+        $nominal = $data * 100000;
+        return $nominal;
+    }
 }

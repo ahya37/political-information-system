@@ -152,8 +152,8 @@ Route::post('/getlistdistrictdapil','API\DapilController@getListDistrict');
 Route::post('addparticipantevent','Admin\EventController@storeAddMemberEventAjax');
 
 // reward anggota biasa
-Route::get('/rewardefault/{daterange}','Admin\RewardController@getPoinByMonthDefault');
-Route::post('/reward/{daterange}','Admin\RewardController@getPoinByMonth');
+Route::get('/rewardefault','Admin\RewardController@getPoinByMonthDefault');
+Route::post('/reward','Admin\RewardController@getPoinByMonth');
 
 // reward member admin
 Route::get('/admin/member/rewardefault/{daterange}','Admin\RewardController@getPoinByMonthMemberAdminDefaul');

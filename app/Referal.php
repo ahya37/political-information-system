@@ -139,7 +139,7 @@ class Referal extends Model
                 COUNT(b.id) as total FROM users as a
                 join users as b on a.id = b.user_id
                 where MONTH(b.created_at) = $mounth and YEAR(b.created_at) = $year and b.village_id is not null 
-                group by a.id, a.name, a.photo, a.phone_number, a.whatsapp";
+                group by a.id, a.name, a.photo, a.phone_number, a.whatsapp order by COUNT(b.id) desc";
         return DB::select($sql);
     }
     
@@ -271,7 +271,17 @@ class Referal extends Model
         $sql = "SELECT a.id, a.name, a.photo, COUNT(b.id) as total_referal, c.total_data as referal_inpoint from users as a
                 join users as b on a.id = b.user_id
                 left join voucher_history as c on a.id = c.user_id
-                where b.created_at BETWEEN '".$start."' and '".$end."' and a.level = 0
+                where b.created_at BETWEEN '".$start."' and '".$end."'
+                GROUP BY a.id, a.name, a.photo, c.total_data order by  COUNT(b.id) desc";
+        return DB::select($sql);
+    }
+
+    public function getPointByThisMonth($year, $month)
+    {
+        $sql = "SELECT a.id, a.name, a.photo, COUNT(b.id) as total_referal, c.total_data as referal_inpoint from users as a
+                join users as b on a.id = b.user_id
+                left join voucher_history as c on a.id = c.user_id
+                where MONTH(b.created_at)  =  $month and  YEAR(b.created_at) = $year
                 GROUP BY a.id, a.name, a.photo, c.total_data order by  COUNT(b.id) desc";
         return DB::select($sql);
     }

@@ -1,5 +1,43 @@
+$(".datepicker").datepicker({
+    format: "MM",
+    viewMode: "months",
+    minViewMode: "months",
+    autoClose: true,
+});
+
 let start = moment().startOf("month");
 let end = moment().endOf("month");
+
+// akumulasi sebelum pilih bulan
+async function acumulate() {
+    $("#totalReferalCalculate").empty();
+    $("#totalNominal").empty();
+    $("#totalPoint").empty();
+    $("#mode").empty();
+    $("#days").empty();
+    $("#monthCategory").empty();
+    BeforeSend("LoadaReferalByMounth");
+    try {
+        const referalPoint = await getReferalPointDefault();
+        const dataReferalPoint = referalPoint.data;
+        const dataDays = referalPoint.days;
+        const monthCategory = referalPoint.monthCategory;
+        const mode = referalPoint.mode;
+        const totalPoint = referalPoint.totalPoint;
+        const totalNominal = referalPoint.totalNominal;
+        const totalReferalCalculate = referalPoint.totalReferalCalculate;
+        referalPointUi(
+            dataReferalPoint,
+            monthCategory,
+            totalPoint,
+            totalNominal,
+            totalReferalCalculate,
+            dataDays,
+            mode
+        );
+    } catch (err) {}
+    Complete("LoadaReferalByMounth");
+}
 
 // default\
 $("#data", async function () {
@@ -11,7 +49,7 @@ $("#data", async function () {
     $("#monthCategory").empty();
     BeforeSend("LoadaReferalByMounth");
     try {
-        const referalPoint = await getReferalPointDefault(start, end);
+        const referalPoint = await getReferalPointDefault();
         const dataReferalPoint = referalPoint.data;
         const dataDays = referalPoint.days;
         const monthCategory = referalPoint.monthCategory;
@@ -21,21 +59,21 @@ $("#data", async function () {
         const totalReferalCalculate = referalPoint.totalReferalCalculate;
         referalPointUi(
             dataReferalPoint,
-            dataDays,
             monthCategory,
-            mode,
             totalPoint,
             totalNominal,
-            totalReferalCalculate
+            totalReferalCalculate,
+            dataDays,
+            mode
         );
-    } catch (err) {}
+    } catch (err) {
+        console.log("error: ", err);
+    }
     Complete("LoadaReferalByMounth");
 });
 
-function getReferalPointDefault(start, end) {
-    let range = start.format("YYYY-MM-DD") + "+" + end.format("YYYY-MM-DD");
-
-    return fetch(`/api/rewardefault/${range}`)
+function getReferalPointDefault() {
+    return fetch(`/api/rewardefault`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -50,73 +88,51 @@ function getReferalPointDefault(start, end) {
         });
 }
 
-$("#created_at").daterangepicker(
-    {
-        startDate: start,
-        endDate: end,
-        locale: {
-            format: "DD/MM/YYYY",
-            separator: " - ",
-            customRangeLabel: "Custom",
-            daysOfWeek: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
-            monthNames: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "Mei",
-                "Jun",
-                "Jul",
-                "Agu",
-                "Sep",
-                "Okt",
-                "Nov",
-                "Des",
-            ],
-            firstDay: 0,
-        },
-    },
-    async function (first, last) {
-        let self = this;
-        $("#totalReferalCalculate").empty();
-        $("#totalNominal").empty();
-        $("#totalPoint").empty();
-        $("#mode").empty();
-        $("#days").empty();
-        $("#monthCategory").empty();
-        BeforeSend("LoadaReferalByMounth");
-        try {
-            const referalPoint = await getReferalPoint(first, last, self);
-            const dataReferalPoint = referalPoint.data;
-            const dataDays = referalPoint.days;
-            const monthCategory = referalPoint.monthCategory;
-            const mode = referalPoint.mode;
-            const totalPoint = referalPoint.totalPoint;
-            const totalNominal = referalPoint.totalNominal;
-            const totalReferalCalculate = referalPoint.totalReferalCalculate;
-            referalPointUi(
-                dataReferalPoint,
-                dataDays,
-                monthCategory,
-                mode,
-                totalPoint,
-                totalNominal,
-                totalReferalCalculate
-            );
-        } catch (err) {}
-        Complete("LoadaReferalByMounth");
-    }
-);
-function getReferalPoint(first, last, self) {
-    let range = first.format("YYYY-MM-DD") + "+" + last.format("YYYY-MM-DD");
+// after change
+$("#date").on("changeDate", async function (selected) {
+    $("#totalReferalCalculate").empty();
+    $("#totalNominal").empty();
+    $("#totalPoint").empty();
+    $("#mode").empty();
+    $("#days").empty();
+    $("#monthCategory").empty();
+    BeforeSend("LoadaReferalByMounth");
 
-    return fetch(`/api/reward/${range}`, {
+    const monthSelected = selected.date.getMonth() + 1;
+    const yearSelected = selected.date.getFullYear();
+    const range = `${yearSelected}-${monthSelected}`;
+
+    try {
+        const referalPoint = await getReferalPoint(range);
+        console.log(referalPoint);
+        const dataReferalPoint = referalPoint.data;
+        const dataDays = referalPoint.days;
+        const monthCategory = referalPoint.monthCategory;
+        const mode = referalPoint.mode;
+        const totalPoint = referalPoint.totalPoint;
+        const totalNominal = referalPoint.totalNominal;
+        const totalReferalCalculate = referalPoint.totalReferalCalculate;
+        referalPointUi(
+            dataReferalPoint,
+            monthCategory,
+            totalPoint,
+            totalNominal,
+            totalReferalCalculate,
+            dataDays,
+            mode
+        );
+    } catch (err) {}
+    Complete("LoadaReferalByMounth");
+});
+
+function getReferalPoint(range) {
+    return fetch(`/api/reward`, {
         method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ first: self.first, last: self.last }),
+        body: JSON.stringify({ range: range }),
     })
         .then((response) => {
             if (!response.ok) {
@@ -134,16 +150,14 @@ function getReferalPoint(first, last, self) {
 
 function referalPointUi(
     dataReferalPoint,
-    dataDays,
     monthCategory,
-    mode,
     totalPoint,
     totalNominal,
     totalReferalCalculate
 ) {
-    $("#mode").append(`Kelipatan : ${mode} Referal`);
-    $("#days").append(`<strong>Dalam ${dataDays} Hari</strong>`);
-    $("#monthCategory").append(`${monthCategory}`);
+    // $("#mode").append(`Kelipatan : ${mode} Referal`);
+    // $("#days").append(`<strong>Dalam ${dataDays} Hari</strong>`);
+    $("#monthCategory").append(`${monthCategory} Bulan`);
     $("#totalPoint").append(`Total Poin : ${totalPoint}`);
     $("#totalNominal").append(`Total Nominal : Rp. ${totalNominal}`);
     $("#totalReferalCalculate").append(
