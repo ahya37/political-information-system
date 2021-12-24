@@ -378,7 +378,7 @@ class GlobalProvider extends ServiceProvider
         $point = [
             '0' => floor($oneMonth),
             '1' => floor($twoMonth),
-            '2' => floor($fourMonth)
+            '2' => floor($fourMonth) 
         ];
 
         return $point[0];
