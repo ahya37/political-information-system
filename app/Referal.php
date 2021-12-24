@@ -271,7 +271,7 @@ class Referal extends Model
         $sql = "SELECT a.id, a.name, a.photo, COUNT(b.id) as total_referal, c.total_data as referal_inpoint from users as a
                 join users as b on a.id = b.user_id
                 left join voucher_history as c on a.id = c.user_id
-                where b.created_at BETWEEN '".$start."' and '".$end."'
+                where b.village_id is not null
                 GROUP BY a.id, a.name, a.photo, c.total_data order by  COUNT(b.id) desc";
         return DB::select($sql);
     }
