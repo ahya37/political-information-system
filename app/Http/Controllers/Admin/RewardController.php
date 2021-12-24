@@ -64,7 +64,7 @@ class RewardController extends Controller
                         'totalNominal' => $gF->callNominal($gF->calPoint($totalReferalByMember))
                         // 'days' => $days,
                         // 'date' => $start.'/'.$end,
-                        // 'month' => $monthCategory
+                        // 'month'=> $monthCategory
                     ];
                 }
                 
