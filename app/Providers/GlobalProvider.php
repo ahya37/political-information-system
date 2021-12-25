@@ -324,32 +324,6 @@ class GlobalProvider extends ServiceProvider
     
     public function calPoint($data)
     {
-        //     if ($days >= 30 OR $days < 60 OR $days < 30) {
-        //        // jika jumlah hari 30 / 1 bulan
-        //        if ($data == 0) {
-        //            $point = '0';
-        //        }elseif ($data != 0) {
-        //            $point = $data / 50;
-        //            return floor($point);
-        //        }
-        //    }
-
-        // rangeMonth = 1,2,4
-        // $data = 
-
-
-
-        // if ($data = 50) {
-        //     $point = $data / 50;
-        // }elseif ($data < 75) {
-        //     $point = $data / 50;
-        // }elseif ($data = 75) {
-        //     $point = $data / 75;
-        // }elseif ($data < 100) {
-        //     $point = $data / 75;
-        // }elseif ($data = 100) {
-        //     $point = $data / 100;
-        // }
 
         $const1 = 50;
         $const2 = 75;
@@ -363,17 +337,42 @@ class GlobalProvider extends ServiceProvider
 
         // // jika dalam 1 bulan = $data / 100 = $poin
         $fourMonth = $data / 100;
+
+        $point = [
+            '0' => floor($oneMonth),
+            '1' => floor($twoMonth),
+            '2' => floor($fourMonth) 
+        ];
+
+        return $point[0];
+    }
+
+    public function callNominal($data)
+    {
+        $nominal = $data * 100000;
+        return $nominal;
+    }
+
+    public function calPointAdmin($data)
+    {
+        $const1 = 50;
+        $const2 = 75;
+        $const3 = 100;
         
-        // $point = '';
-        // if ($data >= $const1) {
-        //     $point = $oneMonth;
-        // }
-        // if ($data < $const2) {
-        //     $point = $oneMonth;
-        // }
-        // if ($data < $const3) {
-        //     $point = $twoMonth;
-        // }
+        // jika dalam 1 bulan = $data / 50 =  $poin
+        $oneMonth = $data / 200;
+      
+        // // jika dalam 2 bulan = $data / 75 =  $poin
+        $twoMonth = $data / 300;
+
+        // // jika dalam 3 bulan = $data / 100 = $poin
+        $fourMonth = $data / 400;
+
+        // jika dalam 4 bulan
+        $fourMonth = $data / 400;
+
+        // jika dalam 6 bulan
+        $fourMonth = $data / 500;
 
         $point = [
             '0' => floor($oneMonth),
@@ -383,14 +382,6 @@ class GlobalProvider extends ServiceProvider
 
         return $point[0];
         
-        // poin = totalReferal / 50 
         
-        // poin * 100
-    }
-
-    public function callNominal($data)
-    {
-        $nominal = $data * 100000;
-        return $nominal;
     }
 }

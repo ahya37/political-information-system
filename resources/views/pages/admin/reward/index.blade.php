@@ -19,7 +19,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Reward</h2>
+                <h2 class="dashboard-title">Reward Referal</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>

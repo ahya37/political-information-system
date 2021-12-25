@@ -1,9 +1,16 @@
+$(".datepicker").datepicker({
+    format: "MM",
+    viewMode: "months",
+    minViewMode: "months",
+    autoClose: true,
+});
+
 let start = moment().startOf("month");
 let end = moment().endOf("month");
 
-// default\
-$("#data", async function () {
-    $("#totalReferalCalculate").empty();
+// akumulasi sebelum pilih bulan
+async function acumulate() {
+    $("#totalInputCalculate").empty();
     $("#totalNominal").empty();
     $("#totalPoint").empty();
     $("#mode").empty();
@@ -11,31 +18,60 @@ $("#data", async function () {
     $("#monthCategory").empty();
     BeforeSend("LoadaReferalByMounth");
     try {
-        const referalPoint = await getReferalPointDefault(start, end);
-        const dataReferalPoint = referalPoint.data;
-        const dataDays = referalPoint.days;
-        const monthCategory = referalPoint.monthCategory;
-        const mode = referalPoint.mode;
-        const totalPoint = referalPoint.totalPoint;
-        const totalNominal = referalPoint.totalNominal;
-        const totalReferalCalculate = referalPoint.totalReferalCalculate;
-        referalPointUi(
-            dataReferalPoint,
-            dataDays,
+        const inputPoint = await getInputPointDefault();
+        const dataInputPoint = inputPoint.data;
+        const dataDays = inputPoint.days;
+        const monthCategory = inputPoint.monthCategory;
+        const mode = inputPoint.mode;
+        const totalPoint = inputPoint.totalPoint;
+        const totalNominal = inputPoint.totalNominal;
+        const totalInputCalculate = inputPoint.totalInputCalculate;
+        inputPointUi(
+            dataInputPoint,
             monthCategory,
-            mode,
             totalPoint,
             totalNominal,
-            totalReferalCalculate
+            totalInputCalculate,
+            dataDays,
+            mode
+        );
+    } catch (err) {}
+    Complete("LoadaReferalByMounth");
+}
+
+// default\
+$("#data", async function () {
+    $("#totalInputCalculate").empty();
+    $("#totalNominal").empty();
+    $("#totalPoint").empty();
+    $("#mode").empty();
+    $("#days").empty();
+    $("#monthCategory").empty();
+    BeforeSend("LoadaReferalByMounth");
+    try {
+        const inputPoint = await getInputPointDefault();
+        const dataInputPoint = inputPoint.data;
+        const dataDays = inputPoint.days;
+        const monthCategory = inputPoint.monthCategory;
+        const mode = inputPoint.mode;
+        const totalPoint = inputPoint.totalPoint;
+        const totalNominal = inputPoint.totalNominal;
+        const totalInputCalculate = inputPoint.totalInputCalculate;
+        inputPointUi(
+            dataInputPoint,
+            monthCategory,
+            totalPoint,
+            totalNominal,
+            totalInputCalculate,
+            dataDays,
+            mode
         );
     } catch (err) {}
     Complete("LoadaReferalByMounth");
 });
 
-function getReferalPointDefault(start, end) {
-    let range = start.format("YYYY-MM-DD") + "+" + end.format("YYYY-MM-DD");
-
-    return fetch(`/api/admin/member/rewardefault/${range}`)
+function getInputPointDefault() {
+    return fetch(`/api/admin/member/rewardefault`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -50,73 +86,51 @@ function getReferalPointDefault(start, end) {
         });
 }
 
-$("#created_at").daterangepicker(
-    {
-        startDate: start,
-        endDate: end,
-        locale: {
-            format: "DD/MM/YYYY",
-            separator: " - ",
-            customRangeLabel: "Custom",
-            daysOfWeek: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
-            monthNames: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "Mei",
-                "Jun",
-                "Jul",
-                "Agu",
-                "Sep",
-                "Okt",
-                "Nov",
-                "Des",
-            ],
-            firstDay: 0,
-        },
-    },
-    async function (first, last) {
-        let self = this;
-        $("#totalReferalCalculate").empty();
-        $("#totalNominal").empty();
-        $("#totalPoint").empty();
-        $("#mode").empty();
-        $("#days").empty();
-        $("#monthCategory").empty();
-        BeforeSend("LoadaReferalByMounth");
-        try {
-            const referalPoint = await getReferalPoint(first, last, self);
-            const dataReferalPoint = referalPoint.data;
-            const dataDays = referalPoint.days;
-            const monthCategory = referalPoint.monthCategory;
-            const mode = referalPoint.mode;
-            const totalPoint = referalPoint.totalPoint;
-            const totalNominal = referalPoint.totalNominal;
-            const totalReferalCalculate = referalPoint.totalReferalCalculate;
-            referalPointUi(
-                dataReferalPoint,
-                dataDays,
-                monthCategory,
-                mode,
-                totalPoint,
-                totalNominal,
-                totalReferalCalculate
-            );
-        } catch (err) {}
-        Complete("LoadaReferalByMounth");
-    }
-);
-function getReferalPoint(first, last, self) {
-    let range = first.format("YYYY-MM-DD") + "+" + last.format("YYYY-MM-DD");
+// after change
+$("#date").on("changeDate", async function (selected) {
+    $("#totalInputCalculate").empty();
+    $("#totalNominal").empty();
+    $("#totalPoint").empty();
+    $("#mode").empty();
+    $("#days").empty();
+    $("#monthCategory").empty();
+    BeforeSend("LoadaReferalByMounth");
 
-    return fetch(`/api/admin/member/reward/${range}`, {
+    const monthSelected = selected.date.getMonth() + 1;
+    const yearSelected = selected.date.getFullYear();
+    const range = `${yearSelected}-${monthSelected}`;
+
+    try {
+        const inputPoint = await getReferalPoint(range);
+        console.log("data perbulan: ", inputPoint);
+        const dataInputPoint = inputPoint.data;
+        const dataDays = inputPoint.days;
+        const monthCategory = inputPoint.monthCategory;
+        const mode = inputPoint.mode;
+        const totalPoint = inputPoint.totalPoint;
+        const totalNominal = inputPoint.totalNominal;
+        const totalInputCalculate = inputPoint.totalInputCalculate;
+        inputPointUi(
+            dataInputPoint,
+            monthCategory,
+            totalPoint,
+            totalNominal,
+            totalInputCalculate,
+            dataDays,
+            mode
+        );
+    } catch (err) {}
+    Complete("LoadaReferalByMounth");
+});
+
+function getReferalPoint(range) {
+    return fetch(`/api/admin/member/reward`, {
         method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ first: self.first, last: self.last }),
+        body: JSON.stringify({ range: range }),
     })
         .then((response) => {
             if (!response.ok) {
@@ -132,23 +146,19 @@ function getReferalPoint(first, last, self) {
         });
 }
 
-function referalPointUi(
+function inputPointUi(
     dataReferalPoint,
-    dataDays,
     monthCategory,
-    mode,
     totalPoint,
     totalNominal,
-    totalReferalCalculate
+    totalInputCalculate
 ) {
-    $("#mode").append(`Kelipatan : ${mode} Input`);
-    $("#days").append(`<strong>Dalam ${dataDays} Hari</strong>`);
-    $("#monthCategory").append(`${monthCategory}`);
+    // $("#mode").append(`Kelipatan : ${mode} Referal`);
+    // $("#days").append(`<strong>Dalam ${dataDays} Hari</strong>`);
+    $("#monthCategory").append(`${monthCategory} Bulan`);
     $("#totalPoint").append(`Total Poin : ${totalPoint}`);
     $("#totalNominal").append(`Total Nominal : Rp. ${totalNominal}`);
-    $("#totalReferalCalculate").append(
-        `Total Input : ${totalReferalCalculate}`
-    );
+    $("#totalInputCalculate").append(`Total Referal : ${totalInputCalculate}`);
     let divGetPoint = "";
     dataReferalPoint.forEach((m) => {
         divGetPoint += showdivGetPoint(m);
@@ -166,7 +176,7 @@ function showdivGetPoint(m) {
             <td>${m.name}</td>
             <td >
             <div class="badge badge-pill badge-info">
-                ${m.totalReferal}
+                ${m.totalInput}
             </div>
             <td >
             <div class="badge badge-pill badge-warning">
@@ -228,9 +238,7 @@ $("body").on("click", ".claim", function () {
                             swal("Error!", data.message, "error");
                         }
                     },
-                    error: function (data) {
-                        console.log("error", data);
-                    },
+                    error: function (data) {},
                 });
             } else {
                 e.dismiss;

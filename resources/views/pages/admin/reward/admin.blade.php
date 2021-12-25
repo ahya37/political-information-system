@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Reward Anggota Admin')
+@section('title','Reward')
 @push('addon-style')
  <link
       href="{{ asset('assets/style/style.css') }}"
@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/daterangepicker/daterangepicker.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
-
 @endpush
 @section('content')
 <!-- Section Content -->
@@ -20,18 +19,25 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">On Progress</h2>
+                <h2 class="dashboard-title">Reward Input Admin</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
-              {{-- <div class="dashboard-content mt-4" id="transactionDetails">
+              <div class="dashboard-content mt-4" id="transactionDetails">
                 <div class="row">
                   <div class="col-12">
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
                         <div class="row">
-                          <div class="col-md-8 col-sm-8">
+                          <div class="col-md-9 col-sm-9"></div>
+                          <div class="input-group mb-3 col-md-3 float-right">
+                            <button onclick="acumulate()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
+                            <input type="text" id="date" name="referalOfMount" value="{{ date('M') }}" class="form-control datepicker">
+                         </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-9 col-sm-9">
                             <div id="days"></div>
                             <div id="monthCategory"></div>
                             <div id="mode"></div>
@@ -40,9 +46,6 @@
                             <div id="totalNominal"></div>
                             <div id="totalReferalCalculate"></div>
                           </div>
-                          <div class="input-group mb-3 col-md-4 float-right">
-                            <input type="text" id="created_at" name="date" class="form-control">
-                         </div>
                       </div>
                         <div class="row">
                           <div class="col-12">
@@ -70,11 +73,10 @@
                     </div>
                   </div>
                 </div>
-              </div> --}}
+              </div>
             </div>
           </div>
 @endsection
-
 @push('addon-script')
 <script type="text/javascript" src="{{ asset('assets/vendor/moments/moment.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/vendor/daterangepicker/daterangepicker.min.js') }}"></script>

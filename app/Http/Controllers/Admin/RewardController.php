@@ -115,20 +115,20 @@ class RewardController extends Controller
             $data = [];
             foreach ($referalPoint as $key => $val) {
                 $totalReferalByMember = $val->total_referal - $val->referal_inpoint;
-                    # code...
-                    
-                    $data[] = [
-                        'userId' => $val->id,
-                        'photo' => $val->photo,
-                        'name' => $val->name,
-                        'totalReferal' =>  $totalReferalByMember,
-                        'poin' => $gF->calPoint($totalReferalByMember),
-                        'nominal' => $gF->decimalFormat($gF->callNominal($gF->calPoint($totalReferalByMember))),
-                        'totalNominal' => $gF->callNominal($gF->calPoint($totalReferalByMember))
-                        // 'days' => $days,
-                        // 'date' => $start.'/'.$end,
-                        // 'month' => $monthCategory
-                    ];
+                    // if ($gF->calPoint($totalReferalByMember) != 0) {
+                        $data[] = [
+                            'userId' => $val->id,
+                            'photo' => $val->photo,
+                            'name' => $val->name,
+                            'totalReferal' =>  $totalReferalByMember,
+                            'poin' => $gF->calPoint($totalReferalByMember),
+                            'nominal' => $gF->decimalFormat($gF->callNominal($gF->calPoint($totalReferalByMember))),
+                            'totalNominal' => $gF->callNominal($gF->calPoint($totalReferalByMember))
+                            // 'days' => $days,
+                            // 'date' => $start.'/'.$end,
+                            // 'month' => $monthCategory
+                        ];
+                    // }
                 
             }
             $totalPoint = collect($data)->sum(function($q){
@@ -155,130 +155,122 @@ class RewardController extends Controller
     public function getPoinByMonthMemberAdmin()
     {
         $gF = new GlobalProvider();
+            $start = date('2021-08-18');
+            $range = request()->range;
+            
+            $exRange = explode('-', $range);
+            $year    = $exRange[0];
+            $month   = $exRange[1];
 
-        if (request()->daterange != '') {
-            $range = request()->daterange;
-
-            $date  = explode('+', $range);
-            $start = Carbon::parse($date[0])->format('Y-m-d');
-            $end   = Carbon::parse($date[1])->format('Y-m-d'); 
-
+            // $date1 = date_create($start); 
+            // $date2 = date_create($end); 
+            
+            // $interval = date_diff($date1, $date2); 
+        
             // jumlah hari
-            $days = $gF->getDaysTotal($start, $end);
-            $monthCategory = $gF->getMonthCategoryMemberAdmin($days);
-            $mode = $gF->getPointModeMemberAdmin($days);
-            
+            $days = 0;
+            $rangeMonth = 1;
+            $mode = 0;
+
             $referalModel = new Referal();
-            $referalPoint = $referalModel->getPointMemberAdmin($start, $end);
-            $totalReferal = collect($referalPoint)->sum(function($q){
-                return $q->total_input;
-            });
-             
-            
+            $referalPoint = $referalModel->getPointByThisMonthAdmin($month, $year);
 
             $data = [];
             foreach ($referalPoint as $key => $val) {
                 $totalInputMember = $val->total_input - $val->input_inpoint;
-                if ($gF->getPointMemberAdmin($totalInputMember, $days) > 0) {
-                    # code...
-                    $data[] = [
-                        'userId' => $val->id,
-                        'photo' => $val->photo,
-                        'name' => $val->name,
-                        'totalReferal' => $totalInputMember,
-                        'poin' => $gF->getPointMemberAdmin($totalInputMember, $days),
-                        'nominal' => $gF->decimalFormat($gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days))),
-                        'totalNominal' => $gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days)),
-                        'days' => $days,
-                        'date' => $start.'/'.$end,
-                        'month' => $monthCategory
-                    ];
-                }
-            }
-
-            $totalPoint = collect($data)->sum(function($q){
-                return $q['poin'];
-            });
-             $totalNominal = collect($data)->sum(function($q){
-                return $q['totalNominal'];
-            });
-             $totalReferalCalculate = collect($data)->sum(function($q){
-                return $q['totalReferal'];
-            });
-
-            $result = [
-                'days' => $days,
-                'monthCategory' => $monthCategory,
-                'mode' => $mode,
-                'totalReferal' => $totalReferal,
-                'totalPoint' => $totalPoint,
-                'totalNominal' => $gF->decimalFormat($totalNominal),
-                'totalReferalCalculate' => $totalReferalCalculate,
-                'data' => $data
-            ];
-            return $result;
-        }
-    }
-
-    public function getPoinByMonthMemberAdminDefaul($daterange)
-    {
-            $gF = new GlobalProvider();
-            $range = $daterange;
-
-            if ($range != '') {
-                $date  = explode('+', $range);
-                $start = Carbon::parse($date[0])->format('Y-m-d');
-                $end   = Carbon::parse($date[1])->format('Y-m-d'); 
-            }
-
-            // jumlah hari
-            $days = $gF->getDaysTotal($start, $end);
-            $monthCategory = $gF->getMonthCategoryMemberAdmin($days);
-            $mode = $gF->getPointModeMemberAdmin($days);
-            
-            $referalModel = new Referal();
-            $referalPoint = $referalModel->getPointMemberAdmin($start, $end);
-            $totalReferal = collect($referalPoint)->sum(function($q){
-                return $q->total_input;
-            });
-
-            $data = [];
-            foreach ($referalPoint as $key => $val) {
-                $totalInputMember = $val->total_input - $val->input_inpoint;
-                if ($gF->getPointMemberAdmin($totalInputMember, $days) > 0) {
-                    # code...
-                    $data[] = [
-                        'userId' => $val->id,
-                        'photo' => $val->photo,
-                        'name' => $val->name,
-                        'totalReferal' => $totalInputMember,
-                        'poin' => $gF->getPointMemberAdmin($totalInputMember, $days),
-                        'nominal' => $gF->decimalFormat($gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days))),
-                        'totalNominal' => $gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days)),
-                        'days' => $days,
-                        'date' => $start.'/'.$end,
-                        'month' => $monthCategory
-                    ];
-                }
+                    if ($gF->calPointAdmin($totalInputMember) != 0) {
+                        $data[] = [
+                            'userId' => $val->id,
+                            'photo' => $val->photo,
+                            'name' => $val->name,
+                            'totalInput' =>  $totalInputMember,
+                            'poin' => $gF->calPointAdmin($totalInputMember),
+                            'nominal' => $gF->decimalFormat($gF->callNominal($gF->calPointAdmin($totalInputMember))),
+                            'totalNominal' => $gF->callNominal($gF->calPointAdmin($totalInputMember))
+                            // 'days' => $days,
+                            // 'date' => $start.'/'.$end,
+                            // 'month' => $monthCategory
+                        ];
+                    }
+                
             }
             $totalPoint = collect($data)->sum(function($q){
                 return $q['poin'];
             });
             $totalNominal = collect($data)->sum(function($q){
-                return $q['totalNominal'];
+                return  $q['totalNominal'];
             });
-             $totalReferalCalculate = collect($data)->sum(function($q){
-                return $q['totalReferal'];
+             $totalInputCalculate = collect($data)->sum(function($q){
+                return $q['totalInput'];
             });
 
             $result = [
-                'days' => $days,
-                'monthCategory' => $monthCategory,
+                'monthCategory' => $rangeMonth,
                 'mode' => $mode,
-                'totalReferal' => $totalReferal,
+                'totalInputCalculate' => $gF->decimalFormat($totalInputCalculate),
                 'totalPoint' => $totalPoint,
-                'totalNominal' => $totalNominal,
-                'totalReferalCalculate' => $totalReferalCalculate,
+                'totalNominal' => $gF->decimalFormat($totalNominal),
+                'data' => $data
+            ];
+            return $result;
+    }
+
+    public function getPoinByMonthMemberAdminDefaul()
+    {
+            $gF = new GlobalProvider();
+            $start = date('2021-08-18');
+            $end = date('Y-m-d');
+
+            $date1 = date_create($start); 
+            $date2 = date_create($end); 
+
+            
+            $interval = date_diff($date1, $date2); 
+        
+            // jumlah hari
+            $days = $interval->d;
+            $rangeMonth = $interval->m;
+            $mode = $gF->getPointMode($days);
+
+            $referalModel = new Referal();
+            $referalPoint = $referalModel->getPointMemberAdmin($start, $end);
+            
+
+            $data = [];
+            foreach ($referalPoint as $key => $val) {
+                $totalInputMember = $val->total_input - $val->input_inpoint;
+                    // if ($gF->calPointAdmin($totalInputMember) != 0) {
+                        $data[] = [
+                            'userId' => $val->id,
+                            'photo' => $val->photo,
+                            'name' => $val->name,
+                            'totalInput' =>  $totalInputMember,
+                            'poin' => $gF->calPointAdmin($totalInputMember),
+                            'nominal' => $gF->decimalFormat($gF->callNominal($gF->calPointAdmin($totalInputMember))),
+                            'totalNominal' => $gF->callNominal($gF->calPointAdmin($totalInputMember))
+                            // 'days' => $days,
+                            // 'date' => $start.'/'.$end,
+                            // 'month' => $monthCategory
+                        ];
+                    // }
+                
+            }
+            $totalPoint = collect($data)->sum(function($q){
+                return $q['poin'];
+            });
+            $totalNominal = collect($data)->sum(function($q){
+                return  $q['totalNominal'];
+            });
+             $totalInputCalculate = collect($data)->sum(function($q){
+                return $q['totalInput'];
+            });
+
+            $result = [
+                'monthCategory' => $rangeMonth,
+                'mode' => $mode,
+                'totalInputCalculate' => $gF->decimalFormat($totalInputCalculate),
+                'totalPoint' => $totalPoint,
+                'totalNominal' => $gF->decimalFormat($totalNominal),
                 'data' => $data
             ];
             return $result;
