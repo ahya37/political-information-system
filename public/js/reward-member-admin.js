@@ -98,11 +98,10 @@ $("#date").on("changeDate", async function (selected) {
 
     const monthSelected = selected.date.getMonth() + 1;
     const yearSelected = selected.date.getFullYear();
-    const range = `${yearSelected}-${monthSelected}`;
+    const range = `${yearSelected}-${monthSelected}-30`;
 
     try {
         const inputPoint = await getReferalPoint(range);
-        console.log("data perbulan: ", inputPoint);
         const dataInputPoint = inputPoint.data;
         const dataDays = inputPoint.days;
         const monthCategory = inputPoint.monthCategory;

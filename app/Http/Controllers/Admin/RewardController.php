@@ -153,24 +153,24 @@ class RewardController extends Controller
     {
         $gF = new GlobalProvider();
             $start = date('2021-08-18');
-            $range = request()->range;
+            $end = request()->range;
             
-            $exRange = explode('-', $range);
-            $year    = $exRange[0];
-            $month   = $exRange[1];
+            // $exRange = explode('-', $range);
+            // $year    = $exRange[0];
+            // $month   = $exRange[1];
 
-            // $date1 = date_create($start); 
-            // $date2 = date_create($end); 
+            $date1 = date_create($start); 
+            $date2 = date_create($end); 
             
-            // $interval = date_diff($date1, $date2); 
+            $interval = date_diff($date1, $date2); 
         
             // jumlah hari
             $days = 0;
-            $rangeMonth = 1;
+            $rangeMonth = $interval->m;
             $mode = 0;
 
             $referalModel = new Referal();
-            $referalPoint = $referalModel->getPointByThisMonthAdmin($month, $year);
+            $referalPoint = $referalModel->getPointByThisMonthAdmin($start, $end);
 
             $data = [];
             foreach ($referalPoint as $key => $val) {
