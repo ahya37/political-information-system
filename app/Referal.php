@@ -276,12 +276,12 @@ class Referal extends Model
         return DB::select($sql);
     }
 
-    public function getPointByThisMonth($month, $year)
+    public function getPointByThisMonth($start, $end)
     {
         $sql = "SELECT a.id, a.name, a.photo, COUNT(b.id) as total_referal, c.total_data as referal_inpoint from users as a
                 join users as b on a.id = b.user_id
                 left join voucher_history as c on a.id = c.user_id
-                where MONTH(b.created_at)  =  $month and  YEAR(b.created_at) = $year
+                where b.created_at BETWEEN  '$start' and '$end'
                 GROUP BY a.id, a.name, a.photo, c.total_data order by  COUNT(b.id) desc";
         return DB::select($sql);
     }

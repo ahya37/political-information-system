@@ -100,7 +100,7 @@ $("#date").on("changeDate", async function (selected) {
 
     const monthSelected = selected.date.getMonth() + 1;
     const yearSelected = selected.date.getFullYear();
-    const range = `${yearSelected}-${monthSelected}`;
+    const range = `${yearSelected}-${monthSelected}-30`;
 
     try {
         const referalPoint = await getReferalPoint(range);
