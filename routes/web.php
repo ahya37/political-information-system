@@ -253,6 +253,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/detaillistrewardreferal/{id}','RewardController@detailListReward')->name('admin-detail-listrewardreferal');
         Route::get('/detaillistrewardadmin/{id}','RewardController@detailListRewardAdmin')->name('admin-detail-listrewardadmin');
 
+        // intelegency
+        Route::get('/info/intelegency','InformationController@formIntelegencyPolitic')->name('admin-intelegency');
+
         
     });
 });

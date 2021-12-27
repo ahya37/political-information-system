@@ -144,7 +144,28 @@
                   <a
                     href="{{ route('admin-event-create') }}"
                     class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event/create')) ? 'active custom-active-color' : '' }}"
-                    ><span>Buat Event Baru</span></a>
+                    ><span>Buat Event Baru</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <a
+              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event*')) ? 'active custom-active-color' : '' }}"
+              href="#info"
+              data-toggle="collapse"
+              data-target="#info"
+              >
+              <span class="d-none d-sm-inline"></span>Informasi</a
+            >
+            <div class="collapse" id="info" aria-expanded="false">
+              <ul class="flex-column pl-2 nav">
+                <li class="nav-item">
+                  <a
+                    href="{{ route('admin-intelegency') }}"
+                    class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/info/intelegency')) ? 'active custom-active-color' : '' }}"
+                    ><span>Intelegensi Politik</span>
+                  </a>
                 </li>
               </ul>
             </div>
