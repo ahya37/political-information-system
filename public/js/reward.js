@@ -50,6 +50,7 @@ $("#data", async function () {
     BeforeSend("LoadaReferalByMounth");
     try {
         const referalPoint = await getReferalPointDefault();
+        console.log("data: ", referalPoint);
         const dataReferalPoint = referalPoint.data;
         const dataDays = referalPoint.days;
         const monthCategory = referalPoint.monthCategory;
@@ -192,11 +193,31 @@ function showdivGetPoint(m) {
             </div>
             </td>
             <td>
-               <button class="btn btn-sm btn-sc-primary text-white claim" data-date="${m.date}" data-month="${m.month}" data-referal="${m.totalReferal}" data-point="${m.poin}" data-nominal="${m.nominal}" data-range="${m.days}" data-name="${m.name}" data-id="${m.userId}">Beri Voucher</button>
+                 <div class="btn-group">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">Beri Voucher</button>
+                                <div class="dropdown-menu">
+                                         <button
+                                               type="button" 
+                                                class="dropdown-item btn"
+                                                data-toggle="modal" data-target="#setPoint"
+                                                data-id="${m.userId}"
+                                                data-name="${m.name}"
+                                                data-point="${m.poin}"
+                                                data-nominal="${m.nominal}"
+                                                data-referal="${m.totalReferal}"
+                                                >
+                                                Sesuaikan
+                                                </button>
+                                    <button class="dropdown-item btn btn-sm  claim"  data-referal="${m.totalReferal}" data-point="${m.poin}" data-nominal="${m.nominal}"  data-name="${m.name}" data-id="${m.userId}">Semua</button>
+                                </div>
+                            </div>
+                        </div>
             </td>
             </tr>`;
 }
 
+// jika beri semua
 $("body").on("click", ".claim", function () {
     const userId = $(this).data("id");
     const name = $(this).data("name");
@@ -204,8 +225,6 @@ $("body").on("click", ".claim", function () {
     const nominal = $(this).data("nominal");
     const daterange = $(this).data("range");
     const referal = $(this).data("referal");
-    const date = $(this).data("date");
-    const month = $(this).data("month");
 
     Swal.fire({
         title: "Beri Voucher",
@@ -229,8 +248,6 @@ $("body").on("click", ".claim", function () {
                         nominal: nominal,
                         referal: referal,
                         daterange: daterange,
-                        date: date,
-                        month: month,
                     },
                     dataType: "JSON",
                     success: function (data) {

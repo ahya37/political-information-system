@@ -45,6 +45,12 @@
                    >
                     Reward
                   </a>
+                   <a
+                    href="{{ route('admin-listrewardreferal') }}"
+                    class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/listrewardreferal')) ? 'active custom-active-color' : '' }}"
+                   >
+                    Daftar Reward
+                  </a>
                 </li>
               </ul>
             </div>
@@ -83,6 +89,12 @@
                     class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/rewardadmin')) ? 'active custom-active-color' : '' }}"
                    >
                     Reward
+                  </a>
+                   <a
+                    href="{{ route('admin-listrewardadmin') }}"
+                    class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/listrewardadmin')) ? 'active custom-active-color' : '' }}"
+                   >
+                    Daftar Reward
                   </a>
                 </li>
               </ul>

@@ -77,6 +77,36 @@
             </div>
           </div>
 @endsection
+@push('prepend-script')
+  <div class="modal fade" id="setPoint" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{{ route('admin-customvoucheradmin') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="hidden" name="userId" id="userId" class="form-control">
+            <input type="hidden" name="point" id="point" class="form-control">
+            <input type="hidden" name="nominal" id="nominal" class="form-control">
+            <input type="hidden" name="input"  id="input" class="form-control">
+            <input type="number" name="pointReq" id="pointReq" class="form-control" placeholder="Jumlah poin yang akan diberikan">
+          </div>
+              <div class="form-group float-right">
+                <button type="submit" class="btn btn-sc-primary">Simpan</button>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+@endpush
 @push('addon-script')
 <script type="text/javascript" src="{{ asset('assets/vendor/moments/moment.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/vendor/daterangepicker/daterangepicker.min.js') }}"></script>
@@ -84,4 +114,21 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
 <script type="text/javascript" src={{ asset('/js/reward-member-admin.js') }}></script>
+ <script>
+      $('#setPoint').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget) 
+        let recipient = button.data('name') 
+        let userId = button.data('id')
+        let point = button.data('point')
+        let nominal = button.data('nominal')
+        let input = button.data('input')
+        let modal = $(this)
+        modal.find('.modal-title').text('Sesuaikan poin kepada : ' + recipient)
+        modal.find('.modal-body #userId').val(userId)
+        modal.find('.modal-body #point').val(point)
+        modal.find('.modal-body #nominal').val(nominal)
+        modal.find('.modal-body #input').val(input)
+        modal.find('.modal-body #pointReq').attr({"max" : point})
+      })
+    </script>
 @endpush

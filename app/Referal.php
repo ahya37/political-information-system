@@ -290,7 +290,7 @@ class Referal extends Model
     {
         $sql = "SELECT a.id, a.name, a.photo, COUNT(b.id) as total_input, c.total_data as input_inpoint from users as a
                 join users as b on a.id = b.cby
-                left join voucher_history as c on a.id = c.user_id
+                left join voucher_history_admin as c on a.id = c.user_id
                 where b.created_at BETWEEN  '$start' and '$end' and a.level != 0 and b.village_id is not null 
                 GROUP BY a.id, a.name, a.photo, c.total_data order by  COUNT(b.id) desc";
         return DB::select($sql);
@@ -300,7 +300,7 @@ class Referal extends Model
     {
         $sql = "SELECT a.id, a.name, a.photo, COUNT(b.id) as total_input, c.total_data as input_inpoint from users as a
                 join users as b on a.id = b.cby
-                left join voucher_history as c on a.id = c.user_id
+                left join voucher_history_admin as c on a.id = c.user_id
                 where b.village_id is not null and a.level != 0 and b.village_id is not null
                 GROUP BY a.id, a.name, a.photo, c.total_data order by  COUNT(b.id) desc";
         return DB::select($sql);

@@ -504,15 +504,6 @@ class UserController extends Controller
                                                 >
                                                 Edit Referal
                                                 </a>
-                                                <button
-                                               type="button" 
-                                                class="btn"
-                                                data-toggle="modal" data-target="#setFigure"
-                                                data-whatever="'.$item->id.'"
-                                                data-name="'.$item->name.'"
-                                                >
-                                                Tokoh
-                                                </button>
                                         </div>
                                     </div>
                                 </div>

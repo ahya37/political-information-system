@@ -53,36 +53,6 @@
             </div>
           </div>
 @endsection
-@push('prepend-script')
-  <div class="modal fade" id="setFigure" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form action="{{ route('savesetfigures') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="modal-body">
-              <input type="hidden" name="userid" id="uid" class="form-control" id="recipient-name">
-              @foreach ($figure as $fig)
-              <div class="form-group">
-                <input type="checkbox" name="figureId[]" value="{{ $fig->id }}"> {{ $fig->name }}
-              </div>
-              @endforeach
-              <div class="form-group float-right">
-                <button type="submit" class="btn btn-sc-primary">Simpan</button>
-              </div>
-            </div>
-          </form>
-        </div>
-    </div>
-  </div>
-</div>
-@endpush
-@push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
     <script>
      var datatable = $('#data').DataTable({

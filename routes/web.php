@@ -243,7 +243,15 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/by_referal/downloadpdfall/{user_id}','MemberController@memberByReferalAllDownloadPDF')->name('by-referal-downloadpdfall');
         Route::get('/by_referal/downloadexcelall/{user_id}','MemberController@memberByReferalDownloadExcelAll')->name('by-referal-downloadexcelall');
 
-
+        // voucher
+        Route::post('/savecustomvoucher','RewardController@CustomSaveVoucherHistory')->name('admin-customvoucher');
+        Route::post('/savecustomvoucheradmin','RewardController@CustomSaveVoucherHistoryAdmin')->name('admin-customvoucheradmin');
+        Route::get('/listrewardreferal','RewardController@listRewardReferal')->name('admin-listrewardreferal');
+        Route::get('/listrewardadmin','RewardController@listRewardAdmin')->name('admin-listrewardadmin');
+        Route::get('/dtlistrewardreferal','RewardController@dtListRewardReferal');
+        Route::get('/dtlistrewardadmin','RewardController@dtListRewardAdmin');
+        Route::get('/detaillistrewardreferal/{id}','RewardController@detailListReward')->name('admin-detail-listrewardreferal');
+        Route::get('/detaillistrewardadmin/{id}','RewardController@detailListRewardAdmin')->name('admin-detail-listrewardadmin');
 
         
     });
