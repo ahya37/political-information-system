@@ -131,6 +131,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                     <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Keterangan </label>
+                                        <div class="col-sm-10">
+                                           <textarea class="form-control"></textarea>
+                                        </div> 
+                                    </div>
+                                     <div class="form-group">
+                                         <div class="col-md-9 col-sm-9"></div>
+                                        <button type="submit" class="col-md-3 col-sm-3 btn btn-sc-primary text-white float-right">Simpan</button>
+                                    </div>
 
                             </form>
                       </div>
