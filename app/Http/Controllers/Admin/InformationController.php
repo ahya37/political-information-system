@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Figure;
 use App\DetailFigure;
+use App\DetailFigureInfo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
@@ -25,16 +26,24 @@ class InformationController extends Controller
             'village_id' => 'required',
         ]);
 
-        $info = $request->info;
-        $year = $request->year;
-        $status = $request->status;
-        $dataInfo = '[{"name":"'.$info[0].'","year":"'.$year[0].'","status":"'.$status[0].'"},{"name":"'.$info[1].'","year":"'.$year[1].'","status":"'.$status[1].'"},{"name":"'.$info[2].'","year":"'.$year[2].'","status":"'.$status[2].'"}]';
-        
+       $info = empty($request->info) ? [] : $request->info;
+       $year = empty($request->year) ? [] : $request->year;
+       $status =  empty($request->status) ? [] : $request->status;
+
+        $result = array_map(function($info, $year, $status){
+            return array_combine(
+                ['name','year','status'],
+                [$info,$year,$status]
+            );
+        }, $info,$year,$status);
+
+        $dataInfo = json_encode($result);
+
         DetailFigure::create([
             'name' => $request->name,
             'village_id' => $request->village_id,
             'figure_id' => $request->figure_id,
-            'info' => $dataInfo,
+            'info_politic' => $dataInfo,
             'descr' => $request->desc
         ]);
 

@@ -116,7 +116,7 @@
                                         <div class="col-sm-12 col-md-12 border">
                                             <div class="row mb-1 mt-1">
                                                 <div class="col-sm-4 col-md-4">
-                                                    <input type="checkbox" name="info[]" value="DPR"> DPR
+                                                    <input type="checkbox" name="info[]" value=""> DPR
                                                 </div>
                                                 <div class="col-sm-4 col-md-4">
                                                     <input type="text" name="year[]" class="form-control form-control-sm"  placeholder="Tahun">
@@ -134,7 +134,7 @@
                                      <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Keterangan </label>
                                         <div class="col-sm-10">
-                                           <textarea class="form-control" name="desc"></textarea>
+                                           <textarea class="form-control" name="descr"></textarea>
                                         </div> 
                                     </div>
                                      <div class="form-group">
