@@ -13,7 +13,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Intelegensi</h2>
+                <h2 class="dashboard-title">Daftar Intelegensi Politik</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
