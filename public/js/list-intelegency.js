@@ -12,5 +12,6 @@ $("#data").DataTable({
         { data: "name", name: "name" },
         { data: "address", name: "address" },
         { data: "desc", name: "desc" },
+        { data: "action", name: "action" },
     ],
 });

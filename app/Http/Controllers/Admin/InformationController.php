@@ -66,9 +66,12 @@ class InformationController extends Controller
                             return ''.$item->village->name.'<br> KEC. '.$item->village->district->name.'<br>'.$item->village->district->regency->name.'<br> '.$item->village->district->regency->province->name.' ';
                         })
                         ->addColumn('desc', function($item){
-                            return $item->descr;
+                            return $item->figure->name;
                         })
-                        ->rawColumns(['address','desc'])
+                        ->addColumn('action', function($item){
+                            return '<a class="btn btn-sm btn-sc-primary text-white">Detail</a>';
+                        })
+                        ->rawColumns(['address','desc','action'])
                         ->make(true);
         }
     }

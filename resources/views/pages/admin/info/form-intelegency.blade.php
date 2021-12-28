@@ -15,7 +15,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Form Intelegensi [ON PROGRESS]</h2>
+                <h2 class="dashboard-title">Form Intelegensi</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
