@@ -5,11 +5,7 @@
       href="{{ asset('assets/style/style.css') }}"
       rel="stylesheet"
     />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/daterangepicker/daterangepicker.css') }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
 @endpush
 @section('content')
 <!-- Section Content -->
@@ -29,11 +25,12 @@
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
-                            <form id="register">
+                            <form id="register" action="{{ route('admin-saveintelegency') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Nama</label>
                                         <div class="col-sm-6">
-                                        <input type="text" class="form-control">
+                                        <input type="text" name="name" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -81,17 +78,18 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-sm-12 col-md-12 col-form-label">Pernah mencalonkan diri sebagai</label>
+                                        <label class="col-sm-12 col-md-12 col-form-label">Pernah mencalonkan diri sebagai :</label>
                                         <div class="col-sm-12 col-md-12 border">
                                             <div class="row mb-1 mt-1">
                                                 <div class="col-sm-4 col-md-4">
-                                                    <input type="checkbox"> Kepala Desa
+                                                    <input type="checkbox" name="info[]" value="Kepala Desa"> Kepala Desa
                                                 </div>
                                                 <div class="col-sm-4 col-md-4">
-                                                    <input type="text" class="form-control form-control-sm" placeholder="Tahun">
+                                                    <input type="text" class="form-control form-control-sm" name="year[]" placeholder="Tahun">
                                                 </div>
                                                 <div class="col-sm-4 col-md-4">
-                                                    <select class="form-control">
+                                                    <select class="form-control" name="status[]">
+                                                        <option value="">-Pilih status-</option>
                                                         <option value="MENANG">Menang</option>
                                                         <option value="KALAH">Kalah</option>
                                                     </select>
@@ -101,13 +99,14 @@
                                         <div class="col-sm-12 col-md-12 border">
                                             <div class="row mb-1 mt-1">
                                                 <div class="col-sm-4 col-md-4">
-                                                    <input type="checkbox"> DPRD
+                                                    <input type="checkbox" name="info[]" value="DPRD"> DPRD
                                                 </div>
                                                 <div class="col-sm-4 col-md-4">
-                                                    <input type="text" class="form-control form-control-sm" placeholder="Tahun">
+                                                    <input type="text" name="year[]" class="form-control form-control-sm" placeholder="Tahun">
                                                 </div>
                                                 <div class="col-sm-4 col-md-4">
-                                                    <select class="form-control">
+                                                    <select class="form-control" name="status[]">
+                                                        <option value="">-Pilih status-</option>
                                                         <option value="MENANG">Menang</option>
                                                         <option value="KALAH">Kalah</option>
                                                     </select>
@@ -117,13 +116,14 @@
                                         <div class="col-sm-12 col-md-12 border">
                                             <div class="row mb-1 mt-1">
                                                 <div class="col-sm-4 col-md-4">
-                                                    <input type="checkbox"> DPR
+                                                    <input type="checkbox" name="info[]" value="DPR"> DPR
                                                 </div>
                                                 <div class="col-sm-4 col-md-4">
-                                                    <input type="text" class="form-control form-control-sm" placeholder="Tahun">
+                                                    <input type="text" name="year[]" class="form-control form-control-sm"  placeholder="Tahun">
                                                 </div>
                                                 <div class="col-sm-4 col-md-4">
-                                                    <select class="form-control">
+                                                    <select class="form-control" name="status[]">
+                                                        <option value="">-Pilih status-</option>
                                                         <option value="MENANG">Menang</option>
                                                         <option value="KALAH">Kalah</option>
                                                     </select>
@@ -134,7 +134,7 @@
                                      <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Keterangan </label>
                                         <div class="col-sm-10">
-                                           <textarea class="form-control"></textarea>
+                                           <textarea class="form-control" name="desc"></textarea>
                                         </div> 
                                     </div>
                                      <div class="form-group">

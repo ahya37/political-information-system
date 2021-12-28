@@ -255,6 +255,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // intelegency
         Route::get('/info/intelegency','InformationController@formIntelegencyPolitic')->name('admin-intelegency');
+        Route::post('/info/saveintelegency','InformationController@saveIntelegencyPolitic')->name('admin-saveintelegency');
+        Route::get('/info/listintelegency','InformationController@listIntelegency')->name('admin-listintelegency');
+        Route::get('/info/dtintelegency','InformationController@dtListIntelegency');
 
         
     });

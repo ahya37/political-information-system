@@ -166,6 +166,11 @@
                     class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/info/intelegency')) ? 'active custom-active-color' : '' }}"
                     ><span>Intelegensi Politik</span>
                   </a>
+                  <a
+                    href="{{ route('admin-listintelegency') }}"
+                    class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/info/listintelegency')) ? 'active custom-active-color' : '' }}"
+                    ><span>Daftar Intelegensi Politik</span>
+                  </a>
                 </li>
               </ul>
             </div>
