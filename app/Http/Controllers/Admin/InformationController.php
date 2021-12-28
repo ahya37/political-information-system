@@ -38,7 +38,7 @@ class InformationController extends Controller
             'descr' => $request->desc
         ]);
 
-        return redirect()->back()->with(['success' => 'Data telah tersimpan']);
+        return redirect()->route('admin-listintelegency')->with(['success' => 'Data telah tersimpan']);
     }
 
     public function listIntelegency()
