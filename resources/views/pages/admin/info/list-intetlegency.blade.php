@@ -31,7 +31,6 @@
                                       <tr>
                                         <th scope="col">NAMA</th>
                                         <th scope="col">ALAMAT</th>
-                                        <th scope="col">KETERANGAN</th>
                                         <th scope="col">AKSI</th>
                                       </tr>
                                     </thead>
@@ -48,6 +47,15 @@
             </div>
           </div>
 @endsection
+@push('prepend-script')
+  <div id="onDetail"class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+@endpush
 
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>

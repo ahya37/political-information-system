@@ -65,14 +65,31 @@ class InformationController extends Controller
                         ->addColumn('address', function($item){
                             return ''.$item->village->name.'<br> KEC. '.$item->village->district->name.'<br>'.$item->village->district->regency->name.'<br> '.$item->village->district->regency->province->name.' ';
                         })
-                        ->addColumn('desc', function($item){
-                            return $item->figure->name;
-                        })
                         ->addColumn('action', function($item){
-                            return '<a class="btn btn-sm btn-sc-primary text-white">Detail</a>';
+                            return '<button type="button" class="btn btn-sm btn-sc-primary text-white" onclick="onDetail('.$item->id.')">Detail</button>';
                         })
                         ->rawColumns(['address','desc','action'])
                         ->make(true);
+        }
+    }
+
+    public function detailFigure()
+    {
+        $token = request()->_token;
+        if ($token != null) {
+            $id = request()->id;
+            $detailFigure = DetailFigure::with(['figure'])->where('id', $id)->first();
+
+            $info_politic = json_decode($detailFigure->info_politic);
+
+            $data = [];
+            foreach($info_politic as $val){
+
+                // $data[] = $val->name.' TAHUN: '.$val->year.' STATUS: '.$val->status.'<br>';
+                $data[] = "<tr><td>$val->name</td><td>$val->year</td><td>$val->status</td></tr>";
+            }
+
+            return response()->json($data);
         }
     }
 }

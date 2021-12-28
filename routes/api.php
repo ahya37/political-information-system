@@ -168,3 +168,5 @@ Route::post('/user/reward/{daterange}','RewardController@getPoinByMonthByAccount
 
 // target
 Route::get('/list/target','Admin\SettingController@getListTarget');
+
+Route::post('/detailfigure','Admin\InformationController@detailFigure');
