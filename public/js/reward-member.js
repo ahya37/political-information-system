@@ -269,6 +269,52 @@ function getInputPointReferal(code, range) {
         });
 }
 
+// history voucher
+$("#dataReferal").DataTable({
+    processing: true,
+    language: {
+        processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+    },
+    serverSide: true,
+    ordering: true,
+    ajax: {
+        url: `/api/user/dtrewardreferal`,
+        type: "POST",
+        data : {code: code}
+    },
+    columns: [
+        { data: "code", name: "code" },
+        { data: "total_data", name: "total_data" },
+        { data: "totalPoint", name: "totalPoint", className: "text-center" },
+        { data: "totalNominal", name: "totalNominal" },
+        { data: "date", name: "date" },
+    ],
+    aaSorting: [[1, "desc"]],
+});
+
+$("#dataInput").DataTable({
+    processing: true,
+    language: {
+        processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+    },
+    serverSide: true,
+    ordering: true,
+    ajax: {
+        url: `/api/user/dtrewardinput`,
+        type: "POST",
+        data : {code: code}
+    },
+    columns: [
+        { data: "code", name: "code" },
+        { data: "total_data", name: "total_data" },
+        { data: "totalPoint", name: "totalPoint", className: "text-center" },
+        { data: "totalNominal", name: "totalNominal" },
+        { data: "date", name: "date" },
+    ],
+    aaSorting: [[1, "desc"]],
+});
+
+
 function BeforeSend(idLoader) {
     $("#" + idLoader + "").removeClass("d-none");
 }

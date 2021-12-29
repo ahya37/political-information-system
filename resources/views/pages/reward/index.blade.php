@@ -79,7 +79,35 @@
                                       </div>
                                   </div>
                               </div>
-                              <div class="col-md-8 col-sm-8"></div>
+                              <div class="col-md-8 col-sm-8">
+                              <div class="row mt-2">
+                                <div class="col-md-4 col-sm-4">
+                                  <h5>Vocher Saya</h5>
+                                </div>
+                              </div>
+                              <div class="row mb-4">
+                                <div class="col-md-8 col-sm-8">
+                                  <small>Total Data : {{$gF->decimalFormat($voucher->total_data ?? '')}}</small><br>
+                                  <small>Total Point : {{$gF->decimalFormat($voucher->total_point ?? '')}}</small><br>
+                                  <small>Total Nominal : Rp. {{$gF->decimalFormat($voucher->total_nominal ?? '')}}</small>
+                                </div>
+                              </div>
+                                <div class="table-responsive">
+                                    <table id="dataReferal" class="table table-sm table-striped" width="100%">
+                                      <thead>
+                                        <tr>
+                                          <th scope="col">KODE</th>
+                                          <th scope="col">JUMLAH DATA</th>
+                                          <th scope="col">POIN</th>
+                                          <th scope="col">NOMINAL</th>
+                                          <th scope="col">TANGGAl</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      </tbody>
+                                    </table>
+                                </div>
+                              </div>
                           </div>
                          
                       </div>
@@ -142,7 +170,35 @@
                                       </div>
                                   </div>
                               </div>
-                              <div class="col-md-8 col-sm-8"></div>
+                              <div class="col-md-8 col-sm-8">
+                              <div class="row mt-2">
+                                <div class="col-md-4 col-sm-4">
+                                  <h5>Vocher Saya</h5>
+                                </div>
+                              </div>
+                              <div class="row mb-4">
+                                <div class="col-md-8 col-sm-8">
+                                  <small>Total Data : {{$gF->decimalFormat($voucherAdmin->total_data  ?? '')}}</small><br>
+                                  <small>Total Point : {{$gF->decimalFormat($voucherAdmin->total_point ?? '')}}</small><br>
+                                  <small>Total Nominal : Rp. {{$gF->decimalFormat($voucherAdmin->total_nominal ?? '')}}</small>
+                                </div>
+                              </div>
+                              <div class="table-responsive">
+                                    <table id="dataInput" class="table table-sm table-striped" width="100%">
+                                      <thead>
+                                        <tr>
+                                          <th scope="col">KODE</th>
+                                          <th scope="col">JUMLAH DATA</th>
+                                          <th scope="col">POIN</th>
+                                          <th scope="col">NOMINAL</th>
+                                          <th scope="col">TANGGAl</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      </tbody>
+                                    </table>
+                                </div>
+                              </div>
                           </div>
                          
                       </div>

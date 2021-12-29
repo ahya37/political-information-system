@@ -3,17 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Referal;
+use App\User;
+use App\VoucherHistory;
+use App\VoucherHistoryAdmin;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Providers\GlobalProvider;
-use App\User;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
 class RewardController extends Controller
 {
     public function index()
     {
-            return view('pages.reward.index');
+            $gF = new GlobalProvider();
+            $userId = Auth::user()->id;
+            $voucher = VoucherHistory::where('user_id', $userId)->first();
+            $voucherAdmin = VoucherHistoryAdmin::where('user_id', $userId)->first();
+            return view('pages.reward.index', compact('voucher','gF','voucherAdmin'));
 
     }
 
@@ -244,5 +251,73 @@ class RewardController extends Controller
                 }
 
             }
+    }
+
+    public function dtVoucherHistoryReferal()
+    {
+        $gF = new GlobalProvider();
+        $code = request()->code;
+        $user = User::select('id','level')->where('code', $code)->first();
+        $userId = $user->id;
+        $voucherModel = new VoucherHistory();
+        $voucher      = $voucherModel->getListVoucherByMember($userId);
+
+        if (request()->ajax()) 
+        {
+            return DataTables::of($voucher)
+                         ->addColumn('totalPoint', function($item){
+                                 return '<div class="badge badge-pill badge-success">
+                                        '.$item->point.'
+                                    </div>
+                                       ';
+                            })
+                            ->addColumn('totalNominal', function($item){
+                                $gF = new GlobalProvider();
+                                 return '<div class="badge badge-pill badge-success">
+                                        Rp. '.$gF->decimalFormat($item->nominal).'
+                                    </div>
+                                       ';
+                            })
+                            ->addColumn('date', function($item){
+                               return date('d-m-Y H:i', strtotime($item->created_at));
+                            })
+
+                        ->rawColumns(['totalPoint','totalNominal','date'])
+                        ->make(true);
+        }
+    }
+
+    public function dtVoucherHistoryAdmin()
+    {
+        $gF = new GlobalProvider();
+        $code = request()->code;
+        $user = User::select('id','level')->where('code', $code)->first();
+        $userId = $user->id;
+        $voucherModel = new VoucherHistoryAdmin();
+        $voucher      = $voucherModel->getListVoucherByMember($userId);
+
+        if (request()->ajax()) 
+        {
+            return DataTables::of($voucher)
+                         ->addColumn('totalPoint', function($item){
+                                 return '<div class="badge badge-pill badge-success">
+                                        '.$item->point.'
+                                    </div>
+                                       ';
+                            })
+                            ->addColumn('totalNominal', function($item){
+                                $gF = new GlobalProvider();
+                                 return '<div class="badge badge-pill badge-success">
+                                        Rp. '.$gF->decimalFormat($item->nominal).'
+                                    </div>
+                                       ';
+                            })
+                            ->addColumn('date', function($item){
+                               return date('d-m-Y H:i', strtotime($item->created_at));
+                            })
+
+                        ->rawColumns(['totalPoint','totalNominal','date'])
+                        ->make(true);
+        }
     }
 }

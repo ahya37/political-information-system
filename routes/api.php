@@ -169,6 +169,10 @@ Route::post('/user/reward','RewardController@getPoinByMonthByAccountMember');
 Route::post('/user/rewardreferal','RewardController@getPoinByMonthDefaultByAccountMemberReferal');
 Route::post('/user/rewardreferalbymonth','RewardController@getPoinByMonthByAccountMemberReferal');
 
+// data history voucher di akun anggota
+Route::post('/user/dtrewardreferal','RewardController@dtVoucherHistoryReferal');
+Route::post('/user/dtrewardinput','RewardController@dtVoucherHistoryAdmin');
+
 // target
 Route::get('/list/target','Admin\SettingController@getListTarget');
 

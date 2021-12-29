@@ -28,4 +28,14 @@ class VoucherHistory extends Model
         $result = collect(\ DB::select($sql))->first();
         return $result;
     }
+
+    public function getListVoucherByMember($userId)
+    {
+        $sql = "SELECT b.code, b.total_data, b.point, b.nominal, b.created_at from voucher_history as a  
+                join detail_voucher_history as b on a.id = b.voucher_history_id
+                where a.user_id = $userId";
+                
+        $result = DB::select($sql);
+        return $result;
+    }
 }

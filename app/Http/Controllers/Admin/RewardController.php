@@ -53,7 +53,7 @@ class RewardController extends Controller
             $data = [];
             foreach ($referalPoint as $key => $val) {
                 $totalReferalByMember = $val->total_referal - $val->referal_inpoint;
-                if ($gF->calPoint($totalReferalByMember) != 0) {
+                if ($gF->calPoint($totalReferalByMember) != 0 AND $gF->calPoint($totalReferalByMember) > 0) {
                     # code...
                     $data[] = [
                         'userId' => $val->id,
@@ -113,7 +113,7 @@ class RewardController extends Controller
             $data = [];
             foreach ($referalPoint as $key => $val) {
                 $totalReferalByMember = $val->total_referal - $val->referal_inpoint;
-                    if ($gF->calPoint($totalReferalByMember) != 0) {
+                    if ($gF->calPoint($totalReferalByMember) != 0 AND $gF->calPoint($totalReferalByMember) > 0) {
                         $data[] = [
                             'userId' => $val->id,
                             'photo' => $val->photo,
@@ -176,7 +176,7 @@ class RewardController extends Controller
             $data = [];
             foreach ($referalPoint as $key => $val) {
                 $totalInputMember = $val->total_input - $val->input_inpoint;
-                    if ($gF->calPointAdmin($totalInputMember) != 0) {
+                    if ($gF->calPointAdmin($totalInputMember) != 0 AND $gF->calPointAdmin($totalInputMember) > 0 ) {
                         $data[] = [
                             'userId' => $val->id,
                             'photo' => $val->photo,
@@ -237,7 +237,7 @@ class RewardController extends Controller
             $data = [];
             foreach ($referalPoint as $key => $val) {
                 $totalInputMember = $val->total_input - $val->input_inpoint;
-                    if ($gF->calPointAdmin($totalInputMember) != 0) {
+                    if ($gF->calPointAdmin($totalInputMember) != 0 AND $gF->calPointAdmin($totalInputMember) > 0) {
                         $data[] = [
                             'userId' => $val->id,
                             'photo' => $val->photo,
@@ -704,7 +704,7 @@ class RewardController extends Controller
     public function saveVoucherHistoryAdmin()
     {
         
-        $token = request()->_token;
+       $token = request()->_token;
 
         if ($token != null) {
             $userId = request()->userId;
@@ -712,16 +712,81 @@ class RewardController extends Controller
             $nominal = preg_replace("/[^0-9]/", "", request()->nominal);
             $referal = preg_replace("/[^0-9]/", "", request()->referal);
 
-            $data =  DetailVoucherHistory::create([
-                    'user_id' => $userId,
-                    'point' => $point,
-                    'nominal' => $nominal,
-                    'total_data' => $referal,
-                    'code' => Str::random(5),
-                    'type' => 'Admin'
-            ]);
+            $requestNominal = $point * 100000;
+            $requestTotalData = $point * 200;
 
-          if ($data) {
+            $vhModel  = new VoucherHistoryAdmin();
+            $dvhModel = new DetailVoucherHistoryAdmin();
+
+            $cekVh = $vhModel->where('user_id', $userId)->first();
+            // jika beulm ada, create detailnya dan update vh nya
+            if ($cekVh == null) {
+                $saveVh = $vhModel->create([
+                     'user_id' => $userId,
+                     'total_point' => 0,
+                     'total_nominal' => 0,
+                     'total_data' => 0,
+                 ]);
+
+                $saveDetailVh =   $vhModel->create([
+                    'voucher_history_id' => $saveVh->id,
+                    'point' => $point,
+                    'nominal' => $requestNominal,
+                    'total_data' => $requestTotalData,
+                    'code' => Str::random(5),
+                    'type' => 'Referal'
+                ]);
+
+                $detailVh = $dvhModel->where('voucher_history_id', $saveVh->id)->get();
+                $total_point = collect($detailVh)->sum(function($q){
+                    return $q->point;
+                });
+                $total_nominal = collect($detailVh)->sum(function($q){
+                    return $q->nominal;
+                });
+                $total_data = collect($detailVh)->sum(function($q){
+                    return $q->total_data;
+                });
+                $updateVh = $vhModel->where('id', $saveVh->id)->first();
+                $updateVh->update([
+                    'total_point' => $total_point,
+                    'total_nominal' => $total_nominal,
+                    'total_data' => $total_data
+                ]);
+
+            }else{
+                // jika sudah ada, buatkan dan create detailnya
+                // create voucher_history
+                // create_detail_voucher_history
+                $cekVhUpdte = $vhModel->where('user_id', $userId)->first();
+                $saveDetailVh =  $dvhModel->create([
+                    'voucher_history_id' => $cekVhUpdte->id,
+                    'point' => $point,
+                    'nominal' => $requestNominal,
+                    'total_data' => $requestTotalData,
+                    'code' => Str::random(5),
+                    'type' => 'Referal'
+                ]);
+
+                $detailVh = $dvhModel->where('voucher_history_id', $cekVhUpdte->id)->get();
+                $total_point = collect($detailVh)->sum(function($q){
+                    return $q->point;
+                });
+                $total_nominal = collect($detailVh)->sum(function($q){
+                    return $q->nominal;
+                });
+                $total_data = collect($detailVh)->sum(function($q){
+                    return $q->total_data;
+                });
+                $updateVh = $vhModel->where('id', $cekVhUpdte->id)->first();
+                $updateVh->update([
+                    'total_point' => $total_point,
+                    'total_nominal' => $total_nominal,
+                    'total_data' => $total_data
+                ]);
+            }
+
+          if ($saveDetailVh) {
                 $success = true;
                 $message = 'Voucher telah diberikan';
 
