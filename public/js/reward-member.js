@@ -124,7 +124,7 @@ function pointUi(totalData, monthCategory, point, nominal) {
     $("#point").append(`<h6>${point}</h6>`);
     $("#nominal").append(`<h6>Rp. ${nominal}</h6>`);
     $("#totalData").append(`<h6>${totalData}</h6>`);
-    $("#monthCategory").append(`${monthCategory} Bulan`);
+    $("#monthCategory").append(`${monthCategory === 0 ? 1 : monthCategory} Bulan`);
 }
 
 // REFERAL
@@ -240,7 +240,7 @@ function pointReferalUi(
     $("#pointReferal").append(`<h6>${pointReferal}</h6>`);
     $("#nominalReferal").append(`<h6>Rp. ${nominalReferal}</h6>`);
     $("#totalDataReferal").append(`<h6>${totalDataRefeal}</h6>`);
-    $("#monthCategoryReferal").append(`${monthCategoryReferal} Bulan`);
+    $("#monthCategoryReferal").append(`${monthCategoryReferal === 0 ? 1 : monthCategoryReferal} Bulan`);
 }
 
 function getInputPointReferal(code, range) {
