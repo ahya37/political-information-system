@@ -71,7 +71,7 @@
                                                   </div>
                                                 </div>
                                               </div>
-                                              <span id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay"></span>
+                                              <span id="LoadaReferalByMounthReferal" class="d-none lds-dual-ring hidden overlay"></span>
                                               <div class="card-footer">
                                                   <div id="monthCategoryReferal"></div>
                                               </div>

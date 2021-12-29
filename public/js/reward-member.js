@@ -133,7 +133,7 @@ async function acumulateReferal() {
     $("#totalDataReferal").empty();
     $("#nominalReferal").empty();
     $("#monthCategoryReferal").empty();
-    BeforeSend("LoadaReferalByMounth");
+    BeforeSend("LoadaReferalByMounthReferal");
     try {
         const dataPoint = await getInputPointDefaultReferal(code);
         const monthCategoryReferal = dataPoint.monthCategoryReferal;
@@ -149,7 +149,7 @@ async function acumulateReferal() {
         );
     } catch (err) {
     }
-    Complete("LoadaReferalByMounth");
+    Complete("LoadaReferalByMounthReferal");
 }
 // default
 async function referalDefault() {
@@ -157,7 +157,7 @@ async function referalDefault() {
     $("#totalDataReferal").empty();
     $("#nominalReferal").empty();
     $("#monthCategoryReferal").empty();
-    BeforeSend("LoadaReferalByMounth");
+    BeforeSend("LoadaReferalByMounthReferal");
     try {
         const dataPoint = await getInputPointDefaultReferal(code);
         const monthCategoryReferal = dataPoint.monthCategoryReferal;
@@ -173,7 +173,7 @@ async function referalDefault() {
         );
     } catch (err) {
     }
-    Complete("LoadaReferalByMounth");
+    Complete("LoadaReferalByMounthReferal");
 }
 
 referalDefault();
@@ -184,7 +184,7 @@ $("#dateReferal").on("changeDate", async function (selected) {
     $("#totalDataReferal").empty();
     $("#nominalReferal").empty();
     $("#monthCategoryReferal").empty();
-    BeforeSend("LoadaReferalByMounth");
+    BeforeSend("LoadaReferalByMounthReferal");
 
     const monthSelected = selected.date.getMonth() + 1;
     const yearSelected = selected.date.getFullYear();
@@ -205,7 +205,7 @@ $("#dateReferal").on("changeDate", async function (selected) {
         );
     } catch (err) {
     }
-    Complete("LoadaReferalByMounth");
+    Complete("LoadaReferalByMounthReferal");
 });
 
 function getInputPointDefaultReferal(code) {
