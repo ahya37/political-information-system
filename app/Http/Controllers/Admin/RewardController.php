@@ -14,6 +14,7 @@ use App\Providers\GlobalProvider;
 use App\Http\Controllers\Controller;
 use App\VoucherHistoryAdmin;
 use Yajra\DataTables\Facades\DataTables;
+use PDF;
 
 class RewardController extends Controller
 {
@@ -906,7 +907,7 @@ class RewardController extends Controller
         $gF = new GlobalProvider();
         $dvhModel = new VoucherHistory();
         $member   = $dvhModel->getMember($id);
-        $listVucher = DetailVoucherHistory::where('voucher_history_id', $id)->get();
+        $listVucher = DetailVoucherHistory::where('voucher_history_id', $id)->orderBy('created_at','desc')->get();
         return view('pages.admin.reward.detail-history-referal', compact('member','listVucher','gF'));
     }
 
@@ -915,7 +916,27 @@ class RewardController extends Controller
         $gF = new GlobalProvider();
         $dvhModel = new VoucherHistoryAdmin();
         $member   = $dvhModel->getMember($id);
-        $listVucher = DetailVoucherHistoryAdmin::where('voucher_history_id', $id)->get();
+        $listVucher = DetailVoucherHistoryAdmin::where('voucher_history_id', $id)->orderBy('created_at','desc')->get();
         return view('pages.admin.reward.detail-history-admin', compact('member','listVucher','gF'));
+    }
+
+    public function downloadVoucherAdmin($id)
+    {
+        $gF = new GlobalProvider();
+
+        $voucher = DetailVoucherHistoryAdmin::where('id', $id)->first();
+        $customPaper = array(0,0,400.00,283.50);
+        $pdf = PDF::LoadView('pages.admin.report.voucher', compact('voucher','gF'))->setPaper($customPaper, 'landscape');;
+        return $pdf->download('voucher-input-'.$voucher->code.'.pdf');
+    }
+
+    public function downloadVoucherReferal($id)
+    {
+        $gF = new GlobalProvider();
+
+        $voucher = DetailVoucherHistory::where('id', $id)->first();
+        $customPaper = array(0,0,400.00,283.50);
+        $pdf = PDF::LoadView('pages.admin.report.voucher-referal', compact('voucher','gF'))->setPaper($customPaper, 'landscape');;
+        return $pdf->download('voucher-referal-'.$voucher->code.'.pdf');
     }
 }

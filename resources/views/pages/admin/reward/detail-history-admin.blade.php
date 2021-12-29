@@ -18,7 +18,7 @@
               <div class="dashboard-content mt-4" id="transactionDetails">
                 <div class="row">
                     @foreach ($listVucher as $item)
-                    <div class="col-md-4 col-sm-4">
+                    <div class="col-md-4 col-sm-4 mb-3">
                       <div class="card">
                         <div class="card-body">
                             <div class="fa fa-tags"></div>
@@ -26,6 +26,9 @@
                             <h5 class="text-center">{{ $item->point }}</h5>
                             <div class="mt-4">
                                  <small class="float-right">Tanggal : {{ $item->created_at }}</small>
+                            </div>
+                            <div class="mr-2">
+                                 <a href="{{ route('voucher-download', $item->id) }}"><i class="fa fa-download"></i></a>
                             </div>
                         </div>
                         <div class="card-footer bg-info">

@@ -105,6 +105,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
     Route::post('/accadminvillage','AdminController@accAdminVillage');
 
     // voucher / reward
+    Route::get('/downloadvoucher/{id}','RewardController@downloadVoucherAdmin')->name('voucher-download');
+    Route::get('/downloadvoucherreferal/{id}','RewardController@downloadVoucherReferal')->name('voucherreferal-download');
 
     Route::group(['middleware' => 'admin'], function(){
         Route::post('logout','LoginController@logout')->name('admin-logout');

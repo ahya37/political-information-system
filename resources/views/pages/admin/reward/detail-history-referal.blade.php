@@ -27,6 +27,9 @@
                             <div class="mt-4">
                                  <small class="float-right">Tanggal : {{ $item->created_at }}</small>
                             </div>
+                            <div class="mr-2">
+                                 <a href="{{ route('voucherreferal-download', $item->id) }}"><i class="fa fa-download"></i></a>
+                            </div>
                         </div>
                         <div class="card-footer bg-info">
                             <h5 class="text-center text-white"> Rp. {{ $gF->decimalFormat($item->nominal) }}</h5>
