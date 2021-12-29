@@ -310,8 +310,8 @@ class Referal extends Model
     {
         $sql = "SELECT COUNT(b.id) as total_input, c.total_data as input_inpoint from users as a
                 join users as b on a.id = b.cby
-                left join voucher_history as c on a.id = c.user_id
-                where b.created_at BETWEEN '$start' and '$end' and a.id = $userId
+                left join voucher_history_admin as c on a.id = c.user_id
+                where b.created_at BETWEEN '$start' and '$end' and a.id = $userId and b.village_id  is not null
                 GROUP BY c.total_data";
         $result =  collect(\DB::select($sql))->first();
         return $result;

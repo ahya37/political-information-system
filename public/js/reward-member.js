@@ -1,18 +1,45 @@
+$(".datepicker").datepicker({
+    format: "MM",
+    viewMode: "months",
+    minViewMode: "months",
+    autoClose: true,
+});
+
 let start = moment().startOf("month");
 let end = moment().endOf("month");
 const code = $("#uid").val();
+
+// akumulasi sebelum pilih bulan
+async function acumulate() {
+    $("#point").empty();
+    $("#totalData").empty();
+    $("#nominal").empty();
+    $("#monthCategory").empty();
+    BeforeSend("LoadaReferalByMounth");
+    try {
+        const dataPoint = await getInputPointDefault(code);
+        const days = dataPoint.days;
+        const monthCategory = dataPoint.monthCategory;
+        const point = dataPoint.point;
+        const nominal = dataPoint.nominal;
+        const mode = dataPoint.mode;
+        const level = dataPoint.level;
+        const totalData = dataPoint.totalData;
+
+        pointUi(totalData, level, days, monthCategory, point, nominal, mode);
+    } catch (err) {}
+    Complete("LoadaReferalByMounth");
+}
 
 // default\
 $("#data", async function () {
     $("#point").empty();
     $("#totalData").empty();
     $("#nominal").empty();
-    $("#days").empty();
     $("#monthCategory").empty();
-    $("#mode").empty();
     BeforeSend("LoadaReferalByMounth");
     try {
-        const dataPoint = await getInputPointDefault(start, end, code);
+        const dataPoint = await getInputPointDefault(code);
         const days = dataPoint.days;
         const monthCategory = dataPoint.monthCategory;
         const point = dataPoint.point;
@@ -26,9 +53,8 @@ $("#data", async function () {
     Complete("LoadaReferalByMounth");
 });
 
-function getInputPointDefault(start, end, code) {
-    let range = start.format("YYYY-MM-DD") + "+" + end.format("YYYY-MM-DD");
-    return fetch(`/api/user/rewardefault/${range}`, {
+function getInputPointDefault(code) {
+    return fetch(`/api/user/rewardefault`, {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -50,77 +76,44 @@ function getInputPointDefault(start, end, code) {
         });
 }
 
-$("#created_at").daterangepicker(
-    {
-        startDate: start,
-        endDate: end,
-        locale: {
-            format: "DD/MM/YYYY",
-            separator: " - ",
-            customRangeLabel: "Custom",
-            daysOfWeek: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
-            monthNames: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "Mei",
-                "Jun",
-                "Jul",
-                "Agu",
-                "Sep",
-                "Okt",
-                "Nov",
-                "Des",
-            ],
-            firstDay: 0,
-        },
-    },
-    async function (first, last) {
-        let self = this;
-        $("#point").empty();
-        $("#totalData").empty();
-        $("#nominal").empty();
-        $("#days").empty();
-        $("#monthCategory").empty();
-        $("#mode").empty();
-        BeforeSend("LoadaReferalByMounth");
-        try {
-            const dataPoint = await getInputPoint(first, last, self, code);
-            const days = dataPoint.days;
-            const monthCategory = dataPoint.monthCategory;
-            const point = dataPoint.point;
-            const nominal = dataPoint.nominal;
-            const mode = dataPoint.mode;
-            const level = dataPoint.level;
-            const totalData = dataPoint.totalData;
+// after change
+$("#date").on("changeDate", async function (selected) {
+    $("#point").empty();
+    $("#totalData").empty();
+    $("#nominal").empty();
+    $("#monthCategory").empty();
+    BeforeSend("LoadaReferalByMounth");
 
-            pointUi(
-                totalData,
-                level,
-                days,
-                monthCategory,
-                point,
-                nominal,
-                mode
-            );
-        } catch (err) {}
-        Complete("LoadaReferalByMounth");
-    }
-);
-function getInputPoint(first, last, self, code) {
-    let range = first.format("YYYY-MM-DD") + "+" + last.format("YYYY-MM-DD");
+    const monthSelected = selected.date.getMonth() + 1;
+    const yearSelected = selected.date.getFullYear();
+    const range = `${yearSelected}-${monthSelected}-30`;
 
-    return fetch(`/api/user/reward/${range}`, {
+    try {
+        const dataPoint = await getInputPoint(code, range);
+        console.log("data after change date: ", dataPoint);
+        const days = dataPoint.days;
+        const monthCategory = dataPoint.monthCategory;
+        const point = dataPoint.point;
+        const nominal = dataPoint.nominal;
+        const mode = dataPoint.mode;
+        const level = dataPoint.level;
+        const totalData = dataPoint.totalData;
+
+        pointUi(totalData, level, days, monthCategory, point, nominal, mode);
+    } catch (err) {}
+    Complete("LoadaReferalByMounth");
+});
+
+function getInputPoint(code, range) {
+    return fetch(`/api/user/reward`, {
         method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            first: self.first,
-            last: self.last,
             code: code,
+            range: range,
         }),
     })
         .then((response) => {
@@ -142,9 +135,7 @@ function pointUi(totalData, level, days, monthCategory, point, nominal, mode) {
     $("#point").append(`<h6>${point}</h6>`);
     $("#nominal").append(`<h6>Rp. ${nominal}</h6>`);
     $("#totalData").append(`<h6>${totalData}</h6>`);
-    $("#days").append(`Dalam ${days} Hari`);
-    $("#monthCategory").append(`${monthCategory}`);
-    $("#mode").append(`Kelipatan ${mode} ${descMode}`);
+    $("#monthCategory").append(`${monthCategory} Bulan`);
 }
 
 function BeforeSend(idLoader) {

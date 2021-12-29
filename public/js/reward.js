@@ -50,7 +50,6 @@ $("#data", async function () {
     BeforeSend("LoadaReferalByMounth");
     try {
         const referalPoint = await getReferalPointDefault();
-        console.log("data: ", referalPoint);
         const dataReferalPoint = referalPoint.data;
         const dataDays = referalPoint.days;
         const monthCategory = referalPoint.monthCategory;
@@ -67,9 +66,7 @@ $("#data", async function () {
             dataDays,
             mode
         );
-    } catch (err) {
-        console.log("error: ", err);
-    }
+    } catch (err) {}
     Complete("LoadaReferalByMounth");
 });
 

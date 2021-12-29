@@ -163,8 +163,8 @@ Route::post('/savevoucher','Admin\RewardController@saveVoucherHistory');
 Route::post('/savevoucheradmin','Admin\RewardController@saveVoucherHistoryAdmin');
 
 // reward by account member
-Route::post('/user/rewardefault/{daterange}','RewardController@getPoinByMonthDefaultByAccountMember');
-Route::post('/user/reward/{daterange}','RewardController@getPoinByMonthByAccountMember');
+Route::post('/user/rewardefault','RewardController@getPoinByMonthDefaultByAccountMember');
+Route::post('/user/reward','RewardController@getPoinByMonthByAccountMember');
 
 // target
 Route::get('/list/target','Admin\SettingController@getListTarget');

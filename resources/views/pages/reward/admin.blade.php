@@ -29,16 +29,19 @@
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
+                        <h5>Reward Input Admin</h5>
+                        <hr>
                           <div class="row">
                               <div class="col-md-4 col-sm-4">
-                                  <div class="row">
-                                      <div class="col-md-12 col-sm-12">
-                                          <div class="input-group">
-                                            <button id="created_at" class="btn btn-sm btn-sc-primary text-white">Tanggal</button>
-                                                {{-- <input type="text" id="created_at" name="date" class="form-control"> --}}
-                                                <input type="hidden" value="{{ Auth::user()->code }}" id="uid" >
-                                          </div>
+                                 <div class="row">
+                                    <div class="col-md-9 col-sm-9"></div>
+                                      <div class="input-group mb-3 col-md-6">
+                                        <button onclick="acumulate()" class="btn btn-sm btn-default border mr-1 mb-1">Akumulasi</button>
+                                        <button type="text" id="date" class="btn btn-sm btn-sc-primary text-white datepicker">Bulan</button>
+                                        <input type="hidden" value="{{ Auth::user()->code }}" id="uid" >
                                       </div>
+                                  </div>
+                                  <div class="row">
                                       <div class="col-md-12 col-sm-12 mt-2">
                                           <div class="card shadow">
                                               <div class="card body bg-success">
@@ -69,29 +72,15 @@
                                               </div>
                                               <span id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay"></span>
                                               <div class="card-footer">
-                                                  <div id="days"></div>
                                                   <div id="monthCategory"></div>
-                                                  <div id="mode"></div>
                                               </div>
                                           </div>
                                       </div>
                                   </div>
                               </div>
-                              <div class="col-md-8 col-sm-8">
-                                  
-                              </div>
+                              <div class="col-md-8 col-sm-8"></div>
                           </div>
-                          {{-- <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <div class="input-group mb-6 col-md-12 col-sm-12">
-                                  <input type="text" id="created_at" name="date" class="form-control">
-                               </div>
-                               <div class="col-md-12 col-sm-12">
-                                   Data
-                               </div>
-                            </div>
-                          </div> --}}
-                          
+                         
                       </div>
                     </div>
                   </div>

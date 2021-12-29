@@ -24,7 +24,7 @@ class RewardController extends Controller
 
     }
 
-    public function getPoinByMonthDefaultByAccountMember($daterange)
+    public function getPoinByMonthDefaultByAccountMember()
     {
             $code = request()->code;
             $user = User::select('id','level')->where('code', $code)->first();
@@ -34,38 +34,34 @@ class RewardController extends Controller
                 # code...
                 $user_id = $user->id;
                 $gF = new GlobalProvider();
-                $range = $daterange;
-    
-                if ($range != '') {
-                    $date  = explode('+', $range);
-                    $start = Carbon::parse($date[0])->format('Y-m-d');
-                    $end   = Carbon::parse($date[1])->format('Y-m-d'); 
-                }
+
+                $start = date('2021-08-18');
+                $end = date('Y-m-d');
+
+                $date1 = date_create($start); 
+                $date2 = date_create($end); 
+
+                $interval = date_diff($date1, $date2); 
+
     
                 // jumlah hari
-                $days = $gF->getDaysTotal($start, $end);
-                $monthCategory = $level == 0 ? $gF->getMonthCategory($days) : $gF->getMonthCategoryMemberAdmin($days) ;
-                $mode = $level == 0 ? $gF->getPointMode($days) : $gF->getPointModeMemberAdmin($days);
+                $days = $interval->d;
+                $monthCategory = $interval->m;
+                // $mode = $level == 0 ? $gF->getPointMode($days) : $gF->getPointModeMemberAdmin($days);
                 
                 $referalModel = new Referal();
-                $inputPoint = $level == 0 ? $referalModel->getPointByMemberAccountReferal($start, $end, $user_id) : $referalModel->getPointByMemberAccount($start, $end, $user_id);
+                $inputPoint   =  $referalModel->getPointByMemberAccount($start, $end, $user_id);
 
                 if ($inputPoint != null) {
                                         
-                    $inpoint = $level == 0 ? $inputPoint->referal_inpoint : $inputPoint->input_inpoint; 
+                    $inpoint =  $inputPoint->input_inpoint; 
                     $totalInputMember = $inputPoint->total_input - $inpoint;
-                    
-                    $nominal = $level == 0 ? $gF->decimalFormat($gF->getPointNominal($gF->getPoint($totalInputMember, $days))) : $gF->decimalFormat($gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days)));
-                    $point   = $level == 0 ? $gF->getPoint($totalInputMember, $days) : $gF->getPointMemberAdmin($totalInputMember, $days);
         
                     $result = [
-                        'level' => $level,
-                        'days' => $days,
                         'monthCategory' => $monthCategory,
-                        'point' => $point,
+                        'point' => $gF->calPointAdmin($totalInputMember),
                         'totalData' => $totalInputMember,
-                        'nominal' => $nominal,
-                        'mode' => $mode,
+                        'nominal' => $gF->decimalFormat($gF->callNominal($gF->calPointAdmin($totalInputMember))),
                     ];
         
                     return $result;
@@ -73,13 +69,10 @@ class RewardController extends Controller
 
         
                      $result = [
-                        'level' => $level,
-                        'days' => $days,
                         'monthCategory' => $monthCategory,
                         'point' => 0,
                         'totalData' => 0,
                         'nominal' => 0,
-                        'mode' => $mode,
                     ];
         
                     return $result;
@@ -95,61 +88,50 @@ class RewardController extends Controller
             $level = $user->level;
 
             if ($user != null) {
-                # code...
-                $user_id = $user->id;
-                $gF = new GlobalProvider();
-                if (request()->daterange != '') {
 
-                    $range = request()->daterange;
-
-                    $date  = explode('+', $range);
-                    $start = Carbon::parse($date[0])->format('Y-m-d');
-                    $end   = Carbon::parse($date[1])->format('Y-m-d'); 
+                    $user_id = $user->id;
+                    $gF = new GlobalProvider();
+                    $start = date('2021-08-18');
+                    $end = request()->range;
                 
                     // jumlah hari
-                    $days = $gF->getDaysTotal($start, $end);
-                    $monthCategory = $level == 0 ? $gF->getMonthCategory($days) : $gF->getMonthCategoryMemberAdmin($days) ;
-                    $mode = $level == 0 ? $gF->getPointMode($days) : $gF->getPointModeMemberAdmin($days);
+                    $date1 = date_create($start); 
+                    $date2 = date_create($end); 
+
+                    $interval = date_diff($date1, $date2); 
+        
+                    // jumlah hari
+                    $days = $interval->d;
+                    $monthCategory = $interval->m;
                     
                     $referalModel = new Referal();
-                    $inputPoint = $level == 0 ? $referalModel->getPointByMemberAccountReferal($start, $end, $user_id) : $referalModel->getPointByMemberAccount($start, $end, $user_id);
+                    $inputPoint  =  $referalModel->getPointByMemberAccount($start, $end, $user_id);
                     // $inputPoint = $referalModel->getPointByMemberAccount($start, $end, $user_id);
                     
                     if ($inputPoint != null) {
-                        # code...
-                        $inpoint = $level == 0 ? $inputPoint->referal_inpoint : $inputPoint->input_inpoint; 
+                        $inpoint =  $inputPoint->input_inpoint; 
                         $totalInputMember = $inputPoint->total_input - $inpoint;
                         
-                        $nominal = $level == 0 ? $gF->decimalFormat($gF->getPointNominal($gF->getPoint($totalInputMember, $days))) : $gF->decimalFormat($gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days)));
-                        $point   = $level == 0 ? $gF->getPoint($totalInputMember, $days) : $gF->getPointMemberAdmin($totalInputMember, $days);
             
                         $result = [
-                            'level' => $level,
-                            'days' => $days,
                             'monthCategory' => $monthCategory,
-                            'point' => $point,
+                            'point' => $gF->calPointAdmin($totalInputMember),
                             'totalData' => $totalInputMember,
-                            'nominal' => $nominal,
-                            'mode' => $mode,
+                            'nominal' => $gF->decimalFormat($gF->callNominal($gF->calPointAdmin($totalInputMember))),
                         ];
             
                         return $result;
                     }else{
-    
-            
                          $result = [
-                            'level' => $level,
-                            'days' => $days,
                             'monthCategory' => $monthCategory,
                             'point' => 0,
                             'totalData' => 0,
                             'nominal' => 0,
-                            'mode' => $mode,
                         ];
             
                         return $result;
                     }
-                }
+                
     
 
 
