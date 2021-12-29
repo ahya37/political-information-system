@@ -109,9 +109,6 @@ class RewardController extends Controller
 
             $referalModel = new Referal();
             $referalPoint = $referalModel->getPoint($start, $end);
-            $totalReferal = collect($referalPoint)->sum(function($q){
-                return $q->total_referal;
-            });
 
             $data = [];
             foreach ($referalPoint as $key => $val) {

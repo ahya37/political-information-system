@@ -166,6 +166,9 @@ Route::post('/savevoucheradmin','Admin\RewardController@saveVoucherHistoryAdmin'
 Route::post('/user/rewardefault','RewardController@getPoinByMonthDefaultByAccountMember');
 Route::post('/user/reward','RewardController@getPoinByMonthByAccountMember');
 
+Route::post('/user/rewardreferal','RewardController@getPoinByMonthDefaultByAccountMemberReferal');
+Route::post('/user/rewardreferalbymonth','RewardController@getPoinByMonthByAccountMemberReferal');
+
 // target
 Route::get('/list/target','Admin\SettingController@getListTarget');
 

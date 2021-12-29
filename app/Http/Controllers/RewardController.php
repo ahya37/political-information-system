@@ -13,14 +13,7 @@ class RewardController extends Controller
 {
     public function index()
     {
-        // jika anggota adalah admin
-        $level = Auth::user()->level;
-        if ($level != 0) {
-            return view('pages.reward.admin');
-        }elseif ($level == 0) {
-            // jika anggota adalam anggota biasa
             return view('pages.reward.index');
-        }
 
     }
 
@@ -138,41 +131,44 @@ class RewardController extends Controller
             }
     }
 
-    public function getPoinByMonthDefaultByAccountMemberReferal($daterange)
+    public function getPoinByMonthDefaultByAccountMemberReferal()
     {
             $code = request()->code;
-            $user = User::select('id')->where('code', $code)->first();
+            $user = User::select('id','level')->where('code', $code)->first();
+            $level = $user->level;
 
             if ($user != null) {
                 # code...
-                $user_id = $user->id;
+                $userId = $user->id;
                 $gF = new GlobalProvider();
-                $range = $daterange;
-    
-                if ($range != '') {
-                    $date  = explode('+', $range);
-                    $start = Carbon::parse($date[0])->format('Y-m-d');
-                    $end   = Carbon::parse($date[1])->format('Y-m-d'); 
-                }
+
+                $start = date('2021-08-18');
+                $end = date('Y-m-d');
+                
+                $date1 = date_create($start); 
+                $date2 = date_create($end); 
+
+                $interval = date_diff($date1, $date2); 
+
     
                 // jumlah hari
-                $days = $gF->getDaysTotal($start, $end);
-                $monthCategory = $gF->getMonthCategory($days);
-                $mode = $gF->getPointMode($days);
+                $days = $interval->d;
+                $monthCategory = $interval->m;
+                // $mode = $level == 0 ? $gF->getPointMode($days) : $gF->getPointModeMemberAdmin($days);
                 
                 $referalModel = new Referal();
-                $referalPoint = $referalModel->getPointByMemberAccountReferal($start, $end, $user_id);
+                $inputPoint   =  $referalModel->getPointByMemberAccountReferal($start, $end, $userId);
 
-                if ($referalPoint != null) {
-                    # code...
-                    $totalReferal = $referalPoint->total_input - $referalPoint->referal_inpoint;
+                if ($inputPoint != null) {
+                                        
+                    $inpoint =  $inputPoint->referal_inpoint; 
+                    $totalReferal = $inputPoint->total_referal - $inpoint;
         
-                     $result = [
-                        'days' => $days,
-                        'monthCategory' => $monthCategory,
-                        'point' => $gF->getPoint($totalReferal, $days),
-                        'nominal' => $gF->decimalFormat($gF->getPointNominal($gF->getPoint($totalReferal, $days))),
-                        'mode' => $mode,
+                    $result = [
+                        'monthCategoryReferal' => $monthCategory,
+                        'pointReferal' => $gF->calPoint($totalReferal),
+                        'totalDataReferal' => $totalReferal,
+                        'nominalReferal' => $gF->decimalFormat($gF->callNominal($gF->calPoint($totalReferal))),
                     ];
         
                     return $result;
@@ -180,11 +176,10 @@ class RewardController extends Controller
 
         
                      $result = [
-                        'days' => $days,
-                        'monthCategory' => $monthCategory,
-                        'point' => 0,
-                        'nominal' => 0,
-                        'mode' => $mode,
+                        'monthCategoryReferal' => $monthCategory,
+                        'pointReferal' => 0,
+                        'totalDataReferal' => 0,
+                        'nominalReferal' => 0,
                     ];
         
                     return $result;
@@ -196,57 +191,57 @@ class RewardController extends Controller
     public function getPoinByMonthByAccountMemberReferal()
     {
             $code = request()->code;
-            $user = User::select('id')->where('code', $code)->first();
+            $user = User::select('id','level')->where('code', $code)->first();
+            $level = $user->level;
 
             if ($user != null) {
                 # code...
-                $user_id = $user->id;
+                $userId = $user->id;
                 $gF = new GlobalProvider();
-                if (request()->daterange != '') {
 
-                    $range = request()->daterange;
+                $start = date('2021-08-18');
+                $end = request()->range;
 
-                    $date  = explode('+', $range);
-                    $start = Carbon::parse($date[0])->format('Y-m-d');
-                    $end   = Carbon::parse($date[1])->format('Y-m-d'); 
+
+                $date1 = date_create($start); 
+                $date2 = date_create($end); 
+
+                $interval = date_diff($date1, $date2); 
+
+    
+                // jumlah hari
+                $days = $interval->d;
+                $monthCategory = $interval->m;
+                // $mode = $level == 0 ? $gF->getPointMode($days) : $gF->getPointModeMemberAdmin($days);
                 
-                    // jumlah hari
-                    $days = $gF->getDaysTotal($start, $end);
-                    $monthCategory = $gF->getMonthCategoryMemberAdmin($days);
-                    $mode = $gF->getPointModeMemberAdmin($days);
-                    
-                    $referalModel = new Referal();
-                    $inputPoint = $referalModel->getPointByMemberAccount($start, $end, $user_id);
-                    
-                    if ($inputPoint != null) {
-                        # code...
-                        $totalInputMember = $inputPoint->total_input - $inputPoint->input_inpoint;
-            
-                         $result = [
-                            'days' => $days,
-                            'monthCategory' => $monthCategory,
-                            'point' => $gF->getPointMemberAdmin($totalInputMember, $days),
-                            'nominal' => $gF->decimalFormat($gF->getPointNominal($gF->getPointMemberAdmin($totalInputMember, $days))),
-                            'mode' => $mode,
-                        ];
-            
-                        return $result;
-                    }else{
-    
-            
-                         $result = [
-                            'days' => $days,
-                            'monthCategory' => $monthCategory,
-                            'point' => 0,
-                            'nominal' => 0,
-                            'mode' => $mode,
-                        ];
-            
-                        return $result;
-                    }
-                }
-    
+                $referalModel = new Referal();
+                $inputPoint   =  $referalModel->getPointByMemberAccountReferal($start, $end, $userId);
 
+                if ($inputPoint != null) {
+                                        
+                    $inpoint =  $inputPoint->referal_inpoint; 
+                    $totalReferal = $inputPoint->total_referal - $inpoint;
+        
+                    $result = [
+                        'monthCategoryReferal' => $monthCategory,
+                        'pointReferal' => $gF->calPoint($totalReferal),
+                        'totalDataReferal' => $totalReferal,
+                        'nominalReferal' => $gF->decimalFormat($gF->callNominal($gF->calPoint($totalReferal))),
+                    ];
+        
+                    return $result;
+                }else{
+
+        
+                     $result = [
+                        'monthCategoryReferal' => $monthCategory,
+                        'pointReferal' => 0,
+                        'totalDataReferal' => 0,
+                        'nominalReferal' => 0,
+                    ];
+        
+                    return $result;
+                }
 
             }
     }
