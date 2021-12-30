@@ -19,4 +19,9 @@ class DetailFigure extends Model
     {
         return $this->belongsTo(Figure::class,'figure_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'create_by');
+    }
 }

@@ -18,7 +18,11 @@
                 </p>
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
-                
+                <div class="row mb-2">
+                  <div class="col-12">
+                    <a href="{{ route('admin-downloadfigureall') }}" class="btn btn-sm btn-sc-primary text-white">Download</a>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-12">
                     @include('layouts.message')

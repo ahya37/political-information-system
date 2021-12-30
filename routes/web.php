@@ -267,6 +267,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/info/listintelegency','InformationController@listIntelegency')->name('admin-listintelegency');
         Route::get('/info/dtintelegency','InformationController@dtListIntelegency');
         Route::get('/info/detalfigure/{id}','InformationController@detailFigure')->name('admin-detailfigure');
+        
+        // intelegency Pdf
+        Route::get('/info/downloadpdfallbyvillage/{villageId}','InformationController@downloadPdfAllByVillageId')->name('admin-downloadpdfbyvillageid');
+        Route::get('/info/downloadpdfallall','InformationController@downloadPdfAll')->name('admin-downloadfigureall');
 
         
     });

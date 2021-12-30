@@ -7,8 +7,10 @@ use App\Figure;
 use App\DetailFigure;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Village;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use PDF;
 
 class InformationController extends Controller
 {
@@ -70,7 +72,9 @@ class InformationController extends Controller
             foreach($info_politic as $val){
 
                 // $data[] = $val->name.' TAHUN: '.$val->year.' STATUS: '.$val->status.'<br>';
-                $data[] = "<tr><td>$val->name</td><td>$val->year</td><td>$val->status</td></tr>";
+                if ($val->name != null) {
+                    $data[] = "<tr><td>$val->name</td><td>$val->year</td><td>$val->status</td></tr>";
+                }
             }
 
             return response()->json($data);
@@ -146,5 +150,52 @@ class InformationController extends Controller
     public function listIntelegencyAccounMember()
     {
         return view('pages.info.list-intetlegency');
+    }
+
+    public function downloadPdfAll()
+    {
+        $figure = DetailFigure::with(['village.district.regency.province','figure','user'])->orderBy('name','asc')->get();
+        $data = [];
+        $no   = 1;
+        foreach ($figure as $val) {
+            $data[] = [
+                'name' => $val->name,
+                'village' => $val->village->name,
+                'district' => $val->village->district->name, 
+                'regency' => $val->village->district->regency->name, 
+                'province' => $val->village->district->regency->province->name, 
+                'descr' => $val->descr,
+                'info'  => json_decode($val->info_politic),
+                'cby'   => $val->user->name,
+            ];    
+        }
+
+
+        $pdf = PDF::LoadView('pages.admin.report.figurebyvillageall', compact('data','no'));
+        return $pdf->download('LAPORAN-TOKOH.pdf');
+    }
+
+    public function downloadPdfAllByVillageId($villageId)
+    {
+        $village = Village::select('name')->where('id', $villageId)->first();
+        $figure = DetailFigure::with(['village.district.regency.province','figure','user'])->where('village_id', $villageId)->orderBy('name','asc')->get();
+
+        $data = [];
+        $no   = 1;
+        foreach ($figure as $val) {
+            $data[] = [
+                'name' => $val->name,
+                'village' => $val->village->name,
+                'district' => $val->village->district->name, 
+                'regency' => $val->village->district->regency->name, 
+                'province' => $val->village->district->regency->province->name, 
+                'descr' => $val->descr,
+                'info'  => json_decode($val->info_politic),
+                'cby'   => $val->user->name,
+            ];    
+        }
+
+        $pdf = PDF::LoadView('pages.admin.report.figurebyvillage', compact('data','no'));
+        return $pdf->download('LAPORAN-TOKOH-DESA: '.$village->name.'.pdf');
     }
 }

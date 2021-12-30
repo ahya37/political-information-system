@@ -926,7 +926,7 @@ class RewardController extends Controller
 
         $voucher = DetailVoucherHistoryAdmin::where('id', $id)->first();
         $customPaper = array(0,0,400.00,283.50);
-        $pdf = PDF::LoadView('pages.admin.report.voucher', compact('voucher','gF'))->setPaper($customPaper, 'landscape');;
+        $pdf = PDF::LoadView('pages.admin.report.voucher', compact('voucher','gF'))->setPaper($customPaper, 'landscape');
         return $pdf->download('voucher-input-'.$voucher->code.'.pdf');
     }
 

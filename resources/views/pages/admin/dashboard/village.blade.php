@@ -40,6 +40,7 @@
                               </a>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                   <a href="{{ route('pdf-members-village', $village->id) }}" class="dropdown-item">Anggota Terdaftar</a>
+                                  <a href="{{ route('admin-downloadpdfbyvillageid', $village->id) }}" class="dropdown-item">Tokoh Berpengaruh</a>
                               </div>
                           </div>
                         </div>
