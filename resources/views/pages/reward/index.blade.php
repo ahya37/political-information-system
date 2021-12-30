@@ -92,21 +92,8 @@
                                   <small>Total Nominal : Rp. {{$gF->decimalFormat($voucher->total_nominal ?? '')}}</small>
                                 </div>
                               </div>
-                                <div class="table-responsive">
-                                    <table id="dataReferal" class="table table-sm table-striped" width="100%">
-                                      <thead>
-                                        <tr>
-                                          <th scope="col">KODE</th>
-                                          <th scope="col">JUMLAH DATA</th>
-                                          <th scope="col">POIN</th>
-                                          <th scope="col">NOMINAL</th>
-                                          <th scope="col">TANGGAl</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                      </tbody>
-                                    </table>
-                                </div>
+                                <div class="row" id="showdivHtmlvoucherReferal"></div>
+                              </div>
                               </div>
                           </div>
                          
@@ -183,21 +170,7 @@
                                   <small>Total Nominal : Rp. {{$gF->decimalFormat($voucherAdmin->total_nominal ?? '')}}</small>
                                 </div>
                               </div>
-                              <div class="table-responsive">
-                                    <table id="dataInput" class="table table-sm table-striped" width="100%">
-                                      <thead>
-                                        <tr>
-                                          <th scope="col">KODE</th>
-                                          <th scope="col">JUMLAH DATA</th>
-                                          <th scope="col">POIN</th>
-                                          <th scope="col">NOMINAL</th>
-                                          <th scope="col">TANGGAl</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                      </tbody>
-                                    </table>
-                                </div>
+                              <div class="row" id="showdivHtmlvoucherInput"></div>
                               </div>
                           </div>
                          

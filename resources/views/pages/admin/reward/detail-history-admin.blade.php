@@ -22,6 +22,9 @@
                       <div class="card">
                         <div class="card-body">
                             <div class="fa fa-tags"></div>
+                             <div class="row">
+                                        <small class="col-12">Voucher Input (Admin)</small>
+                                        </div>
                             <h5 class="text-center">Poin</h5>
                             <h5 class="text-center">{{ $item->point }}</h5>
                             <div class="mt-4">

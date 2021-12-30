@@ -262,29 +262,20 @@ class RewardController extends Controller
         $voucherModel = new VoucherHistory();
         $voucher      = $voucherModel->getListVoucherByMember($userId);
 
-        if (request()->ajax()) 
-        {
-            return DataTables::of($voucher)
-                         ->addColumn('totalPoint', function($item){
-                                 return '<div class="badge badge-pill badge-success">
-                                        '.$item->point.'
-                                    </div>
-                                       ';
-                            })
-                            ->addColumn('totalNominal', function($item){
-                                $gF = new GlobalProvider();
-                                 return '<div class="badge badge-pill badge-success">
-                                        Rp. '.$gF->decimalFormat($item->nominal).'
-                                    </div>
-                                       ';
-                            })
-                            ->addColumn('date', function($item){
-                               return date('d-m-Y H:i', strtotime($item->created_at));
-                            })
+         $data = [];
+            foreach ($voucher as $item) {
+                $data [] = [
+                    'totalPoint' => $item->point,
+                    'totalNominal' => $gF->decimalFormat($item->nominal),
+                    'date' => date('d-m-Y H:i', strtotime($item->created_at)),
+                ];
+            }
 
-                        ->rawColumns(['totalPoint','totalNominal','date'])
-                        ->make(true);
-        }
+            $result = [
+                'data' => $data
+            ];
+            
+            return $result;
     }
 
     public function dtVoucherHistoryAdmin()
@@ -296,28 +287,19 @@ class RewardController extends Controller
         $voucherModel = new VoucherHistoryAdmin();
         $voucher      = $voucherModel->getListVoucherByMember($userId);
 
-        if (request()->ajax()) 
-        {
-            return DataTables::of($voucher)
-                         ->addColumn('totalPoint', function($item){
-                                 return '<div class="badge badge-pill badge-success">
-                                        '.$item->point.'
-                                    </div>
-                                       ';
-                            })
-                            ->addColumn('totalNominal', function($item){
-                                $gF = new GlobalProvider();
-                                 return '<div class="badge badge-pill badge-success">
-                                        Rp. '.$gF->decimalFormat($item->nominal).'
-                                    </div>
-                                       ';
-                            })
-                            ->addColumn('date', function($item){
-                               return date('d-m-Y H:i', strtotime($item->created_at));
-                            })
-
-                        ->rawColumns(['totalPoint','totalNominal','date'])
-                        ->make(true);
+        $data = [];
+        foreach ($voucher as $item) {
+            $data [] = [
+                'totalPoint' => $item->point,
+                'totalNominal' => $gF->decimalFormat($item->nominal),
+                'date' => date('d-m-Y H:i', strtotime($item->created_at)),
+            ];
         }
+
+        $result = [
+            'data' => $data
+        ];
+        
+        return $result;
     }
 }
