@@ -273,7 +273,7 @@ class MemberController extends Controller
                     ->addIndexColumn()
                     ->addColumn('photo', function($item){
                         return '
-                        <a href="'.route('admin-profile-member', encrypt($item->id)).'">
+                        <a href="'.route('admin-profile-member', $item->id).'">
                             <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
                             '.$item->name.'
                         </a>
@@ -306,7 +306,7 @@ class MemberController extends Controller
                     ->addIndexColumn()
                     ->addColumn('photo', function($item){
                         return '
-                        <a href="'.route('admin-profile-member', encrypt($item->id)).'">
+                        <a href="'.route('admin-profile-member', $item->id).'">
                             <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
                             '.$item->name.'
                         </a>
@@ -337,7 +337,7 @@ class MemberController extends Controller
                     ->addIndexColumn()
                     ->addColumn('photo', function($item){
                         return '
-                        <a href="'.route('admin-profile-member', encrypt($item->id)).'">
+                        <a href="'.route('admin-profile-member', $item->id).'">
                             <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
                             '.$item->name.'
                         </a>
@@ -366,7 +366,7 @@ class MemberController extends Controller
                     ->addIndexColumn()
                     ->addColumn('photo', function($item){
                         return '
-                        <a href="'.route('admin-profile-member', encrypt($item->id)).'">
+                        <a href="'.route('admin-profile-member', $item->id).'">
                             <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
                             '.$item->name.'
                         </a>
