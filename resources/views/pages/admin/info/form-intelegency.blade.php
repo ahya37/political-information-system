@@ -69,7 +69,8 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Informasi Tokoh</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" name="figure_id">
+                                            <select class="form-control" name="figure_id" required>
+                                                <option value="">- Pilih -</option>
                                                 @foreach ($figures as $item)
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
@@ -78,7 +79,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-sm-12 col-md-12 col-form-label">Pernah mencalonkan diri sebagai :</label>
+                                        <label style="color: red" class="col-sm-12 col-md-12 col-form-label"><i>Optional, boleh diisi jika anggota tersebut pernah menacalonkan diri sebagai :</i></label>
                                         <div class="col-sm-12 col-md-12 border">
                                             <div class="row mb-1 mt-1">
                                                 <div class="col-sm-4 col-md-4">

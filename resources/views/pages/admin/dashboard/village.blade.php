@@ -307,23 +307,24 @@
                    <div class="col-md-12 col-sm-12">
                      <div class="card mb-2">
                       <div class="card-body">
-                        <h6 class="text-center">Anggota / Tokoh Berpengaruh</h6>
+                        <h6 class="text-center">Tokoh Berpengaruh</h6>
                         <div class="row">
                       </div>
                       <div class="row">
                           <div class="table-responsive mt-3">
-                            <table id="dtshowFigure" class="data table table-sm table-striped" width="100%">
-                              <thead>
-                               <tr>
-                                  <th scope="col"></th>
-                                  <th scope="col">NAMA</th>
-                                  <th scope="col">TOKOH</th>
-                                  <th scope="col">ALAMAT</th>
-                                  <th scope="col">KONTAK</th>
-                                </tr>
-                                </thead>
-                                
-                              </table>
+                               <table id="dtshowFigure" class="table table-sm table-striped" width="100%">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">NAMA</th>
+                                        <th scope="col">ALAMAT</th>
+                                        <th scope="col">KETERANGAN</th>
+                                        <th scope="col">AKSI</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                     
+                                    </tbody>
+                                  </table>
                           </div>
                       </div>
                     </div>
@@ -357,6 +358,14 @@
               
           </div>
 @endsection
+@push('prepend-script')
+  <div id="onDetail"class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+@endpush
 
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>

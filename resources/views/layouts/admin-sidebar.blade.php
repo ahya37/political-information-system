@@ -164,7 +164,7 @@
                   <a
                     href="{{ route('admin-intelegency') }}"
                     class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/info/intelegency')) ? 'active custom-active-color' : '' }}"
-                    ><span>Intelegensi Politik</span>
+                    ><span>Form Intelegensi Politik</span>
                   </a>
                   <a
                     href="{{ route('admin-listintelegency') }}"

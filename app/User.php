@@ -910,7 +910,7 @@ class User extends Authenticatable
     public function getMemberFigure($villageID)
     {
          $sql = "SELECT a.id as user_id, a.village_id, a.name as member, c.name as figure, a.photo, a.phone_number, a.whatsapp from users as a
-                join figure_detail as b on a.id = b.user_id
+                join detail_figure as b on a.id = b.user_id
                 join figure as c on b.figure_id = c.id where a.village_id = $villageID";
         return DB::select($sql);
     }

@@ -11,6 +11,7 @@ $("#data").DataTable({
     columns: [
         { data: "name", name: "name" },
         { data: "address", name: "address" },
+        { data: "figure.name", name: "figure.name" },
         { data: "action", name: "action" },
     ],
 });
@@ -32,6 +33,7 @@ $("#list").DataTable({
     columns: [
         { data: "name", name: "name" },
         { data: "address", name: "address" },
+        { data: "figure.name", name: "figure.name" },
         { data: "action", name: "action" },
     ],
 });

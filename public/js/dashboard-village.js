@@ -468,13 +468,11 @@ $("#dtshowFigure").DataTable({
         url: `/admin/dtlistmemberfigure/${villageID}`,
     },
     columns: [
-        { data: "photo", name: "photo" },
-        { data: "member", name: "member" },
-        { data: "figure", name: "figure" },
+        { data: "name", name: "name" },
         { data: "address", name: "address" },
-        { data: "contact", name: "contact" },
+        { data: "figure.name", name: "figure.name" },
+        { data: "action", name: "action" },
     ],
-    aaSorting: [[2, "desc"]],
 });
 
 // anggota referal terbanyak perbulan
@@ -634,6 +632,34 @@ let tbadminVillage = $("#listadminArea").DataTable({
     ],
     aaSorting: [[1, "desc"]],
 });
+
+function onDetail(id) {
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    $.ajax({
+        url: "/api/detailfigure",
+        method: "POST",
+        data: { _token: CSRF_TOKEN, id: id },
+        success: function (data) {
+            $("#onDetail .modal-content").empty();
+            $("#onDetail").modal("show");
+            $("#onDetail .modal-content").append(`
+                <div class="modal-body">
+                <div class="col-md-12 col-sm-12">
+                <h5>Informasi </h5>
+                    <table class="table tabl-sm">
+                        <tr>
+                            <th>KATEGORI</th>
+                            <th>TAHUN</th>
+                            <th>STATUS</th>
+                        </tr>
+                        ${data}
+                    </table>
+                    </div>
+                </div>
+            `);
+        },
+    });
+}
 
 // funsgsi efect loader
 function BeforeSend(idLoader) {

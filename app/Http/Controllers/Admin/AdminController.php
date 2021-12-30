@@ -14,6 +14,7 @@ use App\AdminDapilDistrict;
 use Illuminate\Http\Request;
 use App\AdminRegionalVillage;
 use App\AdminRegionalDistrict;
+use App\DetailFigure;
 use App\Providers\GlobalProvider;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -743,36 +744,23 @@ class AdminController extends Controller
 
     public function dtListMemberFigure($villageID)
     {
-        $userModel = new User();
-        $memberInputer = $userModel->getMemberFigure($villageID);
         // anggota berdasarkan input di district
+        $detailFigure = DetailFigure::with(['village.district.regency.province','figure'])
+                        ->where('village_id', $villageID)
+                        ->orderBy('name','ASC')
+                        ->get();
         if (request()->ajax()) 
         {
-            return DataTables::of($memberInputer)
-                        ->addColumn('photo', function($item){
-                                        return '
-                                            <a href="'.route('admin-profile-member', $item->user_id).'">
-                                                <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
-                                            </a>';
-                        })
+            return DataTables::of($detailFigure)
                         ->addColumn('address', function($item){
-                             $village = Village::with(['district.regency.province'])->where('id', $item->village_id)->first(); 
-                             return $village->district->name .'<br>'.$village->district->name.',<br>'.$village->district->regency->name.',<br>'.$village->district->regency->province->name;
+                            return ''.$item->village->name.'<br> KEC. '.$item->village->district->name.'<br>'.$item->village->district->regency->name.'<br> '.$item->village->district->regency->province->name.' ';
                         })
-                        ->addColumn('contact', function($item){
-                            return '<div class="badge badge-pill badge-primary">
-                                        <i class="fa fa-phone"></i>
-                                        </div>
-                                       '.$item->phone_number.'
-                                        <br/>
-                                        <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
-                                        </div>
-                                        '.$item->whatsapp.' ';
+                        ->addColumn('action', function($item){
+                            return '<button type="button" class="btn btn-sm btn-sc-primary text-white" onclick="onDetail('.$item->id.')">Detail</button>';
                         })
-                        ->rawColumns(['photo','address','contact'])
+                        ->rawColumns(['address','desc','action'])
                         ->make(true);
         }
-
     }
     
 }
