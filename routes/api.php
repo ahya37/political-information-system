@@ -177,3 +177,7 @@ Route::post('/user/dtrewardinput','RewardController@dtVoucherHistoryAdmin');
 Route::get('/list/target','Admin\SettingController@getListTarget');
 
 Route::post('/detailfigure','Admin\InformationController@detailFigure');
+
+// list intelegensi akun anggota
+Route::post('/user/member/info/dtintelegency','Admin\InformationController@dtListIntelegencyAccountMember');
+

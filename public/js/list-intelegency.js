@@ -15,6 +15,27 @@ $("#data").DataTable({
     ],
 });
 
+// list data di akun anggota
+const code = $("#code").val();
+$("#list").DataTable({
+    processing: true,
+    language: {
+        processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+    },
+    serverSide: true,
+    ordering: true,
+    ajax: {
+        url: `/api/user/member/info/dtintelegency`,
+        type: "POST",
+        data: { code: code },
+    },
+    columns: [
+        { data: "name", name: "name" },
+        { data: "address", name: "address" },
+        { data: "action", name: "action" },
+    ],
+});
+
 function onDetail(id) {
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     $.ajax({
