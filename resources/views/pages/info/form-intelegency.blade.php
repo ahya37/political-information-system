@@ -20,9 +20,18 @@
                 </p>
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
+                  <div class="row">
+                      <div class="col-12">
+                          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Intelegensi politik !</strong> adalah untuk mengetahui seberapa berpengaruh masyarakat / orang di daerah tersebut.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                      </div>
+                  </div>
                 <div class="row">
                   <div class="col-12">
-                    @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
                             <form id="register" action="{{ route('member-intelegensi-save') }}" method="POST" enctype="multipart/form-data">
