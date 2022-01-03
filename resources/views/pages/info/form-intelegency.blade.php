@@ -76,74 +76,65 @@
                                     </div>
                                     
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Informasi Tokoh</label>
+                                        <label class="col-sm-2 col-form-label">Profesi</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" name="figure_id" required>
-                                                <option value="">- Pilih -</option>
+                                            <select class="form-control" name="figure_id" id="figure_id" required onchange="showDiv('fiugureOther', this)">
                                                 @foreach ($figures as $item)
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-
-                                    <div class="form-group">
-                                        <label style="color: red" class="col-sm-12 col-md-12 col-form-label"><i>Optional, boleh diisi jika anggota tersebut pernah menacalonkan diri sebagai :</i></label>
-                                        <div class="col-sm-12 col-md-12 border">
-                                            <div class="row mb-1 mt-1">
-                                                <div class="col-sm-4 col-md-4">
-                                                    <input type="checkbox" name="info[]" value="Kepala Desa"> Kepala Desa
-                                                </div>
-                                                <div class="col-sm-4 col-md-4">
-                                                    <input type="text" class="form-control form-control-sm" name="year[]" placeholder="Tahun">
-                                                </div>
-                                                <div class="col-sm-4 col-md-4">
-                                                    <select class="form-control" name="status[]">
-                                                        <option value="">-Pilih status-</option>
-                                                        <option value="MENANG">Menang</option>
-                                                        <option value="KALAH">Kalah</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                     <div class="form-group row">
+                                          <label class="col-sm-2 col-form-label"></label>
+                                        <div class="col-sm-6">
+                                        <input type="text" id="fiugureOther" style="display: none" name="fiugureOther" class="form-control" placeholder="Tulis lainnya disini">
                                         </div>
-                                        <div class="col-sm-12 col-md-12 border">
-                                            <div class="row mb-1 mt-1">
-                                                <div class="col-sm-4 col-md-4">
-                                                    <input type="checkbox" name="info[]" value="DPRD"> DPRD
-                                                </div>
-                                                <div class="col-sm-4 col-md-4">
-                                                    <input type="text" name="year[]" class="form-control form-control-sm" placeholder="Tahun">
-                                                </div>
-                                                <div class="col-sm-4 col-md-4">
-                                                    <select class="form-control" name="status[]">
-                                                        <option value="">-Pilih status-</option>
-                                                        <option value="MENANG">Menang</option>
-                                                        <option value="KALAH">Kalah</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">No. Telepon</label>
+                                        <div class="col-sm-6">
+                                        <input type="text" name="no.telp" class="form-control">
                                         </div>
-                                        <div class="col-sm-12 col-md-12 border">
-                                            <div class="row mb-1 mt-1">
-                                                <div class="col-sm-4 col-md-4">
-                                                    <input type="checkbox" name="info[]" value=""> DPR
-                                                </div>
-                                                <div class="col-sm-4 col-md-4">
-                                                    <input type="text" name="year[]" class="form-control form-control-sm"  placeholder="Tahun">
-                                                </div>
-                                                <div class="col-sm-4 col-md-4">
-                                                    <select class="form-control" name="status[]">
-                                                        <option value="">-Pilih status-</option>
-                                                        <option value="MENANG">Menang</option>
-                                                        <option value="KALAH">Kalah</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row">
+                                        <label class="col-sm-12 col-form-label">Optional, boleh diisi jika atas nama tersebut menacalonkan diri sebagai :</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" name="politic_name">
+                                                <option value="">- Pilih -</option>
+                                                <option value="KEPALA DESA">KEPALA DESA</option>
+                                                <option value="DPRD">DPRD</option>
+                                                <option value="DPR">DPR</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-12 col-form-label">TAHUN</label>
+                                        <div class="col-sm-6">
+                                        <input type="text" name="politic_year" class="form-control" placeholder="contoh: 2019">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-12 col-form-label">Status</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" name="politic_status" >
+                                                <option value="">- Pilih -</option>
+                                                <option value="KALAH">KALAH</option>
+                                                <option value="MENANG">MENANG</option>
+                                            </select>
                                         </div>
                                     </div>
                                      <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Keterangan </label>
-                                        <div class="col-sm-10">
+                                        <label class="col-sm-12 col-form-label">Perolehan Suara</label>
+                                        <div class="col-sm-6">
+                                        <input type="text" name="politic_member" class="form-control" placeholder="contoh: 2000">
+                                        </div>
+                                    </div>
+
+                                     <div class="form-group row">
+                                        <label class="col-sm-12 col-form-label">Keterangan </label>
+                                        <div class="col-sm-6">
                                            <textarea class="form-control" name="descr"></textarea>
                                         </div> 
                                     </div>

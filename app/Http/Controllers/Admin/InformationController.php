@@ -71,22 +71,16 @@ class InformationController extends Controller
         $detailFigure = DetailFigure::with(['village','figure'])->where('id', $id)->first();
         $gF = new GlobalProvider();
         return view('pages.admin.info.detail-figure', compact('detailFigure','gF'));
-        // $token = request()->_token;
-        // if ($token != null) {
+        
 
-        //     $info_politic = json_decode($detailFigure->info_politic);
+    }
 
-        //     $data = [];
-        //     foreach($info_politic as $val){
-
-        //         // $data[] = $val->name.' TAHUN: '.$val->year.' STATUS: '.$val->status.'<br>';
-        //         if ($val->name != null) {
-        //             $data[] = "<tr><td>$val->name</td><td>$val->year</td><td>$val->status</td></tr>";
-        //         }
-        //     }
-
-        //     return response()->json($data);
-        // }
+    public function detailFigureAccountMember($id)
+    {
+        $detailFigure = DetailFigure::with(['village','figure'])->where('id', $id)->first();
+        $gF = new GlobalProvider();
+        return view('pages.info.detail-figure', compact('detailFigure','gF'));
+        
 
     }
 
@@ -104,7 +98,7 @@ class InformationController extends Controller
             'name' => $request->name,
             'village_id' => $request->village_id,
             'figure_id' => $request->figure_id,
-            'fiugure_other' => $request->figure_id != null ? 'NULL' : $request->fiugureOther,
+            'figure_other' => $request->figure_id = '10' ? $request->fiugureOther : 'NULL',
             'no_telp' => $request->no_telp,
             'info_politic' => 'NULL',
             'politic_name' => $request->politic_name,
@@ -132,33 +126,11 @@ class InformationController extends Controller
                             return ''.$item->village->name.'<br> KEC. '.$item->village->district->name.'<br>'.$item->village->district->regency->name.'<br> '.$item->village->district->regency->province->name.' ';
                         })
                         ->addColumn('action', function($item){
-                            return '<button type="button" class="btn btn-sm btn-sc-primary text-white" onclick="onDetail('.$item->id.')">Detail</button>';
+                            return '<a href="'.route('member-detailfigure',$item->id).'" class="btn btn-sm btn-sc-primary text-white" >Detail</a>';
                         })
                         ->rawColumns(['address','desc','action'])
                         ->make(true);
         }
-    }
-
-    public function getDataInfo($request)
-    {
-        $request->validate([
-            'name' => 'required|string',
-            'village_id' => 'required',
-        ]);
-
-       $info = empty($request->info) ? [] : $request->info;
-       $year = empty($request->year) ? [] : $request->year;
-       $status =  empty($request->status) ? [] : $request->status;
-
-        $result = array_map(function($info, $year, $status){
-            return array_combine(
-                ['name','year','status'],
-                [$info,$year,$status]
-            );
-        }, $info,$year,$status);
-
-        $dataInfo = json_encode($result);
-        return $dataInfo;
     }
 
     public function listIntelegencyAccounMember()

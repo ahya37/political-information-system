@@ -96,6 +96,9 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/intelegence','Admin\InformationController@formIntelegencyPoliticAccounMember')->name('member-intelegensi-create');
         Route::post('/saveintelegence','Admin\InformationController@saveIntelegencyPoliticAccounMember')->name('member-intelegensi-save');
         Route::get('/listintelegence','Admin\InformationController@listIntelegencyAccounMember')->name('member-intelegensi-index');
+
+        Route::get('/info/detalfigure/{id}','Admin\InformationController@detailFigureAccountMember')->name('member-detailfigure');
+
         
 
     });

@@ -92,7 +92,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-12 col-form-label">Optional, boleh diisi jika atas nama tersebut menacalonkan diri sebagai :</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" name="politic_name" required>
+                                            <select class="form-control" name="politic_name" >
                                                 <option value="">- Pilih -</option>
                                                 <option value="KEPALA DESA">KEPALA DESA</option>
                                                 <option value="DPRD">DPRD</option>
@@ -109,7 +109,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-12 col-form-label">Status</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" name="politic_status" required>
+                                            <select class="form-control" name="politic_status" >
                                                 <option value="">- Pilih -</option>
                                                 <option value="KALAH">KALAH</option>
                                                 <option value="MENANG">MENANG</option>
