@@ -167,7 +167,7 @@ class InformationController extends Controller
 
 
         $pdf = PDF::LoadView('pages.admin.report.figurebyvillageall', compact('data','no'))->setPaper('landscape');
-        return $pdf->stream('LAPORAN-INTELEGENSI-POLITIK.pdf');
+        return $pdf->download('LAPORAN-INTELEGENSI-POLITIK.pdf');
     }
 
     public function downloadPdfAllByVillageId($villageId)
