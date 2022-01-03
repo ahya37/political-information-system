@@ -51,7 +51,7 @@ class InformationController extends Controller
 
     public function dtListIntelegency()
     {
-
+       
         $detailFigure = DetailFigure::with(['village.district.regency.province','figure'])->get();
         if (request()->ajax()) 
         {
@@ -59,10 +59,19 @@ class InformationController extends Controller
                         ->addColumn('address', function($item){
                             return ''.$item->village->name.'<br> KEC. '.$item->village->district->name.'<br>'.$item->village->district->regency->name.'<br> '.$item->village->district->regency->province->name.' ';
                         })
+                        ->addColumn('potensi', function($item){
+
+                            $potensi = "$item->politic_member";
+                            $gF = new GlobalProvider();
+
+                            return '<div class="badge badge-warning">
+                                    '.$gF->decimalFormat($potensi).'
+                                    </div>';
+                        })
                         ->addColumn('action', function($item){
                             return '<a href="'.route('admin-detailfigure',$item->id).'" class="btn btn-sm btn-sc-primary text-white" >Detail</a>';
                         })
-                        ->rawColumns(['address','desc','action'])
+                        ->rawColumns(['address','desc','action','potensi'])
                         ->make(true);
         }
     }

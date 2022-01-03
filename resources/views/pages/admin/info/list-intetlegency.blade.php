@@ -36,6 +36,7 @@
                                         <th scope="col">NAMA</th>
                                         <th scope="col">ALAMAT</th>
                                         <th scope="col">PROFESI</th>
+                                        <th scope="col">POTENSI SUARA</th>
                                         <th scope="col">AKSI</th>
                                       </tr>
                                     </thead>
