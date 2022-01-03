@@ -44,6 +44,8 @@
                                         </div>
                                     </div>
                                     <div class="col-4">
+                                       <div class="product-title">Pernah Menjabat Sebagai</div>
+                                      <div class="product-subtitle">{{ $detailFigure->once_served }}</div>
                                       <div class="product-title">Mencalonkan diri sebagai</div>
                                       <div class="product-subtitle">{{ $detailFigure->politic_name }}</div>
                                       <div class="product-title">Tahun</div>
@@ -52,6 +54,10 @@
                                       <div class="product-subtitle">{{ $detailFigure->politic_status }}</div>
                                       <div class="product-title">Perolehan Suara</div>
                                       <div class="product-subtitle">{{ $detailFigure->politic_member == 0 ? '' : $gF->decimalFormat($detailFigure->politic_member) .' Suara' }}</div>
+                                    </div>
+                                    <div class="col-4">
+                                      <div class="product-title">Keterangan</div>
+                                      <div class="product-subtitle">{{ $detailFigure->descr }}</div>
                                     </div>
                                 </div>
                               </div>

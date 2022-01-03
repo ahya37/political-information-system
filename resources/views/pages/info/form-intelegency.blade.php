@@ -89,11 +89,32 @@
                                           <label class="col-sm-2 col-form-label"></label>
                                         <div class="col-sm-6">
                                         <input type="text" id="fiugureOther" style="display: none" name="fiugureOther" class="form-control" placeholder="Tulis lainnya disini">
-                                        </div>
+                                        </div> 
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">No. Telepon</label>
-                                        <div class="col-sm-6">
+                                        <label class="col-sm-4 col-form-label">Pernah Menjabat Sebagai :</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control" name="once_served" id="once_served" onchange="showDiv('once_served_other', this)">
+                                                <option value="">- Pilih -</option>
+                                                <option value="KEPALA DESA">KEPALA DESA</option>
+                                                <option value="DPRD KABUPATEN">DPRD KABUPATEN</option>
+                                                <option value="DPRD PROVINSI">DPRD PROVINSI</option>
+                                                <option value="DPR RI">DPR RI</option>
+                                                <option value="PNS">PNS</option>
+                                                <option value="10">Lainnya</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                     <div class="form-group row">
+                                          <label class="col-sm-4 col-form-label"></label>
+                                        <div class="col-sm-4">
+                                        <input type="text" id="once_served_other" style="display: none" name="once_served_other" class="form-control" placeholder="Tulis lainnya disini">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 col-form-label">No. Telepon <sup>(jika ada)</sup></label>
+                                        <div class="col-sm-4">
                                         <input type="text" name="no.telp" class="form-control">
                                         </div>
                                     </div>
@@ -101,12 +122,21 @@
                                     <div class="form-group row">
                                         <label class="col-sm-12 col-form-label">Optional, boleh diisi jika atas nama tersebut menacalonkan diri sebagai :</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" name="politic_name">
+                                            <select class="form-control" name="politic_name" onchange="showDiv('politic_name_other', this)">
                                                 <option value="">- Pilih -</option>
                                                 <option value="KEPALA DESA">KEPALA DESA</option>
-                                                <option value="DPRD">DPRD</option>
-                                                <option value="DPR">DPR</option>
+                                                <option value="DPRD KABUPATEN">DPRD KABUPATEN</option>
+                                                <option value="DPRD PROVINSI">DPRD PROVINSI</option>
+                                                <option value="DPR RI">DPR RI</option>
+                                                <option value="PNS">PNS</option>
+                                                <option value="10">Lainnya</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                     <div class="form-group row">
+                                          <label class="col-sm-12 col-form-label"></label>
+                                        <div class="col-sm-6">
+                                        <input type="text" id="politic_name_other" style="display: none" name="politic_name_other" class="form-control" placeholder="Tulis lainnya disini">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -131,18 +161,16 @@
                                         <input type="text" name="politic_member" class="form-control" placeholder="contoh: 2000">
                                         </div>
                                     </div>
-
                                      <div class="form-group row">
                                         <label class="col-sm-12 col-form-label">Keterangan </label>
                                         <div class="col-sm-6">
-                                           <textarea class="form-control" name="descr"></textarea>
+                                           <textarea class="form-control" name="desc"></textarea>
                                         </div> 
                                     </div>
                                      <div class="form-group">
                                          <div class="col-md-9 col-sm-9"></div>
                                         <button type="submit" class="col-md-3 col-sm-3 btn btn-sc-primary text-white float-right">Simpan</button>
                                     </div>
-
                             </form>
                       </div>
                     </div>

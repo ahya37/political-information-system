@@ -27,7 +27,7 @@
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
-                        <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                       <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                                 <div class="row mt-4">
                                   <div class="col-4">
                                         <div class="product-title">Nama</div>
@@ -43,6 +43,8 @@
                                         </div>
                                     </div>
                                     <div class="col-4">
+                                       <div class="product-title">Pernah Menjabat Sebagai</div>
+                                      <div class="product-subtitle">{{ $detailFigure->once_served }}</div>
                                       <div class="product-title">Mencalonkan diri sebagai</div>
                                       <div class="product-subtitle">{{ $detailFigure->politic_name }}</div>
                                       <div class="product-title">Tahun</div>
@@ -51,6 +53,10 @@
                                       <div class="product-subtitle">{{ $detailFigure->politic_status }}</div>
                                       <div class="product-title">Perolehan Suara</div>
                                       <div class="product-subtitle">{{ $detailFigure->politic_member == 0 ? '' : $gF->decimalFormat($detailFigure->politic_member) .' Suara' }}</div>
+                                    </div>
+                                    <div class="col-4">
+                                      <div class="product-title">Keterangan</div>
+                                      <div class="product-subtitle">{{ $detailFigure->descr }}</div>
                                     </div>
                                 </div>
                               </div>

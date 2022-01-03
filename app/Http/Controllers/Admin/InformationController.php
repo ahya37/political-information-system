@@ -32,7 +32,8 @@ class InformationController extends Controller
             'figure_other' => $request->figure_id = '10' ? $request->fiugureOther : 'NULL',
             'no_telp' => $request->no_telp,
             'info_politic' => 'NULL',
-            'politic_name' => $request->politic_name,
+            'once_served' => $request->once_served == '10' ? $request->once_served_other : $request->once_served,
+            'politic_name' => $request->politic_name == '10' ? $request->politic_name_other : $request->politic_name,
             'politic_year' => $request->politic_year,
             'politic_status' => $request->politic_status,
             'politic_member' => $request->politic_member,
@@ -68,7 +69,7 @@ class InformationController extends Controller
 
     public function detailFigure($id)
     {
-        $detailFigure = DetailFigure::with(['village','figure'])->where('id', $id)->first();
+        $detailFigure = DetailFigure::with(['village','figure'])->where('id', $id)->orderBy('name','ASC')->first();
         $gF = new GlobalProvider();
         return view('pages.admin.info.detail-figure', compact('detailFigure','gF'));
         
@@ -95,13 +96,14 @@ class InformationController extends Controller
         // $dataInfo = $this->getDataInfo($request);
 
         DetailFigure::create([
-            'name' => $request->name,
+             'name' => $request->name,
             'village_id' => $request->village_id,
             'figure_id' => $request->figure_id,
             'figure_other' => $request->figure_id = '10' ? $request->fiugureOther : 'NULL',
             'no_telp' => $request->no_telp,
             'info_politic' => 'NULL',
-            'politic_name' => $request->politic_name,
+            'once_served' => $request->once_served == '10' ? $request->once_served_other : $request->once_served,
+            'politic_name' => $request->politic_name == '10' ? $request->politic_name_other : $request->politic_name,
             'politic_year' => $request->politic_year,
             'politic_status' => $request->politic_status,
             'politic_member' => $request->politic_member,
@@ -140,25 +142,25 @@ class InformationController extends Controller
 
     public function downloadPdfAll()
     {
-        $figure = DetailFigure::with(['village.district.regency.province','figure','user'])->orderBy('name','asc')->get();
-        $data = [];
-        $no   = 1;
-        foreach ($figure as $val) {
-            $data[] = [
-                'name' => $val->name,
-                'village' => $val->village->name,
-                'district' => $val->village->district->name, 
-                'regency' => $val->village->district->regency->name, 
-                'province' => $val->village->district->regency->province->name, 
-                'descr' => $val->descr,
-                'info'  => json_decode($val->info_politic),
-                'cby'   => $val->user->name,
-            ];    
-        }
+        // $figure = DetailFigure::with(['village.district.regency.province','figure','user'])->orderBy('name','asc')->get();
+        // $data = [];
+        // $no   = 1;
+        // foreach ($figure as $val) {
+        //     $data[] = [
+        //         'name' => $val->name,
+        //         'village' => $val->village->name,
+        //         'district' => $val->village->district->name, 
+        //         'regency' => $val->village->district->regency->name, 
+        //         'province' => $val->village->district->regency->province->name, 
+        //         'descr' => $val->descr,
+        //         'info'  => json_decode($val->info_politic),
+        //         'cby'   => $val->user->name,
+        //     ];    
+        // }
 
 
-        $pdf = PDF::LoadView('pages.admin.report.figurebyvillageall', compact('data','no'));
-        return $pdf->download('LAPORAN-TOKOH.pdf');
+        $pdf = PDF::LoadView('pages.admin.report.figurebyvillageall');
+        return $pdf->stream('LAPORAN-TOKOH.pdf');
     }
 
     public function downloadPdfAllByVillageId($villageId)

@@ -35,7 +35,7 @@
                 font-size: 12px;
 
             }
-            table {
+            .table {
             font-family: Arial, Helvetica, sans-serif;
             color: #666;
             text-shadow: 1px 1px 0px #fff;
@@ -43,7 +43,7 @@
             border: #ccc 1px solid;
             width: 100%
             }
-            table th {
+            .table th {
             font-size: 10px;
             padding: 5px auto;
             border-left:1px solid #e0e0e0;
@@ -51,7 +51,7 @@
             background:   #34495e;
             color: #fff;
             }
-            table td {
+            .table td {
             font-size: 10px;
             padding: 5px auto;
             border-left:1px solid #e0e0e0;
@@ -61,7 +61,6 @@
             padding-left: 5px;
             }
         </style>
-    
 <body>
     <header>
         <h4>
@@ -73,39 +72,57 @@
             <table cellspacing='0'>
                 <thead>
                     <tr>
-                        <th>NO</th>
-                        <th>NAMA</th>
-                        <th>ALAMAT</th>
-                        <th>INFORMASI</th>
-                        <th>KETERANGAN</th>
-                        <th>DIBUAT OLEH</th>
+                        <td>Nama</td><td>:</td><th>AA</th>
+                    </tr>
+                    <tr>
+                        <td>Profesi</td><td>:</td><th>AA</th>
+                    </tr>
+                    <tr>
+                        <td>No.Telp</td><td>:</td><th>AA</th>
+                    </tr>
+                    <tr>
+                        <td>Alamat</td><td>:</td><th>AA</th>
+                    </tr>
+                    <tr>
+                        <td>Keterangan</td><td>:</td><th>AA</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach ($data as $item)
-                        <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $item['name'] }}</td>
-                            <td>
-                                {{ 'DS. '.$item['village'] }},<br>
-                                {{ 'KEC. '.$item['district'] }},<br>
-                                {{ $item['regency'] }}<br>
-                                {{ $item['province'] }}
-                            </td>
-                            <td>
-                                @foreach ($item['info'] as $info)
-                                @if ($info->name != null)
-                                <ul>
-                                    <li> Mencalonkan diri menjadi {{ $info->name }}, Tahun: {{ $info->year }}, Status: {{ $info->status }}</li>
-                                </ul>
-                                @endif
-                                @endforeach
-                            </td>
-                            <td>{{ $item['descr'] }}</td>
-                            <td>{{ $item['cby'] }}</td>
-                        </tr>
-                    @endforeach                   
-                </tbody>
+            </table>
+            <table cellspacing='0'>
+                <thead>
+                    <tr>
+                        <td>Nama</td><td>:</td><th>AA</th>
+                    </tr>
+                    <tr>
+                        <td>Profesi</td><td>:</td><th>AA</th>
+                    </tr>
+                    <tr>
+                        <td>No.Telp</td><td>:</td><th>AA</th>
+                    </tr>
+                    <tr>
+                        <td>Alamat</td><td>:</td><th>AA</th>
+                    </tr>
+                    <tr>
+                        <td>Keterangan</td><td>:</td><th>AA</th>
+                    </tr>
+                </thead>
+            </table>
+            <h5>Informasi :</h5>
+            <table cellspacing='0'>
+                <thead>
+                    <tr>
+                        <td>Mencalonkan Diri Sebagai</td><td>:</td><th>AA</th>
+                    </tr>
+                    <tr>
+                        <td>Tahun</td><td>:</td><th>AA</th>
+                    </tr>
+                    <tr>
+                        <td>Status</td><td>:</td><th>AA</th>
+                    </tr>
+                    <tr>
+                        <td>Perolehan Suara</td><td>:</td><th>AA</th>
+                    </tr>
+                </thead>
             </table>
         </section>
         
