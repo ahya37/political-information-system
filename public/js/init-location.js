@@ -1,3 +1,7 @@
+function showDiv(divId, element) {
+    document.getElementById(divId).style.display =
+        element.value == 10 ? "block" : "none";
+}
 var register = new Vue({
     el: "#register",
     mounted() {

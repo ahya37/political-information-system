@@ -34,7 +34,7 @@
                                         <div class="product-title">Nama</div>
                                         <div class="product-subtitle">{{ $detailFigure->name }}</div>
                                         <div class="product-title">Profesi</div>
-                                        <div class="product-subtitle">{{ $detailFigure->figure->name }}</div>
+                                        <div class="product-subtitle">{{ $detailFigure->figure->id == '10' ? $detailFigure->figure_other : $detailFigure->figure->name }}</div>
                                         <div class="product-title">No. Telp</div>
                                         <div class="product-subtitle">{{ $detailFigure->no_telp }}</div>
                                         <div class="product-title">Alamat</div>

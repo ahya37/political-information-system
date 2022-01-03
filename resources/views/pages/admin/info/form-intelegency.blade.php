@@ -69,12 +69,17 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Profesi</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" name="figure_id" required>
-                                                <option value="">- Pilih -</option>
+                                            <select class="form-control" name="figure_id" id="figure_id" required onchange="showDiv('fiugureOther', this)">
                                                 @foreach ($figures as $item)
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
                                             </select>
+                                        </div>
+                                    </div>
+                                     <div class="form-group row">
+                                          <label class="col-sm-2 col-form-label"></label>
+                                        <div class="col-sm-6">
+                                        <input type="text" id="fiugureOther" style="display: none" name="fiugureOther" class="form-control" placeholder="Tulis lainnya disini">
                                         </div>
                                     </div>
                                     <div class="form-group row">
