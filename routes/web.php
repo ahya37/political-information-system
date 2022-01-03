@@ -273,7 +273,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         
         // intelegency Pdf
         Route::get('/info/downloadpdfallbyvillage/{villageId}','InformationController@downloadPdfAllByVillageId')->name('admin-downloadpdfbyvillageid');
-        Route::get('/info/downloadpdfallall','InformationController@downloadPdfAll')->name('admin-downloadfigureall');
+        Route::get('/info/downloadpdfall','InformationController@downloadPdfAll')->name('admin-downloadfigureall');
 
         
     });

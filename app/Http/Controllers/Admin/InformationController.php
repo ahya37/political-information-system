@@ -96,14 +96,13 @@ class InformationController extends Controller
         // $dataInfo = $this->getDataInfo($request);
 
         DetailFigure::create([
-             'name' => $request->name,
+            'name' => $request->name,
             'village_id' => $request->village_id,
             'figure_id' => $request->figure_id,
             'figure_other' => $request->figure_id = '10' ? $request->fiugureOther : 'NULL',
             'no_telp' => $request->no_telp,
             'info_politic' => 'NULL',
-            'once_served' => $request->once_served == '10' ? $request->once_served_other : $request->once_served,
-            'politic_name' => $request->politic_name == '10' ? $request->politic_name_other : $request->politic_name,
+            'politic_name' => $request->politic_name,
             'politic_year' => $request->politic_year,
             'politic_status' => $request->politic_status,
             'politic_member' => $request->politic_member,
@@ -142,25 +141,33 @@ class InformationController extends Controller
 
     public function downloadPdfAll()
     {
-        // $figure = DetailFigure::with(['village.district.regency.province','figure','user'])->orderBy('name','asc')->get();
-        // $data = [];
-        // $no   = 1;
-        // foreach ($figure as $val) {
-        //     $data[] = [
-        //         'name' => $val->name,
-        //         'village' => $val->village->name,
-        //         'district' => $val->village->district->name, 
-        //         'regency' => $val->village->district->regency->name, 
-        //         'province' => $val->village->district->regency->province->name, 
-        //         'descr' => $val->descr,
-        //         'info'  => json_decode($val->info_politic),
-        //         'cby'   => $val->user->name,
-        //     ];    
-        // }
+        $gF = new GlobalProvider();
+        $figure = DetailFigure::with(['village.district.regency.province','figure','user'])->orderBy('name','asc')->get();
+        $data = [];
+        $no   = 1;
+        foreach ($figure as $val) {
+            $data[] = [
+                'name' => $val->name,
+                'figure' => $val->figure->name,
+                'village' => $val->village->name,
+                'district' => $val->village->district->name, 
+                'regency' => $val->village->district->regency->name, 
+                'province' => $val->village->district->regency->province->name, 
+                'no_telp' => $val->no_telp,
+                'once_served' => $val->once_served,
+                'politic_name' => $val->politic_name,
+                'politc_year' => $val->politic_year,
+                'politic_status' => $val->politic_status,
+                'politic_member' => $gF->decimalFormat($val->politic_member),
+                'descr' => $val->descr,
+                'info'  => json_decode($val->info_politic),
+                'cby'   => $val->user->name,
+            ];    
+        }
 
 
-        $pdf = PDF::LoadView('pages.admin.report.figurebyvillageall');
-        return $pdf->stream('LAPORAN-TOKOH.pdf');
+        $pdf = PDF::LoadView('pages.admin.report.figurebyvillageall', compact('data','no'))->setPaper('landscape');
+        return $pdf->stream('LAPORAN-INTELEGENSI-POLITIK.pdf');
     }
 
     public function downloadPdfAllByVillageId($villageId)
