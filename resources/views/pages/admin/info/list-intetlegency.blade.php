@@ -18,11 +18,11 @@
                 </p>
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
-                <div class="row mb-2">
+                {{-- <div class="row mb-2">
                   <div class="col-12">
                     <a href="{{ route('admin-downloadfigureall') }}" class="btn btn-sm btn-sc-primary text-white">Download</a>
                   </div>
-                </div>
+                </div> --}}
                 <div class="row">
                   <div class="col-12">
                     @include('layouts.message')
@@ -35,7 +35,7 @@
                                       <tr>
                                         <th scope="col">NAMA</th>
                                         <th scope="col">ALAMAT</th>
-                                        <th scope="col">KETERANGAN</th>
+                                        <th scope="col">PROFESI</th>
                                         <th scope="col">AKSI</th>
                                       </tr>
                                     </thead>

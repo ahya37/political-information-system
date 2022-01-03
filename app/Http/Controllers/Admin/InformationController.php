@@ -8,6 +8,7 @@ use App\DetailFigure;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Village;
+use App\Providers\GlobalProvider;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use PDF;
@@ -22,13 +23,18 @@ class InformationController extends Controller
 
     public function saveIntelegencyPolitic(Request $request)
     {
-        $dataInfo = $this->getDataInfo($request);
+        // $dataInfo = $this->getDataInfo($request);
 
         DetailFigure::create([
             'name' => $request->name,
             'village_id' => $request->village_id,
             'figure_id' => $request->figure_id,
-            'info_politic' => $dataInfo,
+            'no_telp' => $request->no_telp,
+            'info_politic' => 'NULL',
+            'politic_name' => $request->politic_name,
+            'politic_year' => $request->politic_year,
+            'politic_status' => $request->politic_status,
+            'politic_member' => $request->politic_member,
             'descr' => $request->desc,
             'create_by' => 35
         ]);
@@ -52,33 +58,34 @@ class InformationController extends Controller
                             return ''.$item->village->name.'<br> KEC. '.$item->village->district->name.'<br>'.$item->village->district->regency->name.'<br> '.$item->village->district->regency->province->name.' ';
                         })
                         ->addColumn('action', function($item){
-                            return '<button type="button" class="btn btn-sm btn-sc-primary text-white" onclick="onDetail('.$item->id.')">Detail</button>';
+                            return '<a href="'.route('admin-detailfigure',$item->id).'" class="btn btn-sm btn-sc-primary text-white" >Detail</a>';
                         })
                         ->rawColumns(['address','desc','action'])
                         ->make(true);
         }
     }
 
-    public function detailFigure()
+    public function detailFigure($id)
     {
-        $token = request()->_token;
-        if ($token != null) {
-            $id = request()->id;
-            $detailFigure = DetailFigure::with(['figure'])->where('id', $id)->first();
+        $detailFigure = DetailFigure::with(['village','figure'])->where('id', $id)->first();
+        $gF = new GlobalProvider();
+        return view('pages.admin.info.detail-figure', compact('detailFigure','gF'));
+        // $token = request()->_token;
+        // if ($token != null) {
 
-            $info_politic = json_decode($detailFigure->info_politic);
+        //     $info_politic = json_decode($detailFigure->info_politic);
 
-            $data = [];
-            foreach($info_politic as $val){
+        //     $data = [];
+        //     foreach($info_politic as $val){
 
-                // $data[] = $val->name.' TAHUN: '.$val->year.' STATUS: '.$val->status.'<br>';
-                if ($val->name != null) {
-                    $data[] = "<tr><td>$val->name</td><td>$val->year</td><td>$val->status</td></tr>";
-                }
-            }
+        //         // $data[] = $val->name.' TAHUN: '.$val->year.' STATUS: '.$val->status.'<br>';
+        //         if ($val->name != null) {
+        //             $data[] = "<tr><td>$val->name</td><td>$val->year</td><td>$val->status</td></tr>";
+        //         }
+        //     }
 
-            return response()->json($data);
-        }
+        //     return response()->json($data);
+        // }
 
     }
 
@@ -90,13 +97,18 @@ class InformationController extends Controller
 
     public function saveIntelegencyPoliticAccounMember(Request $request)
     {
-        $dataInfo = $this->getDataInfo($request);
+        // $dataInfo = $this->getDataInfo($request);
 
         DetailFigure::create([
             'name' => $request->name,
             'village_id' => $request->village_id,
             'figure_id' => $request->figure_id,
-            'info_politic' => $dataInfo,
+            'no_telp' => $request->no_telp,
+            'info_politic' => 'NULL',
+            'politic_name' => $request->politic_name,
+            'politic_year' => $request->politic_year,
+            'politic_status' => $request->politic_status,
+            'politic_member' => $request->politic_member,
             'descr' => $request->desc,
             'create_by' => Auth::user()->id
         ]);
