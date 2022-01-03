@@ -180,7 +180,8 @@ class InformationController extends Controller
 
     public function downloadPdfAllByVillageId($villageId)
     {
-        $village = Village::select('name')->where('id', $villageId)->first();
+         $gF = new GlobalProvider();
+        $village = Village::with(['district.regency.province'])->where('id', $villageId)->first();
         $figure = DetailFigure::with(['village.district.regency.province','figure','user'])->where('village_id', $villageId)->orderBy('name','asc')->get();
 
         $data = [];
@@ -188,17 +189,24 @@ class InformationController extends Controller
         foreach ($figure as $val) {
             $data[] = [
                 'name' => $val->name,
+                'figure' => $val->figure->name,
                 'village' => $val->village->name,
                 'district' => $val->village->district->name, 
                 'regency' => $val->village->district->regency->name, 
                 'province' => $val->village->district->regency->province->name, 
+                'no_telp' => $val->no_telp,
+                'once_served' => $val->once_served,
+                'politic_name' => $val->politic_name,
+                'politc_year' => $val->politic_year,
+                'politic_status' => $val->politic_status,
+                'politic_member' => $gF->decimalFormat($val->politic_member),
                 'descr' => $val->descr,
                 'info'  => json_decode($val->info_politic),
                 'cby'   => $val->user->name,
             ];    
         }
 
-        $pdf = PDF::LoadView('pages.admin.report.figurebyvillage', compact('data','no'));
+        $pdf = PDF::LoadView('pages.admin.report.figurebyvillage', compact('data','no','village'));
         return $pdf->download('LAPORAN-TOKOH-DESA: '.$village->name.'.pdf');
     }
 }

@@ -65,46 +65,54 @@
 <body>
     <header>
         <h4>
-            LAPORAN TOKOH BERPENGARUH
-        </h5> 
+            LAPORAN INTELEGENSI POLITIK
+        </h4> 
         <hr>
     </header>
         <section align="justify">
+            <h6>DESA {{ $village->name }}, KECAMATAN {{ $village->district->name }}, {{ $village->district->regency->name }}, {{ $village->district->regency->province->name }}</h6>
             <table cellspacing='0'>
                 <thead>
                     <tr>
                         <th>NO</th>
                         <th>NAMA</th>
+                        <th>PROFESI</th>
+                        <th>NO.TELP</th>
                         <th>ALAMAT</th>
-                        <th>INFORMASI</th>
                         <th>KETERANGAN</th>
-                        <th>DIBUAT OLEH</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data as $item)
-                        <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $item['name'] }}</td>
-                            <td>
-                                {{ 'DS. '.$item['village'] }},<br>
-                                {{ 'KEC. '.$item['district'] }},<br>
-                                {{ $item['regency'] }}<br>
-                                {{ $item['province'] }}
-                            </td>
-                            <td>
-                                @foreach ($item['info'] as $info)
-                                @if ($info->name != null)
-                                <ul>
-                                    <li> Mencalonkan diri menjadi {{ $info->name }}, Tahun: {{ $info->year }}, Status: {{ $info->status }}</li>
-                                </ul>
-                                @endif
-                                @endforeach
-                            </td>
-                            <td>{{ $item['descr'] }}</td>
-                            <td>{{ $item['cby'] }}</td>
-                        </tr>
-                    @endforeach                   
+                    <tr>
+                        <td>{{ $no++ }}</td>
+                        <td>{{ $item['name'] }}</td>
+                        <td>{{ $item['figure'] }}</td>
+                        <td>{{ $item['no_telp'] }}</td>
+                        <td>
+                            {{ 'DS. '.$item['village'] }},<br>
+                            {{ 'KEC. '.$item['district'] }},<br>
+                            {{ $item['regency'] }},<br>
+                            {{ $item['province'] }}
+                        </td>
+                        <td>
+                            <ul>
+                                <li style="margin-bottom: 2">Pernah menjabat sebagai : {{ $item['once_served'] }}</li>
+                                <li >
+                                    Mencalonkan diri sebagai : {{ $item['politic_name'] }}
+                                    <ul>
+                                        <li>Tahun: {{ $item['politc_year'] }}</li>
+                                        <li>Status: {{ $item['politic_status'] }}</li>
+                                        <li>Perolehan Suara: {{ $item['politic_member'] }}</li>
+                                    </ul>
+                                </li>
+                                <li tyle="margin-top: 4">Dibuat Oleh : {{ $item['cby'] }}</li>
+
+                            </ul>
+                        </td>
+                    </tr>                        
+                    @endforeach
+                                 
                 </tbody>
             </table>
         </section>
