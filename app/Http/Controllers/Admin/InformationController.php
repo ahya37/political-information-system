@@ -61,11 +61,10 @@ class InformationController extends Controller
                         })
                         ->addColumn('potensi', function($item){
 
-                            $potensi = "$item->politic_member";
                             $gF = new GlobalProvider();
 
                             return '<div class="badge badge-warning">
-                                    '.$gF->decimalFormat($potensi).'
+                                    '.$gF->decimalFormat($item->politic_member).'
                                     </div>';
                         })
                         ->addColumn('action', function($item){
