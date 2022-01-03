@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Daftar Intelgensi')
+@section('title','Detail Informasi')
 @push('addon-style')
          <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
       <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -13,7 +13,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Intelegensi Politik</h2>
+                <h2 class="dashboard-title">Detail Informasi</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>

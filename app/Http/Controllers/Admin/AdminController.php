@@ -756,7 +756,7 @@ class AdminController extends Controller
                             return ''.$item->village->name.'<br> KEC. '.$item->village->district->name.'<br>'.$item->village->district->regency->name.'<br> '.$item->village->district->regency->province->name.' ';
                         })
                         ->addColumn('action', function($item){
-                            return '<button type="button" class="btn btn-sm btn-sc-primary text-white" onclick="onDetail('.$item->id.')">Detail</button>';
+                            return '<a href="'.route('admin-detailfigure', $item->id).'" class="btn btn-sm btn-sc-primary text-white">Detail</a>';
                         })
                         ->rawColumns(['address','desc','action'])
                         ->make(true);
