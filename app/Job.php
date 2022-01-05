@@ -22,6 +22,19 @@ class Job extends Model
         return DB::select($sql);
     }
 
+    public function getJobAdminMember($user_id)
+    {
+        $sql = "SELECT a.name, count(a.id) as total_job from jobs as a
+                join users as b on a.id = b.job_id
+                join villages as c on b.village_id = c.id
+                join districts as d on c.district_id = d.id 
+                join admin_dapil_district as e on d.id = e.district_id 
+                join admin_dapils as f on e.admin_dapils_id = f.id 
+                where f.admin_user_id = $user_id
+                group by a.name order by COUNT(a.id) desc";
+        return DB::select($sql);
+    }
+
     public function getJobs()
     {
         $sql = "SELECT e.name, COUNT(e.name) as total_job

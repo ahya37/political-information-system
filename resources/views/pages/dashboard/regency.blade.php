@@ -133,7 +133,7 @@
                   <div class="col-md-12 col-sm-12">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <h6 class="text-center">Anggota Terdaftar VS Target (%)</h6>
+                        <h6 class="text-center">Anggota Terdaftar VS Target</h6>
                         <div id="LoadmemberRegister" class="d-none lds-dual-ring hidden overlay">
                           </div>
                         <canvas id="memberRegister">
@@ -179,7 +179,7 @@
                   <div class="col-md-6">
                     <div class="card">
                       <div class="card-body">
-                        <h6 class="text-center">Anggota Berdasarkan Pekerjaan (%)</h6>
+                        <h6 class="text-center">Anggota Berdasarkan Pekerjaan</h6>
                         <div>
                           <div id="Loadjobs" class="d-none lds-dual-ring hidden overlay">
                           </div>

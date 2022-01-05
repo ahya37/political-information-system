@@ -6,12 +6,12 @@ $(document).ready(function () {
     const regencyID = $("#regencyID").val();
     $.ajax({
         url:
-            "/api/member/regency/" +
+            "/api/admin/member/" +
             start.format("YYYY-MM-DD") +
             "+" +
             end.format("YYYY-MM-DD") +
             "/" +
-            regencyID,
+            userID,
         method: "GET",
         data: { first: self.first, last: self.last },
         dataType: "json",
@@ -96,12 +96,12 @@ $(document).ready(function () {
             var self = this;
             $.ajax({
                 url:
-                    "/api/member/regency/" +
+                    "/api/admin/member/" +
                     first.format("YYYY-MM-DD") +
                     "+" +
                     last.format("YYYY-MM-DD") +
                     "/" +
-                    regencyID,
+                    userID,
                 method: "GET",
                 data: { first: self.first, last: self.last },
                 dataType: "json",
@@ -201,7 +201,7 @@ $(document).ready(function () {
 
     // anggota terdaftar
     $.ajax({
-        url: `/api/adminuser/member/rergister/regency/${regencyID}/${userID}`,
+        url: `/api/admin/member/rergister/regency/${userID}`,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -281,7 +281,7 @@ $(document).ready(function () {
     });
 
     $.ajax({
-        url: `/api/member/totalregency/${regencyID}/${userID}`,
+        url: `/api/admin/member/totalregency/${userID}`,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -304,7 +304,7 @@ $(document).ready(function () {
 
     // anggota terdaftar vs target
     $.ajax({
-        url: "/api/membervsterget/regency" + "/" + regencyID,
+        url: "/api/admin/membervsterget" + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -354,7 +354,7 @@ $(document).ready(function () {
 
     // gender
     $.ajax({
-        url: "/api/member/gender/regency" + "/" + regencyID,
+        url: "/api/admin/member/gender" + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -380,7 +380,7 @@ $(document).ready(function () {
 
     // Jobs
     $.ajax({
-        url: "/api/member/jobs/regency" + "/" + regencyID,
+        url: "/api/admin/member/jobs" + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -414,7 +414,7 @@ $(document).ready(function () {
 
     // kelompok umur
     $.ajax({
-        url: "/api/member/agegroup/regency" + "/" + regencyID,
+        url: "/api/admin/member/agegroup" + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -454,7 +454,7 @@ $(document).ready(function () {
 
     //generasi umur
     $.ajax({
-        url: "/api/member/genage/regency" + "/" + regencyID,
+        url: "/api/admin/member/genage" + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -494,7 +494,7 @@ $(document).ready(function () {
 
     // admin input terbanyak
     $.ajax({
-        url: "/api/member/inputer/regency" + "/" + regencyID,
+        url: "/api/admin/member/inputer" + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -534,7 +534,7 @@ $(document).ready(function () {
 
     // anggota referal terbanyak
     $.ajax({
-        url: "/api/member/referal/regency" + "/" + regencyID,
+        url: "/api/admin/member/referal" + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -583,7 +583,7 @@ $(document).ready(function () {
 
     gerTotalRegional();
     function getDataTotalRegional() {
-        return fetch(`/api/totalregional/regency/${regencyID}/${userID}`)
+        return fetch(`/api/totalregional/regency/${regencyID}`)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(response.statusText);

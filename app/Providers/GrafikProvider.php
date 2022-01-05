@@ -85,7 +85,7 @@ class GrafikProvider extends ServiceProvider
         $sum_jobs = collect($jobs)->sum(function($q){return $q->total_job; }); // fungsi untuk menjumlahkan total job
         foreach ($jobs as  $val) {
             $cat_jobs['label'][] = $val->name;
-            $cat_jobs['data'][] = $gF->persen(($val->total_job / $sum_jobs)*100);
+            $cat_jobs['data'][] = $val->total_job;
         }
 
         

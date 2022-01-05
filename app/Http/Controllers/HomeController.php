@@ -188,7 +188,7 @@ class HomeController extends Controller
         $regency          = Regency::with('province')->where('id', $regency_id)->first();
         $districtModel    = new District();
         // Daftar pencapaian lokasi / daerah
-        $achievments   = $districtModel->achievementDistrict($regency_id);
+        $achievments   = $districtModel->achievementAdminMember($user_id);
         if (request()->ajax()) {
             return DataTables::of($achievments)
                     ->addColumn('persentage', function($item){

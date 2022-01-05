@@ -181,3 +181,15 @@ Route::post('/detailfigure','Admin\InformationController@detailFigure');
 // list intelegensi akun anggota
 Route::post('/user/member/info/dtintelegency','Admin\InformationController@dtListIntelegencyAccountMember');
 
+
+// ANGGOTA ADMIN
+Route::get('/admin/member/totalregency/{user_id}','API\DashboardController@getTotalMemberByAdminMember');
+Route::get('/admin/member/rergister/regency/{user_id}','API\DashboardController@getMemberAdminMember');
+Route::get('/admin/membervsterget/{user_id}','API\DashboardController@getMemberVsTargetAdminMember');
+Route::get('/admin/member/gender/{user_id}','API\DashboardController@getGenderAdminMember');
+Route::get('/admin/member/jobs/{user_id}','API\DashboardController@getJobsAdminMember');
+Route::get('/admin/member/agegroup/{user_id}','API\DashboardController@getAgeGroupAdminMember');
+Route::get('/admin/member/genage/{user_id}','API\DashboardController@genAgeAdminMember');
+Route::get('/admin/member/inputer/{user_id}','API\DashboardController@getInputerAdminMember');
+Route::get('/admin/member/referal/{user_id}','API\DashboardController@getRegefalAdminMember');
+Route::get('/admin/member/{daterange}/{user_id}','API\DashboardController@memberReportPerMountAdminMember');

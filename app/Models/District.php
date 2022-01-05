@@ -71,6 +71,18 @@ class District extends Model
         return DB::select($sql);
     }
 
+    public function getGrafikTotalMemberAdminMember($user_id)
+    {
+        $sql = "SELECT a.id as distric_id, a.name as district, COUNT(DISTINCT(e.id)) as total_member
+                from districts as a 
+                join admin_dapil_district as b on a.id = b.district_id
+                join admin_dapils as c on b.admin_dapils_id = c.id
+                join villages as d on a.id = d.district_id
+                join users as e on d.id = e.village_id
+                where c.admin_user_id = $user_id group by a.id , a.name order by COUNT(DISTINCT(e.id)) desc";
+        return DB::select($sql);
+    }
+
     public function getGrafikTotalMemberDistrict($district_id)
     {
         $sql = "SELECT b.id as village_id, b.name as district,
@@ -95,6 +107,24 @@ class District extends Model
                 right join villages as b on a.village_id = b.id
                 join districts as c on b.district_id = c.id
                 where c.regency_id = $regency_id
+                group by c.id, c.name, c.target HAVING count(a.id) != 0  order by c.name asc";
+        return DB::select($sql);
+    }
+
+    public function achievementAdminMember($user_id)
+    {
+        $sql = "SELECT c.id, c.name,
+                count(DISTINCT(b.id)) as total_village,
+                c.target as target_member,
+                CEIL(c.target /  count(DISTINCT(b.id)))  as total_target_member,
+                count(a.id) as realisasi_member,
+                count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
+                from users as a
+                right join villages as b on a.village_id = b.id
+                join districts as c on b.district_id = c.id
+                join admin_dapil_district as d on c.id = d.district_id 
+                join admin_dapils as e on d.admin_dapils_id = e.id 
+                where e.admin_user_id = $user_id
                 group by c.id, c.name, c.target HAVING count(a.id) != 0  order by c.name asc";
         return DB::select($sql);
     }

@@ -59,12 +59,26 @@ class Referal extends Model
 
     public function getInputerRegency($regency_id)
     {
-        $sql = "select b.id, b.name,  COUNT(DISTINCT (a.id)) as total_data from users as a
+        $sql = "SELECT b.id, b.name,  COUNT(DISTINCT (a.id)) as total_data from users as a
                 join users as b on a.cby = b.id  
                 join admin_dapils as c on b.id = c.admin_user_id
                 join villages as d on a.village_id = d.id
                 join districts as e on d.district_id = e.id
-                where e.regency_id = 3602
+                where e.regency_id = $regency_id
+                group by b.id , b.name order by  COUNT(DISTINCT (a.id)) desc limit 5";
+        return DB::select($sql);
+    }
+
+    public function getInputerAdminMember($userId)
+    {
+        $sql = "SELECT b.id, b.name,  COUNT(DISTINCT (a.id)) as total_data from users as a
+                join users as b on a.cby = b.id  
+                join admin_dapils as c on b.id = c.admin_user_id
+                join villages as d on a.village_id = d.id
+                join districts as e on d.district_id = e.id
+                JOIN admin_dapil_district as f on e.id = f.district_id 
+                join admin_dapils as g on f.admin_dapils_id = g.id 
+                where g.admin_user_id = $userId
                 group by b.id , b.name order by  COUNT(DISTINCT (a.id)) desc limit 5";
         return DB::select($sql);
     }
@@ -89,6 +103,22 @@ class Referal extends Model
                 left join villages as c on a.village_id = c.id
                 left join districts as d on c.district_id = d.id 
                 where d.regency_id = $regency_id and a.village_id is not null 
+                group by b.name, b.id
+                order by count(a.id) desc
+                limit 5";
+        return DB::select($sql);
+    }
+
+    public function getReferalAdminMember($user_id)
+    {
+        $sql = "SELECT b.id, b.name , count(a.id) as total_data
+                from users as a
+                join users as b on a.user_id = b.id
+                left join villages as c on a.village_id = c.id
+                left join districts as d on c.district_id = d.id
+                join admin_dapil_district as e on d.id = e.district_id
+                join admin_dapils as f on e.admin_dapils_id = f.id 
+                where  a.village_id is not null  and f.admin_user_id = $user_id
                 group by b.name, b.id
                 order by count(a.id) desc
                 limit 5";

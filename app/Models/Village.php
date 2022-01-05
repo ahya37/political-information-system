@@ -149,7 +149,7 @@ class Village extends Model
                 where b.id = $village_id";
         return collect(\DB::select($sql))->first();
     }
-
+    
     public function getVillageFilledNational()
     {
         $sql = "SELECT a.id, a.name as village, b.name as district, c.name as regency, d.name as province,
@@ -204,21 +204,41 @@ class Village extends Model
                 GROUP  by a.id,  a.name, b.name , c.name , d.name order by a.name ASC";
         return DB::select($sql);
     }
-
+    
     public function getUpdateTargetVillage($district_id , $total_target_village)
     {
-
+        
         $sql = "UPDATE villages set target = $total_target_village  where district_id = $district_id";
         return DB::update($sql);
     }
-
+    
     public function getDataVillageByDistrictId($district_id)
     {
-         $sql = "SELECT a.id, a.name from villages as a
+        $sql = "SELECT a.id, a.name from villages as a
                 join users as b on a.id = b.village_id
                 where a.district_id = $district_id and b.nik is not NULL and b.email is not null and b.status = 1
                 group by a.id , a.name order by a.name asc";
         return DB::select($sql);
     }
     
+    public function getTotalVillageAdminMember($user_id)
+    {
+        $sql = "SELECT count(a.name) as total_village from villages as a
+                join districts as b on a.district_id = b.id
+                join admin_dapil_district as c on b.id = c.district_id
+                join admin_dapils as d on c.admin_dapils_id = d.id
+                where d.admin_user_id = $user_id";
+        return collect(\DB::select($sql))->first();
+    }
+
+    public function getVillageFilledAdminMember($user_id)
+    {
+        $sql = "SELECT COUNT(DISTINCT (a.village_id)) as total_village FROM  users as a
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id
+                join admin_dapil_district as d on c.id = d.district_id 
+                join admin_dapils as e on d.admin_dapils_id = e.id
+                where e.admin_user_id = $user_id";
+        return collect(\DB::select($sql))->first();
+    }
 }

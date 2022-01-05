@@ -84,6 +84,28 @@ class DashboardController extends Controller
         return $data;
     }
 
+    public function memberReportPerMountAdminMember($daterange, $user_id)
+    {
+        if ($daterange != '') {
+            $date  = explode('+', $daterange);
+            $start = Carbon::parse($date[0])->format('Y-m-d');
+            $end   = Carbon::parse($date[1])->format('Y-m-d'); 
+        }
+        // dd($start);
+
+        $userModel = new User();
+        $member    = $userModel->getMemberRegisteredByDayAdminMember($user_id, $start, $end);
+       
+        $data = [];
+        foreach ($member as $value) {
+            $data[] = [
+                'day' => date('d-m-Y', strtotime($value->day)),
+                'count' => $value->total
+            ];
+        }
+        return $data;
+    }
+
     public function memberReportPerMountDistrict($daterange, $districtID)
     {
         if ($daterange != '') {
@@ -375,6 +397,27 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
+    public function getMemberVsTargetAdminMember($user_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+
+        $userModel        = new User();
+        $member_registered  = $userModel->getMemberRegisteredAdminMember($user_id);
+        $chart_member_target = [];
+        foreach ($member_registered as $val) {
+            $chart_member_target['label'][] = $val->name;
+            $chart_member_target['target'][] = $val->target_member;
+            // $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+            $chart_member_target['persentage'][] = $val->realisasi_member;
+        }
+        $data = [
+            'label' => $chart_member_target['label'],
+            'persentage' => $chart_member_target['persentage'],
+            'value_target' =>  $chart_member_target['target'] 
+        ];
+        return response()->json($data);
+    }
+
     public function getMemberVsTargetDistrict($district_id)
     {
         $gF   = app('GlobalProvider'); // global function
@@ -425,6 +468,28 @@ class DashboardController extends Controller
 
         $userModel = new User();
         $gender     = $userModel->getGenderRegency($regency_id);
+        $CatGender  = $GrafikProvider->getGrafikGender($gender);
+       
+        $cat_gender = $CatGender['cat_gender'];
+        $total_male_gender  = $CatGender['total_male_gender'];
+        $total_female_gender = $CatGender['total_female_gender'];
+
+        $data  = [
+            'cat_gender' => $cat_gender,
+            'total_male_gender' => $total_male_gender,
+            'total_female_gender' => $total_female_gender
+        ];
+        return response()->json($data);
+        
+    }
+
+    public function getGenderAdminMember($user_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+        $GrafikProvider = new GrafikProvider();
+
+        $userModel = new User();
+        $gender     = $userModel->getGenderAdminMember($user_id);
         $CatGender  = $GrafikProvider->getGrafikGender($gender);
        
         $cat_gender = $CatGender['cat_gender'];
@@ -526,6 +591,27 @@ class DashboardController extends Controller
 
     }
 
+    public function getJobsAdminMember($user_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $jobModel  = new Job();
+        // $most_jobs = $jobModel->getMostJobs();
+        $jobs      = $jobModel->getJobAdminMember($user_id);
+        $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
+        $chart_jobs_label= $ChartJobs['chart_jobs_label'];
+        $chart_jobs_data= $ChartJobs['chart_jobs_data'];
+        $color_jobs    = $ChartJobs['color_jobs'];
+
+        $data = [
+
+            'chart_jobs_label' => $chart_jobs_label,
+            'chart_jobs_data'  => $chart_jobs_data,
+            'color_jobs' => $color_jobs,
+        ];
+        return response()->json($data);
+
+    }
+
     public function getJobsDistrict($district_id)
     {
         $GrafikProvider = new GrafikProvider();
@@ -593,6 +679,25 @@ class DashboardController extends Controller
         $userModel = new User();
 
         $range_age     = $userModel->rangeAgeRegency($regency_id);
+        $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
+        $cat_range_age = $CatRange['cat_range_age'];
+        $cat_range_age_data = $CatRange['cat_range_age_data'];
+
+        $data = [
+            'cat_range_age' => $cat_range_age,
+            'cat_range_age_data' => $cat_range_age_data
+        ];
+
+        return response()->json($data);
+
+    }
+
+    public function getAgeGroupAdminMember($user_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $range_age     = $userModel->rangeAgeAdminMember($user_id);
         $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
         $cat_range_age = $CatRange['cat_range_age'];
         $cat_range_age_data = $CatRange['cat_range_age_data'];
@@ -687,6 +792,24 @@ class DashboardController extends Controller
         $userModel = new User();
 
         $gen_age     = $userModel->generationAgeRegency($regency_id);
+        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        $cat_gen_age = $GenAge['cat_gen_age'];
+        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
+
+        $data = [
+            'cat_gen_age' => $cat_gen_age,
+            'cat_gen_age_data' => $cat_gen_age_data
+        ];
+        return response()->json($data);
+
+    }
+
+    public function genAgeAdminMember($user_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $gen_age     = $userModel->generationAgeAdminMember($user_id);
         $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
         $cat_gen_age = $GenAge['cat_gen_age'];
         $cat_gen_age_data = $GenAge['cat_gen_age_data'];
@@ -798,6 +921,28 @@ class DashboardController extends Controller
 
     }
 
+    public function getInputerAdminMember($user_id)
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getInputerAdminMember($user_id);
+        // get fungsi grafik admin input terbanyak
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer
+        ];
+        return response()->json($data);
+
+    }
+
     public function getInputerDistrict($district_id)
     {
         $referalModel = new Referal();
@@ -892,6 +1037,27 @@ class DashboardController extends Controller
 
         // input admin terbanyak
         $inputer      = $referalModel->getReferalRegency($regency_id);
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer,
+        ];
+        return response()->json($data);
+
+    }
+    
+    public function getRegefalAdminMember($user_id)
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getReferalAdminMember($user_id);
         $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
         $cat_inputer_label = $ChartInputer['cat_inputer_label'];
         $cat_inputer_data = $ChartInputer['cat_inputer_data'];
@@ -1616,6 +1782,61 @@ class DashboardController extends Controller
       ];
 
       return response()->json($result);
+    }
+
+    public function getTotalMemberByAdminMember($user_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+
+        $userModel        = new User();
+        $member           = $userModel->getMemberByAdminMember($user_id);   
+        $total_member     = count($member); // total anggota terdaftar
+        $regencyModel     = new Regency();
+        $getTargetMember     = $regencyModel->getAllTarget($user_id);
+
+        $target_member    = $getTargetMember->target; 
+        $persentage_target_member = ($total_member / $target_member) * 100;
+
+        $villageModel   = new Village();
+        $villages       = $villageModel->getTotalVillageAdminMember($user_id); // fungsi total desa di kab
+        $total_village  = $villages->total_village;
+        $village_filled = $villageModel->getVillageFilledAdminMember($user_id); //fungsi total desa yang terisi 
+        $total_village_filled      = $village_filled->total_village; // total desa yang terisi
+        $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
+
+        $data = [
+            'total_village' => $gF->decimalFormat($total_village),
+            'total_village_filled' => $gF->decimalFormat($total_village_filled),
+            'presentage_village_filled' => $gF->persen($presentage_village_filled),
+            'total_member' => $gF->decimalFormat($total_member),
+            'target_member' => $gF->decimalFormat($target_member),
+            'persentage_target_member' => $gF->persen($persentage_target_member)
+        ];
+        return response()->json($data);
+
+    }
+
+    public function getMemberAdminMember($user_id)
+    {
+        $districtModel    = new District();
+
+        $districts = $districtModel->getGrafikTotalMemberAdminMember($user_id);
+        $cat_districts      = [];
+        $cat_districts_data = [];
+        foreach ($districts as $val) {
+            $cat_districts[] = $val->district; 
+            $cat_districts_data[] = [
+                "y" => $val->total_member,
+                "url" => route('adminuser-dashboard-district', $val->distric_id)
+            ];
+        }
+        
+        $data = [
+            'cat_districts' => $cat_districts,
+            'cat_districts_data' => $cat_districts_data,
+            // 'colors' => $colors
+        ];
+        return response()->json($data);
     }
 
 }

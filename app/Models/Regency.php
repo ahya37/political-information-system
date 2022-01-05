@@ -142,7 +142,7 @@ class Regency extends Model
                 where a.id = $regency_id GROUP BY a.name ";
         return collect(\ DB::select($sql))->first();
     }
-
+    
     public function getSelectRegencies()
     {
         $sql = "SELECT a.id as regency_id, a.name from regencies as a
@@ -152,7 +152,19 @@ class Regency extends Model
                 GROUP by a.id, a.name";
         $result = DB::select($sql);
         return $result;
+        
+    }
 
+    public function getAllTarget($user_id)
+    {
+        $sql = "SELECT
+                SUM(DISTINCT(a.target)) as target
+                from districts as a
+                join villages as b on a.id = b.district_id
+                join admin_dapil_district as d on a.id = d.district_id
+                join admin_dapils as e on d.admin_dapils_id = e.id
+                where e.admin_user_id = $user_id";
+        return collect(\ DB::select($sql))->first();
     }
     
     
