@@ -34,38 +34,35 @@ class Referal extends Model
 
     public function getInputerProvince($province_id)
     {
-        $sql = "select b.id, b.name,  COUNT(DISTINCT (a.id)) as total_data from users as a
-                join users as b on a.cby = b.id  
-                join admin_dapils as c on b.id = c.admin_user_id
-                join villages as d on a.village_id = d.id
+        $sql = "SELECT a.id, a.name, count(c.id) as total_data from users as a
+                join admin_dapils as b on a.id = b.admin_user_id
+                join users as c on a.id = c.cby
+                join villages as d on c.village_id = d.id
                 join districts as e on d.district_id = e.id
-                join regencies as f on e.regency_id = f.id 
+                join regencies as f on e.regency_id = f.id
                 where f.province_id = $province_id
-                group by b.id , b.name order by  COUNT(DISTINCT (a.id)) desc limit 5";
+                group by a.id, a.name order by count(c.id) desc";
         return DB::select($sql);
     }
 
     public function getInputers()
     {
-        $sql = "SELECT b.id, b.name , count(b.id) as total_data
-                from users as a
-                join users as b on a.cby = b.id
-                where a.village_id is not null 
-                group by b.name, b.id
-                order by count(b.id) desc
-                limit 5";
+        $sql = "SELECT a.id, a.name, count(c.id) as total_data from users as a
+                join admin_dapils as b on a.id = b.admin_user_id
+                join users as c on a.id = c.cby
+                group by a.id, a.name order by count(c.id) desc";
         return DB::select($sql);
     }
 
     public function getInputerRegency($regency_id)
     {
-        $sql = "SELECT b.id, b.name,  COUNT(DISTINCT (a.id)) as total_data from users as a
-                join users as b on a.cby = b.id  
-                join admin_dapils as c on b.id = c.admin_user_id
-                join villages as d on a.village_id = d.id
+        $sql = "SELECT a.id, a.name, count(c.id) as total_data from users as a
+                join admin_dapils as b on a.id = b.admin_user_id
+                join users as c on a.id = c.cby
+                join villages as d on c.village_id = d.id
                 join districts as e on d.district_id = e.id
                 where e.regency_id = $regency_id
-                group by b.id , b.name order by  COUNT(DISTINCT (a.id)) desc limit 5";
+                group by a.id, a.name order by count(c.id) desc";
         return DB::select($sql);
     }
 
@@ -85,13 +82,13 @@ class Referal extends Model
 
      public function getInputerDistrict($district_id)
     {
-        $sql = "SELECT b.id, b.name, COUNT(DISTINCT (a.id)) as total_data from users as a
-                join users as b on a.cby = b.id
-                join admin_dapils as c on b.id = c.admin_user_id
-                join admin_dapil_district as d on c.id = d.admin_dapils_id
-                join villages as e on a.village_id = e.id
-                where e.district_id = $district_id and d.district_id =  $district_id group by b.id, b.name
-                order by COUNT(DISTINCT (a.id)) desc limit 5";
+        $sql = "SELECT a.id, a.name, count(c.id) as total_data from users as a
+                join admin_dapils as b on a.id = b.admin_user_id
+                join users as c on a.id = c.cby
+                join villages as d on c.village_id = d.id
+                join admin_dapil_district as e on b.id = e.admin_dapils_id
+                where e.district_id = $district_id and  d.district_id = $district_id
+                group by a.id, a.name order by count(c.id) desc";
         return DB::select($sql);
     }
 
@@ -140,13 +137,13 @@ class Referal extends Model
 
     public function getInputerVillage($village_id)
     {
-        $sql = "select b.id, b.name , COUNT(a.id) as total_data from  users as a
-                join users as b on a.cby = b.id  
-                join admin_dapils as c on b.id = c.admin_user_id
-                join admin_dapil_village as d on c.id = d.admin_dapil_id 
-                join villages as e on a.village_id = e.id 
-                where d.village_id = $village_id and e.id = $village_id
-                group by b.id, b.name order by COUNT(a.id) desc limit 5";
+        $sql = "SELECT a.id, a.name, count(c.id) as total_data from users as a
+                join admin_dapils as b on a.id = b.admin_user_id
+                join users as c on a.id = c.cby
+                join villages as d on c.village_id = d.id
+                join admin_dapil_village as e on b.id = e.admin_dapil_id 
+                where e.village_id = $village_id and d.id = $village_id
+                group by a.id, a.name order by count(c.id) desc";
         return DB::select($sql);
     }
 
