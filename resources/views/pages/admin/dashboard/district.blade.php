@@ -339,7 +339,8 @@
                             </div>
                             <div class="input-group mb-3 col-md-3 float-right">
                               <button onclick="acumulate()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
-                              <input type="text" id="referalOfMount" name="referalOfMount" class="form-control datepicker">
+                                <button id="referalOfMount" class="btn btn-sm btn-sc-primary text-white datepicker">Bulan</button>
+
                           </div>
                         </div>
                         </div>
