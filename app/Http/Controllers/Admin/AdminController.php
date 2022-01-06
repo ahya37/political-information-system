@@ -83,13 +83,13 @@ class AdminController extends Controller
             $user->update(['level' => $request->level]);
             // cek apakah sudah ter set menu_id =1 
             $cekMenu  = $userMenuModel->where('user_id', $user->id)->count();
-            if ($cekMenu == 0) {
+            // if ($cekMenu == 0) {
                 // tambahkan user_id tersebut ke tbl user_menu untuk mendapatkan akses dashboard
                 $userMenuModel->create([
                     'user_id' => $user->id,
                     'menu_id' => 1
                     ]);
-            }
+            // }
 
                 // jika level = 1 , korcam kordes
                 $level = $request->level;
@@ -106,6 +106,14 @@ class AdminController extends Controller
                             'admin_dapils_id' => $saveAdminDapil->id,
                             'district_id' => $request->district_id,
                         ]);
+
+                        $village = Village::where('district_id', $request->district_id)->get();
+                        foreach ($village as $val) {
+                            $adminDapilVillage = new AdminDapilVillage();
+                            $adminDapilVillage->admin_dapil_id =  $saveAdminDapil->id;
+                            $adminDapilVillage->village_id = $val->id;
+                            $adminDapilVillage->save();
+                        }
                         
                     }else{
                         // jika ada, get id nya
@@ -115,6 +123,14 @@ class AdminController extends Controller
                             'admin_dapils_id' => $adminDapilId->id,
                             'district_id' => $request->district_id,
                         ]);
+
+                        $village = Village::where('district_id', $request->district_id)->get();
+                        foreach ($village as $val) {
+                            $adminDapilVillage = new AdminDapilVillage();
+                            $adminDapilVillage->admin_dapil_id =  $adminDapilId->id;
+                            $adminDapilVillage->village_id = $val->id;
+                            $adminDapilVillage->save();
+                        }
                     }
 
                 // jika level = 2, korwil / dapil TK.II
@@ -138,6 +154,16 @@ class AdminController extends Controller
                         $adminDapilDistrict->admin_dapils_id = $saveAdminDapil->id;
                         $adminDapilDistrict->district_id = $val->district_id;
                         $adminDapilDistrict->save();
+
+                        $village = Village::where('district_id',  $val->district_id)->get();
+                         foreach ($village as $val) {
+                            $adminDapilVillage = new AdminDapilVillage();
+                            $adminDapilVillage->admin_dapil_id =  $saveAdminDapil->id;
+                            $adminDapilVillage->village_id = $val->id;
+                            $adminDapilVillage->save();
+                        }
+
+                        
                     } 
                 }
 

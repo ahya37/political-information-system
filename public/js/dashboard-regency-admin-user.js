@@ -602,4 +602,28 @@ $(document).ready(function () {
         let text = document.createTextNode(getTotalRegional);
         div.appendChild(text);
     }
+
+    // anggota referal terbanyak perbulan
+    $(".datepicker").datepicker({
+        format: "MM",
+        viewMode: "months",
+        minViewMode: "months",
+        autoClose: true,
+    });
+
+    // Data Default
+    $("#referalOfMount", async function () {
+        let date = new Date();
+        const mounthSelected = date.getMonth() + 1;
+        const yearSelected = date.getFullYear();
+        BeforeSend("LoadaReferalByMounth");
+        $("#totalReferalByMonth").empty();
+        try {
+            const referalByMounth = await getReferalByDefault();
+            const resultReferalByMounth = referalByMounth.data;
+            const calculate = referalByMounth.referal_acumulate;
+            updateReferalByMounth(resultReferalByMounth, calculate);
+        } catch (err) {}
+        Complete("LoadaReferalByMounth");
+    });
 });
