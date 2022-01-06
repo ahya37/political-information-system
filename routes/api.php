@@ -130,6 +130,7 @@ Route::post('/searchmember','API\MemberController@getSearchMember');
 Route::post('/searchmemberforcaleg','API\MemberController@getSearchMemberForCaleg');
 Route::post('/memberbyid','API\MemberController@getMemberById');
 
+// referal
 Route::post('/dashboard/referalbymount','API\DashboardController@referalByMountAdmin');
 Route::post('/dashboard/referalbydefault','API\DashboardController@referalByMountAdminByDefault');
 Route::post('/dashboard/referalbymonthprovince','API\DashboardController@referalByMountAdminProvince');
@@ -140,6 +141,28 @@ Route::post('/dashboard/referalbymounthdistrict','API\DashboardController@refera
 Route::post('/dashboard/referalbymounthdistrictdefault','API\DashboardController@referalByMountAdminDistrictDefault');
 Route::post('/dashboard/referalbymounthvillage','API\DashboardController@referalByMountAdminVillage');
 Route::post('/dashboard/referalbymounthvillagedefault','API\DashboardController@referalByMountAdminVillageDefault');
+
+// input national
+Route::get('/dashboard/inputbymonthpdefault','API\DashboardController@inputByMountAdmiNationalDefault');
+Route::post('/dashboard/inputbymonth','API\DashboardController@inputByMountAdminNational');
+
+// input province
+Route::post('/dashboard/inputbymonthprovincedefault','API\DashboardController@inputByMountAdminProvinceDefault');
+Route::post('/dashboard/inputbymonthprovince','API\DashboardController@inputByMountAdminNational');
+
+// input regency
+Route::post('/dashboard/inputbymonthregencydefault','API\DashboardController@inputByMountAdminRegencyDefault');
+Route::post('/dashboard/inputbymonthregency','API\DashboardController@inputByMountAdminRegency');
+
+// input district
+Route::post('/dashboard/inputbymonthdistrictdefault','API\DashboardController@inputByMountAdminDistrictDefault');
+Route::post('/dashboard/inputbymonthdistrict','API\DashboardController@inputByMountAdminDistrict');
+
+// input villages
+Route::post('/dashboard/inputbymonthvillagedefault','API\DashboardController@inputByMountAdminVillageDefault');
+Route::post('/dashboard/inputbymonthvillage','API\DashboardController@inputByMountAdminVillage');
+
+
 
 Route::get('/dashboard/adminregional','TestController@testAdminRegionalVillage');
 

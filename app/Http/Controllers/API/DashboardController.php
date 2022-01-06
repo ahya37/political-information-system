@@ -272,7 +272,7 @@ class DashboardController extends Controller
 
         $regencyModel     = Regency::select('target')->where('id', $regency_id)->first();
         $targetMember    = $regencyModel->target; // target anggota tercapai, per kecamatan 1000 target
-;
+
         $target_member    = (string) $targetMember;
         $persentage_target_member = ($total_member / $target_member) * 100;
 
@@ -1837,6 +1837,364 @@ class DashboardController extends Controller
             // 'colors' => $colors
         ];
         return response()->json($data);
+    }
+
+    public function inputByMountAdminProvinceDefault()
+    {
+      $province_id  = request()->province_id;
+      $referalModel = new Referal();
+      $input      = $referalModel->getInputByDefaultProvince($province_id);
+      $referalCalculate = collect($input)->sum(function($q){
+          return $q->total;
+      });
+
+      $gF = new GlobalProvider();
+
+      $userModel = new User();
+      $data = [];
+      $no = 1;
+      foreach ($input as $val) {
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
+             'input' => $gF->decimalFormat($val->total),
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+          ];
+      }
+      $result = [
+          'input_acumulate' => $gF->decimalFormat($referalCalculate),
+          'data' => $data
+      ];
+      return response()->json($result);
+    }
+
+    public function inputByMountAdminProvince()
+    {
+      $mounth       = request()->mounth;
+      $year         = request()->year;
+      $province_id  = request()->province_id;
+      $referalModel = new Referal();
+      $input      = $referalModel->getInputByMounthAdminProvince($mounth, $year, $province_id);
+      $inputCalculate = collect($input)->sum(function($q){
+          return $q->total;
+      });
+       $gF = new GlobalProvider();
+
+      $userModel = new User();
+      $data = [];
+      $no = 1;
+      foreach ($input as $val) {
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
+             'input' => $val->total,
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+          ];
+      }
+      $result = [
+          'input_acumulate' => $gF->decimalFormat($inputCalculate),
+          'data' => $data
+      ];
+
+      return response()->json($result);
+    }
+
+    public function inputByMountAdminRegencyDefault()
+    {
+      $regency_id  = request()->regency_id;
+      $referalModel = new Referal();
+      $input      = $referalModel->getInputByDefaultRegency($regency_id);
+      $referalCalculate = collect($input)->sum(function($q){
+          return $q->total;
+      });
+
+      $gF = new GlobalProvider();
+
+      $userModel = new User();
+      $data = [];
+      $no = 1;
+      foreach ($input as $val) {
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
+             'input' => $gF->decimalFormat($val->total),
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+          ];
+      }
+      $result = [
+          'input_acumulate' => $gF->decimalFormat($referalCalculate),
+          'data' => $data
+      ];
+      return response()->json($result);
+    }
+
+    public function inputByMountAdminRegency()
+    {
+      $mounth       = request()->mounth;
+      $year         = request()->year;
+      $regency_id  = request()->regency_id;
+      $referalModel = new Referal();
+      $input      = $referalModel->getInputByMounthAdminRegency($mounth, $year, $regency_id);
+      $inputCalculate = collect($input)->sum(function($q){
+          return $q->total;
+      });
+       $gF = new GlobalProvider();
+
+      $userModel = new User();
+      $data = [];
+      $no = 1;
+      foreach ($input as $val) {
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
+             'input' => $val->total,
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+          ];
+      }
+      $result = [
+          'input_acumulate' => $gF->decimalFormat($inputCalculate),
+          'data' => $data
+      ];
+
+      return response()->json($result);
+    }
+
+     public function inputByMountAdminDistrictDefault()
+    {
+      $district_id  = request()->district_id;
+      $referalModel = new Referal();
+      $input      = $referalModel->getInputByDefaultDistrict($district_id);
+      $referalCalculate = collect($input)->sum(function($q){
+          return $q->total;
+      });
+
+      $gF = new GlobalProvider();
+
+      $userModel = new User();
+      $data = [];
+      $no = 1;
+      foreach ($input as $val) {
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
+             'input' => $gF->decimalFormat($val->total),
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+          ];
+      }
+      $result = [
+          'input_acumulate' => $gF->decimalFormat($referalCalculate),
+          'data' => $data
+      ];
+      return response()->json($result);
+    }
+
+     public function inputByMountAdminDistrict()
+    {
+      $mounth       = request()->mounth;
+      $year         = request()->year;
+      $district_id  = request()->district_id;
+      $referalModel = new Referal();
+      $input      = $referalModel->getInputByMounthAdminDistrict($mounth, $year, $district_id);
+      $inputCalculate = collect($input)->sum(function($q){
+          return $q->total;
+      });
+       $gF = new GlobalProvider();
+
+      $userModel = new User();
+      $data = [];
+      $no = 1;
+      foreach ($input as $val) {
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
+             'input' => $val->total,
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+          ];
+      }
+      $result = [
+          'input_acumulate' => $gF->decimalFormat($inputCalculate),
+          'data' => $data
+      ];
+
+      return response()->json($result);
+    }
+
+      public function inputByMountAdminVillageDefault()
+    {
+      $village_id  = request()->village_id;
+      $referalModel = new Referal();
+      $input      = $referalModel->getInputByDefaultVillage($village_id);
+      $referalCalculate = collect($input)->sum(function($q){
+          return $q->total;
+      });
+
+      $gF = new GlobalProvider();
+
+      $userModel = new User();
+      $data = [];
+      $no = 1;
+      foreach ($input as $val) {
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
+             'input' => $gF->decimalFormat($val->total),
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+          ];
+      }
+      $result = [
+          'input_acumulate' => $gF->decimalFormat($referalCalculate),
+          'data' => $data
+      ];
+      return response()->json($result);
+    }
+
+     public function inputByMountAdminVillage()
+    {
+      $mounth       = request()->mounth;
+      $year         = request()->year;
+      $village_id  = request()->village_id;
+      $referalModel = new Referal();
+      $input      = $referalModel->getInputByMounthAdminVillage($mounth, $year, $village_id);
+      $inputCalculate = collect($input)->sum(function($q){
+          return $q->total;
+      });
+       $gF = new GlobalProvider();
+
+      $userModel = new User();
+      $data = [];
+      $no = 1;
+      foreach ($input as $val) {
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
+             'input' => $val->total,
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+          ];
+      }
+      $result = [
+          'input_acumulate' => $gF->decimalFormat($inputCalculate),
+          'data' => $data
+      ];
+
+      return response()->json($result);
+    }
+
+     public function inputByMountAdmiNationalDefault()
+    {
+      $referalModel = new Referal();
+      $input      = $referalModel->getInputByDefaultNational();
+      $referalCalculate = collect($input)->sum(function($q){
+          return $q->total;
+      });
+
+      $gF = new GlobalProvider();
+
+      $userModel = new User();
+      $data = [];
+      $no = 1;
+      foreach ($input as $val) {
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $address->village->name ?? '',
+             'district' => $address->village->district->name ?? '',
+             'regency' => $address->village->district->regency->name ?? '',
+             'input' => $gF->decimalFormat($val->total),
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+          ];
+      }
+      $result = [
+          'input_acumulate' => $gF->decimalFormat($referalCalculate),
+          'data' => $data
+      ];
+      return response()->json($result);
+    }
+
+     public function inputByMountAdminNational()
+    {
+      $mounth       = request()->mounth;
+      $year         = request()->year;
+      $referalModel = new Referal();
+      $input      = $referalModel->getInputByMounthAdminNational($mounth, $year);
+      $inputCalculate = collect($input)->sum(function($q){
+          return $q->total;
+      });
+       $gF = new GlobalProvider();
+
+      $userModel = new User();
+      $data = [];
+      $no = 1;
+      foreach ($input as $val) {
+          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+          $data[] = [ 
+              'no' => $no ++,
+             'photo' => $val->photo,
+             'name' => $val->name,
+             'village' => $address->village->name,
+             'district' => $address->village->district->name,
+             'regency' => $address->village->district->regency->name,
+             'input' => $val->total,
+             'whatsapp' => $val->whatsapp,
+             'phone' => $val->phone_number,
+          ];
+      }
+      $result = [
+          'input_acumulate' => $gF->decimalFormat($inputCalculate),
+          'data' => $data
+      ];
+
+      return response()->json($result);
     }
 
 }

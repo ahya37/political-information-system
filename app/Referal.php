@@ -184,6 +184,31 @@ class Referal extends Model
         return DB::select($sql);
     }
 
+    public function getInputByMounthAdminProvince($mounth, $year, $province_id)
+    {
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, a.photo, 
+                COUNT(b.id) as total FROM users as a
+                join users as b on a.id = b.cby
+                join villages as c on b.village_id = c.id 
+                join districts as d on c.district_id = d.id 
+                join regencies as e on d.regency_id = e.id
+                where MONTH(b.created_at) = $mounth and YEAR(b.created_at) = $year and e.province_id = $province_id
+                group by  a.id, a.name, a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc";
+        return DB::select($sql);
+    }
+
+    public function getInputByMounthAdminNational($mounth, $year)
+    {
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, a.photo, 
+                COUNT(b.id) as total FROM users as a
+                join users as b on a.id = b.cby
+                where MONTH(b.created_at) = $mounth and YEAR(b.created_at) = $year and b.village_id is not null
+                group by  a.id, a.name, a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc";
+        return DB::select($sql);
+    }
+
     public function getReferealByDefault()
     {
         $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, a.photo, 
@@ -209,6 +234,67 @@ class Referal extends Model
         return DB::select($sql);
     }
 
+     public function getInputByDefaultProvince($province_id)
+    {
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name,  a.photo, 
+                COUNT(b.id) as total FROM users as a
+                join users as b on a.id = b.cby
+                join villages as c on b.village_id = c.id 
+                join districts as d on c.district_id = d.id 
+                join regencies as e on d.regency_id = e.id
+                where e.province_id = $province_id
+                group by a.id, a.name,a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc";
+        return DB::select($sql);
+    }
+
+     public function getInputByDefaultNational()
+    {
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name,  a.photo, 
+                COUNT(b.id) as total FROM users as a
+                join users as b on a.id = b.cby
+                where  b.village_id  is not null
+                group by a.id, a.name,a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc";
+        return DB::select($sql);
+    }
+
+     public function getInputByDefaultRegency($regency_id)
+    {
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name,  a.photo, 
+                COUNT(b.id) as total FROM users as a
+                join users as b on a.id = b.cby
+                join villages as c on b.village_id = c.id 
+                join districts as d on c.district_id = d.id 
+                where d.regency_id = $regency_id
+                group by a.id, a.name,a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc";
+        return DB::select($sql);
+    }
+
+     public function getInputByDefaultDistrict($district_id)
+    {
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name,  a.photo, 
+                COUNT(b.id) as total FROM users as a
+                join users as b on a.id = b.cby
+                join villages as c on b.village_id = c.id 
+                where c.district_id = $district_id
+                group by a.id, a.name,a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc";
+        return DB::select($sql);
+    }
+
+     public function getInputByDefaultVillage($village_id)
+    {
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name,  a.photo, 
+                COUNT(b.id) as total FROM users as a
+                join users as b on a.id = b.cby
+                where b.village_id = $village_id
+                group by a.id, a.name,a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc";
+        return DB::select($sql);
+    }
+
     public function getReferealByMounthAdminRegency($mounth, $year, $regency_id)
     {
         $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, a.photo, 
@@ -218,6 +304,43 @@ class Referal extends Model
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
                 where MONTH(b.created_at) = $mounth and YEAR(b.created_at) = $year and e.id = $regency_id
+                group by a.id, a.name, a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc";
+        return DB::select($sql);
+    }
+    
+    public function getInputByMounthAdminRegency($mounth, $year, $regency_id)
+    {
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, a.photo, 
+                COUNT(b.id) as total FROM users as a
+                join users as b on a.id = b.cby
+                join villages as c on b.village_id = c.id 
+                join districts as d on c.district_id = d.id 
+                join regencies as e on d.regency_id = e.id
+                where MONTH(b.created_at) = $mounth and YEAR(b.created_at) = $year and e.id = $regency_id
+                group by a.id, a.name, a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc";
+        return DB::select($sql);
+    }
+
+    public function getInputByMounthAdminDistrict($mounth, $year, $district_id)
+    {
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, a.photo, 
+                COUNT(b.id) as total FROM users as a
+                join users as b on a.id = b.cby
+                join villages as c on b.village_id = c.id 
+                where MONTH(b.created_at) = $mounth and YEAR(b.created_at) = $year and c.district_id = $district_id
+                group by a.id, a.name, a.photo, a.phone_number, a.whatsapp 
+                order by COUNT(b.id) desc";
+        return DB::select($sql);
+    }
+
+    public function getInputByMounthAdminVillage($mounth, $year, $village_id)
+    {
+        $sql = "SELECT a.id as user_id, a.phone_number, a.whatsapp, a.name, a.photo, 
+                COUNT(b.id) as total FROM users as a
+                join users as b on a.id = b.cby
+                where MONTH(b.created_at) = $mounth and YEAR(b.created_at) = $year and b.village_id = $village_id
                 group by a.id, a.name, a.photo, a.phone_number, a.whatsapp 
                 order by COUNT(b.id) desc";
         return DB::select($sql);

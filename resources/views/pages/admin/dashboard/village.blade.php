@@ -281,23 +281,38 @@
                    <div class="col-md-12 col-sm-12">
                      <div class="card mb-2">
                       <div class="card-body">
-                        <h6 class="text-center">Anggota Input Terbanyak</h6>
-                        <div class="row">
-                      </div>
+                        <h6 class="text-center">Anggota Input Terbanyak Perbulan</h6>
+                        <div class="col-12">
+                          <div class="row">
+                            <div class="col-md-9">
+                              <div id="totalInputByMonth"></div>
+                            </div>
+                              <div class="input-group mb-3 col-md-3 float-right">
+                                <button onclick="acumulateInput()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
+                                <button id="inputOfMount" class="btn btn-sm btn-sc-primary text-white datepicker">Bulan</button>
+                            </div>
+                        </div>
+                        </div>
 
                       <div class="row">
                           <div class="table-responsive mt-3">
-                            <table id="dtshowInputerDataInputerByMounth" class="data table table-sm table-striped" width="100%">
+                            <table id="dtshowInputDataByMounth" class="data table table-sm table-striped" width="100%">
                               <thead>
-                               <tr>
+                               
+                                  <th scope="col">NO</th>
                                   <th scope="col"></th>
                                   <th scope="col">NAMA</th>
-                                  <th scope="col">JUMLAH ANGGOTA</th>
+                                  <th scope="col">JUMLAH DATA</th>
                                   <th scope="col">ALAMAT</th>
                                   <th scope="col">KONTAK</th>
                                 </tr>
+                                 <tr>
+                                    <th colspan="7" id="LoadaInputByMounth" class="d-none lds-dual-ring hidden overlay"></th>
+                                  </tr>
+                                <tr>
                                 </thead>
-                                
+                                <tbody id="showInputDataByMounth">
+                                </tbody>
                               </table>
                           </div>
                       </div>
@@ -332,7 +347,7 @@
                   </div>
                    </div>
 
-                    <div class="col-md-12 col-sm-12">
+                    {{-- <div class="col-md-12 col-sm-12">
                      <div class="card mb-2">
                       <div class="card-body">
                         <h6 class="text-center">Admin</h6>
@@ -353,7 +368,7 @@
                         </div>
                     </div>
                   </div>
-                   </div>
+                   </div> --}}
               </div>
             </div>
               

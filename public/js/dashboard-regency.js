@@ -619,25 +619,125 @@ $(document).ready(function () {
 });
 
 // anggota input terbanyak
-$("#dtshowInputerDataInputerByMounth").DataTable({
-    processing: true,
-    language: {
-        processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
-    },
-    serverSide: true,
-    ordering: true,
-    ajax: {
-        url: `/admin/dtlistmemberinputerbyregency/${regencyID}`,
-    },
-    columns: [
-        { data: "photo", name: "photo" },
-        { data: "member", name: "member" },
-        { data: "totalData", name: "totalData", className: "text-center" },
-        { data: "address", name: "address" },
-        { data: "contact", name: "contact" },
-    ],
-    aaSorting: [[2, "desc"]],
+// Data Default
+async function acumulateInput() {
+    $("#totalInputByMonth").empty();
+    BeforeSend("LoadaInputByMounth");
+    try {
+        const inputByMounth = await getInputByDefault(regencyID);
+        const resultInputByMounth = inputByMounth.data;
+        const calculate = inputByMounth.input_acumulate;
+
+        updateInputByMounth(resultInputByMounth, calculate);
+    } catch (err) {}
+    Complete("LoadaInputByMounth");
+}
+
+$("#inputOfMount", async function () {
+    $("#totalInputByMonth").empty();
+    BeforeSend("LoadaInputByMounth");
+    try {
+        const inputByMounth = await getInputByDefault(regencyID);
+        const resultInputByMounth = inputByMounth.data;
+        const calculate = inputByMounth.input_acumulate;
+
+        updateInputByMounth(resultInputByMounth, calculate);
+    } catch (err) {}
+    Complete("LoadaInputByMounth");
 });
+// akumulasi sebelum pilih bulan
+function getInputByDefault() {
+    return fetch("/api/dashboard/inputbymonthregencydefault", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            regency_id: regencyID,
+        }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+// After ChangeDate
+$("#inputOfMount").on("changeDate", async function (selected) {
+    const mounthSelected = selected.date.getMonth() + 1;
+    const yearSelected = selected.date.getFullYear();
+    $("#totalInputByMonth").empty();
+    BeforeSend("LoadaInputByMounth");
+    try {
+        const InputByMounth = await getInputByMount(
+            mounthSelected,
+            yearSelected,
+            regencyID
+        );
+        const resultInputByMounth = InputByMounth.data;
+        const calculate = InputByMounth.input_acumulate;
+        updateInputByMounth(resultInputByMounth, calculate);
+    } catch (err) {}
+    Complete("LoadaInputByMounth");
+});
+function getInputByMount(mounthSelected, yearSelected) {
+    return fetch("/api/dashboard/inputbymonthregency", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            mounth: mounthSelected,
+            year: yearSelected,
+            regency_id: regencyID,
+        }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+
+function updateInputByMounth(resultInputByMounth, calculate) {
+    $("#totalInputByMonth").append(`Total : <strong>${calculate}</strong>`);
+
+    let divHtmInputByMounth = "";
+    resultInputByMounth.forEach((m) => {
+        divHtmInputByMounth += showDivHtmInputByMounth(m);
+    });
+
+    const divHtmInputByMounthContainer = document.getElementById(
+        "showInputDataByMounth"
+    );
+    divHtmInputByMounthContainer.innerHTML = divHtmInputByMounth;
+}
+function showDivHtmInputByMounth(m) {
+    return `<tr>
+            <td class="text-center">${m.no}</td>
+            <td>
+                <img  class="rounded" width="40" src="/storage/${m.photo}">
+            </td>
+            <td>${m.name}</td>
+            <td class="text-center">
+            <div class="badge badge-pill badge-info">
+                ${m.input}
+            </div>
+            </td>           
+            </td>
+             <td>
+                ${m.village},<br> ${m.district}, <br> ${m.regency}
+            </td>
+             <td>
+                <div class="badge badge-pill badge-primary">
+                    <i class="fa fa-phone"></i>
+                </div>
+                ${m.phone}
+                <br/>
+               <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+               </div>
+                 ${m.whatsapp}
+            </td>
+            </tr>`;
+}
+
+// CLOSE INPUT TERBANYAK PERBULAN
 
 // anggota referal terbanyak perbulan
 $(".datepicker").datepicker({
