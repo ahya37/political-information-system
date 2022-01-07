@@ -44,7 +44,7 @@ class VoucherHistory extends Model
         $sql = "SELECT a.id as voucher_id, b.id as user_id, b.name, a.total_point , a.total_data , a.total_nominal from voucher_history as a
                 join users as b on a.user_id = b.id
                 join detail_voucher_history as c on a.id = c.voucher_history_id where c.tf is not null
-                group by a.id, b.id, b.name";
+                group by a.id, b.id, b.name, a.total_data , a.total_nominal , a.total_point";
                 
         $result = DB::select($sql);
         return $result;
