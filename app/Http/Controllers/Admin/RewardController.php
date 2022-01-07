@@ -114,7 +114,15 @@ class RewardController extends Controller
 
             $data = [];
             foreach ($referalPoint as $key => $val) {
-                $totalReferalByMember = $val->total_referal - $val->referal_inpoint;
+                $detailVoucher    = DetailVoucherHistory::select('total_data')
+                                    ->where('voucher_history_id', $val->voucher_id)
+                                    ->where('type','Referal')
+                                    ->get();
+                $total_inpoint  = collect($detailVoucher)->sum(function($q){
+                    return $q->total_data;
+                });
+
+                $totalReferalByMember = $val->total_referal - $total_inpoint;
                     if ($gF->calPoint($totalReferalByMember) != 0 AND $gF->calPoint($totalReferalByMember) > 0) {
                         $data[] = [
                             'userId' => $val->id,
@@ -177,7 +185,15 @@ class RewardController extends Controller
 
             $data = [];
             foreach ($referalPoint as $key => $val) {
-                $totalInputMember = $val->total_input - $val->input_inpoint;
+                 $detailVoucher    = DetailVoucherHistory::select('total_data')
+                                    ->where('voucher_history_id', $val->voucher_id)
+                                    ->where('type','Input')
+                                    ->get();
+                $total_inpoint  = collect($detailVoucher)->sum(function($q){
+                    return $q->total_data;
+                });
+
+                $totalInputMember = $val->total_input - $total_inpoint;
                     if ($gF->calPointAdmin($totalInputMember) != 0 AND $gF->calPointAdmin($totalInputMember) > 0 ) {
                         $data[] = [
                             'userId' => $val->id,
@@ -238,7 +254,15 @@ class RewardController extends Controller
 
             $data = [];
             foreach ($referalPoint as $key => $val) {
-                $totalInputMember = $val->total_input - $val->input_inpoint;
+                // get detail_voucher_history
+                $detailVoucher    = DetailVoucherHistory::select('total_data')
+                                    ->where('voucher_history_id', $val->voucher_id)
+                                    ->where('type','Input')
+                                    ->get();
+                $total_inpoint  = collect($detailVoucher)->sum(function($q){
+                    return $q->total_data;
+                });
+                $totalInputMember = $val->total_input - $total_inpoint;
                     if ($gF->calPointAdmin($totalInputMember) != 0 AND $gF->calPointAdmin($totalInputMember) > 0) {
                         $data[] = [
                             'userId' => $val->id,
@@ -730,7 +754,7 @@ class RewardController extends Controller
                      'total_data' => 0,
                  ]);
 
-                $saveDetailVh =   $vhModel->create([
+                $saveDetailVh =   $dvhModel->create([
                     'voucher_history_id' => $saveVh->id,
                     'point' => $point,
                     'nominal' => $requestNominal,
