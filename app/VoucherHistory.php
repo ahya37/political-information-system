@@ -12,12 +12,16 @@ class VoucherHistory extends Model
 
     public function getListVoucher()
     {
-        $sql = "select b.id,  a.photo, a.name, c.name as village, d.name as district, e.name as regency, f.name as province, b.total_data , b.total_nominal , b.total_point from users as a
+        $sql = "SELECT b.id,  a.photo, a.name, c.name as village, d.name as district, e.name as regency, 
+                f.name as province, sum(g.total_data) as total_data, sum(g.nominal) as  total_nominal, sum(g.point) as total_point
+                from users as a
                 join voucher_history as b on a.id = b.user_id
                 join villages as c on a.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id 
-                join provinces as f on e.province_id = f.id";
+                join provinces as f on e.province_id = f.id
+                join detail_voucher_history as g on b.id = g.voucher_history_id where g.type = 'Referal'
+                group by b.id, a.photo, a.name, c.name, d.name, e.name , f.name";
         return DB::select($sql);
     }
 

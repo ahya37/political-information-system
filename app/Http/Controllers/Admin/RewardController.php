@@ -450,8 +450,8 @@ class RewardController extends Controller
         $requestNominal = $pointReq * 100000;
         $requestTotalData = $pointReq * 200;
 
-        $vhModel  = new VoucherHistoryAdmin();
-        $dvhModel = new DetailVoucherHistoryAdmin();
+        $vhModel  = new VoucherHistory();
+        $dvhModel = new DetailVoucherHistory();
 
         // jika pointReq = point
         if ($pointReq == $point) {
@@ -473,7 +473,7 @@ class RewardController extends Controller
                     'nominal' => $requestNominal,
                     'total_data' => $requestTotalData,
                     'code' => Str::random(5),
-                    'type' => 'Referal'
+                    'type' => 'Input'
                 ]);
 
                 $detailVh = $dvhModel->where('voucher_history_id', $saveVh->id)->get();
@@ -504,7 +504,7 @@ class RewardController extends Controller
                     'nominal' => $requestNominal,
                     'total_data' => $requestTotalData,
                     'code' => Str::random(5),
-                    'type' => 'Referal'
+                    'type' => 'Input'
                 ]);
 
                 $detailVh = $dvhModel->where('voucher_history_id', $cekVhUpdte->id)->get();
@@ -544,7 +544,7 @@ class RewardController extends Controller
                     'nominal' => $requestNominal,
                     'total_data' => $requestTotalData,
                     'code' => Str::random(5),
-                    'type' => 'Referal'
+                    'type' => 'Input'
                 ]);
 
                 $detailVh = $dvhModel->where('voucher_history_id', $saveVh->id)->get();
@@ -575,7 +575,7 @@ class RewardController extends Controller
                     'nominal' => $requestNominal,
                     'total_data' => $requestTotalData,
                     'code' => Str::random(5),
-                    'type' => 'Referal'
+                    'type' => 'Input'
                 ]);
 
                 $detailVh = $dvhModel->where('voucher_history_id', $cekVhUpdte->id)->get();
@@ -717,8 +717,8 @@ class RewardController extends Controller
             $requestNominal = $point * 100000;
             $requestTotalData = $point * 200;
 
-            $vhModel  = new VoucherHistoryAdmin();
-            $dvhModel = new DetailVoucherHistoryAdmin();
+            $vhModel  = new VoucherHistory();
+            $dvhModel = new DetailVoucherHistory();
 
             $cekVh = $vhModel->where('user_id', $userId)->first();
             // jika beulm ada, create detailnya dan update vh nya
@@ -736,7 +736,7 @@ class RewardController extends Controller
                     'nominal' => $requestNominal,
                     'total_data' => $requestTotalData,
                     'code' => Str::random(5),
-                    'type' => 'Referal'
+                    'type' => 'Input'
                 ]);
 
                 $detailVh = $dvhModel->where('voucher_history_id', $saveVh->id)->get();
@@ -767,7 +767,7 @@ class RewardController extends Controller
                     'nominal' => $requestNominal,
                     'total_data' => $requestTotalData,
                     'code' => Str::random(5),
-                    'type' => 'Referal'
+                    'type' => 'Input'
                 ]);
 
                 $detailVh = $dvhModel->where('voucher_history_id', $cekVhUpdte->id)->get();
@@ -908,16 +908,20 @@ class RewardController extends Controller
         $gF = new GlobalProvider();
         $dvhModel = new VoucherHistory();
         $member   = $dvhModel->getMember($id);
-        $listVucher = DetailVoucherHistory::where('voucher_history_id', $id)->orderBy('created_at','desc')->get();
+        $listVucher = DetailVoucherHistory::where('voucher_history_id', $id)
+                    ->where('type','Referal')    
+                    ->orderBy('created_at','desc')->get();
         return view('pages.admin.reward.detail-history-referal', compact('member','listVucher','gF'));
     }
 
     public function detailListRewardAdmin($id)
     {
         $gF = new GlobalProvider();
-        $dvhModel = new VoucherHistoryAdmin();
+        $dvhModel = new VoucherHistory();
         $member   = $dvhModel->getMember($id);
-        $listVucher = DetailVoucherHistoryAdmin::where('voucher_history_id', $id)->orderBy('created_at','desc')->get();
+        $listVucher = DetailVoucherHistory::where('voucher_history_id', $id)
+                    ->where('type','Input')    
+                    ->orderBy('created_at','desc')->get();
         return view('pages.admin.reward.detail-history-admin', compact('member','listVucher','gF'));
     }
 
