@@ -16,6 +16,7 @@
                 </p>
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
+                @include('layouts.message')
                 <div class="row">
                     @foreach ($listVucher as $item)
                     <div class="col-md-4 col-sm-4">
@@ -33,6 +34,15 @@
                             <div class="mr-2">
                                  <a href="{{ route('voucherreferal-download', $item->id) }}"><i class="fa fa-download"></i></a>
                             </div>
+                            @if ($item->tf == null)
+                            <div class="mr-2">
+                                 <button class="btn btn-sm btn-sc-primary text-white "  type="button" data-id="{{ $item->id }}"  data-toggle="modal" data-target="#setPoint{{ $item->id }}">Upload Bukti</button>
+                            </div>
+                            @else
+                            <a href="{{ asset('storage/'.$item->tf) }}" target="_blank">
+                              <small>Bukti</small>
+                            </a>
+                            @endif
                         </div>
                         <div class="card-footer bg-info">
                             <h5 class="text-center text-white"> Rp. {{ $gF->decimalFormat($item->nominal) }}</h5>
@@ -46,6 +56,40 @@
             </div>
           </div>
 @endsection
+@push('prepend-script')
+@foreach ($listVucher as $item)
+  <div class="modal fade" id="setPoint{{ $item->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload Bukti</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{{ route('admin-vouvhertf-upload') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Nominal</label>
+            <input type="hidden" name="VoucherId" id="VoucherId" value="{{ $item->id }}" class="form-control">
+            <input type="text" name="nominal" value="{{ $item->nominal }}" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Bukti Transfer</label>
+            <input type="file" name="file" class="form-control">
+          </div>
+              <div class="form-group float-right">
+                <button type="submit" class="btn btn-sc-primary">Simpan</button>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+ @endforeach
+@endpush
 
 @push('addon-script')
 @endpush

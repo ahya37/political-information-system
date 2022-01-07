@@ -273,7 +273,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/info/downloadpdfallbyvillage/{villageId}','InformationController@downloadPdfAllByVillageId')->name('admin-downloadpdfbyvillageid');
         Route::get('/info/downloadpdfall','InformationController@downloadPdfAll')->name('admin-downloadfigureall');
 
-        
+        // Bukti TF Voucher
+        Route::post('voucher/tf','RewardController@uploadTFVoucher')->name('admin-vouvhertf-upload');
+        Route::get('voucher/report','RewardController@ReportVoucher')->name('admin-voucher-report');
     });
 });
 

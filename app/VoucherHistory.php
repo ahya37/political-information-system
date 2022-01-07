@@ -23,7 +23,7 @@ class VoucherHistory extends Model
 
     public function getMember($id)
     {
-        $sql = "SELECT a.name from users as a
+        $sql = "SELECT a.id, a.name from users as a
                 join voucher_history as b on a.id = b.user_id where b.id = $id";
         $result = collect(\ DB::select($sql))->first();
         return $result;
@@ -34,6 +34,17 @@ class VoucherHistory extends Model
         $sql = "SELECT b.code, b.total_data, b.point, b.nominal, b.created_at from voucher_history as a  
                 join detail_voucher_history as b on a.id = b.voucher_history_id
                 where a.user_id = $userId";
+                
+        $result = DB::select($sql);
+        return $result;
+    }
+
+    public function getListMember()
+    {
+        $sql = "SELECT a.id as voucher_id, b.id as user_id, b.name, a.total_point , a.total_data , a.total_nominal from voucher_history as a
+                join users as b on a.user_id = b.id
+                join detail_voucher_history as c on a.id = c.voucher_history_id where c.tf is not null
+                group by a.id, b.id, b.name";
                 
         $result = DB::select($sql);
         return $result;

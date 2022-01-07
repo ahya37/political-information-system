@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DetailVoucherHistory;
-use App\DetailVoucherHistoryAdmin;
+use PDF;
+use App\Cost;
 use App\User;
 use App\Referal;
 use Carbon\Carbon;
 use App\VoucherHistory;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Providers\GlobalProvider;
-use App\Http\Controllers\Controller;
 use App\VoucherHistoryAdmin;
+use Illuminate\Http\Request;
+use App\DetailVoucherHistory;
+use App\Providers\GlobalProvider;
+use App\DetailVoucherHistoryAdmin;
+use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
-use PDF;
 
 class RewardController extends Controller
 {
@@ -938,5 +939,81 @@ class RewardController extends Controller
         $customPaper = array(0,0,400.00,283.50);
         $pdf = PDF::LoadView('pages.admin.report.voucher-referal', compact('voucher','gF'))->setPaper($customPaper, 'landscape');;
         return $pdf->download('voucher-referal-'.$voucher->code.'.pdf');
+    }
+
+    public function uploadTFVoucher(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:png,jpg,jpeg'
+        ]);
+
+        $voucherDetail = DetailVoucherHistory::where('id', $request->VoucherId)->first();
+
+        $voucherModel   = new VoucherHistory();
+        $user          =  $voucherModel->getMember($voucherDetail->voucher_history_id);
+
+
+            $fileImage = $request->file->store('assets/voucher/tf','public');
+
+            $voucherDetail->update([
+                'tf' => $fileImage,
+            ]);
+            
+            // simpan ke table cost
+            Cost::create([
+                'cost_category_id' => 1,
+                'to' => $user->id,
+                'nominal' => $request->nominal
+            ]);
+        
+
+        return redirect()->back()->with(['success' => 'Berhasil upload']);
+
+    }
+
+    public function ReportVoucher()
+    {
+        $gF = new GlobalProvider();
+        $voucherModel = new VoucherHistory();
+        $dataVoucher  = $voucherModel->getListMember();
+        $total_point_all  = collect($dataVoucher)->sum(function($q){
+            return $q->total_point;
+        });
+        $total_data_all  = collect($dataVoucher)->sum(function($q){
+            return $q->total_data;
+        });
+        $total_nominal_all  = collect($dataVoucher)->sum(function($q){
+            return $q->total_nominal;
+        });
+
+        $data = [];
+        $no = 1;
+        foreach ($dataVoucher as $val) {
+            $detailVoucher = DetailVoucherHistory::select('id','nominal','point','total_data','type','created_at')
+                            ->where('voucher_history_id', $val->voucher_id)
+                            ->get();
+            $total_point = collect($detailVoucher)->sum(function($q){
+                return $q->point;
+            });
+            $total_data = collect($detailVoucher)->sum(function($q){
+                return $q->total_data;
+            });
+            $total_nominal = collect($detailVoucher)->sum(function($q){
+                return $q->nominal;
+            });
+            
+            $data[] = [
+                'total_data' => $total_data,
+                'total_nominal' => $total_nominal,
+                'total_point' => $total_point,
+                'voucher_id' => $val->voucher_id,
+                'user_id' => $val->user_id,
+                'name' => $val->name,
+                'datapoint' => $detailVoucher
+            ];
+        }
+
+
+        return view('pages.admin.reward.report-voucher', compact('data','gF','no','total_point_all','total_data_all','total_nominal_all'));
     }
 }

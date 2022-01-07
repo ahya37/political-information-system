@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>LAPORAN VOUCHER REFERAL</title>
+        <title>ANGGOTA BERDASARKAN REFERAL </title>
     </head>
     <style>
             /** Define the margins of your page **/
@@ -65,11 +65,13 @@
 <body>
     <header>
         <h5>
-            LAPORAN VOUCHER REFERAL
+            LAPORAN ANGGOTA REFERAL
         </h5> 
         <hr>
     </header>
-   
+    <div style="margin-bottom: 2px">
+        <small>REFERAL   : {{ $user->name }}</small>
+    </div>
         <section align="justify">
             <table cellspacing='0'>
                 <thead>
@@ -87,7 +89,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                   {{-- @foreach ($members as $row)
+                   @foreach ($members as $row)
                    <tr>
                        <td>{{ $no++ }}</td>
                        <td>{{ $row->name }}</td>
@@ -100,7 +102,7 @@
                        <td>{{ $row->phone_number }}</td>
                        <td>{{ $row->whatsapp }}</td>
                    </tr>                       
-                   @endforeach --}}
+                   @endforeach
                 </tbody>
             </table>
         </section>
