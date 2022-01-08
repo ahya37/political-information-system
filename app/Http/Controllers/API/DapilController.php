@@ -38,4 +38,15 @@ class DapilController extends Controller
             return response()->json($listDistricts);
         }
     }
+
+    public function getListVillage()
+    {
+        $token = request()->token;
+        $districtId = request()->district_id;
+        $dapilModel = new Dapil();
+        if ($token == true) {
+            $listVillage = $dapilModel->getDataListVillage($districtId);
+            return response()->json($listVillage);
+        }
+    }
 }

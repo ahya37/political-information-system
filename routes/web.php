@@ -247,6 +247,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // target
         Route::get('/target','SettingController@listTarget')->name('admin-list-target');
+        Route::get('/rightchoose','SettingController@settingRightChoose')->name('admin-rightchoose');
+        Route::post('/saverightchoose','SettingController@SaveRightChooseVillage')->name('admin-rightchoose-save');
 
         // anggota potensial download
         Route::get('/by_referal/downloadpdfall/{user_id}','MemberController@memberByReferalAllDownloadPDF')->name('by-referal-downloadpdfall');

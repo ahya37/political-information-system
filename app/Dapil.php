@@ -77,6 +77,14 @@ class Dapil extends Model
         return $result;
     }
 
+    public function getDataListVillage($districtId)
+    {
+        $sql = "SELECT id, name from villages
+                where district_id = $districtId";
+        $result = DB::select($sql);
+        return $result;
+    }
+
     public function getDataDapilByDapilId($dapilId)
     {
         $sql = "SELECT a.id as dapil_id, a.name as dapil_name, b.name as regency from dapils as a

@@ -1,3 +1,96 @@
+const ctx = document.getElementById("myChart").getContext("2d");
+let coloR = [];
+let dynamicColors = function () {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    return "rgb(" + r + "," + g + "," + b + ")";
+};
+coloR.push(dynamicColors());
+const myChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+        labels: ["Iman", "Aman", "Uman", "Amin"],
+        datasets: [
+            {
+                label: "Persentasi",
+                data: [12, 19, 10, 8],
+                backgroundColor: [
+                    "rgba(255,99,132,1)",
+                    "rgba(54, 162, 235, 1)",
+                    "rgba(255, 206, 86, 1)",
+                    "rgba(75, 192, 192, 1)",
+                ],
+
+                borderWidth: 1,
+            },
+        ],
+    },
+    options: {
+        responsive: true,
+        scales: {
+            yAxes: [
+                {
+                    ticks: {
+                        beginAtZero: true,
+                    },
+                },
+            ],
+        },
+        plugins: {
+            datalabels: {
+                color: "black",
+                display: function (context) {
+                    return context.dataset.data[context.dataIndex] > 15;
+                },
+                font: {
+                    weight: "bold",
+                },
+                formatter: Math.round,
+            },
+        },
+        legend: false,
+    },
+});
+
+$("#listData").append(
+    ` <li>Iman</li>
+    <li>Aman</li>
+    <li>Uman</li>
+    <li>Amin</li>`
+);
+
+const pie = document.getElementById("inicanvas").getContext("2d");
+// tampilan chart
+const piechart = new Chart(pie, {
+    type: "pie",
+    data: {
+        // label nama setiap Value
+        labels: [
+            "Tokoh Masyarakat",
+            "Tokoh Ada",
+            "Tokoh Politik",
+            "Kepala Desa",
+        ],
+        datasets: [
+            {
+                // Jumlah Value yang ditampilkan
+                data: [12, 19, 10, 8],
+
+                backgroundColor: [
+                    "rgba(255,99,132,1)",
+                    "rgba(54, 162, 235, 1)",
+                    "rgba(255, 206, 86, 1)",
+                    "rgba(75, 192, 192, 1)",
+                ],
+            },
+        ],
+    },
+    options: {
+        legend: false,
+    },
+});
+
 $("#data").DataTable({
     processing: true,
     language: {

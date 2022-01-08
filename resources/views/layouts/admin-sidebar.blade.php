@@ -199,6 +199,13 @@
                     ><span>Daftar Target Anggota</span></a
                   >
                 </li>
+                <li class="nav-item">
+                  <a
+                    href="{{ route('admin-rightchoose') }}"
+                    class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/rightchoose')) ? 'active custom-active-color' : '' }}"
+                    ><span>Atur Hak Pilih</span></a>
+                  >
+                </li>
               </ul>
             </div>
 

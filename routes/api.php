@@ -170,6 +170,7 @@ Route::get('/dashboard/adminregional','TestController@testAdminRegionalVillage')
 Route::post('/getregencydapil','API\DapilController@getRegencyDapil');
 Route::post('/getlistdapil','API\DapilController@getListDapil');
 Route::post('/getlistdistrictdapil','API\DapilController@getListDistrict');
+Route::post('/getlistvillagetdapil','API\DapilController@getListVillage');
 
 // get kabkot untuk create event
 Route::post('addparticipantevent','Admin\EventController@storeAddMemberEventAjax');

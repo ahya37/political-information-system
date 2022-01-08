@@ -83,6 +83,12 @@
                                         </div> 
                                     </div>
                                     <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Potensi Jumlah Suara</label>
+                                        <div class="col-sm-6">
+                                        <input type="number" name="politic_potential" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label class="col-sm-4 col-form-label">Pernah Menjabat Sebagai :</label>
                                         <div class="col-sm-4">
                                             <select class="form-control" name="once_served" id="once_served" onchange="showDiv('once_served_other', this)">
@@ -147,9 +153,9 @@
                                         </div>
                                     </div>
                                      <div class="form-group row">
-                                        <label class="col-sm-12 col-form-label">Perolehan Suara</label>
+                                        <label class="col-sm-12 col-form-label">Perolehan Jumlah Suara</label>
                                         <div class="col-sm-6">
-                                        <input type="text" name="politic_member" class="form-control" placeholder="contoh: 2000">
+                                        <input type="number" name="politic_member" class="form-control" placeholder="contoh: 2000">
                                         </div>
                                     </div>
                                      <div class="form-group row">

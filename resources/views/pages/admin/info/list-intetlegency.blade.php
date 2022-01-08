@@ -13,7 +13,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Intelegensi Politik</h2>
+                <h2 class="dashboard-title">Daftar Intelegensi Politik [ON PROGRESS]</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
@@ -21,6 +21,29 @@
                 <div class="row mb-2">
                   <div class="col-12">
                     <a href="{{ route('admin-downloadfigureall') }}" class="btn btn-sm btn-sc-primary text-white">Download</a>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-6">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="col-12">
+                          <canvas anvas id="myChart"></canvas>
+                        </div>
+                        <div class="col-12">
+                          <ul id="listData">
+                           
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="card">
+                      <div class="card-body">
+                        <canvas id="inicanvas"></canvas>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="row">
@@ -65,5 +88,7 @@
 
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
+
 <script src="{{ asset('/js/list-intelegency.js') }}"></script>
 @endpush

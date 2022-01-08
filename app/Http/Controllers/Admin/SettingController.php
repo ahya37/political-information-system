@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Dapil;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\District;
 use App\Models\Province;
 use App\Models\Regency;
 use App\Models\Village;
+use App\RightChosseVillage;
 
 class SettingController extends Controller
 {
@@ -110,5 +112,36 @@ class SettingController extends Controller
             'data' => $data
         ];
         return $result;
+    }
+
+    public function settingRightChoose()
+    {
+        $dapils = new Dapil();
+        $dataDapils = $dapils->getRegencyDapil();
+        return view('pages.admin.setting.rightchoose', compact('dataDapils'));
+    }
+
+    public function SaveRightChooseVillage(Request $request)
+    {
+        $request->validate([
+            'value' => 'required|numeric'
+        ]);
+
+        $choose = RightChosseVillage::where('village_id', $request->village_id)->count();
+        if ($choose == 0) {
+            RightChosseVillage::create([
+                'village_id' => $request->village_id,
+                'choose' => $request->value
+            ]);
+
+            return redirect()->back()->with(['success' => 'Jumlah hak pilih telah disimpan']);
+        }else{
+            $update = RightChosseVillage::where('village_id', $request->village_id)->first();
+             $update->update([
+                'choose' => $request->value
+            ]);
+            return redirect()->back()->with(['success' => 'Jumlah hak pilih telah diubah']);
+        }
+
     }
 }

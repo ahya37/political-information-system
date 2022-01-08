@@ -29,6 +29,7 @@ class InformationController extends Controller
             'name' => $request->name,
             'village_id' => $request->village_id,
             'figure_id' => $request->figure_id,
+            'politic_potential' => $request->politic_potential,
             'figure_other' => $request->figure_id = '10' ? $request->fiugureOther : 'NULL',
             'no_telp' => $request->no_telp,
             'info_politic' => 'NULL',
@@ -64,7 +65,7 @@ class InformationController extends Controller
                             $gF = new GlobalProvider();
 
                             return '<div class="badge badge-warning">
-                                    '.$gF->decimalFormat($item->politic_member).'
+                                    '.$gF->decimalFormat($item->politic_potential).'
                                     </div>';
                         })
                         ->addColumn('action', function($item){
