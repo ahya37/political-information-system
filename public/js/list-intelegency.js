@@ -1,95 +1,293 @@
-const ctx = document.getElementById("myChart").getContext("2d");
-let coloR = [];
-let dynamicColors = function () {
-    var r = Math.floor(Math.random() * 255);
-    var g = Math.floor(Math.random() * 255);
-    var b = Math.floor(Math.random() * 255);
-    return "rgb(" + r + "," + g + "," + b + ")";
-};
-coloR.push(dynamicColors());
-const myChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-        labels: ["Iman", "Aman", "Uman", "Amin"],
-        datasets: [
-            {
-                label: "Persentasi",
-                data: [12, 19, 10, 8],
-                backgroundColor: [
-                    "rgba(255,99,132,1)",
-                    "rgba(54, 162, 235, 1)",
-                    "rgba(255, 206, 86, 1)",
-                    "rgba(75, 192, 192, 1)",
-                ],
+const selectArea = $("#selectArea");
+const selectListArea = $("#selectListArea");
+const selectDistrictId = $("#selectDistrictId");
+const selectVillageId = $("#selectVillageId");
+const myChart = $("#myChart");
 
-                borderWidth: 1,
-            },
-        ],
-    },
-    options: {
-        responsive: true,
-        scales: {
-            yAxes: [
-                {
-                    ticks: {
-                        beginAtZero: true,
+selectArea.hide();
+selectListArea.hide();
+selectDistrictId.hide();
+selectVillageId.hide();
+
+const selectProvince = document.getElementById("province");
+selectProvince.addEventListener("change", async function () {
+    try {
+        const selectProvinceValue = selectProvince.value;
+        if (selectProvinceValue !== "") {
+            const responseData = await getDapilRegency(selectProvinceValue);
+            selectArea.show();
+            selectArea.empty();
+            selectListArea.empty();
+            selectArea.append("<option value=''>-Pilih Daerah-</option>");
+            getDapilRegencyUi(responseData);
+        } else {
+            selectArea.hide();
+            selectListArea.hide();
+            selectDistrictId.hide();
+        }
+    } catch {}
+});
+
+function getDapilRegency(selectProvinceValue) {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    return fetch(`/api/dapilbyprovinceid/${selectProvinceValue}`).then(
+        (response) => {
+            return response.json();
+        }
+    );
+}
+
+function getDapilRegencyUi(responseData) {
+    let divHtmldapil = "";
+    responseData.forEach((m) => {
+        divHtmldapil += showDivHtmlDapil(m);
+    });
+    const divHtmldapilContainer = $("#selectArea");
+    divHtmldapilContainer.append(divHtmldapil);
+}
+function showDivHtmlDapil(m) {
+    return `<option value="${m.id}">${m.name}</option>`;
+}
+
+// get list dapil names
+selectArea.on("change", async function () {
+    try {
+        const selectAreaValue = $(this).children("option:selected").val();
+        if (selectAreaValue !== "") {
+            selectListArea.show();
+            const listDapils = await getDapilNames(selectAreaValue);
+            selectListArea.empty();
+            // selectDistrictId.empty();
+            selectListArea.append("<option value=''>-Pilih Dapil-</option>");
+            getDapilNamesUi(listDapils);
+        } else {
+            selectListArea.hide();
+        }
+    } catch {}
+});
+
+function getDapilNames(selectAreaValue) {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    return fetch(`/api/getlistdapil`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({ token: CSRF_TOKEN, regencyId: selectAreaValue }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+function getDapilNamesUi(listDapils) {
+    let divListDapil = "";
+    listDapils.forEach((m) => {
+        divListDapil += showDivHtmlListDapil(m);
+    });
+    const divListDapilContainer = $("#selectListArea");
+    divListDapilContainer.append(divListDapil);
+}
+function showDivHtmlListDapil(m) {
+    return `<option value="${m.id}">${m.name}</option>`;
+}
+
+selectListArea.on("change", async function () {
+    const selectListAreaValue = $(this).children("option:selected").val();
+    try {
+        const listDistricts = await getListDistrict(selectListAreaValue);
+        if (selectListAreaValue !== "") {
+            selectDistrictId.show();
+            selectDistrictId.empty();
+            selectDistrictId.append(
+                "<option value=''>-Pilih Kecamatan-</option>"
+            );
+            getListDistrictUi(listDistricts);
+        } else {
+            selectDistrictId.hide();
+        }
+    } catch {}
+});
+function getListDistrict(selectListAreaValue) {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    return fetch(`/api/getlistdistrictdapil`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({
+            token: CSRF_TOKEN,
+            dapilId: selectListAreaValue,
+        }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+function getListDistrictUi(listDistricts) {
+    let divListDistrict = "";
+    listDistricts.forEach((m) => {
+        divListDistrict += showDivHtmlListDistrict(m);
+    });
+    const divListDistrictContainer = $("#selectDistrictId");
+    divListDistrictContainer.append(divListDistrict);
+}
+
+function showDivHtmlListDistrict(m) {
+    return `<option value="${m.district_id}">${m.name}</option>`;
+}
+
+selectDistrictId.on("change", async function () {
+    const selectDistrictValue = $(this).children("option:selected").val();
+    try {
+        const dataVillages = await getListVillage(selectDistrictValue);
+        selectVillageId.show();
+        selectVillageId.empty();
+        selectVillageId.append("<option value=''>-Pilih Desa-</option>");
+        getListVillageUi(dataVillages);
+    } catch {}
+});
+function getListVillage(selectDistrictValue) {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    return fetch(`/api/getlistvillagetdapil`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({
+            token: CSRF_TOKEN,
+            district_id: selectDistrictValue,
+        }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+function getListVillageUi(dataVillages) {
+    let divVillage = "";
+    dataVillages.forEach((m) => {
+        divVillage += showDivHtmlVillage(m);
+    });
+    const divVillageContainer = $("#selectVillageId");
+    divVillageContainer.append(divVillage);
+}
+function showDivHtmlVillage(m) {
+    return `<option value="${m.id}">${m.name}</option>`;
+}
+
+selectVillageId.on("change", async function () {
+    const selectVillageValue = $(this).children("option:selected").val();
+    $.ajax({
+        url: "/api/intelegency/byvillage" + "/" + selectVillageValue,
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#Loadinputer").removeClass("d-none");
+        },
+        success: function (data) {
+            if (data.data.length === 0) {
+            } else {
+                $("#myChart").remove();
+                $("#divMyChart").append('<canvas id="myChart"></canvas>');
+                let coloR = [];
+                let dynamicColors = function () {
+                    let r = Math.floor(Math.random() * 255);
+                    let g = Math.floor(Math.random() * 255);
+                    let b = Math.floor(Math.random() * 255);
+                    return "rgb(" + r + "," + g + "," + b + ")";
+                };
+                for (let i in data.data) {
+                    coloR.push(dynamicColors());
+                }
+
+                let inputer = document.getElementById("myChart");
+                let inputerChart = new Chart(inputer, {
+                    type: "bar",
+                    data: {
+                        labels: data.data.cat_inputer_label,
+                        datasets: [
+                            {
+                                data: data.data.cat_inputer_data,
+                                backgroundColor: coloR,
+                            },
+                        ],
                     },
-                },
-            ],
+                    options: {
+                        scales: {
+                            yAxes: [
+                                {
+                                    ticks: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            ],
+                        },
+                        legend: false,
+                    },
+                });
+
+                let listData = "";
+                for (let i in data.listdata) {
+                    listData += `<tr>
+                                    <td>
+                                        <li class="fa fa-rectangle-landscape" style="color:${coloR[i]};"></li> 
+                                    </td>
+                                    <td>${data.listdata[i].name}</td>
+                                    <td>/</td>
+                                    <td>${data.listdata[i].politic_potential}</td>
+                                    <td>/</td>
+                                    <td>${data.listdata[i].percent} % </td>
+                                </tr>`;
+                }
+                $("#listData").remove();
+                $("#divListData").append('<ul  id="listData"></ul>');
+                $("#listData").append(listData);
+
+                console.log("listData: ", listData);
+            }
         },
-        plugins: {
-            datalabels: {
-                color: "black",
-                display: function (context) {
-                    return context.dataset.data[context.dataIndex] > 15;
-                },
-                font: {
-                    weight: "bold",
-                },
-                formatter: Math.round,
-            },
+        complete: function () {
+            $("#Loadinputer").addClass("d-none");
         },
-        legend: false,
-    },
+    });
+
+    $.ajax({
+        url: "/api/intelegency/byvillage/figure" + "/" + selectVillageValue,
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#Loadjobs").removeClass("d-none");
+        },
+        success: function (data) {
+            $("#figur").remove();
+            $("#divFigur").append('<canvas id="figur"></canvas>');
+            const label = data.chart_figure_label;
+            const value = data.chart_figure_data;
+            const colorFigure = data.color_figure;
+            const figurProfesi = document.getElementById("figur");
+
+            const piechart = new Chart(figurProfesi, {
+                type: "pie",
+                data: {
+                    labels: label,
+                    datasets: [
+                        {
+                            data: value,
+                            backgroundColor: colorFigure,
+                        },
+                    ],
+                },
+                options: {
+                    legend: false,
+                },
+            });
+        },
+        complete: function () {
+            $("#Loadjobs").addClass("d-none");
+        },
+    });
 });
 
-$("#listData").append(
-    ` <li>Iman</li>
-    <li>Aman</li>
-    <li>Uman</li>
-    <li>Amin</li>`
-);
-
-const pie = document.getElementById("inicanvas").getContext("2d");
-// tampilan chart
-const piechart = new Chart(pie, {
-    type: "pie",
-    data: {
-        // label nama setiap Value
-        labels: [
-            "Tokoh Masyarakat",
-            "Tokoh Ada",
-            "Tokoh Politik",
-            "Kepala Desa",
-        ],
-        datasets: [
-            {
-                // Jumlah Value yang ditampilkan
-                data: [12, 19, 10, 8],
-
-                backgroundColor: [
-                    "rgba(255,99,132,1)",
-                    "rgba(54, 162, 235, 1)",
-                    "rgba(255, 206, 86, 1)",
-                    "rgba(75, 192, 192, 1)",
-                ],
-            },
-        ],
-    },
-    options: {
-        legend: false,
-    },
-});
+function getFrafikBar() {}
 
 $("#data").DataTable({
     processing: true,
@@ -158,4 +356,13 @@ function onDetail(id) {
             `);
         },
     });
+}
+
+// funsgsi efect loader
+function BeforeSend(idLoader) {
+    $("#" + idLoader + "").removeClass("d-none");
+}
+
+function Complete(idLoader) {
+    $("#" + idLoader + "").addClass("d-none");
 }

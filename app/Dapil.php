@@ -103,5 +103,25 @@ class Dapil extends Model
         return $result;
     }
 
+    public function getProvinceDapil()
+    {
+        $sql = "SELECT a.id, a.name from provinces as a
+                join regencies as b on a.id = b.province_id
+                join dapils as c on b.id = c.regency_id 
+                group by a.id, a.name";
+        $result = DB::select($sql);
+        return $result;
+    }
+
+    public function getRegencyDapilByProvince($id)
+    {
+        $sql = "SELECT a.id, a.name from regencies as a
+                join dapils as b on a.id = b.regency_id
+                where a.province_id = $id
+                group by a.id, a.name order by a.name asc";
+        $result = DB::select($sql);
+        return $result;
+    }
+
 
 }

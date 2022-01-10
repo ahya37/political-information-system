@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use PDF;
+use App\Job;
 use App\User;
+use App\Dapil;
 use App\Figure;
+use App\Referal;
 use App\DetailFigure;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Village;
+use Illuminate\Http\Request;
 use App\Providers\GlobalProvider;
+use App\Providers\GrafikProvider;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
-use PDF;
 
 class InformationController extends Controller
 {
@@ -47,7 +51,9 @@ class InformationController extends Controller
 
     public function listIntelegency()
     {
-        return view('pages.admin.info.list-intetlegency');
+        $dapil = new Dapil();
+        $provinceDapil = $dapil->getProvinceDapil();
+        return view('pages.admin.info.list-intetlegency', compact('provinceDapil'));
     }
 
     public function dtListIntelegency()
@@ -210,4 +216,100 @@ class InformationController extends Controller
         $pdf = PDF::LoadView('pages.admin.report.figurebyvillage', compact('data','no','village'));
         return $pdf->download('LAPORAN-TOKOH-DESA: '.$village->name.'.pdf');
     }
+
+    public function getGrafikIntelegencyVillage($village_id)
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+        $gF = new GlobalProvider();
+
+        $figure = new DetailFigure();
+        $figure   = $figure->getFigureVillage($village_id);
+
+        if ($figure == null) {
+            $data = [
+                'cat_inputer_label' => [],
+                'cat_inputer_data' => [],
+                'color_inputer' => [],
+            ];
+            
+            $listData = [];
+            foreach ($figure as  $val) {
+                $listData[] = [
+                    'name' =>[],
+                    'politic_potential' => [],
+                    'percent' => []
+                ];
+            }
+
+             $result = [
+                'data' => $data,
+                'listdata' => $listData
+            ];
+
+            return response()->json($result);
+        }else{
+            // get fungsi grafik 
+            $ChartInputer = $GrafikProvider->getGrafikInputer($figure);
+            $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+            $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+            $color_inputer = $ChartInputer['colors'];
+    
+            $data = [
+                'cat_inputer_label' => $cat_inputer_label,
+                'cat_inputer_data' => $cat_inputer_data,
+                'color_inputer' => $color_inputer
+            ];
+
+            $listData = [];
+            foreach ($figure as  $val) {
+                $listData[] = [
+                    'name' =>$val->name,
+                    'politic_potential' => $gF->decimalFormat($val->politic_potential),
+                    'percent' => $gF->persen(($val->politic_potential / $val->choose) * 100)
+                ];
+            }
+
+            $result = [
+                'data' => $data,
+                'listdata' => $listData
+            ];
+            return response()->json($result);
+        }
+
+
+    }
+
+     public function getFigureGrafikVillage($village_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $figureModel  = new DetailFigure();
+        // $most_jobs = $figureModel->getMostJobs();
+        $figure      = $figureModel->getProfesiFigureVillage($village_id);
+        if ($figure == null) {
+                    $data = [
+
+                    'chart_figure_label' => [],
+                    'chart_figure_data'  => [],
+                    'color_figure' => [],
+                ];
+                return response()->json($data);
+        }else{
+            $ChartJobs = $GrafikProvider->getGrafikJobs($figure);
+            $chart_figure_label= $ChartJobs['chart_jobs_label'];
+            $chart_figure_data= $ChartJobs['chart_jobs_data'];
+            $color_figure    = $ChartJobs['color_jobs'];
+    
+            $data = [
+    
+                'chart_figure_label' => $chart_figure_label,
+                'chart_figure_data'  => $chart_figure_data,
+                'color_figure' => $color_figure,
+            ];
+            return response()->json($data);
+
+        }
+
+    }
+
 }

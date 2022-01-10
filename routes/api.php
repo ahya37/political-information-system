@@ -167,6 +167,7 @@ Route::post('/dashboard/inputbymonthvillage','API\DashboardController@inputByMou
 Route::get('/dashboard/adminregional','TestController@testAdminRegionalVillage');
 
 // get daerah kabupaten yang sudah tersimpan di tb dapils
+Route::get('/dapilbyprovinceid/{id}','API\DapilController@getRegencyDapilByProvince');
 Route::post('/getregencydapil','API\DapilController@getRegencyDapil');
 Route::post('/getlistdapil','API\DapilController@getListDapil');
 Route::post('/getlistdistrictdapil','API\DapilController@getListDistrict');
@@ -217,3 +218,7 @@ Route::get('/admin/member/genage/{user_id}','API\DashboardController@genAgeAdmin
 Route::get('/admin/member/inputer/{user_id}','API\DashboardController@getInputerAdminMember');
 Route::get('/admin/member/referal/{user_id}','API\DashboardController@getRegefalAdminMember');
 Route::get('/admin/member/{daterange}/{user_id}','API\DashboardController@memberReportPerMountAdminMember');
+
+// GRAFIK INTEGENCY
+Route::get('/intelegency/byvillage/{village_id}','Admin\InformationController@getGrafikIntelegencyVillage');
+Route::get('/intelegency/byvillage/figure/{village_id}','Admin\InformationController@getFigureGrafikVillage');

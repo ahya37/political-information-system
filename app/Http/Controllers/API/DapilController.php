@@ -18,6 +18,13 @@ class DapilController extends Controller
         }
     }
 
+    public function getRegencyDapilByProvince($id)
+    {
+            $dapilModel = new Dapil();
+            $dapilRegency = $dapilModel->getRegencyDapilByProvince($id);
+            return response()->json($dapilRegency);
+    }
+
     public function getListDapil()
     {
         $token = request()->token;

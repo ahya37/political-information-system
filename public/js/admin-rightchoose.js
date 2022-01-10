@@ -5,7 +5,7 @@ const idValue = $("#idValue");
 // selectArea.hide();
 selectListArea.hide();
 selectDistrictId.hide();
-selectVillageId = $("#selectVillageId");
+const selectVillageId = $("#selectVillageId");
 selectVillageId.hide();
 idValue.hide();
 
@@ -98,7 +98,8 @@ selectDistrictId.on("change", async function () {
     try {
         const dataVillages = await getListVillage(selectDistrictValue);
         selectVillageId.show();
-        selectVillageId.append("<option value=''>-Pilih Kecamatan-</option>");
+        selectVillageId.empty();
+        selectVillageId.append("<option value=''>-Pilih Desa-</option>");
         getListVillageUi(dataVillages);
     } catch {}
 });
