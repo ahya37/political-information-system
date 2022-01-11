@@ -27,6 +27,8 @@ Route::post('searchregencyById', 'API\LocationController@getSearchRegencyById');
 Route::post('searchdistrictById', 'API\LocationController@getSearchDistrictById');
 Route::post('searchVillageById', 'API\LocationController@getSearchVillageById');
 
+Route::get('selectvillage', 'API\LocationController@getVillageSelect');
+
 Route::post('getdistricts', 'API\LocationController@getDistricts');
 Route::post('getvillages', 'API\LocationController@getVillages');
 Route::post('getmemberbyregency', 'API\MemberController@getMemberByRegency');

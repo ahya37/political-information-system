@@ -278,6 +278,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         // Bukti TF Voucher
         Route::post('voucher/tf','RewardController@uploadTFVoucher')->name('admin-vouvhertf-upload');
         Route::get('voucher/report','RewardController@ReportVoucher')->name('admin-voucher-report');
+       
+        // Cost 
+        Route::get('cost/create','CostController@create')->name('admin-create-cost');
+        Route::post('cost/save','CostController@store')->name('admin-create-store');
     });
 });
 

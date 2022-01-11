@@ -227,14 +227,13 @@ class InformationController extends Controller
         $figureModel = new DetailFigure();
         $figure   = $figureModel->getFigureVillage($village_id);
         $choose   = $figureModel->getChooseVillage($village_id);
-        $totalChoose = $choose->choose ?? '';
+        $totalChoose = $choose == null ? 0 : $choose->choose;
 
         $totalPotential = collect($figure)->sum(function($q){
-            return $q->politic_potential ?? '';
+            return $q->politic_potential ?? 0;
         });
-
-        $potentialPercent = $gF->persen(($totalPotential / $totalChoose) * 100);
-
+        
+        $potentialPercent = $choose == null ? 0 : $gF->persen(($totalPotential / $totalChoose) * 100);
         if ($figure == null) {
 
             $data = [
@@ -294,7 +293,7 @@ class InformationController extends Controller
                 'data' => $data,
                 'listdata' => $listData,
                 'totalPotential' => $gF->decimalFormat($totalPotential),
-                'potentialPercent' => $gF->persen($potentialPercent),
+                'potentialPercent' => $gF->persen($potentialPercent) ?? 0,
                 'totalChoose' => $gF->decimalFormat($totalChoose),
             ];
             return response()->json($result);

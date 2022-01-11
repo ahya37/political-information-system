@@ -241,4 +241,14 @@ class Village extends Model
                 where e.admin_user_id = $user_id";
         return collect(\DB::select($sql))->first();
     }
+
+    public function getVillagesSelect($params)
+    {
+        $sql = "SELECT a.id, a.name as village, b.name as district, c.name as regency, d.name as province from villages as a
+            join districts as b on b.id = a.district_id 
+            join regencies as c on c.id = b.regency_id 
+            join provinces as d on c.province_id = d.id
+            where a.name like '%$params%' and  d.id  = 36 or d.id =  31 order by d.id desc ";
+        return DB::select($sql);
+    }
 }

@@ -143,4 +143,22 @@ class LocationController extends Controller
 
     }
 
+    public function getVillageSelect()
+    {
+        $villageModel = new Village();
+        $params       = request()->input('search');
+        $village = $villageModel->getVillagesSelect($params);
+
+        $list = array();
+        $key=0;
+
+        foreach ($village as $value) {
+            $list[$key]['id'] = $value->id;
+            $list[$key]['text'] = $value->village.", KEC:  $value->district".", $value->regency".", $value->province";
+            $key++;
+        }
+
+        return response()->json($list);
+    }
+
 }
