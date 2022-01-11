@@ -4,15 +4,32 @@ const selectDistrictId = $("#selectDistrictId");
 const selectVillageId = $("#selectVillageId");
 const myChart = $("#myChart");
 
-selectArea.hide();
 selectListArea.hide();
 selectDistrictId.hide();
 selectVillageId.hide();
 
-const selectProvince = document.getElementById("province");
-selectProvince.addEventListener("change", async function () {
+// const selectProvince = document.getElementById("province");
+// selectProvince.addEventListener("change", async function () {
+//     try {
+//         const selectProvinceValue = 36;
+//         if (selectProvinceValue !== "") {
+//             const responseData = await getDapilRegency(selectProvinceValue);
+//             selectArea.show();
+//             selectArea.empty();
+//             selectListArea.empty();
+//             selectArea.append("<option value=''>-Pilih Daerah-</option>");
+//             getDapilRegencyUi(responseData);
+//         } else {
+//             selectArea.hide();
+//             selectListArea.hide();
+//             selectDistrictId.hide();
+//         }
+//     } catch {}
+// });
+
+async function getLisDapil() {
     try {
-        const selectProvinceValue = selectProvince.value;
+        const selectProvinceValue = 36;
         if (selectProvinceValue !== "") {
             const responseData = await getDapilRegency(selectProvinceValue);
             selectArea.show();
@@ -26,8 +43,8 @@ selectProvince.addEventListener("change", async function () {
             selectDistrictId.hide();
         }
     } catch {}
-});
-
+}
+getLisDapil();
 function getDapilRegency(selectProvinceValue) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     return fetch(`/api/dapilbyprovinceid/${selectProvinceValue}`).then(

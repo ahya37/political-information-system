@@ -17,7 +17,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Intelegensi Politik [ON PROGRESS]</h2>
+                <h2 class="dashboard-title">Daftar Intelegensi Politik</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
@@ -32,14 +32,14 @@
                     <div class="card">
                       <div class="card-body">
                         <div class="row">
-                          <div class="col-3">
+                          {{-- <div class="col-3">
                              <select name="level" id="province" required class="form-control" required>
                                <option value="">-Pilih Provinsi-</option>
                                @foreach ($provinceDapil as $item)
                                <option value="{{ $item->id }}">{{ $item->name }}</option>
                                @endforeach
                               </select>
-                          </div>
+                          </div> --}}
                           <div class="col-3">
                              <div class="form-group">
                                         <div class="row">
