@@ -186,6 +186,10 @@ selectVillageId.on("change", async function () {
         success: function (data) {
             if (data.data.length === 0) {
             } else {
+                $("#totalChoose").remove();
+                $("#divTotalChoose").append(
+                    `<div id="totalChoose" class="text-white">Jumlah Hak Pilih : ${data.totalChoose} Suara</div>`
+                );
                 $("#myChart").remove();
                 $("#divMyChart").append('<canvas id="myChart"></canvas>');
                 let coloR = [];
@@ -231,15 +235,23 @@ selectVillageId.on("change", async function () {
                                     <td>
                                         <li class="fa fa-rectangle-landscape" style="color:${coloR[i]};"></li> 
                                     </td>
-                                    <td>${data.listdata[i].name}</td>
-                                    <td>/</td>
-                                    <td>${data.listdata[i].politic_potential}</td>
-                                    <td>/</td>
-                                    <td>${data.listdata[i].percent} % </td>
-                                </tr>`;
+                                    <td>
+                                    <a href="/admin/info/detalfigure/${data.listdata[i].id}">
+                                    ${data.listdata[i].name}
+                                    </a>
+                                    </td>
+                                    <td align="right">${data.listdata[i].politic_potential}</td>
+                                    <td align="right">${data.listdata[i].percent} % </td>
+                                </tr>
+
+                                `;
                 }
                 $("#listData").remove();
-                $("#divListData").append('<ul  id="listData"></ul>');
+                $("#listFoot").remove();
+                $("#listDataHead").remove();
+                $("#divListData").append(
+                    `<thead id="listDataHead"><tr><th></th><th>Nama</th><th>Potensi Suara</th><th>Persentasi</th></tr></thead> <tbody id="listData"></tbody><tfoot id="listFoot"><tr><td><b>Jumlah</b></td><td></td><td align="right"><b>${data.totalPotential}</b></td><td align="right"><b>${data.potentialPercent}</b> %</td></tr></tfoot>`
+                );
                 $("#listData").append(listData);
 
                 console.log("listData: ", listData);
@@ -276,9 +288,6 @@ selectVillageId.on("change", async function () {
                         },
                     ],
                 },
-                options: {
-                    legend: false,
-                },
             });
         },
         complete: function () {
@@ -286,49 +295,24 @@ selectVillageId.on("change", async function () {
         },
     });
 });
-
-function getFrafikBar() {}
-
-$("#data").DataTable({
-    processing: true,
-    language: {
-        processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
-    },
-    serverSide: true,
-    ordering: true,
-    ajax: {
-        url: `/admin/info/dtintelegency`,
-    },
-    columns: [
-        { data: "name", name: "name" },
-        { data: "address", name: "address" },
-        { data: "figure.name", name: "figure.name" },
-        { data: "potensi", name: "potensi" },
-        { data: "action", name: "action" },
-    ],
-});
-
-// list data di akun anggota
-const code = $("#code").val();
-$("#list").DataTable({
-    processing: true,
-    language: {
-        processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
-    },
-    serverSide: true,
-    ordering: true,
-    ajax: {
-        url: `/api/user/member/info/dtintelegency`,
-        type: "POST",
-        data: { code: code },
-    },
-    columns: [
-        { data: "name", name: "name" },
-        { data: "address", name: "address" },
-        { data: "figure.name", name: "figure.name" },
-        { data: "action", name: "action" },
-    ],
-});
+// $("#data").DataTable({
+//     processing: true,
+//     language: {
+//         processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+//     },
+//     serverSide: true,
+//     ordering: true,
+//     ajax: {
+//         url: `/admin/info/dtintelegencyvillage/${selectVillageValue}`,
+//     },
+//     columns: [
+//         { data: "name", name: "name" },
+//         { data: "address", name: "address" },
+//         { data: "figure.name", name: "figure.name" },
+//         { data: "potensi", name: "potensi" },
+//         { data: "action", name: "action" },
+//     ],
+// });
 
 function onDetail(id) {
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");

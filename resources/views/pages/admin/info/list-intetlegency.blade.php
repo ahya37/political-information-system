@@ -86,6 +86,17 @@
                   </div>
                 </div>
                 <div class="row mb-2">
+                  <div class="col-4">
+                    <div class="card">
+                      <div class="card-body bg-info">
+                        <div id="divTotalChoose">
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-2">
                   <div class="col-7">
                     <div class="card">
                       <div class="card-body">
@@ -97,8 +108,7 @@
                             </div>
                         </div>
                         <div class="col-12">
-                          <div id="divListData"></div>
-                          <table id="listData" class="table table-sm table-striped">
+                          <table  id="divListData" class="table table-sm table-striped">
                           </table>
                         </div>
                       </div>

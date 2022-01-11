@@ -30,6 +30,27 @@ class GrafikProvider extends ServiceProvider
     {
         
     }
+
+    public function getGrafikIntelegency($inputer)
+    {
+        $gF = new GlobalProvider();
+
+        $cat_inputer = [];
+        foreach($inputer as $val){
+            $cat_inputer['label'][] = $val->name;
+            $cat_inputer['data'][]  = $gF->persen($val->total_data);
+        }
+        $cat_inputer_label = collect($cat_inputer['label']); 
+        $colors            = $cat_inputer_label->map(function($item){return $rand_color = '#' . substr(md5(mt_rand()),0,6);});
+
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer['label'],
+            'cat_inputer_data' => $cat_inputer['data'],
+            'colors' => $colors
+        ];
+        return $data;
+    }
     
     public function getGrafikInputer($inputer)
     {

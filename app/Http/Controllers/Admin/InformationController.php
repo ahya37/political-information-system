@@ -56,10 +56,12 @@ class InformationController extends Controller
         return view('pages.admin.info.list-intetlegency', compact('provinceDapil'));
     }
 
-    public function dtListIntelegency()
+    public function dtListIntelegency($village_id)
     {
        
-        $detailFigure = DetailFigure::with(['village.district.regency.province','figure'])->get();
+        $detailFigure = DetailFigure::with(['village.district.regency.province','figure'])
+                        ->where('village_id', $village_id)
+                        ->get();
         if (request()->ajax()) 
         {
             return DataTables::of($detailFigure)
@@ -219,14 +221,22 @@ class InformationController extends Controller
 
     public function getGrafikIntelegencyVillage($village_id)
     {
-        $referalModel = new Referal();
         $GrafikProvider = new GrafikProvider();
         $gF = new GlobalProvider();
 
-        $figure = new DetailFigure();
-        $figure   = $figure->getFigureVillage($village_id);
+        $figureModel = new DetailFigure();
+        $figure   = $figureModel->getFigureVillage($village_id);
+        $choose   = $figureModel->getChooseVillage($village_id);
+        $totalChoose = $choose->choose ?? '';
+
+        $totalPotential = collect($figure)->sum(function($q){
+            return $q->politic_potential ?? '';
+        });
+
+        $potentialPercent = $gF->persen(($totalPotential / $totalChoose) * 100);
 
         if ($figure == null) {
+
             $data = [
                 'cat_inputer_label' => [],
                 'cat_inputer_data' => [],
@@ -236,43 +246,56 @@ class InformationController extends Controller
             $listData = [];
             foreach ($figure as  $val) {
                 $listData[] = [
+                    'id' => [],
                     'name' =>[],
                     'politic_potential' => [],
-                    'percent' => []
+                    'percent' => [],
+
                 ];
             }
 
+
              $result = [
                 'data' => $data,
-                'listdata' => $listData
+                'listdata' => $listData,
+                'totalPotential' => 0,
+                'potentialPercent' => 0,
+                'totalChoose' => 0
             ];
 
             return response()->json($result);
         }else{
             // get fungsi grafik 
-            $ChartInputer = $GrafikProvider->getGrafikInputer($figure);
+            $ChartInputer = $GrafikProvider->getGrafikIntelegency($figure);
             $cat_inputer_label = $ChartInputer['cat_inputer_label'];
             $cat_inputer_data = $ChartInputer['cat_inputer_data'];
             $color_inputer = $ChartInputer['colors'];
+
     
             $data = [
                 'cat_inputer_label' => $cat_inputer_label,
                 'cat_inputer_data' => $cat_inputer_data,
-                'color_inputer' => $color_inputer
+                'color_inputer' => $color_inputer,
             ];
+
 
             $listData = [];
             foreach ($figure as  $val) {
                 $listData[] = [
+                    'id' => $val->id,
                     'name' =>$val->name,
                     'politic_potential' => $gF->decimalFormat($val->politic_potential),
-                    'percent' => $gF->persen(($val->politic_potential / $val->choose) * 100)
+                    'percent' => $gF->persen($val->total_data),
+
                 ];
             }
 
             $result = [
                 'data' => $data,
-                'listdata' => $listData
+                'listdata' => $listData,
+                'totalPotential' => $gF->decimalFormat($totalPotential),
+                'potentialPercent' => $gF->persen($potentialPercent),
+                'totalChoose' => $gF->decimalFormat($totalChoose),
             ];
             return response()->json($result);
         }

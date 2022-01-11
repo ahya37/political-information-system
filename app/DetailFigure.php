@@ -28,13 +28,13 @@ class DetailFigure extends Model
 
     public function getFigureVillage($village_id)
     {
-        $sql = "SELECT a.name, a.politic_potential, c.choose,
+        $sql = "SELECT a.id, a.name, a.politic_potential, c.choose,
                 SUM(a.politic_potential / c.choose ) * 100 as total_data 
                 from detail_figure as a 
                 join villages as b on a.village_id = b.id
                 left join right_to_choose_village as c on b.id = c.village_id
                 where b.id  = $village_id
-                GROUP  BY a.name, a.politic_potential, c.choose";
+                GROUP  BY a.id, a.name, a.politic_potential, c.choose";
         return DB::select($sql);
     }
 
@@ -45,5 +45,13 @@ class DetailFigure extends Model
                 where b.village_id = $village_id
                 group by a.name";
         return DB::select($sql);
+    }
+
+    public function getChooseVillage($village_id)
+    {
+        $sql = "SELECT b.name as village, a.choose from right_to_choose_village as a
+                join villages as b on a.village_id = b.id
+                where a.village_id  = $village_id";
+        return collect(\ DB::select($sql))->first();
     }
 }

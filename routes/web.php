@@ -268,7 +268,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/info/intelegency','InformationController@formIntelegencyPolitic')->name('admin-intelegency');
         Route::post('/info/saveintelegency','InformationController@saveIntelegencyPolitic')->name('admin-saveintelegency');
         Route::get('/info/listintelegency','InformationController@listIntelegency')->name('admin-listintelegency');
-        Route::get('/info/dtintelegency','InformationController@dtListIntelegency');
+        Route::get('/info/dtintelegencyvillage/{village_id}','InformationController@dtListIntelegency');
         Route::get('/info/detalfigure/{id}','InformationController@detailFigure')->name('admin-detailfigure');
         
         // intelegency Pdf
