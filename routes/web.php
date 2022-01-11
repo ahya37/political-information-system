@@ -280,8 +280,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('voucher/report','RewardController@ReportVoucher')->name('admin-voucher-report');
        
         // Cost 
-        Route::get('cost/create','CostController@create')->name('admin-create-cost');
-        Route::post('cost/save','CostController@store')->name('admin-create-store');
+        Route::get('cost/create','CostController@create')->name('admin-cost-cost');
+        Route::post('cost/save','CostController@store')->name('admin-cost-store');
+        Route::post('forecast/save','CostController@addForecast')->name('admin-forecast-store');
+        Route::post('forecastdesc/save','CostController@addForecastDesc')->name('admin-forecastdesc-store');
     });
 });
 

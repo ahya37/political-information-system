@@ -154,7 +154,7 @@ class LocationController extends Controller
 
         foreach ($village as $value) {
             $list[$key]['id'] = $value->id;
-            $list[$key]['text'] = $value->village.", KEC:  $value->district".", $value->regency".", $value->province";
+            $list[$key]['text'] =  $value->member.", DS. $value->village". ", KEC. $value->district".", $value->regency";
             $key++;
         }
 

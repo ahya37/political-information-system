@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-7 col-sm-12">
                       @include('layouts.message')
-                    <form action="{{ route('admin-create-store') }}" id="register" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin-cost-store') }}" id="register" method="POST" enctype="multipart/form-data">
                       @csrf
                       <div class="card">
                         <div class="card-body">
@@ -51,7 +51,7 @@
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                     @endforeach
                                                 </select>
-                                                <a href="#"> + Tambah Perkiraan</a>
+                                                <a href="#" data-toggle="modal" data-target="#Perkiraan"> + Tambah Perkiraan</a>
                                             </div>
                                         </div>
                                     </div>                                       
@@ -65,16 +65,16 @@
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                     @endforeach
                                                 </select>
-                                                <a href="#"> + Tambah Uraian</a>
+                                                <a href="#" data-toggle="modal" data-target="#Uraian"> + Tambah Uraian</a>
                                             </div>
                                         </div>
                                     </div>                                       
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
-                                                <label>Desa</label>
-                                                <select name="village_id" id="village" class="form-control select2">
-                                                   <option value="">- pilih Desa -</option>
+                                                <label>Penerima</label>
+                                                <select name="user_id" id="village" class="form-control select2">
+                                                   <option value="">- pilih Penerima -</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -107,6 +107,55 @@
             </div>
           </div>
 @endsection
+@push('prepend-script')
+    <div class="modal fade" id="Perkiraan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Perkiraan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form action="{{ route('admin-forecast-store') }}" method="POST">
+            @csrf
+              <div class="form-group">
+                  <input type="text" name="name" required class="form-control">
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btns-sm btn-sc-primary text-white">Simpan</button>
+              </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <div class="modal fade" id="Uraian" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Uraian</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form action="{{ route('admin-forecastdesc-store') }}" method="POST">
+            @csrf
+              <div class="form-group">
+                  <input type="text" name="name" required class="form-control">
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btns-sm btn-sc-primary text-white">Simpan</button>
+              </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+@endpush
 
 @push('addon-script')
 <script src="{{asset('assets/select2/dist/js/select2.min.js')}}"></script>

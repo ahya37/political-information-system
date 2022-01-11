@@ -220,7 +220,7 @@
               <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
                   <a
-                    href="{{ route('admin-create-cost') }}"
+                    href="{{ route('admin-cost-cost') }}"
                     class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('cost/create')) ? 'active custom-active-color' : '' }}"
                     ><span>Tambah Pengeluaran</span></a
                   >
