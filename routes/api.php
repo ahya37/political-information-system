@@ -224,3 +224,6 @@ Route::get('/admin/member/{daterange}/{user_id}','API\DashboardController@member
 // GRAFIK INTEGENCY
 Route::get('/intelegency/byvillage/{village_id}','Admin\InformationController@getGrafikIntelegencyVillage');
 Route::get('/intelegency/byvillage/figure/{village_id}','Admin\InformationController@getFigureGrafikVillage');
+
+// Cost
+Route::get('/cost/list','Admin\CostController@getDataCost');

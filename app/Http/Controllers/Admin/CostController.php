@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Cost;
 use App\CostLess;
 use App\Forecast;
 use App\ForecastDesc;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Providers\GlobalProvider;
+use Carbon\Carbon;
 
 class CostController extends Controller
 {
@@ -55,5 +58,53 @@ class CostController extends Controller
         ]);
 
         return redirect()->back()->with(['success' => 'Uraian telah tersimpan']);
+    }
+
+    public function listCostPolitic()
+    {
+         $costModel = new Cost();
+         $cost      = $costModel->getDataCost();
+         $total     = collect($cost)->sum(function($q){
+             return $q->nominal;
+         });
+
+         $gF = new GlobalProvider();
+         $no = 1;
+
+         if (request('date') != '') {
+             $daterange =  request('date');
+             $date  = explode('+', $daterange);
+
+             $start = Carbon::parse($date[0])->format('Y-m-d');
+             $end   = Carbon::parse($date[1])->format('Y-m-d');
+
+             $cost     = $costModel->getDataCostRange($start, $end);
+
+              $total     = collect($cost)->sum(function($q){
+                    return $q->nominal;
+                });
+            }
+
+
+        return view('pages.admin.cost.index', compact('cost','gF','no','total'));
+    }
+
+    public function getDataCost()
+    {
+        $costModel = new Cost();
+        $cost      = $costModel->getDataCost();
+        $data = [];
+
+        foreach($cost as $val){
+            $data[] = array(
+                'date' => $val->date,
+                'forecast' => $val->forcest,
+                'forecast_desc' => $val->forecast_desc,
+                'village_id' => $val->village_id,
+                'member' => $val->member,
+            );
+        }
+
+        return response()->json($data);
     }
 }
