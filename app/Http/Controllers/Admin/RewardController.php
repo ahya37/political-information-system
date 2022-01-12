@@ -385,6 +385,15 @@ class RewardController extends Controller
                     'total_nominal' => $total_nominal,
                     'total_data' => $total_data
                 ]);
+
+                // simpan ke table cost_less
+                // $updateVh->user_id
+                // $updateVh->total_nominal
+                // $date-> tanggal saat create
+                // perkiraan = VOUCHER = 4
+                // uraian = VOUCHER REFERAL = 3
+
+
             }
             
         }elseif ($pointReq < $point) {

@@ -10,6 +10,8 @@ use App\Figure;
 use App\Referal;
 use App\DetailFigure;
 use App\Models\Village;
+use App\FigureNameOption;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Providers\GlobalProvider;
 use App\Providers\GrafikProvider;
@@ -22,31 +24,60 @@ class InformationController extends Controller
     public function formIntelegencyPolitic()
     {
         $figures = Figure::all();
-        return view('pages.admin.info.form-intelegency', compact('figures'));
+        $detailFigure = DetailFigure::select('idx','name')->groupBy('idx','name')->get();
+        return view('pages.admin.info.form-intelegency', compact('figures','detailFigure'));
     }
 
     public function saveIntelegencyPolitic(Request $request)
     {
         // $dataInfo = $this->getDataInfo($request);
+        $detailMode = DetailFigure::where('id', $request->name); 
+        $detail = $detailMode->count();
 
-        DetailFigure::create([
-            'name' => $request->name,
-            'village_id' => $request->village_id,
-            'figure_id' => $request->figure_id,
-            'politic_potential' => $request->politic_potential,
-            'figure_other' => $request->figure_id = '10' ? $request->fiugureOther : 'NULL',
-            'no_telp' => $request->no_telp,
-            'info_politic' => 'NULL',
-            'once_served' => $request->once_served == '10' ? $request->once_served_other : $request->once_served,
-            'politic_name' => $request->politic_name == '10' ? $request->politic_name_other : $request->politic_name,
-            'politic_year' => $request->politic_year,
-            'politic_status' => $request->politic_status,
-            'politic_member' => $request->politic_member,
-            'descr' => $request->desc,
-            'create_by' => 35
-        ]);
+        if ($detail > 0) {
+            $figure =  $detailMode->first();
+            DetailFigure::create([
+                'idx' => $figure->id,
+                'name' => strtoupper($figure->name),
+                'village_id' => $request->village_id,
+                'figure_id' => $request->figure_id,
+                'politic_potential' => $request->politic_potential,
+                'figure_other' => $request->figure_id = '11' ? $request->fiugureOther : 'NULL',
+                'no_telp' => $request->no_telp,
+                'info_politic' => 'NULL',
+                'once_served' => $request->once_served == '11' ? $request->once_served_other : $request->once_served,
+                'politic_name' => $request->politic_name == '11' ? $request->politic_name_other : $request->politic_name,
+                'politic_year' => $request->politic_year,
+                'politic_status' => $request->politic_status,
+                'politic_member' => $request->politic_member,
+                'descr' => $request->desc,
+                'create_by' => 35
+            ]);
 
-        return redirect()->route('admin-listintelegency')->with(['success' => 'Data telah tersimpan']);
+        }else{
+           $saveFigure = DetailFigure::create([
+                'name' => strtoupper($request->name),
+                'village_id' => $request->village_id,
+                'figure_id' => $request->figure_id,
+                'politic_potential' => $request->politic_potential,
+                'figure_other' => $request->figure_id = '11' ? $request->fiugureOther : 'NULL',
+                'no_telp' => $request->no_telp,
+                'info_politic' => 'NULL',
+                'once_served' => $request->once_served == '11' ? $request->once_served_other : $request->once_served,
+                'politic_name' => $request->politic_name == '11' ? $request->politic_name_other : $request->politic_name,
+                'politic_year' => $request->politic_year,
+                'politic_status' => $request->politic_status,
+                'politic_member' => $request->politic_member,
+                'descr' => $request->desc,
+                'create_by' => 35
+            ]);
+
+            $updateIdx = DetailFigure::where('id', $saveFigure->id)->first();
+            $updateIdx->update(['idx' => $saveFigure->id]);
+        }
+
+
+        return redirect()->back()->with(['success' => 'Data telah tersimpan']);
     }
 
     public function listIntelegency()
@@ -116,7 +147,7 @@ class InformationController extends Controller
             'name' => $request->name,
             'village_id' => $request->village_id,
             'figure_id' => $request->figure_id,
-            'figure_other' => $request->figure_id = '10' ? $request->fiugureOther : 'NULL',
+            'figure_other' => $request->figure_id = '11' ? $request->fiugureOther : 'NULL',
             'no_telp' => $request->no_telp,
             'info_politic' => 'NULL',
             'politic_name' => $request->politic_name,
@@ -333,5 +364,6 @@ class InformationController extends Controller
         }
 
     }
+
 
 }

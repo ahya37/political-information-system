@@ -161,4 +161,22 @@ class LocationController extends Controller
         return response()->json($list);
     }
 
+    public function getVillageSearch()
+    {
+        $villageModel = new Village();
+        $params       = request()->input('search');
+        $village = $villageModel->getVillagesSearch($params);
+
+        $list = array();
+        $key=0;
+
+        foreach ($village as $value) {
+            $list[$key]['id'] = $value->id;
+            $list[$key]['text'] = $value->village. ", KEC. $value->district".", $value->regency";
+            $key++;
+        }
+
+        return response()->json($list);
+    }
+
 }

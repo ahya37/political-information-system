@@ -28,6 +28,7 @@ Route::post('searchdistrictById', 'API\LocationController@getSearchDistrictById'
 Route::post('searchVillageById', 'API\LocationController@getSearchVillageById');
 
 Route::get('selectvillage', 'API\LocationController@getVillageSelect');
+Route::get('searchvillage', 'API\LocationController@getVillageSearch');
 
 Route::post('getdistricts', 'API\LocationController@getDistricts');
 Route::post('getvillages', 'API\LocationController@getVillages');
@@ -227,3 +228,4 @@ Route::get('/intelegency/byvillage/figure/{village_id}','Admin\InformationContro
 
 // Cost
 Route::get('/cost/list','Admin\CostController@getDataCost');
+

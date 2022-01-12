@@ -1,74 +1,43 @@
 function showDiv(divId, element) {
     document.getElementById(divId).style.display =
-        element.value == 10 ? "block" : "none";
+        element.value == 11 ? "block" : "none";
 }
-var register = new Vue({
-    el: "#register",
-    mounted() {
-        AOS.init();
-        this.getProvincesData();
-        this.getRegenciesData();
-        this.getDistrictsData();
-        this.getVillagesData();
-        this.getJobsData();
-        this.getEducationsData();
-    },
-    data() {
-        return {
-            provinces: null,
-            regencies: null,
-            districts: null,
-            villages: null,
-            provinces_id: null,
-            regencies_id: null,
-            districts_id: null,
-            villages_id: null,
-        };
-    },
-    methods: {
-        getProvincesData() {
-            var self = this;
-            axios.get("/api/provinces").then(function (response) {
-                self.provinces = response.data;
-            });
+$(".select22")
+    .select2({
+        placeholder: "Pilih Nama",
+        tags: true,
+    })
+    .on("select2:select", function () {
+        let element = $(this);
+        let new_name = $.trim(element.val());
+        console.log("data: ", new_name);
+
+        // if (new_name != "") {
+        //     $.ajax({
+        //         url: "/api/info/figureoption",
+        //         method: "POST",
+        //         data: { name: new_name },
+        //     });
+        // }
+    });
+
+$("#village").select2({
+    minimumInputLength: 3,
+    allowClear: true,
+    placeholder: "masukkan nama desa",
+    ajax: {
+        dataType: "json",
+        url: "/api/searchvillage",
+        delay: 800,
+        data: function (params) {
+            return {
+                search: params.term,
+            };
         },
-        getRegenciesData() {
-            var self = this;
-            axios
-                .get("/api/regencies/" + self.provinces_id)
-                .then(function (response) {
-                    self.regencies = response.data;
-                });
-        },
-        getDistrictsData() {
-            var self = this;
-            axios
-                .get("/api/districts/" + self.regencies_id)
-                .then(function (response) {
-                    self.districts = response.data;
-                });
-        },
-        getVillagesData() {
-            var self = this;
-            axios
-                .get("/api/villages/" + self.districts_id)
-                .then(function (response) {
-                    self.villages = response.data;
-                });
-        },
-    },
-    watch: {
-        provinces_id: function (val, oldval) {
-            this.regencies_id = null;
-            this.getRegenciesData();
-        },
-        regencies_id: function (val, oldval) {
-            this.districts_id = null;
-            this.getDistrictsData();
-        },
-        districts_id: function (val, oldval) {
-            this.villages_id = null;
-            this.getVillagesData();
+        processResults: function (data, page) {
+            return {
+                results: data,
+            };
         },
     },
 });

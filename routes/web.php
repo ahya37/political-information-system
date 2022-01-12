@@ -271,6 +271,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/info/dtintelegencyvillage/{village_id}','InformationController@dtListIntelegency');
         Route::get('/info/detalfigure/{id}','InformationController@detailFigure')->name('admin-detailfigure');
         
+        
         // intelegency Pdf
         Route::get('/info/downloadpdfallbyvillage/{villageId}','InformationController@downloadPdfAllByVillageId')->name('admin-downloadpdfbyvillageid');
         Route::get('/info/downloadpdfall','InformationController@downloadPdfAll')->name('admin-downloadfigureall');

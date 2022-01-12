@@ -252,4 +252,14 @@ class Village extends Model
                 where e.name like '%$params%'";
         return DB::select($sql);
     }
+
+    public function getVillagesSearch($params)
+    {
+        $sql = "SELECT a.id, a.name as village, b.name as district, c.name as regency
+                from villages as a
+                join districts as b on b.id = a.district_id 
+                join regencies as c on c.id = b.regency_id 
+                where a.name like '%$params%' or b.name like '%$params%' ";
+        return DB::select($sql);
+    }
 }
