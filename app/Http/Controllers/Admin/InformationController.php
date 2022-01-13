@@ -162,36 +162,93 @@ class InformationController extends Controller
     public function formIntelegencyPoliticAccounMember()
     {
         $figures = Figure::all();
-        return view('pages.info.form-intelegency', compact('figures'));
+        $detailFigure = DetailFigure::select('idx','name')->groupBy('idx','name')->get();
+        $resourceInfo = ResourceInfo::select('id','name')->get();
+        return view('pages.info.form-intelegency', compact('figures','detailFigure','resourceInfo'));
     }
 
     public function saveIntelegencyPoliticAccounMember(Request $request)
     {
         // $dataInfo = $this->getDataInfo($request);
 
-        DetailFigure::create([
-            'name' => $request->name,
-            'village_id' => $request->village_id,
-            'figure_id' => $request->figure_id,
-            'figure_other' => $request->figure_id = '11' ? $request->fiugureOther : 'NULL',
-            'no_telp' => $request->no_telp,
-            'info_politic' => 'NULL',
-            'politic_name' => $request->politic_name,
-            'politic_year' => $request->politic_year,
-            'politic_status' => $request->politic_status,
-            'politic_member' => $request->politic_member,
-            'descr' => $request->desc,
-            'create_by' => Auth::user()->id
+       $request->validate([
+            'name' => 'required',
+            'resource' => 'required'
         ]);
+        // $dataInfo = $this->getDataInfo($request);
+        $detailMode = DetailFigure::where('id', $request->name); 
+        $detail = $detailMode->count();
+        
+        $resource = ResourceInfo::where('id', $request->resource);
+        $cekRoesource = $resource->count();
 
-        return redirect()->route('member-intelegensi-index')->with(['success' => 'Data telah tersimpan']);
+        if ($cekRoesource > 0) {
+            $getresource =  $resource->first();
+            $resource_id = $getresource->id;
+        }else{
+            $saveRoesource = ResourceInfo::create([
+                'name' => strtoupper($request->resource),
+                'create_by' => Auth::user()->id
+            ]);
+            $resource_id    = $saveRoesource->id;
+        }
+
+
+
+
+        if ($detail > 0) {
+            $figure =  $detailMode->first();
+            DetailFigure::create([
+                'idx' => $figure->id,
+                'name' => strtoupper($figure->name),
+                'village_id' => $request->village_id,
+                'figure_id' => $request->figure_id,
+                'politic_potential' => $request->politic_potential,
+                'figure_other' => $request->figure_id = '11' ? $request->fiugureOther : 'NULL',
+                'no_telp' => $request->no_telp,
+                'info_politic' => 'NULL',
+                'once_served' => $request->once_served == '11' ? $request->once_served_other : $request->once_served,
+                'politic_name' => $request->politic_name == '11' ? $request->politic_name_other : $request->politic_name,
+                'politic_year' => $request->politic_year,
+                'politic_status' => $request->politic_status,
+                'politic_member' => $request->politic_member,
+                'descr' => $request->desc,
+                'resource_id' => $resource_id,
+                'create_by' => Auth::user()->id
+            ]);
+
+        }else{
+           $saveFigure = DetailFigure::create([
+                'name' => strtoupper($request->name),
+                'village_id' => $request->village_id,
+                'figure_id' => $request->figure_id,
+                'politic_potential' => $request->politic_potential,
+                'figure_other' => $request->figure_id = '11' ? $request->fiugureOther : 'NULL',
+                'no_telp' => $request->no_telp,
+                'info_politic' => 'NULL',
+                'once_served' => $request->once_served == '11' ? $request->once_served_other : $request->once_served,
+                'politic_name' => $request->politic_name == '11' ? $request->politic_name_other : $request->politic_name,
+                'politic_year' => $request->politic_year,
+                'politic_status' => $request->politic_status,
+                'politic_member' => $request->politic_member,
+                'descr' => $request->desc,
+                'resource_id' => $resource_id,
+                'create_by' => Auth::user()->id
+            ]);
+
+            $updateIdx = DetailFigure::where('id', $saveFigure->id)->first();
+            $updateIdx->update(['idx' => $saveFigure->id]);
+        }
+
+
+        return redirect()->back()->with(['success' => 'Data telah tersimpan']);
     }
 
     public function dtListIntelegencyAccountMember()
     {
-        $code = request()->code;
-        $user = User::select('id')->where('code', $code)->first();
-        $userId = $user->id;
+        // $code = request()->code;
+        // $user = User::select('id')->where('code', $code)->first();
+        $userId = Auth::user()->id;
 
         $detailFigure = DetailFigure::with(['village.district.regency.province','figure'])->where('create_by', $userId)->get();
         if (request()->ajax()) 
@@ -200,10 +257,15 @@ class InformationController extends Controller
                         ->addColumn('address', function($item){
                             return ''.$item->village->name.'<br> KEC. '.$item->village->district->name.'<br>'.$item->village->district->regency->name.'<br> '.$item->village->district->regency->province->name.' ';
                         })
+                        ->addColumn('potensi', function($item){
+                            $gF = new GlobalProvider();
+
+                            return $gF->decimalFormat($item->politic_potential);
+                        })
                         ->addColumn('action', function($item){
                             return '<a href="'.route('member-detailfigure',$item->id).'" class="btn btn-sm btn-sc-primary text-white" >Detail</a>';
                         })
-                        ->rawColumns(['address','desc','action'])
+                        ->rawColumns(['address','desc','action','potensi'])
                         ->make(true);
         }
     }

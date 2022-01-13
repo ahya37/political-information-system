@@ -99,6 +99,9 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 
         Route::get('/info/detalfigure/{id}','Admin\InformationController@detailFigureAccountMember')->name('member-detailfigure');
 
+        Route::post('/info/saveintelegency','Admin\InformationController@saveIntelegencyPoliticAccounMember')->name('member-saveintelegency');
+
+
         
 
     });
@@ -116,6 +119,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
     // voucher / reward
     Route::get('/downloadvoucher/{id}','RewardController@downloadVoucherAdmin')->name('voucher-download');
     Route::get('/downloadvoucherreferal/{id}','RewardController@downloadVoucherReferal')->name('voucherreferal-download');
+    
+    Route::get('/info/dtintelegencyvillage','InformationController@dtListIntelegencyAccountMember');
 
     Route::group(['middleware' => 'admin'], function(){
         Route::post('logout','LoginController@logout')->name('admin-logout');
@@ -268,7 +273,6 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/info/intelegency','InformationController@formIntelegencyPolitic')->name('admin-intelegency');
         Route::post('/info/saveintelegency','InformationController@saveIntelegencyPolitic')->name('admin-saveintelegency');
         Route::get('/info/listintelegency','InformationController@listIntelegency')->name('admin-listintelegency');
-        Route::get('/info/dtintelegencyvillage/{village_id}','InformationController@dtListIntelegency');
         Route::get('/info/detalfigure/{id}','InformationController@detailFigure')->name('admin-detailfigure');
         
         

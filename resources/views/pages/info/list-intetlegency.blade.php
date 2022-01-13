@@ -33,6 +33,7 @@
                                         <th scope="col">NAMA</th>
                                         <th scope="col">ALAMAT</th>
                                         <th scope="col">KETERANGAN</th>
+                                        <th scope="col">POTENSI SUARA</th>
                                         <th scope="col">AKSI</th>
                                       </tr>
                                     </thead>
@@ -61,4 +62,7 @@
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="{{ asset('/js/list-intelegency.js') }}"></script>
+<script>
+  
+</script>
 @endpush
