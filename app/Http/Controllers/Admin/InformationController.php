@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 use App\Providers\GlobalProvider;
 use App\Providers\GrafikProvider;
 use App\Http\Controllers\Controller;
+use App\ResourceInfo;
+use App\RightChosseVillage;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -25,14 +27,36 @@ class InformationController extends Controller
     {
         $figures = Figure::all();
         $detailFigure = DetailFigure::select('idx','name')->groupBy('idx','name')->get();
-        return view('pages.admin.info.form-intelegency', compact('figures','detailFigure'));
+        $resourceInfo = ResourceInfo::select('id','name')->get();
+        return view('pages.admin.info.form-intelegency', compact('figures','detailFigure','resourceInfo'));
     }
 
     public function saveIntelegencyPolitic(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'resource' => 'required'
+        ]);
         // $dataInfo = $this->getDataInfo($request);
         $detailMode = DetailFigure::where('id', $request->name); 
         $detail = $detailMode->count();
+        
+        $resource = ResourceInfo::where('id', $request->resource);
+        $cekRoesource = $resource->count();
+
+        if ($cekRoesource > 0) {
+            $getresource =  $resource->first();
+            $resource_id = $getresource->id;
+        }else{
+            $saveRoesource = ResourceInfo::create([
+                'name' => strtoupper($request->resource),
+                'create_by' => 35
+            ]);
+            $resource_id    = $saveRoesource->id;
+        }
+
+
+
 
         if ($detail > 0) {
             $figure =  $detailMode->first();
@@ -51,6 +75,7 @@ class InformationController extends Controller
                 'politic_status' => $request->politic_status,
                 'politic_member' => $request->politic_member,
                 'descr' => $request->desc,
+                'resource_id' => $resource_id,
                 'create_by' => 35
             ]);
 
@@ -69,6 +94,7 @@ class InformationController extends Controller
                 'politic_status' => $request->politic_status,
                 'politic_member' => $request->politic_member,
                 'descr' => $request->desc,
+                'resource_id' => $resource_id,
                 'create_by' => 35
             ]);
 
@@ -263,8 +289,18 @@ class InformationController extends Controller
         $totalPotential = collect($figure)->sum(function($q){
             return $q->politic_potential ?? 0;
         });
+
+        $totalPercen = collect($figure)->sum(function($q){
+            return $q->total_data ?? 0;
+        });
+
+        $range =  $choose == null ? 0 : $totalChoose - $totalPotential;
+        $range_percen =  $choose == null ? 0 : $gF->persen(($range / $totalChoose)*100);
+
+        $totalOther = $totalChoose - $totalPotential;
+        $totalPercenAll = $totalPercen + $range_percen;
         
-        $potentialPercent = $choose == null ? 0 : $gF->persen(($totalPotential / $totalChoose) * 100);
+        $potentialPercent = $choose == null ? 0 : $gF->persen(($totalChoose / $totalChoose) * 100);
         if ($figure == null) {
 
             $data = [
@@ -290,7 +326,9 @@ class InformationController extends Controller
                 'listdata' => $listData,
                 'totalPotential' => 0,
                 'potentialPercent' => 0,
-                'totalChoose' => 0
+                'totalChoose' => 0,
+                'range' => 0,
+                'range_percen' => 0
             ];
 
             return response()->json($result);
@@ -323,9 +361,11 @@ class InformationController extends Controller
             $result = [
                 'data' => $data,
                 'listdata' => $listData,
-                'totalPotential' => $gF->decimalFormat($totalPotential),
-                'potentialPercent' => $gF->persen($potentialPercent) ?? 0,
+                'totalPotential' => $gF->decimalFormat($totalChoose),
+                'potentialPercent' => $gF->persen($totalPercenAll) ?? 0,
                 'totalChoose' => $gF->decimalFormat($totalChoose),
+                'range' => $gF->decimalFormat($totalOther),
+                'range_percen' => $range_percen
             ];
             return response()->json($result);
         }
@@ -365,5 +405,38 @@ class InformationController extends Controller
 
     }
 
+    public function listResourceInfo($village_id)
+    {
+        $resource = new ResourceInfo();
+        $dataResource = $resource->getDataResourceVillage($village_id);
+
+        $data = [];
+        foreach ($dataResource as $val) {
+            $figure = DetailFigure::select('id','name','politic_potential')->where('resource_id', $val->id)->get();
+            
+            $data[] = [
+                'name' => $val->name,
+                'figure' => $figure
+            ];
+        }
+
+        $result = [
+            'data' => $data
+        ];
+            return response()->json($result);
+    }
+
+    public function infoRightChooseVillage($id)
+    {
+        $gF = new GlobalProvider();
+
+        $chooseModel = new RightChosseVillage();
+        $choose = $chooseModel->getDataChooseVillage($id);
+        $data = [
+            'name' => $choose->name,
+            'choose' => $gF->decimalFormat($choose->choose),
+        ];
+        return response()->json($data);
+    }
 
 }

@@ -209,6 +209,10 @@ Route::post('/detailfigure','Admin\InformationController@detailFigure');
 // list intelegensi akun anggota
 Route::post('/user/member/info/dtintelegency','Admin\InformationController@dtListIntelegencyAccountMember');
 
+Route::get('/getchoose/village/{id}','Admin\InformationController@infoRightChooseVillage');
+
+Route::get('/info/resource/{village_id}','Admin\InformationController@listResourceInfo');
+
 
 // ANGGOTA ADMIN
 Route::get('/admin/member/totalregency/{user_id}','API\DashboardController@getTotalMemberByAdminMember');

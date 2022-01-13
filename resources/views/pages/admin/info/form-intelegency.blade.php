@@ -31,7 +31,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Nama</label>
                                         <div class="col-sm-6">
-                                             <select class="form-control select22" id="figure" name="name" >
+                                             <select class="form-control select22" id="figure" required name="name" >
                                                  @foreach ($detailFigure as $item)
                                                    <option value="{{ $item->idx }}">{{ $item->name }}</option>
                                                  @endforeach
@@ -43,10 +43,13 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Alamat </label>
                                         <div class="col-sm-6">
-                                             <select name="village_id" id="village" class="form-control select2">
+                                             <select name="village_id" id="village" class="form-control select2" required>
                                                    <option value="">- pilih Desa -</option>
                                                 </select>
                                         </div>
+                                    </div>
+                                    <div class="form-group row" id="choose">
+                                        
                                     </div>
                                     
                                     <div class="form-group row">
@@ -68,7 +71,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Potensi Jumlah Suara</label>
                                         <div class="col-sm-6">
-                                        <input type="number" name="politic_potential" class="form-control">
+                                        <input type="number" name="politic_potential" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -98,6 +101,17 @@
                                         <input type="text" name="no.telp" class="form-control">
                                         </div>
                                     </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Submer Informasi</label>
+                                        <div class="col-sm-6">
+                                             <select class="form-control select3" id="resource" name="resource" >
+                                                 @foreach ($resourceInfo as $item)
+                                                   <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                 @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <hr>
                                     <div class="form-group row">
                                         <label class="col-sm-12 col-form-label">Optional, boleh diisi jika atas nama tersebut menacalonkan diri sebagai :</label>

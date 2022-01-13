@@ -86,7 +86,7 @@
                   </div>
                 </div>
                 <div class="row mb-2">
-                  <div class="col-4">
+                  <div class="col-6">
                     <div class="card">
                       <div class="card-body bg-info">
                         <div id="divTotalChoose">
@@ -95,9 +95,20 @@
                       </div>
                     </div>
                   </div>
+                   <div class="col-6">
+                    <div class="card">
+                      <div class="card-body">
+                        <div id="Loadjobs" class="d-none lds-dual-ring hidden overlay">
+                          </div>
+                          <div class="col-12" id="divFigur">
+                              <canvas id="figur"></canvas>
+                            </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="row mb-2">
-                  <div class="col-7">
+                  <div class="col-12">
                     <div class="card">
                       <div class="card-body">
                         <div class="col-12">
@@ -114,44 +125,29 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-5">
-                    <div class="card">
-                      <div class="card-body">
-                        <div id="Loadjobs" class="d-none lds-dual-ring hidden overlay">
-                          </div>
-                          <div class="col-12" id="divFigur">
-                              <canvas id="figur"></canvas>
-                            </div>
-                      </div>
-                    </div>
-                  </div>
+                 
                 </div>
-                {{-- <div class="row">
+
+                {{-- <div class="row mb-2">
                   <div class="col-12">
-                    @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
-                        <div id="members"></div>
-                       <div class="table-responsive">
-                                  <table id="data" class="table table-sm table-striped" width="100%">
-                                    <thead>
-                                      <tr>
-                                        <th scope="col">NAMA</th>
-                                        <th scope="col">ALAMAT</th>
-                                        <th scope="col">PROFESI</th>
-                                        <th scope="col">POTENSI SUARA</th>
-                                        <th scope="col">AKSI</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                     
-                                    </tbody>
-                                  </table>
+                        <h5 class="card-title">Sumber Informasi</h5>
+                        <div id="divrsdata">
+
                         </div>
+
+
+                        {{-- <table  id="divresource" class="table table-sm table-hovered"> --}}
+                        {{-- <thead id="rshead">
+                          <tr><th>NAMA</th><th>POTENSI SUARA</th><th>PERSENTASI</th></tr></thead> --}}
+                        {{-- </table> --}}
+
                       </div>
                     </div>
                   </div>
                 </div> --}}
+                
               </div>
             </div>
           </div>

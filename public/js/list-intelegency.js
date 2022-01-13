@@ -205,7 +205,12 @@ selectVillageId.on("change", async function () {
             } else {
                 $("#totalChoose").remove();
                 $("#divTotalChoose").append(
-                    `<div id="totalChoose" class="text-white">Jumlah Hak Pilih : ${data.totalChoose} Suara</div>`
+                    `<div id="totalChoose" class="text-white">
+                    <h5 class="text-white">Jumlah Hak Pilih</h5>
+                    <h4>
+                    ${data.totalChoose} Suara
+                    </h4>
+                    </div>`
                 );
                 $("#myChart").remove();
                 $("#divMyChart").append('<canvas id="myChart"></canvas>');
@@ -254,8 +259,8 @@ selectVillageId.on("change", async function () {
                                     </td>
                                     <td>
                                     <a href="/admin/info/detalfigure/${data.listdata[i].id}">
-                                    ${data.listdata[i].name}
                                     </a>
+                                    ${data.listdata[i].name}
                                     </td>
                                     <td align="right">${data.listdata[i].politic_potential}</td>
                                     <td align="right">${data.listdata[i].percent} % </td>
@@ -267,11 +272,14 @@ selectVillageId.on("change", async function () {
                 $("#listFoot").remove();
                 $("#listDataHead").remove();
                 $("#divListData").append(
-                    `<thead id="listDataHead"><tr><th></th><th>Nama</th><th>Potensi Suara</th><th>Persentasi</th></tr></thead> <tbody id="listData"></tbody><tfoot id="listFoot"><tr><td><b>Jumlah</b></td><td></td><td align="right"><b>${data.totalPotential}</b></td><td align="right"><b>${data.potentialPercent}</b> %</td></tr></tfoot>`
+                    `<thead id="listDataHead"><tr><th></th><th>Nama</th><th>Potensi Suara</th><th>Persentasi</th></tr></thead> 
+                     <tbody id="listData"></tbody>
+                     <tfoot id="listFoot">
+                     <tr><td>Lain-lain</td><td></td><td align="right">${data.range}</td><td align="right">${data.range_percen} %</td>
+                     <tr><td><b>Jumlah</b></td><td></td><td align="right"><b>${data.totalPotential}</b></td><td align="right"><b>${data.potentialPercent}</b> %</td></tr>
+                    </tfoot>`
                 );
                 $("#listData").append(listData);
-
-                console.log("listData: ", listData);
             }
         },
         complete: function () {
@@ -311,25 +319,30 @@ selectVillageId.on("change", async function () {
             $("#Loadjobs").addClass("d-none");
         },
     });
+
+    // sumber informasi
+    $.ajax({
+        url: "/api/info/resource/" + selectVillageValue,
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {},
+        success: function (data) {
+            let rsdata = "";
+            const result = data.data;
+            result.forEach((m) => {
+                rsdata += `<div id="rsdata">
+                            <h6>${m.name}</h6>
+                            ${m.figure.map((row) => {
+                                "<p>ok</p>";
+                            })}
+                            </div>`;
+            });
+            $("#rsdata").remove();
+            $("#rsdata").remove();
+            $("#divrsdata").append(rsdata);
+        },
+    });
 });
-// $("#data").DataTable({
-//     processing: true,
-//     language: {
-//         processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
-//     },
-//     serverSide: true,
-//     ordering: true,
-//     ajax: {
-//         url: `/admin/info/dtintelegencyvillage/${selectVillageValue}`,
-//     },
-//     columns: [
-//         { data: "name", name: "name" },
-//         { data: "address", name: "address" },
-//         { data: "figure.name", name: "figure.name" },
-//         { data: "potensi", name: "potensi" },
-//         { data: "action", name: "action" },
-//     ],
-// });
 
 function onDetail(id) {
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
