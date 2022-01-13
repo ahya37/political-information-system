@@ -388,7 +388,7 @@ class InformationController extends Controller
                 'listdata' => $listData,
                 'totalPotential' => 0,
                 'potentialPercent' => 0,
-                'totalChoose' => 0,
+                'totalChoose' => $gF->decimalFormat($totalChoose),
                 'range' => 0,
                 'range_percen' => 0
             ];
