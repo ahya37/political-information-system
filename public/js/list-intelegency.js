@@ -332,9 +332,6 @@ selectVillageId.on("change", async function () {
             result.forEach((m) => {
                 rsdata += `<div id="rsdata">
                             <h6>${m.name}</h6>
-                            ${m.figure.map((row) => {
-                                "<p>ok</p>";
-                            })}
                             </div>`;
             });
             $("#rsdata").remove();
