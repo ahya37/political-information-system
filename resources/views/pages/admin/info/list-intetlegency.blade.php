@@ -132,7 +132,8 @@
                   <div class="col-12">
                     <div class="card">
                       <div class="card-body">
-                        <h5 class="card-header">Sumber Informasi</h5>
+                        <h5 class="card-title">Sumber Informasi</h5>
+                        <hr>
                         <div id="divrsdata">
 
                         </div>
