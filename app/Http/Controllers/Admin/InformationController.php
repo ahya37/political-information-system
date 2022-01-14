@@ -474,9 +474,9 @@ class InformationController extends Controller
         $dataResource = $resource->getDataResourceVillage($village_id);
 
         $data = [];
-        foreach ($dataResource as $val) {
+        foreach ($dataResource as $value) {
             $figureModel = new  DetailFigure();
-            $figure      = $figureModel->getFigureByResource($val->id);
+            $figure      = $figureModel->getFigureByResource($value->id);
 
             $dataFigure = [];
             foreach($figure as $val ){
@@ -484,12 +484,12 @@ class InformationController extends Controller
                     'id' => $val->id,
                     'name' => $val->name,
                     'politic_potential' => $gF->decimalFormat($val->politic_potential),
-                    'resource' => $val->resource
+                    'create_by' => $val->create_by
                 ];
             }
             
             $data[] = [
-                'name' => $val->name,
+                'name' => $value->name,
                 'figure' => $dataFigure
             ];
         }

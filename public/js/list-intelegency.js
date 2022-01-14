@@ -349,7 +349,7 @@ selectVillageId.on("change", async function () {
                             </td>
                             <td>${j.politic_potential}
                             </td>
-                            <td>${j.resource}
+                            <td>${j.create_by}
                             </td>
                             </tr>`
                     ) +

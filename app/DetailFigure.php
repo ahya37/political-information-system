@@ -58,7 +58,7 @@ class DetailFigure extends Model
 
     public function getFigureByResource($id)
     {
-        $sql = "SELECT a.id, a.name, a.politic_potential, b.name as resource from detail_figure as a
+        $sql = "SELECT a.id, a.name, a.politic_potential, b.name as create_by from detail_figure as a
                 join users as b on a.create_by = b.id where a.resource_id = $id";
         return DB::select($sql);
     }
