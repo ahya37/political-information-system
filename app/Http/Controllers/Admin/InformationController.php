@@ -469,16 +469,28 @@ class InformationController extends Controller
 
     public function listResourceInfo($village_id)
     {
+        $gF = new GlobalProvider();
         $resource = new ResourceInfo();
         $dataResource = $resource->getDataResourceVillage($village_id);
 
         $data = [];
         foreach ($dataResource as $val) {
-            $figure = DetailFigure::select('id','name','politic_potential')->where('resource_id', $val->id)->get();
+            $figureModel = new  DetailFigure();
+            $figure      = $figureModel->getFigureByResource($val->id);
+
+            $dataFigure = [];
+            foreach($figure as $val ){
+                $dataFigure[] = [
+                    'id' => $val->id,
+                    'name' => $val->name,
+                    'politic_potential' => $gF->decimalFormat($val->politic_potential),
+                    'resource' => $val->resource
+                ];
+            }
             
             $data[] = [
                 'name' => $val->name,
-                'figure' => $figure
+                'figure' => $dataFigure
             ];
         }
 

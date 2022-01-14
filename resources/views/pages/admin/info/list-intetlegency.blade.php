@@ -132,10 +132,10 @@
                   <div class="col-12">
                     <div class="card">
                       <div class="card-body">
-                        <h5 class="card-title">Sumber Informasi [ON PROGRESS PENGERJAAN]</h5>
-                        {{-- <div id="divrsdata">
+                        <h5 class="card-title">Sumber Informasi</h5>
+                        <div id="divrsdata">
 
-                        </div> --}}
+                        </div>
 
 
                         {{-- <table  id="divresource" class="table table-sm table-hovered">

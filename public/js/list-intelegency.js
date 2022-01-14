@@ -330,8 +330,30 @@ selectVillageId.on("change", async function () {
             let rsdata = "";
             const result = data.data;
             result.forEach((m) => {
-                rsdata += `<div id="rsdata">
-                            <h6>${m.name}</h6>
+                rsdata +=
+                    `<div id="rsdata">
+                            <h5>Sumber : ${m.name}</h5>
+                            <table class="table table-sm table-hovered"> 
+                                <tr>
+                                    <th>NAMA</th>
+                                    <th>POTENSI SUARA</th>
+                                    <th>DIBUAT OLEH</th>
+                                </tr>
+                                ` +
+                    m.figure.map(
+                        (j) =>
+                            `<tr><td>
+                            <a href="/admin/info/detalfigure/${j.id}">
+                            ${j.name}
+                            </a>
+                            </td>
+                            <td>${j.politic_potential}
+                            </td>
+                            <td>${j.resource}
+                            </td>
+                            </tr>`
+                    ) +
+                    `</table>
                             </div>`;
             });
             $("#rsdata").remove();

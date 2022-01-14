@@ -55,4 +55,11 @@ class DetailFigure extends Model
                 where a.village_id  = $village_id";
         return collect(\ DB::select($sql))->first();
     }
+
+    public function getFigureByResource($id)
+    {
+        $sql = "SELECT a.id, a.name, a.politic_potential, b.name as resource from detail_figure as a
+                join users as b on a.create_by = b.id where a.resource_id = $id";
+        return DB::select($sql);
+    }
 }
