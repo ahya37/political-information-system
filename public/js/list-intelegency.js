@@ -331,8 +331,11 @@ selectVillageId.on("change", async function () {
             const result = data.data;
             result.forEach((m) => {
                 rsdata +=
-                    `<div id="rsdata">
-                            <h5>Sumber : ${m.name}</h5>
+                    `
+                    <div id="rsdata ">
+                        <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Sumber Informasi : ${m.name}</h5>
                             <table class="table table-sm table-hovered"> 
                                 <tr>
                                     <th>NAMA</th>
@@ -354,7 +357,10 @@ selectVillageId.on("change", async function () {
                             </tr>`
                     ) +
                     `</table>
-                            </div>`;
+                            </div>
+                        </div>
+                        </div>
+                        </div>`;
             });
             $("#rsdata").remove();
             $("#rsdata").remove();

@@ -128,23 +128,11 @@
                  
                 </div>
 
-                 <div class="row mb-2">
+                <div class="row mb-2">
                   <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                        <h5 class="card-title">Sumber Informasi</h5>
-                        <hr>
-                        <div id="divrsdata">
-
-                        </div>
-
-
-                        {{-- <table  id="divresource" class="table table-sm table-hovered">
-                        <thead id="rshead">
-                          <tr><th>NAMA</th><th>POTENSI SUARA</th><th>PERSENTASI</th></tr></thead>
-                        </table> --}}
-
-                      </div>
+  
+                    <div id="divrsdata">
+  
                     </div>
                   </div>
                 </div>
