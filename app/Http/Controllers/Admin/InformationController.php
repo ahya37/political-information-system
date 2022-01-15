@@ -182,7 +182,12 @@ class InformationController extends Controller
             'resource' => 'required'
         ]);
         // $dataInfo = $this->getDataInfo($request);
-        $detailMode = DetailFigure::where('id', $request->name); 
+         $cekDetailFigureSameResource = DetailFigure::where('id', $request->name)->where('resource_id', $request->resource)->count();
+         if ($cekDetailFigureSameResource > 0) {
+            return redirect()->back()->with(['warning' => 'Data dengan sumber tersebut sudah tersedia']);
+             
+         }else{
+             $detailMode = DetailFigure::where('id', $request->name); 
         $detail = $detailMode->count();
         
         $resource = ResourceInfo::where('id', $request->resource);
@@ -245,6 +250,8 @@ class InformationController extends Controller
             $updateIdx = DetailFigure::where('id', $saveFigure->id)->first();
             $updateIdx->update(['idx' => $saveFigure->id]);
         }
+
+         }
 
 
         return redirect()->back()->with(['success' => 'Data telah tersimpan']);
