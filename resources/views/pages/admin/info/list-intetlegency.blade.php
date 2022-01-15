@@ -129,7 +129,7 @@
                 </div>
 
                 <div class="row mb-2">
-                  <div class="col-12">
+                  <div class="col-12" class="divListData">
                     <div id="divrsdata"></div>
                   </div>
                 </div>

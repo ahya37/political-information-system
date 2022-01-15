@@ -331,11 +331,11 @@ selectVillageId.on("change", async function () {
             const result = data.data;
             result.forEach((m) => {
                 rsdata +=
-                    `<div id="rsdata">
+                    `<div id="rsdata" class="divListData">
                         <div class="card mb-2">
                         <div class="card-body">
-                            <h5 class="card-title">Sumber Informasi : ${m.name}</h5>
-                            <table class="table table-sm table-hovered"> 
+                            <h5 class="card-title" id="title">Sumber Informasi : ${m.name}</h5>
+                            <table id="datatable" class="table table-sm table-hovered"> 
                                 <tr>
                                     <th>NAMA</th>
                                     <th>POTENSI SUARA</th>
@@ -361,8 +361,10 @@ selectVillageId.on("change", async function () {
                         </div>
                         </div>`;
             });
-            $("#rsdata").remove();
-            $("#rsdata").remove();
+            $(".divListData").remove();
+            // $("#rsdata").remove();
+            // $("#title").remove();
+            // $("#datatable").remove();
             $("#divrsdata").append(rsdata);
         },
     });
