@@ -331,8 +331,7 @@ selectVillageId.on("change", async function () {
             const result = data.data;
             result.forEach((m) => {
                 rsdata +=
-                    `
-                    <div id="rsdata ">
+                    `<div id="rsdata">
                         <div class="card mb-2">
                         <div class="card-body">
                             <h5 class="card-title">Sumber Informasi : ${m.name}</h5>

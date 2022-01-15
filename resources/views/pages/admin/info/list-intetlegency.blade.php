@@ -130,13 +130,9 @@
 
                 <div class="row mb-2">
                   <div class="col-12">
-  
-                    <div id="divrsdata">
-  
-                    </div>
+                    <div id="divrsdata"></div>
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
@@ -150,7 +146,6 @@
 </div>
 
 @endpush
-
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>  
