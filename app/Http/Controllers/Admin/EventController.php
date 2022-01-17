@@ -24,14 +24,21 @@ class EventController extends Controller
                             <div class="dropdown">
                                 <button class="btn btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">Aksi</button>
                                 <div class="dropdown-menu">
-                                     <a class="dropdown-item" href="'.route('admin-event-addmember-detail', encrypt($item->id)).'">
+                                    <a class="dropdown-item" href="'.route('admin-event-addmember-detail', encrypt($item->id)).'">
                                         Detail
+                                    </a>
+                                     <a class="dropdown-item" href="'.route('admin-event-edit', $item->id).'">
+                                        Edit
                                      </a>
-                                      <a class="dropdown-item" href="'.route('admin-event-addmember', encrypt($item->id)).'">
-                                        Tambah Peserta
+                                     <a class="dropdown-item" href="'.route('admin-event-addmember', encrypt($item->id)).'">
+                                       Tambah Peserta
                                      </a>
+                                    
                                      <a class="dropdown-item" href="'.route('admin-event-gallery', encrypt($item->id)).'">
                                         Galeri
+                                     </a>
+                                       <a class="dropdown-item" href="'.route('admin-event-delete', $item->id).'">
+                                        Hapus
                                      </a>
                                 </div>
                             </div>
@@ -54,6 +61,19 @@ class EventController extends Controller
     public function create()
     {
         return view('pages.admin.event.create');
+    }
+
+    public function edit($id)
+    {
+        $event = Event::where('id', $id)->first();
+        return view('pages.admin.event.edit', compact('event'));
+    }
+    public function delete($id)
+    {
+        $event = Event::where('id', $id)->first();
+        $event->delete();
+
+        return redirect()->back()->with(['success' => 'Event telah dihapus']);
     }
 
     public function addMemberEvent($id)
@@ -169,6 +189,26 @@ class EventController extends Controller
         ]);
 
         return redirect()->route('admin-event')->with(['success' => 'Event baru telah dibuat']);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'title' => 'required',
+            'desc' => 'required',
+            'address' => 'required'
+        ]);
+
+        $event = Event::where('id', $id)->first();
+        $event->update([
+            'title' => $request->title,
+            'description' => $request->desc,
+            'address' => $request->address,
+            'time' => date('H:i', strtotime($request->time)),
+            'date' => date('Y-m-d', strtotime($request->date)),
+        ]);
+
+        return redirect()->route('admin-event')->with(['success' => 'Event telah diubah']);
     }
 
     public function evenDetials($id)

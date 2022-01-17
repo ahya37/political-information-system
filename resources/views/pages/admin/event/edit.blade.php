@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Edit Event')
+@section('title','Buat Anggota Baru')
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
@@ -12,7 +12,7 @@
           >
             <div class="container-fluid">
                 <div class="dashboard-heading">
-                    <h2 class="dashboard-title">Edit Event</h2>
+                    <h2 class="dashboard-title">Buat Event Baru</h2>
                 <p class="dashboard-subtitle">
                 </p>
             </div>
@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-md-7 col-sm-12">
                       @include('layouts.message')
-                    <form action="{{ route('admin-event-store') }}" id="register" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin-event-update', $event->id) }}" id="register" method="POST" enctype="multipart/form-data">
                       @csrf
                       <div class="card">
                         <div class="card-body">
@@ -30,7 +30,7 @@
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
                                                 <label>Judul Event</label>
-                                                <input type="text" name="title" required class="form-control" />
+                                                <input type="text" name="title" value="{{ $event->title }}" required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -38,7 +38,7 @@
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
                                                 <label>Isi Pengumuman</label>
-                                                <textarea name="desc"  required class="form-control" ></textarea>
+                                                <textarea name="desc"  required class="form-control" >{{ $event->description }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -46,7 +46,7 @@
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
                                                 <label>Alamat/Tempat</label>
-                                                <textarea name="address" required class="form-control" ></textarea>
+                                                <textarea name="address" required class="form-control" >{{ $event->address }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -59,7 +59,8 @@
                                                 type="text"
                                                 class="form-control"
                                                 name="date"
-                                                autocomplete="off" 
+                                                autocomplete="off"
+                                                value="{{ $event->date }}"
                                                 required >
                                             </div>
                                         </div>
@@ -68,7 +69,7 @@
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
                                                 <label>Waktu Event</label>
-                                                <input id="timepicker6" type="text" name="time"  required class="form-control" />
+                                                <input id="timepicker6" type="text" name="time" value="{{ $event->time }}"  required class="form-control" />
                                             </div>
                                         </div>
                                     </div>                                         
