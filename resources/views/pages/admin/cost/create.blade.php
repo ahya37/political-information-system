@@ -73,11 +73,23 @@
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
                                                 <label>Penerima</label>
-                                                <select name="user_id" id="village" class="form-control select2">
+                                                {{-- <select name="user_id" id="village" class="form-control select2">
                                                    <option value="">- pilih Penerima -</option>
-                                                </select>
+                                                </select> --}}
+                                               <input name="received_name" required class="form-control">
                                             </div>
                                         </div>
+                                    </div>
+                                     <div class="form-group">
+                                       <div class="row">
+                                         <div class="col-sm-12">
+                                            <label class>Alamat </label>
+                                               <select name="village_id" id="village" class="form-control select2" required>
+                                                     <option value="">- pilih Desa -</option>
+                                                  </select>
+                                          </div>
+
+                                       </div>
                                     </div>
                                                                      
                                     <div class="form-group">

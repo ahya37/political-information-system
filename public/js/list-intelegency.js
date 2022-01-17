@@ -275,8 +275,8 @@ selectVillageId.on("change", async function () {
                     `<thead id="listDataHead"><tr><th></th><th>Nama</th><th>Potensi Suara</th><th>Persentasi</th></tr></thead> 
                      <tbody id="listData"></tbody>
                      <tfoot id="listFoot">
-                     <tr><td>Lain-lain</td><td></td><td align="right">${data.range}</td><td align="right">${data.range_percen} %</td>
-                     <tr><td><b>Jumlah</b></td><td></td><td align="right"><b>${data.totalPotential}</b></td><td align="right"><b>${data.potentialPercent}</b> %</td></tr>
+                     <tr><td></td><td>Lain-lain</td><td align="right">${data.range}</td><td align="right">${data.range_percen} %</td>
+                     <tr><td></td><td><b>Jumlah</b></td><td align="right"><b>${data.totalPotential}</b></td><td align="right"><b>${data.potentialPercent}</b> %</td></tr>
                     </tfoot>`
                 );
                 $("#listData").append(listData);
@@ -339,6 +339,7 @@ selectVillageId.on("change", async function () {
                                 <tr>
                                     <th>NAMA</th>
                                     <th>POTENSI SUARA</th>
+                                    <th>PERSENTASI</th>
                                     <th>DIBUAT OLEH</th>
                                 </tr>
                                 ` +
@@ -349,13 +350,16 @@ selectVillageId.on("change", async function () {
                             ${j.name}
                             </a>
                             </td>
-                            <td>${j.politic_potential}
+                            <td align="right">${j.politic_potential}
                             </td>
+                            <td align="right">%</td>
                             <td>${j.create_by}
                             </td>
-                            </tr>`
+                            </tr>
+                            `
                     ) +
-                    `</table>
+                    `
+                    </table>
                             </div>
                         </div>
                         </div>

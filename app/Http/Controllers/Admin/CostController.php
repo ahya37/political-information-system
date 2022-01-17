@@ -26,7 +26,7 @@ class CostController extends Controller
             'date' => 'required',
             'forecast_id' => 'required',
             'forecast_desc_id' => 'required',
-            'user_id' => 'required',
+            'received_name' => 'required',
             'nominal' => 'required',
         ]);
 
@@ -35,7 +35,8 @@ class CostController extends Controller
             'date' => date('Y-m-d', strtotime($request->date)),
             'forcest_id' => $request->forecast_id,
             'forecast_desc_id' => $request->forecast_desc_id,
-            'user_id' => $request->user_id,
+            'received_name' => $request->received_name,
+            'village_id' => $request->village_id,
             'nominal' => $request->nominal,
         ]);
 

@@ -7,7 +7,7 @@ $(document).ready(function () {
         placeholder: "masukkan nama desa",
         ajax: {
             dataType: "json",
-            url: "/api/selectvillage",
+            url: "/api/searchvillage",
             delay: 800,
             data: function (params) {
                 return {

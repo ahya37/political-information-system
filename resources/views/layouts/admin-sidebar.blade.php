@@ -127,13 +127,13 @@
             </div>
             <a
               class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event*')) ? 'active custom-active-color' : '' }}"
-              href="#submenu1"
+              href="#event"
               data-toggle="collapse"
-              data-target="#submenu1"
+              data-target="#event"
               >
               <span class="d-none d-sm-inline"></span>Event</a
             >
-            <div class="collapse" id="submenu1" aria-expanded="false">
+            <div class="collapse" id="event" aria-expanded="false">
               <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
                   <a
@@ -143,7 +143,7 @@
                   >
                   <a
                     href="{{ route('admin-event-create') }}"
-                    class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event/create')) ? 'active custom-active-color' : '' }}"
+                    class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event/*')) ? 'active custom-active-color' : '' }}"
                     ><span>Buat Event Baru</span>
                   </a>
                 </li>
@@ -151,7 +151,7 @@
             </div>
 
             <a
-              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event*')) ? 'active custom-active-color' : '' }}"
+              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/info/*')) ? 'active custom-active-color' : '' }}"
               href="#info"
               data-toggle="collapse"
               data-target="#info"
@@ -176,7 +176,7 @@
             </div>
 
             <a
-              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event*')) ? 'active custom-active-color' : '' }}"
+              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/cost/*')) ? 'active custom-active-color' : '' }}"
               href="#cas"
               data-toggle="collapse"
               data-target="#cas"
@@ -201,7 +201,7 @@
 
 
             <a
-              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event*')) ? 'active custom-active-color' : '' }}"
+              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/voucher*')) ? 'active custom-active-color' : '' }}"
               href="#report"
               data-toggle="collapse"
               data-target="#report"
@@ -221,7 +221,7 @@
             </div>
 
             <a
-              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/event*')) ? 'active custom-active-color' : '' }}"
+              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/setting/*')) ? 'active custom-active-color' : '' }}"
               href="#setting"
               data-toggle="collapse"
               data-target="#setting"

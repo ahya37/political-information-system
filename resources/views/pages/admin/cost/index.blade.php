@@ -67,7 +67,7 @@
                                          <td>{{ date('d-m-Y', strtotime($item->date)) }}</td>
                                          <td>{{ $item->forcest }}</td>
                                          <td>{{ $item->forecast_desc }}</td>
-                                         <td>{{ $item->member }}</td>
+                                         <td>{{ $item->received_name }}</td>
                                          <td>{{ $item->village }}, <br> KEC. {{ $item->district }}, <br> {{ $item->regency }}</td>
                                          <td class="text-right">Rp .{{ $gF->decimalFormat($item->nominal) }}</td>
                                      </tr>
