@@ -485,11 +485,17 @@ class InformationController extends Controller
         $gF = new GlobalProvider();
         $resource = new ResourceInfo();
         $dataResource = $resource->getDataResourceVillage($village_id);
+        $chooseModel  = RightChosseVillage::select('choose')->where('village_id', $village_id)->first();
+        $choose       = $chooseModel->choose ?? 0;
 
         $data = [];
         foreach ($dataResource as $value) {
             $figureModel = new  DetailFigure();
             $figure      = $figureModel->getFigureByResource($value->id);
+
+            $total_politic_potential = collect($figure)->sum(function($q){
+                return $q->politic_potential ?? 0;
+            });
 
             $dataFigure = [];
             foreach($figure as $val ){
@@ -497,13 +503,31 @@ class InformationController extends Controller
                     'id' => $val->id,
                     'name' => $val->name,
                     'politic_potential' => $gF->decimalFormat($val->politic_potential),
+                    'persentage' => $gF->persen(($val->politic_potential / $choose) * 100),
+                    'persen' => ($val->politic_potential / $choose) * 100,
                     'create_by' => $val->create_by
                 ];
             }
+
+            $others = $choose - $total_politic_potential;
+            $total_choose = $total_politic_potential + $others;
+            $other_persentage = collect($dataFigure)->sum(function($q){
+                return $q['persen'] ?? 0;
+            });
+
+            $range =  ($total_choose / $choose) * 100;
+
+            $total_other_persentage = $range - $other_persentage;
+
+            $total_persentage = $other_persentage + $total_other_persentage;
             
             $data[] = [
                 'name' => $value->name,
-                'figure' => $dataFigure
+                'figure' => $dataFigure,
+                'others' => $gF->decimalFormat($others),
+                'total_choose' => $gF->decimalFormat($total_choose),
+                'other_persentage' => $gF->persen($total_other_persentage),
+                'total_persentage' => $gF->persen($total_persentage)
             ];
         }
 

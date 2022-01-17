@@ -352,13 +352,25 @@ selectVillageId.on("change", async function () {
                             </td>
                             <td align="right">${j.politic_potential}
                             </td>
-                            <td align="right">%</td>
+                            <td align="right">${j.persentage}%</td>
                             <td>${j.create_by}
                             </td>
                             </tr>
                             `
                     ) +
                     `
+                    <tr>
+                            <td>Lain-lain</td>
+                            <td align="right">${m.others}</td>
+                            <td align="right">${m.other_persentage}%</td>
+                            <td></td>
+                    </tr>
+                    <tr>
+                            <td><b>Jumlah</b></td>
+                            <td align="right"><b>${m.total_choose}</b></td>
+                            <td align="right"><b>${m.total_persentage}%</b></td>
+                            <td></td>
+                    </tr>
                     </table>
                             </div>
                         </div>

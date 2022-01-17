@@ -46,6 +46,12 @@ class GlobalProvider extends ServiceProvider
         return $show;
     }
 
+    public function persenIntel($data)
+    {
+        $show = number_format($data,0);
+        return $show;
+    }
+
     public function cutStringCardRegency($data)
     {
         $show = substr($data, 2);
