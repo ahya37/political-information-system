@@ -524,9 +524,9 @@ class InformationController extends Controller
             $data[] = [
                 'name' => $value->name,
                 'figure' => $dataFigure,
-                'others' => $gF->decimalFormat($others),
+                'others' =>  $others >0 ? $gF->decimalFormat($others) : 0,
                 'total_choose' => $gF->decimalFormat($total_choose),
-                'other_persentage' => $gF->persen($total_other_persentage),
+                'other_persentage' => $total_other_persentage >0 ? $gF->persen($total_other_persentage) : 0,
                 'total_persentage' => $gF->persen($total_persentage)
             ];
         }
