@@ -96,7 +96,15 @@
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
                                                 <label>Jumlah</label>
-                                               <input name="nominal" class="form-control">
+                                               <input type="number" name="nominal" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>                                     
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12">
+                                                <label>Lampirkan File</label>
+                                               <input type="file" name="file" class="form-control">
                                             </div>
                                         </div>
                                     </div>                                     

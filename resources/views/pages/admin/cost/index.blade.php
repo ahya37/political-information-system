@@ -58,6 +58,7 @@
                                          <th>PENERIMA</th>
                                          <th>ALAMAT</th>
                                          <th>JUMLAH</th>
+                                         <th>FILE</th>
                                      </tr>
                                  </thead>
                                  <tbody>
@@ -70,6 +71,12 @@
                                          <td>{{ $item->received_name }}</td>
                                          <td>{{ $item->village }}, <br> KEC. {{ $item->district }}, <br> {{ $item->regency }}</td>
                                          <td class="text-right">Rp .{{ $gF->decimalFormat($item->nominal) }}</td>
+                                         <td>
+                                             <a target="_blank" href="{{ asset('/storage/'.$item->file ?? '') }}">
+
+                                                <img class="rounded" width="40" src="{{ asset('/storage/'.$item->file ?? '') }}">
+                                             </a>
+                                         </td>
                                      </tr>
                                      @endforeach
                                  </tbody>

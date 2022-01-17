@@ -28,7 +28,14 @@ class CostController extends Controller
             'forecast_desc_id' => 'required',
             'received_name' => 'required',
             'nominal' => 'required',
+            'file' => 'nullable|mimes:jpeg,jpg,png,pdf'
         ]);
+
+       if ($request->hasFile('file')) {
+                $fileImage = $request->file->store('assets/cost','public');
+            }else{
+                $fileImage = 'NULL';
+            }
 
         // 
         CostLess::create([
@@ -38,6 +45,7 @@ class CostController extends Controller
             'received_name' => $request->received_name,
             'village_id' => $request->village_id,
             'nominal' => $request->nominal,
+            'file' => $fileImage,
         ]);
 
         return redirect()->back()->with(['success' => 'Pengeluaran telah tersimpan']);
