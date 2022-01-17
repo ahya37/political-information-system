@@ -245,7 +245,7 @@ const _url = $.ajax({
                     "<div class='col-xl-3 col-lg-4 col-md-6 col-sm-4 mb-4'>";
                 divEl += "<div class='bg-white rounded shadow-sm'>";
                 divEl +=
-                    "<img class='img-fluid card-img-top' src=" +
+                    "<img class='img-fluid card-img-top img-thumbnail' src=" +
                     storage +
                     item.file +
                     ">";
