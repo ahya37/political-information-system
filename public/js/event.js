@@ -4,7 +4,7 @@ const eventId = query.substring(query.lastIndexOf("/") + 1);
 // const eventId = $("#eventId").val();
 const storage = "/storage/";
 // create event
-$(".select2").select2();
+// $(".select2").select2();
 let CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 // select district
 $("#regencies_id").on("change", async function () {
@@ -233,6 +233,7 @@ const _url = $.ajax({
         $("#loadResult").removeClass("d-none");
     },
     success: function (data) {
+        console.log("data:", data);
         if (data.data.length === 0) {
             $("#result").append(
                 "<div class='row col-12'><h5>Tidak ada galeri</h5></div>"

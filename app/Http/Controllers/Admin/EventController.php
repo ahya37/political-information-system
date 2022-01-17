@@ -34,7 +34,7 @@ class EventController extends Controller
                                        Tambah Peserta
                                      </a>
                                     
-                                     <a class="dropdown-item" href="'.route('admin-event-gallery', encrypt($item->id)).'">
+                                     <a class="dropdown-item" href="'.route('admin-event-gallery', $item->id).'">
                                         Galeri
                                      </a>
                                        <a class="dropdown-item" href="'.route('admin-event-delete', $item->id).'">

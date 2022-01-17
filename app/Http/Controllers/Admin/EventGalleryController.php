@@ -11,7 +11,7 @@ class EventGalleryController extends Controller
 {
     public function index($id)
     {
-        $id = decrypt($id);
+        $id = $id;
         $event = Event::select('id','title')->where('id', $id)->first();
         return view('pages.admin.gallery.index', compact('event'));
     }
