@@ -27,7 +27,7 @@
                   <div class="col-12">
                     <div class="card">
                       <div class="card-body">
-                        <form action="{{ route('admin-list-target-regional') }}" method="GET">
+                        <form action="" method="GET">
                           @csrf
                           <div class="row">
                             <div class="col-3">
