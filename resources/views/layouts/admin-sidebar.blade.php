@@ -151,6 +151,41 @@
             </div>
 
             <a
+              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/setting*')) ? 'active custom-active-color' : '' }}"
+              href="#target"
+              data-toggle="collapse"
+              data-target="#target"
+              >
+              <span class="d-none d-sm-inline"></span>Target</a
+            >
+            <div class="collapse" id="target" aria-expanded="false">
+              <ul class="flex-column pl-2 nav">
+                <li class="nav-item">
+                  <a
+                    href="{{ route('admin-setting-targetmember') }}"
+                    class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/targetmember')) ? 'active custom-active-color' : '' }}"
+                    ><span>Atur Target Anggota</span></a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    href="{{ route('admin-list-target') }}"
+                    class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/targetmember')) ? 'active custom-active-color' : '' }}"
+                    ><span>Daftar Target Anggota</span></a
+                  >
+                </li>
+                 <li class="nav-item">
+                  <a
+                    href="{{ route('admin-rightchoose') }}"
+                    class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/rightchoose')) ? 'active custom-active-color' : '' }}"
+                    ><span>Atur Hak Pilih</span></a>
+                  >
+                </li>
+               
+              </ul>
+            </div>
+
+            <a
               class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/info/*')) ? 'active custom-active-color' : '' }}"
               href="#info"
               data-toggle="collapse"
@@ -215,40 +250,6 @@
                     href="{{ route('admin-voucher-report') }}"
                     class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/targetmember')) ? 'active custom-active-color' : '' }}"
                     ><span>Pengeluaran Voucher</span></a
-                  >
-                </li>
-              </ul>
-            </div>
-
-            <a
-              class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/setting/*')) ? 'active custom-active-color' : '' }}"
-              href="#setting"
-              data-toggle="collapse"
-              data-target="#setting"
-              >
-              <span class="d-none d-sm-inline"></span>Pengaturan</a
-            >
-            <div class="collapse" id="setting" aria-expanded="false">
-              <ul class="flex-column pl-2 nav">
-                <li class="nav-item">
-                  <a
-                    href="{{ route('admin-setting-targetmember') }}"
-                    class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/targetmember')) ? 'active custom-active-color' : '' }}"
-                    ><span>Atur Target Anggota</span></a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a
-                    href="{{ route('admin-list-target') }}"
-                    class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/targetmember')) ? 'active custom-active-color' : '' }}"
-                    ><span>Daftar Target Anggota</span></a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a
-                    href="{{ route('admin-rightchoose') }}"
-                    class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/rightchoose')) ? 'active custom-active-color' : '' }}"
-                    ><span>Atur Hak Pilih</span></a>
                   >
                 </li>
               </ul>

@@ -17,7 +17,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Target [ON PROGRESS]</h2>
+                <h2 class="dashboard-title">Daftar Target Nasional</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
