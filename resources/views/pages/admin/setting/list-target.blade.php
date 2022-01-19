@@ -23,7 +23,7 @@
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
                
-                <div class="row mb-2">
+                {{-- <div class="row mb-2">
                   <div class="col-12">
                     <div class="card">
                       <div class="card-body">
@@ -102,7 +102,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> --}}
                 
                 <div class="row mb-2">
                   <div class="col-12">
@@ -112,6 +112,7 @@
                              <table id="achievment" class="table table-sm table-striped">
                                    <thead>
                                      <tr>
+                                     <th scope="col"></th>
                                      <th scope="col">DAERAH</th>
                                      <th scope="col">TARGET</th>
                                      <th scope="col">REALISASI</th>
@@ -135,31 +136,40 @@
 @push('addon-script')
   
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
-<script src="{{ asset('/js/list-target.js') }}"></script>
+{{-- <script src="{{ asset('/js/list-target.js') }}"></script> --}}
 <script>
       let table =  $('#achievment').DataTable({
-            processing: true,
-            language:{
-              processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
-            },
-            serverSide: true,
-            ordering: true,
-            ajax: {
+        processing: true,
+        language:{
+          processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
+        },
+        serverSide: true,
+        ordering: true,
+        ajax: {
                 url: '{!! url()->current() !!}',
-            },
-            columns:[
+              },
+              columns:[
                 {data: 'name', name:'name'},
+                {data: 'namelink', name:'namelink'},
                 {data: 'targets', name:'targets', className:'text-right'},
                 {data: 'realisasi_member', name:'realisasi_member', className:'text-right'},
                 {data: 'persentage', name:'persentage'},
             ],
+            aaSorting: [[0, "asc"]],
             columnDefs: [
               {
-                targets: [1,2],
-                render: $.fn.dataTable.render.number('.', '.', 0, '')
-              }
+                targets: [2,3],
+                render: $.fn.dataTable.render.number('.', '.', 0, ''),
+              },
+              {
+                "targets": [ 0],
+                "visible": false,
+                "searchable": false
+            },
             ],
         });
-        table.draw()
+       table
+      .order( [ 0, 'asc' ] )
+      .draw();
 </script>
 @endpush

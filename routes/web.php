@@ -255,7 +255,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // target
         Route::get('/target','SettingController@listTarget')->name('admin-list-target');
-        Route::get('/targetprovince/{province_id}','SettingController@listTargetRegional')->name('admin-list-target-regional');
+        Route::get('/targetprovince/{province_id}','SettingController@listTargetProvince')->name('admin-list-target-province');
+        Route::get('/targetregency/{regency_id}','SettingController@listTargetRegency')->name('admin-list-target-regency');
+        Route::get('/targetdistrict/{district_id}','SettingController@listTargetDistric')->name('admin-list-target-district');
         Route::get('/rightchoose','SettingController@settingRightChoose')->name('admin-rightchoose');
         Route::post('/saverightchoose','SettingController@SaveRightChooseVillage')->name('admin-rightchoose-save');
 
@@ -278,7 +280,6 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::post('/info/saveintelegency','InformationController@saveIntelegencyPolitic')->name('admin-saveintelegency');
         Route::get('/info/listintelegency','InformationController@listIntelegency')->name('admin-listintelegency');
         Route::get('/info/detalfigure/{id}','InformationController@detailFigure')->name('admin-detailfigure');
-        
         
         // intelegency Pdf
         Route::get('/info/downloadpdfallbyvillage/{villageId}','InformationController@downloadPdfAllByVillageId')->name('admin-downloadpdfbyvillageid');

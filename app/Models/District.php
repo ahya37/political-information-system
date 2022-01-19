@@ -102,7 +102,8 @@ class District extends Model
                 c.target as target_member,
                 CEIL(c.target /  count(DISTINCT(b.id)))  as total_target_member,
                 count(a.id) as realisasi_member,
-                count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
+                count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement,
+                (count(a.id) / c.target) * 100 as percen
                 from users as a
                 right join villages as b on a.village_id = b.id
                 join districts as c on b.district_id = c.id

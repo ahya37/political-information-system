@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Daftar Intelgensi')
+@section('title','Daftar Target')
 @push('addon-style')
 <link
       href="{{ asset('assets/style/style.css') }}"
@@ -18,13 +18,16 @@
             <div class="container-fluid">
               <div class="dashboard-heading">
                 <h2 class="dashboard-title">
-                  Daftar Target</h2>
+                  Daftar Target Daerah</h2>
                 <p class="dashboard-subtitle">
                   <nav aria-label="breadcrumb">
                   <ol class="breadcrumb">
-                     <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('admin-list-target') }}">NASIONAL</a></li>
-                     <li class="breadcrumb-item">PROVINSI {{ $provincedetail->name }}</li>
+                     <li class="breadcrumb-item"><a href="{{ route('admin-list-target') }}">Nasional</a></li>
+                     <li class="breadcrumb-item"><a href="{{ route('admin-list-target-province', $district->regency->province->id) }}">Provinsi {{ $district->regency->province->name }}</a></li>
+                          <li class="breadcrumb-item"><a href="{{ route('admin-list-target-regency', $district->regency->id) }}">{{ $district->regency->name }}</a></li>
+                          <li class="breadcrumb-item active" aria-current="page">KECAMATAN {{ $district->name }}</li>
                   </ol>
+                </nav>
                 </nav>
                 </p>
               </div>
@@ -86,11 +89,11 @@
                 targets: [2,3],
                 render: $.fn.dataTable.render.number('.', '.', 0, '')
               },
-              {
-                "targets": [ 0],
-                "visible": false,
-                "searchable": false
-            },
+                {
+                  "targets": [ 0],
+                  "visible": false,
+                  "searchable": false
+              }
             ],
         });
         table.draw()

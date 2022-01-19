@@ -123,7 +123,8 @@ class Village extends Model
         $sql = "SELECT b.id, b.name,
                 b.target as target_member,
                 COUNT(a.id) as realisasi_member, 
-                count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
+                count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement,
+                (count(a.id) / b.target) * 100 as percen
                 from users as a
                 join villages as b on a.village_id = b.id
                 where b.district_id = $district_id
