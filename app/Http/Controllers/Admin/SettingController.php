@@ -2,20 +2,67 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\User;
 use App\Dapil;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\District;
-use App\Models\Province;
 use App\Models\Regency;
 use App\Models\Village;
+use App\Models\District;
+use App\Models\Province;
 use App\RightChosseVillage;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Providers\GlobalProvider;
+use Yajra\DataTables\Facades\DataTables;
 
 class SettingController extends Controller
 {
     public function listTarget()
     {
-        return view('pages.admin.setting.list-target');
+        
+        $provinceModel = new Province();
+        $province = $provinceModel->getDataProvince();
+        $regencyModel= new Regency();
+        $achievments   = $regencyModel->achievements();
+            if (request()->ajax()) {
+                return DataTables::of($achievments)
+                        ->addColumn('persentage', function($item){
+                        $gF   = app('GlobalProvider'); // global function
+                        $persentage = $gF->persen($item->percen);
+                        $persentageWidth = $persentage + 30;
+                        return '
+                        <div class="mt-3 progress" style="width:100%;">
+                            <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
+                        </div>
+                        ';
+                    })
+                    ->addColumn('targets', function($item){
+                       return $item->target_member == null ? 0 : $item->target_member;
+                    })                    
+                    ->rawColumns(['persentage','targets'])
+                    ->make();
+            }
+    
+            return view('pages.admin.setting.list-target', compact('province'));
+            
+    }
+
+    public function listTargetRegional($province_id)
+    {
+        
+        $provinceModel = new Province();
+        $province = $provinceModel->getDataProvince();
+        $provincedetail = $provinceModel->select('id','name')->where('id', $province_id)->first();
+        $regencyModel= new Regency();
+        
+
+            $achievments   = $regencyModel->achievementProvince($province_id);
+            if (request()->ajax()) {
+                return DataTables::of($achievments)
+                    ->make();
+            }
+    
+            return view('pages.admin.setting.list-target-province', compact('province','provincedetail'));
+
     }
 
     public function settingTargetMember()
@@ -143,5 +190,95 @@ class SettingController extends Controller
             return redirect()->back()->with(['success' => 'Jumlah hak pilih telah diubah']);
         }
 
+    }
+
+    public function getDatatarget()
+    {
+        $gF = new GlobalProvider();
+        $userModel        = new User();
+
+        if (request('province')) {
+            $province = request('province');
+            $target  = $userModel->getMemberRegistered($province);
+
+            $data = [];
+            foreach($target as $val){
+                $data[] = [
+                    'id' => $val->id,
+                    'name' => $val->name,
+                    'target_member' => $gF->decimalFormat($val->target_member),
+                    'realisasi_member' => $gF->decimalFormat($val->realisasi_member),
+                    'pencapaian' => $gF->persen($val->achivment)
+                ];
+            }
+
+           
+
+
+        }elseif (request('regency')) {
+            $regency = request('regency');
+            $target  = $userModel->getMemberRegisteredRegency($regency);
+
+            $data = [];
+            foreach($target as $val){
+                $data[] = [
+                    'id' => $val->id,
+                    'name' => $val->name,
+                    'target_member' => $gF->decimalFormat($val->target_member),
+                    'realisasi_member' => $gF->decimalFormat($val->realisasi_member),
+                    'pencapaian' => $gF->persen($val->achivment)
+                ];
+            }
+
+            return response()->json($data);
+
+        }elseif ( request('dapil')) {
+            $dapil = request('dapil');
+            
+            $target  = $userModel->getMemberRegisteredRegency($dapil);
+
+            // $data = [];
+            // foreach($target as $val){
+            //     $data[] = [
+            //         'id' => $val->id,
+            //         'name' => $val->name,
+            //         'target_member' => $gF->decimalFormat($val->target_member),
+            //         'realisasi_member' => $gF->decimalFormat($val->realisasi_member),
+            //         'pencapaian' => $gF->persen($val->achivment)
+            //     ];
+            // }
+
+            return response()->json($target);
+
+        }elseif (request('district')) {
+            $village = request('village');
+            return 'district';
+
+        }else{
+            
+            $regencyModel= new Regency();
+            $achievments   = $regencyModel->achievements();
+            return $achievments;
+            
+            if (request()->ajax()) {
+                return DataTables::of($achievments)
+                        ->addColumn('persentage', function($item){
+                            $gF = new GlobalProvider();
+                            $persentage = ($item->realisasi_member / $item->target_member)*100;
+                            $persentage = $gF->persen($persentage);
+                            $persentageWidth = $persentage + 30;
+                            return '
+                            <div class="mt-3 progress" style="width:100%;">
+                                <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
+                            </div>
+                            ';
+                        })
+                        ->rawColumns(['persentage'])
+                        ->make();
+            }
+
+          return view('pages.admin.setting.list-target');
+        }
+        
     }
 }

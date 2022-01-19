@@ -17,7 +17,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Target [ON PROGRESS]</h2>
+                <h2 class="dashboard-title">Daftar Target Provinsi</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
@@ -27,7 +27,7 @@
                   <div class="col-12">
                     <div class="card">
                       <div class="card-body">
-                        <form action="{{ route('admin-list-target-regional') }}" method="GET">
+                        <form action="{{ route('admin-list-target-regional', $provincedetail->id) }}" method="GET">
                           @csrf
                           <div class="row">
                             <div class="col-3">
@@ -113,9 +113,6 @@
                                    <thead>
                                      <tr>
                                      <th scope="col">DAERAH</th>
-                                     <th scope="col">TARGET</th>
-                                     <th scope="col">REALISASI</th>
-                                     <th scope="col">PENCAPAIAN</th>
                                    </tr>
                                    </thead>
                                    <tbody>
@@ -137,7 +134,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="{{ asset('/js/list-target.js') }}"></script>
 <script>
-      let table =  $('#achievment').DataTable({
+       $('#achievment').DataTable({
             processing: true,
             language:{
               processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
@@ -149,17 +146,7 @@
             },
             columns:[
                 {data: 'name', name:'name'},
-                {data: 'targets', name:'targets', className:'text-right'},
-                {data: 'realisasi_member', name:'realisasi_member', className:'text-right'},
-                {data: 'persentage', name:'persentage'},
-            ],
-            columnDefs: [
-              {
-                targets: [1,2],
-                render: $.fn.dataTable.render.number('.', '.', 0, '')
-              }
-            ],
+            ]
         });
-        table.draw()
 </script>
 @endpush

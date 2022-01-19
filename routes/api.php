@@ -233,3 +233,6 @@ Route::get('/intelegency/byvillage/figure/{village_id}','Admin\InformationContro
 // Cost
 Route::get('/cost/list','Admin\CostController@getDataCost');
 
+// Target
+
+Route::post('/target/list','Admin\SettingController@getDatatarget');

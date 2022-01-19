@@ -1,112 +1,191 @@
-async function getListTarget() {
-    BeforeSend("Loadachievment");
+const selectArea = $("#selectArea");
+const selectListArea = $("#selectListArea");
+const selectDistrictId = $("#selectDistrictId");
+const selectVillageId = $("#selectVillageId");
+const province = $("#province");
+const myChart = $("#myChart");
+
+selectListArea.hide();
+selectDistrictId.hide();
+selectVillageId.hide();
+selectArea.hide();
+
+const selectProvince = document.getElementById("province");
+selectProvince.addEventListener("change", async function () {
     try {
-        const target = await getListDataTarget();
-        const dataTarget = target.data;
-        listTargetUI(dataTarget);
-    } catch (err) {}
-    Complete("Loadachievment");
-}
+        const selectProvinceValue = $(this).children("option:selected").val();
+        if (selectProvinceValue !== "") {
+            const responseData = await getDapilRegency(selectProvinceValue);
+            selectArea.show();
+            selectArea.empty();
+            selectListArea.empty();
+            selectArea.append("<option value=''>-Pilih Daerah-</option>");
+            getDapilRegencyUi(responseData);
 
-getListTarget();
+            // get data by province
+        } else {
+            selectArea.hide();
+            selectListArea.hide();
+            selectDistrictId.hide();
+            selectVillageId.hide();
+        }
+    } catch {}
+});
 
-function getListDataTarget() {
-    return fetch(`/api/list/target`)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
+// GET DATA BY PROVINCE
+
+function getDapilRegency(selectProvinceValue) {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    return fetch(`/api/dapilbyprovinceid/${selectProvinceValue}`).then(
+        (response) => {
             return response.json();
-        })
-        .then((response) => {
-            if (response.Response === "False") {
-            }
-            return response;
-        });
+        }
+    );
 }
 
-function listTargetUI(dataTarget) {
-    let divHtml = "";
-    dataTarget.forEach((m) => {
-        divHtml += showDivHtml(m);
+function getDapilRegencyUi(responseData) {
+    let divHtmldapil = "";
+    responseData.forEach((m) => {
+        divHtmldapil += showDivHtmlDapil(m);
     });
-
-    const divHtmlContainer = document.getElementById("showData");
-    divHtmlContainer.innerHTML = divHtml;
+    const divHtmldapilContainer = $("#selectArea");
+    divHtmldapilContainer.append(divHtmldapil);
 }
-function formatNumber(num) {
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, ",");
-}
-
-function number_format(number, decimals, decPoint, thousandsSep) {
-    number = (number + "").replace(/[^0-9+\-Ee.]/g, "");
-    var n = !isFinite(+number) ? 0 : +number;
-    var prec = !isFinite(+decimals) ? 0 : Math.abs(decimals);
-    var sep = typeof thousandsSep === "undefined" ? "." : thousandsSep;
-    var dec = typeof decPoint === "undefined" ? "." : decPoint;
-    var s = "";
-
-    var toFixedFix = function (n, prec) {
-        var k = Math.pow(10, prec);
-        return "" + (Math.round(n * k) / k).toFixed(prec);
-    };
-
-    // @todo: for IE parseFloat(0.55).toFixed(0) = 0;
-    s = (prec ? toFixedFix(n, prec) : "" + Math.round(n)).split(".");
-    if (s[0].length > 3) {
-        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-    }
-    if ((s[1] || "").length < prec) {
-        s[1] = s[1] || "";
-        s[1] += new Array(prec - s[1].length + 1).join("0");
-    }
-
-    return s.join(dec);
+function showDivHtmlDapil(m) {
+    return `<option value="${m.id}">${m.name}</option>`;
 }
 
-function showDivHtml(m) {
-    return `
-                          <tr class="table-primary">
-                            <td colspan="4">${
-                                m.province
-                            }</td><td>${number_format(m.target)}</td>
-                          </tr>
-                          ${m.regencies.map(
-                              (reg) =>
-                                  `
-                                <tr class="table-info">
-                                    <td></td><td colspan="3">${
-                                        reg.name
-                                    }</td><td>${number_format(reg.target)}</td>
-                                </tr>
-                                ${reg.districts.map(
-                                    (dist) =>
-                                        `
-                                        <tr class="table-success">
-                                            <td></td><td></td><td colspan="2">KECAMATAN ${
-                                                dist.name
-                                            }</td><td>${number_format(
-                                            dist.target
-                                        )}</td>
-                                        </tr>
-                                        ${dist.villages.map(
-                                            (vill) =>
-                                                `<tr class="table-secondary">
-                                                    <td></td><td></td><td></td><td>DESA ${
-                                                        vill.name
-                                                    }</td><td>${number_format(
-                                                    vill.target
-                                                )}</td>
-                                                </tr>
-                                                `
-                                        )}
-                                    `
-                                )}
-                                `
-                          )}
-            `;
+// get list dapil names
+selectArea.on("change", async function () {
+    try {
+        const selectAreaValue = $(this).children("option:selected").val();
+        if (selectAreaValue !== "") {
+            selectListArea.show();
+            const listDapils = await getDapilNames(selectAreaValue);
+            selectListArea.empty();
+            // selectDistrictId.empty();
+            selectListArea.append("<option value=''>-Pilih Dapil-</option>");
+            getDapilNamesUi(listDapils);
+        } else {
+            selectListArea.hide();
+        }
+    } catch {}
+});
+
+function getDapilNames(selectAreaValue) {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    return fetch(`/api/getlistdapil`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({ token: CSRF_TOKEN, regencyId: selectAreaValue }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+function getDapilNamesUi(listDapils) {
+    let divListDapil = "";
+    listDapils.forEach((m) => {
+        divListDapil += showDivHtmlListDapil(m);
+    });
+    const divListDapilContainer = $("#selectListArea");
+    divListDapilContainer.append(divListDapil);
+}
+function showDivHtmlListDapil(m) {
+    return `<option value="${m.id}">${m.name}</option>`;
 }
 
+selectListArea.on("change", async function () {
+    const selectListAreaValue = $(this).children("option:selected").val();
+    try {
+        const listDistricts = await getListDistrict(selectListAreaValue);
+        if (selectListAreaValue !== "") {
+            selectDistrictId.show();
+            selectDistrictId.empty();
+            selectDistrictId.append(
+                "<option value=''>-Pilih Kecamatan-</option>"
+            );
+            getListDistrictUi(listDistricts);
+        } else {
+            selectDistrictId.hide();
+        }
+    } catch {}
+});
+function getListDistrict(selectListAreaValue) {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    return fetch(`/api/getlistdistrictdapil`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({
+            token: CSRF_TOKEN,
+            dapilId: selectListAreaValue,
+        }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+function getListDistrictUi(listDistricts) {
+    let divListDistrict = "";
+    listDistricts.forEach((m) => {
+        divListDistrict += showDivHtmlListDistrict(m);
+    });
+    const divListDistrictContainer = $("#selectDistrictId");
+    divListDistrictContainer.append(divListDistrict);
+}
+
+function showDivHtmlListDistrict(m) {
+    return `<option value="${m.district_id}">${m.name}</option>`;
+}
+
+selectDistrictId.on("change", async function () {
+    const selectDistrictValue = $(this).children("option:selected").val();
+    try {
+        const dataVillages = await getListVillage(selectDistrictValue);
+        selectVillageId.show();
+        selectVillageId.empty();
+        selectVillageId.append("<option value=''>-Pilih Desa-</option>");
+        getListVillageUi(dataVillages);
+    } catch {}
+});
+function getListVillage(selectDistrictValue) {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    return fetch(`/api/getlistvillagetdapil`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({
+            token: CSRF_TOKEN,
+            district_id: selectDistrictValue,
+        }),
+    }).then((response) => {
+        return response.json();
+    });
+}
+function getListVillageUi(dataVillages) {
+    let divVillage = "";
+    dataVillages.forEach((m) => {
+        divVillage += showDivHtmlVillage(m);
+    });
+    const divVillageContainer = $("#selectVillageId");
+    divVillageContainer.append(divVillage);
+}
+function showDivHtmlVillage(m) {
+    return `<option value="${m.id}">${m.name}</option>`;
+}
+
+selectVillageId.on("change", async function () {
+    const selectVillageValue = $(this).children("option:selected").val();
+    console.log(selectVillageValue);
+});
+
+// funsgsi efect loader
 function BeforeSend(idLoader) {
     $("#" + idLoader + "").removeClass("d-none");
 }

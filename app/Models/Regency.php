@@ -107,7 +107,8 @@ class Regency extends Model
             count(DISTINCT(c.id)) as total_district,
             d.target as target_member,
             count(a.id) as realisasi_member,
-            count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
+            count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement,
+            (count(a.id) / d.target) * 100 as percen
             from users as a
             join villages as b on a.village_id = b.id
             right join districts as c on b.district_id = c.id
@@ -123,7 +124,8 @@ class Regency extends Model
             count(DISTINCT(c.id)) as total_district,
             e.target as target_member,
             count(a.id) as realisasi_member,
-            count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
+            count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement,
+            (count(a.id) / e.target) * 100 as percen
             from users as a
             join villages as b on a.village_id = b.id
             right join districts as c on b.district_id = c.id

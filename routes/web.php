@@ -255,6 +255,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // target
         Route::get('/target','SettingController@listTarget')->name('admin-list-target');
+        Route::get('/targetprovince/{province_id}','SettingController@listTargetRegional')->name('admin-list-target-regional');
         Route::get('/rightchoose','SettingController@settingRightChoose')->name('admin-rightchoose');
         Route::post('/saverightchoose','SettingController@SaveRightChooseVillage')->name('admin-rightchoose-save');
 

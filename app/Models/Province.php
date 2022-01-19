@@ -61,5 +61,18 @@ class Province extends Model
         return $result;
     }
 
+    public function getDataProvince()
+    {
+        $sql = "SELECT a.id, a.name from provinces as a
+                join regencies as b on a.id = b.province_id 
+                join districts as c on b.id = c.regency_id 
+                join villages as d on c.id = d.district_id 
+                join users as e on d.id = e.village_id 
+                group by a.id, a.name order by a.name asc
+                ";
+        $result = DB::select($sql);
+        return $result;
+    }
+
     
 }
