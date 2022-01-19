@@ -24,14 +24,14 @@ class MemberExportVillage implements FromCollection, WithHeadings, WithEvents
     {
         $village_id = $this->village;
         $sql = "SELECT a.name, a.address,a.rt, a.rw, b.name as village, c.name as district,d.name as regency, a.phone_number, a.whatsapp,
-                e.code as referal_code
+                e.name as referal_name
                 from users as a
                 join villages as b on a.village_id = b.id
                 join districts as c on b.district_id = c.id
                 join users as e on a.user_id = e.id
                 join regencies as d on c.regency_id = d.id
                 where b.id = $village_id 
-                order by b.name";
+                order by a.name asc";
         $result = collect(\ DB::select($sql));
         return $result;
     }

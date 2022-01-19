@@ -22,7 +22,7 @@ class MemberDatatableController extends Controller
                         ';
                     })
                     ->addColumn('action', function($item){
-                        if ($item->status == 1 ) {
+                        if ($item->status == 1 AND $item->email != null) {
                             return '
                                 <span class="badge badge-success">Akun Aktif</span>
                             ';
@@ -50,7 +50,11 @@ class MemberDatatableController extends Controller
                      ->addColumn('registered', function($item){
                         return date('d-m-Y', strtotime($item->created_at));
                     })
-                    ->rawColumns(['photo','action','registered','input'])
+                    ->addColumn('total_referal', function($item){
+                        $total_referal = User::where('user_id', $item->id)->whereNotNull('village_id')->count();
+                        return $total_referal;
+                    })
+                    ->rawColumns(['photo','action','registered','input','total_referal'])
                     ->make(true);
     }
 

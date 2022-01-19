@@ -38,6 +38,7 @@
                                         <th scope="col">REFERAL DARI</th>
                                         <th scope="col">INPUT Dari</th>
                                         <th scope="col">TERDAFTAR</th>
+                                        <th scope="col">JUMLAH REFERAL</th>
                                         <th scope="col">AKSI</th>
                                       </tr>
                                     </thead>

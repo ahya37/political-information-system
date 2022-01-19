@@ -73,14 +73,18 @@
             <table cellspacing='0'>
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Desa</th>
-                        <th>Kecamatan</th>
-                        <th>Kab/Kot</th>
-                        <th>Provinsi</th>
-                        <th>Telpon</th>
-                        <th>Whatsapp</th>
+                        <th>NO</th>
+                        <th>NAMA</th>
+                        <th>ALAMAT</th>
+                        <th>RT</th>
+                        <th>RW</th>
+                        <th>DESA</th>
+                        <th>KECAMATAN</th>
+                        <th>KAB/KOT</th>
+                        <th>PROVINSI</th>
+                        <th>TELPON</th>
+                        <th>WHATSAPP</th>
+                        <th>REFERAL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,12 +95,16 @@
                             <img width="50" src="{{ asset('storage/'. $row->photo) }}">
                         </td> --}}
                         <td>{{ strtoupper($row->name) }}</td>
+                        <td>{{ strtoupper($row->address) }}</td>
+                        <td>{{ $row->rt }}</td>
+                        <td>{{ $row->rw }}</td>
                         <td>{{ $row->village->name ?? '' }}</td>
                         <td>{{ $row->village->district->name ?? '' }}</td>
                         <td>{{ $row->village->district->regency->name ?? '' }}</td>
                         <td>{{ $row->village->district->regency->province->name ?? '' }}</td>
                         <td>{{ $row->phone_number }}</td>
                         <td>{{ $row->whatsapp }}</td>
+                        <td>{{ $row->reveral->name }}</td>
                     </tr>
                     @endforeach
                 </tbody>

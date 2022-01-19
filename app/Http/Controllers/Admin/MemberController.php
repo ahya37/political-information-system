@@ -434,12 +434,12 @@ class MemberController extends Controller
     public function reportMemberDistrictPdf($district_id)
     {
         $district = District::select('name')->where('id', $district_id)->first();
-        $member = User::with(['village'])
+        $member = User::with(['village','reveral'])
                     ->whereHas('village', function($village) use ($district_id){
                         $village->where('district_id', $district_id);
                     })
                     ->whereNotNull('nik')
-                    ->orderBy('name',)
+                    ->orderBy('name','asc')
                     ->get();
         $title = 'Anggota-'. $district->name; 
         $no = 1;
@@ -450,16 +450,16 @@ class MemberController extends Controller
     public function reportMemberVillagePdf($village_id)
     {
         $village = Village::select('name')->where('id', $village_id)->first();
-        $member = User::with(['village'])
+        $member = User::with(['village','reveral'])
                     ->whereHas('village', function($village) use ($village_id){
                         $village->where('id', $village_id);
                     })
                     ->whereNotNull('nik')
-                    ->orderBy('name',)
+                    ->orderBy('name','asc')
                     ->get();
         $title = 'Anggota-Desa-'. $village->name; 
         $no = 1;
-        $pdf   = PDF::loadView('pages.admin.report.member-village-pdf', compact('member','title','no','village'));
+        $pdf   = PDF::loadView('pages.admin.report.member-village-pdf', compact('member','title','no','village'))->setPaper('landscape');
         return $pdf->download($title.'.pdf');
     }
 
