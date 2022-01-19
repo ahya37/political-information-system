@@ -179,7 +179,6 @@
                     href="{{ route('admin-rightchoose') }}"
                     class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ (request()->is('setting/rightchoose')) ? 'active custom-active-color' : '' }}"
                     ><span>Atur Hak Pilih</span></a>
-                  >
                 </li>
                
               </ul>
@@ -235,7 +234,7 @@
             </div>
 
 
-            <a
+            {{-- <a
               class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/voucher*')) ? 'active custom-active-color' : '' }}"
               href="#report"
               data-toggle="collapse"
@@ -253,7 +252,7 @@
                   >
                 </li>
               </ul>
-            </div>
+            </div> --}}
             
             <a class="list-group-item d-lg-none custom-sidebar list-group-item-action custom-active-color" href="{{ route('admin-logout') }}"
                     onclick="event.preventDefault();
