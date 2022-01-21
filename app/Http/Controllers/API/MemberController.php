@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\User;
-use App\Http\Controllers\Controller;
+use App\Models\Province;
 use GuzzleHttp\Psr7\Request;
+use App\Http\Controllers\Controller;
 
 class MemberController extends Controller
 {
@@ -73,6 +74,48 @@ class MemberController extends Controller
             return response()->json($members);
         }
 
+    }
+
+    public function getMember(Request $request){
+        $provinceModel = new Province();
+        $province = $provinceModel->getDataProvince();
+
+        $draw = $request->draw;
+       
+
+        $searchByProvince = $request->searchByProvince;
+
+        $searchQuery = "";
+        if ($searchByProvince != '') {
+            $searchQuery .= $searchByProvince;
+        }
+
+        // total record tanpa filtering
+        $sel = $provinceModel->getAllcountMember();
+        $totalRecords = $sel->allcount;
+
+        // total_record dengan filtering
+        $sel = $provinceModel->getAllcountMember($searchQuery);
+        $totalRecordwithFilter = $sel->allcount;
+
+        // fetch
+        $empQuery = $provinceModel->getMembers($searchQuery);
+        $data = array();
+
+        foreach ($empQuery as  $val) {
+            $data[] = array(
+                "name" => $val->name
+            );
+        }
+
+        $response = array(
+                "draw" => intval($draw),
+                "iTotalRecords" => $totalRecords,
+                "iTotalDisplayRecords" => $totalRecordwithFilter,
+                "aaData" => $data
+        );
+
+        echo json_encode($response);
     }
 
 

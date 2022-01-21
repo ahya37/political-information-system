@@ -74,5 +74,31 @@ class Province extends Model
         return $result;
     }
 
+    public function getAllcountMember(){
+         $sql = "SELECT COUNT(*) as allcount from users ";
+         $result = collect(\DB::select($sql))->first();
+        return $result;
+    }
+
+     public function getAllcountMemberByProvince($searchQuery){
+         $sql = "SELECT COUNT(a.id) as allcount from users as a
+                join villages as b on a.village_id = b.id
+                join districts as c on b.district_id = c.id 
+                join regencies as d on c.regency_id = d.id
+                where d.province_id = $searchQuery";
+         $result = collect(\DB::select($sql))->first();
+        return $result;
+    }
+
+    public function getMembers($searchQuery){
+        $sql = "SELECT a.id as user_id, a.name, a.photo from users as a
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id
+                join regencies as d on c.regency_id = d.id
+                where d.province_id  = $searchQuery and a.village_id is not NULL and a.nik is not NULL and a.email is not null";
+        $result = DB::select($sql);
+        return $result;
+    }
+
     
 }

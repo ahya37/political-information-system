@@ -18,6 +18,64 @@
                 </p>
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
+                <div class="row mb-2">
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-3">
+                             <select name="level" id="province" required class="form-control filter" required>
+                               <option value="">-Pilih Provinsi-</option>
+                               @foreach ($province as $item)
+                               <option value="{{ $item->id }}">{{ $item->name }}</option>
+                               @endforeach
+                              </select>
+                          </div>
+                          <div class="col-3">
+                             <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="" id="selectArea"  class="form-control filter" required>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                          </div>
+                          <div class="col-3">
+                            <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="dapil_id" id="selectListArea"  class="form-control filter" required>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                          </div>
+                          <div class="col-3">
+                            <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="district_id" id="selectDistrictId"  class="form-control filter">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                          </div>
+                          <div class="col-3">
+                             <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="village_id" id="selectVillageId"  class="form-control filter">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 
                 <div class="row">
                   <div class="col-12">
@@ -29,15 +87,14 @@
                                   <table id="data" class="table table-sm table-striped" width="100%">
                                     <thead>
                                       <tr>
-                                        <th>ID</th>
                                         <th></th>
                                         <th scope="col">NAMA</th>
                                         <th scope="col">KABUPATEN/KOTA</th>
                                         <th scope="col">KECAMATAN</th>
                                         <th scope="col">DESA</th>
-                                        <th scope="col">REFERAL DARI</th>
-                                        <th scope="col">INPUT Dari</th>
-                                        <th scope="col">TERDAFTAR</th>
+                                         <th scope="col">REFERAL DARI</th>
+                                          <th scope="col">INPUT Dari</th>
+                                          <th scope="col">TERDAFTAR</th>
                                         <th scope="col">JUMLAH REFERAL</th>
                                         <th scope="col">AKSI</th>
                                       </tr>
@@ -58,5 +115,6 @@
 
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+{{-- <script src="{{ asset('js/list-target.js') }}"></script> --}}
 <script src="{{ asset('js/member-index.js') }}"></script>
 @endpush

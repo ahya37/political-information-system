@@ -39,7 +39,9 @@ class MemberController extends Controller
     }
     public function index(Request $request)
     {
-        return view('pages.admin.member.index');
+        $provinceModel = new Province();
+        $province = $provinceModel->getDataProvince();
+        return view('pages.admin.member.index', compact('province'));
     }
 
     public function create()

@@ -122,6 +122,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
     
     Route::get('/info/dtintelegencyvillage','InformationController@dtListIntelegencyAccountMember');
 
+
+
     Route::group(['middleware' => 'admin'], function(){
         Route::post('logout','LoginController@logout')->name('admin-logout');
         Route::get('/dashboard/nation','DashboardController@index')->name('admin-dashboard');
@@ -203,7 +205,6 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/pdf/member/village/{village_id}','MemberController@reportMemberVillagePdf')->name('pdf-members-village');
 
         Route::get('/crop','MemberController@cropImage');
-        Route::get('/member/dtmember','Datatable\MemberDatatableController@dTableMember');
         Route::get('/member/dtmemberpotentialreferal','Datatable\MemberDatatableController@dTableMemberPotentialReferal');
         Route::get('/member/dtmemberpotentialreferalByMember/{id_user}','Datatable\MemberDatatableController@dTableMemberPotentialReferalByMember');
         Route::get('/member/dtmemberpotentialinput','Datatable\MemberDatatableController@dTableMemberPotentialInput');
