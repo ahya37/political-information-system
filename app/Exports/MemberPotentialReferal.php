@@ -31,6 +31,7 @@ class MemberPotentialReferal implements FromCollection,WithHeadings, WithEvents
                 order by COUNT(a.user_id) desc";
         $result = DB::select($sql);
 
+        $no = 1;
         $data = [];
         foreach ($result as $val) {
             $userModel = new User();
@@ -39,6 +40,7 @@ class MemberPotentialReferal implements FromCollection,WithHeadings, WithEvents
             $total_referal_undirect = $referal_undirect->total == NULL ? '0' : $referal_undirect->total;
             
             $data[] = [
+                'no' => $no++,
                 'name' => $val->name,
                 'referal' => $val->total,
                 'referal_undirect' => $total_referal_undirect,
@@ -57,6 +59,7 @@ class MemberPotentialReferal implements FromCollection,WithHeadings, WithEvents
     public function headings(): array
     {
         return [
+            'NOS',
             'NAMA',
             'REFERAL',
             'REFERAL TIDAK LANGSUNG',

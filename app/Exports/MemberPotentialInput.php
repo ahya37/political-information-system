@@ -32,8 +32,10 @@ class MemberPotentialInput implements FromCollection, WithHeadings, WithEvents
         $result = DB::select($sql);
 
         $data = [];
+        $no = 1;
         foreach ($result as $val) {            
             $data[] = [
+                'no' => $no++,
                 'name' => $val->name,
                 'total' => $val->total,
                 'village' => $val->village,
@@ -51,6 +53,7 @@ class MemberPotentialInput implements FromCollection, WithHeadings, WithEvents
     public function headings(): array
     {
         return [
+            'NO',
             'NAMA',
             'JUMLAH',
             'DESA',
@@ -66,7 +69,7 @@ class MemberPotentialInput implements FromCollection, WithHeadings, WithEvents
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:H1')->applyFromArray([
+                $event->sheet->getStyle('A1:I1')->applyFromArray([
                     'font' => [
                         'bold' => true
                     ]
