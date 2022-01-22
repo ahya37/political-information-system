@@ -598,7 +598,7 @@ class MemberController extends Controller
         $gF = new GlobalProvider();
         $no  =1;
         $pdf = PDF::LoadView('pages.report.member-potential-referal',compact('data','no','gF'))->setPaper('a4');
-        return  $pdf->stream('ANGGOTA POTENSIAL REFERAL.pdf');
+        return  $pdf->download('ANGGOTA POTENSIAL REFERAL.pdf');
     }
 
     public function memberPotentialInputDownloadPDF()
