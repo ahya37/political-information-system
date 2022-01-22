@@ -300,6 +300,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         // Download angota potensial
         Route::get('/member/potential/referal/excel','MemberController@memberPotentialReferalDownloadExcel')->name('admin-member-potential-referal-excel');
         Route::get('/member/potential/input/excel','MemberController@memberPotentialInputDownloadExcel')->name('admin-member-potential-input-excel');
+        Route::get('/member/potential/referal/pdf','MemberController@memberPotentialReferalDownloadPDF')->name('admin-member-potential-referal-pdf');
+        Route::get('/member/potential/input/pdf','MemberController@memberPotentialInputDownloadPDF')->name('admin-member-potential-input-pdf');
     });
 });
 

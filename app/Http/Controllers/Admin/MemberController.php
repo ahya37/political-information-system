@@ -568,7 +568,47 @@ class MemberController extends Controller
 
     public function memberPotentialInputDownloadExcel()
     {
-        return $this->excel->download(new MemberPotentialInput(), 'ANGGOTA POTENSIAL REFERAL.xls');
+        return $this->excel->download(new MemberPotentialInput(), 'ANGGOTA POTENSIAL INPUT.xls');
+    }
+
+    public function memberPotentialReferalDownloadPDF()
+    {
+        $userModel = new User();
+        $member = $userModel->getMemberReferal();
+
+        $data = [];
+        foreach ($member as $val) {
+            $userModel = new User();
+            $id_user = $val->id;
+            $referal_undirect = $userModel->getReferalUnDirect($id_user);
+            $total_referal_undirect = $referal_undirect->total == NULL ? '0' : $referal_undirect->total;
+            
+            $data[] = [
+                'name' => $val->name,
+                'referal' => $val->total,
+                'referal_undirect' => $total_referal_undirect,
+                'village' => $val->village,
+                'district' => $val->district,
+                'regency' => $val->regency,
+                'province' => $val->province,
+                'phone_number' => $val->phone_number,
+                'whatsapp' => $val->whatsapp,
+            ];
+        }
+        $gF = new GlobalProvider();
+        $no  =1;
+        $pdf = PDF::LoadView('pages.report.member-potential-referal',compact('data','no','gF'))->setPaper('a4');
+        return  $pdf->stream('ANGGOTA POTENSIAL REFERAL.pdf');
+    }
+
+    public function memberPotentialInputDownloadPDF()
+    {
+        $gF = new GlobalProvider();
+        $userModel = new User();
+        $member = $userModel->getMemberInput();
+        $no  = 1;
+        $pdf = PDF::LoadView('pages.report.member-potential-input',compact('member','no','gF'))->setPaper('a4');
+        return  $pdf->download('ANGGOTA POTENSIAL INPUT.pdf');
     }
 
 

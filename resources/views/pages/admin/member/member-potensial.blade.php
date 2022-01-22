@@ -24,6 +24,18 @@
               <div class="row mb-2">
                     <div class="col-md-12">
                       <div class="row">
+                         <div class="col-md-2 col-sm-2">
+                          <div class="dropdown show">
+                            <a class="btn btn-sm border border-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Download PDF
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a href="{{ route('admin-member-potential-referal-pdf') }}" class="dropdown-item">Anggota Potensial Referal</a>
+                            <a href="{{ route('admin-member-potential-input-pdf') }}" class="dropdown-item">Anggota Potensial Input</a>
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="col-md-2 col-sm-2">
                           <div class="dropdown show">
                             <a class="btn btn-sm border border-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

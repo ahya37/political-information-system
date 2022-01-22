@@ -808,24 +808,27 @@ class User extends Authenticatable
 
     public function getMemberInput()
     {
-        $sql = "SELECT a.id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, a.photo, COUNT(a.user_id) as total FROM users as a
+        $sql = "SELECT a.id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, a.photo, COUNT(a.user_id) as total,
+                c.name as village, f.name as province  FROM users as a
                 join users as b on a.id = b.cby
                 join villages as c on a.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
-                group by a.id, a.name, e.name, d.name , a.photo , a.phone_number, a.whatsapp
+                join provinces as f on e.province_id = f.id
+                group by a.id, a.name, e.name, d.name , a.photo , a.phone_number, a.whatsapp, c.name, f.name
                 order by COUNT(a.user_id) desc";
         return DB::select($sql);
     }
     public function getMemberReferal()
     {
-        $sql = "SELECT a.id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, c.name as village, a.photo, 
+        $sql = "SELECT a.id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, c.name as village, f.name as province, a.photo, 
                 COUNT(case when b.id != b.user_id then a.user_id end) as total FROM users as a
                 join users as b on a.id = b.user_id
                 join villages as c on a.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
-                group by c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
+                join provinces as f on e.province_id = f.id
+                group by f.name, c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
                 order by COUNT(a.user_id) desc";
         return DB::select($sql);
     }
