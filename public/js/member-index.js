@@ -128,6 +128,7 @@ $(".filter").change(async function () {
     selectVillageId = $("#selectVillageId").val();
 
     try {
+        // kabkot
         if (province !== "") {
             const responseData = await getDapilRegency(province);
 
@@ -136,10 +137,9 @@ $(".filter").change(async function () {
             // $("#selectListArea").empty();
             $("#selectArea").append("<option value=''>-Pilih Daerah-</option>");
             getDapilRegencyUi(responseData);
-
-            // get data by province
         }
 
+        // dapil
         if (selectArea !== "") {
             const listDapils = await getDapilNames(selectArea);
             $("#selectListArea").empty();
@@ -150,19 +150,21 @@ $(".filter").change(async function () {
             );
             getDapilNamesUi(listDapils);
         }
+        // kecamatan
         if (selectListArea !== "") {
             const listDistricts = await getListDistrict(selectListArea);
-            $("#selectDistrictId").show();
             $("#selectDistrictId").empty();
+            $("#selectDistrictId").show();
             $("#selectDistrictId").append(
                 "<option value=''>-Pilih Kecamatan-</option>"
             );
             getListDistrictUi(listDistricts);
         }
+        // desa
         if (selectDistrictId !== "") {
             const dataVillages = await getListVillage(selectDistrictId);
-            $("#selectVillageId").show();
             $("#selectVillageId").empty();
+            $("#selectVillageId").show();
             $("#selectVillageId").append(
                 "<option value=''>-Pilih Desa-</option>"
             );

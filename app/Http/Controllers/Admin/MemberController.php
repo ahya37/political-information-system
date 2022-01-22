@@ -10,6 +10,8 @@ use App\Crop;
 use App\Exports\MemberByReferalAll;
 use App\Exports\MemberByReferalInDistrict;
 use App\Exports\MemberMostReferal;
+use App\Exports\MemberPotentialInput;
+use App\Exports\MemberPotentialReferal;
 use App\UserMenu;
 use App\Models\Regency;
 use App\Models\Village;
@@ -557,6 +559,16 @@ class MemberController extends Controller
         $members  = $userModel->getListMemberByUserAll($user_id);
         $pdf = PDF::LoadView('pages.report.member-referal-all', compact('members','no','user'))->setPaper('a4');
         return  $pdf->download('ANGGOTA REFERAL DARI '.$user->name.'.pdf');
+    }
+
+    public function memberPotentialReferalDownloadExcel()
+    {
+        return $this->excel->download(new MemberPotentialReferal(), 'ANGGOTA POTENSIAL REFERAL.xls');
+    }
+
+    public function memberPotentialInputDownloadExcel()
+    {
+        return $this->excel->download(new MemberPotentialInput(), 'ANGGOTA POTENSIAL REFERAL.xls');
     }
 
 
