@@ -38,6 +38,7 @@
                                         <th scope="col">NAMA</th>
                                         <th scope="col">ALAMAT</th>
                                         <th scope="col">TOTAL POIN</th>
+                                        <th scope="col">TOTAL DATA</th>
                                         <th scope="col">TOTAL NOMINAL</th>
                                         <th scope="col">AKSI</th>
                                       </tr>

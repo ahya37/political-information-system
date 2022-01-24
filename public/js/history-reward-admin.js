@@ -13,7 +13,12 @@ $("#data").DataTable({
         { data: "name", name: "name" },
         { data: "address", name: "address" },
         { data: "totalPoint", name: "totalPoint", className: "text-center" },
-        { data: "totalNominal", name: "totalNominal" },
+        { data: "totalData", name: "totalData", className: "text-center" },
+        {
+            data: "totalNominal",
+            name: "totalNominal",
+            className: "text-center",
+        },
         { data: "action", name: "action" },
     ],
     aaSorting: [[2, "desc"]],

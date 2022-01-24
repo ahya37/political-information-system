@@ -883,12 +883,19 @@ class RewardController extends Controller
                                     </div>
                                        ';
                             })
+                        ->addColumn('totalData', function($item){
+                                $gF = new GlobalProvider();
+                                 return '<div class="badge badge-pill badge-success">
+                                        '.$gF->decimalFormat($item->total_data).'
+                                    </div>
+                                       ';
+                            })
                         
                         ->addColumn('action', function($item){
                                  return '<a href="'.route('admin-detail-listrewardreferal', $item->id).'" class="btn btn-sm btn-sc-primary text-white">Detail</a>';
                             })
                         
-                        ->rawColumns(['photo','address','time','totalPoint','totalNominal','action'])
+                        ->rawColumns(['photo','address','time','totalPoint','totalNominal','action','totalData'])
                         ->make(true);
         }
     }
@@ -927,12 +934,19 @@ class RewardController extends Controller
                                     </div>
                                        ';
                             })
+                         ->addColumn('totalData', function($item){
+                                $gF = new GlobalProvider();
+                                 return '<div class="badge badge-pill badge-success">
+                                        '.$gF->decimalFormat($item->total_data).'
+                                    </div>
+                                       ';
+                            })
                         
                         ->addColumn('action', function($item){
                                  return '<a href="'.route('admin-detail-listrewardadmin', $item->id).'" class="btn btn-sm btn-sc-primary text-white">Detail</a>';
                             })
                         
-                        ->rawColumns(['photo','address','time','totalPoint','totalNominal','action'])
+                        ->rawColumns(['photo','address','time','totalPoint','totalNominal','action','totalData'])
                         ->make(true);
         }
     }
