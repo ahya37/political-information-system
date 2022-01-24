@@ -240,17 +240,30 @@ class MemberController extends Controller
         $user = User::select('id','name')->where('id', $id)->first();
         
         $this->validate($request, [
-            'email' => 'required|email|unique:users'
+            'email' => 'required|email'
         ]);
     
         $user->update([
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'activate_token' => Str::random(10),
+            // 'activate_token' => Str::random(10),
+            'status' => 1
         ]);
 
+        // set secara defualt menunya ketika mendaftar
+        $menu_default = Menu::select('id','name')->get();
+        // karena menu dashboard itu ada di array pertama maka kita hapus,
+        // karena saat mendaftar user tidak bisa mengakses menu dashboard jika bukan di jadikan admin oleh administrator
+        unset($menu_default[0]);
+        foreach($menu_default as $val){
+            UserMenu::create([
+                'user_id' => $user->id,
+                'menu_id' => $val->id
+            ]);
+        }
+        
         // send link verifikasi ke email terkait
-        Mail::to($request->email)->send(new RegisterMail($user)); // send email untuk verifikasi akun       
+        // Mail::to($request->email)->send(new RegisterMail($user)); // send email untuk verifikasi akun
 
         return redirect()->route('admin-member')->with(['success' => 'Akun untuk '.$user->name.' telah dibuat']);
         

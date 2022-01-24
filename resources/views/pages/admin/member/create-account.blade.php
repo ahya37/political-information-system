@@ -82,7 +82,7 @@
 <script src="https://unpkg.com/vue-toasted"></script>
 <script src="https://unpkg.com/vue-toasted"></script>
 <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
-<script>
+{{-- <script>
         Vue.use(Toasted);
 
         var register = new Vue({
@@ -110,7 +110,7 @@
 
                     if(response.data == 'Available'){
                         self.$toasted.success(
-                            "Email Anda tersedia, silahkan lanjut langkah selanjutnya!",
+                            "Email Anda tersedia, silahkan lanjut!",
                             {
                             position: "top-center",
                             className: "rounded",
@@ -137,5 +137,5 @@
             },
             }
         })
-    </script>
+    </script> --}}
 @endpush
