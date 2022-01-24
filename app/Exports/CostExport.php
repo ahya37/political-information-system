@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Providers\GlobalProvider;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Events\AfterSheet;
@@ -74,6 +75,8 @@ class CostExport implements FromCollection, WithHeadings, WithEvents
 
     public function registerEvents(): array
     {
+        
+
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $event->sheet->getStyle('A1:G1')->applyFromArray([
@@ -81,6 +84,16 @@ class CostExport implements FromCollection, WithHeadings, WithEvents
                         'bold' => true
                     ]
                 ]);
+
+                $data = $this->collection();
+                $total = collect($data)->sum(function($q){
+                    return $q['nominal'];
+                });
+
+                $event->sheet->appendRows(array(
+                    array('Total','','','','','',$total),
+                ), $event);
+
             }
         ];
     }
