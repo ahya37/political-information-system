@@ -27,7 +27,7 @@ class VoucherHistory extends Model
 
     public function getMember($id)
     {
-        $sql = "SELECT a.id, a.name from users as a
+        $sql = "SELECT a.id, a.name, village_id from users as a
                 join voucher_history as b on a.id = b.user_id where b.id = $id";
         $result = collect(\ DB::select($sql))->first();
         return $result;

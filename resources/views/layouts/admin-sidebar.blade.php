@@ -240,7 +240,7 @@
               data-toggle="collapse"
               data-target="#report"
               >
-              <span class="d-none d-sm-inline"></span>Laporan</a
+              <span class="d-none d-sm-inline"></span>Voucher</a
             >
              <div class="collapse" id="report" aria-expanded="false">
               <ul class="flex-column pl-2 nav">

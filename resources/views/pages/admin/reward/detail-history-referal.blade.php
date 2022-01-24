@@ -74,6 +74,7 @@
             <label>Nominal</label>
             <input type="hidden" name="VoucherId" id="VoucherId" value="{{ $item->id }}" class="form-control">
             <input type="text" name="nominal" value="{{ $item->nominal }}" class="form-control">
+            <input type="hidden" name="type" value="referal">
           </div>
           <div class="form-group">
             <label>Bukti Transfer</label>

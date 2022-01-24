@@ -6,6 +6,7 @@ use PDF;
 use App\Cost;
 use App\User;
 use App\Referal;
+use App\CostLess;
 use Carbon\Carbon;
 use App\VoucherHistory;
 use Illuminate\Support\Str;
@@ -981,27 +982,41 @@ class RewardController extends Controller
     public function uploadTFVoucher(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:png,jpg,jpeg'
+            'file' => 'required|mimes:png,jpg,jpeg',
+            'nominal' => 'required'
         ]);
 
+
         $voucherDetail = DetailVoucherHistory::where('id', $request->VoucherId)->first();
+        $voucher_history_id = $voucherDetail->voucher_history_id;
 
         $voucherModel   = new VoucherHistory();
         $user          =  $voucherModel->getMember($voucherDetail->voucher_history_id);
 
+        $fileImage = $request->file->store('assets/voucher/tf','public');
 
-            $fileImage = $request->file->store('assets/voucher/tf','public');
-
-            $voucherDetail->update([
-                'tf' => $fileImage,
-            ]);
+        $voucherDetail->update([
+            'tf' => $fileImage,
+        ]);
             
             // simpan ke table cost
-            Cost::create([
-                'cost_category_id' => 1,
-                'to' => $user->id,
-                'nominal' => $request->nominal
-            ]);
+            // Cost::create([
+            //     'cost_category_id' => 1,
+            //     'to' => $user->id,
+            //     'nominal' => $request->nominal
+            // ]);
+
+        // simpan ke tb cost_less
+        CostLess::create([
+            'date' => date('Y-m-d'),
+            'forcest_id' => 4, // voucher
+            'forecast_desc_id' => $request->type == 'referal' ? 3 : 6, // voucher referal atau voucher admina
+            'received_name' => $user->name,
+            'village_id' => $user->village_id,
+            'nominal' => $request->nominal,
+            'file' => $fileImage,
+        ]);
+
         
 
         return redirect()->back()->with(['success' => 'Berhasil upload']);
