@@ -6,10 +6,10 @@ use PDF;
 use Auth;
 use App\Menu;
 use App\User;
-use App\UserMenu;
-use App\AdminDistrict;
 use App\Figure;
+use App\UserMenu;
 use App\LogEditUser;
+use App\AdminDistrict;
 use App\Models\District;
 use App\Providers\StrRandom;
 use Illuminate\Http\Request;
@@ -17,6 +17,7 @@ use Maatwebsite\Excel\Excel;
 use App\Providers\GlobalProvider;
 use App\Providers\QrCodeProvider;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
@@ -504,6 +505,12 @@ class UserController extends Controller
                                                 >
                                                 Edit Referal
                                                 </a>
+                                             <a
+                                                href="'.route('member-registered-create-account', $item->id).'"
+                                                class="btn "
+                                                >
+                                                Buat Akun
+                                                </a>
                                         </div>
                                     </div>
                                 </div>
@@ -525,6 +532,54 @@ class UserController extends Controller
                         ->make();
                     }
                     return view('pages.member.member-register', compact('figure'));
+    }
+
+    public function createAccount($id)
+    {
+
+        $user = User::select('id','name','password')->where('id', $id)->first();
+
+        if ($user->password != null) {
+            return redirect()->back()->with(['warning' => 'Anggota tersebut sudah memiliki akun']);
+        }else{
+            return view('pages.member.create-account', compact('user'));
+        }
+
+    }
+
+    public function storeAccount(Request $request, $id)
+    {
+        $user = User::select('id','name')->where('id', $id)->first();
+
+        $this->validate($request, [
+            'email' => 'required|email'
+        ]);
+
+        $user->update([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            // 'activate_token' => Str::random(10),
+            'status' => 1
+        ]);
+
+        // set secara defualt menunya ketika mendaftar
+        $menu_default = Menu::select('id','name')->get();
+        // karena menu dashboard itu ada di array pertama maka kita hapus,
+        // karena saat mendaftar user tidak bisa mengakses menu dashboard jika bukan di jadikan admin oleh administrator
+        unset($menu_default[0]);
+        foreach($menu_default as $val){
+            UserMenu::create([
+                'user_id' => $user->id,
+                'menu_id' => $val->id
+            ]);
+        }
+        // send link verifikasi ke email terkait
+        // Mail::to($request->email)->send(new RegisterMail($user)); // send email untuk verifikasi akun
+        
+    
+
+        return redirect()->route('member-registered-user')->with(['success' => 'Akun untuk '.$user->name.' telah dibuat']);
+        
     }
     
 

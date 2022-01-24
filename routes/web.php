@@ -64,6 +64,8 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/event/absen/{event_detail_id}','EventController@storeAbsen')->name('member-event-absen');
         
         Route::get('/registered','UserController@memberRegister')->name('member-registered-user');
+        Route::get('/registered/create/account/{id}','UserController@createAccount')->name('member-registered-create-account');
+        Route::post('/registered/create/account/store/{id}','UserController@storeAccount')->name('member-create-account-store');
 
         Route::get('/province/{province_id}','MemberController@memberProvince')->name('adminuser-members-province');
         Route::get('/villagefilled/province/{province_id}','VillageController@villafeFilledProvince')->name('adminuser-villagefilled-province');
