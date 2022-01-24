@@ -59,7 +59,7 @@ class MemberPotentialReferal implements FromCollection,WithHeadings, WithEvents
     public function headings(): array
     {
         return [
-            'NOS',
+            'NO',
             'NAMA',
             'REFERAL',
             'REFERAL TIDAK LANGSUNG',

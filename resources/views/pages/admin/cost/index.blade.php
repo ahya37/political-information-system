@@ -28,7 +28,7 @@
                         <div class="card-body">
                             <div class="row mb-4">
                                 <div class="col-2">
-                                    <a href="{{ route('admin-cost-index') }}" class="btn btn-sm border">Akumulasi</a>
+                                    <a href="{{ route('admin-cost-index') }}" class="btn btn-sm btn-sc-primary text-white">Akumulasi</a>
                                 </div>
                                 <div class="col-4">
                                     <form action="{{ route('admin-cost-index') }}" method="GET">
@@ -44,7 +44,11 @@
                                 <div class="col-2">
                                     <button class="btn btn-sm btn-sc-primary text-white">Filter</button>
                                 </div>
-                                </form> 
+                                </form>
+                                <div class="col-2">
+                                    <a class="btn btn-sm btn-sc-primary text-white" id="exportpdf">PDF</a>
+                                    <a class="btn btn-sm btn-sc-primary text-white" id="exportexcel">EXCEL</a>
+                                </div> 
 
                             </div>
                          <div class="table-responsipe mt-4">

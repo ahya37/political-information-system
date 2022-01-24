@@ -4,15 +4,24 @@ namespace App\Http\Controllers\Admin;
 
 use App\Cost;
 use App\CostLess;
+use App\Exports\CostExport;
 use App\Forecast;
 use App\ForecastDesc;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\GlobalProvider;
 use Carbon\Carbon;
+use PDF;
+use Maatwebsite\Excel\Excel;
 
 class CostController extends Controller
 {
+    public $excel;
+    public function __construct(Excel $excel)
+    {
+        $this->excel = $excel;
+    }
+
     public function create()
     {
         $forecast = Forecast::orderBy('name','desc')->get();
@@ -87,7 +96,7 @@ class CostController extends Controller
              $start = Carbon::parse($date[0])->format('Y-m-d');
              $end   = Carbon::parse($date[1])->format('Y-m-d');
 
-             $cost     = $costModel->getDataCostRange($start, $end);
+              $cost     = $costModel->getDataCostRange($start, $end);
 
               $total     = collect($cost)->sum(function($q){
                     return $q->nominal;
@@ -115,5 +124,42 @@ class CostController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    public function downloadPDF($daterange)
+    {
+             $gF = new GlobalProvider();
+             $date  = explode('+', $daterange);
+
+             $start = Carbon::parse($date[0])->format('Y-m-d');
+             $end   = Carbon::parse($date[1])->format('Y-m-d');
+             
+            $costModel = new Cost();
+
+            $cost     = $costModel->getDataCostRange($start, $end);
+            $no = 1;
+
+            $total     = collect($cost)->sum(function($q){
+                    return $q->nominal;
+                });
+            $date_report = date('d-m-Y', strtotime($start)) .' - '. date('d-m-Y', strtotime($end));
+
+        $pdf = PDF::LoadView('pages.admin.report.cost-politic', compact('cost','gF','date_report','no','total'))->setPaper('landscape');;
+        return $pdf->download('LAPORAN COST POLITIC '.$date_report.'.pdf');
+             
+    }
+
+    public function downloadExcel($daterange)
+    {
+             $gF = new GlobalProvider();
+             $date  = explode('+', $daterange);
+
+             $start = Carbon::parse($date[0])->format('Y-m-d');
+             $end   = Carbon::parse($date[1])->format('Y-m-d');
+             
+            $date_report = date('d-m-Y', strtotime($start)) .' - '. date('d-m-Y', strtotime($end));
+
+        return $this->excel->download(new CostExport($start, $end), 'LAPORAN COST POLITIK '.$date_report.'.xls');
+             
     }
 }
