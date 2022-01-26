@@ -12,26 +12,54 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Detail Event :  {{ $title }}</h2>
+                <h2 class="dashboard-title">Detail Event :  {{ $event->title }}</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
                 
                 <div class="row">
-                  <div class="col-12">
+                  <div class="col-10">
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
+                        <h5 class="card-title mb-2">Daftar Biaya</h5>
+                       <div class="table-responsive">
+                                  <table id="cost" class="table table-sm table-striped">
+                                    <thead>
+                                      <tr>
+                                        <th >NOMINAL</th>
+                                        <th >FILE</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      @foreach ($cost as $item)
+                                          <tr>
+                                            <td class="text-right">Rp. {{ $gF->decimalFormat($item->nominal)  }}</td>
+                                            <td>
+                                              <img src="{{ asset('/storage/',$item->file) }}" width="30">
+                                            </td>
+                                          </tr>
+                                      @endforeach
+                                    </tbody>
+                                  </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-10">
+                    @include('layouts.message')
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title mb-2">Daftar Peserta</h5>
                        <div class="table-responsive">
                                   <table id="data" class="table table-sm table-striped" width="100%">
                                     <thead>
                                       <tr>
-                                        <th scope="col">No KTA</th>
-                                        <th scope="col">Nama</th>
-                                        <th scope="col">Hadir</th>
-                                        <th scope="col">Domisili</th>
-                                        <th scope="col">Log Kehadiran</th>
+                                        <th scope="col">NAMA</th>
+                                        <th scope="col">TERDAFTAR</th>
                                       </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -60,12 +88,11 @@
                 url: '{!! url()->current() !!}',
             },
             columns:[
-               {data:'number', name:'number'},
-               {data:'name', name:'name'},
-               {data:'present', name:'present'},
-               {data:'domisili', name:'domisili'},
-               {data:'log_presents', name:'log_presents'},
+               {data:'participant', name:'participant'},
+               {data:'register', name:'register'},
             ]
         });
+
+        $('#cost').DataTable()
     </script>
 @endpush

@@ -13,6 +13,7 @@ use App\Models\Regency;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Providers\GlobalProvider;
 use Yajra\DataTables\Facades\DataTables;
 
 class EventController extends Controller
@@ -31,7 +32,7 @@ class EventController extends Controller
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="'.route('admin-event-addmember-detail', encrypt($item->id)).'">
+                                            <a class="dropdown-item" href="'.route('admin-event-addmember-detail', $item->id).'">
                                                 Detail
                                             </a>
                                             <a class="dropdown-item" href="'.route('admin-event-edit', $item->id).'">
@@ -274,35 +275,25 @@ class EventController extends Controller
 
     public function evenDetials($id)
     {
-        $event_id = decrypt($id);
-        $evenDetailModel = new EventDetail();
-        $event_detail     = $evenDetailModel->getEventDetail($event_id);
+        $event_id =$id;
+        $event_detail = EventDetail::orderBy('participant','asc')->where('event_id', $event_id)->get();
+        $event = Event::select('title')->where('id', $event_id)->first();
+        // $event_detail     = $evenDetailModel->getEventDetail($event_id);
         if (request()->ajax()) {
                 return DataTables::of($event_detail)
-                        ->addColumn('present', function($item){
-                            if ($item->log_present === NULL) {
-                                return '<span class="badge badge-danger">Tidak</span>';
-                            }else{
-                                return '<span class="badge badge-success">Ya</span>';
-                            }
+                        ->addColumn('register', function($item){
+                            $date = date('d-m-Y', strtotime($item->created_at));
+                            return $date;
                         })
-                        ->addColumn('log_presents', function($item){
-                            if ($item->log_present != NULL) {
-                                return date('d-m-Y H:i:s', strtotime($item->log_present));
-                            }else{
-                                return '-';
-                            }
-                        })
-                        ->rawColumns(['present','log_presents'])
-                        ->make();
+                        ->rawColumns(['register'])
+                        ->make(true);
                     }
 
-        $title = '';
-        foreach ($event_detail as $val) {
-            $title = $val->title;
-        }
-
-        return view('pages.admin.event.detail', compact('title'));
+        // biaya
+        $cost = CostEvent::where('event_id', $event_id)->get();
+        $gF = new GlobalProvider();
+        
+        return view('pages.admin.event.detail', compact('event','cost','gF'));
     }
 
     public function costEventStore(Request $request, $id)
