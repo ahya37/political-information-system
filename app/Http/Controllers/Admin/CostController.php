@@ -9,6 +9,7 @@ use App\Forecast;
 use App\ForecastDesc;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Village;
 use App\Providers\GlobalProvider;
 use Carbon\Carbon;
 use PDF;
@@ -46,13 +47,14 @@ class CostController extends Controller
                 $fileImage = 'NULL';
             }
 
-        // 
+        //
+        $village = Village::with(['district.regency'])->where('id', $request->village_id)->first();
         CostLess::create([
             'date' => date('Y-m-d', strtotime($request->date)),
             'forcest_id' => $request->forecast_id,
             'forecast_desc_id' => $request->forecast_desc_id,
             'received_name' => $request->received_name,
-            'village_id' => $request->village_id,
+            'address' => 'DS. '. $village->name. ', KEC. ' .$village->district->name. ', '. $village->district->regency->name,
             'nominal' => $request->nominal,
             'file' => $fileImage,
         ]);

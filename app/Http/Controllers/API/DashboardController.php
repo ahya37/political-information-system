@@ -370,7 +370,7 @@ class DashboardController extends Controller
         }
         $data = [
             'label' => $chart_member_target['label'],
-            'persentage' => $chart_member_target['persentage'],
+            'persentage' =>  $chart_member_target['persentage'],
             'value_target' =>  $chart_member_target['target'] 
         ];
         return response()->json($data);
@@ -454,8 +454,8 @@ class DashboardController extends Controller
 
         $data  = [
             'cat_gender' => $cat_gender,
-            'total_male_gender' => $total_male_gender,
-            'total_female_gender' => $total_female_gender
+            'total_male_gender' => $gF->decimalFormat($total_male_gender),
+            'total_female_gender' => $gF->decimalFormat($total_female_gender)
         ];
         return response()->json($data);
         
@@ -476,8 +476,8 @@ class DashboardController extends Controller
 
         $data  = [
             'cat_gender' => $cat_gender,
-            'total_male_gender' => $total_male_gender,
-            'total_female_gender' => $total_female_gender
+            'total_male_gender' => $gF->decimalFormat($total_male_gender),
+            'total_female_gender' => $gF->decimalFormat($total_female_gender)
         ];
         return response()->json($data);
         
@@ -520,8 +520,8 @@ class DashboardController extends Controller
 
         $data  = [
             'cat_gender' => $cat_gender,
-            'total_male_gender' => $total_male_gender,
-            'total_female_gender' => $total_female_gender
+            'total_male_gender' => $gF->decimalFormat($total_male_gender),
+            'total_female_gender' => $gF->decimalFormat($total_female_gender)
         ];
         return response()->json($data);
         
@@ -542,8 +542,8 @@ class DashboardController extends Controller
 
         $data  = [
             'cat_gender' => $cat_gender,
-            'total_male_gender' => $total_male_gender,
-            'total_female_gender' => $total_female_gender
+            'total_male_gender' => $gF->decimalFormat($total_male_gender),
+            'total_female_gender' => $gF->decimalFormat($total_female_gender)
         ];
         return response()->json($data);
         
@@ -1221,8 +1221,8 @@ class DashboardController extends Controller
 
         $data  = [
             'cat_gender' => $cat_gender,
-            'total_male_gender' => $total_male_gender,
-            'total_female_gender' => $total_female_gender
+            'total_male_gender' => $gF->decimalFormat($total_male_gender),
+            'total_female_gender' => $gF->decimalFormat($total_female_gender)
         ];
         return response()->json($data);
         
@@ -1401,11 +1401,11 @@ class DashboardController extends Controller
              'village' => $address->village->name,
              'district' => $address->village->district->name,
              'regency' => $address->village->district->regency->name,
-             'referal' => $val->total,
+             'referal' => $gF->decimalFormat($val->total),
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
-             'referal_undirect' => $referal_undirect->total,
-             'total_referal' => $totalReferal,
+             'referal_undirect' => $gF->decimalFormat($referal_undirect->total),
+             'total_referal' => $gF->decimalFormat($totalReferal),
              
           ];
       }
@@ -1524,11 +1524,11 @@ class DashboardController extends Controller
              'village' => $address->village->name,
              'district' => $address->village->district->name,
              'regency' => $address->village->district->regency->name,
-             'referal' => $val->total,
+             'referal' => $gF->decimalFormat($val->total),
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
-             'referal_undirect' => $referal_undirect->total,
-             'total_referal' => $totalReferal,
+             'referal_undirect' => $gF->decimalFormat($referal_undirect->total),
+             'total_referal' => $gF->decimalFormat($totalReferal),
           ];
       }
       $result = [
@@ -1565,11 +1565,11 @@ class DashboardController extends Controller
              'village' => $address->village->name,
              'district' => $address->village->district->name,
              'regency' => $address->village->district->regency->name,
-             'referal' => $val->total,
+             'referal' => $gF->decimalFormat($val->total),
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
-             'referal_undirect' => $referal_undirect->total,
-             'total_referal' => $totalReferal
+             'referal_undirect' => $gF->decimalFormat($referal_undirect->total),
+             'total_referal' => $gF->decimalFormat($totalReferal)
           ];
       }
 
@@ -1598,17 +1598,17 @@ class DashboardController extends Controller
           $totalReferal     = $val->total + $referal_undirect->total;
           $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
           $data[] = [ 
-              'no' => $no ++,
+            'no' => $no ++,
              'photo' => $val->photo,
              'name' => $val->name,
              'village' => $address->village->name,
              'district' => $address->village->district->name,
              'regency' => $address->village->district->regency->name,
-             'referal' => $val->total,
+             'referal' => $gF->decimalFormat($val->total),
              'whatsapp' => $val->whatsapp,
              'phone' => $val->phone_number,
-             'referal_undirect' => $referal_undirect->total,
-             'total_referal' => $totalReferal
+             'referal_undirect' => $gF->decimalFormat($referal_undirect->total),
+             'total_referal' => $gF->decimalFormat($totalReferal)
           ];
       }
       $result = [

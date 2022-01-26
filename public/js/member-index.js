@@ -93,7 +93,7 @@ const table = $("#data").DataTable({
         {
             targets: 8,
             render: function (data, type, row, meta) {
-                return `<p>${row.total_referal}</p>`;
+                return `<p align="right">${row.total_referal}</p>`;
             },
         },
         {

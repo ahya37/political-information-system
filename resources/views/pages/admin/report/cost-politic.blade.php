@@ -90,7 +90,7 @@
                                          <td>{{ $item->forcest }}</td>
                                          <td>{{ $item->forecast_desc }}</td>
                                          <td>{{ $item->received_name }}</td>
-                                         <td>{{ $item->village }}, <br> KEC. {{ $item->district }}, <br> {{ $item->regency }}</td>
+                                         <td>{{ $item->address}}</td>
                                          <td align="right">
                                              <p style="margin-right: 3px">Rp {{ $gF->decimalFormat($item->nominal) }}</p>
                                          </td>

@@ -884,3 +884,7 @@ function BeforeSend(idLoader) {
 function Complete(idLoader) {
     $("#" + idLoader + "").addClass("d-none");
 }
+
+function decimalFormat(data) {
+    return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}

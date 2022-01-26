@@ -306,6 +306,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/member/potential/input/excel','MemberController@memberPotentialInputDownloadExcel')->name('admin-member-potential-input-excel');
         Route::get('/member/potential/referal/pdf','MemberController@memberPotentialReferalDownloadPDF')->name('admin-member-potential-referal-pdf');
         Route::get('/member/potential/input/pdf','MemberController@memberPotentialInputDownloadPDF')->name('admin-member-potential-input-pdf');
+
+        // cost event
+        Route::get('/event/cost/create/{id}','EventController@createCost')->name('admin-event-cost-create');
+        Route::post('/event/cost/store/{id}','EventController@costEventStore')->name('admin-event-cost-store');
+
     });
 });
 

@@ -61,7 +61,7 @@
                                          <th>URAIAN</th>
                                          <th>PENERIMA</th>
                                          <th>ALAMAT</th>
-                                         <th>JUMLAH</th>
+                                         <th>JUMLAH (Rp)</th>
                                          <th>FILE</th>
                                      </tr>
                                  </thead>
@@ -73,11 +73,10 @@
                                          <td>{{ $item->forcest }}</td>
                                          <td>{{ $item->forecast_desc }}</td>
                                          <td>{{ $item->received_name }}</td>
-                                         <td>{{ $item->village }}, <br> KEC. {{ $item->district }}, <br> {{ $item->regency }}</td>
-                                         <td class="text-right">Rp .{{ $gF->decimalFormat($item->nominal) }}</td>
+                                         <td>{{ $item->address }}</td>
+                                         <td class="text-right">{{ $gF->decimalFormat($item->nominal) }}</td>
                                          <td>
                                              <a target="_blank" href="{{ asset('/storage/'.$item->file ?? '') }}">
-
                                                 <img class="rounded" width="40" src="{{ asset('/storage/'.$item->file ?? '') }}">
                                              </a>
                                          </td>
@@ -87,7 +86,7 @@
                                  <tfoot>
                                      <tr>
                                          <th colspan="6">Jumlah</th>
-                                         <th class="text-right">Rp. {{ $gF->decimalFormat($total) }}</th>
+                                         <th class="text-right">{{ $gF->decimalFormat($total) }}</th>
                                      </tr>
                                  </tfoot>
                              </table>

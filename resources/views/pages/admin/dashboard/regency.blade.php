@@ -489,7 +489,7 @@
             ],
               columnDefs: [
               {
-                targets: [1,2,3,6],
+                targets: [1,2,3,4,6],
                 render: $.fn.dataTable.render.number('.', '.', 0, '')
               }
             ],

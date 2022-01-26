@@ -42,14 +42,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-12 col-sm-12">
-                                                <label>Alamat/Tempat</label>
-                                                <textarea name="address" required class="form-control" >{{ $event->address }}</textarea>
-                                            </div>
-                                        </div>
-                                    </div>
                                      <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
@@ -72,7 +64,47 @@
                                                 <input id="timepicker6" type="text" name="time" value="{{ $event->time }}"  required class="form-control" />
                                             </div>
                                         </div>
-                                    </div>                                         
+                                    </div>
+                                     <hr>
+                                     <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <div class="alert alert-info">Alamat Event</div>
+                                            </div>
+                                        </div>
+                                     </div>
+                                      <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="regency_id" id="selectArea"   class="form-control" >
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="dapil_id" id="selectListArea"  class="form-control" >
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="district_id" id="selectDistrictId"  class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="village_id" id="selectVillageId"  class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>                                       
                                     <div class="form-group">
                                         <button
                                         type="submit"
@@ -100,17 +132,6 @@
 <script>
     AOS.init();
 </script>
-<script>
-    $(document).ready(function(){
-        jQuery('#datetimepicker6').datetimepicker({
-            timepicker:false,
-            format:'d-m-Y'
-            });
-        jQuery('#timepicker6').datetimepicker({
-            datepicker:false,
-            format:'H:i',
-            });
-            $.datetimepicker.setLocale('id');
-    });
-</script>
+<script src="{{ asset('js/event-create.js') }}"></script>
+
 @endpush

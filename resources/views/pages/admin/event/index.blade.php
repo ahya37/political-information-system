@@ -31,7 +31,6 @@
                                         <th scope="col">Waktu</th>
                                         <th scope="col">Deskripsi</th>
                                         <th scope="col">Alamat</th>
-                                        <th scope="col">Total Kehadiran / Undangan</th>
                                         <th scope="col">Aksi</th>
                                       </tr>
                                     </thead>
@@ -65,7 +64,6 @@
                {data:'times', name:'times'},
                {data:'description', name:'description'},
                {data:'address', name:'address'},
-               {data:'absen', name:'absen'},
                {data:'action', name:'action'}
             ]
         });

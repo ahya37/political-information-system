@@ -31,14 +31,10 @@ class CostExport implements FromCollection, WithHeadings, WithEvents
             $start = $this->start;
             $end = $this->end;
 
-            $sql = "SELECT a.file, a.date, a.received_name, a.nominal, b.name as forcest, c.name as forecast_desc,
-                e.name as village , f.name as district , g.name as regency 
+            $sql = "SELECT a.file, a.date, a.received_name, a.nominal, b.name as forcest, c.name as forecast_desc,a.address
                 from cost_les as a
                 join forecast as b on a.forcest_id = b.id 
                 join forecast_desc as c on a.forecast_desc_id = c.id 
-                join villages as e on a.village_id = e.id 
-                join districts as f on e.district_id = f.id 
-                join regencies as g on f.regency_id = g.id 
                 where a.date  BETWEEN  '$start' and '$end' order by a.date desc ";
         $result = DB::select($sql);
 
@@ -51,7 +47,7 @@ class CostExport implements FromCollection, WithHeadings, WithEvents
                 'forecast' => $val->forcest,
                 'forecast_desc' => $val->forecast_desc,
                 'received_name' => $val->received_name,
-                'address' => $val->village.', '.$val->district.', '.$val->regency,
+                'address' => $val->address,
                 'nominal' => $val->nominal
             ];
         }

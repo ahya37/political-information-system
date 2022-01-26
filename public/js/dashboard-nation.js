@@ -779,10 +779,10 @@ $("#achievment").DataTable({
                     ) +
                     "</td>" +
                     "<td class='text-right'>" +
-                    data[i].total_district +
+                    decimalFormat(data[i].total_district) +
                     "</td>" +
                     "<td class='text-right'>" +
-                    data[i].realisasi_member +
+                    decimalFormat(data[i].realisasi_member) +
                     "</td>" +
                     "<td class='text-right'>" +
                     "<div class='mt-3 progress' style='width:100%'>" +

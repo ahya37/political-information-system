@@ -13,7 +13,7 @@
           >
             <div class="container-fluid">
                 <div class="dashboard-heading">
-                    <h2 class="dashboard-title">Tambah Pengeluaran</h2>
+                    <h2 class="dashboard-title">Biaya Event</h2>
                 <p class="dashboard-subtitle">
                 </p>
             </div>
@@ -21,26 +21,13 @@
                 <div class="row">
                     <div class="col-md-7 col-sm-12">
                       @include('layouts.message')
-                    <form action="{{ route('admin-cost-store') }}" id="register" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin-event-cost-store', $id) }}" id="register" method="POST" enctype="multipart/form-data">
                       @csrf
                       <div class="card">
                         <div class="card-body">
                          <div class="row row-login">
                                 <div class="col-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-12 col-sm-12">
-                                                <label>Tanggal</label>
-                                                <input
-                                                id="datetimepicker6"
-                                                type="text"
-                                                class="form-control"
-                                                name="date"
-                                                autocomplete="off" 
-                                                required >
-                                            </div>
-                                        </div>
-                                    </div>                                       
+                                                                       
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
@@ -76,22 +63,10 @@
                                                 {{-- <select name="user_id" id="village" class="form-control select2">
                                                    <option value="">- pilih Penerima -</option>
                                                 </select> --}}
-                                               <input name="received_name" required class="form-control">
+                                               <input name="received_name"  class="form-control">
                                             </div>
                                         </div>
-                                    </div>
-                                     <div class="form-group">
-                                       <div class="row">
-                                         <div class="col-sm-12">
-                                            <label class>Alamat </label>
-                                               <select name="village_id" id="village" class="form-control select2" required>
-                                                     <option value="">- pilih Desa -</option>
-                                                </select>
-                                          </div>
-
-                                       </div>
-                                    </div>
-                                                                     
+                                    </div>                                                                     
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">

@@ -2,6 +2,8 @@
 @section('title','Edit Event')
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
 @endpush
 @section('content')
@@ -42,14 +44,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-12 col-sm-12">
-                                                <label>Alamat/Tempat</label>
-                                                <textarea name="address" required class="form-control" ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
+                                   
                                      <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
@@ -64,14 +59,55 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
                                                 <label>Waktu Event</label>
                                                 <input id="timepicker6" type="text" name="time"  required class="form-control" />
                                             </div>
                                         </div>
-                                    </div>                                         
+                                    </div>
+                                    <hr>
+                                     <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <div class="alert alert-info">Alamat Event</div>
+                                            </div>
+                                        </div>
+                                     </div>
+                                     <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="regency_id" id="selectArea"  class="form-control" required>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="dapil_id" id="selectListArea"  class="form-control" required>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="district_id" id="selectDistrictId"  class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <select name="village_id" id="selectVillageId"  class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                                                          
                                     <div class="form-group">
                                         <button
                                         type="submit"
@@ -93,23 +129,11 @@
 @endsection
 
 @push('addon-script')
-<script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
-<script src="https://unpkg.com/vue-toasted"></script>
+<script src="{{asset('assets/select2/dist/js/select2.min.js')}}"></script>
 <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
 <script>
     AOS.init();
 </script>
-<script>
-    $(document).ready(function(){
-        jQuery('#datetimepicker6').datetimepicker({
-            timepicker:false,
-            format:'d-m-Y'
-            });
-        jQuery('#timepicker6').datetimepicker({
-            datepicker:false,
-            format:'H:i',
-            });
-            $.datetimepicker.setLocale('id');
-    });
-</script>
+<script src="{{ asset('js/event-create.js') }}"></script>
+
 @endpush

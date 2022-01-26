@@ -841,17 +841,21 @@ function showDivHtmlReferalByMounth(m) {
             <td>${m.name}</td>
             <td class="text-center">
             <div class="badge badge-pill badge-info">
-                ${m.referal}
+                ${decimalFormat(m.referal)}
             </div>
             </td>
             <td class="text-center">
              <div class="badge badge-pill badge-warning">
-             ${m.referal_undirect === null ? 0 : m.referal_undirect}
+             ${
+                 m.referal_undirect === null
+                     ? 0
+                     : decimalFormat(m.referal_undirect)
+             }
              </div>
             </td>
             <td class="text-center">
              <div class="badge badge-pill badge-success">
-             ${m.total_referal === null ? 0 : m.total_referal}
+             ${m.total_referal === null ? 0 : decimalFormat(m.total_referal)}
              </div>
             </td>
              <td>
@@ -902,4 +906,8 @@ function Complete(idLoader) {
 
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function decimalFormat(data) {
+    return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
