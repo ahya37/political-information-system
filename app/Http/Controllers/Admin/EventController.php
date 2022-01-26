@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\CostEvent;
-use App\CostLess;
 use App\User;
 use App\Event;
+use App\CostLess;
 use App\Forecast;
+use App\CostEvent;
 use App\EventDetail;
 use App\ForecastDesc;
 use App\Models\Regency;
+use App\Models\Province;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
@@ -42,7 +43,7 @@ class EventController extends Controller
                                             <a class="dropdown-item" href="'.route('admin-event-cost-create', $item->id).'">
                                                 Tambah Biaya
                                             </a>
-                                            <a class="dropdown-item" href="'.route('admin-event-addmember', encrypt($item->id)).'">
+                                            <a class="dropdown-item" href="'.route('admin-event-addmember', $item->id).'">
                                             Tambah Peserta
                                             </a>
                                             
@@ -106,11 +107,11 @@ class EventController extends Controller
 
     public function addMemberEvent($id)
     {
-        $event_id = decrypt($id);
+        $event_id = $id;
         
         // mengambil member yang memiliki akun login saja, atau yg daftar mandiri
-        $memberModel = new User();
-        $members     = $memberModel->getMemberForEvent($event_id);
+        // $memberModel = new User();
+        // $members     = $memberModel->getMemberForEvent($event_id);
 
             // if (request()->ajax()) {
             //     return DataTables::of($members)
@@ -136,9 +137,11 @@ class EventController extends Controller
             //             ->make();
 
             //         }
-        $regencyModel = new Regency();
-        $regencies     = $regencyModel->getSelectRegencies();
-        return view('pages.admin.event.add-participant', compact('regencies'));
+        // $regencyModel = new Regency();
+        // $regencies     = $regencyModel->getSelectRegencies();
+        $provinceModel = new Province();
+        $province = $provinceModel->getDataProvince();
+        return view('pages.admin.event.add-participant', compact('province','event_id'));
     }
 
     public function storeAddMemberEvent(Request $request)
@@ -198,6 +201,33 @@ class EventController extends Controller
 
         }
         
+    }
+
+    public function storeAddParticipant($event_id, $user_id)
+    {
+        $user = User::select('name')->where('id', $user_id)->first();
+
+        $eventDetail = new EventDetail();
+            $eventDetail::create([
+                'event_id' => $event_id,
+                'participant' => strtoupper($user->name)
+            ]);
+
+        return redirect()->back()->with(['success' => 'Berhasil menambahkan peserta']);
+
+    }
+
+    public function storeAddParticipantOther(Request $request, $event_id)
+    {
+
+        $eventDetail = new EventDetail();
+            $eventDetail::create([
+                'event_id' => $event_id,
+                'participant' => strtoupper($request->name)
+            ]);
+
+        return redirect()->back()->with(['success' => 'Berhasil menambahkan peserta']);
+
     }
 
     public function store(Request $request)

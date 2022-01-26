@@ -24,4 +24,11 @@ class EventDetail extends Model
         $result = DB::select($sql);
         return $result;
     }
+
+    public function getAddParticipant($event_id, $user)
+    {
+        $sql = "UPDATE event_details set participant = JSON_ARRAY_APPEND(participant, '$.name','$user->name') where event_id = $event_id";
+        $result = DB::update($sql);
+        return $result;
+    }
 }
