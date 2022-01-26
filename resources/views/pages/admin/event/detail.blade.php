@@ -37,7 +37,7 @@
                                           <tr>
                                             <td class="text-right">Rp. {{ $gF->decimalFormat($item->nominal)  }}</td>
                                             <td>
-                                              <img src="{{ asset('/storage/',$item->file) }}" width="30">
+                                              <img src="{{ asset('/storage/'.$item->file) }}" width="30">
                                             </td>
                                           </tr>
                                       @endforeach

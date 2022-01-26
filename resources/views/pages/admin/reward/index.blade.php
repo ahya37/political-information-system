@@ -91,6 +91,7 @@
         @csrf
         <div class="modal-body">
           <div class="form-group">
+            <input type="hidden" name="type" value="referal" class="form-control">
             <input type="hidden" name="userId" id="userId" class="form-control">
             <input type="hidden" name="point" id="point" class="form-control">
             <input type="hidden" name="nominal" id="nominal" class="form-control">

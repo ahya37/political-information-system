@@ -8,6 +8,7 @@ use App\User;
 use App\Referal;
 use App\CostLess;
 use Carbon\Carbon;
+use App\Models\Village;
 use App\VoucherHistory;
 use Illuminate\Support\Str;
 use App\VoucherHistoryAdmin;
@@ -394,6 +395,19 @@ class RewardController extends Controller
                 // perkiraan = VOUCHER = 4
                 // uraian = VOUCHER REFERAL = 3
 
+                 // simpan ke tb cost_less
+                $user = User::select('name','village_id')->where('id', $userId)->first();
+                $village = Village::with(['district.regency.province'])->where('id', $user->village_id)->first();
+                CostLess::create([
+                    'date' => date('Y-m-d'),
+                    'forcest_id' => 4, // voucher
+                    'forecast_desc_id' => $request->type == 'referal' ? 3 : 6, // voucher referal atau voucher admina
+                    'received_name' => $user->name,
+                    'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'nominal' => $total_nominal,
+                    'file' => NULL,
+                ]);
+
 
             }
             
@@ -467,6 +481,19 @@ class RewardController extends Controller
                     'total_data' => $total_data
                 ]);
             }
+
+            // simpan ke tb cost_less
+                $user = User::select('name','village_id')->where('id', $userId)->first();
+                $village = Village::with(['district.regency.province'])->where('id', $user->village_id)->first();
+                CostLess::create([
+                    'date' => date('Y-m-d'),
+                    'forcest_id' => 4, // voucher
+                    'forecast_desc_id' => $request->type == 'referal' ? 3 : 6, // voucher referal atau voucher admina
+                    'received_name' => $user->name,
+                    'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'nominal' => $total_nominal,
+                    'file' => NULL,
+                ]);
 
         }
 
@@ -558,6 +585,19 @@ class RewardController extends Controller
                     'total_data' => $total_data
                 ]);
             }
+
+            // simpan ke tb cost_less
+                $user = User::select('name','village_id')->where('id', $userId)->first();
+                $village = Village::with(['district.regency.province'])->where('id', $user->village_id)->first();
+                CostLess::create([
+                    'date' => date('Y-m-d'),
+                    'forcest_id' => 4, // voucher
+                    'forecast_desc_id' => $request->type == 'referal' ? 3 : 6, // voucher referal atau voucher admina
+                    'received_name' => $user->name,
+                    'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'nominal' => $total_nominal,
+                    'file' => NULL,
+                ]);
             
         }elseif ($pointReq < $point) {
 
@@ -629,6 +669,19 @@ class RewardController extends Controller
                     'total_data' => $total_data
                 ]);
             }
+
+            // simpan ke tb cost_less
+                $user = User::select('name','village_id')->where('id', $userId)->first();
+                $village = Village::with(['district.regency.province'])->where('id', $user->village_id)->first();
+                CostLess::create([
+                    'date' => date('Y-m-d'),
+                    'forcest_id' => 4, // voucher
+                    'forecast_desc_id' => $request->type == 'referal' ? 3 : 6, // voucher referal atau voucher admina
+                    'received_name' => $user->name,
+                    'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'nominal' => $total_nominal,
+                    'file' => NULL,
+                ]);
 
         }
 
@@ -719,6 +772,20 @@ class RewardController extends Controller
                     'total_data' => $total_data
                 ]);
             }
+
+            // simpan ke tb cost_less
+                $user = User::select('name','village_id')->where('id', $userId)->first();
+                $village = Village::with(['district.regency.province'])->where('id', $user->village_id)->first();
+                CostLess::create([
+                    'date' => date('Y-m-d'),
+                    'forcest_id' => 4, // voucher
+                    'forecast_desc_id' => 3, // voucher referal atau voucher admina
+                    'received_name' => $user->name,
+                    'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'nominal' => $total_nominal,
+                    'file' => NULL,
+                ]);
+
 
           if ($saveDetailVh) {
                 $success = true;
@@ -821,6 +888,19 @@ class RewardController extends Controller
                     'total_data' => $total_data
                 ]);
             }
+
+            // simpan ke tb cost_less
+                $user = User::select('name','village_id')->where('id', $userId)->first();
+                $village = Village::with(['district.regency.province'])->where('id', $user->village_id)->first();
+                CostLess::create([
+                    'date' => date('Y-m-d'),
+                    'forcest_id' => 4, // voucher
+                    'forecast_desc_id' => 6, // voucher referal atau voucher admina
+                    'received_name' => $user->name,
+                    'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'nominal' => $total_nominal,
+                    'file' => NULL,
+                ]);
 
           if ($saveDetailVh) {
                 $success = true;
@@ -1018,20 +1098,7 @@ class RewardController extends Controller
             //     'cost_category_id' => 1,
             //     'to' => $user->id,
             //     'nominal' => $request->nominal
-            // ]);
-
-        // simpan ke tb cost_less
-        CostLess::create([
-            'date' => date('Y-m-d'),
-            'forcest_id' => 4, // voucher
-            'forecast_desc_id' => $request->type == 'referal' ? 3 : 6, // voucher referal atau voucher admina
-            'received_name' => $user->name,
-            'village_id' => $user->village_id,
-            'nominal' => $request->nominal,
-            'file' => $fileImage,
-        ]);
-
-        
+            // ]);        
 
         return redirect()->back()->with(['success' => 'Berhasil upload']);
 
