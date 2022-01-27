@@ -241,3 +241,8 @@ Route::post('/target/list','Admin\SettingController@getDatatarget');
 Route::post('/table/members/province','API\SettingController@getMember');
 
 Route::post('/admin/member/dtmember','Admin\Datatable\MemberDatatableController@dTableMember');
+
+
+// voucher history by mount
+Route::post('/admin/voucherhistory','Admin\RewardController@getListVoucherMemberByMount');
+

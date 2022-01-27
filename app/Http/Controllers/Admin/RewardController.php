@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use App\DetailVoucherHistory;
 use App\Providers\GlobalProvider;
 use App\DetailVoucherHistoryAdmin;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -1148,5 +1149,65 @@ class RewardController extends Controller
 
 
         return view('pages.admin.reward.report-voucher', compact('data','gF','no','total_point_all','total_data_all','total_nominal_all'));
+    }
+
+
+    public function getListVoucherMemberByMount(Request $request)
+    {
+        $gF = new GlobalProvider();
+        $orderBy = 'a.name';
+
+        $data = DB::table('users as a')
+                ->select('b.id','a.photo','a.name','c.name as village','d.name as district','e.name as regency','f.name as province',
+                DB::raw('SUM(g.total_data) as total_data'), DB::raw('SUM(g.nominal) as total_nominal'),DB::raw('SUM(g.point) as total_point'))
+                ->join('voucher_history as b','a.id','b.user_id')
+                ->join('villages as c','a.village_id','c.id')
+                ->join('districts as d','c.district_id','d.id')
+                ->join('regencies as e','d.regency_id','e.id')
+                ->join('provinces as f','e.province_id','f.id')
+                ->join('detail_voucher_history as g','b.id','g.voucher_history_id')
+                ->where('g.type','Referal');
+
+        if($request->input('search.value')!=null){
+            $data = $data->where(function($q)use($request){
+                $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                ->orWhereRaw('LOWER(c.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                ;
+            });
+        }
+
+                
+        if($request->input('date') != null AND $request->input('year') != null){
+            $data->whereMonth('b.created_at', $request->date);
+            $data->whereYear('b.created_at', $request->year);
+        }
+
+        $data = $data->groupBy('b.id','a.photo','a.name','c.name','d.name','e.name','f.name');
+
+        $recordsFiltered = $data->count();
+        if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+        $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+        $recordsTotal = $data->count();
+        
+        $result = [];
+        foreach ($data as $val) {
+            $result[] = [
+                'id' => $val->id,
+                'photo' => $val->photo,
+                'name' => $val->name,
+                'address' => 'DS, ' .$val->village.', KEC. ' .$val->district.', '.$val->regency.', '.$val->province,
+                'total_data' => $gF->decimalFormat($val->total_data),
+                'total_nominal' => $gF->decimalFormat($val->total_nominal),
+                'total_point' => $gF->decimalFormat($val->total_point)
+            ];
+        }
+
+        return response()->json([
+                'draw'=>$request->input('draw'),
+                'recordsTotal'=>$recordsTotal,
+                'recordsFiltered'=>$recordsFiltered,
+                'data'=> $result
+            ]);
+
     }
 }
