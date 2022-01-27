@@ -2,6 +2,8 @@
 @section('title','Daftar Event - Tambah Peserta')
 @push('addon-style')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
 @endpush
@@ -132,9 +134,25 @@
         <form action="{{ route('admin-event-partisipant-other', $event_id) }}" method="POST">
           @csrf
           <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Nama</label>
-            <input type="text" name="name" class="form-control" id="recipient-name">
+            <div class="col-12">
+
+              <label for="recipient-name" class="col-form-label">Nama</label>
+              <input type="text" name="name" class="form-control" id="recipient-name">
+            </div>
           </div>
+          <div class="form-group">
+            <div class="col-12">
+
+              <label class="col-form-label">Alamat </label>
+            </div>
+            <div class="col-12">
+              <select name="village_id" id="village" class="form-control select2">
+                <option value="">- pilih Desa -</option>
+              </select>
+
+            </div>
+          </div>
+          
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-sm btn-sc-primary text-white">Simpan</button>
@@ -145,6 +163,8 @@
 </div>
 @endpush
 @push('addon-script')
+<script src="{{asset('assets/select2/dist/js/select2.min.js')}}"></script>
+
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script type="text/javascript" src="{{ asset('js/event-2.js') }}"></script>
 @endpush

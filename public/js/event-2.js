@@ -228,3 +228,24 @@ function getListVillageUi(dataVillages) {
 function showDivHtmlVillage(m) {
     return `<option value="${m.id}">${m.name}</option>`;
 }
+
+$("#village").select2({
+    minimumInputLength: 5,
+    allowClear: true,
+    placeholder: "masukkan nama desa",
+    ajax: {
+        dataType: "json",
+        url: "/api/searchvillage",
+        delay: 800,
+        data: function (params) {
+            return {
+                search: params.term,
+            };
+        },
+        processResults: function (data, page) {
+            return {
+                results: data,
+            };
+        },
+    },
+});

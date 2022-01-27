@@ -10,10 +10,11 @@ use App\CostEvent;
 use App\EventDetail;
 use App\ForecastDesc;
 use App\Models\Regency;
+use App\Models\Village;
 use App\Models\Province;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Providers\GlobalProvider;
+use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 
 class EventController extends Controller
@@ -206,12 +207,16 @@ class EventController extends Controller
 
     public function storeAddParticipant($event_id, $user_id)
     {
-        $user = User::select('name')->where('id', $user_id)->first();
+        $user = User::select('name','village_id')->where('id', $user_id)->first();
+
+        $village = Village::with(['district.regency'])->where('id', $user->village_id)->first();
+        $address = 'DS. '. $village->name. ', KEC. ' .$village->district->name. ', '. $village->district->regency->name;
 
         $eventDetail = new EventDetail();
             $eventDetail::create([
                 'event_id' => $event_id,
-                'participant' => strtoupper($user->name)
+                'participant' => strtoupper($user->name),
+                'address' =>  $address
             ]);
 
         return redirect()->back()->with(['success' => 'Berhasil menambahkan peserta']);
@@ -220,11 +225,19 @@ class EventController extends Controller
 
     public function storeAddParticipantOther(Request $request, $event_id)
     {
+        $address = '';
+        if ($request->village_id == null ) {
+            $address = null;
+        }else{
+            $village = Village::with(['district.regency'])->where('id', $request->village_id)->first();
+            $address = 'DS. '. $village->name. ', KEC. ' .$village->district->name. ', '. $village->district->regency->name;
+        }
 
         $eventDetail = new EventDetail();
             $eventDetail::create([
                 'event_id' => $event_id,
-                'participant' => strtoupper($request->name)
+                'participant' => strtoupper($request->name),
+                'address' => $address
             ]);
 
         return redirect()->back()->with(['success' => 'Berhasil menambahkan peserta']);

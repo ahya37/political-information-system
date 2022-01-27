@@ -162,7 +162,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::post('/event/update/{id}','EventController@update')->name('admin-event-update');
         Route::get('/event/delete/{id}','EventController@delete')->name('admin-event-delete');
         Route::get('/event/add/member/{id}','EventController@addMemberEvent')->name('admin-event-addmember');
-        Route::post('/event/add/member/store','EventController@storeAddMemberEvent')->name('admin-event-addmember-store');
+        // Route::post('/event/add/member/store','EventController@storeAddMemberEvent')->name('admin-event-addmember-store');
         Route::get('/event/detail/{id}','EventController@evenDetials')->name('admin-event-addmember-detail');
         Route::get('/event/add/participant/store/{event_id}/{user_id}','EventController@storeAddParticipant');
         Route::post('/event/add/participantother/store/{event_id}','EventController@storeAddParticipantOther')->name('admin-event-partisipant-other');

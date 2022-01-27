@@ -59,6 +59,7 @@
                                     <thead>
                                       <tr>
                                         <th scope="col">NAMA</th>
+                                        <th scope="col">ALAMAT</th>
                                         <th scope="col">TERDAFTAR</th>
                                       </tr>
                                     </thead>
@@ -89,6 +90,7 @@
             },
             columns:[
                {data:'participant', name:'participant'},
+               {data:'address', name:'address'},
                {data:'register', name:'register'},
             ]
         });
