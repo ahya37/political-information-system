@@ -164,4 +164,45 @@ class CostController extends Controller
         return $this->excel->download(new CostExport($start, $end), 'LAPORAN COST POLITIK '.$date_report.'.xls');
              
     }
+
+    public function edit($id)
+    {
+        $forecast = Forecast::orderBy('name','desc')->get();
+        $forecast_desc = ForecastDesc::orderBy('name','desc')->get();
+        $cost = CostLess::where('id', $id)->first();
+        return view('pages.admin.cost.edit', compact('forecast','forecast_desc','id','cost'));
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $cost = CostLess::where('id', $id)->first();
+        if ($request->hasFile('file')) {
+                $fileImage = $request->file->store('assets/cost','public');
+            }else{
+                $fileImage = 'NULL';
+            }
+
+        //
+        $address = '';
+        if ($request->village_id == null ) {
+            $address = $cost->address;
+        }else{
+            $village = Village::with(['district.regency'])->where('id', $request->village_id)->first();
+            $address = 'DS. '. $village->name. ', KEC. ' .$village->district->name. ', '. $village->district->regency->name;
+        }
+        
+        $cost->update([
+            'date' => date('Y-m-d', strtotime($request->date)),
+            'forcest_id' => $request->forecast_id,
+            'forecast_desc_id' => $request->forecast_desc_id,
+            'received_name' => $request->received_name,
+            'address' => $address,
+            'nominal' => $request->nominal,
+            'file' => $fileImage,
+        ]);
+
+        return redirect()->route('admin-cost-index')->with(['success' => 'Pengeluaran telah diubah']);
+    }
+
 }

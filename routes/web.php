@@ -298,7 +298,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         // Cost 
         Route::get('cost/index','CostController@listCostPolitic')->name('admin-cost-index');
         Route::get('cost/create','CostController@create')->name('admin-cost-cost');
+        Route::get('cost/edit/{id}','CostController@edit')->name('admin-cost-edit');
         Route::post('cost/save','CostController@store')->name('admin-cost-store');
+        Route::post('cost/update/{id}','CostController@update')->name('admin-cost-update');
         Route::post('forecast/save','CostController@addForecast')->name('admin-forecast-store');
         Route::post('forecastdesc/save','CostController@addForecastDesc')->name('admin-forecastdesc-store');
         Route::get('cost/index/pdf/{daterange}','CostController@downloadPDF');

@@ -3,9 +3,9 @@
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/daterangepicker/daterangepicker.css') }}" />
-    <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
 
-      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
+      <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 
 
 @endpush
@@ -63,6 +63,7 @@
                                          <th>ALAMAT</th>
                                          <th>JUMLAH (Rp)</th>
                                          <th>FILE</th>
+                                         <th>AKSI</th>
                                      </tr>
                                  </thead>
                                  <tbody>
@@ -79,6 +80,9 @@
                                              <a target="_blank" href="{{ asset('/storage/'.$item->file ?? '') }}">
                                                 <img class="rounded" width="40" src="{{ asset('/storage/'.$item->file ?? '') }}">
                                              </a>
+                                         </td>
+                                         <td>
+                                             <a href="{{ route('admin-cost-edit', $item->id) }}" class="btn btn-sm btn-sc-primary text-white rounded" title="Edit"><i class="fa fa-edit"></i></a>
                                          </td>
                                      </tr>
                                      @endforeach
@@ -102,7 +106,6 @@
 @push('addon-script')    
 <script type="text/javascript" src="{{ asset('assets/vendor/moments/moment.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
-
 <script type="text/javascript" src="{{ asset('assets/vendor/daterangepicker/daterangepicker.min.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 

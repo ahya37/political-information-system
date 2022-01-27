@@ -12,7 +12,7 @@ class Cost extends Model
 
     public function getDataCost()
     {
-        $sql = "SELECT a.file, a.date, a.received_name, a.nominal, b.name as forcest, c.name as forecast_desc, a.address
+        $sql = "SELECT a.id, a.file, a.date, a.received_name, a.nominal, b.name as forcest, c.name as forecast_desc, a.address
             from cost_les as a
             join forecast as b on a.forcest_id = b.id 
             join forecast_desc as c on a.forecast_desc_id = c.id 
@@ -22,7 +22,7 @@ class Cost extends Model
 
     public function getDataCostRange($start, $end)
     {
-        $sql = "SELECT a.file, a.date, a.received_name, a.nominal, b.name as forcest, c.name as forecast_desc, a.address
+        $sql = "SELECT a.id, a.file, a.date, a.received_name, a.nominal, b.name as forcest, c.name as forecast_desc, a.address
             from cost_les as a
             join forecast as b on a.forcest_id = b.id 
             join forecast_desc as c on a.forecast_desc_id = c.id 
