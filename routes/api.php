@@ -244,5 +244,6 @@ Route::post('/admin/member/dtmember','Admin\Datatable\MemberDatatableController@
 
 
 // voucher history by mount
-Route::post('/admin/voucherhistory','Admin\RewardController@getListVoucherMemberByMount');
+Route::post('/admin/voucherhistory','Admin\RewardController@getListVoucherReferalByMount');
+Route::post('/admin/voucherhistoryadmin','Admin\RewardController@getListVoucherAdminByMount');
 

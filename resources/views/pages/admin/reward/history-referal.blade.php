@@ -28,8 +28,8 @@
                  <div class="row">
                           <div class="col-md-9 col-sm-9"></div>
                           <div class="input-group mb-3 col-md-3 float-right">
-                            <button onclick="acumulate()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
-                            <input type="text" id="date" name="referalOfMount" class="form-control datepicker filter">
+                            <a href="" class="btn btn-sm btn-default border mr-2">Akumulasi</a>
+                            <input type="text" id="date" name="referalOfMount" value="{{ date('M') }}" class="form-control datepicker filter">
                          </div>
                         </div>
                 
