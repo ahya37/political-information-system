@@ -188,128 +188,128 @@ $(".datepicker").datepicker({
 });
 
 // Data Default
-$("#referalOfMount", async function () {
-    let date = new Date();
-    const mounthSelected = date.getMonth() + 1;
-    const yearSelected = date.getFullYear();
-    BeforeSend("LoadaReferalByMounth");
-    $("#totalReferalByMonth").empty();
-    try {
-        const referalByMounth = await getReferalByDefault();
-        const resultReferalByMounth = referalByMounth.data;
-        const calculate = referalByMounth.referal_acumulate;
-        updateReferalByMounth(resultReferalByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaReferalByMounth");
-});
+// $("#referalOfMount", async function () {
+//     let date = new Date();
+//     const mounthSelected = date.getMonth() + 1;
+//     const yearSelected = date.getFullYear();
+//     BeforeSend("LoadaReferalByMounth");
+//     $("#totalReferalByMonth").empty();
+//     try {
+//         const referalByMounth = await getReferalByDefault();
+//         const resultReferalByMounth = referalByMounth.data;
+//         const calculate = referalByMounth.referal_acumulate;
+//         updateReferalByMounth(resultReferalByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaReferalByMounth");
+// });
 
 // akumulasi sebelum pilih bulan
-async function acumulate() {
-    $("#totalReferalByMonth").empty();
-    BeforeSend("LoadaReferalByMounth");
-    try {
-        const referalByMounth = await getReferalByDefault();
-        const resultReferalByMounth = referalByMounth.data;
-        const calculate = referalByMounth.referal_acumulate;
-        updateReferalByMounth(resultReferalByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaReferalByMounth");
-}
+// async function acumulate() {
+//     $("#totalReferalByMonth").empty();
+//     BeforeSend("LoadaReferalByMounth");
+//     try {
+//         const referalByMounth = await getReferalByDefault();
+//         const resultReferalByMounth = referalByMounth.data;
+//         const calculate = referalByMounth.referal_acumulate;
+//         updateReferalByMounth(resultReferalByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaReferalByMounth");
+// }
 
-function getReferalByDefault() {
-    return fetch("/api/dashboard/referalbydefault", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-    }).then((response) => {
-        return response.json();
-    });
-}
+// function getReferalByDefault() {
+//     return fetch("/api/dashboard/referalbydefault", {
+//         method: "POST",
+//         headers: {
+//             Accept: "application/json",
+//             "Content-Type": "application/json",
+//         },
+//     }).then((response) => {
+//         return response.json();
+//     });
+// }
 // After ChangeDate
-$("#referalOfMount").on("changeDate", async function (selected) {
-    const mounthSelected = selected.date.getMonth() + 1;
-    const yearSelected = selected.date.getFullYear();
-    $("#totalReferalByMonth").empty();
-    BeforeSend("LoadaReferalByMounth");
-    try {
-        const referalByMounth = await getReferalByMount(
-            mounthSelected,
-            yearSelected
-        );
-        const resultReferalByMounth = referalByMounth.data;
-        const calculate = referalByMounth.referalCalculate;
+// $("#referalOfMount").on("changeDate", async function (selected) {
+//     const mounthSelected = selected.date.getMonth() + 1;
+//     const yearSelected = selected.date.getFullYear();
+//     $("#totalReferalByMonth").empty();
+//     BeforeSend("LoadaReferalByMounth");
+//     try {
+//         const referalByMounth = await getReferalByMount(
+//             mounthSelected,
+//             yearSelected
+//         );
+//         const resultReferalByMounth = referalByMounth.data;
+//         const calculate = referalByMounth.referalCalculate;
 
-        updateReferalByMounth(resultReferalByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaReferalByMounth");
-});
+//         updateReferalByMounth(resultReferalByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaReferalByMounth");
+// });
 
-function getReferalByMount(mounthSelected, yearSelected) {
-    return fetch("/api/dashboard/referalbymount", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ mounth: mounthSelected, year: yearSelected }),
-    }).then((response) => {
-        return response.json();
-    });
-}
+// function getReferalByMount(mounthSelected, yearSelected) {
+//     return fetch("/api/dashboard/referalbymount", {
+//         method: "POST",
+//         headers: {
+//             Accept: "application/json",
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ mounth: mounthSelected, year: yearSelected }),
+//     }).then((response) => {
+//         return response.json();
+//     });
+// }
 
-function updateReferalByMounth(resultReferalByMounth, calculate) {
-    $("#totalReferalByMonth").append(`Total : <strong>${calculate}</strong>`);
+// function updateReferalByMounth(resultReferalByMounth, calculate) {
+//     $("#totalReferalByMonth").append(`Total : <strong>${calculate}</strong>`);
 
-    let divHtmlReferalByMounth = "";
-    resultReferalByMounth.forEach((m) => {
-        divHtmlReferalByMounth += showDivHtmlReferalByMounth(m);
-    });
+//     let divHtmlReferalByMounth = "";
+//     resultReferalByMounth.forEach((m) => {
+//         divHtmlReferalByMounth += showDivHtmlReferalByMounth(m);
+//     });
 
-    const divHtmlReferalByMounthContainer = document.getElementById(
-        "showReferalDataReferalByMounth"
-    );
-    divHtmlReferalByMounthContainer.innerHTML = divHtmlReferalByMounth;
-}
+//     const divHtmlReferalByMounthContainer = document.getElementById(
+//         "showReferalDataReferalByMounth"
+//     );
+//     divHtmlReferalByMounthContainer.innerHTML = divHtmlReferalByMounth;
+// }
 
-function showDivHtmlReferalByMounth(m) {
-    return `<tr>
-            <td class="text-center">${m.no}</td>
-            <td>
-                <img  class="rounded" width="40" src="/storage/${m.photo}">
-            </td>
-            <td>${m.name}</td>
-            <td class="text-center">
-            <div class="badge badge-pill badge-info">
-                ${m.referal}
-            </div>
-            </td>
-            <td class="text-center">
-             <div class="badge badge-pill badge-warning">
-             ${m.referal_undirect === null ? 0 : m.referal_undirect}
-             </div>
-            </td>
-            <td class="text-center">
-             <div class="badge badge-pill badge-success">
-             ${m.total_referal === null ? 0 : m.total_referal}
-             </div>
-            </td>
-             <td>
-                ${m.village},<br> ${m.district}, <br> ${m.regency}
-            </td>
-             <td>
-                <div class="badge badge-pill badge-primary">
-                    <i class="fa fa-phone"></i>
-                </div>
-                ${m.phone}
-                <br/>
-               <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
-               </div>
-                 ${m.whatsapp}
-            </td>
-            </tr>`;
-}
+// function showDivHtmlReferalByMounth(m) {
+//     return `<tr>
+//             <td class="text-center">${m.no}</td>
+//             <td>
+//                 <img  class="rounded" width="40" src="/storage/${m.photo}">
+//             </td>
+//             <td>${m.name}</td>
+//             <td class="text-center">
+//             <div class="badge badge-pill badge-info">
+//                 ${m.referal}
+//             </div>
+//             </td>
+//             <td class="text-center">
+//              <div class="badge badge-pill badge-warning">
+//              ${m.referal_undirect === null ? 0 : m.referal_undirect}
+//              </div>
+//             </td>
+//             <td class="text-center">
+//              <div class="badge badge-pill badge-success">
+//              ${m.total_referal === null ? 0 : m.total_referal}
+//              </div>
+//             </td>
+//              <td>
+//                 ${m.village},<br> ${m.district}, <br> ${m.regency}
+//             </td>
+//              <td>
+//                 <div class="badge badge-pill badge-primary">
+//                     <i class="fa fa-phone"></i>
+//                 </div>
+//                 ${m.phone}
+//                 <br/>
+//                <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+//                </div>
+//                  ${m.whatsapp}
+//             </td>
+//             </tr>`;
+// }
 
 // total member
 $(document).ready(function () {
@@ -862,112 +862,264 @@ function Complete(idLoader) {
 
 // anggota input terbanyak
 // Data Default
-async function acumulateInput() {
-    $("#totalInputByMonth").empty();
-    BeforeSend("LoadaInputByMounth");
-    try {
-        const inputByMounth = await getInputByDefault();
-        const resultInputByMounth = inputByMounth.data;
-        const calculate = inputByMounth.input_acumulate;
+// async function acumulateInput() {
+//     $("#totalInputByMonth").empty();
+//     BeforeSend("LoadaInputByMounth");
+//     try {
+//         const inputByMounth = await getInputByDefault();
+//         const resultInputByMounth = inputByMounth.data;
+//         const calculate = inputByMounth.input_acumulate;
 
-        updateInputByMounth(resultInputByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaInputByMounth");
-}
+//         updateInputByMounth(resultInputByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaInputByMounth");
+// }
 
-$("#inputOfMount", async function () {
-    $("#totalInputByMonth").empty();
-    BeforeSend("LoadaInputByMounth");
-    try {
-        const inputByMounth = await getInputByDefault();
-        const resultInputByMounth = inputByMounth.data;
-        const calculate = inputByMounth.input_acumulate;
+// $("#inputOfMount", async function () {
+//     $("#totalInputByMonth").empty();
+//     BeforeSend("LoadaInputByMounth");
+//     try {
+//         const inputByMounth = await getInputByDefault();
+//         const resultInputByMounth = inputByMounth.data;
+//         const calculate = inputByMounth.input_acumulate;
 
-        updateInputByMounth(resultInputByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaInputByMounth");
-});
-// akumulasi sebelum pilih bulan
-function getInputByDefault() {
-    return fetch("/api/dashboard/inputbymonthpdefault").then((response) => {
-        return response.json();
-    });
-}
-// After ChangeDate
-$("#inputOfMount").on("changeDate", async function (selected) {
-    const mounthSelected = selected.date.getMonth() + 1;
-    const yearSelected = selected.date.getFullYear();
-    $("#totalInputByMonth").empty();
-    BeforeSend("LoadaInputByMounth");
-    try {
-        const InputByMounth = await getInputByMount(
-            mounthSelected,
-            yearSelected
-        );
-        const resultInputByMounth = InputByMounth.data;
-        const calculate = InputByMounth.input_acumulate;
-        updateInputByMounth(resultInputByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaInputByMounth");
-});
-function getInputByMount(mounthSelected, yearSelected) {
-    return fetch("/api/dashboard/inputbymonth", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            mounth: mounthSelected,
-            year: yearSelected,
-        }),
-    }).then((response) => {
-        return response.json();
-    });
-}
+//         updateInputByMounth(resultInputByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaInputByMounth");
+// });
+// // akumulasi sebelum pilih bulan
+// function getInputByDefault() {
+//     return fetch("/api/dashboard/inputbymonthpdefault").then((response) => {
+//         return response.json();
+//     });
+// }
+// // After ChangeDate
+// $("#inputOfMount").on("changeDate", async function (selected) {
+//     const mounthSelected = selected.date.getMonth() + 1;
+//     const yearSelected = selected.date.getFullYear();
+//     $("#totalInputByMonth").empty();
+//     BeforeSend("LoadaInputByMounth");
+//     try {
+//         const InputByMounth = await getInputByMount(
+//             mounthSelected,
+//             yearSelected
+//         );
+//         const resultInputByMounth = InputByMounth.data;
+//         const calculate = InputByMounth.input_acumulate;
+//         updateInputByMounth(resultInputByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaInputByMounth");
+// });
+// function getInputByMount(mounthSelected, yearSelected) {
+//     return fetch("/api/dashboard/inputbymonth", {
+//         method: "POST",
+//         headers: {
+//             Accept: "application/json",
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//             mounth: mounthSelected,
+//             year: yearSelected,
+//         }),
+//     }).then((response) => {
+//         return response.json();
+//     });
+// }
 
-function updateInputByMounth(resultInputByMounth, calculate) {
-    $("#totalInputByMonth").append(`Total : <strong>${calculate}</strong>`);
+// function updateInputByMounth(resultInputByMounth, calculate) {
+//     $("#totalInputByMonth").append(`Total : <strong>${calculate}</strong>`);
 
-    let divHtmInputByMounth = "";
-    resultInputByMounth.forEach((m) => {
-        divHtmInputByMounth += showDivHtmInputByMounth(m);
-    });
+//     let divHtmInputByMounth = "";
+//     resultInputByMounth.forEach((m) => {
+//         divHtmInputByMounth += showDivHtmInputByMounth(m);
+//     });
 
-    const divHtmInputByMounthContainer = document.getElementById(
-        "showInputDataByMounth"
-    );
-    divHtmInputByMounthContainer.innerHTML = divHtmInputByMounth;
-}
-function showDivHtmInputByMounth(m) {
-    return `<tr>
-            <td class="text-center">${m.no}</td>
-            <td>
-                <img  class="rounded" width="40" src="/storage/${m.photo}">
-            </td>
-            <td>${m.name}</td>
-            <td class="text-center">
-            <div class="badge badge-pill badge-info">
-                ${m.input}
-            </div>
-            </td>           
-            </td>
-             <td>
-                ${m.village},<br> ${m.district}, <br> ${m.regency}
-            </td>
-             <td>
-                <div class="badge badge-pill badge-primary">
-                    <i class="fa fa-phone"></i>
-                </div>
-                ${m.phone}
-                <br/>
-               <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
-               </div>
-                 ${m.whatsapp}
-            </td>
-            </tr>`;
-}
+//     const divHtmInputByMounthContainer = document.getElementById(
+//         "showInputDataByMounth"
+//     );
+//     divHtmInputByMounthContainer.innerHTML = divHtmInputByMounth;
+// }
+// function showDivHtmInputByMounth(m) {
+//     return `<tr>
+//             <td class="text-center">${m.no}</td>
+//             <td>
+//                 <img  class="rounded" width="40" src="/storage/${m.photo}">
+//             </td>
+//             <td>${m.name}</td>
+//             <td class="text-center">
+//             <div class="badge badge-pill badge-info">
+//                 ${m.input}
+//             </div>
+//             </td>
+//             </td>
+//              <td>
+//                 ${m.village},<br> ${m.district}, <br> ${m.regency}
+//             </td>
+//              <td>
+//                 <div class="badge badge-pill badge-primary">
+//                     <i class="fa fa-phone"></i>
+//                 </div>
+//                 ${m.phone}
+//                 <br/>
+//                <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+//                </div>
+//                  ${m.whatsapp}
+//             </td>
+//             </tr>`;
+// }
 // CLOSE INPUT PERBULAN
+// ANGGOTA REFERAL TERBANYAK DATATABLE
+let dateReferal = $("#referalOfMount").val();
+let yearReferal = "";
+
+$("#totalReferalByMonth", function (dateReferal, yearReferal) {
+    getTotalReferalByMonth(dateReferal, yearReferal);
+});
+
+const tableReferal = $("#dtshowReferalDataReferalByMounthNew").DataTable({
+    pageLength: 10,
+    bLengthChange: true,
+    bFilter: true,
+    bInfo: true,
+    processing: true,
+    bServerSide: true,
+    order: [[3, "desc"]],
+    autoWidth: false,
+    ajax: {
+        url: "/api/dashboard/referalbydefault",
+        type: "POST",
+        data: function (d) {
+            d.dateReferal = dateReferal;
+            d.yearReferal = yearReferal;
+            return d;
+        },
+    },
+    columnDefs: [
+        {
+            targets: 0,
+            render: function (data, type, row, meta) {
+                return `<p>${row.no}</p>`;
+            },
+        },
+        {
+            targets: 1,
+            render: function (data, type, row, meta) {
+                return `<img  class="rounded" width="40" src="/storage/${row.photo}">`;
+            },
+        },
+        {
+            targets: 2,
+            render: function (data, type, row, meta) {
+                return `<p>${row.name}</p>`;
+            },
+        },
+        {
+            targets: 3,
+            render: function (data, type, row, meta) {
+                return `<div class="badge badge-pill badge-info">
+                 ${row.referal}
+             </div>`;
+            },
+        },
+        {
+            targets: 4,
+            render: function (data, type, row, meta) {
+                return ` <div class="badge badge-pill badge-warning">
+              ${row.referal_undirect === null ? 0 : row.referal_undirect}
+              </div>`;
+            },
+        },
+        {
+            targets: 5,
+            render: function (data, type, row, meta) {
+                return ` <div class="badge badge-pill badge-success">
+              ${row.total_referal === null ? 0 : row.total_referal}
+              </div>`;
+            },
+        },
+        {
+            targets: 6,
+            render: function (data, type, row, meta) {
+                return `<p>${row.address}</p>`;
+            },
+        },
+        {
+            targets: 7,
+            render: function (data, type, row, meta) {
+                return `<div class="badge badge-pill badge-primary">
+                        <i class="fa fa-phone"></i>
+                        </div>
+                        ${row.phone}
+                        <br/>
+                        <div class="badge badge-pill badge-success">
+                        <i class="fa fa-whatsapp"></i>
+                        </div>
+                        ${row.whatsapp}`;
+            },
+        },
+    ],
+});
+
+$(".filter").on("changeDate", async function (selected) {
+    const monthSelected = selected.date.getMonth() + 1;
+    const yearSelected = selected.date.getFullYear();
+    dateReferal = monthSelected;
+    yearReferal = yearSelected;
+    tableReferal.ajax.reload(null, false);
+    getTotalReferalByMonth(dateReferal, yearReferal);
+});
+
+async function acumulate() {
+    dateReferal = "";
+    yearReferal = "";
+    tableReferal.ajax.reload(null, false);
+    getTotalReferalByMonth(dateReferal, yearReferal);
+}
+
+function getTotalReferalByMonth(dateReferal, yearReferal) {
+    return $.ajax({
+        url: "/api/dashboard/totalreferalbydefault",
+        method: "POST",
+        data: { dateReferal: dateReferal, yearReferal: yearReferal },
+        success: function (data) {
+            $("#totalReferalByMonth").empty();
+            $("#totalReferalByMonth").append(
+                `Total : <strong>${data.referal_acumulate}</strong>`
+            );
+        },
+    });
+}
+
+// ANGGOTA INPUT TERBANYAK PERBULAN
+// let dateInputer = $("#inputOfMount").val();
+// let yearInputer = "";
+
+// const tableInputer = $("#dtshowInputDataByMounth").DataTable({
+//     pageLength: 10,
+//     bLengthChange: true,
+//     bFilter: true,
+//     bInfo: true,
+//     processing: true,
+//     bServerSide: true,
+//     autoWidth: false,
+//     ajax: {
+//         // /api/dashboard/inputbymonthpdefault
+//         url: "",
+//         type: "POST",
+//         data: function (d) {
+//             d.dateInputer = dateInputer;
+//             d.yearInputer = yearInputer;
+//             return d;
+//         },
+//     },
+// });
+// $("#inputOfMount").on("changeDate", async function (selected) {
+//     const monthSelected = selected.date.getMonth() + 1;
+//     const yearSelected = selected.date.getFullYear();
+//     dateInputer = monthSelected;
+//     yearInputer = yearSelected;
+//     tableInputer.ajax.reload(null, false);
+// });
 
 // anggota input terbanyak
 $("#dtshowInputerDataInputerByMounth").DataTable({

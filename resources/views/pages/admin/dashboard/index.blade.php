@@ -362,16 +362,16 @@
                           </div>
                           <div class="input-group mb-3 col-md-3 float-right">
                               <button onclick="acumulate()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
-                                <button id="referalOfMount" class="btn btn-sm btn-sc-primary text-white datepicker">Bulan</button>
+                                <button id="referalOfMount" class="btn btn-sm btn-sc-primary text-white datepicker filter">Bulan</button>
+                                {{-- <input type="text" id="referalOfMount"  name="referalOfMount" class="form-control datepicker filter"> --}}
                             </div>
                           </div>
                         </div>
 
                       <div class="row">
                           <div class="table-responsive mt-3">
-                            <table id="dtshowReferalDataReferalByMounth" class="data table table-sm table-striped" width="100%">
+                            <table id="dtshowReferalDataReferalByMounthNew" class="data table table-sm table-striped" width="100%">
                               <thead>
-                               
                                   <th scope="col">NO</th>
                                   <th scope="col"></th>
                                   <th scope="col">NAMA</th>
@@ -381,12 +381,8 @@
                                   <th scope="col">ALAMAT</th>
                                   <th scope="col">KONTAK</th>
                                 </tr>
-                                 <tr>
-                                    <th colspan="7" id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay"></th>
-                                  </tr>
-                                <tr>
                                 </thead>
-                                <tbody id="showReferalDataReferalByMounth">
+                                <tbody>
                                 </tbody>
                               </table>
                           </div>
@@ -415,7 +411,7 @@
                           <div class="table-responsive mt-3">
                             <table id="dtshowInputDataByMounth" class="data table table-sm table-striped" width="100%">
                               <thead>
-                               
+                               <tr>
                                   <th scope="col">NO</th>
                                   <th scope="col"></th>
                                   <th scope="col">NAMA</th>
@@ -423,10 +419,6 @@
                                   <th scope="col">ALAMAT</th>
                                   <th scope="col">KONTAK</th>
                                 </tr>
-                                 <tr>
-                                    <th colspan="7" id="LoadaInputByMounth" class="d-none lds-dual-ring hidden overlay"></th>
-                                  </tr>
-                                <tr>
                                 </thead>
                                 <tbody id="showInputDataByMounth">
                                 </tbody>

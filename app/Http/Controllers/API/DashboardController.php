@@ -13,7 +13,9 @@ use App\Models\District;
 use App\Models\Province;
 use App\Providers\GlobalProvider;
 use App\Providers\GrafikProvider;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -1498,44 +1500,119 @@ class DashboardController extends Controller
       return response()->json($result);
     }
 
-    public function referalByMountAdminByDefault()
+    public function getTotalreferalByMonth(Request $request)
     {
-      $referalModel = new Referal();
-      $referal      = $referalModel->getReferealByDefault();
-      $gF   = new GlobalProvider();
+         $gF = new GlobalProvider();
+        $data      = DB::table('users as a')
+                        ->select('a.id as user_id','a.name','a.phone_number','a.whatsapp','a.photo',
+                        DB::raw('COUNT(b.id) as total'))
+                        ->join('users as b','b.user_id','a.id')
+                        ->whereNotNull('b.village_id');
 
-      //  jumlah referal secara defautl / akumulasi
-      $referalCalculate = collect($referal)->sum(function($q){
-          return $q->total;
-      });
+                        if($request->input('dateReferal') != '' AND $request->input('yearReferal') != ''){
+                            $data->whereMonth('b.created_at', $request->dateReferal);
+                            $data->whereYear('b.created_at', $request->yearReferal);
+                        }
+                        
+                        $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
+                        
+                        $data = $data->get();
+                        
+                        //  jumlah referal secara defautl / akumulasi
+                        $referalCalculate = collect($data)->sum(function($q){
+                            return $q->total;
+                        });
+                        return response()->json([
+                            'referal_acumulate' => $gF->decimalFormat($referalCalculate),
+                        ]);
+    }
 
-      $userModel = new User();
-      $referal_undirect = '';
-      $data = [];
-      $no = 1;
-      foreach ($referal as $val) {
-          $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
-          $totalReferal     = $val->total + $referal_undirect->total;
-          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
-          $data[] = [ 
-              'no' => $no ++,
-             'photo' => $val->photo,
-             'name' => $val->name,
-             'village' => $address->village->name,
-             'district' => $address->village->district->name,
-             'regency' => $address->village->district->regency->name,
-             'referal' => $gF->decimalFormat($val->total),
-             'whatsapp' => $val->whatsapp,
-             'phone' => $val->phone_number,
-             'referal_undirect' => $gF->decimalFormat($referal_undirect->total),
-             'total_referal' => $gF->decimalFormat($totalReferal),
-          ];
-      }
-      $result = [
-          'referal_acumulate' => $gF->decimalFormat($referalCalculate),
-          'data' => $data
-      ];
-      return response()->json($result);
+
+    public function referalByMountAdminByDefault(Request $request)
+    {
+        $gF = new GlobalProvider();
+        $orderBy = 'a.name';
+        $data      = DB::table('users as a')
+                        ->select('a.id as user_id','a.name','a.phone_number','a.whatsapp','a.photo',
+                        DB::raw('COUNT(b.id) as total'))
+                        ->join('users as b','b.user_id','a.id')
+                        ->whereNotNull('b.village_id');
+
+                        
+                        if($request->input('search.value')!=null){
+                            $data = $data->where(function($q)use($request){
+                                $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                            });
+                        }
+                        
+                        if($request->input('dateReferal') != '' AND $request->input('yearReferal') != ''){
+                            $data->whereMonth('b.created_at', $request->dateReferal);
+                            $data->whereYear('b.created_at', $request->yearReferal);
+                        }
+                        
+                        $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
+                        
+                        if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+                        $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+                        $recordsFiltered = $data->count();
+                        $recordsTotal = $data->count();
+
+                        $userModel = new User();
+                        $result = [];
+                        $no = 1;
+                        foreach ($data as $val) {
+                            $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+                            $totalReferal     = $val->total + $referal_undirect->total;
+                            $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+                            $result[] = [ 
+                                'no' => $no ++,
+                                'photo' => $val->photo,
+                                'name' => $val->name,
+                                'address' => $address->village->name.',<br> '.$address->village->district->name.', <br>'.$address->village->district->regency->name,
+                                'referal' => $gF->decimalFormat($val->total),
+                                'referal_undirect' => $gF->decimalFormat($referal_undirect->total),
+                                'whatsapp' => $val->whatsapp,
+                                'phone' => $val->phone_number,
+                                'total_referal' => $gF->decimalFormat($totalReferal),
+                            ];
+                        }
+                        
+                        return response()->json([
+                            'draw'=>$request->input('draw'),
+                            'recordsTotal'=>$recordsTotal,
+                            'recordsFiltered'=>$recordsFiltered,
+                            'data'=> $result,
+                        ]);
+    //   $gF   = new GlobalProvider();
+
+
+    //   $userModel = new User();
+    //   $referal_undirect = '';
+    //   $data = [];
+    //   $no = 1;
+    //   foreach ($referal as $val) {
+    //       $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+    //       $totalReferal     = $val->total + $referal_undirect->total;
+    //       $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+    //       $data[] = [ 
+    //           'no' => $no ++,
+    //          'photo' => $val->photo,
+    //          'name' => $val->name,
+    //          'village' => $address->village->name,
+    //          'district' => $address->village->district->name,
+    //          'regency' => $address->village->district->regency->name,
+    //          'referal' => $gF->decimalFormat($val->total),
+    //          'whatsapp' => $val->whatsapp,
+    //          'phone' => $val->phone_number,
+    //          'referal_undirect' => $gF->decimalFormat($referal_undirect->total),
+    //          'total_referal' => $gF->decimalFormat($totalReferal),
+    //       ];
+    //   }
+    //   $result = [
+    //       'referal_acumulate' => $gF->decimalFormat($referalCalculate),
+    //       'data' => $data
+    //   ];
+    //   return response()->json($result);
     }
 
     public function referalByMountAdminRegency()
@@ -2127,7 +2204,7 @@ class DashboardController extends Controller
       return response()->json($result);
     }
 
-     public function inputByMountAdmiNationalDefault()
+    public function inputByMountAdmiNationalDefault()
     {
       $referalModel = new Referal();
       $input      = $referalModel->getInputByDefaultNational();
