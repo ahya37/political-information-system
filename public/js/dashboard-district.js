@@ -742,137 +742,137 @@ function showDivHtmInputByMounth(m) {
 
 // anggota referal terbanyak perbulan
 // Data Default
-$("#referalOfMount", async function () {
-    $("#totalReferalByMonth").empty();
-    BeforeSend("LoadaReferalByMounth");
-    try {
-        const referalByMounth = await getReferalByDefault();
-        const resultReferalByMounth = referalByMounth.data;
-        const calculate = referalByMounth.referal_acumulate;
-        updateReferalByMounth(resultReferalByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaReferalByMounth");
-});
+// $("#referalOfMount", async function () {
+//     $("#totalReferalByMonth").empty();
+//     BeforeSend("LoadaReferalByMounth");
+//     try {
+//         const referalByMounth = await getReferalByDefault();
+//         const resultReferalByMounth = referalByMounth.data;
+//         const calculate = referalByMounth.referal_acumulate;
+//         updateReferalByMounth(resultReferalByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaReferalByMounth");
+// });
 
 // akumulasi sebelum pilih bulan
-async function acumulate() {
-    $("#totalReferalByMonth").empty();
-    BeforeSend("LoadaReferalByMounth");
-    try {
-        const referalByMounth = await getReferalByDefault();
-        const resultReferalByMounth = referalByMounth.data;
-        const calculate = referalByMounth.referal_acumulate;
-        updateReferalByMounth(resultReferalByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaReferalByMounth");
-}
+// async function acumulate() {
+//     $("#totalReferalByMonth").empty();
+//     BeforeSend("LoadaReferalByMounth");
+//     try {
+//         const referalByMounth = await getReferalByDefault();
+//         const resultReferalByMounth = referalByMounth.data;
+//         const calculate = referalByMounth.referal_acumulate;
+//         updateReferalByMounth(resultReferalByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaReferalByMounth");
+// }
 
 // akumulasi sebelum pilih bulan
-function getReferalByDefault() {
-    return fetch("/api/dashboard/referalbymounthdistrictdefault", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            district_id: districtID,
-        }),
-    }).then((response) => {
-        return response.json();
-    });
-}
+// function getReferalByDefault() {
+//     return fetch("/api/dashboard/referalbymounthdistrictdefault", {
+//         method: "POST",
+//         headers: {
+//             Accept: "application/json",
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//             district_id: districtID,
+//         }),
+//     }).then((response) => {
+//         return response.json();
+//     });
+// }
 
 // After ChangeDate
-$("#referalOfMount").on("changeDate", async function (selected) {
-    const mounthSelected = selected.date.getMonth() + 1;
-    const yearSelected = selected.date.getFullYear();
-    $("#totalReferalByMonth").empty();
-    BeforeSend("LoadaReferalByMounth");
-    try {
-        const referalByMounth = await getReferalByMount(
-            mounthSelected,
-            yearSelected
-        );
-        const resultReferalByMounth = referalByMounth.data;
-        const calculate = referalByMounth.referal_acumulate;
-        updateReferalByMounth(resultReferalByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaReferalByMounth");
-});
+// $("#referalOfMount").on("changeDate", async function (selected) {
+//     const mounthSelected = selected.date.getMonth() + 1;
+//     const yearSelected = selected.date.getFullYear();
+//     $("#totalReferalByMonth").empty();
+//     BeforeSend("LoadaReferalByMounth");
+//     try {
+//         const referalByMounth = await getReferalByMount(
+//             mounthSelected,
+//             yearSelected
+//         );
+//         const resultReferalByMounth = referalByMounth.data;
+//         const calculate = referalByMounth.referal_acumulate;
+//         updateReferalByMounth(resultReferalByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaReferalByMounth");
+// });
 
-function getReferalByMount(mounthSelected, yearSelected) {
-    return fetch("/api/dashboard/referalbymounthdistrict", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            mounth: mounthSelected,
-            year: yearSelected,
-            district_id: districtID,
-        }),
-    }).then((response) => {
-        return response.json();
-    });
-}
+// function getReferalByMount(mounthSelected, yearSelected) {
+//     return fetch("/api/dashboard/referalbymounthdistrict", {
+//         method: "POST",
+//         headers: {
+//             Accept: "application/json",
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//             mounth: mounthSelected,
+//             year: yearSelected,
+//             district_id: districtID,
+//         }),
+//     }).then((response) => {
+//         return response.json();
+//     });
+// }
 
-function updateReferalByMounth(resultReferalByMounth, calculate) {
-    $("#totalReferalByMonth").append(`Total : <strong>${calculate}</strong>`);
+// function updateReferalByMounth(resultReferalByMounth, calculate) {
+//     $("#totalReferalByMonth").append(`Total : <strong>${calculate}</strong>`);
 
-    let divHtmlReferalByMounth = "";
-    resultReferalByMounth.forEach((m) => {
-        divHtmlReferalByMounth += showDivHtmlReferalByMounth(m);
-    });
+//     let divHtmlReferalByMounth = "";
+//     resultReferalByMounth.forEach((m) => {
+//         divHtmlReferalByMounth += showDivHtmlReferalByMounth(m);
+//     });
 
-    const divHtmlReferalByMounthContainer = document.getElementById(
-        "showReferalDataReferalByMounth"
-    );
-    divHtmlReferalByMounthContainer.innerHTML = divHtmlReferalByMounth;
-}
+//     const divHtmlReferalByMounthContainer = document.getElementById(
+//         "showReferalDataReferalByMounth"
+//     );
+//     divHtmlReferalByMounthContainer.innerHTML = divHtmlReferalByMounth;
+// }
 
-function showDivHtmlReferalByMounth(m) {
-    return `<tr>
-            <td class="text-center">${m.no}</td>
-            <td>
-                <img  class="rounded" width="40" src="/storage/${m.photo}">
-            </td>
-            <td>${m.name}</td>
-            <td class="text-center">
-            <div class="badge badge-pill badge-info">
-                ${decimalFormat(m.referal)}
-            </div>
-            </td>
-            <td class="text-center">
-             <div class="badge badge-pill badge-warning">
-             ${
-                 m.referal_undirect === null
-                     ? 0
-                     : decimalFormat(m.referal_undirect)
-             }
-             </div>
-            </td>
-            <td class="text-center">
-             <div class="badge badge-pill badge-success">
-             ${m.total_referal === null ? 0 : decimalFormat(m.total_referal)}
-             </div>
-            </td>
-             <td>
-                ${m.village},<br> ${m.district}, <br> ${m.regency}
-            </td>
-             <td>
-                <div class="badge badge-pill badge-primary">
-                    <i class="fa fa-phone"></i>
-                </div>
-                ${m.phone}
-                <br/>
-               <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
-               </div>
-                 ${m.whatsapp}
-            </td>
-            </tr>`;
-}
+// function showDivHtmlReferalByMounth(m) {
+//     return `<tr>
+//             <td class="text-center">${m.no}</td>
+//             <td>
+//                 <img  class="rounded" width="40" src="/storage/${m.photo}">
+//             </td>
+//             <td>${m.name}</td>
+//             <td class="text-center">
+//             <div class="badge badge-pill badge-info">
+//                 ${decimalFormat(m.referal)}
+//             </div>
+//             </td>
+//             <td class="text-center">
+//              <div class="badge badge-pill badge-warning">
+//              ${
+//                  m.referal_undirect === null
+//                      ? 0
+//                      : decimalFormat(m.referal_undirect)
+//              }
+//              </div>
+//             </td>
+//             <td class="text-center">
+//              <div class="badge badge-pill badge-success">
+//              ${m.total_referal === null ? 0 : decimalFormat(m.total_referal)}
+//              </div>
+//             </td>
+//              <td>
+//                 ${m.village},<br> ${m.district}, <br> ${m.regency}
+//             </td>
+//              <td>
+//                 <div class="badge badge-pill badge-primary">
+//                     <i class="fa fa-phone"></i>
+//                 </div>
+//                 ${m.phone}
+//                 <br/>
+//                <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+//                </div>
+//                  ${m.whatsapp}
+//             </td>
+//             </tr>`;
+// }
 
 // list admin area
 let tbadminVillage = $("#listadminArea").DataTable({
@@ -910,4 +910,138 @@ function numberWithCommas(x) {
 
 function decimalFormat(data) {
     return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+// REFERAL TERBANYAK PERBULAN
+let dateReferal = $("#referalOfMount").val();
+let yearReferal = "";
+
+$("#totalReferalByMonth", function (dateReferal, yearReferal) {
+    getTotalReferalByMonth(dateReferal, yearReferal, districtID);
+});
+
+const tableReferal = $("#dtshowReferalDataReferalByMounth").DataTable({
+    pageLength: 10,
+    bLengthChange: true,
+    bFilter: true,
+    bInfo: true,
+    processing: true,
+    bServerSide: true,
+    order: [[3, "desc"]],
+    autoWidth: false,
+    ajax: {
+        url: "/api/dashboard/referalbymounthdistrictdefault",
+        type: "POST",
+        data: function (d) {
+            d.dateReferal = dateReferal;
+            d.yearReferal = yearReferal;
+            d.district_id = districtID;
+            return d;
+        },
+    },
+    columnDefs: [
+        {
+            targets: 0,
+            render: function (data, type, row, meta) {
+                return `<p>${row.no}</p>`;
+            },
+        },
+        {
+            targets: 1,
+            render: function (data, type, row, meta) {
+                return `<img  class="rounded" width="40" src="/storage/${row.photo}">`;
+            },
+        },
+        {
+            targets: 2,
+            render: function (data, type, row, meta) {
+                return `<p>${row.name}</p>`;
+            },
+        },
+        {
+            targets: 3,
+            render: function (data, type, row, meta) {
+                return `<div class="badge badge-pill badge-info">
+                 ${decimalFormat(row.referal)}
+             </div>`;
+            },
+        },
+        {
+            targets: 4,
+            render: function (data, type, row, meta) {
+                return ` <div class="badge badge-pill badge-warning">
+              ${
+                  row.referal_undirect === null
+                      ? 0
+                      : decimalFormat(row.referal_undirect)
+              }
+              </div>`;
+            },
+        },
+        {
+            targets: 5,
+            render: function (data, type, row, meta) {
+                return ` <div class="badge badge-pill badge-success">
+              ${
+                  row.total_referal === null
+                      ? 0
+                      : decimalFormat(row.total_referal)
+              }
+              </div>`;
+            },
+        },
+        {
+            targets: 6,
+            render: function (data, type, row, meta) {
+                return `<p>${row.address}</p>`;
+            },
+        },
+        {
+            targets: 7,
+            render: function (data, type, row, meta) {
+                return `<div class="badge badge-pill badge-primary">
+                        <i class="fa fa-phone"></i>
+                        </div>
+                        ${row.phone}
+                        <br/>
+                        <div class="badge badge-pill badge-success">
+                        <i class="fa fa-whatsapp"></i>
+                        </div>
+                        ${row.whatsapp}`;
+            },
+        },
+    ],
+});
+
+$("#referalOfMount").on("changeDate", async function (selected) {
+    const monthSelected = selected.date.getMonth() + 1;
+    const yearSelected = selected.date.getFullYear();
+    dateReferal = monthSelected;
+    yearReferal = yearSelected;
+    tableReferal.ajax.reload(null, false);
+    getTotalReferalByMonth(dateReferal, yearReferal, districtID);
+});
+async function acumulate() {
+    dateReferal = "";
+    yearReferal = "";
+    tableReferal.ajax.reload(null, false);
+    getTotalReferalByMonth(dateReferal, yearReferal, districtID);
+}
+
+function getTotalReferalByMonth(dateReferal, yearReferal, districtID) {
+    return $.ajax({
+        url: "/api/dashboard/totalreferalbymounthdistrictdefault",
+        method: "POST",
+        data: {
+            dateReferal: dateReferal,
+            yearReferal: yearReferal,
+            district_id: districtID,
+        },
+        success: function (data) {
+            $("#totalReferalByMonth").empty();
+            $("#totalReferalByMonth").append(
+                `Total : <strong>${data.referal_acumulate}</strong>`
+            );
+        },
+    });
 }
