@@ -2745,39 +2745,126 @@ class DashboardController extends Controller
       return response()->json($result);
     }
 
-      public function inputByMountAdminVillageDefault()
+    public function getTotalInputByMonthVillage(Request $request)
     {
-      $village_id  = request()->village_id;
-      $referalModel = new Referal();
-      $input      = $referalModel->getInputByDefaultVillage($village_id);
-      $referalCalculate = collect($input)->sum(function($q){
-          return $q->total;
-      });
+        $gF = new GlobalProvider();
+       $data      = DB::table('users as a')
+                        ->select('a.id as user_id','a.name','a.phone_number','a.whatsapp','a.photo')
+                        ->join('users as b','a.id','b.cby')
+                        ->selectRaw('count(b.id) as total')
+                        ->where('b.village_id', $request->village_id)
+                        ->whereNotNull('b.village_id');
 
-      $gF = new GlobalProvider();
+                       if($request->input('dateInputer') != '' AND $request->input('yearInputer') != ''){
+                            $data->whereMonth('b.created_at', $request->dateInputer);
+                            $data->whereYear('b.created_at', $request->yearInputer);
+                        }
+                        
+                        $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
+                        
+                        $data = $data->get();
+                        
+                        //  jumlah referal secara defautl / akumulasi
+                        $referalCalculate = collect($data)->sum(function($q){
+                            return $q->total;
+                        });
+                        return response()->json([
+                            'input_acumulate' => $gF->decimalFormat($referalCalculate),
+                        ]);
+    }
 
-      $userModel = new User();
-      $data = [];
-      $no = 1;
-      foreach ($input as $val) {
-          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
-          $data[] = [ 
-              'no' => $no ++,
-             'photo' => $val->photo,
-             'name' => $val->name,
-             'village' => $address->village->name,
-             'district' => $address->village->district->name,
-             'regency' => $address->village->district->regency->name,
-             'input' => $gF->decimalFormat($val->total),
-             'whatsapp' => $val->whatsapp,
-             'phone' => $val->phone_number,
-          ];
-      }
-      $result = [
-          'input_acumulate' => $gF->decimalFormat($referalCalculate),
-          'data' => $data
-      ];
-      return response()->json($result);
+    public function inputByMountAdminVillageDefault(Request $request)
+    {
+        $gF = new GlobalProvider();
+        $orderBy   = 'a.name';
+        switch($request->input('order.0.column')){
+             case '2':
+                $orderBy = 'a.name';
+                break;
+        }
+
+        $data      = DB::table('users as a')
+                        ->select('a.id as user_id','a.name','a.phone_number','a.whatsapp','a.photo')
+                        ->join('users as b','a.id','b.cby')
+                        ->selectRaw('count(b.id) as total')
+                        ->where('b.village_id', $request->village_id)
+                        ->whereNotNull('b.village_id');
+                        // ->orderBy(\ DB::raw('COUNT(b.id)'),'DESC');
+
+
+                         if($request->input('search.value')!=null){
+                            $data = $data->where(function($q)use($request){
+                                $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])                            ;
+                            });
+                        }
+                        
+                        if($request->input('dateInputer') != '' AND $request->input('yearInputer') != ''){
+                            $data->whereMonth('b.created_at', $request->dateInputer);
+                            $data->whereYear('b.created_at', $request->yearInputer);
+                        }
+                        
+                        $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
+                        $recordsFiltered = $data->count();
+                        
+                        if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+                        $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+                        $recordsTotal = $data->count();
+
+                        $userModel = new User();
+                        $result = [];
+                        $no = 1;
+                        foreach ($data as $val) {
+                            $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+                            $result[] = [ 
+                                'no' => $no ++,
+                                'photo' => $val->photo,
+                                'name' => $val->name,
+                                'address' => $address->village->name.',<br> '.$address->village->district->name.', <br>'.$address->village->district->regency->name,
+                                'input' => $val->total,
+                                'whatsapp' => $val->whatsapp,
+                                'phone' => $val->phone_number,
+                            ];
+                        }
+
+                        $countResult = count($result);
+                                            
+                        return response()->json([
+                            'draw'=>$request->input('draw'),
+                            'recordsTotal'=>$recordsTotal,
+                            'recordsFiltered'=>$countResult,
+                            'data'=> $result,
+                        ]);
+    //   $village_id  = request()->village_id;
+    //   $referalModel = new Referal();
+    //   $input      = $referalModel->getInputByDefaultVillage($village_id);
+    //   $referalCalculate = collect($input)->sum(function($q){
+    //       return $q->total;
+    //   });
+
+    //   $gF = new GlobalProvider();
+
+    //   $userModel = new User();
+    //   $data = [];
+    //   $no = 1;
+    //   foreach ($input as $val) {
+    //       $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+    //       $data[] = [ 
+    //           'no' => $no ++,
+    //          'photo' => $val->photo,
+    //          'name' => $val->name,
+    //          'village' => $address->village->name,
+    //          'district' => $address->village->district->name,
+    //          'regency' => $address->village->district->regency->name,
+    //          'input' => $gF->decimalFormat($val->total),
+    //          'whatsapp' => $val->whatsapp,
+    //          'phone' => $val->phone_number,
+    //       ];
+    //   }
+    //   $result = [
+    //       'input_acumulate' => $gF->decimalFormat($referalCalculate),
+    //       'data' => $data
+    //   ];
+    //   return response()->json($result);
     }
 
      public function inputByMountAdminVillage()

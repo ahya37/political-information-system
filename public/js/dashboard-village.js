@@ -437,122 +437,122 @@ $.ajax({
 
 // anggota input terbanyak
 // Data Default
-async function acumulateInput() {
-    $("#totalInputByMonth").empty();
-    BeforeSend("LoadaInputByMounth");
-    try {
-        const inputByMounth = await getInputByDefault(villageID);
-        const resultInputByMounth = inputByMounth.data;
-        const calculate = inputByMounth.input_acumulate;
+// async function acumulateInput() {
+//     $("#totalInputByMonth").empty();
+//     BeforeSend("LoadaInputByMounth");
+//     try {
+//         const inputByMounth = await getInputByDefault(villageID);
+//         const resultInputByMounth = inputByMounth.data;
+//         const calculate = inputByMounth.input_acumulate;
 
-        updateInputByMounth(resultInputByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaInputByMounth");
-}
+//         updateInputByMounth(resultInputByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaInputByMounth");
+// }
 
-$("#inputOfMount", async function () {
-    $("#totalInputByMonth").empty();
-    BeforeSend("LoadaInputByMounth");
-    try {
-        const inputByMounth = await getInputByDefault(villageID);
-        const resultInputByMounth = inputByMounth.data;
-        const calculate = inputByMounth.input_acumulate;
+// $("#inputOfMount", async function () {
+//     $("#totalInputByMonth").empty();
+//     BeforeSend("LoadaInputByMounth");
+//     try {
+//         const inputByMounth = await getInputByDefault(villageID);
+//         const resultInputByMounth = inputByMounth.data;
+//         const calculate = inputByMounth.input_acumulate;
 
-        updateInputByMounth(resultInputByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaInputByMounth");
-});
-// akumulasi sebelum pilih bulan
-function getInputByDefault() {
-    return fetch("/api/dashboard/inputbymonthvillagedefault", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            village_id: villageID,
-        }),
-    }).then((response) => {
-        return response.json();
-    });
-}
-// After ChangeDate
-$("#inputOfMount").on("changeDate", async function (selected) {
-    const mounthSelected = selected.date.getMonth() + 1;
-    const yearSelected = selected.date.getFullYear();
-    $("#totalInputByMonth").empty();
-    BeforeSend("LoadaInputByMounth");
-    try {
-        const InputByMounth = await getInputByMount(
-            mounthSelected,
-            yearSelected,
-            villageID
-        );
-        const resultInputByMounth = InputByMounth.data;
-        const calculate = InputByMounth.input_acumulate;
-        updateInputByMounth(resultInputByMounth, calculate);
-    } catch (err) {}
-    Complete("LoadaInputByMounth");
-});
-function getInputByMount(mounthSelected, yearSelected) {
-    return fetch("/api/dashboard/inputbymonthvillage", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            mounth: mounthSelected,
-            year: yearSelected,
-            village_id: villageID,
-        }),
-    }).then((response) => {
-        return response.json();
-    });
-}
+//         updateInputByMounth(resultInputByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaInputByMounth");
+// });
+// // akumulasi sebelum pilih bulan
+// function getInputByDefault() {
+//     return fetch("/api/dashboard/inputbymonthvillagedefault", {
+//         method: "POST",
+//         headers: {
+//             Accept: "application/json",
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//             village_id: villageID,
+//         }),
+//     }).then((response) => {
+//         return response.json();
+//     });
+// }
+// // After ChangeDate
+// $("#inputOfMount").on("changeDate", async function (selected) {
+//     const mounthSelected = selected.date.getMonth() + 1;
+//     const yearSelected = selected.date.getFullYear();
+//     $("#totalInputByMonth").empty();
+//     BeforeSend("LoadaInputByMounth");
+//     try {
+//         const InputByMounth = await getInputByMount(
+//             mounthSelected,
+//             yearSelected,
+//             villageID
+//         );
+//         const resultInputByMounth = InputByMounth.data;
+//         const calculate = InputByMounth.input_acumulate;
+//         updateInputByMounth(resultInputByMounth, calculate);
+//     } catch (err) {}
+//     Complete("LoadaInputByMounth");
+// });
+// function getInputByMount(mounthSelected, yearSelected) {
+//     return fetch("/api/dashboard/inputbymonthvillage", {
+//         method: "POST",
+//         headers: {
+//             Accept: "application/json",
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//             mounth: mounthSelected,
+//             year: yearSelected,
+//             village_id: villageID,
+//         }),
+//     }).then((response) => {
+//         return response.json();
+//     });
+// }
 
-function updateInputByMounth(resultInputByMounth, calculate) {
-    $("#totalInputByMonth").append(`Total : <strong>${calculate}</strong>`);
+// function updateInputByMounth(resultInputByMounth, calculate) {
+//     $("#totalInputByMonth").append(`Total : <strong>${calculate}</strong>`);
 
-    let divHtmInputByMounth = "";
-    resultInputByMounth.forEach((m) => {
-        divHtmInputByMounth += showDivHtmInputByMounth(m);
-    });
+//     let divHtmInputByMounth = "";
+//     resultInputByMounth.forEach((m) => {
+//         divHtmInputByMounth += showDivHtmInputByMounth(m);
+//     });
 
-    const divHtmInputByMounthContainer = document.getElementById(
-        "showInputDataByMounth"
-    );
-    divHtmInputByMounthContainer.innerHTML = divHtmInputByMounth;
-}
-function showDivHtmInputByMounth(m) {
-    return `<tr>
-            <td class="text-center">${m.no}</td>
-            <td>
-                <img  class="rounded" width="40" src="/storage/${m.photo}">
-            </td>
-            <td>${m.name}</td>
-            <td class="text-center">
-            <div class="badge badge-pill badge-info">
-                ${m.input}
-            </div>
-            </td>           
-            </td>
-             <td>
-                ${m.village},<br> ${m.district}, <br> ${m.regency}
-            </td>
-             <td>
-                <div class="badge badge-pill badge-primary">
-                    <i class="fa fa-phone"></i>
-                </div>
-                ${m.phone}
-                <br/>
-               <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
-               </div>
-                 ${m.whatsapp}
-            </td>
-            </tr>`;
-}
+//     const divHtmInputByMounthContainer = document.getElementById(
+//         "showInputDataByMounth"
+//     );
+//     divHtmInputByMounthContainer.innerHTML = divHtmInputByMounth;
+// }
+// function showDivHtmInputByMounth(m) {
+//     return `<tr>
+//             <td class="text-center">${m.no}</td>
+//             <td>
+//                 <img  class="rounded" width="40" src="/storage/${m.photo}">
+//             </td>
+//             <td>${m.name}</td>
+//             <td class="text-center">
+//             <div class="badge badge-pill badge-info">
+//                 ${m.input}
+//             </div>
+//             </td>
+//             </td>
+//              <td>
+//                 ${m.village},<br> ${m.district}, <br> ${m.regency}
+//             </td>
+//              <td>
+//                 <div class="badge badge-pill badge-primary">
+//                     <i class="fa fa-phone"></i>
+//                 </div>
+//                 ${m.phone}
+//                 <br/>
+//                <div class="badge badge-pill badge-success"><i class="fa fa-whatsapp"></i>
+//                </div>
+//                  ${m.whatsapp}
+//             </td>
+//             </tr>`;
+// }
 
 // CLOSE INPUT TERBANYAK PERBULAN
 
@@ -901,6 +901,116 @@ function getTotalReferalByMonth(dateReferal, yearReferal, villageID) {
             $("#totalReferalByMonth").empty();
             $("#totalReferalByMonth").append(
                 `Total : <strong>${data.referal_acumulate}</strong>`
+            );
+        },
+    });
+}
+
+// ANGGOTA INPUT TERBANYAK PERBULAN
+let dateInputer = $("#inputOfMount").val();
+let yearInputer = "";
+$("#totalInputByMonth", function (dateInputer, yearInputer) {
+    getTotalInputByMonth(dateInputer, yearInputer, villageID);
+});
+
+const tableInputer = $("#dtshowInputDataByMounth").DataTable({
+    pageLength: 10,
+    bLengthChange: true,
+    bFilter: true,
+    bInfo: true,
+    processing: true,
+    bServerSide: true,
+    order: [[3, "desc"]],
+    autoWidth: false,
+    ajax: {
+        url: "/api/dashboard/inputbymonthvillagedefault",
+        type: "POST",
+        data: function (d) {
+            d.dateInputer = dateInputer;
+            d.yearInputer = yearInputer;
+            d.village_id = villageID;
+            return d;
+        },
+    },
+    columnDefs: [
+        {
+            targets: 0,
+            render: function (data, type, row, meta) {
+                return `<p>${row.no}</p>`;
+            },
+        },
+        {
+            targets: 1,
+            render: function (data, type, row, meta) {
+                return `<img  class="rounded" width="40" src="/storage/${row.photo}">`;
+            },
+        },
+        {
+            targets: 2,
+            render: function (data, type, row, meta) {
+                return `<p>${row.name}</p>`;
+            },
+        },
+        {
+            targets: 3,
+            render: function (data, type, row, meta) {
+                return `<div class="badge badge-pill badge-info">
+                 ${decimalFormat(row.input)}
+             </div>`;
+            },
+        },
+        {
+            targets: 4,
+            render: function (data, type, row, meta) {
+                return `<p>${row.address}</p>`;
+            },
+        },
+        {
+            targets: 5,
+            render: function (data, type, row, meta) {
+                return `<div class="badge badge-pill badge-primary">
+                        <i class="fa fa-phone"></i>
+                        </div>
+                        ${row.phone}
+                        <br/>
+                        <div class="badge badge-pill badge-success">
+                        <i class="fa fa-whatsapp"></i>
+                        </div>
+                        ${row.whatsapp}`;
+            },
+        },
+    ],
+});
+async function acumulateInput() {
+    dateInputer = "";
+    yearInputer = "";
+    tableInputer.ajax.reload(null, false);
+    getTotalInputByMonth(dateInputer, yearInputer, villageID);
+}
+$("#inputOfMount").on("changeDate", async function (selected) {
+    const monthSelected = selected.date.getMonth() + 1;
+    const yearSelected = selected.date.getFullYear();
+    dateInputer = monthSelected;
+    yearInputer = yearSelected;
+    village_id = villageID;
+    tableInputer.ajax.reload(null, false);
+    getTotalInputByMonth(dateInputer, yearInputer, villageID);
+});
+
+function getTotalInputByMonth(dateInputer, yearInputer, villageID) {
+    return $.ajax({
+        url: "/api/dashboard/totalinputbymonthvillagedefault",
+        method: "POST",
+        data: {
+            dateInputer: dateInputer,
+            yearInputer: yearInputer,
+            village_id: villageID,
+        },
+        success: function (data) {
+            console.log("data inputer: ", data);
+            $("#totalInputByMonth").empty();
+            $("#totalInputByMonth").append(
+                `Total : <strong>${data.input_acumulate}</strong>`
             );
         },
     });
