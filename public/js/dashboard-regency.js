@@ -1036,7 +1036,7 @@ const tableInputer = $("#dtshowInputDataByMounth").DataTable({
     bInfo: true,
     processing: true,
     bServerSide: true,
-    // order: [[3, "desc"]],
+    order: [[3, "desc"]],
     autoWidth: false,
     ajax: {
         url: "/api/dashboard/inputbymonthregencydefault",

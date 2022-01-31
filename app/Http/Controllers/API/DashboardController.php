@@ -1500,6 +1500,9 @@ class DashboardController extends Controller
              case '2':
                 $orderBy = 'a.name';
                 break;
+            case '3':
+                $orderBy = 'total';
+                break;
         }
 
          $data      = DB::table('users as a')
@@ -1628,6 +1631,14 @@ class DashboardController extends Controller
     {
         $gF = new GlobalProvider();
         $orderBy = 'a.name';
+          switch($request->input('order.0.column')){
+             case '2':
+                $orderBy = 'a.name';
+                break;
+             case '3':
+                $orderBy = 'total';
+                break;
+        }
         $data      = DB::table('users as a')
                         ->select('a.id as user_id','a.name','a.phone_number','a.whatsapp','a.photo',
                         DB::raw('COUNT(b.id) as total'))
@@ -1793,6 +1804,9 @@ class DashboardController extends Controller
           switch($request->input('order.0.column')){
              case '2':
                 $orderBy = 'a.name';
+                break;
+            case '3':
+                $orderBy = 'total';
                 break;
         }
 
@@ -1966,6 +1980,15 @@ class DashboardController extends Controller
     {
           $gF = new GlobalProvider();
         $orderBy = 'a.name';
+        switch($request->input('order.0.column')){
+             case '2':
+                $orderBy = 'a.name';
+                break;
+             case '3':
+                $orderBy = 'total';
+                break;
+        }
+
           $data      = DB::table('users as a')
                         ->select('a.id as user_id','a.name','a.phone_number','a.whatsapp','a.photo',
                         DB::raw('COUNT(b.id) as total'))
@@ -2133,6 +2156,9 @@ class DashboardController extends Controller
           switch($request->input('order.0.column')){
              case '2':
                 $orderBy = 'a.name';
+                break;
+             case '3':
+                $orderBy = 'total';
                 break;
         }
 
@@ -2321,6 +2347,9 @@ class DashboardController extends Controller
              case '2':
                 $orderBy = 'a.name';
                 break;
+             case '3':
+                $orderBy = 'total';
+                break;
         }
 
         $data      = DB::table('users as a')
@@ -2488,6 +2517,9 @@ class DashboardController extends Controller
              case '2':
                 $orderBy = 'a.name';
                 break;
+            case '3':
+                $orderBy = 'total';
+                break;
         }
 
         $data      = DB::table('users as a')
@@ -2616,10 +2648,13 @@ class DashboardController extends Controller
     {
 
          $gF = new GlobalProvider();
-        $orderBy   = 'a.name';
+         $orderBy   = 'a.name';
         switch($request->input('order.0.column')){
              case '2':
                 $orderBy = 'a.name';
+                break;
+             case '3':
+                $orderBy = 'total';
                 break;
         }
 
@@ -2781,6 +2816,9 @@ class DashboardController extends Controller
              case '2':
                 $orderBy = 'a.name';
                 break;
+             case '3':
+                $orderBy = 'total';
+                break;
         }
 
         $data      = DB::table('users as a')
@@ -2938,6 +2976,9 @@ class DashboardController extends Controller
         switch($request->input('order.0.column')){
              case '2':
                 $orderBy = 'a.name';
+                break;
+            case '3':
+                $orderBy = 'total';
                 break;
         }
 
