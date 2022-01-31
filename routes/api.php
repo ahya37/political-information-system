@@ -166,6 +166,7 @@ Route::post('/dashboard/inputbymonthregency','API\DashboardController@inputByMou
 
 // input district
 Route::post('/dashboard/inputbymonthdistrictdefault','API\DashboardController@inputByMountAdminDistrictDefault');
+Route::post('/dashboard/totalinputbymonthdistrictdefault','API\DashboardController@getTotalInputByMonthDistrict');
 Route::post('/dashboard/inputbymonthdistrict','API\DashboardController@inputByMountAdminDistrict');
 
 // input villages
