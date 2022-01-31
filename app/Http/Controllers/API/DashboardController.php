@@ -1460,44 +1460,140 @@ class DashboardController extends Controller
       return response()->json($result);
     }
 
-    public function referalByMountAdminProvinceDefault()
+    public function getTotalreferalByMonthProvince(Request $request)
     {
-      $province_id  = request()->province_id;
-      $referalModel = new Referal();
-      $referal      = $referalModel->getReferealByDefaultProvince($province_id);
-      $referalCalculate = collect($referal)->sum(function($q){
-          return $q->total;
-      });
+         $gF = new GlobalProvider();
+        $data      = DB::table('users as a')
+                        ->select('a.id as user_id','a.name','a.phone_number','a.whatsapp','a.photo',
+                        DB::raw('COUNT(b.id) as total'))
+                        ->join('users as b','b.user_id','a.id')
+                        ->join('villages as c','b.village_id','c.id')
+                        ->join('districts as d','c.district_id','d.id')
+                        ->join('regencies as e','d.regency_id','e.id')
+                        ->whereNotNull('b.village_id')
+                        ->where('e.province_id', $request->province_id);
 
-      $gF = new GlobalProvider();
+                        if($request->input('dateReferal') != '' AND $request->input('yearReferal') != ''){
+                            $data->whereMonth('b.created_at', $request->dateReferal);
+                            $data->whereYear('b.created_at', $request->yearReferal);
+                        }
+                        
+                        $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
+                        
+                        $data = $data->get();
+                        
+                        //  jumlah referal secara defautl / akumulasi
+                        $referalCalculate = collect($data)->sum(function($q){
+                            return $q->total;
+                        });
+                        return response()->json([
+                            'referal_acumulate' => $gF->decimalFormat($referalCalculate),
+                        ]);
+    }
 
-      $userModel = new User();
-      $referal_undirect = '';
-      $data = [];
-      $no = 1;
-      foreach ($referal as $val) {
-          $referal_undirect = $userModel->getReferalUnDirectProvince($val->user_id, $province_id);
-          $totalReferal     = $val->total + $referal_undirect->total;
-          $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
-          $data[] = [ 
-              'no' => $no ++,
-             'photo' => $val->photo,
-             'name' => $val->name,
-             'village' => $address->village->name,
-             'district' => $address->village->district->name,
-             'regency' => $address->village->district->regency->name,
-             'referal' => $val->total,
-             'whatsapp' => $val->whatsapp,
-             'phone' => $val->phone_number,
-             'referal_undirect' => $referal_undirect->total,
-             'total_referal' => $totalReferal
-          ];
-      }
-      $result = [
-          'referal_acumulate' => $gF->decimalFormat($referalCalculate),
-          'data' => $data
-      ];
-      return response()->json($result);
+
+    public function referalByMountAdminProvinceDefault(Request $request)
+    {
+         $gF = new GlobalProvider();
+         $orderBy = 'a.name';
+          switch($request->input('order.0.column')){
+             case '2':
+                $orderBy = 'a.name';
+                break;
+        }
+
+         $data      = DB::table('users as a')
+                        ->select('a.id as user_id','a.name','a.phone_number','a.whatsapp','a.photo',
+                        DB::raw('COUNT(b.id) as total'))
+                        ->join('users as b','b.user_id','a.id')
+                        ->join('villages as c','b.village_id','c.id')
+                        ->join('districts as d','c.district_id','d.id')
+                        ->join('regencies as e','d.regency_id','e.id')
+                        ->whereNotNull('b.village_id')
+                        ->where('e.province_id', $request->province_id)
+                        ->orderBy(\ DB::raw('COUNT(b.id)'),'DESC');
+
+                        if($request->input('search.value')!=null){
+                            $data = $data->where(function($q)use($request){
+                                $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                            });
+                        }
+                        
+                        if($request->input('dateReferal') != '' AND $request->input('yearReferal') != ''){
+                            $data->whereMonth('b.created_at', $request->dateReferal);
+                            $data->whereYear('b.created_at', $request->yearReferal);
+                        }
+
+                        $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
+                         
+                        if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+                        $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+                        $recordsFiltered = $data->count();
+                        $recordsTotal = $data->count();
+
+                        $userModel = new User();
+                        $result = [];
+                        $no = 1;
+                        foreach ($data as $val) {
+                            $referal_undirect = $userModel->getReferalUnDirect($val->user_id);
+                            $totalReferal     = $val->total + $referal_undirect->total;
+                            $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+                            $result[] = [ 
+                                'no' => $no ++,
+                                'photo' => $val->photo,
+                                'name' => $val->name,
+                                'address' => $address->village->name.',<br> '.$address->village->district->name.', <br>'.$address->village->district->regency->name,
+                                'referal' => $gF->decimalFormat($val->total),
+                                'referal_undirect' => $gF->decimalFormat($referal_undirect->total),
+                                'whatsapp' => $val->whatsapp,
+                                'phone' => $val->phone_number,
+                                'total_referal' => $gF->decimalFormat($totalReferal),
+                            ];
+                        }
+
+                        return response()->json([
+                            'draw'=>$request->input('draw'),
+                            'recordsTotal'=>$recordsTotal,
+                            'recordsFiltered'=>$recordsFiltered,
+                            'data'=> $result,
+                        ]);
+
+        //   $province_id  = request()->province_id;
+        //   $referalModel = new Referal();
+        //   $referal      = $referalModel->getReferealByDefaultProvince($province_id);
+        //   $referalCalculate = collect($referal)->sum(function($q){
+        //       return $q->total;
+        //   });
+
+        //   $gF = new GlobalProvider();
+
+        //   $userModel = new User();
+        //   $referal_undirect = '';
+        //   $data = [];
+        //   $no = 1;
+        //   foreach ($referal as $val) {
+        //       $referal_undirect = $userModel->getReferalUnDirectProvince($val->user_id, $province_id);
+        //       $totalReferal     = $val->total + $referal_undirect->total;
+        //       $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
+        //       $data[] = [ 
+        //          'no' => $no ++,
+        //          'photo' => $val->photo,
+        //          'name' => $val->name,
+        //          'village' => $address->village->name,
+        //          'district' => $address->village->district->name,
+        //          'regency' => $address->village->district->regency->name,
+        //          'referal' => $val->total,
+        //          'whatsapp' => $val->whatsapp,
+        //          'phone' => $val->phone_number,
+        //          'referal_undirect' => $referal_undirect->total,
+        //          'total_referal' => $totalReferal
+        //       ];
+        //   }
+        //   $result = [
+        //       'referal_acumulate' => $gF->decimalFormat($referalCalculate),
+        //       'data' => $data
+        //   ];
+        //   return response()->json($result);
     }
 
     public function getTotalreferalByMonth(Request $request)
