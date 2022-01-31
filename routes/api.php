@@ -147,7 +147,8 @@ Route::post('/dashboard/referalbymounthvillage','API\DashboardController@referal
 Route::post('/dashboard/referalbymounthvillagedefault','API\DashboardController@referalByMountAdminVillageDefault');
 
 // input national
-Route::get('/dashboard/inputbymonthpdefault','API\DashboardController@inputByMountAdmiNationalDefault');
+Route::post('/dashboard/inputbymonthpdefault','API\DashboardController@inputByMountAdmiNationalDefault');
+Route::post('/dashboard/totalinputbymonthpdefault','API\DashboardController@getTotalInputByMonth');
 Route::post('/dashboard/inputbymonth','API\DashboardController@inputByMountAdminNational');
 
 // input province
