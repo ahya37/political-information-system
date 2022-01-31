@@ -160,6 +160,7 @@ Route::post('/dashboard/inputbymonthprovince','API\DashboardController@inputByMo
 
 // input regency
 Route::post('/dashboard/inputbymonthregencydefault','API\DashboardController@inputByMountAdminRegencyDefault');
+Route::post('/dashboard/totalinputbymonthregencydefault','API\DashboardController@getTotalInputByMonthRegency');
 Route::post('/dashboard/inputbymonthregency','API\DashboardController@inputByMountAdminRegency');
 
 // input district

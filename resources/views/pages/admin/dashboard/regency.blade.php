@@ -423,7 +423,7 @@
                           <div class="table-responsive mt-3">
                             <table id="dtshowInputDataByMounth" class="data table table-sm table-striped" width="100%">
                               <thead>
-                               
+                               <tr>
                                   <th scope="col">NO</th>
                                   <th scope="col"></th>
                                   <th scope="col">NAMA</th>
@@ -431,10 +431,6 @@
                                   <th scope="col">ALAMAT</th>
                                   <th scope="col">KONTAK</th>
                                 </tr>
-                                 <tr>
-                                    <th colspan="7" id="LoadaInputByMounth" class="d-none lds-dual-ring hidden overlay"></th>
-                                  </tr>
-                                <tr>
                                 </thead>
                                 <tbody id="showInputDataByMounth">
                                 </tbody>
