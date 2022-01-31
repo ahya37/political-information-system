@@ -1017,7 +1017,7 @@ const tableReferal = $("#dtshowReferalDataReferalByMounthNew").DataTable({
             targets: 3,
             render: function (data, type, row, meta) {
                 return `<div class="badge badge-pill badge-info">
-                 ${row.referal}
+                 ${decimalFormat(row.referal)}
              </div>`;
             },
         },
@@ -1025,7 +1025,11 @@ const tableReferal = $("#dtshowReferalDataReferalByMounthNew").DataTable({
             targets: 4,
             render: function (data, type, row, meta) {
                 return ` <div class="badge badge-pill badge-warning">
-              ${row.referal_undirect === null ? 0 : row.referal_undirect}
+              ${
+                  row.referal_undirect === null
+                      ? 0
+                      : decimalFormat(row.referal_undirect)
+              }
               </div>`;
             },
         },
@@ -1033,7 +1037,11 @@ const tableReferal = $("#dtshowReferalDataReferalByMounthNew").DataTable({
             targets: 5,
             render: function (data, type, row, meta) {
                 return ` <div class="badge badge-pill badge-success">
-              ${row.total_referal === null ? 0 : row.total_referal}
+              ${
+                  row.total_referal === null
+                      ? 0
+                      : decimalFormat(row.total_referal)
+              }
               </div>`;
             },
         },
@@ -1138,7 +1146,7 @@ const tableInputer = $("#dtshowInputDataByMounth").DataTable({
             targets: 3,
             render: function (data, type, row, meta) {
                 return `<div class="badge badge-pill badge-info">
-                 ${row.input}
+                 ${decimalFormat(row.input)}
              </div>`;
             },
         },

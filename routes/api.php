@@ -154,6 +154,7 @@ Route::post('/dashboard/inputbymonth','API\DashboardController@inputByMountAdmin
 
 // input province
 Route::post('/dashboard/inputbymonthprovincedefault','API\DashboardController@inputByMountAdminProvinceDefault');
+Route::post('/dashboard/totalinputbymonthprovincedefault','API\DashboardController@getTotalInputByMonthProvince');
 Route::post('/dashboard/inputbymonthprovince','API\DashboardController@inputByMountAdminNational');
 
 // input regency
