@@ -148,6 +148,7 @@ Route::post('/dashboard/referalbymounthdistrictdefault','API\DashboardController
 Route::post('/dashboard/totalreferalbymounthdistrictdefault','API\DashboardController@getTotalreferalByMonthDistrict');
 Route::post('/dashboard/referalbymounthvillage','API\DashboardController@referalByMountAdminVillage');
 Route::post('/dashboard/referalbymounthvillagedefault','API\DashboardController@referalByMountAdminVillageDefault');
+Route::post('/dashboard/totalreferalbymounthvillagedefault','API\DashboardController@getTotalreferalByMonthVillage');
 
 // input national
 Route::post('/dashboard/inputbymonthpdefault','API\DashboardController@inputByMountAdmiNationalDefault');
