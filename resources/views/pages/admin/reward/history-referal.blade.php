@@ -34,6 +34,7 @@
                         </div>
                 
                 <div class="row mb-3">
+                    @include('layouts.message')
                   <div class="col-4">
                     <div class="card">
                       <div class="card-body" id="totalPoint">
@@ -55,7 +56,6 @@
                 </div>
                 <div class="row">
                   <div class="col-12">
-                    @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
                         <div id="members"></div>

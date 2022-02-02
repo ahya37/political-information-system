@@ -1,3 +1,7 @@
+function currency(data) {
+    return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
 $(".datepicker").datepicker({
     format: "MM",
     viewMode: "months",
@@ -7,6 +11,10 @@ $(".datepicker").datepicker({
 
 let date = $("#date").val();
 let year = "";
+
+$("#totalReferalByMonth", function (date, year) {
+    getTotalInputByMonth(date, year);
+});
 
 const table = $("#data").DataTable({
     pageLength: 100,
@@ -79,7 +87,52 @@ $(".filter").on("changeDate", async function (selected) {
     date = monthSelected;
     year = yearSelected;
     table.ajax.reload(null, false);
+    getTotalInputByMonth(date, year);
 });
+async function acumulate() {
+    date = "";
+    year = "";
+    table.ajax.reload(null, false);
+    getTotalInputByMonth(date, year);
+}
+async function acumulate() {
+    date = "";
+    year = "";
+    table.ajax.reload(null, false);
+    getTotalInputByMonth(date, year);
+}
+function getTotalInputByMonth(date, year) {
+    return $.ajax({
+        url: "/api/admin/totalvoucherhistory",
+        method: "POST",
+        data: {
+            date: date,
+            year: year,
+            type: "Input",
+        },
+        beforeSend: function () {
+            $("#totalPoint").text("Loading...");
+            $("#totalReferal").text("Loading...");
+            $("#totalNominal").text("Loading...");
+        },
+        success: function (data) {
+            $("#totalPoint").empty();
+            $("#totalPoint").append(
+                `Total Poin: <strong>${currency(data.total_point)}</strong>`
+            );
+            $("#totalReferal").empty();
+            $("#totalReferal").append(
+                `Total Data: <strong>${currency(data.total_referal)}</strong>`
+            );
+            $("#totalNominal").empty();
+            $("#totalNominal").append(
+                `Total Nominal: Rp. <strong>${currency(
+                    data.total_nominal
+                )}</strong>`
+            );
+        },
+    });
+}
 
 // $("#data").DataTable({
 //     processing: true,

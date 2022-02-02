@@ -103,6 +103,7 @@ function getTotalReferalByMonth(date, year) {
         data: {
             date: date,
             year: year,
+            type: "Referal",
         },
         beforeSend: function () {
             $("#totalPoint").text("Loading...");
@@ -112,15 +113,19 @@ function getTotalReferalByMonth(date, year) {
         success: function (data) {
             $("#totalPoint").empty();
             $("#totalPoint").append(
-                `Total : <strong>${currency(data.total_point)}</strong>`
+                `Total Poin: <strong>${currency(data.total_point)}</strong>`
             );
             $("#totalReferal").empty();
             $("#totalReferal").append(
-                `Total : <strong>${currency(data.total_referal)}</strong>`
+                `Total Referal : <strong>${currency(
+                    data.total_referal
+                )}</strong>`
             );
             $("#totalNominal").empty();
             $("#totalNominal").append(
-                `Total : <strong>${currency(data.total_nominal)}</strong>`
+                `Total Nominal :Rp . <strong>${currency(
+                    data.total_nominal
+                )}</strong>`
             );
         },
     });
