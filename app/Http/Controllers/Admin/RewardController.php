@@ -922,6 +922,23 @@ class RewardController extends Controller
 
     public function listRewardReferal()
     {
+    //     $referalModel = new Referal();
+    //     $data = $referalModel->getTotalVoucherReferal();
+    //     // total poin
+    //     $total_point = collect($data)->sum(function($q){
+    //         return $q->total_point;
+    //     });
+
+    //     // total nominal
+    //      $total_nominal = collect($data)->sum(function($q){
+    //         return $q->total_nominal;
+    //     });
+        
+    //     // total referal
+    //     $total_referal = collect($data)->sum(function($q){
+    //        return $q->total_data;
+    //    });
+
         return view('pages.admin.reward.history-referal');
     }
 
@@ -1151,6 +1168,47 @@ class RewardController extends Controller
         return view('pages.admin.reward.report-voucher', compact('data','gF','no','total_point_all','total_data_all','total_nominal_all'));
     }
 
+    public function getTotalListVoucherReferalByMount(Request $request)
+    {
+         $data = DB::table('users as a')
+                ->select(DB::raw('SUM(g.total_data) as total_data'), DB::raw('SUM(g.nominal) as total_nominal'),DB::raw('SUM(g.point) as total_point'))
+                ->join('voucher_history as b','a.id','b.user_id')
+                ->join('detail_voucher_history as g','b.id','g.voucher_history_id')
+                ->where('g.type','Referal');
+
+                
+        if($request->input('date') != null AND $request->input('year') != null){
+            $data->whereMonth('b.created_at', $request->date);
+            $data->whereYear('b.created_at', $request->year);
+        }
+
+        $data = $data->groupBy('b.id','a.photo','a.name');
+
+        $data = $data->get();
+
+        // total poin
+        $total_point = collect($data)->sum(function($q){
+            return $q->total_point;
+        });
+
+        // total nominal
+         $total_nominal = collect($data)->sum(function($q){
+            return $q->total_nominal;
+        });
+        
+        // total referal
+        $total_referal = collect($data)->sum(function($q){
+           return $q->total_data;
+       });
+
+       return response()->json([
+                'total_point' => $total_point,
+                'total_nominal' => $total_nominal,
+                'total_referal' => $total_referal,
+            ]);
+
+    }
+
 
     public function getListVoucherReferalByMount(Request $request)
     {
@@ -1206,7 +1264,7 @@ class RewardController extends Controller
                 'draw'=>$request->input('draw'),
                 'recordsTotal'=>$recordsTotal,
                 'recordsFiltered'=>$recordsFiltered,
-                'data'=> $result
+                'data'=> $result,
             ]);
 
     }

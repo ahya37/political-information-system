@@ -28,11 +28,31 @@
                  <div class="row">
                           <div class="col-md-9 col-sm-9"></div>
                           <div class="input-group mb-3 col-md-3 float-right">
-                            <a href="" class="btn btn-sm btn-default border mr-2">Akumulasi</a>
-                            <input type="text" id="date" name="referalOfMount" value="{{ date('M') }}" class="form-control datepicker filter">
+                              <button onclick="acumulate()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
+                            <button type="button" id="date" name="referalOfMount" class="btn btn-sm btn-sc-primary text-white datepicker filter">Bulan</button>
                          </div>
                         </div>
                 
+                <div class="row mb-3">
+                  <div class="col-4">
+                    <div class="card">
+                      <div class="card-body" id="totalPoint">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="card">
+                      <div class="card-body" id="totalReferal">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="card">
+                      <div class="card-body" id="totalNominal">
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-12">
                     @include('layouts.message')
@@ -47,7 +67,7 @@
                                         <th scope="col">NAMA</th>
                                         <th scope="col">ALAMAT</th>
                                         <th scope="col">TOTAL POIN</th>
-                                        <th scope="col">TOTAL DATA</th>
+                                        <th scope="col">TOTAL REFERAL</th>
                                         <th scope="col">TOTAL NOMINAL</th>
                                         <th scope="col">AKSI</th>
                                       </tr>

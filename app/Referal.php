@@ -478,4 +478,16 @@ class Referal extends Model
         return $result;
     }
 
+    public function getTotalVoucherReferal()
+    {
+        $sql = DB::table('users as a')
+                ->select('b.id','a.photo','a.name', DB::raw('SUM(g.total_data) as total_data'), DB::raw('SUM(g.nominal) as total_nominal'),DB::raw('SUM(g.point) as total_point'))
+                ->join('voucher_history as b','a.id','b.user_id')
+                ->join('detail_voucher_history as g','b.id','g.voucher_history_id')
+                ->where('g.type','Referal')
+                ->groupBy('b.id','a.photo','a.name','c.name','d.name','e.name','f.name')
+                ->get();
+        return DB::select($sql);
+    }
+
 }
