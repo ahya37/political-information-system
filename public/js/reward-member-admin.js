@@ -50,6 +50,7 @@ $("#data", async function () {
     BeforeSend("LoadaReferalByMounth");
     try {
         const inputPoint = await getInputPointDefault();
+
         const dataInputPoint = inputPoint.data;
         const dataDays = inputPoint.days;
         const monthCategory = inputPoint.monthCategory;
@@ -57,6 +58,7 @@ $("#data", async function () {
         const totalPoint = inputPoint.totalPoint;
         const totalNominal = inputPoint.totalNominal;
         const totalInputCalculate = inputPoint.totalInputCalculate;
+
         inputPointUi(
             dataInputPoint,
             monthCategory,
@@ -154,10 +156,12 @@ function inputPointUi(
 ) {
     // $("#mode").append(`Kelipatan : ${mode} Referal`);
     // $("#days").append(`<strong>Dalam ${dataDays} Hari</strong>`);
-    $("#monthCategory").append(`${monthCategory === 0 ? 1 : monthCategory} Bulan`);
+    $("#monthCategory").append(
+        `${monthCategory === 0 ? 1 : monthCategory} Bulan`
+    );
     $("#totalPoint").append(`Total Poin : ${totalPoint}`);
     $("#totalNominal").append(`Total Nominal : Rp. ${totalNominal}`);
-    $("#totalInputCalculate").append(`Total Referal : ${totalInputCalculate}`);
+    $("#totalInputCalculate").append(`Total Input : ${totalInputCalculate}`);
     let divGetPoint = "";
     dataReferalPoint.forEach((m) => {
         divGetPoint += showdivGetPoint(m);

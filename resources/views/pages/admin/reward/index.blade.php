@@ -25,28 +25,40 @@
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
                 <div class="row">
+                  <div class="col-md-9 col-sm-9"></div>
+                  <div class="input-group mb-3 col-md-3 float-right">
+                            <button onclick="acumulate()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
+                            <button type="button" id="date" name="referalOfMount"  class="btn btn-sm btn-sc-primary datepicker">Bulan</button>
+                         </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-md-3 col-sm-12 mb-1">
+                    <div class="card">
+                      <div class="card-body" id="monthCategory"></div>
+                      </div>
+                  </div>
+                  <div class="col-md-3 col-sm-12 mb-1">
+                    <div class="card">
+                      <div class="card-body" id="totalPoint"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 col-sm-12 mb-1">
+                    <div class="card">
+                      <div class="card-body" id="totalNominal"></div>
+                      </div>
+                  </div>
+                  <div class="col-md-3 col-sm-12 mb-1">
+                    <div class="card">
+                      <div class="card-body" id="totalReferalCalculate"></div>
+                      </div>
+                  </div>
+
+                </div>
+                <div class="row">
                   <div class="col-12">
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
-                        <div class="row">
-                          <div class="col-md-9 col-sm-9"></div>
-                          <div class="input-group mb-3 col-md-3 float-right">
-                            <button onclick="acumulate()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
-                            <input type="text" id="date" name="referalOfMount" value="{{ date('M') }}" class="form-control datepicker">
-                         </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-9 col-sm-9">
-                            <div id="days"></div>
-                            <div id="monthCategory"></div>
-                            <div id="mode"></div>
-                            <div id="totalReferal"></div>
-                            <div id="totalPoint"></div>
-                            <div id="totalNominal"></div>
-                            <div id="totalReferalCalculate"></div>
-                          </div>
-                      </div>
                         <div class="row">
                           <div class="col-12">
                             <div class="table-responsive">

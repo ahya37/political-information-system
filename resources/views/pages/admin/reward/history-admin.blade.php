@@ -29,19 +29,19 @@
                          </div>
                         </div>
                          <div class="row mb-3">
-                  <div class="col-4">
+                  <div class="col-md-4 col-sm-12">
                     <div class="card">
                       <div class="card-body" id="totalPoint">
                       </div>
                     </div>
                   </div>
-                  <div class="col-4">
+                  <div class="col-md-4 col-sm-12">
                     <div class="card">
                       <div class="card-body" id="totalReferal">
                       </div>
                     </div>
                   </div>
-                  <div class="col-4">
+                  <div class="col-md-4 col-sm-12">
                     <div class="card">
                       <div class="card-body" id="totalNominal">
                       </div>
