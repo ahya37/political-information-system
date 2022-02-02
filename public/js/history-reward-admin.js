@@ -67,7 +67,7 @@ const table = $("#data").DataTable({
         {
             targets: 6,
             render: function (data, type, row, meta) {
-                return `<a href="/admin/detaillistrewardreferal/${row.id}" class="btn btn-sm btn-sc-primary text-white">Detail</a>`;
+                return `<a href="/admin/detaillistrewardadmin/${row.id}" class="btn btn-sm btn-sc-primary text-white">Detail</a>`;
             },
         },
     ],

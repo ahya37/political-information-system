@@ -1629,7 +1629,6 @@ class DashboardController extends Controller
 
     public function referalByMountAdminByDefault(Request $request)
     {
-        $gF = new GlobalProvider();
         $orderBy = 'a.name';
           switch($request->input('order.0.column')){
              case '2':
@@ -1646,7 +1645,6 @@ class DashboardController extends Controller
                         ->whereNotNull('b.village_id');
                         // ->orderBy(\ DB::raw('COUNT(b.id)'),'DESC');
 
-                        
                         if($request->input('search.value')!=null){
                             $data = $data->where(function($q)use($request){
                                 $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
@@ -1660,9 +1658,9 @@ class DashboardController extends Controller
                         
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
                         
-                        if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
-                        $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
                         $recordsFiltered = $data->count();
+                        // if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+                        $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
                         $recordsTotal = $data->count();
 
                         $userModel = new User();
