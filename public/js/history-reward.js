@@ -104,6 +104,11 @@ function getTotalReferalByMonth(date, year) {
             date: date,
             year: year,
         },
+        beforeSend: function () {
+            $("#totalPoint").text("Loading...");
+            $("#totalReferal").text("Loading...");
+            $("#totalNominal").text("Loading...");
+        },
         success: function (data) {
             $("#totalPoint").empty();
             $("#totalPoint").append(
