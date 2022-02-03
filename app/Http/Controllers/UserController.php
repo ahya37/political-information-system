@@ -592,16 +592,16 @@ class UserController extends Controller
         if ($cekBank > 0) {
             $update = $bank->where('user_id', $user_id)->first();
             $update->update([
-                'number' => $request->number == null ? $update->number : $request->number,
-                'owner' => $request->owner == null ? $update->owner : $request->owner,
-                'bank' => $request->bank == null ? $update->bank :  $request->bank,
+                'number' => $request->number == null ? strtoupper($update->number) : strtoupper($request->number),
+                'owner' => $request->owner == null ? strtoupper($update->owner) : strtoupper($request->owner),
+                'bank' => $request->bank == null ? strtoupper($update->bank) :  strtoupper($request->bank),
             ]);
         }else{
             Bank::create([
                 'user_id' => Auth::user()->id,
-                'number' => $request->number,
-                'owner' => $request->owner,
-                'bank' => $request->bank,
+                'number' => strtoupper($request->number),
+                'owner' => strtoupper($request->owner),
+                'bank' => strtoupper($request->bank),
             ]);
         }
         

@@ -418,11 +418,12 @@ class Referal extends Model
 
     public function getPoint($start, $end)
     {
-        $sql = "SELECT c.id as voucher_id, a.id, a.name, a.photo, COUNT(b.id) as total_referal from users as a
+        $sql = "SELECT c.id as voucher_id, a.id, a.name, a.photo, d.number bank_number, d.owner , d.bank bank_name, COUNT(b.id) as total_referal from users as a
                 join users as b on a.id = b.user_id
                 left join voucher_history as c on a.id = c.user_id
+                left join member_bank as d on a.id = d.user_id
                 where b.village_id is not null
-                GROUP BY c.id, a.id, a.name, a.photo, c.total_data order by  COUNT(b.id) desc";
+                GROUP BY c.id, a.id, a.name, a.photo, c.total_data, d.number, d.owner, d.bank order by  COUNT(b.id) desc";
         return DB::select($sql);
     }
 
