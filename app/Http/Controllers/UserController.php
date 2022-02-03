@@ -10,6 +10,7 @@ use App\Figure;
 use App\UserMenu;
 use App\LogEditUser;
 use App\AdminDistrict;
+use App\Bank;
 use App\Models\District;
 use App\Providers\StrRandom;
 use Illuminate\Http\Request;
@@ -580,6 +581,31 @@ class UserController extends Controller
 
         return redirect()->route('member-registered-user')->with(['success' => 'Akun untuk '.$user->name.' telah dibuat']);
         
+    }
+
+    public function storeBank(Request $request)
+    {
+        $user_id = Auth::user()->id;
+
+        $bank    = new Bank();
+        $cekBank = $bank->where('user_id', $user_id)->count();
+        if ($cekBank > 0) {
+            $update = $bank->where('user_id', $user_id)->first();
+            $update->update([
+                'number' => $request->number == null ? $update->number : $request->number,
+                'owner' => $request->owner == null ? $update->owner : $request->owner,
+                'bank' => $request->bank == null ? $update->bank :  $request->bank,
+            ]);
+        }else{
+            Bank::create([
+                'user_id' => Auth::user()->id,
+                'number' => $request->number,
+                'owner' => $request->owner,
+                'bank' => $request->bank,
+            ]);
+        }
+        
+        return redirect()->back()->with(['success' => 'Rekening Bank telah tersimpan']);
     }
     
 

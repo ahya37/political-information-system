@@ -7,6 +7,7 @@ use App\Job;
 use App\User;
 use App\Referal;
 use App\AdminDistrict;
+use App\Bank;
 use App\Models\Regency;
 use App\Models\Village;
 use App\Models\District;
@@ -102,9 +103,10 @@ class HomeController extends Controller
                     ->make();
         }
 
-        $gF = new GlobalProvider();
-        
-        return view('home', compact('gF','profile','member','total_referal','referal_undirect','referal_direct'));
+        $gF  = new GlobalProvider();
+
+        $bank = Bank::where('user_id', $id_user)->first();
+        return view('home', compact('gF','profile','member','total_referal','referal_undirect','referal_direct','bank'));
     }
 
     public function dashboardAdminUser()

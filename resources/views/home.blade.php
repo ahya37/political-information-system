@@ -81,6 +81,7 @@
                 <p class="dashboard-subtitle">Sistem Keanggotaan AAW</p>
               </div>
               <div class="dashboard-content">
+                @include('layouts.message')
                 <div class="row">
                    <div class="col-md-3">
                       <div class="card mb-2 text-white bg-info">
@@ -140,7 +141,7 @@
                                 <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-member-potential" role="tab" aria-controls="nav-contact" aria-selected="false">Anggota Potensial Ku</a>
                                 <a class="nav-link" id="nav-kta-tab" data-toggle="tab" href="#nav-kta" role="tab" aria-controls="nav-kta" aria-selected="false">KTA</a>
                                 <a class="nav-link" id="nav-rev-rev" data-toggle="tab" href="#nav-rev" role="tab" aria-controls="nav-kta" aria-selected="false">Reveral Ku</a>
-
+                                <a class="nav-link" id="nav-rev-rev" data-toggle="tab" href="#nav-rek" role="tab" aria-controls="nav-rek" aria-selected="false">Rekening Ku</a>
                               </div>
                             </nav>
                             <div class="tab-content" id="nav-tabContent">
@@ -385,6 +386,32 @@
                                   <p class="text-center">{{ $profile->code }}</p>
                                 </div>
                               </div> 
+                              <div class="tab-pane fade mt-4" id="nav-rek" role="tabpanel" aria-labelledby="nav-rev-tab">
+                                <div class="col-md-12 col-sm-12  mb-3">
+                                  <button type="button" class="btn btn-sm btn-sc-primary text-white mb-2" data-toggle="modal" data-target="#exampleModal">Tambah atau Ubah Rekening</button>
+                                  <div class="card text-center">
+                                    <div class="card-header">
+                                      <h6 class="card-title">Rekening Bank</h6>
+                                    </div>
+                                      <div class="card-body">
+                                        <div class="table table-responsive">
+                                          <table class="table table-sm table-striped">
+                                            <tr>
+                                              <th>Nomor Rekening</th>
+                                              <th>Nama Pemilik</th>
+                                              <th>Nama Bank</th>
+                                            </tr>
+                                              <tr>
+                                                <td>{{ $bank->number ?? ''}}</td>
+                                                <td>{{ $bank->owner ?? ''}}</td>
+                                                <td>{{ $bank->bank ?? ''}}</td>
+                                              </tr>
+                                          </table>
+                                        </div>
+                                      </div>
+                                  </div>
+                                </div>
+                              </div> 
                             </div>
                         </div>
                       </div>
@@ -394,6 +421,42 @@
             </div>
           </div>
 @endsection
+
+@push('prepend-script')
+  
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tambah atau Ubah Rekening</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ route('user-store-bank') }}" method="POST">
+          @csrf
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Nomor Rekening:</label>
+            <input type="text" class="form-control" value="{{ $bank->number ?? '' }}" name="number" placeholder="3697xxxx" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Nama Pemilik Rekening:</label>
+            <input class="form-control" name="owner" value="{{ $bank->owner ?? '' }}" placeholder="Erik" id="message-text">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Nama Bank:</label>
+            <input type="text" placeholder="BRI" name="bank" value="{{ $bank->bank ?? '' }}" class="form-control" id="recipient-name">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-sm btn-sc-primary text-white">Simpan</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+@endpush
 
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>

@@ -52,6 +52,7 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::post('/profile/store', 'UserController@store')->name('user-store-profile');
         Route::get('show/mymember/{id}','UserController@profileMyMember')->name('member-mymember');
         Route::get('member/card/download/{id}','UserController@downloadCard')->name('member-card-download');
+        Route::post('/bank/store', 'UserController@storeBank')->name('user-store-bank');
 
         Route::get('/referal/undirect','UserController@memberByUnDirectReferal')->name('member-undirect-referal');
         Route::get('/referal/direct','UserController@memberByDirectReferal')->name('member-direct-referal');
