@@ -438,15 +438,15 @@
           @csrf
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">Nomor Rekening:</label>
-            <input type="text" class="form-control" value="{{ $bank->number ?? '' }}" name="number" placeholder="3697xxxx" id="recipient-name">
+            <input type="text" class="form-control" value="{{ $bank->number ?? '' }}" name="number"  id="recipient-name">
           </div>
           <div class="form-group">
             <label for="message-text" class="col-form-label">Nama Pemilik Rekening:</label>
-            <input class="form-control" name="owner" value="{{ $bank->owner ?? '' }}" placeholder="Erik" id="message-text">
+            <input class="form-control" name="owner" value="{{ $bank->owner ?? '' }}"  id="message-text">
           </div>
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">Nama Bank:</label>
-            <input type="text" placeholder="BRI" name="bank" value="{{ $bank->bank ?? '' }}" class="form-control" id="recipient-name">
+            <input type="text"  name="bank" value="{{ $bank->bank ?? '' }}" class="form-control" id="recipient-name">
           </div>
       </div>
       <div class="modal-footer">
