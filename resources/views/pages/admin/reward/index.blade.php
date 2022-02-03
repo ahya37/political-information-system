@@ -121,34 +121,7 @@
   </div>
 </div>
 
-  <div class="modal fade" id="setBank" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-        @csrf
-        <div class="modal-body">
-          <div class="form-group">
-            <label>Nomor Rekening</label>
-            <input type="text"  id="bankNumber" class="form-control" readonly>
-          </div>
-          <div class="form-group">
-            <label>Nama Pemilik</label>
-            <input type="text"  id="bankOwner" class="form-control" readonly>
-          </div>
-          <div class="form-group">
-            <label>Nama Bank</label>
-            <input type="text"  id="bankName" class="form-control" readonly>
-          </div>
-          </div>
-        </div>
-    </div>
-  </div>
-</div>
+  
 @endpush
 @push('addon-script')
 <script type="text/javascript" src="{{ asset('assets/vendor/moments/moment.min.js') }}"></script>

@@ -192,6 +192,20 @@ function showdivGetPoint(m) {
             </div>
             </td>
             <td>
+              <button  
+                type="button"  
+                class="btn btn-sm btn-default text-center"  
+              data-toggle="modal" data-target="#setBank"
+                data-name="${m.name}"
+                data-banknumber="${m.bank_number}"
+                data-bankowner="${m.bank_owner}"
+                data-bankname="${m.bank_name}"
+                >
+                <i class="bg-info fa fa-credit-card"></i>
+              </button>
+
+            </td>
+            <td>
             <div class="btn-group">
                             <div class="dropdown">
                                 <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">Beri Voucher</button>

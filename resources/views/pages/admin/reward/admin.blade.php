@@ -70,6 +70,7 @@
                                       <th scope="col">INPUT</th>
                                       <th scope="col">POIN</th>
                                       <th scope="col">NOMINAL</th>
+                                      <th scope="col">REKENING</th>
                                       <th scope="col">AKSI</th>
                                     </tr>
                                     <tr>
@@ -118,6 +119,34 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="setBank" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        @csrf
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Nomor Rekening</label>
+            <input type="text"  id="bankNumber" class="form-control" readonly>
+          </div>
+          <div class="form-group">
+            <label>Nama Pemilik</label>
+            <input type="text"  id="bankOwner" class="form-control" readonly>
+          </div>
+          <div class="form-group">
+            <label>Nama Bank</label>
+            <input type="text"  id="bankName" class="form-control" readonly>
+          </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
 @endpush
 @push('addon-script')
 <script type="text/javascript" src="{{ asset('assets/vendor/moments/moment.min.js') }}"></script>
@@ -141,6 +170,19 @@
         modal.find('.modal-body #nominal').val(nominal)
         modal.find('.modal-body #input').val(input)
         modal.find('.modal-body #pointReq').attr({"max" : point})
+      })
+
+      $('#setBank').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget) 
+        let recipient = button.data('name') 
+        let bankNumber = button.data('banknumber')
+        let bankOwner = button.data('bankowner')
+        let bankName = button.data('bankname')
+        let modal = $(this)
+        modal.find('.modal-body #bankNumber').val(bankNumber)
+        modal.find('.modal-body #bankOwner').val(bankOwner)
+        modal.find('.modal-body #bankName').val(bankName)
+        modal.find('.modal-title').text('Rekening Bank : ' + recipient)
       })
     </script>
 @endpush

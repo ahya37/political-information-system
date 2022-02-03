@@ -429,31 +429,34 @@ class Referal extends Model
 
     public function getPointByThisMonth($start, $end)
     {
-        $sql = "SELECT a.id, a.name, a.photo, COUNT(b.id) as total_referal, c.total_data as referal_inpoint from users as a
+        $sql = "SELECT a.id, a.name, a.photo, d.number bank_number, d.owner , d.bank bank_name, COUNT(b.id) as total_referal, c.total_data as referal_inpoint from users as a
                 join users as b on a.id = b.user_id
                 left join voucher_history as c on a.id = c.user_id
+                left join member_bank as d on a.id = d.user_id
                 where b.created_at BETWEEN  '$start' and '$end' and b.village_id is not null
-                GROUP BY a.id, a.name, a.photo, c.total_data order by  COUNT(b.id) desc";
+                GROUP BY a.id, a.name, a.photo, c.total_data, d.number, d.owner, d.bank order by  COUNT(b.id) desc";
         return DB::select($sql);
     }
 
     public function getPointByThisMonthAdmin($start, $end)
     {
-        $sql = "SELECT  c.id as voucher_id, a.id, a.name, a.photo, COUNT(b.id) as total_input from users as a
+        $sql = "SELECT  c.id as voucher_id, a.id, a.name, a.photo, d.number bank_number, d.owner , d.bank bank_name, COUNT(b.id) as total_input from users as a
                 join users as b on a.id = b.cby
                 left join voucher_history as c on a.id = c.user_id
+                left join member_bank as d on a.id = d.user_id
                 where b.created_at BETWEEN  '$start' and '$end' and a.level != 0 and b.village_id is not null 
-                GROUP BY c.id, a.id, a.name, a.photo, c.total_data order by  COUNT(b.id) desc";
+                GROUP BY c.id, a.id, a.name, a.photo, c.total_data, d.number, d.owner, d.bank order by  COUNT(b.id) desc";
         return DB::select($sql);
     }
 
     public function getPointMemberAdmin($start, $end)
     {
-        $sql = "SELECT c.id as voucher_id, a.id, a.name, a.photo, COUNT(b.id) as total_input from users as a
+        $sql = "SELECT c.id as voucher_id, a.id, a.name, a.photo, d.number bank_number, d.owner , d.bank bank_name, COUNT(b.id) as total_input from users as a
                 join users as b on a.id = b.cby
                 left join voucher_history as c on a.id = c.user_id
+                left join member_bank as d on a.id = d.user_id
                 where b.village_id is not null and a.level != 0 and b.village_id is not null
-                GROUP BY c.id, a.id, a.name, a.photo, c.total_data order by  COUNT(b.id) desc";
+                GROUP BY c.id, a.id, a.name, a.photo, c.total_data, d.number, d.owner, d.bank order by  COUNT(b.id) desc";
         return DB::select($sql);
     }
 
