@@ -146,7 +146,6 @@
         </div>
     </div>
   </div>
-</div>
 @endpush
 @push('addon-script')
 <script type="text/javascript" src="{{ asset('assets/vendor/moments/moment.min.js') }}"></script>

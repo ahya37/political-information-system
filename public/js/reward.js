@@ -195,7 +195,7 @@ function showdivGetPoint(m) {
               <button  
                 type="button"  
                 class="btn btn-sm btn-default text-center"  
-              data-toggle="modal" data-target="#setBank"
+                data-toggle="modal" data-target="#setBank"
                 data-name="${m.name}"
                 data-banknumber="${m.bank_number}"
                 data-bankowner="${m.bank_owner}"
