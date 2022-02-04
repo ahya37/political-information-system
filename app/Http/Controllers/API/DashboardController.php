@@ -1497,10 +1497,10 @@ class DashboardController extends Controller
          $gF = new GlobalProvider();
          $orderBy = 'a.name';
           switch($request->input('order.0.column')){
-             case '2':
+             case '1':
                 $orderBy = 'a.name';
                 break;
-            case '3':
+            case '2':
                 $orderBy = 'total';
                 break;
         }
@@ -1529,9 +1529,9 @@ class DashboardController extends Controller
 
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
                          
+                        $recordsFiltered = $data->get()->count();
                         if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
                         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
-                        $recordsFiltered = $data->count();
                         $recordsTotal = $data->count();
 
                         $userModel = new User();
@@ -1542,7 +1542,6 @@ class DashboardController extends Controller
                             $totalReferal     = $val->total + $referal_undirect->total;
                             $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
                             $result[] = [ 
-                                'no' => $no ++,
                                 'photo' => $val->photo,
                                 'name' => $val->name,
                                 'address' => $address->village->name.',<br> '.$address->village->district->name.', <br>'.$address->village->district->regency->name,
@@ -1631,10 +1630,10 @@ class DashboardController extends Controller
     {
         $orderBy = 'a.name';
           switch($request->input('order.0.column')){
-             case '2':
+             case '1':
                 $orderBy = 'a.name';
                 break;
-             case '3':
+             case '2':
                 $orderBy = 'total';
                 break;
         }
@@ -1658,8 +1657,8 @@ class DashboardController extends Controller
                         
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
                         
-                        $recordsFiltered = $data->count();
-                        // if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+                         $recordsFiltered = $data->get()->count();
+                        if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
                         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
                         $recordsTotal = $data->count();
 
@@ -1671,7 +1670,6 @@ class DashboardController extends Controller
                             $totalReferal     = $val->total + $referal_undirect->total;
                             $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
                             $result[] = [ 
-                                'no' => $no ++,
                                 'photo' => $val->photo,
                                 'name' => $val->name,
                                 'address' => $address->village->name.',<br> '.$address->village->district->name.', <br>'.$address->village->district->regency->name,
@@ -1800,10 +1798,10 @@ class DashboardController extends Controller
         $gF = new GlobalProvider();
          $orderBy = 'a.name';
           switch($request->input('order.0.column')){
-             case '2':
+             case '1':
                 $orderBy = 'a.name';
                 break;
-            case '3':
+            case '2':
                 $orderBy = 'total';
                 break;
         }
@@ -1831,10 +1829,10 @@ class DashboardController extends Controller
                         }
 
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
-                         
+                        
+                        $recordsFiltered = $data->get()->count();
                         if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
                         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
-                        $recordsFiltered = $data->count();
                         $recordsTotal = $data->count();
 
                         $userModel = new User();
@@ -1979,10 +1977,10 @@ class DashboardController extends Controller
           $gF = new GlobalProvider();
         $orderBy = 'a.name';
         switch($request->input('order.0.column')){
-             case '2':
+             case '1':
                 $orderBy = 'a.name';
                 break;
-             case '3':
+             case '2':
                 $orderBy = 'total';
                 break;
         }
@@ -2009,9 +2007,9 @@ class DashboardController extends Controller
                         
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
                         
+                         $recordsFiltered = $data->get()->count();
                         if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
                         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
-                        $recordsFiltered = $data->count();
                         $recordsTotal = $data->count();
 
                         $userModel = new User();
@@ -2022,7 +2020,6 @@ class DashboardController extends Controller
                             $totalReferal     = $val->total + $referal_undirect->total;
                             $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
                             $result[] = [ 
-                                'no' => $no ++,
                                 'photo' => $val->photo,
                                 'name' => $val->name,
                                 'address' => $address->village->name.',<br> '.$address->village->district->name.', <br>'.$address->village->district->regency->name,
@@ -2152,10 +2149,10 @@ class DashboardController extends Controller
         $gF = new GlobalProvider();
          $orderBy = 'a.name';
           switch($request->input('order.0.column')){
-             case '2':
+             case '1':
                 $orderBy = 'a.name';
                 break;
-             case '3':
+             case '2':
                 $orderBy = 'total';
                 break;
         }
@@ -2181,9 +2178,9 @@ class DashboardController extends Controller
 
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
                          
+                         $recordsFiltered = $data->get()->count();
                         if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
                         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
-                        $recordsFiltered = $data->count();
                         $recordsTotal = $data->count();
 
                         $userModel = new User();
@@ -2342,10 +2339,10 @@ class DashboardController extends Controller
          $gF = new GlobalProvider();
         $orderBy   = 'a.name';
         switch($request->input('order.0.column')){
-             case '2':
+             case '1':
                 $orderBy = 'a.name';
                 break;
-             case '3':
+             case '2':
                 $orderBy = 'total';
                 break;
         }
@@ -2374,7 +2371,7 @@ class DashboardController extends Controller
                         }
                         
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
-                        $recordsFiltered = $data->count();
+                         $recordsFiltered = $data->get()->count();
                         
                         if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
                         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
@@ -2386,7 +2383,6 @@ class DashboardController extends Controller
                         foreach ($data as $val) {
                             $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
                             $result[] = [ 
-                                'no' => $no ++,
                                 'photo' => $val->photo,
                                 'name' => $val->name,
                                 'address' => $address->village->name.',<br> '.$address->village->district->name.', <br>'.$address->village->district->regency->name,
@@ -2396,12 +2392,11 @@ class DashboardController extends Controller
                             ];
                         }
 
-                        $countResult = count($result);
                                             
                         return response()->json([
                             'draw'=>$request->input('draw'),
                             'recordsTotal'=>$recordsTotal,
-                            'recordsFiltered'=>$countResult,
+                            'recordsFiltered'=>$recordsFiltered,
                             'data'=> $result,
                         ]);
 
@@ -2512,10 +2507,10 @@ class DashboardController extends Controller
        $gF = new GlobalProvider();
         $orderBy   = 'a.name';
         switch($request->input('order.0.column')){
-             case '2':
+             case '1':
                 $orderBy = 'a.name';
                 break;
-            case '3':
+            case '2':
                 $orderBy = 'total';
                 break;
         }
@@ -2544,7 +2539,7 @@ class DashboardController extends Controller
                         }
                         
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
-                        $recordsFiltered = $data->count();
+                         $recordsFiltered = $data->get()->count();
                         
                         if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
                         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
@@ -2556,7 +2551,6 @@ class DashboardController extends Controller
                         foreach ($data as $val) {
                             $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
                             $result[] = [ 
-                                'no' => $no ++,
                                 'photo' => $val->photo,
                                 'name' => $val->name,
                                 'address' => $address->village->name.',<br> '.$address->village->district->name.', <br>'.$address->village->district->regency->name,
@@ -2566,12 +2560,11 @@ class DashboardController extends Controller
                             ];
                         }
 
-                        $countResult = count($result);
                                             
                         return response()->json([
                             'draw'=>$request->input('draw'),
                             'recordsTotal'=>$recordsTotal,
-                            'recordsFiltered'=>$countResult,
+                            'recordsFiltered'=>$recordsFiltered,
                             'data'=> $result,
                         ]);
     }
@@ -2648,10 +2641,10 @@ class DashboardController extends Controller
          $gF = new GlobalProvider();
          $orderBy   = 'a.name';
         switch($request->input('order.0.column')){
-             case '2':
+             case '1':
                 $orderBy = 'a.name';
                 break;
-             case '3':
+             case '2':
                 $orderBy = 'total';
                 break;
         }
@@ -2678,7 +2671,7 @@ class DashboardController extends Controller
                         }
                         
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
-                        $recordsFiltered = $data->count();
+                        $recordsFiltered = $data->get()->count();
                         
                         if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
                         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
@@ -2690,7 +2683,6 @@ class DashboardController extends Controller
                         foreach ($data as $val) {
                             $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
                             $result[] = [ 
-                                'no' => $no ++,
                                 'photo' => $val->photo,
                                 'name' => $val->name,
                                 'address' => $address->village->name.',<br> '.$address->village->district->name.', <br>'.$address->village->district->regency->name,
@@ -2700,12 +2692,11 @@ class DashboardController extends Controller
                             ];
                         }
 
-                        $countResult = count($result);
                                             
                         return response()->json([
                             'draw'=>$request->input('draw'),
                             'recordsTotal'=>$recordsTotal,
-                            'recordsFiltered'=>$countResult,
+                            'recordsFiltered'=>$recordsFiltered,
                             'data'=> $result,
                         ]);
     //   $district_id  = request()->district_id;
@@ -2811,10 +2802,10 @@ class DashboardController extends Controller
         $gF = new GlobalProvider();
         $orderBy   = 'a.name';
         switch($request->input('order.0.column')){
-             case '2':
+             case '1':
                 $orderBy = 'a.name';
                 break;
-             case '3':
+             case '2':
                 $orderBy = 'total';
                 break;
         }
@@ -2840,7 +2831,7 @@ class DashboardController extends Controller
                         }
                         
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
-                        $recordsFiltered = $data->count();
+                       $recordsFiltered = $data->get()->count();
                         
                         if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
                         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
@@ -2862,12 +2853,11 @@ class DashboardController extends Controller
                             ];
                         }
 
-                        $countResult = count($result);
                                             
                         return response()->json([
                             'draw'=>$request->input('draw'),
                             'recordsTotal'=>$recordsTotal,
-                            'recordsFiltered'=>$countResult,
+                            'recordsFiltered'=>$recordsFiltered,
                             'data'=> $result,
                         ]);
     //   $village_id  = request()->village_id;
@@ -3000,7 +2990,7 @@ class DashboardController extends Controller
                         }
                         
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
-                        $recordsFiltered = $data->count();
+                        $recordsFiltered = $data->get()->count();
                         
                         if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
                         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
@@ -3012,7 +3002,6 @@ class DashboardController extends Controller
                         foreach ($data as $val) {
                             $address          = $userModel->with(['village.district.regency'])->where('id', $val->user_id)->first();
                             $result[] = [ 
-                                'no' => $no ++,
                                 'photo' => $val->photo,
                                 'name' => $val->name,
                                  'address' => $address->village->name.',<br> '.$address->village->district->name.', <br>'.$address->village->district->regency->name,
@@ -3022,12 +3011,11 @@ class DashboardController extends Controller
                             ];
                         }
 
-                        $countResult = count($result);
                                             
                         return response()->json([
                             'draw'=>$request->input('draw'),
                             'recordsTotal'=>$recordsTotal,
-                            'recordsFiltered'=>$countResult,
+                            'recordsFiltered'=>$recordsFiltered,
                             'data'=> $result,
                         ]);
     //   $referalModel = new Referal();

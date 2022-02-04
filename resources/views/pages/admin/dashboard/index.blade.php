@@ -372,7 +372,6 @@
                           <div class="table-responsive mt-3">
                             <table id="dtshowReferalDataReferalByMounthNew" class="data table table-sm table-striped" width="100%">
                               <thead>
-                                  <th scope="col">NO</th>
                                   <th scope="col"></th>
                                   <th scope="col">NAMA</th>
                                   <th scope="col">REFERAL LANGSUNG</th>
@@ -412,7 +411,6 @@
                             <table id="dtshowInputDataByMounth" class="data table table-sm table-striped" width="100%">
                               <thead>
                                <tr>
-                                  <th scope="col">NO</th>
                                   <th scope="col"></th>
                                   <th scope="col">NAMA</th>
                                   <th scope="col">JUMLAH DATA</th>

@@ -256,7 +256,6 @@
                             <table id="dtshowReferalDataReferalByMounth" class="data table table-sm table-striped" width="100%">
                               <thead>
                                 <tr>
-                                  <th scope="col">NO</th>
                                   <th scope="col"></th>
                                   <th scope="col">NAMA</th>
                                   <th scope="col">REFERAL LANGSUNG</th>
@@ -296,7 +295,6 @@
                             <table id="dtshowInputDataByMounth" class="data table table-sm table-striped" width="100%">
                               <thead>
                                <tr>
-                                  <th scope="col">NO</th>
                                   <th scope="col"></th>
                                   <th scope="col">NAMA</th>
                                   <th scope="col">JUMLAH DATA</th>

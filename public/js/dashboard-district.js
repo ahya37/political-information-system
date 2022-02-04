@@ -927,7 +927,7 @@ const tableReferal = $("#dtshowReferalDataReferalByMounth").DataTable({
     bInfo: true,
     processing: true,
     bServerSide: true,
-    order: [[3, "desc"]],
+    order: [[2, "desc"]],
     autoWidth: false,
     ajax: {
         url: "/api/dashboard/referalbymounthdistrictdefault",
@@ -943,23 +943,17 @@ const tableReferal = $("#dtshowReferalDataReferalByMounth").DataTable({
         {
             targets: 0,
             render: function (data, type, row, meta) {
-                return `<p>${row.no}</p>`;
+                return `<img  class="rounded" width="40" src="/storage/${row.photo}">`;
             },
         },
         {
             targets: 1,
             render: function (data, type, row, meta) {
-                return `<img  class="rounded" width="40" src="/storage/${row.photo}">`;
-            },
-        },
-        {
-            targets: 2,
-            render: function (data, type, row, meta) {
                 return `<p>${row.name}</p>`;
             },
         },
         {
-            targets: 3,
+            targets: 2,
             render: function (data, type, row, meta) {
                 return `<div class="badge badge-pill badge-info">
                  ${decimalFormat(row.referal)}
@@ -967,7 +961,7 @@ const tableReferal = $("#dtshowReferalDataReferalByMounth").DataTable({
             },
         },
         {
-            targets: 4,
+            targets: 3,
             render: function (data, type, row, meta) {
                 return ` <div class="badge badge-pill badge-warning">
               ${
@@ -979,7 +973,7 @@ const tableReferal = $("#dtshowReferalDataReferalByMounth").DataTable({
             },
         },
         {
-            targets: 5,
+            targets: 4,
             render: function (data, type, row, meta) {
                 return ` <div class="badge badge-pill badge-success">
               ${
@@ -991,13 +985,13 @@ const tableReferal = $("#dtshowReferalDataReferalByMounth").DataTable({
             },
         },
         {
-            targets: 6,
+            targets: 5,
             render: function (data, type, row, meta) {
                 return `<p>${row.address}</p>`;
             },
         },
         {
-            targets: 7,
+            targets: 6,
             render: function (data, type, row, meta) {
                 return `<div class="badge badge-pill badge-primary">
                         <i class="fa fa-phone"></i>
@@ -1060,7 +1054,7 @@ const tableInputer = $("#dtshowInputDataByMounth").DataTable({
     bInfo: true,
     processing: true,
     bServerSide: true,
-    order: [[3, "desc"]],
+    order: [[2, "desc"]],
     autoWidth: false,
     ajax: {
         url: "/api/dashboard/inputbymonthdistrictdefault",
@@ -1076,23 +1070,17 @@ const tableInputer = $("#dtshowInputDataByMounth").DataTable({
         {
             targets: 0,
             render: function (data, type, row, meta) {
-                return `<p>${row.no}</p>`;
+                return `<img  class="rounded" width="40" src="/storage/${row.photo}">`;
             },
         },
         {
             targets: 1,
             render: function (data, type, row, meta) {
-                return `<img  class="rounded" width="40" src="/storage/${row.photo}">`;
-            },
-        },
-        {
-            targets: 2,
-            render: function (data, type, row, meta) {
                 return `<p>${row.name}</p>`;
             },
         },
         {
-            targets: 3,
+            targets: 2,
             render: function (data, type, row, meta) {
                 return `<div class="badge badge-pill badge-info">
                  ${decimalFormat(row.input)}
@@ -1100,13 +1088,13 @@ const tableInputer = $("#dtshowInputDataByMounth").DataTable({
             },
         },
         {
-            targets: 4,
+            targets: 3,
             render: function (data, type, row, meta) {
                 return `<p>${row.address}</p>`;
             },
         },
         {
-            targets: 5,
+            targets: 4,
             render: function (data, type, row, meta) {
                 return `<div class="badge badge-pill badge-primary">
                         <i class="fa fa-phone"></i>
