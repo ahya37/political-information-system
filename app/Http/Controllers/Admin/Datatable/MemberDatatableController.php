@@ -84,7 +84,7 @@ class MemberDatatableController extends Controller
 
 
 
-          $recordsFiltered = $data->count();
+          $recordsFiltered = $data->get()->count();
           if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
           $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
           
