@@ -32,22 +32,23 @@
                          </div>
                 </div>
                 <div class="row mb-2">
-                  <div class="col-md-3 col-sm-12 mb-1">
+                  <div class="col-md-6 col-sm-12 mb-1">
                     <div class="card">
                       <div class="card-body" id="monthCategory"></div>
                       </div>
                   </div>
-                  <div class="col-md-3 col-sm-12 mb-1">
-                    <div class="card">
-                      <div class="card-body" id="totalPoint"></div>
-                    </div>
-                  </div>
-                  <div class="col-md-3 col-sm-12 mb-1">
+                   <div class="col-md-6 col-sm-12 mb-1">
                     <div class="card">
                       <div class="card-body" id="totalNominal"></div>
                       </div>
                   </div>
-                  <div class="col-md-3 col-sm-12 mb-1">
+                  <div class="col-md-6 col-sm-12 mb-1">
+                    <div class="card">
+                      <div class="card-body" id="totalPoint"></div>
+                    </div>
+                  </div>
+                 
+                  <div class="col-md-6 col-sm-12 mb-1">
                     <div class="card">
                       <div class="card-body" id="totalReferalCalculate"></div>
                       </div>
