@@ -1658,7 +1658,7 @@ class DashboardController extends Controller
                         $data = $data->groupBy('a.id','a.phone_number','a.whatsapp','a.photo','a.name');
                         
                          $recordsFiltered = $data->get()->count();
-                        if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+                        // if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
                         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
                         $recordsTotal = $data->count();
 
@@ -2962,10 +2962,10 @@ class DashboardController extends Controller
         $gF = new GlobalProvider();
         $orderBy   = 'a.name';
         switch($request->input('order.0.column')){
-             case '2':
+             case '1':
                 $orderBy = 'a.name';
                 break;
-            case '3':
+            case '2':
                 $orderBy = 'total';
                 break;
         }
