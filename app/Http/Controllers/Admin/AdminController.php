@@ -82,7 +82,7 @@ class AdminController extends Controller
             $user = User::where('id', $id)->first();
             $user->update(['level' => $request->level]);
             // cek apakah sudah ter set menu_id =1 
-            $cekMenu  = $userMenuModel->where('user_id', $user->id)->count();
+            // $cekMenu  = $userMenuModel->where('user_id', $user->id)->count();
             // if ($cekMenu == 0) {
                 // tambahkan user_id tersebut ke tbl user_menu untuk mendapatkan akses dashboard
                 $userMenuModel->create([

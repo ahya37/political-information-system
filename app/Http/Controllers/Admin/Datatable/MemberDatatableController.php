@@ -351,4 +351,109 @@ class MemberDatatableController extends Controller
                     ->rawColumns(['photo','action','totalInput','address','contact'])
                     ->make(true);
     }
+
+    public function dTableMemberCaleg(Request $request)
+    {
+
+        $orderBy = 'a.name';
+        switch ($request->input('order.0.column')) {
+            case '1':
+                $orderBy = 'a.name';
+                break;
+            case '2':
+                $orderBy = 'regencies.name';
+                break;
+            case '3':
+                $orderBy = 'districts.name';
+                break;
+            case '4':
+                $orderBy = 'villages.name';
+                break;
+            case '5':
+                $orderBy = 'b.name';
+                break;
+            case '6':
+                $orderBy = 'c.name';
+                break;
+            case '7':
+                $orderBy = 'a.created_at';
+                break;
+        }
+
+        $data = DB::table('users as a')
+                        ->select('a.id','a.user_id','a.name','a.photo','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email')
+                        ->join('villages','villages.id','a.village_id')
+                        ->join('districts','districts.id','villages.district_id')
+                        ->join('regencies','regencies.id','districts.regency_id')
+                        ->join('users as b','b.id','a.user_id')
+                        ->join('users as c','c.id','a.cby')
+                        ->join('dapil_areas','districts.id','dapil_areas.district_id')
+                        ->whereNotNull('a.village_id');
+
+            
+    if($request->input('search.value')!=null){
+            $data = $data->where(function($q)use($request){
+                $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                ->orWhereRaw('LOWER(regencies.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                ->orWhereRaw('LOWER(districts.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                ->orWhereRaw('LOWER(villages.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                ->orWhereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                ->orWhereRaw('LOWER(c.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                ->orWhereRaw('LOWER(a.created_at) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                ;
+            });
+        }
+
+     if ($request->input('province') != null) {
+                     $data->where('regencies.province_id', $request->province);
+        }
+
+     if ($request->input('regency') != null) {
+                     $data->where('regencies.id', $request->regency);
+        }
+
+     if ($request->input('dapil') != null) {
+                     $data ->where('dapil_areas.dapil_id', $request->dapil);
+        }
+     if ($request->input('district') != null) {
+                     $data->where('districts.id', $request->district);
+        }
+     if ($request->input('village') != null) {
+                     $data->where('villages.id', $request->village);
+        }
+
+
+
+          $recordsFiltered = $data->get()->count();
+          if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+          $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+          $recordsTotal = $data->count();
+
+        $result = [];
+        foreach($data as $val){
+             $total_referal = User::where('user_id', $val->id)->whereNotNull('village_id')->count();
+             $result[] = [
+                 'id' => $val->id,
+                 'photo' => $val->photo,
+                 'name' => $val->name,
+                 'regency' => $val->regency,
+                 'district' => $val->district,
+                 'village' => $val->village,
+                 'referal' => $val->referal,
+                 'cby' => $val->cby,
+                 'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                 'total_referal' => $total_referal,
+                 'status' => $val->status,
+                 'email' => $val->email
+             ];
+        }
+
+
+          return response()->json([
+                'draw'=>$request->input('draw'),
+                'recordsTotal'=>$recordsTotal,
+                'recordsFiltered'=>$recordsFiltered,
+                'data'=> $data
+            ]);
+    }
 }
