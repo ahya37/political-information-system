@@ -71,6 +71,32 @@
                                         </div>
                                     </div>
                           </div>
+                          <div class="col-3">
+                             <div class="form-group">
+                                        <div class="row">
+                                          <form action="{{ route('member-download-excel') }}" enctype="multipart/form-data" method="POST">
+                                          @csrf
+                                          <div class="col-md-12 col-sm-12 ">
+                                            <input type="hidden" id="reqprovince" name="province">
+                                            <input type="hidden" id="reqregency" name="regency">
+                                            <input type="hidden" id="reqdapil" name="dapil">
+                                            <input type="hidden" id="reqdistrict" name="district">
+                                            <input type="hidden" id="reqvillage" name="village">
+                                             <button type="submit"  class="btn btn-sm btn-sc-primary text-white">Downlaod Excel</button>
+                                          </div>
+                                          </form>
+                                        </div>
+                                    </div>
+                          </div>
+                          {{-- <div class="col-3">
+                             <div class="form-group">
+                               <input id="reqprovince" />
+                               <input id="reqregency" />
+                               <input id="reqdapil" />
+                               <input id="reqdistrict" />
+                               <input id="reqvillage" />
+                              </div>
+                          </div> --}}
                         </div>
                       </div>
                     </div>
@@ -93,7 +119,7 @@
                                         <th scope="col">KECAMATAN</th>
                                         <th scope="col">DESA</th>
                                          <th scope="col">REFERAL DARI</th>
-                                          <th scope="col">INPUT Dari</th>
+                                          <th scope="col">INPUT DARI</th>
                                           <th scope="col">TERDAFTAR</th>
                                         <th scope="col">JUMLAH REFERAL</th>
                                         <th scope="col">AKSI</th>

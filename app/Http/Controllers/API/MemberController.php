@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Exports\MemberExport;
 use App\User;
 use App\Models\Province;
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Excel;
+
 
 class MemberController extends Controller
 {
+    public $excel;
+    public function __construct(Excel $excel)
+    {
+        $this->excel = $excel;
+    }
 
     public function getSearchMember()
     {
@@ -117,6 +126,7 @@ class MemberController extends Controller
 
         echo json_encode($response);
     }
+
 
 
 }

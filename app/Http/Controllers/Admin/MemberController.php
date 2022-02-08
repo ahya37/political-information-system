@@ -3,15 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use PDF;
+use App\Crop;
 use App\Menu;
 use App\User;
 use App\Admin;
-use App\Crop;
-use App\Exports\MemberByReferalAll;
-use App\Exports\MemberByReferalInDistrict;
-use App\Exports\MemberMostReferal;
-use App\Exports\MemberPotentialInput;
-use App\Exports\MemberPotentialReferal;
 use App\UserMenu;
 use App\Models\Regency;
 use App\Models\Village;
@@ -21,16 +16,23 @@ use App\Mail\RegisterMail;
 use Illuminate\Support\Str;
 use App\Providers\StrRandom;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Excel;
+use App\Exports\MemberExport;
 use App\Providers\GlobalProvider;
 use App\Providers\QrCodeProvider;
+use App\Exports\MemberMostReferal;
+use Illuminate\Support\Facades\DB;
+use App\Exports\MemberByReferalAll;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Exports\MemberPotentialInput;
+use App\Exports\MemberPotentialReferal;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\Facades\DataTables;
-use Maatwebsite\Excel\Excel;
+use App\Exports\MemberByReferalInDistrict;
 
 class MemberController extends Controller
 {
@@ -622,6 +624,71 @@ class MemberController extends Controller
         $no  = 1;
         $pdf = PDF::LoadView('pages.report.member-potential-input',compact('member','no','gF'))->setPaper('a4');
         return  $pdf->download('ANGGOTA POTENSIAL INPUT.pdf');
+    }
+
+
+    public function getDownloadExcel()
+    {
+        $province = request()->input('province');
+        $regency = request()->input('regency');
+        $dapil = request()->input('dapil');
+        $district = request()->input('district');
+        $village = request()->input('village');
+
+        // query
+        $data = DB::table('users as a')
+                        ->select('a.id','a.user_id','a.name','a.photo','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email')
+                        ->join('villages','villages.id','a.village_id')
+                        ->join('districts','districts.id','villages.district_id')
+                        ->join('regencies','regencies.id','districts.regency_id')
+                        ->join('users as b','b.id','a.user_id')
+                        ->join('users as c','c.id','a.cby')
+                        ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
+                        ->whereNotNull('a.village_id');
+
+            if ($province != null) {
+                        $data->where('regencies.province_id', $province);
+            }
+
+            if ($regency != null) {
+                            $data->where('regencies.id',  $regency);
+                }
+
+            if ($dapil != null) {
+                            $data ->where('dapil_areas.dapil_id', $dapil);
+                }
+            if ($district != null) {
+                            $data->where('districts.id', $district);
+                }
+            if ($village != null) {
+                            $data->where('villages.id', $village);
+            }
+
+            $data = $data->get();
+
+             $result = [];
+            foreach($data as $val){
+                $total_referal = User::where('user_id', $val->id)->whereNotNull('village_id')->count();
+                $result[] = [
+                    'id' => $val->id,
+                    'photo' => $val->photo,
+                    'name' => $val->name,
+                    'regency' => $val->regency,
+                    'district' => $val->district,
+                    'village' => $val->village,
+                    'referal' => $val->referal,
+                    'cby' => $val->cby,
+                    'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                    'total_referal' => $total_referal,
+                    'status' => $val->status,
+                    'email' => $val->email
+                ];
+            }
+
+        // EXPORT EXCEL
+
+        return $this->excel->download(new MemberExport($data), 'ANGGOTA.xls');
+
     }
 
 

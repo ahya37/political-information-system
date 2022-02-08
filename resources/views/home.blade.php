@@ -140,7 +140,7 @@
                                 <a class="nav-link" id="nav-member-tab" data-toggle="tab" href="#nav-member" role="tab" aria-controls="nav-contact" aria-selected="false">Anggota Referal Ku</a>
                                 <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-member-potential" role="tab" aria-controls="nav-contact" aria-selected="false">Anggota Potensial Ku</a>
                                 <a class="nav-link" id="nav-kta-tab" data-toggle="tab" href="#nav-kta" role="tab" aria-controls="nav-kta" aria-selected="false">KTA</a>
-                                <a class="nav-link" id="nav-rev-rev" data-toggle="tab" href="#nav-rev" role="tab" aria-controls="nav-kta" aria-selected="false">Reveral Ku</a>
+                                <a class="nav-link" id="nav-rev-rev" data-toggle="tab" href="#nav-rev" role="tab" aria-controls="nav-kta" aria-selected="false">Referal Ku</a>
                                 <a class="nav-link" id="nav-rev-rev" data-toggle="tab" href="#nav-rek" role="tab" aria-controls="nav-rek" aria-selected="false">Rekening Ku</a>
                               </div>
                             </nav>
@@ -178,7 +178,7 @@
                                         <div class="product-subtitle">{{ $profile->village->district->regency->province->name}}</div>
                                         <div class="product-title">Alamat</div>
                                         <div class="product-subtitle">{{ $profile->address}}, {{'RT '. $profile->rt}}, {{'RW '. $profile->rw}}</div>
-                                        <div class="product-title">Reveral dari</div>
+                                        <div class="product-title">Referal dari</div>
                                         <div class="product-subtitle">{{ $profile->reveral->name }}</div>
                                     </div>
                                     <div class="col-4">

@@ -17,7 +17,7 @@ let selectVillageId = $("#selectVillageId").val();
 // selectVillageId.val();
 
 const table = $("#data").DataTable({
-    pageLength: 100,
+    pageLength: 10,
 
     bLengthChange: true,
     bFilter: true,
@@ -120,61 +120,234 @@ const table = $("#data").DataTable({
     ],
 });
 
-$(".filter").change(async function () {
+$("#province").change(async function () {
+    province = $("#province").val();
+
+    if (province !== "") {
+        const responseData = await getDapilRegency(province);
+
+        $("#selectArea").empty();
+        $("#selectListArea").empty();
+        $("#selectDistrictId").empty();
+        $("#selectVillageId").empty();
+
+        $("#selectArea").show();
+        // $("#selectListArea").empty();
+        $("#selectArea").append("<option value=''>-Pilih Daerah-</option>");
+        getDapilRegencyUi(responseData);
+
+        province = $("#province").val();
+        selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+
+        $("#reqprovince").val(province);
+        $("#reqregency").val("");
+        $("#reqdapil").val("");
+        $("#reqdistrict").val("");
+        $("#reqvillage").val("");
+
+        table.ajax.reload(null, false);
+    } else {
+        province = $("#province").val();
+        selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+
+        table.ajax.reload(null, false);
+        $("#reqprovince").val("");
+        $("#reqregency").val("");
+        $("#reqdapil").val("");
+        $("#reqdistrict").val("");
+        $("#reqvillage").val("");
+    }
+});
+
+// KABKOT
+$("#selectArea").change(async function () {
+    selectArea = $("#selectArea").val();
+    if (selectArea !== "") {
+        const listDapils = await getDapilNames(selectArea);
+        $("#selectListArea").empty();
+        $("#selectDistrictId").empty();
+        $("#selectVillageId").empty();
+
+        $("#selectListArea").show();
+        // selectDistrictId.empty();
+        $("#selectListArea").append("<option value=''>-Pilih Dapil-</option>");
+        getDapilNamesUi(listDapils);
+        province = $("#province").val();
+        selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+
+        table.ajax.reload(null, false);
+        $("#reqregency").val(selectArea);
+        $("#reqdapil").val("");
+        $("#reqdistrict").val("");
+        $("#reqvillage").val("");
+    } else {
+        province = $("#province").val();
+        selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+        table.ajax.reload(null, false);
+        $("#reqregency").val("");
+        $("#reqdapil").val("");
+        $("#reqdistrict").val("");
+        $("#reqvillage").val("");
+    }
+});
+
+// DAPIL
+$("#selectListArea").change(async function () {
+    selectListArea = $("#selectListArea").val();
+
+    if (selectListArea !== "") {
+        const listDistricts = await getListDistrict(selectListArea);
+        $("#selectDistrictId").empty();
+        $("#selectVillageId").empty();
+
+        $("#selectDistrictId").show();
+        $("#selectDistrictId").append(
+            "<option value=''>-Pilih Kecamatan-</option>"
+        );
+        getListDistrictUi(listDistricts);
+        province = $("#province").val();
+        selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+
+        table.ajax.reload(null, false);
+        $("#reqdapil").val(selectListArea);
+        $("#reqdistrict").val("");
+    } else {
+        province = $("#province").val();
+        selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+        table.ajax.reload(null, false);
+        $("#reqdapil").val("");
+        $("#reqdistrict").val("");
+        $("#reqvillage").val("");
+    }
+});
+
+// KECAMATAN
+$("#selectDistrictId").change(async function () {
+    selectDistrictId = $("#selectDistrictId").val();
+
+    if (selectDistrictId) {
+        const dataVillages = await getListVillage(selectDistrictId);
+        $("#selectVillageId").empty();
+        $("#selectVillageId").show();
+        $("#selectVillageId").append("<option value=''>-Pilih Desa-</option>");
+        getListVillageUi(dataVillages);
+
+        province = $("#province").val();
+        selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+
+        table.ajax.reload(null, false);
+        $("#reqprovince").val(province);
+        $("#reqregency").val(selectArea);
+        $("#reqdapil").val(selectListArea);
+        $("#reqdistrict").val(selectDistrictId);
+        $("#reqvillage").val("");
+    } else {
+        province = $("#province").val();
+        selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+        table.ajax.reload(null, false);
+        $("#reqdistrict").val("");
+        $("#reqvillage").val("");
+    }
+});
+
+// DESA
+$("#selectVillageId").change(function () {
+    selectVillageId = $("#selectVillageId").val();
+
+    if (selectVillageId !== "") {
+        province = $("#province").val();
+        selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+        table.ajax.reload(null, false);
+        $("#reqprovince").val(province);
+        $("#reqregency").val(selectArea);
+        $("#reqdapil").val(selectListArea);
+        $("#reqdistrict").val(selectDistrictId);
+        $("#reqvillage").val(selectVillageId);
+    } else {
+        province = $("#province").val();
+        selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+        table.ajax.reload(null, false);
+        $("#reqprovince").val(province);
+        $("#reqregency").val(selectArea);
+        $("#reqdapil").val(selectListArea);
+        $("#reqdistrict").val(selectDistrictId);
+        $("#reqvillage").val("");
+    }
+});
+
+// FUNGSI DOWNLOAD PDF
+
+function downloadExcel() {
     province = $("#province").val();
     selectArea = $("#selectArea").val();
     selectListArea = $("#selectListArea").val();
     selectDistrictId = $("#selectDistrictId").val();
     selectVillageId = $("#selectVillageId").val();
 
-    try {
-        // kabkot
-        if (province !== "") {
-            const responseData = await getDapilRegency(province);
+    $("#reqprovince").val(province);
+    $("#reqregency").val(selectArea);
+    $("#reqdapil").val(selectListArea);
+    $("#reqdistrict").val(selectDistrictId);
+    $("#reqvillage").val(selectVillageId);
 
-            $("#selectArea").empty();
-            $("#selectArea").show();
-            // $("#selectListArea").empty();
-            $("#selectArea").append("<option value=''>-Pilih Daerah-</option>");
-            getDapilRegencyUi(responseData);
-        }
-
-        // dapil
-        if (selectArea !== "") {
-            const listDapils = await getDapilNames(selectArea);
-            $("#selectListArea").empty();
-            $("#selectListArea").show();
-            // selectDistrictId.empty();
-            $("#selectListArea").append(
-                "<option value=''>-Pilih Dapil-</option>"
-            );
-            getDapilNamesUi(listDapils);
-        }
-        // kecamatan
-        if (selectListArea !== "") {
-            const listDistricts = await getListDistrict(selectListArea);
-            $("#selectDistrictId").empty();
-            $("#selectDistrictId").show();
-            $("#selectDistrictId").append(
-                "<option value=''>-Pilih Kecamatan-</option>"
-            );
-            getListDistrictUi(listDistricts);
-        }
-        // desa
-        if (selectDistrictId !== "") {
-            const dataVillages = await getListVillage(selectDistrictId);
-            $("#selectVillageId").empty();
-            $("#selectVillageId").show();
-            $("#selectVillageId").append(
-                "<option value=''>-Pilih Desa-</option>"
-            );
-            getListVillageUi(dataVillages);
-        }
-    } catch {}
-
-    table.ajax.reload(null, false);
-});
-
+    console.log("form: ", [
+        $("#reqprovince").val(province),
+        $("#reqregency").val(selectArea),
+        $("#reqdapil").val(selectListArea),
+        $("#reqdistrict").val(selectDistrictId),
+        $("#reqvillage").val(selectVillageId),
+    ]);
+    // $.ajax({
+    //     url: "/api/member/download/excel",
+    //     method: "POST",
+    //     data: {
+    //         province: province,
+    //         regency: selectArea,
+    //         dapil: selectListArea,
+    //         district: selectDistrictId,
+    //         village: selectVillageId,
+    //     },
+    //     beforeSend: function () {
+    //         $("#downloadExcel").text("Loading..");
+    //     },
+    //     success: function (data) {
+    //         console.log("data: ", data);
+    //     },
+    //     complete: function () {
+    //         $("#downloadExcel").text("Download Excel");
+    //     },
+    // });
+}
 // GET DATA BY PROVINCE
 
 function getDapilRegency(province) {
