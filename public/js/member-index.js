@@ -150,6 +150,11 @@ $("#province").change(async function () {
 
         table.ajax.reload(null, false);
     } else {
+        $("#selectArea").empty();
+        $("#selectListArea").empty();
+        $("#selectDistrictId").empty();
+        $("#selectVillageId").empty();
+
         province = $("#province").val();
         selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
@@ -190,6 +195,10 @@ $("#selectArea").change(async function () {
         $("#reqdistrict").val("");
         $("#reqvillage").val("");
     } else {
+        $("#selectListArea").empty();
+        $("#selectDistrictId").empty();
+        $("#selectVillageId").empty();
+
         province = $("#province").val();
         selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
@@ -227,6 +236,8 @@ $("#selectListArea").change(async function () {
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val("");
     } else {
+        $("#selectDistrictId").empty();
+        $("#selectVillageId").empty();
         province = $("#province").val();
         selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
@@ -243,7 +254,7 @@ $("#selectListArea").change(async function () {
 $("#selectDistrictId").change(async function () {
     selectDistrictId = $("#selectDistrictId").val();
 
-    if (selectDistrictId) {
+    if (selectDistrictId !== "") {
         const dataVillages = await getListVillage(selectDistrictId);
         $("#selectVillageId").empty();
         $("#selectVillageId").show();
@@ -263,6 +274,7 @@ $("#selectDistrictId").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
     } else {
+        $("#selectVillageId").empty();
         province = $("#province").val();
         selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
