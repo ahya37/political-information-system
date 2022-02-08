@@ -88,6 +88,18 @@
                                         </div>
                                     </div>
                           </div>
+                          <div class="col-3">
+                             <div class="form-group">
+                                        <div class="row">
+                                          <form action="" enctype="multipart/form-data" method="POST">
+                                          @csrf
+                                          <div class="col-md-12 col-sm-12 ">
+                                             <button type="button" disabled  class="btn btn-sm btn-secondary">Download PDF [In Progress]</button>
+                                          </div>
+                                          </form>
+                                        </div>
+                                    </div>
+                          </div>
                           {{-- <div class="col-3">
                              <div class="form-group">
                                <input id="reqprovince" />
