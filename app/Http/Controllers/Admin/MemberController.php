@@ -634,17 +634,19 @@ class MemberController extends Controller
         $dapil = request()->input('dapil');
         $district = request()->input('district');
         $village = request()->input('village');
+        $type = request()->input('type');
 
         // query
         $data = DB::table('users as a')
-                        ->select('a.id','a.user_id','a.name','a.photo','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email')
+                        ->select('a.id','a.user_id','a.name','a.photo','a.rt','a.rw','a.phone_number','a.whatsapp','a.address','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email')
                         ->join('villages','villages.id','a.village_id')
                         ->join('districts','districts.id','villages.district_id')
                         ->join('regencies','regencies.id','districts.regency_id')
                         ->join('users as b','b.id','a.user_id')
                         ->join('users as c','c.id','a.cby')
                         ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
-                        ->whereNotNull('a.village_id');
+                        ->whereNotNull('a.village_id')
+                        ->orderBy('a.name','asc');
 
             if ($province != null) {
                         $data->where('regencies.province_id', $province);
@@ -666,30 +668,36 @@ class MemberController extends Controller
 
             $data = $data->get();
 
-             $result = [];
+        // EXPORT EXCEL
+        if ($type == 'excel') {
+            return $this->excel->download(new MemberExport($data), 'ANGGOTA.xls');
+        }else{
+            $gF = new GlobalProvider();
+            $result = [];
+            $no = 1;
             foreach($data as $val){
                 $total_referal = User::where('user_id', $val->id)->whereNotNull('village_id')->count();
                 $result[] = [
-                    'id' => $val->id,
-                    'photo' => $val->photo,
+                    'no' => $no++,
                     'name' => $val->name,
-                    'regency' => $val->regency,
-                    'district' => $val->district,
+                    'address' => $val->address,
+                    'rt' => $val->rt,
+                    'rw' => $val->rw,
                     'village' => $val->village,
-                    'referal' => $val->referal,
-                    'cby' => $val->cby,
+                    'district' => $val->district,
+                    'regency' => $val->regency,
+                    'telp'    => $val->phone_number,
+                    'wa' => $val->whatsapp,
                     'created_at' => date('d-m-Y', strtotime($val->created_at)),
-                    'total_referal' => $total_referal,
-                    'status' => $val->status,
-                    'email' => $val->email
+                    'cby' => $val->cby,
+                    'referal' => $val->referal,
+                    'total_referal' => $gF->decimalFormat($total_referal),
                 ];
             }
-
-        // EXPORT EXCEL
-
-        return $this->excel->download(new MemberExport($data), 'ANGGOTA.xls');
+            $pdf = PDF::LoadView('pages.admin.report.member-byregional',compact('result','no','gF'))->setPaper('f4','landscape');
+            return  $pdf->download('LAPORAN ANGGOTA.pdf');
+        }
 
     }
-
 
 }

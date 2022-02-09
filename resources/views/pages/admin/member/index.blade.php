@@ -71,7 +71,7 @@
                                         </div>
                                     </div>
                           </div>
-                          <div class="col-3">
+                          <div class="col-2">
                              <div class="form-group">
                                         <div class="row">
                                           <form action="{{ route('member-download-excel') }}" enctype="multipart/form-data" method="POST">
@@ -82,33 +82,20 @@
                                             <input type="hidden" id="reqdapil" name="dapil">
                                             <input type="hidden" id="reqdistrict" name="district">
                                             <input type="hidden" id="reqvillage" name="village">
-                                             <button type="submit"  class="btn btn-sm btn-sc-primary text-white">Downlaod Excel</button>
+                                             <button type="submit" name="type" value="excel"  class="btn btn-sm btn-sc-primary text-white">Downlaod Excel</button>
                                           </div>
-                                          </form>
                                         </div>
                                     </div>
+                              
                           </div>
                           <div class="col-3">
                              <div class="form-group">
-                                        <div class="row">
-                                          <form action="" enctype="multipart/form-data" method="POST">
-                                          @csrf
-                                          <div class="col-md-12 col-sm-12 ">
-                                             <button type="button" disabled  class="btn btn-sm btn-secondary">Download PDF [In Progress]</button>
-                                          </div>
-                                          </form>
-                                        </div>
-                                    </div>
-                          </div>
-                          {{-- <div class="col-3">
-                             <div class="form-group">
-                               <input id="reqprovince" />
-                               <input id="reqregency" />
-                               <input id="reqdapil" />
-                               <input id="reqdistrict" />
-                               <input id="reqvillage" />
+                                <button type="submit" name="type" value="pdf"  class="btn btn-sm btn-sc-primary text-white">Download PDF</button>
+                              
                               </div>
-                          </div> --}}
+                          </form>
+
+                          </div>
                         </div>
                       </div>
                     </div>

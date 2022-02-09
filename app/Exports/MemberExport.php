@@ -28,16 +28,23 @@ class MemberExport implements FromCollection, WithHeadings, WithEvents
         $data = $this->data;
         
          $result = [];
+         $no = 1;
             foreach($data as $val){
                 $total_referal = User::where('user_id', $val->id)->whereNotNull('village_id')->count();
                 $result[] = [
+                    'no' => $no++,
                     'name' => $val->name,
-                    'regency' => $val->regency,
-                    'district' => $val->district,
+                    'address' => $val->address,
+                    'rt' => $val->rt,
+                    'rw' => $val->rw,
                     'village' => $val->village,
-                    'referal' => $val->referal,
-                    'cby' => $val->cby,
+                    'district' => $val->district,
+                    'regency' => $val->regency,
+                    'telp'    => $val->phone_number,
+                    'wa' => $val->whatsapp,
                     'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                    'cby' => $val->cby,
+                    'referal' => $val->referal,
                     'total_referal' => $total_referal,
                 ];
             }
@@ -48,13 +55,19 @@ class MemberExport implements FromCollection, WithHeadings, WithEvents
     public function headings(): array
     {
         return [
+            'NO',
             'NAMA',
-            'KABUPATEN/KOTA',
-            'KECAMATAN',
+            'ALAMAT',
+            'RT',
+            'RW',
             'DESA',
-            'REFERAL DARI',
-            'INPUT DARI',
+            'KECAMATAN',
+            'KABUPATEN/KOTA',
+            'TELEPON',
+            'WHATSAPP',
             'TERDAFTAR',
+            'INPUT DARI',
+            'REFERAL',
             'JUMLAH REFERAL',
         ];
     }
@@ -63,23 +76,12 @@ class MemberExport implements FromCollection, WithHeadings, WithEvents
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:H1')->applyFromArray([
+                $event->sheet->getStyle('A1:N1')->applyFromArray([
                     'font' => [
                         'bold' => true
                     ]
                 ]);
 
-                $data = $this->collection();
-                $total = collect($data)->sum(function($q){
-                    return $q['total_referal'];
-                });
-
-                // $event->sheet->appendRows(array(
-                //     array(' ','','','','','','',''),
-                // ), $event);
-                // $event->sheet->appendRows(array(
-                //     array('TOTAL REFERAL','','','','','','',$total),
-                // ), $event);
             }
         ];
     }
