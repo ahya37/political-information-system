@@ -65,8 +65,11 @@
 <body>
     <header>
         <h4>
-            LAPORAN ANGGOTA
-        </h5> 
+            LAPORAN ANGGOTA {{ $title }}
+        </h5>
+        <br>
+        <hr style="margin-top:20px">
+        <br>
     </header>
         <section align="justify">
             <table cellspacing='0'>

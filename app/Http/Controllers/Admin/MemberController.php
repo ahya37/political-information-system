@@ -647,30 +647,41 @@ class MemberController extends Controller
                         ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
                         ->whereNotNull('a.village_id')
                         ->orderBy('a.name','asc');
-
+                        
+            $title = 'LAPORAN ANGGOTA';
             if ($province != null) {
                         $data->where('regencies.province_id', $province);
+                        $provinces = Province::select('name')->where('id', $province)->first();
+                        $title = "PROVINSI $provinces->name";
             }
 
             if ($regency != null) {
                             $data->where('regencies.id',  $regency);
+                            $regencies = Regency::select('name')->where('id', $regency)->first();
+                            $title = $regencies->name;
+
                 }
 
             if ($dapil != null) {
                             $data ->where('dapil_areas.dapil_id', $dapil);
+                            $title = 'Dapil';
                 }
             if ($district != null) {
                             $data->where('districts.id', $district);
+                            $districts = District::select('name')->where('id', $district)->first();
+                            $title = "KECAMATAN $districts->name";
                 }
             if ($village != null) {
                             $data->where('villages.id', $village);
+                            $villages = Village::select('name')->where('id', $village)->first();
+                            $title = "DESA  $villages->name";
             }
 
             $data = $data->get();
 
         // EXPORT EXCEL
         if ($type == 'excel') {
-            return $this->excel->download(new MemberExport($data), 'ANGGOTA.xls');
+            return $this->excel->download(new MemberExport($data), 'LAPORAN ANGGOTA '.$title.'.xls');
         }else{
             $gF = new GlobalProvider();
             $result = [];
@@ -694,8 +705,8 @@ class MemberController extends Controller
                     'total_referal' => $gF->decimalFormat($total_referal),
                 ];
             }
-            $pdf = PDF::LoadView('pages.admin.report.member-byregional',compact('result','no','gF'))->setPaper('f4','landscape');
-            return  $pdf->download('LAPORAN ANGGOTA.pdf');
+            $pdf = PDF::LoadView('pages.admin.report.member-byregional',compact('result','no','gF','title'))->setPaper('f4','landscape');
+            return  $pdf->download('LAPORAN ANGGOTA '.$title.'.pdf');
         }
 
     }
