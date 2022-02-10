@@ -19,7 +19,14 @@ class CalegController extends Controller
     {
         $provinceModel = new Province();
         $province = $provinceModel->getDataProvince();
-        return view('pages.admin.caleg.create', compact('dapil_id','province'));
+
+        $member = "";
+        if (request()->input('code') != '') {
+            
+            $member = User::with(['village.district.regency.province','job','education'])->where('code', request()->input('code'))->first();
+
+        }
+        return view('pages.admin.caleg.create', compact('dapil_id','province','member'));
     }
 
     public function save(Request $request, $dapil_id)
@@ -77,5 +84,6 @@ class CalegController extends Controller
 
         return redirect()->route('admin-dapil-detail', ['id' => $dapil_id])->with(['success' => 'Caleg telah ditambahkan']);
     }
+
     
 }

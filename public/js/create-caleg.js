@@ -1,279 +1,166 @@
-let province = $("#province").val();
-let selectArea = $("#selectArea").val();
-let selectListArea = $("#selectListArea").val();
-let selectDistrictId = $("#selectDistrictId").val();
-let selectVillageId = $("#selectVillageId").val();
-
-// // hidden
-// selectListArea.hide();
-// selectDistrictId.hide();
-// selectVillageId.hide();
-// selectArea.hide();
-
-// get value
-// selectArea.val();
-// selectListArea.val();
-// selectDistrictId.val();
-// selectVillageId.val();
-
-const table = $("#data").DataTable({
-    pageLength: 100,
-
-    bLengthChange: true,
-    bFilter: true,
-    bInfo: true,
-    processing: true,
-    bServerSide: true,
-    order: [[1, "asc"]],
-    autoWidth: false,
-    ajax: {
-        url: "/api/admin/member/dtmember",
-        type: "POST",
-        data: function (d) {
-            d.province = province;
-            d.regency = selectArea;
-            d.dapil = selectListArea;
-            d.district = selectDistrictId;
-            d.village = selectVillageId;
-            return d;
-        },
-    },
-    columnDefs: [
-        {
-            targets: 0,
-            sortable: false,
-            render: function (data, type, row, meta) {
-                return `<a href="/admin/member/profile/${row.id}">
-                        <img  class="rounded" width="40" src="/storage/${row.photo}">
-                      </a>`;
-            },
-        },
-        {
-            targets: 1,
-            render: function (data, type, row, meta) {
-                return `<p>${row.name}</p>`;
-            },
-        },
-        {
-            targets: 2,
-            render: function (data, type, row, meta) {
-                return `<p>${row.regency}</p>`;
-            },
-        },
-        {
-            targets: 3,
-            render: function (data, type, row, meta) {
-                return `<p>${row.district}</p>`;
-            },
-        },
-        {
-            targets: 4,
-            render: function (data, type, row, meta) {
-                return `<p>${row.village}</p>`;
-            },
-        },
-        {
-            targets: 5,
-            render: function (data, type, row, meta) {
-                return `<p>${row.referal}</p>`;
-            },
-        },
-        {
-            targets: 6,
-            render: function (data, type, row, meta) {
-                return `<p>${row.cby}</p>`;
-            },
-        },
-        {
-            targets: 7,
-            render: function (data, type, row, meta) {
-                return `<p>${row.created_at}</p>`;
-            },
-        },
-        {
-            targets: 8,
-            render: function (data, type, row, meta) {
-                return `<p align="right">${row.total_referal}</p>`;
-            },
-        },
-        {
-            targets: 9,
-            render: function (data, type, row, meta) {
-                let view = ``;
-                if (row.status === 1 && row.email !== null) {
-                    view += `<span class="badge badge-success">Akun Aktif</span>`;
-                } else {
-                    view += ` <div class="btn-group">
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
-                                    <div class="dropdown-menu">
-                                         <a href='/admin/member/create/account/${row.id}' class="dropdown-item">
-                                                Buat Akun
-                                        </a> 
-                                    </div>
-                                </div>
-                            </div>`;
-                }
-                return view;
-            },
-        },
-    ],
+const minlength = 3;
+const search = document.getElementById("searchMember");
+search.addEventListener("keyup", function (event) {
+    if (event.which == "13") {
+        event.preventDefault();
+    }
 });
-
-$(".filter").change(async function () {
-    province = $("#province").val();
-    selectArea = $("#selectArea").val();
-    selectListArea = $("#selectListArea").val();
-    selectDistrictId = $("#selectDistrictId").val();
-    selectVillageId = $("#selectVillageId").val();
-
+search.addEventListener("keyup", async function () {
+    BeforeSend("Loadachievment");
     try {
-        // kabkot
-        if (province !== "") {
-            const responseData = await getDapilRegency(province);
-
-            $("#selectArea").empty();
-            $("#selectArea").show();
-            // $("#selectListArea").empty();
-            $("#selectArea").append("<option value=''>-Pilih Daerah-</option>");
-            getDapilRegencyUi(responseData);
-        }
-
-        // dapil
-        if (selectArea !== "") {
-            const listDapils = await getDapilNames(selectArea);
-            $("#selectListArea").empty();
-            $("#selectListArea").show();
-            // selectDistrictId.empty();
-            $("#selectListArea").append(
-                "<option value=''>-Pilih Dapil-</option>"
-            );
-            getDapilNamesUi(listDapils);
-        }
-        // kecamatan
-        if (selectListArea !== "") {
-            const listDistricts = await getListDistrict(selectListArea);
-            $("#selectDistrictId").empty();
-            $("#selectDistrictId").show();
-            $("#selectDistrictId").append(
-                "<option value=''>-Pilih Kecamatan-</option>"
-            );
-            getListDistrictUi(listDistricts);
-        }
-        // desa
-        if (selectDistrictId !== "") {
-            const dataVillages = await getListVillage(selectDistrictId);
-            $("#selectVillageId").empty();
-            $("#selectVillageId").show();
-            $("#selectVillageId").append(
-                "<option value=''>-Pilih Desa-</option>"
-            );
-            getListVillageUi(dataVillages);
-        }
-    } catch {}
-
-    table.ajax.reload(null, false);
+        const searchValue = this.value;
+        const members = await getMembers(searchValue);
+        updateMemberUi(members, searchValue);
+    } catch (err) {}
+    Complete("Loadachievment");
 });
 
-// GET DATA BY PROVINCE
+function getMembers(searchValue) {
+    if (searchValue.length >= minlength) {
+        return fetch(`/api/searchmember`, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ data: searchValue }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then((response) => {
+                if (response.Response === "False") {
+                    throw new Error(response.statusText);
+                }
+                return response;
+            });
+    } else {
+    }
+}
 
-function getDapilRegency(province) {
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    return fetch(`/api/dapilbyprovinceid/${province}`).then((response) => {
-        return response.json();
+function updateMemberUi(members, searchValue) {
+    let divHtml = "";
+    members.forEach((m) => {
+        divHtml += showDivHtml(m, searchValue);
     });
+
+    const divHtmlContainer = document.getElementById("showData");
+    divHtmlContainer.innerHTML = divHtml;
 }
 
-function getDapilRegencyUi(responseData) {
-    let divHtmldapil = "";
-    responseData.forEach((m) => {
-        divHtmldapil += showDivHtmlDapil(m);
-    });
-    const divHtmldapilContainer = $("#selectArea");
-    divHtmldapilContainer.append(divHtmldapil);
-}
-function showDivHtmlDapil(m) {
-    return `<option value="${m.id}">${m.name}</option>`;
+function showDivHtml(m, searchValue) {
+    return `<a    onclick='selectData(${m.id})' class="col-12">
+                <img  class="rounded mt-2" width="40" src="/storage/${m.photo}">
+                    ${m.name}: <strong>${m.code}</strong>
+            </a>
+            <br>
+            `;
 }
 
-function getDapilNames(selectAreaValue) {
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    return fetch(`/api/getlistdapil`, {
+function BeforeSend(idLoader) {
+    $("#" + idLoader + "").removeClass("d-none");
+}
+
+function Complete(idLoader) {
+    $("#" + idLoader + "").addClass("d-none");
+}
+
+async function selectData(id) {
+    let searchMember = $("#searchMember");
+    searchMember.val(id);
+    BeforeSend("LoadachievmentResult");
+    try {
+        $("#resultById").empty();
+        const detailMember = await getMemberById(id);
+        updateMemberUiById(detailMember);
+    } catch (err) {}
+    Complete("LoadachievmentResult");
+    // $("#resultview").removeClass("d-none");
+    // $("#showData").hide();
+}
+
+function getMemberById(id) {
+    return fetch(`/api/memberbyid`, {
         method: "POST",
         headers: {
             Accept: "application/json",
-            "Content-Type": "appliacation/json",
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token: CSRF_TOKEN, regencyId: selectAreaValue }),
+        body: JSON.stringify({ data: id }),
     }).then((response) => {
         return response.json();
     });
 }
-function getDapilNamesUi(listDapils) {
-    let divListDapil = "";
-    listDapils.forEach((m) => {
-        divListDapil += showDivHtmlListDapil(m);
-    });
-    const divListDapilContainer = $("#selectListArea");
-    divListDapilContainer.append(divListDapil);
-}
-function showDivHtmlListDapil(m) {
-    return `<option value="${m.id}">${m.name}</option>`;
-}
 
-function getListDistrict(selectListAreaValue) {
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    return fetch(`/api/getlistdistrictdapil`, {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "appliacation/json",
-        },
-        body: JSON.stringify({
-            token: CSRF_TOKEN,
-            dapilId: selectListAreaValue,
-        }),
-    }).then((response) => {
-        return response.json();
-    });
-}
-function getListDistrictUi(listDistricts) {
-    let divListDistrict = "";
-    listDistricts.forEach((m) => {
-        divListDistrict += showDivHtmlListDistrict(m);
-    });
-    const divListDistrictContainer = $("#selectDistrictId");
-    divListDistrictContainer.append(divListDistrict);
-}
+function updateMemberUiById(detailMember) {
+    let searchMemberResult = $("#searchMemberResult");
+    searchMemberResult.val(detailMember.id);
 
-function showDivHtmlListDistrict(m) {
-    return `<option value="${m.district_id}">${m.name}</option>`;
-}
+    let searchMember = $("#searchMember");
+    searchMember.val(detailMember.name);
 
-function getListVillage(selectDistrictId) {
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    return fetch(`/api/getlistvillagetdapil`, {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "appliacation/json",
-        },
-        body: JSON.stringify({
-            token: CSRF_TOKEN,
-            district_id: selectDistrictId,
-        }),
-    }).then((response) => {
-        return response.json();
-    });
-}
-function getListVillageUi(dataVillages) {
-    let divVillage = "";
-    dataVillages.forEach((m) => {
-        divVillage += showDivHtmlVillage(m);
-    });
-    const divVillageContainer = $("#selectVillageId");
-    divVillageContainer.append(divVillage);
-}
-function showDivHtmlVillage(m) {
-    return `<option value="${m.id}">${m.name}</option>`;
+    let htmlResult = $("#resultById").append(
+        `
+            <div class="col-12 text-center mt-4">
+                <img src="/storage/${
+                    detailMember.photo
+                }" width="200" class="rounded mb-3 img-thumbnail">
+            </div>
+            <div class="row mt-4">
+                <div class="col-4">
+                    <div class="product-title">NIK</div>
+                    <div class="product-subtitle">${detailMember.nik}</div>
+                    <div class="product-title">NAMA</div>
+                    <div class="product-subtitle">${detailMember.name}</div>
+                    <div class="product-title">DESA</div>
+                    <div class="product-subtitle">${
+                        detailMember.village.name ?? ""
+                    }</div>
+                    <div class="product-title">KECAMATAN</div>
+                    <div class="product-subtitle">${
+                        detailMember.village.district.name ?? ""
+                    }</div>
+                    <div class="product-title">KABUPATEN / KOTA</div>
+                    <div class="product-subtitle">${
+                        detailMember.village.district.regency.name ?? ""
+                    }</div>
+                    <div class="product-title">PROVINSI</div>
+                    <div class="product-subtitle">${
+                        detailMember.village.district.regency.province.name ??
+                        ""
+                    }</div>
+                    <div class="product-title">ALAMAT</div>
+                    <div class="product-subtitle">${detailMember.address}</div>
+                </div>
+                 <div class="col-4">
+                    <div class="product-title">Status Pekerjaan</div>
+                    <div class="product-subtitle">${detailMember.job.name}</div>
+                    <div class="product-title">Pendidikan</div>
+                    <div class="product-subtitle">${
+                        detailMember.education.name
+                    }</div>
+                    <div class="product-title">Agama</div>
+                    <div class="product-subtitle">${
+                        detailMember.religion ?? ""
+                    }</div>
+                </div>
+                 <div class="col-4">
+                    <div class="product-title">Telpon</div>
+                    <div class="product-subtitle">${
+                        detailMember.phone_number
+                    }</div>
+                    <div class="product-title">Whatsapp</div>
+                    <div class="product-subtitle">${detailMember.whatsapp}</div>
+                    <div class="product-title">EMail</div>
+                    <div class="product-subtitle">${
+                        detailMember.email ?? ""
+                    }</div>
+                 </div>
+            </div>
+        `
+    );
+    return htmlResult;
 }
