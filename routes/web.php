@@ -239,6 +239,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         // Caleg
         Route::get('/dapil/caleg/create/{dapil_id}','CalegController@create')->name('admin-caleg-create');
         Route::post('/dapil/caleg/save/{dapil_id}','CalegController@save')->name('admin-caleg-save');
+        Route::get('/dapil/caleg/addadmin/{caleg_user_id}','CalegController@addAdminForCaleg')->name('admin-addadmin-caleg');
+        Route::post('/dapil/saveadminvaleg/{caleg_user_id}','CalegController@saveAdminForCaleg')->name('admin-saveaddadmin-caleg');
         Route::get('/dapil/dapilcalegs/{id}','Datatable\DapilDatatableController@dtDapilCalegs');
 
         // set mapping admin area

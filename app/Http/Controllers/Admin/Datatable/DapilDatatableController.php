@@ -39,10 +39,24 @@ class DapilDatatableController extends Controller
                             '.$item->whatsapp.'
                         ';
                     })
+                 ->addColumn('action', function($item){
+                        return '
+                            <div class="btn-group">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
+                                    <div class="dropdown-menu">
+                                         <a href='.route('admin-addadmin-caleg', $item->user_id).' class="dropdown-item">
+                                                Tambah Admin
+                                        </a> 
+                                    </div>
+                                </div>
+                            </div>
+                        ';
+                    })
                 ->addColumn('fulladdress', function($item){
                     return $item->address."<br>". "DESA. ". $item->village."<br>"."KEC. ".$item->district."<br>". $item->regency."<br>".$item->province;
                 })
-                ->rawColumns(['fulladdress','photo','contact'])
+                ->rawColumns(['fulladdress','photo','contact','action'])
                 ->make(true);
     }
 }

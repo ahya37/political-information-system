@@ -136,7 +136,8 @@ class HomeController extends Controller
 
         }elseif ($level == 3) {
             
-            return $this->dashboardLevelTree($province_id);
+            // return $this->dashboardLevelTree($province_id);
+            return $this->dashboardLevelTwo($regency_id);
 
         }
     }

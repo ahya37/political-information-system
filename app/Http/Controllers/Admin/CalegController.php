@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\AdminCaleg;
 use App\User;
 use App\Caleg;
 use App\UserMenu;
@@ -72,7 +73,7 @@ class CalegController extends Controller
 
             // set level = 2
             $updateLevelUser = User::where('id', $request->user_id)->first();
-            $updateLevelUser->update(['level' => 2]);
+            $updateLevelUser->update(['level' => 3]);
             
             // set hak akses
             $saveAdminDapil =  $adminDapilModel->create([
@@ -100,6 +101,37 @@ class CalegController extends Controller
         }
 
         return redirect()->route('admin-dapil-detail', ['id' => $dapil_id])->with(['success' => 'Caleg telah ditambahkan']);
+    }
+
+    public function addAdminForCaleg($caleg_user_id)
+    {
+        // GET DAPIL ID DARI USER TERSEBUT
+        $caleg = Caleg::with('user')->where('user_id', $caleg_user_id)->first();
+        $dapil_id = $caleg->dapil_id;
+        $caleg_name = $caleg->user->name; 
+
+        return view('pages.admin.caleg.create-admin-for-caleg', compact('caleg','dapil_id','caleg_name','caleg_user_id'));
+
+    }
+
+    public function saveAdminForCaleg(Request $request, $user_id)
+    {
+        // get dapil_id berdasarkan user_id
+        $dapilCaleg = Caleg::select('dapil_id')->where('user_id', $user_id)->first();
+        $dapil_id   = $dapilCaleg->dapil_id;
+
+        $member = User::select('id')->where('code', $request->code)->first();
+
+        $data = [
+            'dapil_id' => $dapil_id,
+            'caleg_user_id' => $user_id,
+            'admin_caleg_user_id' => $member->id
+        ];
+
+        AdminCaleg::create($data);
+        return redirect()->route('admin-dapil-detail', ['id' => $dapil_id])->with(['success' => 'Caleg telah ditambahkan']);
+
+
     }
 
     

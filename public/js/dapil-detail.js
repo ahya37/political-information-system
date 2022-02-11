@@ -44,6 +44,7 @@ $(function () {
             { data: "name", name: "name" },
             { data: "fulladdress", name: "fulladdress" },
             { data: "contact", name: "contact" },
+            { data: "action", name: "action" },
         ],
         aaSorting: [[0, "desc"]],
         columnDefs: [

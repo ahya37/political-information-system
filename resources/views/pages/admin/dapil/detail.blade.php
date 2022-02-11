@@ -50,6 +50,7 @@
                                                                     <th scope="col">NAMA</th>
                                                                     <th scope="col">ALAMAT LENGKAP</th>
                                                                     <th scope="col">KONTAK</th>
+                                                                    <th scope="col">AKSI</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody></tbody>
