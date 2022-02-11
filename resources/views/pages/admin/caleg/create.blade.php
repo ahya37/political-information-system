@@ -124,7 +124,7 @@
                               <form action="{{ route('admin-caleg-save', $dapil_id) }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="user_id" value="{{ $member->id }}" class="form-control form-control-sm" />
-                                <button href="" class="btn btn-sm btn-sc-primary text-white float-right">Pilih</button>
+                                <button type="submit"class="btn btn-sm btn-sc-primary text-white float-right">Pilih</button>
                               </form>
                               @endif
                             </div>
