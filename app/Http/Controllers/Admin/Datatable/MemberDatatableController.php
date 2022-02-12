@@ -388,7 +388,8 @@ class MemberDatatableController extends Controller
                         ->join('users as b','b.id','a.user_id')
                         ->join('users as c','c.id','a.cby')
                         ->join('dapil_areas','districts.id','dapil_areas.district_id')
-                        ->whereNotNull('a.village_id');
+                        ->whereNotNull('a.village_id')
+                        ->orderBy('a.created_at','desc');
 
             
     if($request->input('search.value')!=null){

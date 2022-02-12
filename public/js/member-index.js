@@ -24,7 +24,7 @@ const table = $("#data").DataTable({
     bInfo: true,
     processing: true,
     bServerSide: true,
-    order: [[1, "asc"]],
+    order: [[7, "desc"]],
     autoWidth: false,
     ajax: {
         url: "/api/admin/member/dtmember",
