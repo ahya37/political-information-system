@@ -29,28 +29,53 @@ class MemberByReferalAll implements FromCollection,WithHeadings, WithEvents
         $userModel = new User();
         $members  = $userModel->getListMemberByDistrictAll($user_id);
         // untuk remove id dan photo pada array
+
+        $data = [];
+        $no = 1;
         foreach($members as $val)
         {
             unset($val->id);
             unset($val->photo);
+            $data[] = [
+                'no' => $no++,
+                'name' => $val->name,
+                'address' => $val->address,
+                'rt' => $val->rt,
+                'rw' => $val->rw,
+                'village' => $val->village,
+                'district' => $val->district,
+                'regency' => $val->regency,
+                'province' => $val->province,
+                'phone_number' => $val->phone_number,
+                'whatsapp' => $val->whatsapp,
+                'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                'inputer' => $val->inputer,
+                'referal' => $val->referal,
+                'total_referal' => $val->total_referal == 0 ? '0' : $val->total_referal,
+            ];
         }
-        $result = collect($members);
+        $result = collect($data);
         return $result;
     }
 
     public function headings(): array
     {
         return [
+            'NO',
             'NAMA',
+            'ALAMAT',
+            'RT',
+            'RW',
             'DESA',
             'KECAMATAN',
             'KABUPATEN / KOTA',
             'PPROVINSI',
-            'ALAMAT',
-            'RT',
-            'RW',
             'TELEPON',
             'WHATSAPP',
+            'TERDAFTAR',
+            'INPUT DARI',
+            'REFERAL',
+            'JUMLAH REFERAL',
         ];
     }
 

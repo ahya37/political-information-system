@@ -562,7 +562,8 @@ class MemberController extends Controller
         $district = District::select('name')->where('id', $district_id)->first();
         $no = 1;
         $members  = $userModel->getListMemberByDistrictId($district_id, $user_id);
-        $pdf = PDF::LoadView('pages.report.member-referal-in-district', compact('members','no','district','user'))->setPaper('a4');
+        $gF = new GlobalProvider();
+        $pdf = PDF::LoadView('pages.report.member-referal-in-district', compact('members','no','district','user','gF'))->setPaper('a4','landscape');
         return  $pdf->download('ANGGOTA REFERAL DARI '.$user->name.' DI KECAMATAN '.$district->name.'.pdf');
     }
 
@@ -572,7 +573,8 @@ class MemberController extends Controller
         $user = $userModel->select('name')->where('id', $user_id)->first();
         $no = 1;
         $members  = $userModel->getListMemberByUserAll($user_id);
-        $pdf = PDF::LoadView('pages.report.member-referal-all', compact('members','no','user'))->setPaper('a4');
+        $gF = new GlobalProvider();
+        $pdf = PDF::LoadView('pages.report.member-referal-all', compact('members','no','user','gF'))->setPaper('a4','landscape');
         return  $pdf->download('ANGGOTA REFERAL DARI '.$user->name.'.pdf');
     }
 

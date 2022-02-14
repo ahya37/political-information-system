@@ -835,44 +835,103 @@ class User extends Authenticatable
 
     public function getListMemberByDistrictId($district_id, $user_id)
     {
-        $sql = "SELECT  a.id, a.name,c.name as village, d.name as district, e.name as regency, f.name as province, a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo FROM users as a
-                join villages as c on a.village_id = c.id 
-                join districts as d on c.district_id = d.id 
-                join regencies as e on d.regency_id = e.id
-                join provinces as f on e.province_id = f.id
-                where d.id = $district_id and a.user_id = $user_id  order by a.name";
+        $sql = "SELECT  
+                    a.id, a.name,c.name as village, d.name as district, e.name as regency, f.name as province, a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo,a.created_at,
+                    g.name as inputer, i.name as referal, COUNT(h.id) as total_referal
+                    FROM users as a
+                join 
+                    villages as c on a.village_id = c.id 
+                join 
+                    districts as d on c.district_id = d.id 
+                join 
+                    regencies as e on d.regency_id = e.id
+                join 
+                    provinces as f on e.province_id = f.id
+                join 
+                    users as g on a.cby = g.id
+                left join 
+                	users as h on a.id = h.user_id
+                join 
+                	users as i on a.user_id = i.id
+                where 
+                    d.id = $district_id and a.user_id = $user_id
+                group by 
+                 	a.id, a.name,c.name, d.name, e.name, f.name , a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo, a.created_at, 
+                    g.name, i.name
+                order by c.name,a.name ASC ";
         return DB::select($sql);
     }
     
     public function getListMemberByDistrictAll($user_id)
     {
-        $sql = "SELECT  a.id, a.name,c.name as village, d.name as district, e.name as regency, f.name as province, a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo FROM users as a
-                join villages as c on a.village_id = c.id 
-                join districts as d on c.district_id = d.id 
-                join regencies as e on d.regency_id = e.id
-                join provinces as f on e.province_id = f.id
-                where  a.user_id = $user_id  order by d.name";
+        $sql = "SELECT  
+                    a.id, a.name,c.name as village, d.name as district, e.name as regency, f.name as province, a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo, a.created_at, 
+                    g.name as inputer, i.name as referal, COUNT(h.id) as total_referal
+                FROM 
+                    users as a
+                join 
+                    villages as c on a.village_id = c.id 
+                join
+                    districts as d on c.district_id = d.id 
+                join 
+                    regencies as e on d.regency_id = e.id
+                join 
+                    provinces as f on e.province_id = f.id
+                join 
+                    users as g on a.cby = g.id
+                left join 
+                	users as h on a.id = h.user_id
+                join users as i on a.user_id = i.id
+                where 
+                    a.user_id = $user_id
+                group by 
+                 	a.id, a.name,c.name, d.name, e.name, f.name , a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo, a.created_at, 
+                    g.name, i.name
+                order by c.name, a.name ASC";
         return DB::select($sql);
     }
 
     public function getListMemberByUserAll($user_id)
     {
-        $sql = "SELECT  a.id, a.name,c.name as village, d.name as district, e.name as regency, f.name as province, a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo FROM users as a
-                join villages as c on a.village_id = c.id 
-                join districts as d on c.district_id = d.id 
-                join regencies as e on d.regency_id = e.id
-                join provinces as f on e.province_id = f.id
-                where a.user_id = $user_id  order by d.name";
+        $sql = "SELECT  
+                    a.id, a.name,c.name as village, d.name as district, e.name as regency, f.name as province, a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo, a.created_at, 
+                    g.name as inputer, i.name as referal, COUNT(h.id) as total_referal
+                FROM 
+                    users as a
+                join 
+                    villages as c on a.village_id = c.id 
+                join
+                    districts as d on c.district_id = d.id 
+                join 
+                    regencies as e on d.regency_id = e.id
+                join 
+                    provinces as f on e.province_id = f.id
+                join 
+                    users as g on a.cby = g.id
+                left join 
+                	users as h on a.id = h.user_id
+                join users as i on a.user_id = i.id
+                where 
+                    a.user_id = $user_id
+                group by 
+                 	a.id, a.name,c.name, d.name, e.name, f.name , a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo, a.created_at, 
+                    g.name, i.name
+                order by c.name, a.name ASC";
         return DB::select($sql);
     }
 
     public function getListMemberByDistrictIdInput($district_id, $user_id)
     {
-        $sql = "SELECT a.id, a.name, e.name as regency, d.name as district, c.name as village, a.photo FROM users as a
-                join villages as c on a.village_id = c.id 
-                join districts as d on c.district_id = d.id 
-                join regencies as e on d.regency_id = e.id
-                where d.id = $district_id and a.cby = $user_id  order by a.name";
+        $sql = "SELECT 
+                    a.id, a.name, e.name as regency, d.name as district, c.name as village, a.photo FROM users as a
+                join 
+                    villages as c on a.village_id = c.id 
+                join 
+                    districts as d on c.district_id = d.id 
+                join 
+                    regencies as e on d.regency_id = e.id
+                where 
+                    d.id = $district_id and a.cby = $user_id  order by a.name";
         return DB::select($sql);
     }
 

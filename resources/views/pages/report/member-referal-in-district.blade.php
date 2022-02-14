@@ -78,29 +78,43 @@
                     <tr>
                         <th>NO</th>
                         <th>NAMA</th>
+                        <th>ALAMAT</th>
+                        <th>RT</th>
+                        <th>RW</th>
                         <th>DESA</th>
                         <th>KECAMATAN</th>
                         <th>KABUPATEN / KOTA</th>
                         <th>PROVINSI</th>
-                        <th>RT</th>
-                        <th>RW</th>
                         <th>TELEPON</th>
                         <th>WHATSAPP</th>
+                        <th>TERDAFTAR</th>
+                        <th>INPUT DARI</th>
+                        <th>REFERAL</th>
+                        <th>JUMLAH REFERAL</th>
                     </tr>
                 </thead>
                 <tbody>
                    @foreach ($members as $row)
                    <tr>
-                       <td>{{ $no++ }}</td>
+                    <td>{{ $no++ }}</td>
                        <td>{{ $row->name }}</td>
+                       <td>{{ $row->address }}</td>
+                       <td>{{ $row->rt }}</td>
+                       <td>{{ $row->rw }}</td>
                        <td>{{ $row->village }}</td>
                        <td>{{ $row->district }}</td>
                        <td>{{ $row->regency }}</td>
                        <td>{{ $row->province }}</td>
-                       <td>{{ $row->rt }}</td>
-                       <td>{{ $row->rw }}</td>
                        <td>{{ $row->phone_number }}</td>
                        <td>{{ $row->whatsapp }}</td>
+                       <td>{{ date('d-m-Y', strtotime($row->created_at)) }}</td>
+                       <td>{{ $row->inputer }}</td>
+                       <td>{{ $row->referal }}</td>
+                       <td align="right">
+                           <p style="margin-right:5px">
+                               {{ $gF->decimalFormat($row->total_referal) }}
+                           </p>
+                       </td>
                    </tr>                       
                    @endforeach
                 </tbody>
