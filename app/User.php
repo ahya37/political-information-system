@@ -808,27 +808,34 @@ class User extends Authenticatable
 
     public function getMemberInput()
     {
-        $sql = "SELECT a.id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, a.photo, COUNT(a.user_id) as total,
-                c.name as village, f.name as province  FROM users as a
-                join users as b on a.id = b.cby
-                join villages as c on a.village_id = c.id 
-                join districts as d on c.district_id = d.id 
-                join regencies as e on d.regency_id = e.id
-                join provinces as f on e.province_id = f.id
-                group by a.id, a.name, e.name, d.name , a.photo , a.phone_number, a.whatsapp, c.name, f.name
+        $sql = "SELECT 
+                    a.id, a.phone_number, a.rt, a.rw, a.address, a.cby, a.user_id, a.created_at, a.whatsapp, a.name, e.name as regency, d.name as district, a.photo, COUNT(a.user_id) as total,
+                    c.name as village, f.name as province  
+                FROM users as a
+                join 
+                    users as b on a.id = b.cby
+                join 
+                    villages as c on a.village_id = c.id 
+                join 
+                    districts as d on c.district_id = d.id 
+                join 
+                    regencies as e on d.regency_id = e.id
+                join 
+                    provinces as f on e.province_id = f.id
+                group by a.id, a.name, e.name, d.name , a.photo , a.phone_number, a.whatsapp, c.name, f.name, a.rt, a.rw, a.address, a.created_at, a.cby, a.user_id
                 order by COUNT(a.user_id) desc";
         return DB::select($sql);
     }
     public function getMemberReferal()
     {
-        $sql = "SELECT a.id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, c.name as village, f.name as province, a.photo, 
+        $sql = "SELECT a.id, a.user_id, a.phone_number, a.whatsapp, a.name, a.rt, a.rw, a.address, a.cby, a.created_at, e.name as regency, d.name as district, c.name as village, f.name as province, a.photo, 
                 COUNT(case when b.id != b.user_id then a.user_id end) as total FROM users as a
                 join users as b on a.id = b.user_id
                 join villages as c on a.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
                 join provinces as f on e.province_id = f.id
-                group by f.name, c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp 
+                group by f.name, c.name, a.id, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp, a.rt, a.rw, a.address, a.created_at, a.cby, a.user_id
                 order by COUNT(a.user_id) desc";
         return DB::select($sql);
     }

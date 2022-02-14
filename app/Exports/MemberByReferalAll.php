@@ -83,7 +83,7 @@ class MemberByReferalAll implements FromCollection,WithHeadings, WithEvents
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:J1')->applyFromArray([
+                $event->sheet->getStyle('A1:O1')->applyFromArray([
                     'font' => [
                         'bold' => true
                     ]

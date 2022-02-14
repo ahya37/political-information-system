@@ -599,22 +599,32 @@ class MemberController extends Controller
             $id_user = $val->id;
             $referal_undirect = $userModel->getReferalUnDirect($id_user);
             $total_referal_undirect = $referal_undirect->total == NULL ? '0' : $referal_undirect->total;
+            $inputer = $userModel->select('name')->where('id', $val->cby)->first();
+            $referal = $userModel->select('name')->where('id', $val->user_id)->first();
+            $by_inputer = $inputer->name;
+            $by_referal = $referal->name;
             
             $data[] = [
                 'name' => $val->name,
                 'referal' => $val->total,
                 'referal_undirect' => $total_referal_undirect,
+                'address' => $val->address,
+                'rt' => $val->rt,
+                'rw' => $val->rw,
                 'village' => $val->village,
                 'district' => $val->district,
                 'regency' => $val->regency,
                 'province' => $val->province,
                 'phone_number' => $val->phone_number,
                 'whatsapp' => $val->whatsapp,
+                'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                'by_inputer' => $by_inputer,
+                'by_referal' => $by_referal,
             ];
         }
         $gF = new GlobalProvider();
         $no  =1;
-        $pdf = PDF::LoadView('pages.report.member-potential-referal',compact('data','no','gF'))->setPaper('a4');
+        $pdf = PDF::LoadView('pages.report.member-potential-referal',compact('data','no','gF'))->setPaper('a4','landscape');
         return  $pdf->download('ANGGOTA POTENSIAL REFERAL.pdf');
     }
 
@@ -624,7 +634,33 @@ class MemberController extends Controller
         $userModel = new User();
         $member = $userModel->getMemberInput();
         $no  = 1;
-        $pdf = PDF::LoadView('pages.report.member-potential-input',compact('member','no','gF'))->setPaper('a4');
+        $data = [];
+        foreach ($member as $val) {
+            $userModel = new User();
+            $id_user = $val->id;
+            $inputer = $userModel->select('name')->where('id', $val->cby)->first();
+            $referal = $userModel->select('name')->where('id', $val->user_id)->first();
+            $by_inputer = $inputer->name;
+            $by_referal = $referal->name;
+            
+            $data[] = [
+                'name' => $val->name,
+                'total' => $gF->decimalFormat($val->total),
+                'address' => $val->address,
+                'rt' => $val->rt,
+                'rw' => $val->rw,
+                'village' => $val->village,
+                'district' => $val->district,
+                'regency' => $val->regency,
+                'province' => $val->province,
+                'phone_number' => $val->phone_number,
+                'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                'by_inputer' => $by_inputer,
+                'by_referal' => $by_referal,
+                'whatsapp' => $val->whatsapp,
+            ];
+        }
+        $pdf = PDF::LoadView('pages.report.member-potential-input',compact('data','no','gF'))->setPaper('a4','landscape');
         return  $pdf->download('ANGGOTA POTENSIAL INPUT.pdf');
     }
 

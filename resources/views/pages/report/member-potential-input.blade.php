@@ -76,28 +76,40 @@
                         <th>NO</th>
                         <th>NAMA</th>
                         <th>JUMLAH</th>
+                        <th>ALAMAT</th>
+                        <th>RT</th>
+                        <th>RW</th>
                         <th>DESA</th>
                         <th>KECAMATAN</th>
                         <th>KABUPATEN / KOTA</th>
                         <th>PROVINSI</th>
                         <th>TELEPON</th>
                         <th>WHATSAPP</th>
+                        <th>TERDAFTAR</th>
+                        <th>INPUT DARI</th>
+                        <th>REFERAL</th>
                     </tr>
                 </thead>
                 <tbody>
-                   @foreach ($member as $row)
+                   @foreach ($data as $row)
                    <tr>
                        <td>{{ $no++ }}</td>
-                       <td>{{ $row->name }}</td>
+                       <td>{{ $row['name'] }}</td>
                        <td align="right">
-                           <p style="margin-right: 3px">{{ $gF->decimalFormat($row->total) }}</p>
+                           <p style="margin-right: 3px">{{ $row['total'] }}</p>
                        </td>
-                       <td>{{ $row->village }}</td>
-                       <td>{{ $row->district }}</td>
-                       <td>{{ $row->regency }}</td>
-                       <td>{{ $row->province }}</td>
-                       <td>{{ $row->phone_number }}</td>
-                       <td>{{ $row->whatsapp }}</td>
+                       <td>{{ $row['address'] }}</td>
+                       <td>{{ $row['rt'] }}</td>
+                       <td>{{ $row['rw'] }}</td>
+                       <td>{{ $row['village'] }}</td>
+                       <td>{{ $row['district'] }}</td>
+                       <td>{{ $row['regency'] }}</td>
+                       <td>{{ $row['province'] }}</td>
+                       <td>{{ $row['phone_number'] }}</td>
+                       <td>{{ $row['whatsapp'] }}</td>
+                       <td>{{ $row['created_at'] }}</td>
+                       <td>{{ $row['by_inputer'] }}</td>
+                       <td>{{ $row['by_referal'] }}</td>
                    </tr>                       
                    @endforeach
                 </tbody>

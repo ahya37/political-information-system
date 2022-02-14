@@ -77,12 +77,18 @@
                         <th>NAMA</th>
                         <th>REFERAL</th>
                         <th>REFERAL TIDAK LANGSUNG</th>
+                        <th>ALAMAT</th>
+                        <th>RT</th>
+                        <th>RW</th>
                         <th>DESA</th>
                         <th>KECAMATAN</th>
                         <th>KABUPATEN / KOTA</th>
                         <th>PROVINSI</th>
                         <th>TELEPON</th>
                         <th>WHATSAPP</th>
+                        <th>TERDAFTAR</th>
+                        <th>INPUT DARI</th>
+                        <th>REFERAL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,12 +102,18 @@
                        <td align="right">
                            <p style="margin-right: 3px">{{ $gF->decimalFormat($row['referal_undirect']) }}</p>
                        </td>
+                       <td>{{ $row['address'] }}</td>
+                       <td>{{ $row['rt'] }}</td>
+                       <td>{{ $row['rw'] }}</td>
                        <td>{{ $row['village'] }}</td>
                        <td>{{ $row['district'] }}</td>
                        <td>{{ $row['regency'] }}</td>
                        <td>{{ $row['province'] }}</td>
                        <td>{{ $row['phone_number'] }}</td>
                        <td>{{ $row['whatsapp'] }}</td>
+                       <td>{{ $row['created_at'] }}</td>
+                       <td>{{ $row['by_inputer'] }}</td>
+                       <td>{{ $row['by_referal'] }}</td>
                    </tr>                       
                    @endforeach
                 </tbody>
