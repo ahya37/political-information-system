@@ -453,32 +453,101 @@ class MemberController extends Controller
     public function reportMemberDistrictPdf($district_id)
     {
         $district = District::select('name')->where('id', $district_id)->first();
-        $member = User::with(['village','reveral'])
-                    ->whereHas('village', function($village) use ($district_id){
-                        $village->where('district_id', $district_id);
-                    })
-                    ->whereNotNull('nik')
-                    ->orderBy('name','asc')
-                    ->get();
+        $member = DB::table('users as a')
+                        ->select('a.id','a.cby','a.user_id','a.user_id','a.name','a.photo','a.rt','a.rw','a.phone_number','a.whatsapp','a.address','regencies.name as regency','districts.name as district','villages.name as village','provinces.name as province','a.created_at','a.status','a.email')
+                        ->join('villages','villages.id','a.village_id')
+                        ->join('districts','districts.id','villages.district_id')
+                        ->join('regencies','regencies.id','districts.regency_id')
+                        ->join('provinces','provinces.id','regencies.province_id')
+                        ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
+                        ->whereNotNull('a.village_id')
+                        ->orderBy('villages.name','asc')
+                        ->orderBy('a.name','asc')
+                        ->where('districts.id', $district_id)->get();
+
+            $result = [];
+            $no = 1;
+            $gF = new GlobalProvider();
+            foreach($member as $val){
+                $userModel = new User();
+                $total_referal = $userModel->where('user_id', $val->id)->whereNotNull('village_id')->count();
+                $inputer = $userModel->select('name')->where('id', $val->cby)->first();
+                $referal = $userModel->select('name')->where('id', $val->user_id)->first();
+                $by_inputer = $inputer->name;
+                $by_referal = $referal->name;      
+                $result[] = [
+                    'no' => $no++,
+                    'name' => $val->name,
+                    'address' => $val->address,
+                    'rt' => $val->rt,
+                    'rw' => $val->rw,
+                    'village' => $val->village,
+                    'district' => $val->district,
+                    'regency' => $val->regency,
+                    'province' => $val->province,
+                    'phone_number'    => $val->phone_number,
+                    'whatsapp' => $val->whatsapp,
+                    'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                    'by_inputer' => $by_inputer,
+                    'by_referal' => $by_referal,
+                    'total_referal' => $gF->decimalFormat($total_referal),
+                ];
+            }
+
         $title = 'Anggota-'. $district->name; 
         $no = 1;
-        $pdf   = PDF::loadView('pages.admin.report.member-district-pdf', compact('member','title','no','district'));
+        $pdf   = PDF::loadView('pages.admin.report.member-district-pdf', compact('result','title','no','district'))->setPaper('a4','landscape');
         return $pdf->download($title.'.pdf');
     }
 
     public function reportMemberVillagePdf($village_id)
     {
         $village = Village::select('name')->where('id', $village_id)->first();
-        $member = User::with(['village','reveral'])
-                    ->whereHas('village', function($village) use ($village_id){
-                        $village->where('id', $village_id);
-                    })
-                    ->whereNotNull('nik')
-                    ->orderBy('name','asc')
-                    ->get();
+        $member = DB::table('users as a')
+                        ->select('a.id','a.cby','a.user_id','a.user_id','a.name','a.photo','a.rt','a.rw','a.phone_number','a.whatsapp','a.address','regencies.name as regency','districts.name as district','villages.name as village','provinces.name as province','a.created_at','a.status','a.email')
+                        ->join('villages','villages.id','a.village_id')
+                        ->join('districts','districts.id','villages.district_id')
+                        ->join('regencies','regencies.id','districts.regency_id')
+                        ->join('provinces','provinces.id','regencies.province_id')
+                        ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
+                        ->whereNotNull('a.village_id')
+                        ->orderBy('villages.name','asc')
+                        ->orderBy('a.name','asc')
+                        ->where('villages.id', $village_id)->get();
+
+            $result = [];
+            $no = 1;
+            $gF = new GlobalProvider();
+            foreach($member as $val){
+                $userModel = new User();
+                $total_referal = $userModel->where('user_id', $val->id)->whereNotNull('village_id')->count();
+                $inputer = $userModel->select('name')->where('id', $val->cby)->first();
+                $referal = $userModel->select('name')->where('id', $val->user_id)->first();
+                $by_inputer = $inputer->name;
+                $by_referal = $referal->name;      
+                $result[] = [
+                    'no' => $no++,
+                    'name' => $val->name,
+                    'address' => $val->address,
+                    'rt' => $val->rt,
+                    'rw' => $val->rw,
+                    'village' => $val->village,
+                    'district' => $val->district,
+                    'regency' => $val->regency,
+                    'province' => $val->province,
+                    'phone_number'    => $val->phone_number,
+                    'whatsapp' => $val->whatsapp,
+                    'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                    'by_inputer' => $by_inputer,
+                    'by_referal' => $by_referal,
+                    'total_referal' => $gF->decimalFormat($total_referal),
+                ];
+            }
+
+        
         $title = 'Anggota-Desa-'. $village->name; 
         $no = 1;
-        $pdf   = PDF::loadView('pages.admin.report.member-village-pdf', compact('member','title','no','village'))->setPaper('landscape');
+        $pdf   = PDF::loadView('pages.admin.report.member-village-pdf', compact('result','title','no','village'))->setPaper('a4','landscape');
         return $pdf->download($title.'.pdf');
     }
 
@@ -684,6 +753,7 @@ class MemberController extends Controller
                         ->join('users as c','c.id','a.cby')
                         ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
                         ->whereNotNull('a.village_id')
+                        ->orderBy('villages.name','asc')
                         ->orderBy('a.name','asc');
                         
             $title = 'LAPORAN ANGGOTA';

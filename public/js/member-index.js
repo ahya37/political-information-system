@@ -57,7 +57,7 @@ const table = $("#data").DataTable({
         {
             targets: 2,
             render: function (data, type, row, meta) {
-                return `<p>${row.regency}</p>`;
+                return `<p>${row.village}</p>`;
             },
         },
         {
@@ -69,7 +69,7 @@ const table = $("#data").DataTable({
         {
             targets: 4,
             render: function (data, type, row, meta) {
-                return `<p>${row.village}</p>`;
+                return `<p>${row.regency}</p>`;
             },
         },
         {

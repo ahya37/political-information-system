@@ -80,31 +80,38 @@
                         <th>RW</th>
                         <th>DESA</th>
                         <th>KECAMATAN</th>
-                        <th>KAB/KOT</th>
+                        <th>KABUPATEN / KOTA</th>
                         <th>PROVINSI</th>
-                        <th>TELPON</th>
+                        <th>TELEPON</th>
                         <th>WHATSAPP</th>
+                        <th>TERDAFTAR</th>
+                        <th>INPUT DARI</th>
                         <th>REFERAL</th>
+                        <th>JUMLAH REFERAL</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($member as $row)
+                    @foreach ($result as $row)
                     <tr>
-                        <td>{{ $no++ }}</td>
-                        {{-- <td>
-                            <img width="50" src="{{ asset('storage/'. $row->photo) }}">
-                        </td> --}}
-                        <td>{{ strtoupper($row->name) }}</td>
-                        <td>{{ strtoupper($row->address) }}</td>
-                        <td>{{ $row->rt }}</td>
-                        <td>{{ $row->rw }}</td>
-                        <td>{{ $row->village->name ?? '' }}</td>
-                        <td>{{ $row->village->district->name ?? '' }}</td>
-                        <td>{{ $row->village->district->regency->name ?? '' }}</td>
-                        <td>{{ $row->village->district->regency->province->name ?? '' }}</td>
-                        <td>{{ $row->phone_number }}</td>
-                        <td>{{ $row->whatsapp }}</td>
-                        <td>{{ $row->reveral->name }}</td>
+                        <td>{{ $row['no'] }}</td>
+                       <td>{{ $row['name'] }}</td>
+                       <td>{{ $row['address'] }}</td>
+                       <td>{{ $row['rt'] }}</td>
+                       <td>{{ $row['rw'] }}</td>
+                       <td>{{ $row['village'] }}</td>
+                       <td>{{ $row['district'] }}</td>
+                       <td>{{ $row['regency'] }}</td>
+                       <td>{{ $row['province'] }}</td>
+                       <td>{{ $row['phone_number'] }}</td>
+                       <td>{{ $row['whatsapp'] }}</td>
+                       <td>{{ $row['created_at'] }}</td>
+                       <td>{{ $row['by_inputer'] }}</td>
+                       <td>{{ $row['by_referal'] }}</td>
+                       <td align="right">
+                           <p style="margin-right:5px">
+                               {{ $row['total_referal'] }}
+                           </p>
+                       </td>
                     </tr>
                     @endforeach
                 </tbody>
