@@ -621,7 +621,7 @@ class MemberController extends Controller
     public function memberByReferalDownloadExcelAll($user_id)
     {
         $member = User::select('name')->where('id', $user_id)->first();
-        return $this->excel->download(new MemberByReferalAll($user_id), 'ANGGOTA REFERAL DARI '.$member->name.'.xls');
+        return $this->excel->download(new MemberByReferalAll($user_id),'ANGGOTA-REFERAL-DARI-'.$member->name.'.xls');
     }
 
     public function memberByReferalDownloadPDF($user_id, $district_id)

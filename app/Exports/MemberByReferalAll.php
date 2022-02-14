@@ -4,14 +4,12 @@ namespace App\Exports;
 
 use App\User;
 use Maatwebsite\Excel\Events\AfterSheet;
-use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class MemberByReferalAll implements FromCollection,WithHeadings, WithEvents
 {
-     use Exportable;
     /**
     * @return \Illuminate\Support\Collection
     */
