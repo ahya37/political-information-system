@@ -22,6 +22,7 @@ use App\Providers\GlobalProvider;
 use App\Providers\QrCodeProvider;
 use App\Exports\MemberMostReferal;
 use Illuminate\Support\Facades\DB;
+use App\Exports\MemberByInputerAll;
 use App\Exports\MemberByReferalAll;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
@@ -32,6 +33,7 @@ use App\Exports\MemberPotentialReferal;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\Facades\DataTables;
+use App\Exports\MemberByInputerInDistrict;
 use App\Exports\MemberByReferalInDistrict;
 
 class MemberController extends Controller
@@ -599,7 +601,8 @@ class MemberController extends Controller
         $user = $userModel->select('id','name')->where('id', $user_id)->first();
         $districtModel = new District();
         $districts = $districtModel->getDistrictByInputMember($user_id);
-        return view('pages.admin.member.member-by-input', compact('user','districts','userModel'));
+        $totalMember = $districtModel->getTotalMemberByInput($user_id);
+        return view('pages.admin.member.member-by-input', compact('user','districts','userModel','totalMember'));
     }
 
     public function memberByReferalNationalPDF()
@@ -615,13 +618,27 @@ class MemberController extends Controller
     {
         $member = User::select('name')->where('id', $user_id)->first();
         $district = District::select('name')->where('id', $district_id)->first();
-        return $this->excel->download(new MemberByReferalInDistrict($district_id, $user_id), 'ANGGOTA REFERAL DARI '.$member->name.' DI KECAMATAN '.$district->name.'.xls');
+
+        $type = request()->input('type');
+
+        if ($type == 'input') {
+            return $this->excel->download(new MemberByInputerInDistrict($district_id, $user_id), 'ANGGOTA-INPUT-DARI '.$member->name.' DI KECAMATAN '.$district->name.'.xls');
+        }else{
+            return $this->excel->download(new MemberByReferalInDistrict($district_id, $user_id), 'ANGGOTA-REFERAL-DARI '.$member->name.' DI KECAMATAN '.$district->name.'.xls');
+        }
     }
 
     public function memberByReferalDownloadExcelAll($user_id)
     {
         $member = User::select('name')->where('id', $user_id)->first();
-        return $this->excel->download(new MemberByReferalAll($user_id),'ANGGOTA-REFERAL-DARI-'.$member->name.'.xls');
+        $type = request()->input('type');
+
+         if ($type == 'input') {
+            return $this->excel->download(new MemberByInputerAll($user_id),'ANGGOTA-INPUT-DARI-'.$member->name.'.xls');
+        }else{
+            return $this->excel->download(new MemberByReferalAll($user_id),'ANGGOTA-REFERAL-DARI-'.$member->name.'.xls');
+        }
+
     }
 
     public function memberByReferalDownloadPDF($user_id, $district_id)
@@ -630,10 +647,25 @@ class MemberController extends Controller
         $user = $userModel->select('name')->where('id', $user_id)->first();
         $district = District::select('name')->where('id', $district_id)->first();
         $no = 1;
-        $members  = $userModel->getListMemberByDistrictId($district_id, $user_id);
+
+        $type = request()->input('type'); 
+
+       if ($type == 'input') {
+            $members  = $userModel->getListMemberByInputerDistrictId($district_id, $user_id);
+            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL INPUT '.$user->name.' DI KECAMATAN '.$district->name.'.pdf';
+            $title_header  = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL INPUT';
+            $title_page    = 'INPUT DARI : '.$user->name.', KECAMATAN : '.$district->name;
+        }else{
+            $members  = $userModel->getListMemberByDistrictId($district_id, $user_id);
+            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL REFERAL '.$user->name.' DI KECAMATAN '.$district->name.'.pdf';
+            $title_header  = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL REFERAL';
+            $title_page    = 'REFERAL : '.$user->name.', KECAMATAN :'.$district->name;
+        }
+
+
         $gF = new GlobalProvider();
-        $pdf = PDF::LoadView('pages.report.member-referal-in-district', compact('members','no','district','user','gF'))->setPaper('a4','landscape');
-        return  $pdf->download('ANGGOTA REFERAL DARI '.$user->name.' DI KECAMATAN '.$district->name.'.pdf');
+        $pdf = PDF::LoadView('pages.report.member-referal-in-district', compact('members','no','gF','title_page','title_header'))->setPaper('a4','landscape');
+        return  $pdf->download($title_file);
     }
 
     public function memberByReferalAllDownloadPDF($user_id)
@@ -641,10 +673,23 @@ class MemberController extends Controller
         $userModel = new User();
         $user = $userModel->select('name')->where('id', $user_id)->first();
         $no = 1;
-        $members  = $userModel->getListMemberByUserAll($user_id);
+
+        $type = request()->input('type'); 
+
+        if ($type == 'input') {
+            $members  = $userModel->getListMemberByUserInputerAll($user_id);
+            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL INPUT '.$user->name.'.pdf';
+            $title_header  = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL INPUT';
+            $title_page    = 'INPUT DARI : '. $user->name;
+        }else{
+            $members  = $userModel->getListMemberByUserAll($user_id);
+            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL REFERAL '.$user->name.'.pdf';
+            $title_header  = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL REFERAL';
+            $title_page    = 'REFERAL : '. $user->name;
+        }
         $gF = new GlobalProvider();
-        $pdf = PDF::LoadView('pages.report.member-referal-all', compact('members','no','user','gF'))->setPaper('a4','landscape');
-        return  $pdf->download('ANGGOTA REFERAL DARI '.$user->name.'.pdf');
+        $pdf = PDF::LoadView('pages.report.member-referal-all', compact('members','no','gF','title_page','title_header'))->setPaper('a4','landscape');
+        return  $pdf->download($title_file);
     }
 
     public function memberPotentialReferalDownloadExcel()

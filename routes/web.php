@@ -19,8 +19,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/by_referal/downloadexcel/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadExcel')->name('by-referal-downloadexcel');
-Route::get('/by_referal/downloadpdf/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadPDF')->name('by-referal-downloadpdf');
+Route::post('/by_referal/downloadexcel/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadExcel')->name('by-referal-downloadexcel');
+Route::post('/by_referal/downloadpdf/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadPDF')->name('by-referal-downloadpdf');
 Route::post('/admin/dashboard/referalbymount','Admin\DashboardController@referalByMountAdmin');
 
 
@@ -271,8 +271,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::post('/saverightchoose','SettingController@SaveRightChooseVillage')->name('admin-rightchoose-save');
 
         // anggota potensial download
-        Route::get('/by_referal/downloadpdfall/{user_id}','MemberController@memberByReferalAllDownloadPDF')->name('by-referal-downloadpdfall');
-        Route::get('/by_referal/downloadexcelall/{user_id}','MemberController@memberByReferalDownloadExcelAll')->name('by-referal-downloadexcelall');
+        Route::post('/by_referal/downloadpdfall/{user_id}','MemberController@memberByReferalAllDownloadPDF')->name('by-referal-downloadpdfall');
+        Route::post('/by_referal/downloadexcelall/{user_id}','MemberController@memberByReferalDownloadExcelAll')->name('by-referal-downloadexcelall');
 
         // voucher
         Route::post('/savecustomvoucher','RewardController@CustomSaveVoucherHistory')->name('admin-customvoucher');

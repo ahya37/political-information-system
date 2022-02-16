@@ -152,7 +152,7 @@ class District extends Model
 
     public function getDistrictByInputMember($user_id)
     {
-        $sql = "SELECT a.id as id, a.name as district FROM districts as a
+        $sql = "SELECT a.id as id, a.name as district, COUNT(c.id) as total_member FROM districts as a
                 join villages as b on a.id = b.district_id 
                 join users as c on b.id = c.village_id
                 where c.cby = $user_id
@@ -185,6 +185,15 @@ class District extends Model
                 join villages as b on a.id = b.district_id 
                 join users as c on b.id = c.village_id
                 where c.user_id = $user_id and c.id != $user_id";
+        return collect(\ DB::select($sql))->first();
+    }
+
+    public function getTotalMemberByInput($user_id)
+    {
+        $sql = "SELECT COUNT(c.id) as total_member FROM districts as a
+                join villages as b on a.id = b.district_id 
+                join users as c on b.id = c.village_id
+                where c.cby = $user_id";
         return collect(\ DB::select($sql))->first();
     }
 

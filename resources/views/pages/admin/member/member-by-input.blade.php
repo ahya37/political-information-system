@@ -19,10 +19,44 @@
               </div>
               <div class="row mt-4">
                 <div class="col-12">
+                   <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="col-md-12 col-sm-12">
+                        <div class="row">
+                          <div class="col-md-10 col-sm-10">
+                            <h5 class="badge badge-success text-white">
+                              Total Anggota : {{ $totalMember->total_member }}
+                            </h5>
+                          </div>
+                          <div class="col-md-2 col-sm-2">
+                            <div class="dropdown show">
+                                      <a class="btn btn-sm btn-sc-primary text-white border-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Download Semua
+                                      </a>
+                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <form action="{{ route('by-referal-downloadpdfall',$user->id) }}" method="POST">
+                                          @csrf
+                                          <input type="hidden" name="type" value="input">
+                                          <button type="submit" class="dropdown-item">PDF</button>
+                                        </form>
+                                        <form action="{{ route('by-referal-downloadexcelall',$user->id) }}" method="POST">
+                                          @csrf
+                                          <input type="hidden" name="type" value="input">
+                                          <button type="submit" class="dropdown-item">Excel</button>
+                                        </form>
+                                      </div>
+                                  </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                     @foreach ($districts as $row)
                   <div class="card shadow bg-white rounded mb-3">
                         <div class="card-body">
-                        <div class="col-12">
+                        <div class="col-md-12 col-sm-12">
+                          <div class="row">
+                             <div  class="col-md-7 col-sm-7">
                                 <a
                                     class="nav-link-cs collapsed  "
                                     href="#district"
@@ -30,8 +64,33 @@
                                     data-target="#district{{ $row->id }}"
                                     style="color: #000000; text-decoration:none"
                                     >
-                                    KECAMATAN : {{ $row->district }}</a
-                                    >
+                                    KECAMATAN : {{ $row->district }}
+                                </a>
+                             </div>
+                              <div class="col-md-3 col-sm-3 float-right">
+                                    <span class="badge badge-success">Jumlah : {{ $row->total_member }}</span>
+                              </div>
+                               <div class="col-md-2 col-sm-2 float-right">
+                                    <div class="dropdown show">
+                                      <a class="btn btn-sm btn-sc-primary text-white border-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Download
+                                      </a>
+                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                         <form action="{{ route('by-referal-downloadpdf', ['user_id' => $user->id,'district_id' => $row->id]) }}" method="POST">
+                                          @csrf
+                                          <input type="hidden" name="type" value="input">
+                                          <button type="submit" class="dropdown-item">PDF</button>
+                                        </form>
+                                        <form action="{{ route('by-referal-downloadexcel', ['user_id' => $user->id,'district_id' => $row->id]) }}" method="POST">
+                                          @csrf
+                                          <input type="hidden" name="type" value="input">
+                                          <button type="submit" class="dropdown-item">Excel</button>
+                                        </form>
+                                      </div>
+                                  </div>
+                                  </div>
+                          </div>
+                               
                                     <div class="collapse" id="district{{ $row->id }}" aria-expanded="false">
                                     @php
                                         $district_id = $row->id;

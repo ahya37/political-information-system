@@ -34,8 +34,14 @@
                                         Download Semua
                                       </a>
                                       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                          <a href="{{ route('by-referal-downloadpdfall',$user->id) }}" class="dropdown-item">PDF</a>
-                                          <a href="{{ route('by-referal-downloadexcelall',$user->id) }}" class="dropdown-item">Excel</a>
+                                           <form action="{{ route('by-referal-downloadpdfall',$user->id) }}" method="POST">
+                                          @csrf
+                                          <button type="submit" class="dropdown-item">PDF</button>
+                                        </form>
+                                        <form action="{{ route('by-referal-downloadexcelall',$user->id) }}"  method="POST">
+                                          @csrf
+                                          <button type="submit" class="dropdown-item">Excel</button>
+                                        </form>
                                       </div>
                                   </div>
                           </div>
@@ -69,8 +75,14 @@
                                         Download
                                       </a>
                                       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                          <a href="{{ route('by-referal-downloadpdf', ['user_id' => $user->id,'district_id' => $row->id]) }}" class="dropdown-item">PDF</a>
-                                          <a href="{{ route('by-referal-downloadexcel', ['user_id' => $user->id,'district_id' => $row->id]) }}" class="dropdown-item">Excel</a>
+                                          <form action="{{ route('by-referal-downloadpdf', ['user_id' => $user->id,'district_id' => $row->id]) }}" method="POST">
+                                          @csrf
+                                          <button type="submit" class="dropdown-item">PDF</button>
+                                        </form>
+                                        <form action="{{ route('by-referal-downloadexcel', ['user_id' => $user->id,'district_id' => $row->id]) }}" method="POST">
+                                          @csrf
+                                          <button type="submit" class="dropdown-item">Excel</button>
+                                        </form>
                                       </div>
                                   </div>
                                   </div>

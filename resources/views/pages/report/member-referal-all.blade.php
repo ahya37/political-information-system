@@ -65,12 +65,12 @@
 <body>
     <header>
         <h5>
-            LAPORAN ANGGOTA REFERAL
+            {{ $title_header }}
         </h5> 
         <hr>
     </header>
     <div style="margin-bottom: 2px">
-        <small>REFERAL   : {{ $user->name }}</small>
+        <small>{{ $title_page }}</small>
     </div>
         <section align="justify">
             <table cellspacing='0'>

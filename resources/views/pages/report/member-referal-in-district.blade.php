@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>ANGGOTA BERDASARKAN REFERAL </title>
+        <title>{{ $title_header }} </title>
     </head>
     <style>
             /** Define the margins of your page **/
@@ -65,12 +65,12 @@
 <body>
     <header>
         <h5>
-            LAPORAN ANGGOTA REFERAL
+            {{ $title_header }}
         </h5> 
         <hr>
     </header>
     <div style="margin-bottom: 2px">
-        <small>REFERAL   : {{ $user->name }}, KECAMATAN : {{ $district->name }}</small>
+        <small>{{ $title_page }}</small>
     </div>
         <section align="justify">
             <table cellspacing='0'>
