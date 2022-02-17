@@ -11,10 +11,17 @@ class UserMenu extends Model
 
     public function getUserMenu($user_id)
     { 
-        
         $result = "SELECT b.submenu, b.id as menu_id, b.name as menu, b.url, b.route from user_menus as a
                     join menus as b on a.menu_id = b.id
-                    where a.user_id = $user_id order by a.menu_id ASC";
+                    where a.user_id = $user_id and b.name != 'Admin' order by b.orderby ASC";
+        return DB::select($result);
+    }
+
+    public function getUserMenuCaleg($user_id)
+    { 
+        $result = "SELECT b.submenu, b.id as menu_id, b.name as menu, b.url, b.route from user_menus as a
+                    join menus as b on a.menu_id = b.id
+                    where a.user_id = $user_id order by b.orderby ASC";
         return DB::select($result);
     }
 

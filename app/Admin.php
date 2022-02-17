@@ -14,16 +14,23 @@ class Admin extends Authenticatable
 
     public function getAdmins()
     {
-         $sql = "SELECT b.photo, b.id as user_id,  b.name, b.level, d.name as district, e.name as regency, f.name as province, count(b.id) as total_data
+         $sql = "SELECT b.photo, b.id as user_id,  b.name, b.level, count(a.id) as total_data
                 from users as a
                left  join users as b on a.cby = b.id
-                left join villages as c on b.village_id = c.id
-                left join districts as d on c.district_id = d.id 
-                left join regencies as e on d.regency_id = e.id 
-                left join provinces as f on e.province_id = f.id
                 where a.village_id is not null 
-                group by b.photo, b.id, b.name, b.level, d.name, e.name, f.name
-                order by count(b.id) desc";
+                group by b.photo, b.id, b.name, b.level
+                order by count(a.id) desc";
+        return DB::select($sql);
+    }
+
+    public function getAdminCaleg($user_id)
+    {
+         $sql = "SELECT b.photo, b.id as user_id , b.name, b.level, count(c.id) as total_data from admin_caleg as a
+                join users as b on a.admin_caleg_user_id  = b.id
+                join users as c on b.id = c.cby
+                where c.village_id is not null and a.caleg_user_id = $user_id
+                group by b.photo, b.id, b.name, b.level
+                order by count(c.id) desc";
         return DB::select($sql);
     }
 }

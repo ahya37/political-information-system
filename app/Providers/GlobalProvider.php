@@ -73,8 +73,18 @@ class GlobalProvider extends ServiceProvider
     public function userMenus()
     {
         $user_id = Auth::user()->id;
+        $level = Auth::user()->level;
+
         $userMenuModel  = new UserMenu();
-        $user_menu      = $userMenuModel->getUserMenu($user_id);
+
+        $user_menu = [];
+
+        if ($level == 3) {
+            // jika anggota login itu caleg
+            $user_menu      = $userMenuModel->getUserMenuCaleg($user_id);
+        }else{
+            $user_menu      = $userMenuModel->getUserMenu($user_id);
+        }
         return $user_menu;
     }
 

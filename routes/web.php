@@ -103,8 +103,10 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/info/detalfigure/{id}','Admin\InformationController@detailFigureAccountMember')->name('member-detailfigure');
 
         Route::post('/info/saveintelegency','Admin\InformationController@saveIntelegencyPoliticAccounMember')->name('member-saveintelegency');
-
-
+        
+        // ADMIN DIBAWAH CALEG
+        Route::get('/admin','AdminController@index')->name('member-admin-index');
+        Route::get('/dtlistadmin/{user_id}','AdminController@dtListAdmin');
         
 
     });

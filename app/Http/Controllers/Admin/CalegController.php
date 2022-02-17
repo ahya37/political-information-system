@@ -53,7 +53,6 @@ class CalegController extends Controller
            'user_id' => $request->id,
         ]);
 
-        // ROLES DIBAWAH BELUM DI UJI
 
         // SIMPAN KE TB CALEG
         $saveCaleg =  Caleg::create([
@@ -69,6 +68,11 @@ class CalegController extends Controller
             $userMenuModel->create([
                     'user_id' => $caleg_user_id,
                     'menu_id' => 1
+                    ]);
+
+            $userMenuModel->create([
+                    'user_id' => $caleg_user_id,
+                    'menu_id' => 8
                     ]);
 
             // set level = 2
