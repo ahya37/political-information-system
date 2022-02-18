@@ -24,7 +24,7 @@ const table = $("#data").DataTable({
     bInfo: true,
     processing: true,
     bServerSide: true,
-    order: [[1, "asc"]],
+    order: [[3, "desc"]],
     autoWidth: false,
     ajax: {
         url: "/api/admin/voucherhistoryadmin",
@@ -63,13 +63,17 @@ const table = $("#data").DataTable({
         {
             targets: 4,
             render: function (data, type, row, meta) {
-                return `<div class="badge badge-pill badge-success">${row.total_data}</div>`;
+                return `<div class="badge badge-pill badge-success">${currency(
+                    row.total_data
+                )}</div>`;
             },
         },
         {
             targets: 5,
             render: function (data, type, row, meta) {
-                return `<div class="badge badge-pill badge-success">${row.total_nominal}</div>`;
+                return `<div class="badge badge-pill badge-success">${currency(
+                    row.total_nominal
+                )}</div>`;
             },
         },
         {

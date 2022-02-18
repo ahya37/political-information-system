@@ -17,14 +17,14 @@ $("#totalReferalByMonth", function (date, year) {
 });
 
 const table = $("#data").DataTable({
-    pageLength: 100,
+    pageLength: 10,
 
     bLengthChange: true,
     bFilter: true,
     bInfo: true,
     processing: true,
     bServerSide: true,
-    order: [[1, "asc"]],
+    order: [[3, "desc"]],
     autoWidth: false,
     ajax: {
         url: "/api/admin/voucherhistory",
@@ -57,19 +57,25 @@ const table = $("#data").DataTable({
         {
             targets: 3,
             render: function (data, type, row, meta) {
-                return `<div class="badge badge-pill badge-success">${row.total_point}</div>`;
+                return `<div class="badge badge-pill badge-success">${currency(
+                    row.total_point
+                )}</div>`;
             },
         },
         {
             targets: 4,
             render: function (data, type, row, meta) {
-                return `<div class="badge badge-pill badge-success">${row.total_data}</div>`;
+                return `<div class="badge badge-pill badge-success">${currency(
+                    row.total_data
+                )}</div>`;
             },
         },
         {
             targets: 5,
             render: function (data, type, row, meta) {
-                return `<div class="badge badge-pill badge-success">${row.total_nominal}</div>`;
+                return `<div class="badge badge-pill badge-success">${currency(
+                    row.total_nominal
+                )}</div>`;
             },
         },
         {

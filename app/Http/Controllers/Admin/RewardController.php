@@ -1226,7 +1226,22 @@ class RewardController extends Controller
     public function getListVoucherReferalByMount(Request $request)
     {
         $gF = new GlobalProvider();
-        $orderBy = 'a.name';
+        $orderBy = 'total_point';
+
+         switch ($request->input('order.0.column')) {
+            case '3':
+                $orderBy = 'total_point';
+                break;
+            case '4':
+                $orderBy = 'total_data';
+                break;
+            case '5':
+                $orderBy = 'total_nominal';
+                break;
+            case '1':
+                $orderBy = 'a.name';
+                break;
+        }
 
         $data = DB::table('users as a')
                 ->select('b.id','a.photo','a.name','c.name as village','d.name as district','e.name as regency','f.name as province',
@@ -1255,7 +1270,7 @@ class RewardController extends Controller
 
         $data = $data->groupBy('b.id','a.photo','a.name','c.name','d.name','e.name','f.name');
 
-        $recordsFiltered = $data->count();
+        $recordsFiltered = $data->get()->count();
         if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
         $recordsTotal = $data->count();
@@ -1267,9 +1282,9 @@ class RewardController extends Controller
                 'photo' => $val->photo,
                 'name' => $val->name,
                 'address' => 'DS, ' .$val->village.', KEC. ' .$val->district.', '.$val->regency.', '.$val->province,
-                'total_data' => $gF->decimalFormat($val->total_data),
-                'total_nominal' => $gF->decimalFormat($val->total_nominal),
-                'total_point' => $gF->decimalFormat($val->total_point)
+                'total_data' => $val->total_data,
+                'total_nominal' => $val->total_nominal,
+                'total_point' => $val->total_point
             ];
         }
 
@@ -1285,7 +1300,22 @@ class RewardController extends Controller
     public function getListVoucherAdminByMount(Request $request)
     {
         $gF = new GlobalProvider();
-        $orderBy = 'a.name';
+        $orderBy = 'total_point';
+
+        switch ($request->input('order.0.column')) {
+            case '3':
+                $orderBy = 'total_point';
+                break;
+            case '4':
+                $orderBy = 'total_data';
+                break;
+            case '5':
+                $orderBy = 'total_nominal';
+                break;
+            case '1':
+                $orderBy = 'a.name';
+                break;
+        }
 
         $data = DB::table('users as a')
                 ->select('b.id','a.photo','a.name','c.name as village','d.name as district','e.name as regency','f.name as province',
@@ -1326,9 +1356,9 @@ class RewardController extends Controller
                 'photo' => $val->photo,
                 'name' => $val->name,
                 'address' => 'DS, ' .$val->village.', KEC. ' .$val->district.', '.$val->regency.', '.$val->province,
-                'total_data' => $gF->decimalFormat($val->total_data),
-                'total_nominal' => $gF->decimalFormat($val->total_nominal),
-                'total_point' => $gF->decimalFormat($val->total_point)
+                'total_data' => $val->total_data,
+                'total_nominal' => $val->total_nominal,
+                'total_point' => $val->total_point
             ];
         }
 
