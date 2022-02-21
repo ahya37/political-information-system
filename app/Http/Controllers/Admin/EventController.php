@@ -46,9 +46,8 @@ class EventController extends Controller
                                                 Tambah Biaya
                                             </a>
                                             <a class="dropdown-item" href="'.route('admin-event-addmember', $item->id).'">
-                                            Tambah Peserta
+                                                Tambah Peserta
                                             </a>
-                                            
                                         </div>
                                     </div>
                                 </div>

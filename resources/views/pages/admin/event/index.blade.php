@@ -27,6 +27,7 @@
                                   <table id="data" class="table table-sm table-striped" width="100%">
                                     <thead>
                                       <tr>
+                                        <th scope="col"></th>
                                         <th scope="col">Tanggal</th>
                                         <th scope="col">Waktu</th>
                                         <th scope="col">Deskripsi</th>
@@ -50,7 +51,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
     <script>
      var datatable = $('#data').DataTable({
-            order: [[ 1, "desc" ]],
+            order: [0,"desc"],
             processing: true,
             language:{
               processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
@@ -61,12 +62,19 @@
                 url: '{!! url()->current() !!}',
             },
             columns:[
+               {data:'date', name:'date'},
                {data:'dates', name:'dates'},
                {data:'times', name:'times'},
                {data:'description', name:'description'},
                {data:'address', name:'address'},
                {data:'action', name:'action'}
             ],
+            "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false,
+            },
+        ]
         });
     </script>
 @endpush
