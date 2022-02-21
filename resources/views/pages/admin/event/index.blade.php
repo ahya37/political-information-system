@@ -50,6 +50,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
     <script>
      var datatable = $('#data').DataTable({
+            order: [[ 1, "desc" ]],
             processing: true,
             language:{
               processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
@@ -65,7 +66,7 @@
                {data:'description', name:'description'},
                {data:'address', name:'address'},
                {data:'action', name:'action'}
-            ]
+            ],
         });
     </script>
 @endpush

@@ -22,7 +22,7 @@ class Event extends Model
         $sql = "SELECT a.id, a.date, a.time, a.description, d.name as village, c.name as district, b.name as regency from events as a
                 join regencies as b on a.regency_id = b.id
                 join districts as c on a.district_id = c.id 
-                left join villages as d on a.village_id = d.id ";
+                left join villages as d on a.village_id = d.id order by a.date desc";
 
         $result = DB::select($sql);
         return $result;
