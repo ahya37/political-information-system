@@ -224,20 +224,36 @@ class EventController extends Controller
 
     public function storeAddParticipantOther(Request $request, $event_id)
     {
-        $address = '';
-        if ($request->village_id == null ) {
-            $address = null;
-        }else{
-            $village = Village::with(['district.regency'])->where('id', $request->village_id)->first();
+        $name = $request->name;
+        $data['village_id'] = $request->village_id;
+        foreach ($name as $key => $value) {
+            $village = Village::with(['district.regency'])->where('id', $data['village_id'][$key])->first();
             $address = 'DS. '. $village->name. ', KEC. ' .$village->district->name. ', '. $village->district->regency->name;
+
+            $eventDetail = new EventDetail();
+            $eventDetail->event_id  = $event_id;
+            $eventDetail->participant  = strtoupper($value);
+            $eventDetail->address  = $address;
+            $eventDetail->save();
         }
 
-        $eventDetail = new EventDetail();
-            $eventDetail::create([
-                'event_id' => $event_id,
-                'participant' => strtoupper($request->name),
-                'address' => $address
-            ]);
+
+        // dd($address);
+
+        // $address = '';
+        // if ($request->village_id == null ) {
+        //     $address = null;
+        // }else{
+        //     $village = Village::with(['district.regency'])->where('id', $request->village_id)->first();
+        //     $address = 'DS. '. $village->name. ', KEC. ' .$village->district->name. ', '. $village->district->regency->name;
+        // }
+
+        // $eventDetail = new EventDetail();
+        //     $eventDetail::create([
+        //         'event_id' => $event_id,
+        //         'participant' => strtoupper($request->name),
+        //         'address' => $address
+        //     ]);
 
         return redirect()->back()->with(['success' => 'Berhasil menambahkan peserta']);
 

@@ -21,7 +21,7 @@
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
                 
-                {{-- <div class="row mb-2">
+                <div class="row mb-2">
                   <div class="col-12">
                     <div class="card">
                       <div class="card-body">
@@ -114,29 +114,6 @@
                       </div>
                     </div>
                   </div>
-                </div> --}}
-
-                <div class="row">
-                   <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                        	<form method="post" action="" >
-                            <div id="elements">
-                              <div class="form-group fieldGroup" >
-                                  <div class="input-group">
-                                      <input type="text" name="username[]" class="form-control form-control-sm" placeholder="Nama"/>
-                                       <select name="village_id[]"  class="form-control select2">
-                                          <option value="">- pilih Desa -</option>
-                                        </select>
-                                  </div>
-                              </div>
-                            </div>
-                            <button type="button" class="btn btn-success btn-sm addMore" id="addMore" value="Add"><i class="fas fa-plus"></i></button>
-                            <input type="submit" name="submit" class="btn btn-primary btn-sm" value="Submit"/>	
-
-                        </form>
-                      </div>
-                    </div>
                 </div>
               </div>
             </div>
@@ -144,7 +121,7 @@
 @endsection
 
 @push('prepend-script')
-  {{-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -172,6 +149,7 @@
               <select name="village_id" id="village" class="form-control select2">
                 <option value="">- pilih Desa -</option>
               </select>
+
             </div>
           </div>
           
@@ -182,7 +160,7 @@
         </form>
     </div>
   </div>
-</div> --}}
+</div>
 @endpush
 @push('addon-script')
 <script src="{{asset('assets/select2/dist/js/select2.min.js')}}"></script>

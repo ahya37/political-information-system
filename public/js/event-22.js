@@ -307,11 +307,7 @@ $(document).ready(function () {
     });
 
     // remove fields group
-    // $("body").on("click", ".remove", function () {
-    //     $(this).parents(".fieldGroup").remove();
-    // });
+    $("body").on("click", ".remove", function () {
+        $(this).parents(".fieldGroup").remove();
+    });
 });
-
-function removeElement(id) {
-    $("#" + id + "").remove();
-}

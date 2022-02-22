@@ -127,15 +127,20 @@ class LocationController extends Controller
         $request = request()->data;
         if($request == '2'){
 
-            $html = "
-            <div class='form-group' id='$id'>
-            <div class='input-group' >
-            <button type='button' class='btn btn-danger btn-sm remove' onclick='removeElement($id)'><i class='fas fa-trash'></i></button>
-                                    <input type='text' name='username[]' class='form-control form-control-sm' placeholder='Nama'/>
-                                     <select name='village_id[]'  class='form-control select2' >
-                                        <option value='>- pilih Desa -</option>
-                                    </select>
-                    </div></div>";
+            $html = "<div class='row mt-2 fieldGroup' >
+                                <div class='col-1'>
+                                  <button type='button' class='btn btn-danger btn-sm remove'><i class='fas fa-trash'></i></button>
+                              </div>
+                              <div class='col-5'>
+                                <input type='text' name='name[]' class='form-control form-control-sm' placeholder='Nama'/>
+                              </div>
+                              <div class='col-5'>
+                                 <select name='village_id[]'  class='form-control select2' required>
+                                            <option value='>- pilih Desa -</option>
+                                  </select>
+                              </div>
+                              
+                            </div>";
             echo $html;
             exit;
 
