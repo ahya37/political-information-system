@@ -22,6 +22,7 @@ Route::post('searchprovinces', 'API\LocationController@getSearchProvince');
 Route::post('searchregencies', 'API\LocationController@getSearchRegency');
 Route::post('searchdistricts', 'API\LocationController@getSearchDistrict');
 Route::post('searchvillage', 'API\LocationController@getSearchVillage');
+Route::post('addElement', 'API\LocationController@addElement');
 Route::post('searchprovincesById', 'API\LocationController@getSearchProvinceById');
 Route::post('searchregencyById', 'API\LocationController@getSearchRegencyById');
 Route::post('searchdistrictById', 'API\LocationController@getSearchDistrictById');

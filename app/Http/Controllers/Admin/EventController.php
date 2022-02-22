@@ -323,10 +323,13 @@ class EventController extends Controller
                 $fileImage = 'NULL';
             }
 
+            $forecast = Forecast::where('id', $request->forecast_id)->first();
+
         // simpan ke cost event
             // id, event_id, nominal, file
         CostEvent::create([
             'event_id' => $id,
+            'description' => $forecast->name,
             'nominal' => $request->nominal,
             'file' => $fileImage,
         ]);

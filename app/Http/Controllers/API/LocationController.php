@@ -9,6 +9,7 @@ use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 
 class LocationController extends Controller
 {
@@ -117,6 +118,28 @@ class LocationController extends Controller
 
         return response()->json($data);
 
+    }
+
+    public function addElement()
+    {
+        // Add element
+        $id = Str::random(4);
+        $request = request()->data;
+        if($request == '2'){
+
+            $html = "
+            <div class='form-group' id='$id'>
+            <div class='input-group' >
+            <button type='button' class='btn btn-danger btn-sm remove' onclick='removeElement($id)'><i class='fas fa-trash'></i></button>
+                                    <input type='text' name='username[]' class='form-control form-control-sm' placeholder='Nama'/>
+                                     <select name='village_id[]'  class='form-control select2' >
+                                        <option value='>- pilih Desa -</option>
+                                    </select>
+                    </div></div>";
+            echo $html;
+            exit;
+
+        }
     }
 
     public function getSearchRegencyById()

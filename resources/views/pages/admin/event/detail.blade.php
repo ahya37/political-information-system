@@ -28,6 +28,7 @@
                                   <table id="cost" class="table table-sm table-striped">
                                     <thead>
                                       <tr>
+                                        <th >URAIAN</th>
                                         <th >NOMINAL</th>
                                         <th >FILE</th>
                                       </tr>
@@ -35,6 +36,7 @@
                                     <tbody>
                                       @foreach ($cost as $item)
                                           <tr>
+                                            <td>{{ $item->description }}</td>
                                             <td class="text-right">Rp. {{ $gF->decimalFormat($item->nominal)  }}</td>
                                             <td>
                                               <img src="{{ asset('/storage/'.$item->file) }}" width="30">
