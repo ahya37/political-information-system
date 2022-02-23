@@ -123,11 +123,10 @@ class LocationController extends Controller
     public function addElement()
     {
         // Add element
-        $id = Str::random(4);
         $request = request()->data;
         if($request == '2'){
 
-            $html = "<div class='row mt-2 fieldGroup' >
+            $html = "<div class='row mt-2 fieldGroup'>
                                 <div class='col-1'>
                                   <button type='button' class='btn btn-danger btn-sm remove'><i class='fas fa-trash'></i></button>
                               </div>
