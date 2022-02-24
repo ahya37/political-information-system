@@ -61,8 +61,8 @@ class MemberController extends Controller
                'phone_number' => 'numeric',
            ]);
 
-           $cby_id = Admin::select('id')->first();
-           $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
+           $cby = Admin::select('id')->first();
+        //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
            
            $cek_nik = User::select('nik')->where('nik', $request->nik)->first();
            #cek nik jika sudah terpakai
