@@ -198,7 +198,7 @@
                   SELAMAT DATANG
                 </h4>
                 <h1 style="font-size: 30px; font-weight: 400;">
-                 {{ $user->name}}
+                  NAMA
                 </h1>
               </td>
             </tr>
@@ -238,7 +238,7 @@
                       <table border="0" cellspacing="0" cellpadding="0">
                         <tr>
                           <td align="center" style="border-radius: 3px">
-                            <a style="text-decoration: none" href="{{ route('verify-email', $user->activate_token) }}" class="otp button">LINK DISINI</a>
+                            <a style="text-decoration: none" href="#" class="otp button">LINK DISINI</a>
                           </td>
                         </tr>
                       </table>
