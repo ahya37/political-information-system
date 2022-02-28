@@ -88,6 +88,9 @@ class RewardController extends Controller
                 return $q['totalReferal'];
             });
 
+            $sort_data = array_column($data, 'totalReferal');
+            array_multisort($sort_data, SORT_DESC, $data);
+
             $result = [
                 'monthCategory' => $rangeMonth,
                 'mode' => $mode,
@@ -235,6 +238,9 @@ class RewardController extends Controller
                 return $q['totalInput'];
             });
 
+            $sort_data = array_column($data, 'totalInput');
+            array_multisort($sort_data, SORT_DESC, $data);
+
             $result = [
                 'monthCategory' => $rangeMonth,
                 'mode' => $mode,
@@ -306,6 +312,9 @@ class RewardController extends Controller
              $totalInputCalculate = collect($data)->sum(function($q){
                 return $q['totalInput'];
             });
+
+            $sort_data = array_column($data, 'totalInput');
+            array_multisort($sort_data, SORT_DESC, $data);
 
             $result = [
                 'monthCategory' => $rangeMonth,
