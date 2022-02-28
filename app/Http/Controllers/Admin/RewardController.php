@@ -159,7 +159,7 @@ class RewardController extends Controller
             });
 
             $sort_data = array_column($data, 'totalReferal');
-            array_multisort($sort_data, SORT_ASC, $data);
+            array_multisort($sort_data, SORT_DESC, $data);
 
             $result = [
                 'monthCategory' => $rangeMonth,
