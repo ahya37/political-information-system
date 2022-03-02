@@ -31,15 +31,13 @@
                             <div class="mt-4">
                                  <small class="float-right">Tanggal : {{ $item->created_at }}</small>
                             </div>
-                            <div class="mr-2">
-                                 <a href="{{ route('voucherreferal-download', $item->id) }}"><i class="fa fa-download"></i></a>
-                            </div>
                             @if ($item->tf == null)
                             <div class="mr-2">
                                  <button class="btn btn-sm btn-sc-primary text-white "  type="button" data-id="{{ $item->id }}"  data-toggle="modal" data-target="#setPoint{{ $item->id }}">Upload Bukti</button>
                             </div>
                             @else
                             <a href="{{ asset('storage/'.$item->tf) }}" target="_blank">
+                              <i class="fa fa-download"></i>
                               <small>Bukti</small>
                             </a>
                             @endif
