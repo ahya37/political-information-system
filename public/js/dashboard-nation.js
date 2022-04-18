@@ -1182,7 +1182,7 @@ function getTotalInputByMonth(dateInputer, yearInputer) {
         method: "POST",
         data: { dateInputer: dateInputer, yearInputer: yearInputer },
         success: function (data) {
-            console.log("data inputer: ", data);
+            
             $("#totalInputByMonth").empty();
             $("#totalInputByMonth").append(
                 `Total : <strong>${data.input_acumulate}</strong>`

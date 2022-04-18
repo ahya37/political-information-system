@@ -1097,7 +1097,6 @@ function getTotalInputByMonth(dateInputer, yearInputer, provinceID) {
             province_id: provinceID,
         },
         success: function (data) {
-            console.log("data inputer: ", data);
             $("#totalInputByMonth").empty();
             $("#totalInputByMonth").append(
                 `Total : <strong>${data.input_acumulate}</strong>`

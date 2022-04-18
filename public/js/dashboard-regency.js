@@ -1115,7 +1115,7 @@ function getTotalInputByMonth(dateInputer, yearInputer, regencyID) {
             regency_id: regencyID,
         },
         success: function (data) {
-            console.log("data inputer: ", data);
+			
             $("#totalInputByMonth").empty();
             $("#totalInputByMonth").append(
                 `Total : <strong>${data.input_acumulate}</strong>`
