@@ -15,10 +15,10 @@
             data-aos="fade-up"
           >
             <div class="container-fluid">
-                @include('layouts.message')
-              <div class="dashboard-heading">
-                <h2 class="dashboard-title">Galeri Event</h2>
-                <p class="dashboard-subtitle">
+                <div class="dashboard-heading">
+                    <h2 class="dashboard-title">Galeri Event</h2>
+                    <p class="dashboard-subtitle">
+                    @include('layouts.message')
                 </p>
               </div>
               <div class="row">

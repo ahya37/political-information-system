@@ -78,7 +78,7 @@
                                      <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12 ">
-                                                <select name="regency_id" id="selectArea"  class="form-control" required>
+                                                <select name="regency_id" id="selectArea"  class="form-control" >
                                                 </select>
                                             </div>
                                         </div>
@@ -86,7 +86,7 @@
                                      <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12 ">
-                                                <select name="dapil_id" id="selectListArea"  class="form-control" required>
+                                                <select name="dapil_id" id="selectListArea"  class="form-control" >
                                                 </select>
                                             </div>
                                         </div>

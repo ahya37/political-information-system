@@ -69,9 +69,12 @@ class EventController extends Controller
                                 </a>';
                     })
                     ->addColumn('address', function($item){
-                        if ($item->village == null) {
+                        if ($item->district == null) {
+                            return $item->regency;
+                        }elseif($item->village == null){
                             return 'KEC. ' .$item->district.',<br>'.''.$item->regency.'';
-                        }else{
+                        }
+                        else{
                             return 'DS.' .$item->village.',<br>'.'KEC.'.$item->district.'<br>'.''.$item->regency.'';
                         }
                     })                   
