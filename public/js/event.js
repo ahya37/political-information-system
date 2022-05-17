@@ -244,22 +244,35 @@ const _url = $.ajax({
                 divEl +=
                     "<div class='col-xl-3 col-lg-4 col-md-6 col-sm-4 mb-4'>";
                 divEl += "<div class='bg-white rounded shadow-sm'>";
-                divEl +=
-                    "<img class='img-fluid card-img-top img-thumbnail' src=" +
-                    storage +
-                    item.file +
-                    ">";
-                divEl += "<div class='p-4'>";
-                divEl +=
-                    "<a href='/admin/event/gallery/detail/" +
-                    item.id +
-                    "'> <div class='d-flex align-items-center  justify-content-between rounded-pill bg-primary px-3 py-2 mt-4'>";
-                divEl +=
-                    "<span class='font-weight-bold text-white'>Lihat</span>";
-                divEl += "</div></a>";
-                divEl += "</div>";
-                divEl += "</div>";
-                divEl += "</div>";
+                if (item.file_type === "image") {
+                    divEl +=
+                        "<img class='img-fluid card-img-top img-thumbnail' src=" +
+                        storage +
+                        item.file +
+                        ">";
+                    divEl += "<div class='p-4'>";
+                    divEl +=
+                        "<a href='/admin/event/gallery/detail/" +
+                        item.id +
+                        "'> <div class='d-flex align-items-center  justify-content-between rounded-pill bg-primary px-3 py-2 mt-4'>";
+                    divEl +=
+                        "<span class='font-weight-bold text-white'>Lihat</span>";
+                    divEl += "</div></a>";
+                    divEl += "</div>";
+                    divEl += "</div>";
+                    divEl += "</div>";
+                } else {
+                    divEl +=
+                        "<video class='img-fluid card-img-top img-thumbnail' controls src=" +
+                        storage +
+                        item.file +
+                        "></video>";
+                    divEl += "<div class='p-4'>";
+                    divEl += "Video";
+                    divEl += "</div>";
+                    divEl += "</div>";
+                    divEl += "</div>";
+                }
 
                 $("#result").append(divEl);
             });
