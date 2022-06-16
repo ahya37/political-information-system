@@ -68,6 +68,10 @@ class RewardController extends Controller
                         'bank_name' => $val->bank_name,
                         'bank_owner' => $val->owner,
                         'totalReferal' =>  $totalReferalByMember,
+						
+                        'totalInput' => $val->referal_inpoint,
+                        'referal' =>  $val->total_referal,
+						
                         'poin' => $gF->calPoint($totalReferalByMember),
                         'nominal' => $gF->decimalFormat($gF->callNominal($gF->calPoint($totalReferalByMember))),
                         'totalNominal' => $gF->callNominal($gF->calPoint($totalReferalByMember))

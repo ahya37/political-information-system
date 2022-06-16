@@ -285,7 +285,7 @@
                             </div>
                               <div class="input-group mb-3 col-md-3 float-right">
                                 <button onclick="acumulateInput()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
-                                <button id="inputOfMount" class="btn btn-sm btn-sc-primary text-white datepicker">Bulan</button>
+                                <button id="inputOfMount" value="" class="btn btn-sm btn-sc-primary text-white datepicker">Bulan</button>
                             </div>
                         </div>
                         </div>
