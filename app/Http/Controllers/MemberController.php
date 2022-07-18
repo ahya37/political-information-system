@@ -8,6 +8,8 @@ use App\Models\District;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use DB;
+use Auth;
 
 class MemberController extends Controller
 {
@@ -77,5 +79,55 @@ class MemberController extends Controller
         }
 
         return redirect()->back()->with(['success' => 'Anggota berpengaruh telah dibuat']);
+    }
+	
+	public function memberPotensialByAdminInput()
+	{ 
+	    $user_id = Auth::user()->id;
+		return view('pages.member.member-potensial', ['userId' => $user_id]);
+	}
+	
+	public function dtMemberByAdminInput($userId)
+    {
+        try {
+			
+            $sql = "select b.id, b.photo, b.name, b.phone_number, b.whatsapp,
+					(SELECT COUNT(DISTINCT(id)) from users where user_id = b.id) as total
+					from users as a 
+					join users as b on a.user_id = b.id
+					where a.cby = $userId
+					group by b.id, b.name, b.photo, b.phone_number, b.whatsapp";
+					
+            $data = DB::select($sql);
+			
+            usort($data, function($a, $b) {
+                return $a->total < $b->total;
+            });
+
+           return DataTables::of($data)
+                    ->addColumn('photo', function($item){
+                        return '
+						<img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
+                        ';
+                    })
+                    ->addColumn('totalReferal', function($item){
+                        return '
+                         <div class="badge badge-pill badge-success">
+                            '.$item->total.' 
+                        </div>
+                        ';
+                    })
+                    ->addColumn('action', function($item){
+                        return '
+                           <a href='.route('admin-member-by-referal',$item->id).' class="btn btn-sm text-white btn-sc-primary">Detail</a> 
+                        ';
+                    })
+                    ->rawColumns(['photo','action','totalReferal'])
+                    ->make(true);
+					
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+
     }
 }

@@ -111,8 +111,10 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         // ADMIN DIBAWAH CALEG
         Route::get('/admin','AdminController@index')->name('member-admin-index');
         Route::get('/dtlistadmin/{user_id}','AdminController@dtListAdmin');
+		
+		// ANGGOTA POTENSIAL BY ADMIN INPUT
+		Route::get('referal/rekruter','MemberController@memberPotensialByAdminInput')->name('member-referal-rekruter');
         
-
     });
 
 

@@ -17,9 +17,12 @@ function setAjaxCapaianAnggotaPerhari(){
 			method: "GET",
 			data: { first: self.first, last: self.last },
 			dataType: "json",
+			async: true,
 			cache: false,
 			success: function (data) {
-				resolve(data);
+				setTimeout(() => {
+						resolve(data);
+					},300);
 			},
 			error: function(error){
 				reject(error);
@@ -123,8 +126,11 @@ $("#created_at").daterangepicker(
 					data: { first: self.first, last: self.last },
 					dataType: "json",
 					cache: false,
+					async: true,
 					success: function (data) {
+						setTimeout(() => {
 						resolve(data);
+					},300);
 					},
 					error: function(error){
 						reject(error);
@@ -235,6 +241,7 @@ function setAjaxInfoCard(){
 			method: "GET",
 			dataType: "json",
 			cache: false,
+			async: true,
 			beforeSend: function () {
 				$("#total_member").text("loading...");
 				$("#total_member_persen").text("loading...");
@@ -242,7 +249,9 @@ function setAjaxInfoCard(){
 				$("#village_filled").text("loading...");
 			},
 			success: function (data) {
-				resolve(data);
+				setTimeout(() => {
+						resolve(data);
+					},300);
 			},
 			error: function(error){
 				reject(error);
@@ -269,11 +278,14 @@ function setAjaxGender(){
 			method: "GET",
 			dataType: "json",
 			cache: false,
+			async: true,
 			beforeSend: function () {
 				$("#Loadgender").removeClass("d-none");
 			},
 			success: function (data) {
-				resolve(data);
+				setTimeout(() => {
+						resolve(data);
+					},300);
 			},
 			error: function(error){
 				reject(error);
@@ -309,11 +321,14 @@ function setAjaxJob(){
 			method: "GET",
 			dataType: "json",
 			cache: false,
+			async: true,
 			beforeSend: function () {
 				$("#Loadjobs").removeClass("d-none");
 			},
 			success: function (data) {
-				resolve(data);
+				setTimeout(() => {
+						resolve(data);
+					},300);
 			},
 			error: function(error){
 				reject(error);
@@ -359,11 +374,14 @@ function setAjaxgAgeGroup(){
 			method: "GET",
 			dataType: "json",
 			cache: false,
+			async: true,
 			beforeSend: function () {
 				$("#LoadageGroup").removeClass("d-none");
 			},
 			success: function (data) {
-				resolve(data);
+				setTimeout(() => {
+						resolve(data);
+					},300);
 			},
 			error: function(error){
 				reject(error);
@@ -414,11 +432,14 @@ function setAjaxgAgeGeneration(){
 			method: "GET",
 			dataType: "json",
 			cache: false,
+			async: true,
 			beforeSend: function () {
 				$("#LoadageGen").removeClass("d-none");
 			},
 			success: function (data) {
-				resolve(data);
+				setTimeout(() => {
+						resolve(data);
+					},300);
 			},
 			error: function(error){
 				reject(error);
@@ -468,11 +489,14 @@ function setAjaxAdminInputTerbanyak(){
 			method: "GET",
 			dataType: "json",
 			cache: false,
+			async: true,
 			beforeSend: function () {
 				$("#Loadinputer").removeClass("d-none");
 			},
 			success: function (data) {
-				resolve(data);
+				setTimeout(() => {
+						resolve(data);
+					},300);
 			},
 			error: function(error){
 				reject(error);
@@ -522,11 +546,14 @@ function setAjaxMemberReferalTerbanyak(){
 			method: "GET",
 			dataType: "json",
 			cache: false,
+			async: true,
 			beforeSend: function () {
 				$("#Loadreferal").removeClass("d-none");
 			},
 			success: function (data) {
-				resolve(data);
+				setTimeout(() => {
+						resolve(data);
+					},300);
 			},
 			error: function(error){
 				reject(error);
@@ -569,23 +596,23 @@ setAjaxMemberReferalTerbanyak().then((data) => {
 // SECTION 5 ANGGOTA BERDASARKAN REFERAL TERBANYAK
 
 // figure
-$("#dtshowFigure").DataTable({
-    processing: true,
-    language: {
-        processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
-    },
-    serverSide: true,
-    ordering: true,
-    ajax: {
-        url: `/admin/dtlistmemberfigure/${villageID}`,
-    },
-    columns: [
-        { data: "name", name: "name" },
-        { data: "address", name: "address" },
-        { data: "figure.name", name: "figure.name" },
-        { data: "action", name: "action" },
-    ],
-});
+// $("#dtshowFigure").DataTable({
+    // processing: true,
+    // language: {
+        // processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>',
+    // },
+    // serverSide: true,
+    // ordering: true,
+    // ajax: {
+        // url: `/admin/dtlistmemberfigure/${villageID}`,
+    // },
+    // columns: [
+        // { data: "name", name: "name" },
+        // { data: "address", name: "address" },
+        // { data: "figure.name", name: "figure.name" },
+        // { data: "action", name: "action" },
+    // ],
+// });
 
 // ANGGOTA BERDASARKAN REFERAL TERBANYAK
 $(".datepicker").datepicker({
@@ -603,6 +630,7 @@ let tbadminVillage = $("#listadminArea").DataTable({
     },
     serverSide: true,
     ordering: true,
+	async: true,
     ajax: {
         url: `/admin/dtlistadminareavillage/${villageID}`,
     },
@@ -622,6 +650,7 @@ function onDetail(id) {
         url: "/api/detailfigure",
         method: "POST",
 		cache: false,
+		async: true,
         data: { _token: CSRF_TOKEN, id: id },
         success: function (data) {
             $("#onDetail .modal-content").empty();
@@ -677,6 +706,7 @@ const tableReferal = $("#dtshowReferalDataReferalByMounth").DataTable({
         url: "/api/dashboard/referalbymounthvillagedefault",
         type: "POST",
 		cache: false,
+		async: true,
         data: function (d) {
             d.dateReferal = dateReferal;
             d.yearReferal = yearReferal;
@@ -752,6 +782,32 @@ const tableReferal = $("#dtshowReferalDataReferalByMounth").DataTable({
     ],
 });
 
+// EDIT SCOPE
+// const getNewCases = async (dateReferal, yearReferal,villageID) => {
+	// await fetch('/api/dashboard/referalbymounthvillagedefault', {
+		// method: 'POST',
+		// headers: {
+                // Accept: "application/json",
+                // "Content-Type": "application/json",
+            // },
+		// body:JSON.stringify({
+			// dateReferal: dateReferal,
+			// yearReferal: yearReferal,
+			// village_id: villageID
+			// })
+	// }).then((response) => {
+		// return response.json();
+		
+	// }).then((response) => {
+		 // if (response.Response === "False") {
+                    // throw new Error(response.statusText);
+                // }
+         // return response;
+	// });
+// }
+// getNewCases(dateReferal, yearReferal,villageID);
+// END EDIT SCOPE
+
 $("#referalOfMount").on("changeDate", async function (selected) {
     const monthSelected = selected.date.getMonth() + 1;
     const yearSelected = selected.date.getFullYear();
@@ -774,13 +830,16 @@ function getTotalReferalByMonth(dateReferal, yearReferal, villageID) {
 				url: "/api/dashboard/totalreferalbymounthvillagedefault",
 				method: "POST",
 				cache: false,
+				async: true,
 				data: {
 					dateReferal: dateReferal,
 					yearReferal: yearReferal,
 					village_id: villageID,
 				},
 				success: function (data) {
-					resolve(data);
+					setTimeout(() => {
+						resolve(data);
+					},300);
 				},
 				error: function(error){
 					reject(error);
@@ -820,6 +879,7 @@ const tableInputer = $("#dtshowInputDataByMounth").DataTable({
         url: "/api/dashboard/inputbymonthvillagedefault",
         type: "POST",
 		cache: false,
+		async: true,
         data: function (d) {
             d.dateInputer = dateInputer;
             d.yearInputer = yearInputer;
@@ -893,13 +953,16 @@ function getTotalInputByMonth(dateInputer, yearInputer, villageID) {
 				url: "/api/dashboard/totalinputbymonthvillagedefault",
 				method: "POST",
 				cache: false,
+				async: true,
 				data: {
 					dateInputer: dateInputer,
 					yearInputer: yearInputer,
 					village_id: villageID,
 				},
 				success: function (data) {
-					resolve(data);
+					setTimeout(() => {
+						resolve(data);
+					},300);
 				},
 				error: function(error){
 					reject(error);

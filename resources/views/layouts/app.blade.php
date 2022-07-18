@@ -62,13 +62,13 @@
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-20W3HD4JHH"></script>
-    <script>
+   <!-- <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-20W3HD4JHH');
-    </script>
+    </script> -->
      @stack('addon-script')
   </body>
 </html>
