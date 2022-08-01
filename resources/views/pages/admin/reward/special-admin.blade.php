@@ -39,10 +39,11 @@
                               <table id="datatable" class="table table-sm table-striped" width="100%">
                                   <thead>
                                     <tr>
-                                      <th class="col-2">NAMA</th>
-                                      <th class="col-1">ALAMAT</th>
-                                      <th class="col-1">TOTAL REFERAL</th>
-                                      <th class="col-1">NOMINAL</th>
+                                      <th scope="col">NAMA</th>
+                                      <th scope="col">ALAMAT</th>
+                                      <th scope="col"></th>
+                                      <th scope="col">TOTAL REFERAL</th>
+                                      <th scope="col">NOMINAL</th>
                                     </tr>
                                   </thead>
                                 <tbody id="showReferalPoint"></tbody>

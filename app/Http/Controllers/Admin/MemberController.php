@@ -894,8 +894,9 @@ class MemberController extends Controller
                     'address' => $value->address,
                     'village' => $value->village,
                     'district' => $value->district,
-                    'total_referal' => $value->total,
-                    'bonus' => $bonus
+                    'total_referal' => $gf->decimalFormat($value->total),
+                    'total' => $value->total,
+                    'bonus' => $gf->decimalFormat($bonus)
                 ];
             }
 
@@ -917,10 +918,11 @@ class MemberController extends Controller
                         return ''.$item['address'].', DS.'.$item['village'].', KEC.'.$item['district'];
                     })
                     ->addColumn('totalReferal', function($item){
-                        return $item['total_referal'];
+                        return '<span class="badge bg-success text-light">'.$item['total_referal'].'</span>';
                     })
                     ->addColumn('nominalBonus', function($item){
-                        return $item['bonus'];
+                        return '<span class="badge bg-success text-light">Rp '.$item['bonus'].'</span>';
+
                     })
                     ->rawColumns(['photo','fullAdress','totalReferal','nominalBonus'])
                     ->make(true);
@@ -946,8 +948,9 @@ class MemberController extends Controller
                     'address' => $value->address,
                     'village' => $village->name,
                     'district' => $village->district->name,
-                    'total_data' => $value->total_data,
-                    'bonus' => $bonus,
+                    'total_data' => $gf->decimalFormat($value->total_data),
+                    'total' => $value->total_data,
+                    'bonus' => $gf->decimalFormat($bonus),
                     
                 ];
             }
@@ -970,10 +973,11 @@ class MemberController extends Controller
                         return ''.$item['address'].', DS.'.$item['village'].', KEC.'.$item['district'];
                     })
                     ->addColumn('totalReferal', function($item){
-                        return $item['total_data'];
+                        return '<span class="badge bg-success text-light">'.$item['total_data'].'</span>';
                     })
                     ->addColumn('nominalBonus', function($item){
-                        return $item['bonus'];
+                        return '<span class="badge bg-success text-light">Rp '.$item['bonus'].'</span>';
+
                     })
                     ->rawColumns(['photo','fullAdress','totalReferal','nominalBonus'])
                     ->make(true);

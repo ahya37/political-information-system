@@ -45,18 +45,19 @@
                    >
                     Reward
                   </a>
+                  <a
+                    href="{{ route('admin-reward-special-referal') }}"
+                    class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/listrewardreferal')) ? 'active custom-active-color' : '' }}"
+                   >
+                    Reward Khusus
+                  </a>
                    <a
                     href="{{ route('admin-listrewardreferal') }}"
                     class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/listrewardreferal')) ? 'active custom-active-color' : '' }}"
                    >
                     Daftar Reward
                   </a>
-                   <a
-                    href="{{ route('admin-reward-special-referal') }}"
-                    class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/listrewardreferal')) ? 'active custom-active-color' : '' }}"
-                   >
-                    Daftar Reward Khusus
-                  </a>
+                   
                 </li>
               </ul>
             </div>
@@ -96,18 +97,19 @@
                    >
                     Reward
                   </a>
+                  <a
+                  href="{{ route('admin-reward-special-admin') }}"
+                  class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/listrewardadmin')) ? 'active custom-active-color' : '' }}"
+                 >
+                  Reward Khusus
+                </a>
                    <a
                     href="{{ route('admin-listrewardadmin') }}"
                     class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/listrewardadmin')) ? 'active custom-active-color' : '' }}"
                    >
                     Daftar Reward
                   </a>
-                   <a
-                    href="{{ route('admin-reward-special-admin') }}"
-                    class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/listrewardadmin')) ? 'active custom-active-color' : '' }}"
-                   >
-                    Daftar Reward Khusus
-                  </a>
+                  
                 </li>
               </ul>
             </div>

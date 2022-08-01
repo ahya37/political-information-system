@@ -12,6 +12,7 @@ $(function () {
         columns: [
             { data: "photo", name: "photo" },
             { data: "fullAdress", name: "fullAdress" },
+            { data: "total", name: "total", visible:false },
             {
                 data: "totalReferal",
                 name: "totalReferal",
@@ -24,15 +25,5 @@ $(function () {
             },
         ],
         aaSorting: [[2, "desc"]],
-        columnDefs: [
-            {
-                targets: 2,
-                render: $.fn.dataTable.render.number(".", ".", 0, ""),
-            },
-            {
-                targets: 3,
-                render: $.fn.dataTable.render.number(".", ".", 0, ""),
-            },
-        ],
     });
 });
