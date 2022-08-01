@@ -14,11 +14,11 @@ class Admin extends Authenticatable
 
     public function getAdmins()
     {
-         $sql = "SELECT b.photo, b.id as user_id,  b.name, b.level, count(a.id) as total_data
+         $sql = "SELECT b.set_admin, b.photo, b.id as user_id,  b.name, b.level, b.address, b.village_id, count(a.id) as total_data
                 from users as a
                left  join users as b on a.cby = b.id
                 where a.village_id is not null 
-                group by b.photo, b.id, b.name, b.level
+                group by b.set_admin, b.photo, b.id, b.name, b.level, b.address, b.village_id
                 order by count(a.id) desc";
         return DB::select($sql);
     }

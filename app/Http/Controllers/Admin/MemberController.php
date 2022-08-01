@@ -864,4 +864,199 @@ class MemberController extends Controller
 
     }
 
+    public function spesialBonusReferal()
+    {
+      return view('pages.admin.reward.special');
+    }
+
+    public function spesialBonusAdmin()
+    {
+      return view('pages.admin.reward.special-admin');
+    }
+
+    public function dataSpesialBonusReferal()
+    {
+        $userModel  = new User();
+        $referal    = $userModel->getMemberReferal();
+
+        $gf         = new GlobalProvider();
+
+        $referals   = [];
+        foreach ($referal as $value) {
+
+            $bonus = $gf->calculateSpecialBonusReferal($value->total);
+
+            if ($bonus > 0 AND $value->id != 35) {
+                $referals[] = [
+                    'id' => $value->id,
+                    'name' => $value->name,
+                    'photo' => $value->photo,
+                    'address' => $value->address,
+                    'village' => $value->village,
+                    'district' => $value->district,
+                    'total_referal' => $value->total,
+                    'bonus' => $bonus
+                ];
+            }
+
+        }
+
+        if (request()->ajax()) 
+        {
+            return DataTables::of($referals)
+                    ->addIndexColumn()
+                    ->addColumn('photo', function($item){
+                        return '
+                        <a href="'.route('admin-profile-member', $item['id']).'">
+                            <img  class="rounded" width="40" src="'.asset('storage/'.$item['photo']).'">
+                            '.$item['name'].'
+                        </a>
+                        ';
+                    })
+                    ->addColumn('fullAdress', function($item){
+                        return ''.$item['address'].', DS.'.$item['village'].', KEC.'.$item['district'];
+                    })
+                    ->addColumn('totalReferal', function($item){
+                        return $item['total_referal'];
+                    })
+                    ->addColumn('nominalBonus', function($item){
+                        return $item['bonus'];
+                    })
+                    ->rawColumns(['photo','fullAdress','totalReferal','nominalBonus'])
+                    ->make(true);
+        }
+    }
+
+    public function dataSpesialBonusAdmin()
+    {
+        $adminModel = new Admin();
+        $admin      = $adminModel->getAdmins();
+        $gf         = new GlobalProvider();
+
+
+        $admins   = [];
+        foreach ($admin  as $value) {
+            $bonus    = $gf->calculateSpecialBonusAdmin($value->total_data);
+            if ($bonus> 0 && $value->set_admin == 'Y') {
+                $village  = Village::with('district')->where('id', $value->village_id)->first();
+                $admins[] = [
+                    'id' => $value->user_id,
+                    'name' => $value->name,
+                    'photo' => $value->photo,
+                    'address' => $value->address,
+                    'village' => $village->name,
+                    'district' => $village->district->name,
+                    'total_data' => $value->total_data,
+                    'bonus' => $bonus,
+                    
+                ];
+            }
+        }
+
+
+        if (request()->ajax()) 
+        {
+            return DataTables::of($admins)
+                    ->addIndexColumn()
+                    ->addColumn('photo', function($item){
+                        return '
+                        <a href="'.route('admin-profile-member', $item['id']).'">
+                            <img  class="rounded" width="40" src="'.asset('storage/'.$item['photo']).'">
+                            '.$item['name'].'
+                        </a>
+                        ';
+                    })
+                    ->addColumn('fullAdress', function($item){
+                        return ''.$item['address'].', DS.'.$item['village'].', KEC.'.$item['district'];
+                    })
+                    ->addColumn('totalReferal', function($item){
+                        return $item['total_data'];
+                    })
+                    ->addColumn('nominalBonus', function($item){
+                        return $item['bonus'];
+                    })
+                    ->rawColumns(['photo','fullAdress','totalReferal','nominalBonus'])
+                    ->make(true);
+        }
+    }
+
+    public function spesialBonusReportReferal()
+    {
+        $userModel = new User();
+        $referal    = $userModel->getMemberReferal();
+
+        $gf        = new GlobalProvider();
+
+        $referals    = [];
+        foreach ($referal as $value) {
+
+            $bonus = $gf->calculateSpecialBonusReferal($value->total);
+
+            if ($bonus > 0 AND $value->id != 35) {
+                $referals[] = [
+                    'name' => $value->name,
+                    'photo' => $value->photo,
+                    'address' => $value->address,
+                    'village' => $value->village,
+                    'district' => $value->district,
+                    'total_referal' => $gf->decimalFormat($value->total),
+                    'bonus' => $gf->decimalFormat($bonus),
+                    'total_bonus' => $bonus
+                ];
+            }
+
+        }
+
+        $count_total_bonus = collect($referals)->sum(function($q){
+            return $q['total_bonus'];
+        });
+
+        $count_total_bonus = $gf->decimalFormat($count_total_bonus);
+
+        $no = 1;
+        $title = 'LAPORAN PENERIMA BONUS KHUSUS REFERAL'; 
+        $pdf   = PDF::loadView('pages.admin.report.member-bonus-khusus-pdf', compact('referals','title','no','count_total_bonus'))->setPaper('landscape');
+        return $pdf->download($title.'.pdf');
+
+    }
+
+    public function spesialBonusReportAdmin()
+    {
+        $gf        = new GlobalProvider();
+
+
+        $adminModel = new Admin();
+        $admin    = $adminModel->getAdmins();
+
+        $admins   = [];
+        foreach ($admin  as $value) {
+            $bonus    = $gf->calculateSpecialBonusAdmin($value->total_data);
+            if ($bonus> 0 && $value->set_admin == 'Y') {
+                $village  = Village::with('district')->where('id', $value->village_id)->first();
+                $admins[] = [
+                    'name' => $value->name,
+                    'photo' => $value->photo,
+                    'address' => $value->address,
+                    'village' => $village->name,
+                    'district' => $village->district->name,
+                    'total_data' => $gf->decimalFormat($value->total_data),
+                    'bonus' => $gf->decimalFormat($bonus),
+                    'total_bonus' => $bonus,
+                ];
+            }
+        }
+
+        $count_total_bonus = collect($admins)->sum(function($q){
+            return $q['total_bonus'];
+        });
+
+        $count_total_bonus = $gf->decimalFormat($count_total_bonus);
+
+        $no = 1;
+        $title = 'LAPORAN PENERIMA BONUS KHUSUS ADMIN'; 
+        $pdf   = PDF::loadView('pages.admin.report.member-bonus-khusus-admin-pdf', compact('admins','title','no','count_total_bonus'))->setPaper('landscape');
+        return $pdf->download($title.'.pdf');
+
+    }
+
 }

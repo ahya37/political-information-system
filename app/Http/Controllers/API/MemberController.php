@@ -4,12 +4,15 @@ namespace App\Http\Controllers\API;
 
 use App\Exports\MemberExport;
 use App\User;
+use App\Admin;
 use App\Models\Province;
+use App\Models\Village;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Excel;
-
+use App\Providers\GlobalProvider;
+use PDF;
 
 class MemberController extends Controller
 {

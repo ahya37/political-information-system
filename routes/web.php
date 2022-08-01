@@ -133,8 +133,12 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
     
     Route::get('/info/dtintelegencyvillage','InformationController@dtListIntelegencyAccountMember');
 
-
-
+    // BONUS SPECIAL
+    Route::get('/specialbonus/refefal/data','MemberController@dataSpesialBonusReferal');
+    Route::get('/specialbonus/refefal/report','MemberController@spesialBonusReportReferal')->name('admin-reward-special-referal-report');
+    Route::get('/specialbonus/admin/data','MemberController@dataSpesialBonusAdmin');
+    Route::get('/specialbonus/admin/report','MemberController@spesialBonusReportAdmin')->name('admin-reward-special-admin-report');
+    
     Route::group(['middleware' => 'admin'], function(){
         Route::post('logout','LoginController@logout')->name('admin-logout');
         Route::get('/dashboard/nation','DashboardController@index')->name('admin-dashboard');
@@ -270,6 +274,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         // Reward
         Route::get('/reward','RewardController@index')->name('admin-reward');
         Route::get('/rewardadmin','RewardController@indexAdmin')->name('admin-rewardadmin');
+
+        // Reward Special
+        Route::get('/specialbonus/refefal','MemberController@spesialBonusReferal')->name('admin-reward-special-referal');
+        Route::get('/specialbonus/admin','MemberController@spesialBonusAdmin')->name('admin-reward-special-admin');
+
 
         // target
         Route::get('/target','SettingController@listTarget')->name('admin-list-target');

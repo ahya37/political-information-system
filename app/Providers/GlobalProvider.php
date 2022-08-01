@@ -400,4 +400,52 @@ class GlobalProvider extends ServiceProvider
         
         
     }
+
+    public function calculateSpecialBonusReferal($data)
+    {
+        $nominal = 0;
+        if ($data > 1000) {
+            $nominal = 1000000;
+
+        }elseif ($data >= 750 AND $data <= 999) {
+            $nominal = 750000;
+
+        }elseif ($data >= 500 AND $data < 749) {
+            $nominal = 500000;
+
+        }elseif ($data >= 250 AND $data < 499) {
+            $nominal = 250000;
+
+        }elseif ($data >= 100 AND $data < 249) {
+            $nominal = 100000;
+        }
+
+        else{
+            $nominal = 0;
+        }
+
+        return $nominal;
+    }
+
+    public function calculateSpecialBonusAdmin($data)
+    {
+        $nominal = 0;
+        if ($data > 1000) {
+            $nominal = 250000;
+
+        }elseif ($data >= 500 AND $data <= 999 ) {
+            $nominal = 150000;
+
+        }elseif ($data >= 300 AND $data <= 499 ) {
+            $nominal = 100000;
+
+        }elseif ($data >= 50 AND $data <= 299) {
+            $nominal = 50000;
+
+        }else{
+            $nominal = 0;
+        }
+
+        return $nominal;
+    }
 }
