@@ -164,7 +164,7 @@ class MemberDatatableController extends Controller
                         ';
                     })
                     ->addColumn('address', function($item){
-                        return $item->district.','.$item->regency;
+                        return 'DS. '.$item->village. ',<br>KEC. '.$item->district.','.$item->regency;
                     })
                     ->addColumn('action', function($item){
                         return '
@@ -203,7 +203,7 @@ class MemberDatatableController extends Controller
                         ';
                     })
                      ->addColumn('address', function($item){
-                        return $item->district.','.$item->regency;
+                        return 'DS. '.$item->village. ',<br>KEC. '.$item->district.','.$item->regency;
                     })
                     ->addColumn('action', function($item){
                         return '

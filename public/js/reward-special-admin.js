@@ -11,8 +11,6 @@ $(function () {
         },
         columns: [
             { data: "photo", name: "photo" },
-            { data: "fullAdress", name: "fullAdress" },
-            { data: "total", name: "total", visible: false},
             {
                 data: "totalReferal",
                 name: "totalReferal",
@@ -23,7 +21,9 @@ $(function () {
                 name: "nominalBonus",
                 className: "text-right",
             },
+            { data: "fullAdress", name: "fullAdress" },
+            { data: "total", name: "total", visible: false},
         ],
-        aaSorting: [[2, "desc"]],
+        aaSorting: [[4, "desc"]],
     });
 });

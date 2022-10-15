@@ -40,10 +40,10 @@
                                   <thead>
                                     <tr>
                                       <th scope="col">NAMA</th>
-                                      <th scope="col">ALAMAT</th>
-                                      <th scope="col"></th>
-                                      <th scope="col">TOTAL REFERAL</th>
+                                      <th scope="col">TOTAL INPUT</th>
                                       <th scope="col">NOMINAL</th>
+                                       <th scope="col">ALAMAT</th>
+                                      <th scope="col"></th>
                                     </tr>
                                   </thead>
                                 <tbody id="showReferalPoint"></tbody>
