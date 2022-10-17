@@ -73,6 +73,7 @@ function showDivHtml(m) {
                     ${m.name}, Kode Referal : <strong>${m.code}</strong>
                     <br>
             </a>
+            <a href="/user/member/member/card/download/${m.id}">Download KTA</a>
             `;
 }
 
