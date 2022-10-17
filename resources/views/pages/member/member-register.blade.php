@@ -52,6 +52,7 @@
                                       <tr>
                                         <th scope="col">ID</th>
                                         <th>NAMA</th>
+                                        <th>REFERAL</th>
                                         <th>KABUPATEN / KOTA</th>
                                         <th>KECAMATAN</th>
                                         <th>DESA</th>
@@ -91,6 +92,7 @@
             columns:[
                 {data: 'id', name:'id'},
                 {data: 'photo', name:'photo'},
+                {data: 'code', name:'code'},
                 {data: 'village.district.regency.name', name:'village.district.regency.name'},
                 {data: 'village.district.name', name:'village.district.name'},
                 {data: 'village.name', name:'village.name'},
