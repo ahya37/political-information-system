@@ -528,10 +528,15 @@ class UserController extends Controller
                         ->addColumn('referal', function($item){
                             return $item->referal;
                         })
+                        ->addColumn('countreferal', function($item){
+                            $countreferal = User::select('nik')->where('user_id', $item->id)->whereNotNull('village_id')->count();
+                            $countreferal = 0 ? 0 : $countreferal;
+                            return '<p class="text-right">'.$countreferal.'</p>';
+                        })
                         ->addColumn('register', function($item){
                             return date('d-m-Y', strtotime($item->created_at));
                         })
-                        ->rawColumns(['action','photo','referal','register'])
+                        ->rawColumns(['action','photo','referal','register','countreferal'])
                         ->make();
                     }
                     return view('pages.member.member-register', compact('figure'));

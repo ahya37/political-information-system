@@ -68,11 +68,11 @@ function updateMemberUi(members) {
 }
 
 function showDivHtml(m) {
-    return `<p>
+    return `<a href="/user/member/registered/edit/${m.id}">
                 <img  class="rounded" width="40" src="/storage/${m.photo}">
                     ${m.name}, Kode Referal : <strong>${m.code}</strong>
                     <br>
-            </p>
+            </a>
             `;
 }
 

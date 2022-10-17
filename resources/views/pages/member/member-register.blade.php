@@ -55,6 +55,7 @@
                                         <th>KABUPATEN / KOTA</th>
                                         <th>KECAMATAN</th>
                                         <th>DESA</th>
+                                        <th>JUMLAH REFERAL</th>
                                         <th>REFERAL DARI</th>
                                         <th scope="col">TERDAFTAR</th>
                                         <th scope="col">INPUT DARI</th>
@@ -93,6 +94,7 @@
                 {data: 'village.district.regency.name', name:'village.district.regency.name'},
                 {data: 'village.district.name', name:'village.district.name'},
                 {data: 'village.name', name:'village.name'},
+                {data: 'countreferal', name:'countreferal'},
                 {data: 'reveral.name', name:'reveral.name'},
                 {data: 'register', name:'register'},
                 {data: 'create_by.name', name:'create_by.name'},
