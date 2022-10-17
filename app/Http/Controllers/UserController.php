@@ -500,6 +500,12 @@ class UserController extends Controller
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
                                         <div class="dropdown-menu">
+                                            <a
+                                            href="'.route('member-card-download', $item->id).'"
+                                            class="btn "
+                                            >
+                                            Download KTA
+                                            </a>
                                              <a
                                                 href="'.route('user-profile-edit-referal', encrypt($item->id)).'"
                                                 class="btn "
