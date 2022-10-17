@@ -23,6 +23,27 @@
                 <div class="row">
                   <div class="col-12">
                     @include('layouts.message')
+                    <div class="card mb-2">
+                      <div class="card-body">
+                        <div class="form-inline">
+                          <div class="form-group mx-sm-3 mb-2">
+                            <input type="text" class="form-control" id="searchMember" placeholder="Cari anggota dengan NIK">
+                            <input type="hidden" value="{{Auth::user()->id}}" id="userId">
+                          </div>
+                          <button type="button" class="btn btn-primary mb-2" id="searchMemberBtn">Cari</button>
+                        </div>
+                        <div class="col-md-12">
+                          <div id="Loadachievment" class="d-none">
+                            <button class="btn btn-primary" type="button" disabled>
+                              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                              Sedang mencari...
+                            </button>
+                          </div>
+                          <div id="myAnggota" class="d-none alert alert-warning" role="alert">Anggota tidak ditemukan..</div>
+                          <div id="showData"></div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="card">
                       <div class="card-body">
                        <div class="table-responsive">
@@ -87,8 +108,7 @@
 
             
         });
-    </script>
-    <script>
+    
       $('#setFigure').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget) 
         let recipient = button.data('name') 
@@ -96,6 +116,7 @@
         let modal = $(this)
         modal.find('.modal-title').text('Atur anggota berpengaruh: ' + recipient)
         modal.find('.modal-body #uid').val(id)
-      })
-    </script>
+      });
+  </script>
+  <script type="text/javascript" src="{{asset('/js/search-member-nik.js')}}"></script>
 @endpush
