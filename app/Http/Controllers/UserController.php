@@ -519,8 +519,10 @@ class UserController extends Controller
                         })
                         ->addColumn('photo', function($item){
                             return '
+                                <a href="'.route('member-registered-user-edit', $item->id).'">
                                 <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
                                 '.$item->name.'
+                                </a>
                             ';
                         })
                         ->addColumn('referal', function($item){
@@ -533,6 +535,90 @@ class UserController extends Controller
                         ->make();
                     }
                     return view('pages.member.member-register', compact('figure'));
+    }
+
+    public function EditmemberRegister($id)
+    {
+        $profile = app('UserModel')->getProfile($id);
+        return view('pages.member.edit-member-register', compact('profile'));
+    }
+
+    public function updateMemberRegister(Request $request, $id)
+    {
+        $request->validate([
+            'nik' => 'required'
+        ]);
+
+        $cek_nik = User::select('nik')->where('nik', $request->nik)->whereNotIn('id', [$id])->count();
+
+        if ($cek_nik > 0) {            
+            return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
+        }else{
+
+            $user = User::where('id', $id)->first();
+    
+            if ($request->photo != null || $request->ktp != null) {
+                // delete foto lama
+                $path = public_path();
+                if ($request->photo != null) {
+                    File::delete($path.'/storage/'.$user->photo);
+                }
+                if ($request->ktp != null) {
+                    File::delete($path.'/storage/'.$user->ktp);
+                }
+    
+                $request_ktp = $request->ktp;
+                $request_photo = $request->photo;
+                $gF = new GlobalProvider();
+                $ktp = $request->ktp != null ?  $gF->cropImageKtp($request_ktp) : $user->ktp;
+                $photo = $request->photo != null ? $gF->cropImagePhoto($request_photo) : $user->photo;
+    
+                $user->update([
+                    'nik'  => $request->nik,
+                    'name' => strtoupper($request->name),
+                    'gender' => $request->gender,
+                    'place_berth' => strtoupper($request->place_berth),
+                    'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
+                    'blood_group' => $request->blood_group,
+                    'marital_status' => $request->marital_status,
+                    'job_id' => $request->job_id,
+                    'religion' => $request->religion,
+                    'nik'  => $request->nik,
+                    'education_id'  => $request->education_id,
+                    'phone_number' => $request->phone_number,
+                    'whatsapp' => $request->whatsapp,
+                    'village_id'   => $request->village_id,
+                    'rt'           => $request->rt,
+                    'rw'           => $request->rw,
+                    'address'      => strtoupper($request->address),
+                    'photo'        => $photo,
+                    'ktp'          => $ktp
+                ]);
+    
+            }else{
+                $user->update([
+                    'nik'  => $request->nik,
+                    'name' => strtoupper($request->name),
+                    'gender' => $request->gender,
+                    'place_berth' => strtoupper($request->place_berth),
+                    'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
+                    'blood_group' => $request->blood_group,
+                    'marital_status' => $request->marital_status,
+                    'job_id' => $request->job_id,
+                    'religion' => $request->religion,
+                    'nik'  => $request->nik,
+                    'education_id'  => $request->education_id,
+                    'phone_number' => $request->phone_number,
+                    'whatsapp' => $request->whatsapp,
+                    'village_id'   => $request->village_id,
+                    'rt'           => $request->rt,
+                    'rw'           => $request->rw,
+                    'address'      => strtoupper($request->address),
+                ]);
+            }
+        }
+
+        return redirect()->route('member-registered-user')->with('success','Anggota telah diubah');;
     }
 
     public function createAccount($id)

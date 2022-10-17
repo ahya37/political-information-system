@@ -69,6 +69,8 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/event/absen/{event_detail_id}','EventController@storeAbsen')->name('member-event-absen');
         
         Route::get('/registered','UserController@memberRegister')->name('member-registered-user');
+        Route::get('/registered/edit/{id}','UserController@EditmemberRegister')->name('member-registered-user-edit');
+        Route::post('/registered/update/{id}','UserController@updateMemberRegister')->name('member-registered-user-update');
         Route::get('/registered/create/account/{id}','UserController@createAccount')->name('member-registered-create-account');
         Route::post('/registered/create/account/store/{id}','UserController@storeAccount')->name('member-create-account-store');
 
