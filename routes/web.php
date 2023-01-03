@@ -341,8 +341,14 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         Route::post('/member/download/excel', 'MemberController@getDownloadExcel')->name('member-download-excel');
 
+        // KOORDINATOR
+        Route::get('/koordinator/create','KoordinatorController@create')->name('admin-koordinator-create');
+        Route::post('/koordinator/store','KoordinatorController@store')->name('admin-koordinator-store');
+
 
     });
+
+
 });
 
 Auth::routes();

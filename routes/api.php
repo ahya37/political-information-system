@@ -262,3 +262,6 @@ Route::post('/admin/voucherhistoryadmin','Admin\RewardController@getListVoucherA
 
 Route::get('/user/member/dtmember/{userId}','MemberController@dtMemberByAdminInput');
 
+// KOORDINATOR
+Route::post('/admin/koordinator/store','Admin\KoordinatorController@store');
+
