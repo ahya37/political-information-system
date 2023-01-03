@@ -48,13 +48,20 @@ class CostController extends Controller
             }
 
         //
-        $village = Village::with(['district.regency'])->where('id', $request->village_id)->first();
+        
+        if($request->village_id == ''){
+            $address = '';
+        }else{
+            $village = Village::with(['district.regency'])->where('id', $request->village_id)->first();
+            $address = 'DS. '. $village->name. ', KEC. ' .$village->district->name. ', '. $village->district->regency->name;
+        }
+        
         CostLess::create([
             'date' => date('Y-m-d', strtotime($request->date)),
             'forcest_id' => $request->forecast_id,
             'forecast_desc_id' => $request->forecast_desc_id,
             'received_name' => $request->received_name,
-            'address' => 'DS. '. $village->name. ', KEC. ' .$village->district->name. ', '. $village->district->regency->name,
+            'address' => $address,
             'nominal' => $request->nominal,
             'file' => $fileImage,
         ]);

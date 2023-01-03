@@ -358,7 +358,10 @@
 @push('addon-script')
 {{-- <script src="{{asset('assets/select2/dist/js/select2.min.js')}}"></script> --}}
 <script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
-<script src="https://unpkg.com/vue-toasted"></script>
+<script src="{{ asset('assets/vendor/vuetoasted/vue-toasted.min.js') }}"></script>
+<!-- <script src="https://unpkg.com/vue-toasted"></script> -->
+
+<!-- Init the plugin -->
 <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
 <script src="https://fengyuanchen.github.io/cropperjs/js/cropper.js"></script> 

@@ -84,7 +84,7 @@
                                        <div class="row">
                                          <div class="col-sm-12">
                                             <label class>Alamat </label>
-                                               <select name="village_id" id="village" class="form-control select2" required>
+                                               <select name="village_id" id="village" class="form-control select2" >
                                                      <option value="">- pilih Desa -</option>
                                                 </select>
                                           </div>
