@@ -264,4 +264,5 @@ Route::get('/user/member/dtmember/{userId}','MemberController@dtMemberByAdminInp
 
 // KOORDINATOR
 Route::post('/admin/koordinator/store','Admin\KoordinatorController@store');
+Route::get('/admin/koordinator/pdf','Admin\KoordinatorController@reportPdf');
 
