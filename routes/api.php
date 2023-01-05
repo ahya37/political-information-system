@@ -263,6 +263,8 @@ Route::post('/admin/voucherhistoryadmin','Admin\RewardController@getListVoucherA
 Route::get('/user/member/dtmember/{userId}','MemberController@dtMemberByAdminInput');
 
 // KOORDINATOR
+Route::post('/admin/koordinator/upload','Admin\KoordinatorController@upload');
+Route::post('/admin/koordinator/uploadapi','Admin\KoordinatorController@uploadApi');
 Route::post('/admin/koordinator/store','Admin\KoordinatorController@store');
 Route::get('/admin/koordinator/pdf','Admin\KoordinatorController@reportPdfKoordinator');
 Route::get('/admin/koordinator/lampiran','Admin\KoordinatorController@reportAnggotaPerRt');

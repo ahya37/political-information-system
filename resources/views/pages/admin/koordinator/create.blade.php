@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-7 col-sm-12">
                         @include('layouts.message')
-                        <form action="{{ route('admin-koordinator-store') }}" id="register" method="POST"
+                        <form action="{{ route('admin-koordinator-upload') }}" id="register" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             <div class="card">

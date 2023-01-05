@@ -20,7 +20,7 @@ class KoordinatorController extends Controller
         return view('pages.admin.koordinator.index');
     }
 
-    public function store(Request $request){
+    public function upload(Request $request){
 
         DB::beginTransaction();
         try {
@@ -155,6 +155,57 @@ class KoordinatorController extends Controller
 
         return $data_rt;
 
+    }
+
+    public function store(Request $request){
+
+        DB::beginTransaction();
+        try {
+
+            DB::commit();
+
+            Koordinator::create([
+                'name' => $request->name,
+                'rt' => $request->rt,
+                'rw' => $request->rw,
+                'dapil_id' => $request->dapil_id,
+                'district_id' => $request->district_id,
+                'village_id' => $request->village_id,
+                'recomender_user_id' => $request->recomender_user_id,
+            ]);
+           
+            return response()->json([
+                'message' => 'Bershasil menyimpan'
+            ],200);
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+            return response()->json([
+                'message' => 'Gagal menyimpan'
+            ],401);
+        }
+    }
+
+    public function uploadApi(Request $request){
+
+        DB::beginTransaction();
+        try {
+
+            Excel::import(new KoordinatorImport, request()->file('file'));
+
+            DB::commit();
+           
+            return response()->json([
+                'message' => 'Bershasil upload'
+            ],200);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'message' => 'Gagal upload'
+            ],401);
+        }
     }
 
 }

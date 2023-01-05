@@ -343,7 +343,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // KOORDINATOR
         Route::get('/koordinator/create','KoordinatorController@create')->name('admin-koordinator-create');
-        Route::post('/koordinator/store','KoordinatorController@store')->name('admin-koordinator-store');
+        Route::post('/koordinator/upload','KoordinatorController@store')->name('admin-koordinator-upload');
 
 
     });
