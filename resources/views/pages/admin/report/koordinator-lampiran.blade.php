@@ -64,7 +64,7 @@
     
 <body>
     <header>
-        <h6>KOORDINATOR</h6> 
+        <h6>DATA ANGGOTA DULUR KANG ASEP AW</h6> 
         <h6 style="margin-top: -30">DESA {{$village->name}}</h6> 
         <h6 style="margin-top: -30">KECAMATAN {{$village->district}}</h6> 
     </header>
@@ -74,43 +74,30 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>RT / RW</th>
                         <th>Nama</th>
-                        <th>Jumlah Anggota</th>
-                        <th>Referal Tertinggi</th>
+                        <th>Alamat</th>
+                        <th>RT / RW</th>
+                        <th>Referal</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
-                        $no = 1;
+                        $no_anggota = 1;
+                        // dd($anggota);
                     @endphp
-                    @foreach ($koordinator as $item)
-                        <tr>
-                            <td>{{$no++}}</td>
-                            <td>{{$item['rt']}} / {{$item['rw']}}</td>
-                            <td>
-                                @foreach ($item['koordinator'] as $nama)
-                                <ul>
-                                        <li>
-                                            {{$nama->name}}
-                                        </li>
-                                    </ul>
-                                @endforeach
-                            </td>
-                            <td>{{$item['jumlah_anggota_rt']}}</td>
-                            <td>
-                                @foreach ($item['tim_referal'] as $referal)
-                                <ul>
-                                        <li>
-                                            {{$referal->referal}}
-                                            <br>
-                                            Jumlah Referal : {{$referal->jml_referal}}
-                                        </li>
-                                    </ul>
-                                @endforeach
-                            </td>
-                        </tr>
-                    @endforeach
+                  @foreach ($data['anggota'] as  $row)
+                   <tr>
+                    <td>{{$no_anggota++}}</td>
+                    <td>{{$row->name}}</td>
+                    <td>{{$row->address}}</td>
+                    <td>{{$row->rt}} / {{$row->rw}}</td>
+                    <td>{{$row->referal}}</td>
+                   </tr>
+                  @endforeach
+                  <tr>
+                    <td colspan="3"><strong>Jumlah</strong></td>
+                    <td colspan="2"><strong>{{$data['jumlah']}}</strong></td>
+                  </tr>
                 </tbody>
             </table>
         </section>

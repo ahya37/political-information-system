@@ -17,7 +17,6 @@ class KoordinatorController extends Controller
     }
 
     public function index(){
-
         return view('pages.admin.koordinator.index');
     }
 
@@ -39,10 +38,10 @@ class KoordinatorController extends Controller
         }
     }
 
-    public function reportPdf(){
+    public function reportPdfKoordinator(){
 
-        // $village_id = request('village_id');
-        $village_id = 3602011002;
+        $village_id = request('village_id');
+        // $village_id = 3602011002;
 
         $group_koordinator = DB::table('koordinator')
                             ->select('rt','rw','village_id')
@@ -51,7 +50,7 @@ class KoordinatorController extends Controller
                             ->groupBy('rt','rw','village_id')
                             ->get();
 
-        $result = [];
+        $koordinator = [];
         foreach ($group_koordinator as $value) {
             $tim_referal = DB::table('users as a')
                             ->select('a.name as referal', DB::raw('count(b.id) as jml_referal'))
@@ -65,58 +64,96 @@ class KoordinatorController extends Controller
                             ->groupBy('a.name')
                             ->orderByRaw('count(b.id) DESC')
                             ->get();
-            $result[] = [
+            $koordinator[] = [
                 'rt' => $value->rt,
                 'rw' => $value->rw,
                 'koordinator' => DB::table('koordinator')->select('name')->where('village_id', $village_id)->where('rt', $value->rt)->where('rw', $value->rw)->orderBy('name','asc')->get(),
-                'jumlah_anggota_rt' => DB::table('users')->where('village_id', $value->village_id)->where('rt', $value->rt)->where('rw', $value->rw)->count(),
+                'jumlah_anggota_rt' => DB::table('users')->where('village_id', $value->village_id)->where('rt', $value->rt)->count(),
                 'tim_referal' =>  $tim_referal
             ];
         }
 
-        $anggota = DB::table('users as a')
-                    ->select('a.name','a.address','a.rt','a.rw','b.name as referal')
-                    ->join('users as b','a.user_id','=','b.id')
-                    ->where('a.village_id', $village_id)
-                    ->orderBy('rt','asc')
-                    ->orderBy('rw','asc')
-                    ->get();
 
-        // $total_anggota_desa = collect($result)->sum(function($q){
-        //     return $q['jumlah_anggota_rt'];
-        // });
+        // return $result;
+        $village = DB::table('villages as a')
+                    ->join('districts as b','a.district_id','=','b.id')
+                    ->select('a.name','b.name as district')
+                    ->where('a.id', $village_id)
+                    ->first();
+
+        $pdf = PDF::LoadView('pages.admin.report.koordinator', compact('koordinator','village'))->setPaper('a4');
+        return $pdf->stream('KOORDINATOR DESA '.$village->name.'.pdf');
+
+        // return $data;
+
+    }
+
+    public function reportAnggotaPerRt(){
+
+        $village_id = request('village_id');
+        $rt = request('rt');
+        // $village_id = 3602011002;
 
         // tampilkan rt rw berdasarkan desa
-        $rt = DB::table('users')->select('rt','rw','village_id')->where('village_id', $village_id)->orderBy('rt','asc')->orderBy('rw','asc')->distinct()->get();
-        $result_anggota = [];
+        // $data_rt = DB::table('users')->select('rt','rw','village_id')->where('village_id', $village_id)->orderBy('rt','asc')->orderBy('rw','asc')->distinct()->get();
+        $anggota = [];
+
         // looping 
             // get data anggota per rt dan rw, dan jumlahkan
-        foreach ($rt as $value) {
-            $list_anggota = DB::table('users as a')
+        // foreach ($data_rt as $value) {
+        //     $list_anggota = DB::table('users as a')
+        //                     ->select('a.rt','a.rw','a.name','a.address','b.name as referal')
+        //                     ->join('users as b','a.user_id','=','b.id')
+        //                     ->where('a.village_id', $village_id)
+        //                     ->where('a.rt', $rt)
+        //                     // ->where('a.rw', $value->rw)
+        //                     ->orderBy('a.rt','asc')
+        //                     ->orderBy('a.rw','asc')
+        //                     ->get();
+
+        //     $anggota[] = [
+        //         'list_anggota' => $list_anggota,
+        //         'jml_per_rt' => count($list_anggota)
+        //     ];
+        // }
+
+        // return $anggota;
+
+        $anggota =  DB::table('users as a')
                             ->select('a.rt','a.rw','a.name','a.address','b.name as referal')
                             ->join('users as b','a.user_id','=','b.id')
-                            ->where('a.village_id', $value->village_id)
-                            ->where('a.rt', $value->rt)
-                            ->where('a.rw', $value->rw)
+                            ->where('a.village_id', $village_id)
+                            ->where('a.rt', $rt)
                             ->orderBy('a.rt','asc')
                             ->orderBy('a.rw','asc')
                             ->get();
 
-            $result_anggota[] = [
-                'list_anggota' => $list_anggota,
-                'jml_per_rt' => count($list_anggota)
-            ];
-        }
+        // return $anggota;
 
         $data = [
-            'koordinator' => $result,
-            'anggota' => $result_anggota
+            'anggota' => $anggota,
+            'jumlah' => count($anggota)
         ];
 
-        $pdf = PDF::LoadView('pages.admin.report.koordinator', compact('data'))->setPaper('a4');
-        return $pdf->stream('desa.pdf');
+        $village = DB::table('villages as a')
+                    ->join('districts as b','a.district_id','=','b.id')
+                    ->select('a.name','b.name as district')
+                    ->where('a.id', $village_id)
+                    ->first();
+
+        $pdf = PDF::LoadView('pages.admin.report.koordinator-lampiran', compact('data','village'))->setPaper('a4');
+        return $pdf->stream('LAMPIRAN ANGGOTA DESA '.$village->name.'.pdf');
 
         // return $data;
+
+    }
+
+    public function lisRTVillage(){
+
+        $village_id = request('village_id');
+        $data_rt = DB::table('users')->select('rt','rw')->where('village_id', $village_id)->orderBy('rt','asc')->orderBy('rw','asc')->distinct()->get();
+
+        return $data_rt;
 
     }
 

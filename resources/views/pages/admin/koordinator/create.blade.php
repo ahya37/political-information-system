@@ -47,6 +47,33 @@
                     </div>
                 </div>
             </div>
+
+            {{-- <div class="row mt-4">
+                <div class="col-12">
+                    @include('layouts.message')
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="members"></div>
+                            <div class="table-responsive">
+                                <table id="data" class="table table-sm table-striped" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">NO</th>
+                                            <th scope="col">RT / RW</th>
+                                            <th scope="col">NAMA</th>
+                                            <th scope="col">JUMLAH ANGGOTA</th>
+                                            <th scope="col">REFERAL TERTINGGI</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> --}}
         </div>
     </div>
 @endsection
