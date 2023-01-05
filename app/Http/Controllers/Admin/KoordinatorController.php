@@ -44,30 +44,30 @@ class KoordinatorController extends Controller
         // $village_id = 3602011002;
 
         $group_koordinator = DB::table('koordinator')
-                            ->select('rt','rw','village_id')
+                            ->select('rt','village_id')
                             ->where('village_id', $village_id)
                             ->orderBy('rt','asc')
-                            ->groupBy('rt','rw','village_id')
+                            ->groupBy('rt','village_id')
                             ->get();
 
         $koordinator = [];
         foreach ($group_koordinator as $value) {
             $tim_referal = DB::table('users as a')
-                            ->select('a.name as referal', DB::raw('count(b.id) as jml_referal'))
+                            ->select('a.name as referal','a.rt','a.address', DB::raw('count(b.id) as jml_referal'))
                             ->join('users as b','a.id','=','b.user_id')
                             ->where('b.rt', $value->rt)
-                            ->where('b.rw', $value->rw)
+                            // ->where('b.rw', $value->rw)
                             ->where('b.village_id', $value->village_id)
                             ->where('a.rt', $value->rt)
-                            ->where('a.rw', $value->rw)
+                            // ->where('a.rw', $value->rw)
                             ->where('a.village_id', $value->village_id)
-                            ->groupBy('a.name')
+                            ->groupBy('a.name','a.rt','a.address')
                             ->orderByRaw('count(b.id) DESC')
+                            ->distinct()
                             ->get();
             $koordinator[] = [
                 'rt' => $value->rt,
-                'rw' => $value->rw,
-                'koordinator' => DB::table('koordinator')->select('name')->where('village_id', $village_id)->where('rt', $value->rt)->where('rw', $value->rw)->orderBy('name','asc')->get(),
+                'koordinator' => DB::table('koordinator')->select('name')->where('village_id', $village_id)->where('rt', $value->rt)->orderBy('name','asc')->distinct()->get(),
                 'jumlah_anggota_rt' => DB::table('users')->where('village_id', $value->village_id)->where('rt', $value->rt)->count(),
                 'tim_referal' =>  $tim_referal
             ];
@@ -80,6 +80,9 @@ class KoordinatorController extends Controller
                     ->select('a.name','b.name as district')
                     ->where('a.id', $village_id)
                     ->first();
+
+        
+        // return $koordinator;
 
         $pdf = PDF::LoadView('pages.admin.report.koordinator', compact('koordinator','village'))->setPaper('a4');
         return $pdf->stream('KOORDINATOR DESA '.$village->name.'.pdf');
@@ -126,6 +129,7 @@ class KoordinatorController extends Controller
                             ->where('a.rt', $rt)
                             ->orderBy('a.rt','asc')
                             ->orderBy('a.rw','asc')
+                            ->orderBy('a.name','asc')
                             ->get();
 
         // return $anggota;

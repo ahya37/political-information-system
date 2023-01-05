@@ -64,7 +64,7 @@
     
 <body>
     <header>
-        <h6>KOORDINATOR</h6> 
+        <h6>TIM KOORDINATOR</h6> 
         <h6 style="margin-top: -30">DESA {{$village->name}}</h6> 
         <h6 style="margin-top: -30">KECAMATAN {{$village->district}}</h6> 
     </header>
@@ -73,21 +73,16 @@
             <table cellspacing='0'>
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>RT / RW</th>
-                        <th>Nama</th>
+                        <th>RT</th>
+                        <th>Nama Koordinator</th>
                         <th>Jumlah Anggota</th>
                         <th>Referal Tertinggi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @php
-                        $no = 1;
-                    @endphp
                     @foreach ($koordinator as $item)
                         <tr>
-                            <td>{{$no++}}</td>
-                            <td>{{$item['rt']}} / {{$item['rw']}}</td>
+                            <td>{{$item['rt']}}</td>
                             <td>
                                 @foreach ($item['koordinator'] as $nama)
                                 <ul>
@@ -97,7 +92,7 @@
                                     </ul>
                                 @endforeach
                             </td>
-                            <td>{{$item['jumlah_anggota_rt']}}</td>
+                            <td align="center">{{$item['jumlah_anggota_rt']}}</td>
                             <td>
                                 @foreach ($item['tim_referal'] as $referal)
                                 <ul>
@@ -105,6 +100,8 @@
                                             {{$referal->referal}}
                                             <br>
                                             Jumlah Referal : {{$referal->jml_referal}}
+                                            <br>
+                                            (RT {{$referal->rt}}, {{$referal->address}})
                                         </li>
                                     </ul>
                                 @endforeach
