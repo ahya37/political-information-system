@@ -121,7 +121,7 @@ class KoordinatorController extends Controller
         // return $tim_referal_in_village;
 
         $pdf = PDF::LoadView('pages.admin.report.koordinator', compact('koordinator','village','list_rt','total_jumlah_anggota','tim_referal_in_village','gF'))->setPaper('a4');
-        return $pdf->stream('KOORDINATOR DESA '.$village->name.'.pdf');
+        return $pdf->download('KOORDINATOR DESA '.$village->name.'.pdf');
 
         // return $data;
 
@@ -158,7 +158,7 @@ class KoordinatorController extends Controller
                     ->first();
 
         $pdf = PDF::LoadView('pages.admin.report.koordinator-lampiran', compact('data','village'))->setPaper('a4');
-        return $pdf->stream('LAMPIRAN ANGGOTA DESA '.$village->name.'.pdf');
+        return $pdf->download('RT '.$rt.'.LAMPIRAN ANGGOTA DESA '.$village->name.'.pdf');
 
         // return $data;
 
