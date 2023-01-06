@@ -65,7 +65,7 @@
 <body>
     <header>
         <h6>JARINGAN DULUR KANG ASEP AWALUDIN</h6> 
-        <h6 style="margin-top: -30">DATA ANGGOTA DULUR KANG ASEP AW</h6> 
+        <h6 style="margin-top: -30">DATA ANGGOTA</h6> 
         <h6 style="margin-top: -30">DESA {{$village->name}}</h6> 
         <h6 style="margin-top: -30">KECAMATAN {{$village->district}}</h6> 
     </header>
