@@ -64,11 +64,12 @@
     
 <body>
     <header>
-        <h6>DATA ANGGOTA DULUR KANG ASEP AW</h6> 
+        <h6>JARINGAN DULUR KANG ASEP AWALUDIN</h6> 
+        <h6 style="margin-top: -30">DATA ANGGOTA DULUR KANG ASEP AW</h6> 
         <h6 style="margin-top: -30">DESA {{$village->name}}</h6> 
         <h6 style="margin-top: -30">KECAMATAN {{$village->district}}</h6> 
     </header>
-    <hr>
+    <hr style="margin-top: 15">
         <section align="justify">
             <table cellspacing='0'>
                 <thead>
@@ -83,7 +84,6 @@
                 <tbody>
                     @php
                         $no_anggota = 1;
-                        // dd($anggota);
                     @endphp
                   @foreach ($data['anggota'] as  $row)
                    <tr>

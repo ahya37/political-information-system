@@ -64,11 +64,12 @@
     
 <body>
     <header>
-        <h6>TIM KOORDINATOR</h6> 
+        <h6>JARINGAN DULUR KANG ASEP AWALUDIN</h6> 
+        <h6 style="margin-top: -30">TIM KOORDINATOR</h6> 
         <h6 style="margin-top: -30">DESA {{$village->name}}</h6> 
         <h6 style="margin-top: -30">KECAMATAN {{$village->district}}</h6> 
     </header>
-    <hr>
+    <hr style="margin-top: 15">
         <section align="justify">
             <table cellspacing='0'>
                 <thead>
@@ -106,6 +107,64 @@
                                     </ul>
                                 @endforeach
                             </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h6 align="center">REKAPAN JUMLAH ANGGOTA PER RT DESA {{$village->name}}</h6> 
+        </section>
+
+        <section align="justify">
+            <table cellspacing='0'>
+                <thead>
+                    <tr>
+                        <th>RT</th>
+                        <th>Jumlah Anggota</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($list_rt as $item)
+                        <tr>
+                            <td align="center">{{$item['rt']}}</td>
+                            <td align="center">{{$item['jumlah']}}</td>
+                        </tr>
+                    @endforeach
+                    <tr>
+                        <td  align="center"><strong>Total</strong></td>
+                        <td  align="center"><strong>{{$total_jumlah_anggota}}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h6 align="center">REFERAL TERTINGGI DI DESA {{$village->name}}</h6> 
+        </section>
+
+        @php
+            $no_tim = 1;
+        @endphp
+
+        <section align="justify">
+            <table cellspacing='0'>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Nama</th>
+                        <th>Alamat</th>
+                        <th>Jumlah Anggota</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($tim_referal_in_village as $item)
+                        <tr>
+                            <td align="center">{{$no_tim++}}</td>
+                            <td>{{$item->name}}</td>
+                            <td>{{$item->address}}, RT {{$item->rt}} / RW {{$item->rw}}</td>
+                            <td align="center">{{ $gF->decimalFormat($item->jml_referal)}}</td>
                         </tr>
                     @endforeach
                 </tbody>

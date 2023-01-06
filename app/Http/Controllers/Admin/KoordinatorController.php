@@ -9,6 +9,7 @@ use App\Imports\KoordinatorImport;
 use DB;
 use App\Koordinator;
 use PDF;
+use App\Providers\GlobalProvider;
 
 class KoordinatorController extends Controller
 {
@@ -39,6 +40,8 @@ class KoordinatorController extends Controller
     }
 
     public function reportPdfKoordinator(){
+
+        $gF = new GlobalProvider();
 
         $village_id = request('village_id');
         // $village_id = 3602011002;
@@ -81,10 +84,43 @@ class KoordinatorController extends Controller
                     ->where('a.id', $village_id)
                     ->first();
 
-        
-        // return $koordinator;
+        // JUMLAH ANGGOTA TIAP DESA DI PER DESA
+       $all_rt =  DB::table('users')
+                            ->select('rt')
+                            ->where('village_id', $village_id)
+                            ->orderBy('rt','asc')
+                            ->orderBy('rw','asc')
+                            ->distinct()
+                            ->get();
 
-        $pdf = PDF::LoadView('pages.admin.report.koordinator', compact('koordinator','village'))->setPaper('a4');
+        $list_rt = [];
+        foreach ($all_rt as $value) {
+            $list_rt[] = [
+                'rt' => $value->rt,
+                'jumlah' => DB::table('users')->where('village_id', $village_id)->where('rt', $value->rt)->count(),
+            ];
+        }
+
+        $total_jumlah_anggota = collect($list_rt)->sum(function($q){
+            return $q['jumlah'];
+        });
+
+        $total_jumlah_anggota = $gF->decimalFormat($total_jumlah_anggota);
+
+        // TIM REFERAL BERDASARKAN DESA 
+        $tim_referal_in_village = DB::table('users as a')
+                                ->join('users as b','a.id','=','b.user_id')
+                                ->select('a.name','a.address','a.rt','a.rw', DB::raw('count(b.id) as jml_referal'))
+                                ->where('a.village_id', $village_id)
+                                ->where('b.village_id', $village_id)
+                                ->groupBy('a.name','a.address','a.rt','a.rw')
+                                ->orderByRaw('count(b.id) DESC')
+                                ->get();
+        
+
+        // return $tim_referal_in_village;
+
+        $pdf = PDF::LoadView('pages.admin.report.koordinator', compact('koordinator','village','list_rt','total_jumlah_anggota','tim_referal_in_village','gF'))->setPaper('a4');
         return $pdf->stream('KOORDINATOR DESA '.$village->name.'.pdf');
 
         // return $data;
@@ -95,32 +131,8 @@ class KoordinatorController extends Controller
 
         $village_id = request('village_id');
         $rt = request('rt');
-        // $village_id = 3602011002;
-
-        // tampilkan rt rw berdasarkan desa
-        // $data_rt = DB::table('users')->select('rt','rw','village_id')->where('village_id', $village_id)->orderBy('rt','asc')->orderBy('rw','asc')->distinct()->get();
+        
         $anggota = [];
-
-        // looping 
-            // get data anggota per rt dan rw, dan jumlahkan
-        // foreach ($data_rt as $value) {
-        //     $list_anggota = DB::table('users as a')
-        //                     ->select('a.rt','a.rw','a.name','a.address','b.name as referal')
-        //                     ->join('users as b','a.user_id','=','b.id')
-        //                     ->where('a.village_id', $village_id)
-        //                     ->where('a.rt', $rt)
-        //                     // ->where('a.rw', $value->rw)
-        //                     ->orderBy('a.rt','asc')
-        //                     ->orderBy('a.rw','asc')
-        //                     ->get();
-
-        //     $anggota[] = [
-        //         'list_anggota' => $list_anggota,
-        //         'jml_per_rt' => count($list_anggota)
-        //     ];
-        // }
-
-        // return $anggota;
 
         $anggota =  DB::table('users as a')
                             ->select('a.rt','a.rw','a.name','a.address','b.name as referal')
