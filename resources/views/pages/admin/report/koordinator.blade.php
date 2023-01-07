@@ -82,21 +82,25 @@
                 </thead>
                 <tbody>
                     @foreach ($koordinator as $item)
+                    @php
+                    $no_koor = 1;
+                @endphp
                         <tr>
                             <td>{{$item['rt']}}</td>
                             <td>
+                                {{-- <ol> --}}
                                 @foreach ($item['koordinator'] as $nama)
-                                <ul>
-                                        <li>
+                                        {{-- <li>
                                             {{$nama->name}}
-                                        </li>
-                                    </ul>
+                                        </li> --}}
+                                        <p>{{$no_koor++}} . {{$nama->name}}</p>
                                 @endforeach
+                                {{-- </ol> --}}
                             </td>
                             <td align="center">{{$item['jumlah_anggota_rt']}}</td>
                             <td>
                                 @foreach ($item['tim_referal'] as $referal)
-                                <ol>
+                                <ul>
                                         <li>
                                             {{$referal->referal}}
                                             <br>
@@ -104,7 +108,7 @@
                                             <br>
                                             (RT {{$referal->rt}}, {{$referal->address}})
                                         </li>
-                                    </ol>
+                                    </ul>
                                 @endforeach
                             </td>
                         </tr>
