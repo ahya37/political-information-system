@@ -96,7 +96,7 @@
                             <td align="center">{{$item['jumlah_anggota_rt']}}</td>
                             <td>
                                 @foreach ($item['tim_referal'] as $referal)
-                                <ul>
+                                <ol>
                                         <li>
                                             {{$referal->referal}}
                                             <br>
@@ -104,7 +104,7 @@
                                             <br>
                                             (RT {{$referal->rt}}, {{$referal->address}})
                                         </li>
-                                    </ul>
+                                    </ol>
                                 @endforeach
                             </td>
                         </tr>
