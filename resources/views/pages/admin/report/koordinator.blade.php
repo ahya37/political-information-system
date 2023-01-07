@@ -154,6 +154,8 @@
                     <tr>
                         <th>No.</th>
                         <th>Nama</th>
+                        <th>RT</th>
+                        <th>RW</th>
                         <th>Alamat</th>
                         <th>Jumlah Anggota</th>
                     </tr>
@@ -163,7 +165,9 @@
                         <tr>
                             <td align="center">{{$no_tim++}}</td>
                             <td>{{$item->name}}</td>
-                            <td>{{$item->address}}, RT {{$item->rt}} / RW {{$item->rw}}</td>
+                            <td align="center">{{$item->rt}}</td>
+                            <td align="center">{{$item->rw}}</td>
+                            <td>{{$item->address}}</td>
                             <td align="center">{{ $gF->decimalFormat($item->jml_referal)}}</td>
                         </tr>
                     @endforeach
