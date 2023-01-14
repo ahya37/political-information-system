@@ -124,4 +124,9 @@ class RegisterController extends Controller
         return User::select('name')->where('code', $code)->first();
     }
 
+    public function reveralNameByNik($nik)
+    {
+        return User::select('name')->where('nik', $nik)->first();
+    }
+
 }

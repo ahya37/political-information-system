@@ -10,6 +10,8 @@ use DB;
 use App\Koordinator;
 use PDF;
 use App\Providers\GlobalProvider;
+use App\User;
+use App\KorPusat;
 
 class KoordinatorController extends Controller
 {
@@ -46,32 +48,84 @@ class KoordinatorController extends Controller
         $village_id = request('village_id');
         // $village_id = 3602011002;
 
-        $group_koordinator = DB::table('koordinator')
-                            ->select('rt','village_id')
-                            ->where('village_id', $village_id)
-                            ->orderBy('rt','asc')
-                            ->groupBy('rt','village_id')
-                            ->get();
+        // $group_koordinator = DB::table('koordinator')
+        //                     ->select('rt','village_id')
+        //                     ->where('village_id', $village_id)
+        //                     ->orderBy('rt','asc')
+        //                     ->groupBy('rt','village_id')
+        //                     ->get();
+
+        // KEC. WANASALAM
+            // wanasalam = 24 , 
+            // sukatani  = 20, 
+            // cipedang  = 18
+            // muara     = 27
+
+            // bejod     = 26
+            // katapang  = 14
+            // CISARAP   = 22
+            // PARUNG SARI = 18
+            // CIPEUCANG  = 13
+            // PARUNG PANJANG = 13
+            // CILANGKAP = 15
+            // KARANG PAMINDANGAN = 12
+            // CIKEUSIK = 17
+
+        // KEC. CILOGRANG
+            // CIBARENO = 5
+            // CILOGRANG = 12
+
+        $group_koordinator2 = [
+            ['rt' => 1, 'village_id' => $village_id],
+            ['rt' => 2, 'village_id' => $village_id],
+            ['rt' => 3, 'village_id' => $village_id],
+            ['rt' => 4, 'village_id' => $village_id],
+            ['rt' => 5, 'village_id' => $village_id],
+            ['rt' => 6, 'village_id' => $village_id],
+            ['rt' => 7, 'village_id' => $village_id],
+            // ['rt' => 8, 'village_id' => $village_id],
+            // ['rt' => 9, 'village_id' => $village_id],
+            // ['rt' => 10, 'village_id' => $village_id],
+            // ['rt' => 11, 'village_id' => $village_id],
+            // ['rt' => 12, 'village_id' => $village_id],
+            // ['rt' => 13, 'village_id' => $village_id],
+            // ['rt' => 14, 'village_id' => $village_id],
+            // ['rt' => 15, 'village_id' => $village_id],
+            // ['rt' => 16, 'village_id' => $village_id],
+            // ['rt' => 17, 'village_id' => $village_id],
+            // ['rt' => 18, 'village_id' => $village_id],
+            // ['rt' => 19, 'village_id' => $village_id],
+            // ['rt' => 20, 'village_id' => $village_id],
+            // ['rt' => 21, 'village_id' => $village_id],
+            // ['rt' => 22, 'village_id' => $village_id],
+            // ['rt' => 23, 'village_id' => $village_id],
+            // ['rt' => 24, 'village_id' => $village_id],
+            // ['rt' => 25, 'village_id' => $village_id],
+            // ['rt' => 26, 'village_id' => $village_id],
+            // ['rt' => 27, 'village_id' => $village_id],
+        ];
+
+        // return $group_koordinator2;
 
         $koordinator = [];
-        foreach ($group_koordinator as $value) {
+        foreach ($group_koordinator2 as $value) {
             $tim_referal = DB::table('users as a')
                             ->select('a.name as referal','a.rt','a.address', DB::raw('count(b.id) as jml_referal'))
                             ->join('users as b','a.id','=','b.user_id')
-                            ->where('b.rt', $value->rt)
+                            ->where('b.rt', $value['rt'])
                             // ->where('b.rw', $value->rw)
-                            ->where('b.village_id', $value->village_id)
-                            ->where('a.rt', $value->rt)
+                            ->where('b.village_id', $value['village_id'])
+                            ->where('a.rt', $value['rt'])
                             // ->where('a.rw', $value->rw)
-                            ->where('a.village_id', $value->village_id)
+                            ->where('a.village_id', $value['village_id'])
                             ->groupBy('a.name','a.rt','a.address')
                             ->orderByRaw('count(b.id) DESC')
                             ->distinct()
                             ->get();
             $koordinator[] = [
-                'rt' => $value->rt,
-                'koordinator' => DB::table('koordinator')->select('name')->where('village_id', $village_id)->where('rt', $value->rt)->orderBy('name','asc')->distinct()->get(),
-                'jumlah_anggota_rt' => DB::table('users')->where('village_id', $value->village_id)->where('rt', $value->rt)->count(),
+                'rt' => $value['rt'],
+                'koordinator' => DB::table('koordinator')->select('name')->where('village_id', $village_id)->where('rt', $value['rt'])->orderBy('name','asc')->distinct()->get(),
+                'jumlah_anggota_rt' => DB::table('users')->where('village_id', $value['village_id'])->where('rt', $value['rt'])->count(),
                 'tim_referal' =>  $tim_referal
             ];
         }
@@ -85,19 +139,19 @@ class KoordinatorController extends Controller
                     ->first();
 
         // JUMLAH ANGGOTA TIAP DESA DI PER DESA
-       $all_rt =  DB::table('users')
-                            ->select('rt')
-                            ->where('village_id', $village_id)
-                            ->orderBy('rt','asc')
-                            ->orderBy('rw','asc')
-                            ->distinct()
-                            ->get();
+    //    $all_rt =  DB::table('users')
+    //                         ->select('rt')
+    //                         ->where('village_id', $village_id)
+    //                         ->orderBy('rt','asc')
+    //                         ->orderBy('rw','asc')
+    //                         ->distinct()
+    //                         ->get();
 
         $list_rt = [];
-        foreach ($all_rt as $value) {
+        foreach ($group_koordinator2 as $value) {
             $list_rt[] = [
-                'rt' => $value->rt,
-                'jumlah' => DB::table('users')->where('village_id', $village_id)->where('rt', $value->rt)->count(),
+                'rt' => $value['rt'],
+                'jumlah' => DB::table('users')->where('village_id', $village_id)->where('rt', $value['rt'])->count(),
             ];
         }
 
@@ -222,6 +276,154 @@ class KoordinatorController extends Controller
                 'message' => 'Gagal upload'
             ],401);
         }
+    }
+
+    public function absensi(){
+        
+        $village_id = request('village_id');
+
+        $rt = [
+            ['rt' => 1, 'village_id' => $village_id],
+            ['rt' => 2, 'village_id' => $village_id],
+            ['rt' => 3, 'village_id' => $village_id],
+            ['rt' => 4, 'village_id' => $village_id],
+            ['rt' => 5, 'village_id' => $village_id],
+            ['rt' => 6, 'village_id' => $village_id],
+            ['rt' => 7, 'village_id' => $village_id],
+            // ['rt' => 8, 'village_id' => $village_id],
+            // ['rt' => 9, 'village_id' => $village_id],
+            // ['rt' => 10, 'village_id' => $village_id],
+            // ['rt' => 11, 'village_id' => $village_id],
+            // ['rt' => 12, 'village_id' => $village_id],
+            // ['rt' => 13, 'village_id' => $village_id],
+            // ['rt' => 14, 'village_id' => $village_id],
+            // ['rt' => 15, 'village_id' => $village_id],
+            // ['rt' => 16, 'village_id' => $village_id],
+            // ['rt' => 17, 'village_id' => $village_id],
+            // ['rt' => 18, 'village_id' => $village_id],
+            // ['rt' => 19, 'village_id' => $village_id],
+            // ['rt' => 20, 'village_id' => $village_id],
+            // ['rt' => 21, 'village_id' => $village_id],
+            // ['rt' => 22, 'village_id' => $village_id],
+            // ['rt' => 23, 'village_id' => $village_id],
+            // ['rt' => 24, 'village_id' => $village_id],
+            // ['rt' => 25, 'village_id' => $village_id],
+            // ['rt' => 26, 'village_id' => $village_id],
+            // ['rt' => 27, 'village_id' => $village_id],
+        ];
+
+        // return $group_koordinator2;
+
+        
+
+        $absensi = [];
+        foreach ($rt as $value) {
+
+            $form_absensi = [
+                [
+                    'rt' => $value['rt'],
+                    'name' => '',
+                    'address' => '',
+                    'jml_referal' => ''
+                ],
+            ];
+
+            $form_absensi2 = [
+                [
+                    'rt' => $value['rt'],
+                    'name' => '',
+                    'address' => '',
+                    'jml_referal' => ''
+                ],
+            ];
+
+            $form_absensi3 = [
+                [
+                    'rt' => $value['rt'],
+                    'name' => '',
+                    'address' => '',
+                    'jml_referal' => ''
+                ],
+            ];
+
+
+            $tim_referal = DB::table('users as a')
+                            ->select('a.rt','a.name','a.address', DB::raw('count(b.id) as jml_referal'))
+                            ->join('users as b','a.id','=','b.user_id')
+                            ->where('b.rt', $value['rt'])
+                            // ->where('b.rw', $value->rw)
+                            ->where('b.village_id', $value['village_id'])
+                            ->where('a.rt', $value['rt'])
+                            // ->where('a.rw', $value->rw)
+                            ->where('a.village_id', $value['village_id'])
+                            ->groupBy('a.rt','a.name','a.address')
+                            ->orderByRaw('a.rt','asc')
+                            ->distinct()
+                            ->get();
+
+            $absensi[] = [
+                'rt' => $value['rt'],
+                'absensi' => count($tim_referal) === 0 ? array_merge(array($form_absensi2), array($form_absensi3)) :  array_merge(array($tim_referal), array($form_absensi)),
+                // 'jumlah_anggota_rt' => DB::table('users')->where('village_id', $value['village_id'])->where('rt', $value['rt'])->count(),
+            ];
+        }
+
+        $village = DB::table('villages as a')
+                    ->join('districts as b','a.district_id','=','b.id')
+                    ->select('a.name','b.name as district')
+                    ->where('a.id', $village_id)
+                    ->first();
+
+        return $absensi;
+        
+
+        $pdf = PDF::LoadView('pages.admin.report.absensi', compact('absensi','village'))->setPaper('a4');
+        return $pdf->stream('ABSENSI DESA '.$village->name.'.pdf');
+        
+
+    }
+
+    public function listKorPusat(){
+        return view('pages.admin.koordinator.index-kor-pusat');
+    }
+
+    public function createKorPusat(){
+        return view('pages.admin.koordinator.create-kor-pusat');
+    }
+    
+    public function saveKorPusat(Request $request){
+
+
+        $nik_ketua     = $request->nik_ketua;
+        $nik_sekre     = $request->nik_sekre;
+        $nik_bendahara = $request->nik_bendahara;
+
+        // cari user id berdasarkan nik nya
+        $user = new User();
+
+        $ketua      = $user->select('id','name')->where('nik', $nik_ketua)->first();
+        $sekre      = $user->select('id','name')->where('nik', $nik_sekre)->first();
+        $bendahara  = $user->select('id','name')->where('nik', $nik_bendahara)->first();
+
+        if ($ketua == null || $sekre == null || $bendahara == null) {
+
+            return redirect()->back()->with(['error' => 'NIK tidak ditemukan']);
+
+        }else{
+
+            KorPusat::create([
+                'ketua_uid' => $ketua->id,
+                'ketua_name' => $ketua->name,
+                'sekre_uid' => $sekre->id,
+                'sekre_name' => $sekre->name,
+                'benda_uid' => $bendahara->id,
+                'benda_name' => $bendahara->name
+            ]);
+    
+            return redirect()->route('admin-koordinator-pusat-index')->with(['success' => 'Data telah disimpan!']);
+
+        }
+
     }
 
 }

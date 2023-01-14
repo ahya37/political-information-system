@@ -86,7 +86,7 @@
                     $no_koor = 1;
                 @endphp
                         <tr>
-                            <td>{{$item['rt']}}</td>
+                            <td height="50px">{{$item['rt']}}</td>
                             <td>
                                 {{-- <ol> --}}
                                 @foreach ($item['koordinator'] as $nama)

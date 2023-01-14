@@ -123,6 +123,7 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 });
 
 
+
 Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
     Route::get('/auth','LoginController@loginForm')->name('admin-login');
     Route::post('/login','LoginController@login')->name('post-admin-login');
@@ -345,10 +346,13 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/koordinator/create','KoordinatorController@create')->name('admin-koordinator-create');
         Route::post('/koordinator/upload','KoordinatorController@store')->name('admin-koordinator-upload');
 
-
+        
+        Route::get('/koordinator/pusat','KoordinatorController@listKorPusat')->name('admin-koordinator-pusat-index');
+        Route::get('/koordinator/pusat/create','KoordinatorController@createKorPusat')->name('admin-koordinator-pusat-create');
+        Route::post('/koordinator/pusat/save','KoordinatorController@saveKorPusat')->name('admin-koordinator-pusat-save');
+          
     });
-
-
+    
 });
 
 Auth::routes();

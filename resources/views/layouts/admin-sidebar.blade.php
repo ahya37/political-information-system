@@ -140,7 +140,13 @@
                       href="{{ route('admin-koordinator-create') }}"
                       class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/koordinator/create')) ? 'active custom-active-color' : '' }}"
                     >
-                      Koordinator
+                      Tambah Koordinator
+                    </a>
+                   <a
+                      href="{{ route('admin-koordinator-pusat-index') }}"
+                      class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/koordinator/pusat/create')) ? 'active custom-active-color' : '' }}"
+                    >
+                      Koordinator Pusat
                     </a>
                 </li>
               </ul>

@@ -49,6 +49,7 @@ Route::get('nik/check', 'Auth\RegisterController@nik')->name('api-nik-check');
 Route::get('register/check', 'Auth\RegisterController@check')->name('api-register-check');
 Route::get('reveral/check', 'Auth\RegisterController@reveral')->name('api-reveral-check');
 Route::get('reveral/name/{code}', 'Auth\RegisterController@reveralName');
+Route::get('nik/name/{nik}', 'Auth\RegisterController@reveralNameByNik');
 
 Route::get('member/nation/{daterange}','API\DashboardController@memberReportPerMountNation');
 Route::get('member/province/{daterange}/{provinceID}','API\DashboardController@memberReportPerMountProvince');
@@ -269,4 +270,5 @@ Route::post('/admin/koordinator/store','Admin\KoordinatorController@store');
 Route::get('/admin/koordinator/pdf','Admin\KoordinatorController@reportPdfKoordinator');
 Route::get('/admin/koordinator/lampiran','Admin\KoordinatorController@reportAnggotaPerRt');
 Route::get('/admin/koordinator/listrt','Admin\KoordinatorController@lisRTVillage');
+Route::get('/admin/koordinator/absensi','Admin\KoordinatorController@absensi');
 

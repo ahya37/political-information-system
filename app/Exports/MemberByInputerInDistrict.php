@@ -41,6 +41,7 @@ class MemberByInputerInDistrict implements FromCollection,  WithHeadings, WithEv
             unset($val->photo);
             $data[] = [
                 'no' => $no++,
+                'nik' => $val->nik,
                 'name' => $val->name,
                 'address' => $val->address,
                 'rt' => $val->rt,
@@ -65,6 +66,7 @@ class MemberByInputerInDistrict implements FromCollection,  WithHeadings, WithEv
     {
         return [
             'NO',
+            'NIK',
             'NAMA',
             'ALAMAT',
             'RT',
