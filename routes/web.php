@@ -27,6 +27,8 @@ Route::post('/by_referal/downloadexcel/{user_id}/{district_id}','Admin\MemberCon
 Route::post('/by_referal/downloadpdf/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadPDF')->name('by-referal-downloadpdf');
 Route::post('/admin/dashboard/referalbymount','Admin\DashboardController@referalByMountAdmin');
 
+Route::post('/event/delete','EventController@delete');
+
 
 Route::get('/testgetfigure','TestController@testGretFigure');
 
@@ -66,6 +68,8 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/saved/{id}','UserController@savedNasdem');
 
         Route::get('/event','EventController@index')->name('member-event');
+        Route::get('/event/create','EventController@create')->name('member-event-create');
+        Route::post('/event/store','EventController@store')->name('member-event-store');
         Route::get('/event/absen/{event_detail_id}','EventController@storeAbsen')->name('member-event-absen');
         
         Route::get('/registered','UserController@memberRegister')->name('member-registered-user');
@@ -346,10 +350,14 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/koordinator/create','KoordinatorController@create')->name('admin-koordinator-create');
         Route::post('/koordinator/upload','KoordinatorController@store')->name('admin-koordinator-upload');
 
-        
+        #korpusat
         Route::get('/koordinator/pusat','KoordinatorController@listKorPusat')->name('admin-koordinator-pusat-index');
         Route::get('/koordinator/pusat/create','KoordinatorController@createKorPusat')->name('admin-koordinator-pusat-create');
         Route::post('/koordinator/pusat/save','KoordinatorController@saveKorPusat')->name('admin-koordinator-pusat-save');
+
+        #koradapil
+        Route::get('/koordinator/dapil/create/{id}','KoordinatorController@createKorDapil')->name('admin-koordinator-dapil-create');
+        Route::post('/koordinator/dapil/save','KoordinatorController@saveKorDapil')->name('admin-koordinator-dapil-save');
           
     });
     

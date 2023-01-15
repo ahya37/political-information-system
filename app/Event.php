@@ -39,12 +39,25 @@ class Event extends Model
         return $result;
     }
 
+    # fungsi lama
+    // public function getEventByMember($user_id)
+    // {
+    //     $sql = "SELECT  a.*, b.id as event_detail_id, c.created_at from events as a
+    //             join event_details as b on a.id = b.event_id
+    //             left join absen_events as c on b.id = c.event_detail_id
+    //             where a.cby = $user_id";
+
+    //     $result = DB::select($sql);
+    //     return $result;
+    // }
+
+
     public function getEventByMember($user_id)
     {
-        $sql = "SELECT  a.*, b.id as event_detail_id, c.created_at from events as a
-                join event_details as b on a.id = b.event_id
-                left join absen_events as c on b.id = c.event_detail_id
-                where b.user_id = $user_id";
+        $sql = "SELECT a.id, a.date, a.time, a.title, a.description, d.name as village, c.name as district, b.name as regency from events as a
+                left join regencies as b on a.regency_id = b.id
+                left join districts as c on a.district_id = c.id 
+                left join villages as d on a.village_id = d.id where a.cby = $user_id and isdelete = 0 order by a.date desc";
 
         $result = DB::select($sql);
         return $result;

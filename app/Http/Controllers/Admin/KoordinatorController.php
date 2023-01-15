@@ -12,6 +12,8 @@ use PDF;
 use App\Providers\GlobalProvider;
 use App\User;
 use App\KorPusat;
+use App\KorDapil;
+use App\CekUidKoordinator;
 
 class KoordinatorController extends Controller
 {
@@ -20,6 +22,7 @@ class KoordinatorController extends Controller
     }
 
     public function index(){
+        
         return view('pages.admin.koordinator.index');
     }
 
@@ -384,7 +387,9 @@ class KoordinatorController extends Controller
     }
 
     public function listKorPusat(){
-        return view('pages.admin.koordinator.index-kor-pusat');
+
+        $koordinator = KorPusat::select('id','ketua_name','sekre_name','benda_name')->get();
+        return view('pages.admin.koordinator.index-kor-pusat', compact('koordinator'));
     }
 
     public function createKorPusat(){
@@ -393,36 +398,108 @@ class KoordinatorController extends Controller
     
     public function saveKorPusat(Request $request){
 
+        DB::beginTransaction();        
+        try {
+            #cek jika korpusat sudah ada, jangan tambah lagi
+            $korpus = KorPusat::count();
+            
+            if ($korpus > 0) {
+                
+                return redirect()->back()->with(['warning' => 'Koordinator Pusat sudah ada!']);
+    
+            }else{
+                
+                    $nik_ketua     = $request->nik_ketua;
+                    $nik_sekre     = $request->nik_sekre;
+                    $nik_bendahara = $request->nik_bendahara;
+            
+                    // cari user id berdasarkan nik nya
+                    $user = new User();
+            
+                    $ketua      = $user->select('id','name')->where('nik', $nik_ketua)->first();
+                    $sekre      = $user->select('id','name')->where('nik', $nik_sekre)->first();
+                    $bendahara  = $user->select('id','name')->where('nik', $nik_bendahara)->first();
+            
+                    if ($ketua == null || $sekre == null || $bendahara == null) {
+            
+                        return redirect()->back()->with(['error' => 'NIK tidak ditemukan']);
+            
+                    }else{
+            
+                        KorPusat::create([
+                            'ketua_uid' => $ketua->id,
+                            'ketua_name' => $ketua->name,
+                            'sekre_uid' => $sekre->id,
+                            'sekre_name' => $sekre->name,
+                            'benda_uid' => $bendahara->id,
+                            'benda_name' => $bendahara->name
+                        ]);
+    
+                        $this->saveCekUidKoordinator($ketua, $sekre, $bendahara);
+
+                        DB::commit();
+                        return redirect()->route('admin-koordinator-pusat-index')->with(['success' => 'Data telah disimpan!']);
+            
+                    }
+            }
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return 'Terjadi Kesalahan'. $e->getMessage();
+
+        }
+
+
+
+    }
+
+    public function createKorDapil($id){
+
+        return view('pages.admin.koordinator.index-kor-dapil', compact('id'));
+
+    }
+
+    public function saveKorDapil(Request $request){
+
+        $validated = $request->validate([
+            'korpus' => 'required',
+            'regency_id' => 'required',
+            'dapil_id'  =>'required',
+            'nik_ketua' => 'required',
+            'nik_sekre'  =>'required',
+            'nik_sekre'  =>'required',
+            'nik_bendahara'=> 'required',
+        ]);
 
         $nik_ketua     = $request->nik_ketua;
         $nik_sekre     = $request->nik_sekre;
         $nik_bendahara = $request->nik_bendahara;
-
+        
         // cari user id berdasarkan nik nya
         $user = new User();
-
+        
         $ketua      = $user->select('id','name')->where('nik', $nik_ketua)->first();
         $sekre      = $user->select('id','name')->where('nik', $nik_sekre)->first();
         $bendahara  = $user->select('id','name')->where('nik', $nik_bendahara)->first();
 
-        if ($ketua == null || $sekre == null || $bendahara == null) {
+        #cek apakah user id tersebut sudah ada di tb cek_uid_koordinator
+        $cekUidKor =  CekUidKoordinator::all();
 
-            return redirect()->back()->with(['error' => 'NIK tidak ditemukan']);
+        #jika ada beri notif, tidak boleh dua jabatan
+        #jika belum ada lanjut simpan
 
-        }else{
+    }
 
-            KorPusat::create([
-                'ketua_uid' => $ketua->id,
-                'ketua_name' => $ketua->name,
-                'sekre_uid' => $sekre->id,
-                'sekre_name' => $sekre->name,
-                'benda_uid' => $bendahara->id,
-                'benda_name' => $bendahara->name
-            ]);
-    
-            return redirect()->route('admin-koordinator-pusat-index')->with(['success' => 'Data telah disimpan!']);
+    public function saveCekUidKoordinator($ketua, $sekre,$bendahara){
 
-        }
+        $cekUidKoordinator = new CekUidKoordinator();
+        #lakukan simpan user_id sebanyak jumlah nik
+
+        $cekUidKoordinator->create(['user_id' => $ketua->id]);
+        $cekUidKoordinator->create(['user_id' => $sekre->id]);
+        $cekUidKoordinator->create(['user_id' => $bendahara->id]);
+
+        return true;
 
     }
 

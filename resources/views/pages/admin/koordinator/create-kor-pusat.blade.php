@@ -14,12 +14,6 @@
                 </p>
             </div>
 
-            <div class="row mt-4">
-                <div class="col-12 mt-4">
-                   <button class="btn btn-sc-primary text-white mt-4" data-toggle="modal" data-target="#exampleModal" type="button">+ Buat Koordinator</button>
-                </div>
-            </div>
-
              <div class="row mt-4">
                 <div class="col-12">
                     @include('layouts.message')
@@ -67,7 +61,7 @@
                               />
                               </div>
                               <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                <a href="{{route('admin-koordinator-pusat-index')}}" class="btn btn-secondary">Batal</a>
                                 <button type="submit" class="btn btn-primary">Simpan</button>
                               </div>
                           </form>
