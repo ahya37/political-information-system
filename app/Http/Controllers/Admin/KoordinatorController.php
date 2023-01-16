@@ -461,32 +461,73 @@ class KoordinatorController extends Controller
 
     public function saveKorDapil(Request $request){
 
-        $validated = $request->validate([
-            'korpus' => 'required',
-            'regency_id' => 'required',
-            'dapil_id'  =>'required',
-            'nik_ketua' => 'required',
-            'nik_sekre'  =>'required',
-            'nik_sekre'  =>'required',
-            'nik_bendahara'=> 'required',
-        ]);
-
-        $nik_ketua     = $request->nik_ketua;
-        $nik_sekre     = $request->nik_sekre;
-        $nik_bendahara = $request->nik_bendahara;
+        try {
+            $validated = $request->validate([
+                'korpus' => 'required',
+                'regency_id' => 'required',
+                'dapil_id'  =>'required',
+                'nik_ketua' => 'required',
+                'nik_sekre'  =>'required',
+                'nik_sekre'  =>'required',
+                'nik_bendahara'=> 'required',
+            ]);
+    
+            $cek_data   = $this->cekDataByNik($request);
+    
+            if ($cek_data['ketua'] == null || $cek_data['sekre'] == null || $cek_data['bendahara'] == null) {
+    
+                return redirect()->back()->with(['error' => 'NIK tidak ditemukan']);
+    
+            }else{
+    
+                #cek apakah user id tersebut sudah ada di tb cek_uid_koordinator, dengan cara di hitung
+                $cek_count = $this->cekUidKoordinator($cek_data);
+                
+                #cek nik apakah sudah terdaftar jadi koordinator
+                if ($cek_count['ketua'] > 0 ) {
+                    
+                    return redirect()->back()->with(['error' => 'NIK ketua sudah terdaftrar!']);
         
-        // cari user id berdasarkan nik nya
-        $user = new User();
+                }elseif($cek_count['sekre'] > 0 ){
         
-        $ketua      = $user->select('id','name')->where('nik', $nik_ketua)->first();
-        $sekre      = $user->select('id','name')->where('nik', $nik_sekre)->first();
-        $bendahara  = $user->select('id','name')->where('nik', $nik_bendahara)->first();
+                    return redirect()->back()->with(['error' => 'NIK sekretaris sudah terdaftrar!']);
+                
+                }elseif($cek_count['bendahara'] > 0 ){
+        
+                    return redirect()->back()->with(['error' => 'NIK bendahara sudah terdaftrar!']);
+        
+                }else{
+        
+                    #jika belum ada lanjut simpan
+                    KorDapil::create([
+                        'korpus_id' => $request->korpus,
+                        'ketua_uid' => $cek_data['ketua']->id,
+                        'ketua_name' => $cek_data['ketua']->name,
+                        'sekre_uid' => $cek_data['sekre']->id,
+                        'sekre_name' => $cek_data['sekre']->name,
+                        'benda_uid' => $cek_data['bendahara']->id,
+                        'benda_name' => $cek_data['bendahara']->name,
+                        'dapil_id' => $request->dapil_id,
+                        'dapil_regency_id' => $request->regency_id
+                    ]);
 
-        #cek apakah user id tersebut sudah ada di tb cek_uid_koordinator
-        $cekUidKor =  CekUidKoordinator::all();
+                    #simpan uid di tb cek_uid_koodinator
+                    $this->saveCekUidKoordinator($cek_data['ketua'], $cek_data['sekre'], $cek_data['bendahara']);
 
-        #jika ada beri notif, tidak boleh dua jabatan
-        #jika belum ada lanjut simpan
+                    DB::commit();
+                    return redirect()->back()->with(['success' => 'Data telah disimpan!']);
+        
+                }
+        
+            }
+
+        } catch (\Exception $th) {
+            DB::rollback();
+            return 'Terjadi Kesalahan'. $e->getMessage();
+        }
+
+        
+
 
     }
 
@@ -501,6 +542,41 @@ class KoordinatorController extends Controller
 
         return true;
 
+    }
+
+    public function cekDataByNik($request){
+
+        $user = new User();
+        
+        $ketua      = $user->select('id','name')->where('nik', $request->nik_ketua)->first();
+        $sekre      = $user->select('id','name')->where('nik', $request->nik_sekre)->first();
+        $bendahara  = $user->select('id','name')->where('nik', $request->nik_bendahara)->first();
+
+        $data = [
+            'ketua' => $ketua,
+            'sekre' => $sekre,
+            'bendahara' => $bendahara,
+        ];
+
+        return $data;
+        
+    }
+
+    public function cekUidKoordinator($cek_data){
+
+        $cekUidKor =  new CekUidKoordinator();
+    
+        $cek_ketua     = $cekUidKor->where('user_id', $cek_data['ketua']->id)->count();
+        $cek_sekre     = $cekUidKor->where('user_id', $cek_data['sekre']->id)->count();
+        $cek_bendahara = $cekUidKor->where('user_id', $cek_data['bendahara']->id)->count();
+
+        $data = [
+            'ketua' => $cek_ketua,
+            'sekre' => $cek_sekre,
+            'bendahara' => $cek_bendahara,
+        ];
+
+        return $data;
     }
 
 }

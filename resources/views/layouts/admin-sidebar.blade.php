@@ -136,7 +136,7 @@
                     >
                       Tambah Dapil
                     </a>
-                   {{-- <a
+                   <a
                       href="{{ route('admin-koordinator-create') }}"
                       class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/koordinator/create')) ? 'active custom-active-color' : '' }}"
                     >
@@ -148,7 +148,7 @@
                     >
                       Koordinator
                     </a>
-                </li> --}}
+                </li>
               </ul>
             </div>
             <a
