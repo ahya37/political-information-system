@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use App\Helpers\ResponseFormatter;
 use DB;
+use App\EventGallery;
 
 class EventController extends Controller
 {
@@ -31,20 +32,11 @@ class EventController extends Controller
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="'.route('admin-event-addmember-detail', $item->id).'">
-                                                Detail
-                                            </a>
                                             <a class="dropdown-item" href="'.route('admin-event-edit', $item->id).'">
                                                 Edit
                                             </a>
-                                            <a class="dropdown-item" href="'.route('admin-event-gallery', $item->id).'">
+                                            <a class="dropdown-item" href="'.route('member-event-gallery', $item->id).'">
                                                 Galeri
-                                            </a>
-                                            <a class="dropdown-item" href="'.route('admin-event-cost-create', $item->id).'">
-                                                Tambah Biaya
-                                            </a>
-                                            <a class="dropdown-item" href="'.route('admin-event-addmember', $item->id).'">
-                                                Tambah Peserta
                                             </a>
                                         </div>
                                     </div>
@@ -148,6 +140,42 @@ class EventController extends Controller
         ]);
 
         return redirect()->back()->with(['success' => 'Absen berhasil']);
+    }
+
+    public  function gallery($id){
+        
+        $event = Event::select('id','title')->where('id', $id)->first();
+        return view('pages.gallery.index', compact('event'));
+
+    }
+
+    public function storeGallery(Request $request, $id)
+    {
+        
+        $this->validate($request, [
+               'file' => 'required|mimes:png,jpg,jpeg',
+           ]);
+
+        $file = $request->file('file')->store('assets/user/galleries','public');
+
+        EventGallery::create([
+            'event_id' => $id,
+            'title' => $request->title,
+            'descr' => $request->desc,
+            'file'  => $file,
+            'file_type'  => 'image',
+            'cby'   => Auth::user()->id
+        ]);
+
+        return redirect()->back()->with(['success' => 'Galeri telah ditambahkan']);
+
+    }
+
+    public function detailEventGallery($id)
+    {
+        
+        $event_gallery = EventGallery::where('id', $id)->first();
+        return view('pages.gallery.detail', compact('event_gallery'));
     }
 
 }
