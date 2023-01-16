@@ -32,7 +32,7 @@ class EventController extends Controller
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="'.route('admin-event-edit', $item->id).'">
+                                            <a class="dropdown-item" href="'.route('member-event-edit', $item->id).'">
                                                 Edit
                                             </a>
                                             <a class="dropdown-item" href="'.route('member-event-gallery', $item->id).'">
@@ -178,9 +178,32 @@ class EventController extends Controller
         return view('pages.gallery.detail', compact('event_gallery'));
     }
 
-    public function edit(){
+    public function edit($id)
+    {
+        $event = Event::where('id', $id)->first();
+        return view('pages.event.edit', compact('event'));
+    }
 
-        return 'edit';
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'title' => 'required',
+            'desc' => 'required',
+        ]);
+
+        $event = Event::where('id', $id)->first();
+        $event->update([
+            'title' => $request->title,
+            'description' => $request->desc,
+            'time' => date('H:i', strtotime($request->time)),
+            'date' => date('Y-m-d', strtotime($request->date)),
+            'regency_id' => $request->regency_id == null ? $event->regency_id : $request->regency_id,
+            'dapil_id' => $request->dapil_id == null ? $event->dapil_id : $request->dapil_id,
+            'district_id' => $request->district_id == null ? $event->district_id : $request->district_id,
+            'village_id' => $request->village_id == null ? $event->village_id : $request->village_id
+        ]);
+
+        return redirect()->route('member-event')->with(['success' => 'Event telah diubah']);
     }
 
 }

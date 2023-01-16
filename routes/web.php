@@ -76,6 +76,8 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/event/gallery/{id}','EventController@gallery')->name('member-event-gallery');
         Route::post('/event/gallery/store/{id}','EventController@storeGallery')->name('member-event-gallery-store');
         Route::get('/event/gallery/detail/{id}','EventController@detailEventGallery');
+        Route::get('/event/edit/{id}','EventController@edit')->name('member-event-edit');
+        Route::post('/event/update/{id}','EventController@update')->name('member-event-update');
 
         
         Route::get('/registered','UserController@memberRegister')->name('member-registered-user');

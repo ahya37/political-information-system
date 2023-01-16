@@ -101,6 +101,7 @@ class EventController extends Controller
         $event = Event::where('id', $id)->first();
         return view('pages.admin.event.edit', compact('event'));
     }
+    
     public function delete($id)
     {
         $event = Event::where('id', $id)->first();
