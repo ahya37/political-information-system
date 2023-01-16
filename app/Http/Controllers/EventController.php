@@ -178,4 +178,9 @@ class EventController extends Controller
         return view('pages.gallery.detail', compact('event_gallery'));
     }
 
+    public function edit(){
+
+        return 'edit';
+    }
+
 }
