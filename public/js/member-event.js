@@ -288,3 +288,5 @@ function BeforeSend(idLoader) {
 function Complete(idLoader) {
     $("#" + idLoader + "").addClass("d-none");
 }
+
+//end
