@@ -526,9 +526,6 @@ class KoordinatorController extends Controller
             return 'Terjadi Kesalahan'. $e->getMessage();
         }
 
-        
-
-
     }
 
     public function saveCekUidKoordinator($ketua, $sekre,$bendahara){
