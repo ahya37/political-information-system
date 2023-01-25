@@ -16,12 +16,13 @@ class DatabaseSeeder extends Seeder
         // $this->call(JobSeeder::class);
         // $this->call(AdminSeeder::class);
         // $this->call(MenuSeeder::class);
-        $this->call(UserMenuSeeder::class);
+        // $this->call(UserMenuSeeder::class);
         // $this->call(AdminRegionalVillage::class);
         // $this->call(FigureSeeder::class);
         // $this->call(GroupFigureVillageSeeder::class);
         // $this->call(DapilSeeder::class);
         // $this->call(DapilAreaSeeder::class);
+        $this->call(OrgDiagramSeeder::class);
 
     }
 }

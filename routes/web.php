@@ -366,6 +366,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         #koradapil
         Route::get('/koordinator/dapil/create/{id}','KoordinatorController@createKorDapil')->name('admin-koordinator-dapil-create');
         Route::post('/koordinator/dapil/save','KoordinatorController@saveKorDapil')->name('admin-koordinator-dapil-save');
+
+        #struktur ogrganisasi
+        Route::get('/struktur','OrgDiagramController@index')->name('admin-struktur-organisasi');
           
     });
     

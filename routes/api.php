@@ -272,3 +272,5 @@ Route::get('/admin/koordinator/lampiran','Admin\KoordinatorController@reportAngg
 Route::get('/admin/koordinator/listrt','Admin\KoordinatorController@lisRTVillage');
 Route::get('/admin/koordinator/absensi','Admin\KoordinatorController@absensi');
 
+// ORG DIAGRAM
+Route::get('/ordiagram','Admin\OrgDiagramController@show');

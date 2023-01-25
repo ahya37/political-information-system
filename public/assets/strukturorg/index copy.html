@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>Struktur Organisasi Sekolah</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="js/jquery/ui-lightness/jquery-ui-1.10.2.custom.css"
+    />
+    <script type="text/javascript" src="js/jquery/jquery-1.9.1.js"></script>
+    <script
+      type="text/javascript"
+      src="js/jquery/jquery-ui-1.10.2.custom.min.js"
+    ></script>
+
+    <script type="text/javascript" src="js/primitives.min.js"></script>
+    <link
+      href="css/primitives.latest.css"
+      media="screen"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!-- <a class="navbar-brand" href="#">Fixed top</a> -->
+      <div class="row mb-4">
+        <nav class="navbar fixed-top navbar-light bg-light">
+          <div class="col-md-3">
+            <div class="form-group">
+              <select class="form-control">
+                <option value="">Kabupaten</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <select class="form-control">
+                <option value="">Dapil</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <select class="form-control">
+                <option value="">Kecamatan</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <select class="form-control">
+                <option value="">Desa</option>
+              </select>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <div class="row mt-4">
+        <div class="col-md-12 mt-4">
+          <div id="korpus" style="width: 3000px; height: 1000px" class="mt-4"></div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      //<![CDATA[
+      const data = [
+        {
+          
+        }
+      ]
+      $(window).load(function () {
+        const avatar =
+          "data:image/png;base64,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";
+        let options = new primitives.orgdiagram.Config();
+
+        let items = [
+        new primitives.orgdiagram.ItemConfig({
+            id: 0,
+            parent: null,
+            title: "Pembina",
+            description: "Nama Pembina",
+            image: avatar,
+          }),
+        new primitives.orgdiagram.ItemConfig({
+            id: 1,
+            parent: null,
+            title: "Pensihat",
+            description: "Nama Pembina",
+            image: avatar,
+          }),
+        new primitives.orgdiagram.ItemConfig({
+            id: 2,
+            parent: null,
+            title: "Anggota",
+            description: "",
+            label: null,
+            labelOrientation: 3,
+            labelPlacement: 0,
+            labelSize: null,
+            parent: null,
+            showCallout: 0,
+            showLabel: 0,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 3,
+            parent: 2,
+            title: "Anggota",
+            description: "Nama Anggota",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 4,
+            parent: 2,
+            title: "Anggota",
+            description: "Nama Anggota",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 5,
+            parent: 2,
+            title: "Anggota",
+            description: "Nama Anggota",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 6,
+            parent: null,
+            title: "KOOR. PUSAT",
+            description: "",
+            label: null,
+            labelOrientation: 3,
+            labelPlacement: 0,
+            labelSize: null,
+            parent: null,
+            showCallout: 0,
+            showLabel: 0,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 7,
+            parent: 6,
+            title: "Ketua",
+            description: "Nama Kesiswaan",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 8,
+            parent: 6,
+            title: "Sekretaris",
+            description: "Nama Kesiswaan",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 9,
+            parent: 6,
+            title: "Bendahara",
+            description: "Nama Humas",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 10,
+            parent: 6,
+            title: "KOOR. DAPIL",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 11,
+            parent: 10,
+            title: "KETUA",
+            description: "Nama Kesiswaan",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 12,
+            parent: 10,
+            title: "Sekretaris",
+            description: "Nama Kesiswaan",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 13,
+            parent: 10,
+            title: "Bendahara",
+            description: "Nama Humas",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 14,
+            parent: 10,
+            title: "KOOR. CAM",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 15,
+            parent: 14,
+            title: "KETUA",
+            description: "Nama Kesiswaan",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 16,
+            parent: 14,
+            title: "Sekretaris",
+            description: "Nama Kesiswaan",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 17,
+            parent: 14,
+            title: "Bendahara",
+            description: "Nama Humas",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 18,
+            parent: 14,
+            title: "KOOR. DES",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 19,
+            parent: 18,
+            title: "KETUA",
+            description: "Nama Kesiswaan",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 20,
+            parent: 18,
+            title: "Sekretaris",
+            description: "Nama Kesiswaan",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 21,
+            parent: 18,
+            title: "Bendahara",
+            description: "Nama Humas",
+            image: avatar,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 22,
+            parent: 18,
+            title: "KOOR. RT",
+            description: "",
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 23,
+            parent: 22,
+            title: "RT. 1",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 24,
+            parent: 22,
+            title: "RT. 2",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 25,
+            parent: 22,
+            title: "RT. 3",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 26,
+            parent: 22,
+            title: "RT. 4",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 27,
+            parent: 22,
+            title: "RT. 4",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 28,
+            parent: 22,
+            title: "RT. 5",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 29,
+            parent: 22,
+            title: "RT. 5",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 30,
+            parent: 22,
+            title: "RT. 6",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 31,
+            parent: 22,
+            title: "RT. 7",
+            description: "",
+            image: false,
+          }),
+          new primitives.orgdiagram.ItemConfig({
+            id: 32,
+            parent: 22,
+            title: "Koordinator",
+            description: "Rusdi",
+            image: avatar,
+          }),
+        ];
+
+        options.items = items;
+        options.cursorItem = 0;
+        options.hasSelectorCheckbox = primitives.common.Enabled.True;
+        options.labelFontWeight = "bold";
+        options.labelFontSize = "12px";
+        options.groupTitlePanelSize = 21;
+        options.horizontalAlignment = 0;
+        options.showLabels = 1;
+        options.onMouseClick = (e) => {
+            console.log('test klik: ', e);
+        };
+        // options.orientationType  = 2
+        console.log(options);
+        jQuery("#korpus").orgDiagram(options);
+      }); //]]>
+    </script>
+  </body>
+</html>
