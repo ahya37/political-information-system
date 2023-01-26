@@ -51,6 +51,10 @@ Route::get('reveral/check', 'Auth\RegisterController@reveral')->name('api-revera
 Route::get('reveral/name/{code}', 'Auth\RegisterController@reveralName');
 Route::get('nik/name/{nik}', 'Auth\RegisterController@reveralNameByNik');
 
+#store org 
+Route::post('store/org', 'Admin\OrgDiagramController@storeOrg');
+
+
 Route::get('member/nation/{daterange}','API\DashboardController@memberReportPerMountNation');
 Route::get('member/province/{daterange}/{provinceID}','API\DashboardController@memberReportPerMountProvince');
 Route::get('member/regency/{daterange}/{regencyID}','API\DashboardController@memberReportPerMountRegency');
