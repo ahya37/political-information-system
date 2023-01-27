@@ -9,13 +9,13 @@
             >
               Dashboard
             </a>
-            <a
+            {{-- <a
               href="{{ route('admin-struktur-organisasi') }}"
               target="_blank"
               class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/struktur*')) ? 'active custom-active-color' : '' }}"
             >
               Struktur Organisasi
-            </a>
+            </a> --}}
             <a
               class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/member*')) ? 'active custom-active-color ' : '' }}"
               href="#Anggota"
