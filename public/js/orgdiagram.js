@@ -44,13 +44,14 @@ $(window).load(function () {
                     dapil_id: data[i].dapil_id,
                     district_id: data[i].district_id,
                     village_id: data[i].village_id,
+                    idOrg: data[i].id
                 })
             );
         }
 
         options.items = items;
         options.cursorItem = 0;
-        options.hasSelectorCheckbox = primitives.common.Enabled.False;
+        options.hasSelectorCheckbox = primitives.common.Enabled.True;
         options.labelFontWeight = "bold";
         options.labelFontSize = "12px";
         options.groupTitlePanelSize = 21;
@@ -58,7 +59,7 @@ $(window).load(function () {
         options.showLabels = 1;
         options.onMouseClick = (e, data) => {
             const user = {
-                id: data.context.idx,
+                id: data.context.id,
                 regency: data.context.regency_id,
                 dapil: data.context.dapil_id,
                 district: data.context.district_id,
@@ -66,13 +67,115 @@ $(window).load(function () {
                 base: data.context.base,
                 parent: data.context.id,
                 title: data.context.title,
+                idOrg: data.context.idOrg
 
             };
 
             initialModal(user);
         };
 
+        options.onSelectionChanging = (e, data) => {
+            const user = {
+                id: data.context.id,
+                regency: data.context.regency_id,
+                dapil: data.context.dapil_id,
+                district: data.context.district_id,
+                village: data.context.village_id,
+                base: data.context.base,
+                parent: data.context.id,
+                title: data.context.title,
+                idOrg: data.context.idOrg
+
+            };
+
+            initialModalEdit(user);
+
+        }
+
+        options.selectCheckBoxLabel = "Pilih";
+
         jQuery("#korpus").orgDiagram(options);
+    }
+
+    const initialModalEdit = async (user) => {
+        
+        try {
+            const { value: formValues } = await Swal.fire({
+                title: 'Detail',
+                denyButtonText: `Hapus`,
+                showDenyButton: true,
+                html:
+                    '<input id="swal-input1" value="'+user.title+'" class="swal2-input" placeholder="Jabatan">' +
+                    '<input id="swal-input2" value="'+user.id+'" class="swal2-input" placeholder="IDX">',
+                focusConfirm: false,
+                preConfirm: () => {
+                    return [
+                        document.getElementById('swal-input1').value,
+                        document.getElementById('swal-input2').value
+                    ]
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // store update data
+                    $.ajax({
+                        url: `/api/org/update`,
+                        method: "POST",
+                        data: {
+                            id: user.idOrg,
+                            idx: result.value[1],
+                            title: result.value[0]
+                        },
+                        beforeSend: function () {
+                            $("#loading").text("Updated Konten ...")
+                        },
+                        success: function (data) {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: data.data.message,
+                                showConfirmButton: false,
+                                timer: 1000
+                            });
+                            location.reload();
+                        },
+                        complete: function () {
+                            $("#loading").hide();
+                        }
+                    });
+
+                } else if (result.isDenied) {
+                    $.ajax({
+                        url: `/api/org/delete`,
+                        method: "POST",
+                        data: {
+                            id: user.idOrg,
+                        },
+                        beforeSend: function () {
+                            $("#loading").text("Updated Konten ...")
+                        },
+                        success: function (data) {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: data.data.message,
+                                showConfirmButton: false,
+                                timer: 1000
+                            });
+                            location.reload();
+                        },
+                        complete: function () {
+                            $("#loading").hide();
+                        }
+                    });
+                }
+            }).catch((e) => {
+
+            })
+
+
+        } catch (e) {
+        }
+
     }
 
     const initialModal = async (user) => {
@@ -110,24 +213,8 @@ $(window).load(function () {
                         timer: 1000
                     });
                     location.reload();
-                    // $.ajax({
-                    //     url: `${PUBLIC_API}?regency_id=${regency_id}&dapil_id=${dapil_id}&district_id=${district_id}&village_id=${village_id}`,
-                    //     method: "GET",
-                    //     dataType: "JSON",
-                    //     cache: false,
-                    //     beforeSend: function () {
-                    //         $("#loading").text("Memuat Konten ...")
-                    //     },
-                    //     success: function (data) {
-                    //         initialDiagram(data.data)
-                    //     },
-                    //     complete: function () {
-                    //         $("#loading").hide();
-                    //     },
-                    // });
-                    // $("#container-fluid").load('http://127.0.0.1:8000/admin/struktur')
                 },
-                error: function(e){
+                error: function (e) {
                     const message = JSON.parse(e.responseText)
                     Swal.fire({
                         position: 'top-end',

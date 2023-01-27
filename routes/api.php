@@ -53,6 +53,8 @@ Route::get('nik/name/{nik}', 'Auth\RegisterController@reveralNameByNik');
 
 #store org 
 Route::post('store/org', 'Admin\OrgDiagramController@storeOrg');
+Route::post('org/update', 'Admin\OrgDiagramController@updateOrg');
+Route::post('org/delete', 'Admin\OrgDiagramController@deleteOrg');
 
 
 Route::get('member/nation/{daterange}','API\DashboardController@memberReportPerMountNation');

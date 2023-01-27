@@ -29,7 +29,8 @@ class OrgDiagramController extends Controller
         $district_id= request('district_id');
         $village_id = request('village_id');
 
-        $org_diagram= OrgDiagram::select('id','idx','parent','title','name','image','user_id','base','regency_id','dapil_id','district_id','village_id')->get();
+        $org_diagram= OrgDiagram::select('id','idx','parent','title','name','image','user_id','base','regency_id','dapil_id','district_id','village_id')
+                                ->orderBy('idx','asc')->get();
 
         return response()->json([
             'data' => $org_diagram
@@ -111,6 +112,63 @@ class OrgDiagramController extends Controller
             DB::rollback();
             return ResponseFormatter::error([
                 'message' => 'Somethin when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
+
+    }
+
+    public function updateOrg(){
+
+        DB::beginTransaction();
+        try {
+
+            $idx   = request()->idx;
+            $title = request()->title;
+            $id    = request()->id;
+
+            #update org
+            $org = OrgDiagram::where('id', $id)->first();
+            $org->update([
+                'title' => $title,
+                'idx' => $idx
+                ]
+            );
+
+            DB::commit();
+            return ResponseFormatter::success([
+                   'message' => 'Berhasil update struktur!'
+            ],200);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
+
+    }
+
+    public function deleteOrg(){
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+
+            #update org
+            $org = OrgDiagram::where('id', $id)->delete();
+
+            DB::commit();
+            return ResponseFormatter::success([
+                   'message' => 'Berhasil hapus struktur!'
+            ],200);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
                 'error' => $e->getMessage()
             ]);
         }
