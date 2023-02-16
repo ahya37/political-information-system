@@ -60,19 +60,19 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-12 col-form-label">Nama</label>
                                                     <div class="col-sm-12">
-                                                        <input type="text" name="name" class="form-control">
+                                                        <input type="text" name="name" class="form-control" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-12 col-form-label">Kampung</label>
                                                     <div class="col-sm-12">
-                                                        <input type="text" name="address" class="form-control">
+                                                        <input type="text" name="address" class="form-control" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-12 col-form-label">RT</label>
                                                     <div class="col-sm-12">
-                                                        <input type="number" name="rt" class="form-control">
+                                                        <input type="number" name="rt" class="form-control" required>
                                                     </div>
                                                 </div>
 
@@ -90,7 +90,7 @@
                                                     <label class="col-sm-12 col-form-label">Kecamatan</label>
                                                     <div class="col-sm-12">
                                                         <select id="districts_id" name="district_id" class="form-control"
-                                                            v-model="districts_id" v-if="districts">
+                                                            v-model="districts_id" v-if="districts" required>
                                                             <option v-for="district in districts" :value="district.id">
                                                                 @{{ district.name }}
                                                             </option>
@@ -101,7 +101,7 @@
                                                     <label class="col-sm-12 col-form-label">Desa</label>
                                                     <div class="col-sm-12">
                                                         <select name="village_id" id="villages_id" required
-                                                            class="form-control" v-model="villages_id" v-if="districts">
+                                                            class="form-control" v-model="villages_id" v-if="districts" required>
                                                             <option v-for="village in villages" :value="village.id">
                                                                 @{{ village.name }}
                                                             </option>
