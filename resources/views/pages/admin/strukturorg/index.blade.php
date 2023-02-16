@@ -15,7 +15,7 @@
 <body>
     <div class="container-fluid" id="container-fluid">
         <div class="row mb-4">
-            <nav class="navbar fixed-top navbar-light bg-light">
+            {{-- <nav class="navbar fixed-top navbar-light bg-light">
                 <div class="col-md-2">
                     <div class="form-group">
                         <select name="level" id="province" required class="form-control filter" required>
@@ -46,7 +46,7 @@
                         <select name="village_id" id="selectVillageId" class="form-control filter"></select>
                     </div>
                 </div>
-            </nav>
+            </nav> --}}
         </div>
         <div class="row mt-4">
             <div class="col-md-12 mt-4">

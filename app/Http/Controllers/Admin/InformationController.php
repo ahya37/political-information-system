@@ -9,6 +9,10 @@ use App\Dapil;
 use App\Figure;
 use App\Referal;
 use App\DetailFigure;
+use App\IntelegensiPolitik;
+use App\ProfessionIntelegensiPolitik;
+use App\OnceServedIntelegensiPolitik;
+use App\PolitikNameIntelegensiPolitik;
 use App\Models\Village;
 use App\FigureNameOption;
 use Illuminate\Support\Str;
@@ -20,9 +24,155 @@ use App\ResourceInfo;
 use App\RightChosseVillage;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\IntelegensiPolitikImport;
+use DB;
 
 class InformationController extends Controller
 {
+    public function index(){
+
+        return view('pages.admin.intelegensipolitik.index');
+    }
+
+    public function getDataIntelegensiPolitik(Request $request){
+
+        $orderBy = 'a.name';
+        switch ($request->input('order.0.column')) {
+            case '1':
+                $orderBy = 'a.name';
+                break;
+            case '3':
+                $orderBy = 'a.profession';
+                break;
+            case '5':
+                $orderBy = 'a.politic_potential';
+                break;
+        }
+
+        $data = DB::table('intelegensi_politik as a')
+                    ->select('a.id','a.name','a.address','a.descr','a.politic_potential','b.name as village','c.name as district','a.ismember','a.profession')
+                    ->join('villages as b','b.id','=','a.village_id')
+                    ->join('districts as c','c.id','=','b.district_id');
+            
+        if($request->input('search.value')!=null){
+            $data = $data->where(function($q)use($request){
+                $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                $q->whereRaw('LOWER(a.profession) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                $q->whereRaw('LOWER(a.politic_potential) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+            });
+        }
+        
+        // if ($request->input('district') != null) {
+        //                 $data->where('districts.id', $request->district);
+        //     }
+
+        // if ($request->input('village') != null) {
+        //                 $data->where('villages.id', $request->village);
+        //     }
+
+
+          $recordsFiltered = $data->get()->count();
+          if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+          $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+          
+          $recordsTotal = $data->count();
+
+          $results = [];
+          $no = 1;
+          foreach ($data as $value) {
+            #get profesi where id
+            $results[] = [
+                'no' => $no++,
+                'name' => $value->name,
+                'descr' => $value->descr,
+                'address' => $value->address,
+                'profession' => $value->profession,
+                'politic_potential' => $value->politic_potential,
+                'village' => $value->village,
+                'district' => $value->district,
+                'ismember' => $value->ismember,
+            ];
+          }
+
+
+          return response()->json([
+                'draw'=>$request->input('draw'),
+                'recordsTotal'=>$recordsTotal,
+                'recordsFiltered'=>$recordsFiltered,
+                'data'=> $results
+            ]);
+    }
+
+    public function getGrafikProfesiIntelegensiPolitik(){
+
+        $professions = DB::table('profession_intelegensi_politik as a')
+                        ->join('intelegensi_politik as b','b.id','=','a.intelegensi_politik_id')
+                        ->select('a.name', DB::raw('count(b.id) as jumlah'))
+                        ->groupBy('a.name')
+                        ->orderBy(\DB::raw('count(b.id)'),'desc')
+                        ->get();
+
+        $total_jumlah = collect($professions)->sum(function($q){
+            return $q->jumlah;
+        });
+
+        $results = [];
+        foreach ($professions as $value) {
+            $persentage = round(($value->jumlah/$total_jumlah)*100);
+            $results[] = [ucwords($value->name ?? 'Kosong'), $persentage];
+        }
+
+        return response()->json($results);
+                
+    }
+
+    public function getGrafikOnceServedIntelegensiPolitik(){
+
+        $onceserved = DB::table('once_served_intelegensi_politik as a')
+                        ->join('intelegensi_politik as b','b.id','=','a.intelegensi_politik_id')
+                        ->select('a.name', DB::raw('count(b.id) as jumlah'))
+                        ->groupBy('a.name')
+                        ->orderBy(\DB::raw('count(b.id)'),'desc')
+                        ->get();
+
+        $total_jumlah = collect($onceserved)->sum(function($q){
+            return $q->jumlah;
+        });
+
+        $results = [];
+        foreach ($onceserved as $value) {
+            $persentage = round(($value->jumlah/$total_jumlah)*100);
+            $results[] = [ucwords($value->name ?? 'Kosong'), $persentage];
+        }
+
+        return response()->json($results);
+                
+    }
+
+    public function getGrafikPolitikNameIntelegensiPolitik(){
+
+        $politicname = DB::table('politik_name_intelegensi_politik as a')
+                        ->join('intelegensi_politik as b','b.id','=','a.intelegensi_politik_id')
+                        ->select('a.name', DB::raw('count(b.id) as jumlah'))
+                        ->groupBy('a.name')
+                        ->orderBy(\DB::raw('count(b.id)'),'desc')
+                        ->get();
+
+        $total_jumlah = collect($politicname)->sum(function($q){
+            return $q->jumlah;
+        });
+
+        $results = [];
+        foreach ($politicname as $value) {
+            $persentage = round(($value->jumlah/$total_jumlah)*100);
+            $results[] = [ucwords($value->name ?? 'Kosong'), $persentage];
+        }
+
+        return response()->json($results);
+                
+    }
+
     public function formIntelegencyPolitic()
     {
         $figures = Figure::all();
@@ -548,6 +698,178 @@ class InformationController extends Controller
             'choose' => $gF->decimalFormat($choose->choose),
         ];
         return response()->json($data);
+    }
+
+    public function intelegensiPolitikImportExcel(){
+
+        try {
+            
+            Excel::import(new IntelegensiPolitikImport, request()->file('file'));
+
+            return 'success';
+
+        } catch (\Exception $th) {
+            
+            return $th->getMessage();
+
+        }
+
+
+    }
+
+    public function  shareFormIntelegencyPolitic(){
+        
+        $figures = Figure::all();
+        $detailFigure = DetailFigure::select('idx','name')->groupBy('idx','name')->get();
+        $resourceInfo = ResourceInfo::select('id','name')->get();
+        return view('form-intelegency', compact('figures','detailFigure','resourceInfo'));
+
+    }
+
+    public function saveFormIntelegencyPolitic(Request $request){
+
+        DB::beginTransaction();
+        try {
+
+            $profession['professi']     = $request->profession;
+            $onceserved['onceserved']   = $request->onceserved;
+            $politicname['politicname'] = $request->politicname;
+
+            $professions  = implode(", ", $profession['professi']);
+            $onceserveds  = implode(", ", $onceserved['onceserved']);
+            $politicnames = implode(", ", $politicname['politicname']);
+
+            #simpan intelegensi politik
+            $IntelegensiPolitik = IntelegensiPolitik::create([
+                'name' => strtoupper($request->name),
+                'village_id' => $request->village_id,
+                'district_id' => $request->district_id,
+                'regency_id' => 3602,
+                'profession' => $professions,
+                'once_served' => $onceserveds,
+                'politik_name' => $politicnames,
+                'rt' => $request->rt,
+                'address' => strtoupper($request->address),
+                'politic_potential' => $request->politic_potential,
+                'no_telp' => $request->notelp,
+                'politic_year' => $request->politic_year,
+                'politic_status' => $request->politik_status,
+                'politic_member' => $request->politic_member,
+                'descr' => $request->descr,
+                'resource_information' => strtoupper($request->resource),
+                'ismember' => $request->ismember,
+                'member_number' => $request->nomember
+            ]);
+
+            #jika profesi ada, simpan ke tb
+            $profession = $request->profession;
+            if ($profession != null) {
+
+                foreach($profession as $key => $value){
+                    if ($value != null) {
+                        ProfessionIntelegensiPolitik::create([
+                            'intelegensi_politik_id' =>  $IntelegensiPolitik->id,
+                            'name' => $value
+                        ]);
+                    }
+                }
+            }
+
+            # jika data pernah menjabat ada, simpan ke tb
+            $onceserved = $request->onceserved;
+            if ($onceserved != null) {
+
+                foreach($onceserved as $key => $value){
+                    if ($value != null) {
+                        OnceServedIntelegensiPolitik::create([
+                            'intelegensi_politik_id' =>  $IntelegensiPolitik->id,
+                            'name' => $value
+                        ]);
+                    }
+                }
+            }
+
+            # jika data pernah mencalonkan diri ada, simpan ke tb
+            $politicname = $request->politicname;
+            if ($politicname != null) {
+
+                foreach($politicname as $key => $value){
+                    if ($value != null) {
+                        PolitikNameIntelegensiPolitik::create([
+                            'intelegensi_politik_id' =>  $IntelegensiPolitik->id,
+                            'name' => $value
+                        ]);
+                    }
+                }
+            }
+        
+            DB::commit();
+
+            return view('form-intelegency-success');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
+    }
+
+    public function importIntelegensiToProfession(){
+
+        try {
+            #get data intelegensi
+           
+    
+            #jika profesi ada, simpan ke tb
+            // foreach ($IntelegensiPolitik as $value) {
+    
+            //     ProfessionIntelegensiPolitik::create([
+            //         'intelegensi_politik_id' =>  $value->id,
+            //         'name' => $value->profession
+            //     ]);
+
+            //     OnceServedIntelegensiPolitik::create([
+            //         'intelegensi_politik_id' =>  $value->id,
+            //         'name' => $value->once_served ?? null
+            //     ]);
+
+            //     PolitikNameIntelegensiPolitik::create([
+            //         'intelegensi_politik_id' =>  $value->id,
+            //         'name' => $value->politic_name ?? null
+            //     ]);
+              
+            // }
+
+
+    
+            #jika data pernah menjabat ada, simpan ke tb
+    
+            #jika data pernah mencalonkan diri ada, simpan ke tb
+
+            // $ProfessionIntelegensiPolitik = ProfessionIntelegensiPolitik::select('name')->where('intelegensi_politik_id', $id)->get();
+            // $pro = $ProfessionIntelegensiPolitik->implode('name',', ');
+            // $IntelegensiPolitik = IntelegensiPolitik::where('id', $id)->first();
+            // $IntelegensiPolitik->update(['profession' => $pro]);
+
+            $IntelegensiPolitik = IntelegensiPolitik::select('id')->get();
+            $results = [];
+            foreach ($IntelegensiPolitik as $value) {
+                $PolitikNameIntelegensiPolitik = PolitikNameIntelegensiPolitik::select('name')->where('intelegensi_politik_id', $value->id)->get();
+                $pro = $PolitikNameIntelegensiPolitik->implode('name',', ');
+                $update = IntelegensiPolitik::where('id', $value->id)->first();
+                $update->update(['politik_name' => $pro]);
+            }
+
+
+            DB::commit();
+            // return $results;
+
+            return 'Berhasil simpan data';
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
+
+
     }
 
 }

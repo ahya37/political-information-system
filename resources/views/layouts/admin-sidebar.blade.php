@@ -17,6 +17,12 @@
               Struktur Organisasi
             </a> --}}
             <a
+              href="{{ route('admin-intelegency-index') }}"
+              class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/intelegency*')) ? 'active custom-active-color' : '' }}"
+            >
+             Intelegensi Politik
+            </a>
+            <a
               class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/member*')) ? 'active custom-active-color ' : '' }}"
               href="#Anggota"
               data-toggle="collapse"

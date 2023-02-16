@@ -29,6 +29,9 @@ Route::post('/admin/dashboard/referalbymount','Admin\DashboardController@referal
 
 Route::post('/event/delete','EventController@delete');
 
+Route::get('/formintelegence','Admin\InformationController@shareFormIntelegencyPolitic')->name('formintelegence');
+Route::post('/saveformintelegence','Admin\InformationController@saveFormIntelegencyPolitic')->name('saveformintelegence');
+
 
 Route::get('/testgetfigure','TestController@testGretFigure');
 
@@ -322,6 +325,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::post('/info/saveintelegency','InformationController@saveIntelegencyPolitic')->name('admin-saveintelegency');
         Route::get('/info/listintelegency','InformationController@listIntelegency')->name('admin-listintelegency');
         Route::get('/info/detalfigure/{id}','InformationController@detailFigure')->name('admin-detailfigure');
+
+        Route::group(['prefix' => 'intelegency'], function(){
+            Route::get('/','InformationController@index')->name('admin-intelegency-index');
+        });
+
         
         // intelegency Pdf
         Route::get('/info/downloadpdfallbyvillage/{villageId}','InformationController@downloadPdfAllByVillageId')->name('admin-downloadpdfbyvillageid');

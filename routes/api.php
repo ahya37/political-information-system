@@ -232,6 +232,11 @@ Route::get('/getchoose/village/{id}','Admin\InformationController@infoRightChoos
 
 Route::get('/info/resource/{village_id}','Admin\InformationController@listResourceInfo');
 
+Route::get('/intelegensipolitik','Admin\InformationController@importIntelegensiToProfession');
+Route::get('/getgrafikprofessionintelegensipolitik','Admin\InformationController@getGrafikProfesiIntelegensiPolitik');
+Route::get('/getgrafikonceservedintelegensipolitik','Admin\InformationController@getGrafikOnceServedIntelegensiPolitik');
+Route::get('/getgrafikpolitiknameintelegensipolitik','Admin\InformationController@getGrafikPolitikNameIntelegensiPolitik');
+
 
 // ANGGOTA ADMIN
 Route::get('/admin/member/totalregency/{user_id}','API\DashboardController@getTotalMemberByAdminMember');
@@ -248,6 +253,8 @@ Route::get('/admin/member/{daterange}/{user_id}','API\DashboardController@member
 // GRAFIK INTEGENCY
 Route::get('/intelegency/byvillage/{village_id}','Admin\InformationController@getGrafikIntelegencyVillage');
 Route::get('/intelegency/byvillage/figure/{village_id}','Admin\InformationController@getFigureGrafikVillage');
+Route::post('/getdataintelegensipolitik','Admin\InformationController@getDataIntelegensiPolitik');
+
 
 // Cost
 Route::get('/cost/list','Admin\CostController@getDataCost');
