@@ -376,8 +376,14 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::post('/koordinator/dapil/save','KoordinatorController@saveKorDapil')->name('admin-koordinator-dapil-save');
 
         #struktur ogrganisasi
-        Route::get('/struktur','OrgDiagramController@index')->name('admin-struktur-organisasi');
-        Route::get('/strukturtest','OrgDiagramController@orgDiagramTest');
+        // Route::get('/struktur','OrgDiagramController@index')->name('admin-struktur-organisasi');
+        // Route::get('/strukturtest','OrgDiagramController@orgDiagramTest')->name('admin-struktur-organisasi-test');
+
+        Route::group(['prefix' => 'struktur'], function(){
+            Route::get('/dashboard','OrgDiagramController@orgDiagramTest')->name('admin-struktur-organisasi-test');
+            Route::get('/village/create','OrgDiagramController@createOrgVillage')->name('admin-struktur-organisasi-create');
+
+        });
           
     });
     

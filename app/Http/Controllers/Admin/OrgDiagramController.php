@@ -180,7 +180,7 @@ class OrgDiagramController extends Controller
 
         $regency = Regency::select('id','name')->where('id', 3602)->first();
 
-        return view('pages.admin.strukturorg.index2',['regency' => $regency]);
+        return view('pages.admin.strukturorg.index',['regency' => $regency]);
 
     }
 
@@ -205,7 +205,7 @@ class OrgDiagramController extends Controller
                 'title' => $value->title ?? $value->name,
                 'name' => $value->name,
                 'color' => $value->color ?? '',
-                'image' => $value->photo ?? '',
+                'image' => '/storage/'.$value->photo ?? '',
             ];
         }
 
@@ -216,4 +216,102 @@ class OrgDiagramController extends Controller
 
         return response()->json($results);
     }
+
+    public function createOrgVillage(){
+
+        $data = DB::table('org_diagram_village as a')
+                ->select('a.idx','a.pidx','a.title','a.nik','a.name','a.base','a.photo','b.name as village')
+                ->join('villages as b','b.id','=','a.village_id')
+                ->orderBy('a.id','asc')->get();
+
+        return view('pages.admin.strukturorg.village.create', compact('data'));
+
+    }
+
+    public function getDataOrgVillage(){
+
+        // DATATABLE 
+    }
+
+    public function setSaveOrgVillage(){
+
+        DB::beginTransaction();
+        try {
+
+            $idx         = request()->id;
+            $nik         = request()->nik;
+            $villageId   = request()->villageId;
+            $title       = request()->title;
+
+            $org         = DB::table('org_diagram_village');
+
+            #cek apakah nik tersebut sudah ada di tb org_diagram_village
+            $user        =  $org->where('nik', $nik)->count();
+
+            if ($user > 0) {
+                
+                return ResponseFormatter::error([
+                    'message' => 'NIK sudah terdaftar!',
+                ]);
+
+            }else{
+
+                #membuat idx
+                #hitung data terakhir dari $idx, lalu di tambah 1 : XXXX.KORRT.1.x
+                $data       = DB::table('org_diagram_village')->where('pidx', $idx)->where('village_id', $villageId)->max('idx');
+                $data_count = DB::table('org_diagram_village')->where('pidx', $idx)->where('village_id', $villageId)->count('idx');
+    
+                #jika belum ada
+                if (!$data) {
+                    
+                    #buat idx baru
+                    $new_idx = $data_count + 1; 
+                    $new_idx = $idx.".".$new_idx;
+    
+                }else{
+    
+                    #hitung jumlah data terakhir dari $idx, lalu di tambah 1 : XXXX.KORRT.1.x
+                    $new_idx    = $data_count + 1;
+                    $new_idx    = $idx.".".$new_idx;
+                }
+    
+                $user =  DB::table('users')->select('photo','name')->where('nik', $nik)->first();
+    
+                #get id domisili by villageId
+                $domisili = DB::table('villages as a')
+                            ->join('districts as b','b.id','=','a.district_id')
+                            ->select('a.id as village_id','b.id as district_id','b.regency_id')
+                            ->where('a.id', $villageId)
+                            ->first();
+    
+                #save data org village
+                $save_org  = $org->insert([
+                                'idx'    => $new_idx,
+                                'pidx'   => $idx,
+                                'title'  => $title,
+                                'nik'    => $nik,
+                                'name'   => $user->name,
+                                'base'   => 'KORRT',
+                                'photo'  => $user->photo ?? '',
+                                'regency_id'  => $domisili->regency_id,
+                                'district_id' => $domisili->district_id,
+                                'village_id'  => $domisili->village_id,
+                            ]);
+    
+                DB::commit();
+                return ResponseFormatter::success([
+                       'data' => $save_org,
+                       'message' => 'Berhasil tambah struktur!'
+                ],200);
+            }
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
 }

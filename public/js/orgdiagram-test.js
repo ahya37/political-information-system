@@ -1,3 +1,4 @@
+
 function getChartOrgVillage(villageId) {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -14,7 +15,6 @@ function getChartOrgVillage(villageId) {
                         height: 400,
                         inverted: true
                     },
-
                     title: {
                         text: 'Struktur Organisasi'
                     },
@@ -49,7 +49,16 @@ function getChartOrgVillage(villageId) {
                             color: 'white'
                         },
                         borderColor: 'white',
-                        nodeWidth: 60
+                        nodeWidth: 60,
+                        events: {
+                            click: function (points) {
+                                let { id, name, title } = points.point
+                                // MODAL ADD CHILD
+                                modalAddChild(id, name, title, villageId);
+
+                            }
+                        }
+
                     }],
                     tooltip: {
                         outside: true
@@ -75,6 +84,75 @@ $('#selectVillageId').on('change', function () {
     getChartOrgVillage(selectVillageId);
 })
 
-let villageId = '';
+let villageId = 3602011002;
 
 getChartOrgVillage(villageId);
+
+async function modalAddChild(id, name, title, villageId) {
+
+
+    let label = name.length === 1 ? `Tambah struktur di ${title}` : `Tambah struktur di ${name}`;
+    const { value: formValues } = await Swal.fire({
+        title: label,
+        html:
+          '<input id="swal-input1" placeholder="NIK" class="swal2-input">' +
+          '<input id="swal-input2" placeholder="Judul" class="swal2-input">',
+        focusConfirm: false,
+        preConfirm: () => {
+          return [
+            document.getElementById('swal-input1').value,
+            document.getElementById('swal-input2').value
+          ]
+        }
+      })
+      
+    if (formValues) {
+        // AJAX SAVE
+        return new Promise((reject, resolve) => {
+            const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+
+            $.ajax({
+                url: '/api/org/village/save',
+                method: 'POST',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id,
+                    nik: formValues[0],
+                    title: formValues[1],
+                    villageId: villageId,
+                },
+                beforeSend: function () {
+                    Swal.showLoading()
+                },
+                success: function (data) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                          toast.addEventListener('mouseenter', Swal.stopTimer)
+                          toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                      })
+                      
+                      Toast.fire({
+                        icon: 'success',
+                        title: data?.data.message
+                      })
+                },
+                complete: function () {
+                    $('#tree').empty();
+                    getChartOrgVillage(villageId);
+
+                }
+            }).done(reject).fail(resolve)
+        })
+
+
+    } else {
+        Swal.fire(`Masukan Data`);
+    }
+
+}
