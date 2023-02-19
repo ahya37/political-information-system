@@ -7,7 +7,13 @@ function getChartOrgVillage(villageId) {
             dataType: 'json',
             data: { village: villageId },
             beforeSend: function () {
-                $('#loading').append('<p>Loading Konten...</p>')
+                $('#loading').append(`<div class="text-center">
+                                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden"></span>
+                                    </div>
+                                </div>`
+                                )
+
             },
             success: function (data) {
                 Highcharts.chart('tree', {
@@ -53,9 +59,7 @@ function getChartOrgVillage(villageId) {
                         events: {
                             click: function (points) {
                                 let { id, name, title } = points.point
-                                // MODAL ADD CHILD
                                 modalAddChild(id, name, title, villageId);
-
                             }
                         }
 
@@ -67,7 +71,7 @@ function getChartOrgVillage(villageId) {
                         allowHTML: true,
                         sourceWidth: 800,
                         sourceHeight: 600
-                    }
+                    },
 
                 });
             },
@@ -84,28 +88,25 @@ $('#selectVillageId').on('change', function () {
     getChartOrgVillage(selectVillageId);
 })
 
-let villageId = 3602011002;
-
-getChartOrgVillage(villageId);
+getChartOrgVillage(3602011002);
 
 async function modalAddChild(id, name, title, villageId) {
-
 
     let label = name.length === 1 ? `Tambah struktur di ${title}` : `Tambah struktur di ${name}`;
     const { value: formValues } = await Swal.fire({
         title: label,
         html:
-          '<input id="swal-input1" placeholder="NIK" class="swal2-input">' +
-          '<input id="swal-input2" placeholder="Judul" class="swal2-input">',
+            '<input id="swal-input1" placeholder="NIK" class="swal2-input">' +
+            '<input id="swal-input2" placeholder="Judul" class="swal2-input">',
         focusConfirm: false,
         preConfirm: () => {
-          return [
-            document.getElementById('swal-input1').value,
-            document.getElementById('swal-input2').value
-          ]
+            return [
+                document.getElementById('swal-input1').value,
+                document.getElementById('swal-input2').value
+            ]
         }
-      })
-      
+    })
+
     if (formValues) {
         // AJAX SAVE
         return new Promise((reject, resolve) => {
@@ -125,27 +126,15 @@ async function modalAddChild(id, name, title, villageId) {
                     Swal.showLoading()
                 },
                 success: function (data) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                          toast.addEventListener('mouseenter', Swal.stopTimer)
-                          toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                      })
-                      
-                      Toast.fire({
-                        icon: 'success',
-                        title: data?.data.message
-                      })
+                    showAllertToast('success', data?.data.message);
                 },
                 complete: function () {
                     $('#tree').empty();
                     getChartOrgVillage(villageId);
 
+                },
+                error: function (er) {
+                    showAllertToast('error', er?.responseJSON.data.message)
                 }
             }).done(reject).fail(resolve)
         })
@@ -155,4 +144,23 @@ async function modalAddChild(id, name, title, villageId) {
         Swal.fire(`Masukan Data`);
     }
 
+}
+
+function showAllertToast(type, message) {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: type,
+        title: message
+    })
 }

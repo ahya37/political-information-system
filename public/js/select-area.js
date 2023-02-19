@@ -20,7 +20,6 @@ $("#selectListArea").change(async function () {
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
-        table.ajax.reload(null, false);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val("");
     } else {
@@ -31,7 +30,6 @@ $("#selectListArea").change(async function () {
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
-        table.ajax.reload(null, false);
         $("#reqdapil").val("");
         $("#reqdistrict").val("");
         $("#reqvillage").val("");
@@ -55,7 +53,6 @@ $("#selectDistrictId").change(async function () {
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
-        table.ajax.reload(null, false);
         $("#reqprovince").val(province);
         $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
@@ -68,7 +65,7 @@ $("#selectDistrictId").change(async function () {
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
-        table.ajax.reload(null, false);
+
         $("#reqdistrict").val("");
         $("#reqvillage").val("");
     }
@@ -84,7 +81,7 @@ $("#selectVillageId").change(function () {
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
-        table.ajax.reload(null, false);
+        
         $("#reqprovince").val(province);
         $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
@@ -96,7 +93,7 @@ $("#selectVillageId").change(function () {
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
-        table.ajax.reload(null, false);
+        
         $("#reqprovince").val(province);
         $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
@@ -105,11 +102,10 @@ $("#selectVillageId").change(function () {
     }
 });
 
-function getDapilRegency(province) {
+async function getDapilRegency(province) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    return fetch(`/api/dapilbyprovinceid/${province}`).then((response) => {
-        return response.json();
-    });
+    const response = await fetch(`/api/dapilbyprovinceid/${province}`);
+    return await response.json();
 }
 
 function getDapilRegencyUi(responseData) {
@@ -125,8 +121,10 @@ function showDivHtmlDapil(m) {
     return `<option value="${m.id}">${m.name}</option>`;
 }
 
-async function getDapilNames() {
-    const regencyId = $('#regencyId').val();
+async function getDapilNames(regencyId) {
+    $("#selectListArea").append(
+        "<option value=''>Loading..</option>"
+    );
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     return await fetch(`/api/getlistdapil`, {
         method: "POST",
@@ -134,11 +132,13 @@ async function getDapilNames() {
             Accept: "application/json",
             "Content-Type": "appliacation/json",
         },
-        body: JSON.stringify({ token: CSRF_TOKEN, regencyId: 3602 }),
+        body: JSON.stringify({ token: CSRF_TOKEN, regencyId: regencyId }),
     }).then((response) => {
+        $("#selectListArea").empty();
         return response.json();
     }).catch(error => {
     });
+    
 }
 function getDapilNamesUi(listDapils) {
     let divListDapil = "";
@@ -152,25 +152,72 @@ function showDivHtmlListDapil(m) {
     return `<option value="${m.id}">${m.name}</option>`;
 }
 
-async function getDapil() {
-
-    const results = await getDapilNames();
-    console.log('results: ', results)
+async function getDapil(regencyId) {
+    const results = await getDapilNames(regencyId);
+    getDapilNamesUi(results)
 }
-getDapil()
 
-async function fetchData(regency) {
+let regencyId = $('#regencyId').val();
+getDapil(regencyId)
+
+async function getListDistrict(selectListAreaValue) {
+    $("#selectDistrictId").append(
+        "<option value=''>Loading..</option>"
+    );
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    let response = await fetch(`/api/getlistdapil`, {
+    const response = await fetch(`/api/getlistdistrictdapil`, {
         method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "appliacation/json",
         },
-        body: JSON.stringify({ token: CSRF_TOKEN, regencyId: regency }),
-    })
-    
-    return response;
+        body: JSON.stringify({
+            token: CSRF_TOKEN,
+            dapilId: selectListAreaValue,
+        }),
+    });
+    $("#selectDistrictId").empty();
+    return await response.json();
 }
-const regency = $('#regencyId').val();
-console.log(fetchData(regency))
+function getListDistrictUi(listDistricts) {
+    let divListDistrict = "";
+    listDistricts.forEach((m) => {
+        divListDistrict += showDivHtmlListDistrict(m);
+    });
+    const divListDistrictContainer = $("#selectDistrictId");
+    divListDistrictContainer.append(divListDistrict);
+}
+
+function showDivHtmlListDistrict(m) {
+    return `<option value="${m.district_id}">${m.name}</option>`;
+}
+async function getListVillage(selectDistrictId) {
+    $("#selectVillageId").append(
+        "<option value=''>Loading..</option>"
+    );
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    const response = await fetch(`/api/getlistvillagetdapil`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({
+            token: CSRF_TOKEN,
+            district_id: selectDistrictId,
+        }),
+    });
+    $("#selectVillageId").empty();
+    return await response.json();
+}
+function getListVillageUi(dataVillages) {
+    let divVillage = "";
+    dataVillages.forEach((m) => {
+        divVillage += showDivHtmlVillage(m);
+    });
+    const divVillageContainer = $("#selectVillageId");
+    divVillageContainer.append(divVillage);
+}
+function showDivHtmlVillage(m) {
+    return `<option value="${m.id}">${m.name}</option>`;
+}

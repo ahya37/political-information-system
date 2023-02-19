@@ -243,67 +243,83 @@ class OrgDiagramController extends Controller
             $villageId   = request()->villageId;
             $title       = request()->title;
 
-            $org         = DB::table('org_diagram_village');
+            #cek nik di tb users, apakah sudah terdaftar
+            $cek_user       =  DB::table('users')->select('photo','name')->where('nik', $nik);
+            $cek_count_user = $cek_user->count();
 
-            #cek apakah nik tersebut sudah ada di tb org_diagram_village
-            $user        =  $org->where('nik', $nik)->count();
-
-            if ($user > 0) {
+            if ($cek_count_user < 1) {
                 
                 return ResponseFormatter::error([
-                    'message' => 'NIK sudah terdaftar!',
+                    'message' => 'NIK tidak tersedia di sistem!',
                 ]);
 
             }else{
 
-                #membuat idx
-                #hitung data terakhir dari $idx, lalu di tambah 1 : XXXX.KORRT.1.x
-                $data       = DB::table('org_diagram_village')->where('pidx', $idx)->where('village_id', $villageId)->max('idx');
-                $data_count = DB::table('org_diagram_village')->where('pidx', $idx)->where('village_id', $villageId)->count('idx');
+                $org         = DB::table('org_diagram_village');
     
-                #jika belum ada
-                if (!$data) {
+                #cek apakah nik tersebut sudah ada di tb org_diagram_village
+                $user        =  $org->where('nik', $nik)->count();
+    
+                if ($user > 0) {
                     
-                    #buat idx baru
-                    $new_idx = $data_count + 1; 
-                    $new_idx = $idx.".".$new_idx;
+                    return ResponseFormatter::error([
+                        'message' => 'NIK sudah terdaftar distruktur!',
+                    ]);
     
                 }else{
     
-                    #hitung jumlah data terakhir dari $idx, lalu di tambah 1 : XXXX.KORRT.1.x
-                    $new_idx    = $data_count + 1;
-                    $new_idx    = $idx.".".$new_idx;
+                    #membuat idx
+                    #hitung data terakhir dari $idx, lalu di tambah 1 : XXXX.KORRT.1.x
+                    $data       = DB::table('org_diagram_village')->where('pidx', $idx)->where('village_id', $villageId)->max('idx');
+                    $data_count = DB::table('org_diagram_village')->where('pidx', $idx)->where('village_id', $villageId)->count('idx');
+        
+                    #jika belum ada
+                    if (!$data) {
+                        
+                        #buat idx baru
+                        $new_idx = $data_count + 1; 
+                        $new_idx = $idx.".".$new_idx;
+        
+                    }else{
+        
+                        #hitung jumlah data terakhir dari $idx, lalu di tambah 1 : XXXX.KORRT.1.x
+                        $new_idx    = $data_count + 1;
+                        $new_idx    = $idx.".".$new_idx;
+                    }
+    
+                    $user = $cek_user->first();
+        
+        
+                    #get id domisili by villageId
+                    $domisili = DB::table('villages as a')
+                                ->join('districts as b','b.id','=','a.district_id')
+                                ->select('a.id as village_id','b.id as district_id','b.regency_id')
+                                ->where('a.id', $villageId)
+                                ->first();
+        
+                    #save data org village
+                    $save_org  = $org->insert([
+                                    'idx'    => $new_idx,
+                                    'pidx'   => $idx,
+                                    'title'  => $title,
+                                    'nik'    => $nik,
+                                    'name'   => $user->name,
+                                    'base'   => 'KORRT',
+                                    'photo'  => $user->photo ?? '',
+                                    'regency_id'  => $domisili->regency_id,
+                                    'district_id' => $domisili->district_id,
+                                    'village_id'  => $domisili->village_id,
+                                ]);
+        
+                    DB::commit();
+                    return ResponseFormatter::success([
+                           'data' => $save_org,
+                           'message' => 'Berhasil tambah struktur!'
+                    ],200);
                 }
-    
-                $user =  DB::table('users')->select('photo','name')->where('nik', $nik)->first();
-    
-                #get id domisili by villageId
-                $domisili = DB::table('villages as a')
-                            ->join('districts as b','b.id','=','a.district_id')
-                            ->select('a.id as village_id','b.id as district_id','b.regency_id')
-                            ->where('a.id', $villageId)
-                            ->first();
-    
-                #save data org village
-                $save_org  = $org->insert([
-                                'idx'    => $new_idx,
-                                'pidx'   => $idx,
-                                'title'  => $title,
-                                'nik'    => $nik,
-                                'name'   => $user->name,
-                                'base'   => 'KORRT',
-                                'photo'  => $user->photo ?? '',
-                                'regency_id'  => $domisili->regency_id,
-                                'district_id' => $domisili->district_id,
-                                'village_id'  => $domisili->village_id,
-                            ]);
-    
-                DB::commit();
-                return ResponseFormatter::success([
-                       'data' => $save_org,
-                       'message' => 'Berhasil tambah struktur!'
-                ],200);
+
             }
+
 
         } catch (\Exception $e) {
             DB::rollback();
