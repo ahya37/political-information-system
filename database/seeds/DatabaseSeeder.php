@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(DapilSeeder::class);
         // $this->call(DapilAreaSeeder::class);
         $this->call(OrgDiagramSeeder::class);
+        // $this->call(OrgDiagramVillageSeeder::class);
 
     }
 }

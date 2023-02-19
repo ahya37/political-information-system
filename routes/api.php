@@ -56,6 +56,9 @@ Route::post('store/org', 'Admin\OrgDiagramController@storeOrg');
 Route::post('org/update', 'Admin\OrgDiagramController@updateOrg');
 Route::post('org/delete', 'Admin\OrgDiagramController@deleteOrg');
 
+#new org diagram
+Route::get('org/village', 'Admin\OrgDiagramController@getDataOrgDiagramVillage');
+
 
 Route::get('member/nation/{daterange}','API\DashboardController@memberReportPerMountNation');
 Route::get('member/province/{daterange}/{provinceID}','API\DashboardController@memberReportPerMountProvince');

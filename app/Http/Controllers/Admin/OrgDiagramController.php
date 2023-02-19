@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\OrgDiagram;
 use App\Models\Province;
+use App\Models\Regency;
 use App\Helpers\ResponseFormatter;
 use DB;
 use App\Http\Controllers\Auth\RegisterController;
@@ -173,5 +174,46 @@ class OrgDiagramController extends Controller
             ]);
         }
 
+    }
+
+    public function orgDiagramTest(){
+
+        $regency = Regency::select('id','name')->where('id', 3602)->first();
+
+        return view('pages.admin.strukturorg.index2',['regency' => $regency]);
+
+    }
+
+    public function getDataOrgDiagramVillage(){
+
+        $village_id = request('village');
+        $orgs = DB::table('org_diagram_village')
+                ->select('idx','pidx','color','title','nik','name','photo')
+                ->whereNotNull('pidx')
+                ->where('village_id', $village_id)
+                ->get();
+
+        $data = [];
+        foreach ($orgs as $value) {
+            $data[] = [$value->pidx,$value->idx];
+        }
+
+        $nodes = [];
+        foreach ($orgs as $value) {
+            $nodes[] = [
+                'id' => $value->idx,
+                'title' => $value->title ?? $value->name,
+                'name' => $value->name,
+                'color' => $value->color ?? '',
+                'image' => $value->photo ?? '',
+            ];
+        }
+
+        $results = [
+            'nodes' => $nodes,
+            'data' => $data,
+        ];
+
+        return response()->json($results);
     }
 }

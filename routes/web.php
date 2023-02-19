@@ -377,6 +377,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         #struktur ogrganisasi
         Route::get('/struktur','OrgDiagramController@index')->name('admin-struktur-organisasi');
+        Route::get('/strukturtest','OrgDiagramController@orgDiagramTest');
           
     });
     

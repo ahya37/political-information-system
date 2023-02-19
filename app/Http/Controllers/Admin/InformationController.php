@@ -172,6 +172,7 @@ class InformationController extends Controller
         return response()->json($results);
                 
     }
+    
 
     public function formIntelegencyPolitic()
     {
