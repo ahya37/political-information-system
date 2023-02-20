@@ -29,11 +29,11 @@
     <div class="container-fluid" id="container-fluid">
         <div class="row mb-4">
             <nav class="navbar fixed-top navbar-light bg-light">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         {{-- <select name="" id="selectArea" class="form-control filter" required></select> --}}
                         <input value="{{ $regency->id }}" type="hidden" id="regencyId" class="form-control">
-                        <input value="{{ $regency->name }}" type="text" readonly class="form-control">
+                        <input value="KOR PUSAT" type="text" id="btnKorPusat" readonly class="btn btn-sm btn-primary">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -59,7 +59,10 @@
         <div class="row mt-4">
             <div class="col-md-12 mt-4">
                 <div id="loading"></div>
-                <div id="tree"></div>
+                <div id="orgVillage"></div>
+                <div id="orgDistrict"></div>
+                <div id="orgDapil"></div>
+                <div id="orgPusat"></div>
             </div>
         </div>
     </div>
@@ -70,7 +73,6 @@
     <script src="{{ asset('assets/vendor/highcharts/sankey.js') }}"></script>
     <script src="{{ asset('assets/vendor/highcharts/organization.js') }}"></script>
     <script src="{{ asset('assets/vendor/highcharts/accessibility10.3.js') }}"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
     <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}" type="text/javascript"></script>
     <script type="text/javascript" src="{{ asset('js/orgdiagram-test.js') }}"></script>

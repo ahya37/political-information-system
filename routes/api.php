@@ -58,7 +58,11 @@ Route::post('org/delete', 'Admin\OrgDiagramController@deleteOrg');
 
 #new org diagram
 Route::get('org/village', 'Admin\OrgDiagramController@getDataOrgDiagramVillage');
+Route::get('org/district', 'Admin\OrgDiagramController@getDataOrgDiagramDistrict');
+Route::get('org/dapil', 'Admin\OrgDiagramController@getDataOrgDiagramDapil');
+Route::get('org/pusat', 'Admin\OrgDiagramController@getDataOrgDiagramPusat');
 Route::post('org/village/save', 'Admin\OrgDiagramController@setSaveOrgVillage');
+Route::post('org/district/save', 'Admin\OrgDiagramController@setSaveOrgDistrict');
 
 
 Route::get('member/nation/{daterange}','API\DashboardController@memberReportPerMountNation');

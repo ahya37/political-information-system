@@ -217,6 +217,103 @@ class OrgDiagramController extends Controller
         return response()->json($results);
     }
 
+    public function getDataOrgDiagramDistrict(){
+
+        $district_id = request('district');
+        $orgs = DB::table('org_diagram_district')
+                ->select('idx','pidx','color','title','nik','name','photo')
+                ->whereNotNull('pidx')
+                ->where('district_id', $district_id)
+                ->get();
+
+        $data = [];
+        foreach ($orgs as $value) {
+            $data[] = [$value->pidx,$value->idx];
+        }
+
+        $nodes = [];
+        foreach ($orgs as $value) {
+            $nodes[] = [
+                'id' => $value->idx,
+                'title' => $value->title ?? $value->name,
+                'name' => $value->name,
+                'color' => $value->color ?? '',
+                'image' => '/storage/'.$value->photo ?? '',
+            ];
+        }
+
+        $results = [
+            'nodes' => $nodes,
+            'data' => $data,
+        ];
+
+        return response()->json($results);
+    }
+
+    public function getDataOrgDiagramDapil(){
+
+        $dapil_id = request('dapil');
+        $orgs = DB::table('org_diagram_dapil')
+                ->select('idx','pidx','color','title','nik','name','photo')
+                ->whereNotNull('pidx')
+                ->where('dapil_id', $dapil_id)
+                ->get();
+
+        $data = [];
+        foreach ($orgs as $value) {
+            $data[] = [$value->pidx,$value->idx];
+        }
+
+        $nodes = [];
+        foreach ($orgs as $value) {
+            $nodes[] = [
+                'id' => $value->idx,
+                'title' => $value->title ?? $value->name,
+                'name' => $value->name,
+                'color' => $value->color ?? '',
+                'image' => '/storage/'.$value->photo ?? '',
+            ];
+        }
+
+        $results = [
+            'nodes' => $nodes,
+            'data' => $data,
+        ];
+
+        return response()->json($results);
+    }
+
+    public function getDataOrgDiagramPusat(){
+
+        $orgs = DB::table('org_diagram_pusat')
+                ->select('idx','pidx','color','title','nik','name','photo')
+                ->whereNotNull('pidx')
+                ->get();
+
+        $data = [];
+        foreach ($orgs as $value) {
+            $data[] = [$value->pidx,$value->idx];
+        }
+
+        $nodes = [];
+        foreach ($orgs as $value) {
+            $nodes[] = [
+                'id' => $value->idx,
+                'title' => $value->title ?? $value->name,
+                'name' => $value->name,
+                'color' => $value->color ?? '',
+                'image' => '/storage/'.$value->photo ?? '',
+            ];
+        }
+
+        $results = [
+            'nodes' => $nodes,
+            'data' => $data,
+        ];
+
+        return response()->json($results);
+    }
+
     public function createOrgVillage(){
 
         $data = DB::table('org_diagram_village as a')
@@ -240,7 +337,7 @@ class OrgDiagramController extends Controller
 
             $idx         = request()->id;
             $nik         = request()->nik;
-            $villageId   = request()->villageId;
+            $villageId   = request()->regionId;
             $title       = request()->title;
 
             #cek nik di tb users, apakah sudah terdaftar
@@ -313,7 +410,97 @@ class OrgDiagramController extends Controller
         
                     DB::commit();
                     return ResponseFormatter::success([
-                           'data' => $save_org,
+                           'message' => 'Berhasil tambah struktur!'
+                    ],200);
+                }
+
+            }
+
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function setSaveOrgDistrict(){
+
+        DB::beginTransaction();
+        try {
+
+            $idx         = request()->id;
+            $nik         = request()->nik;
+            $districtId   = request()->regionId;
+            $title       = request()->title;
+
+            #cek nik di tb users, apakah sudah terdaftar
+            $cek_user       =  DB::table('users')->select('photo','name')->where('nik', $nik);
+            $cek_count_user = $cek_user->count();
+
+            if ($cek_count_user < 1) {
+                
+                return ResponseFormatter::error([
+                    'message' => 'NIK tidak tersedia di sistem!',
+                ]);
+
+            }else{
+
+                $org         = DB::table('org_diagram_district');
+    
+                #cek apakah nik tersebut sudah ada di tb org_diagram_village
+                $user        =  $org->where('nik', $nik)->count();
+    
+                if ($user > 0) {
+                    
+                    return ResponseFormatter::error([
+                        'message' => 'NIK sudah terdaftar distruktur!',
+                    ]);
+    
+                }else{
+    
+                    #membuat idx
+                    #hitung data terakhir dari $idx, lalu di tambah 1 : XXXX.KORRT.1.x
+                    $data       = DB::table('org_diagram_district')->where('pidx', $idx)->where('district_id', $districtId)->max('idx');
+                    $data_count = DB::table('org_diagram_district')->where('pidx', $idx)->where('district_id', $districtId)->count('idx');
+
+        
+                    #jika belum ada
+                    if (!$data) {
+                        
+                        #buat idx baru
+                        $new_idx = $data_count + 1; 
+                        $new_idx = $idx.".".$new_idx;
+
+                    }else{
+        
+                        #hitung jumlah data terakhir dari $idx, lalu di tambah 1 : XXXX.KORRT.1.x
+                        // $new_idx    = $data_count;
+                        $new_idx    = $idx.".".$data_count;
+                    }
+    
+                    $user = $cek_user->first();
+        
+                    #get id domisili by villageId
+                    $domisili = DB::table('districts')->select('id','regency_id')->where('id', $districtId)->first();
+        
+                    #save data org village
+                    $save_org  = $org->insert([
+                                    'idx'    => $new_idx,
+                                    'pidx'   => $idx,
+                                    'title'  => $title,
+                                    'nik'    => $nik,
+                                    'name'   => $user->name,
+                                    'base'   => 'KORRT',
+                                    'photo'  => $user->photo ?? '',
+                                    'regency_id'  => $domisili->regency_id,
+                                    'district_id' => $domisili->id,
+                                ]);
+        
+                    DB::commit();
+                    return ResponseFormatter::success([
                            'message' => 'Berhasil tambah struktur!'
                     ],200);
                 }

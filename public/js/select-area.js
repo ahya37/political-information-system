@@ -135,6 +135,9 @@ async function getDapilNames(regencyId) {
         body: JSON.stringify({ token: CSRF_TOKEN, regencyId: regencyId }),
     }).then((response) => {
         $("#selectListArea").empty();
+        $("#selectListArea").append(
+            "<option value=''>-Pilih Dapil-</option>"
+        );
         return response.json();
     }).catch(error => {
     });

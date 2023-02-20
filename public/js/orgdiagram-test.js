@@ -1,79 +1,32 @@
+$('#tree').hide();
+$('#orgDistrict').hide();
+$('#orgDapil').hide();
+let CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
 function getChartOrgVillage(villageId) {
+    $('#orgDistrict').hide();
+    $('#orgDapil').hide();
+    $('#orgVillage').show();
     return new Promise((resolve, reject) => {
+        const URL_ADD_CHILD = '/api/org/village/save';
+        const type = 'village';
+
         $.ajax({
             url: `/api/org/village`,
             method: 'GET',
             dataType: 'json',
-            data: { village: villageId },
+            data: { _token: CSRF_TOKEN, village: villageId },
             beforeSend: function () {
                 $('#loading').append(`<div class="text-center">
                                     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                                     <span class="visually-hidden"></span>
                                     </div>
                                 </div>`
-                                )
+                )
 
             },
             success: function (data) {
-                Highcharts.chart('tree', {
-                    chart: {
-                        height: 400,
-                        inverted: true
-                    },
-                    title: {
-                        text: 'Struktur Organisasi'
-                    },
-                    accessibility: {
-                        point: {
-                            descriptionFormatter: function (point) {
-                                var nodeName = point.toNode.name,
-                                    nodeId = point.toNode.id,
-                                    nodeDesc = nodeName === nodeId ? nodeName : nodeName + ', ' + nodeId,
-                                    parentDesc = point.fromNode.id;
-                                return point.index + '. ' + nodeDesc + ', reports to ' + parentDesc + '.';
-                            }
-                        }
-                    },
-
-                    series: [{
-                        type: 'organization',
-                        keys: ['from', 'to'],
-                        data: data.data,
-                        levels: [{
-                            level: 0,
-                            color: 'silver',
-                            dataLabels: {
-                                color: 'black'
-                            },
-                            height: 10
-                        }],
-                        nodes: data.nodes,
-                        colorByPoint: false,
-                        color: '#007ad0',
-                        dataLabels: {
-                            color: 'white'
-                        },
-                        borderColor: 'white',
-                        nodeWidth: 60,
-                        events: {
-                            click: function (points) {
-                                let { id, name, title } = points.point
-                                modalAddChild(id, name, title, villageId);
-                            }
-                        }
-
-                    }],
-                    tooltip: {
-                        outside: true
-                    },
-                    exporting: {
-                        allowHTML: true,
-                        sourceWidth: 800,
-                        sourceHeight: 600
-                    },
-
-                });
+                initialChartOrg('orgVillage', data, villageId, URL_ADD_CHILD, type);
             },
             complete: function () {
                 $('#loading').empty();
@@ -83,14 +36,76 @@ function getChartOrgVillage(villageId) {
 }
 
 $('#selectVillageId').on('change', function () {
-    $('#tree').empty();
+    $('#orgVillage').empty();
+    $('#orgDistrict').empty();
     selectVillageId = $("#selectVillageId").val();
     getChartOrgVillage(selectVillageId);
 })
 
-getChartOrgVillage(3602011002);
 
-async function modalAddChild(id, name, title, villageId) {
+function initialChartOrg(idElement, data, regionId, URL_ADD_CHILD, type) {
+
+    Highcharts.chart(idElement, {
+        chart: {
+            height: 400,
+            inverted: true
+        },
+        title: {
+            text: 'Struktur Organisasi'
+        },
+        accessibility: {
+            point: {
+                descriptionFormatter: function (point) {
+                    var nodeName = point.toNode.name,
+                        nodeId = point.toNode.id,
+                        nodeDesc = nodeName === nodeId ? nodeName : nodeName + ', ' + nodeId,
+                        parentDesc = point.fromNode.id;
+                    return point.index + '. ' + nodeDesc + ', reports to ' + parentDesc + '.';
+                }
+            }
+        },
+
+        series: [{
+            type: 'organization',
+            keys: ['from', 'to'],
+            data: data.data,
+            levels: [{
+                level: 0,
+                color: 'silver',
+                dataLabels: {
+                    color: 'black'
+                },
+                height: 10
+            }],
+            nodes: data.nodes,
+            colorByPoint: false,
+            color: '#007ad0',
+            dataLabels: {
+                color: 'white'
+            },
+            borderColor: 'white',
+            nodeWidth: 60,
+            events: {
+                click: function (points) {
+                    let { id, name, title } = points.point
+                    modalAddChild(id, name, title, regionId, URL_ADD_CHILD, type);
+                }
+            }
+
+        }],
+        tooltip: {
+            outside: true
+        },
+        exporting: {
+            allowHTML: true,
+            sourceWidth: 800,
+            sourceHeight: 600
+        },
+
+    });
+}
+
+async function modalAddChild(id, name, title, regionId, URL_ADD_CHILD, type) {
 
     let label = name.length === 1 ? `Tambah struktur di ${title}` : `Tambah struktur di ${name}`;
     const { value: formValues } = await Swal.fire({
@@ -108,19 +123,18 @@ async function modalAddChild(id, name, title, villageId) {
     })
 
     if (formValues) {
-        // AJAX SAVE
         return new Promise((reject, resolve) => {
             const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
             $.ajax({
-                url: '/api/org/village/save',
+                url: URL_ADD_CHILD,
                 method: 'POST',
                 data: {
                     _token: CSRF_TOKEN,
                     id: id,
                     nik: formValues[0],
                     title: formValues[1],
-                    villageId: villageId,
+                    regionId: regionId,
                 },
                 beforeSend: function () {
                     Swal.showLoading()
@@ -129,8 +143,13 @@ async function modalAddChild(id, name, title, villageId) {
                     showAllertToast('success', data?.data.message);
                 },
                 complete: function () {
-                    $('#tree').empty();
-                    getChartOrgVillage(villageId);
+                    if (type === 'village') {
+                        $('#orgVillage').empty();
+                        getChartOrgVillage(regionId);
+                    } else if (type === 'district') {
+                        $('#orgDistrict').empty();
+                        getChartOrgDistrict(regionId);
+                    }
 
                 },
                 error: function (er) {
@@ -144,6 +163,39 @@ async function modalAddChild(id, name, title, villageId) {
         Swal.fire(`Masukan Data`);
     }
 
+}
+
+function getChartOrgDistrict(selectDistrictId) {
+    $('#orgVillage').hide();
+    $('#orgDapil').hide();
+    $('#orgPusat').hide();
+    $('#orgDistrict').show();
+    return new Promise((resolve, reject) => {
+        const URL_ADD_CHILD = '/api/org/district/save';
+        const type = 'district';
+
+        $.ajax({
+            url: `/api/org/district`,
+            method: 'GET',
+            dataType: 'json',
+            data: { _token: CSRF_TOKEN, district: selectDistrictId },
+            beforeSend: function () {
+                $('#loading').append(`<div class="text-center">
+                                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden"></span>
+                                    </div>
+                                </div>`
+                )
+
+            },
+            success: function (data) {
+                initialChartOrg('orgDistrict', data, selectDistrictId, URL_ADD_CHILD, type);
+            },
+            complete: function () {
+                $('#loading').empty();
+            }
+        }).done(resolve).fail(reject)
+    })
 }
 
 function showAllertToast(type, message) {
@@ -164,3 +216,91 @@ function showAllertToast(type, message) {
         title: message
     })
 }
+
+$('#selectDistrictId').on('change', function () {
+    $('#orgDistrict').empty();
+    selectDistrictId = $("#selectDistrictId").val();
+    getChartOrgDistrict(selectDistrictId);
+});
+
+$('#selectListArea').on('change', function () {
+    selectListArea = $("#selectListArea").val();
+    getChartOrgDapil(selectListArea);
+})
+
+function getChartOrgDapil(selectListArea) {
+    $('#orgVillage').hide();
+    $('#orgDistrict').hide();
+    $('#orgPusat').hide();
+    $('#orgDapil').show();
+    return new Promise((resolve, reject) => {
+        const URL_ADD_CHILD = '';
+        const type = 'dapil';
+
+        $.ajax({
+            url: `/api/org/dapil`,
+            method: 'GET',
+            dataType: 'json',
+            data: { _token: CSRF_TOKEN, dapil: selectListArea },
+            beforeSend: function () {
+                $('#loading').append(`<div class="text-center">
+                                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden"></span>
+                                    </div>
+                                </div>`
+                )
+
+            },
+            success: function (data) {
+                initialChartOrg('orgDapil', data, selectListArea, URL_ADD_CHILD, type);
+            },
+            complete: function () {
+                $('#loading').empty();
+            }
+        }).done(resolve).fail(reject)
+    })
+
+}
+function getChartOrgPusat() {
+    $('#orgVillage').hide();
+    $('#orgDistrict').hide();
+    $('#orgDapil').hide();
+    return new Promise((resolve, reject) => {
+        const URL_ADD_CHILD = '';
+        const type = 'dapil';
+        const pusatId = '';
+
+        $.ajax({
+            url: `/api/org/pusat`,
+            method: 'GET',
+            dataType: 'json',
+            data: { _token: CSRF_TOKEN },
+            beforeSend: function () {
+                $('#loading').append(`<div class="text-center">
+                                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden"></span>
+                                    </div>
+                                </div>`
+                )
+
+            },
+            success: function (data) {
+                initialChartOrg('orgPusat', data, pusatId, URL_ADD_CHILD, type);
+            },
+            complete: function () {
+                $('#loading').empty();
+            }
+        }).done(resolve).fail(reject)
+    })
+
+}
+
+getChartOrgPusat();
+
+$('#btnKorPusat').on('click', function () {
+    $('#orgVillage').hide();
+    $('#orgDistrict').hide();
+    $('#orgDapil').hide();
+    $('#orgPusat').show();
+    getChartOrgPusat();
+})
