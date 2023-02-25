@@ -17,6 +17,10 @@
         <div class="collapse" id="org" aria-expanded="false">
             <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
+                    <a href="{{ route('admin-struktur-organisasi-pusat') }}"
+                        class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
+                        Daftar Struktur Pusat
+                    </a>
                     <a href="{{ route('admin-struktur-organisasi-create') }}"
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
                         Daftar Struktur Desa

@@ -517,4 +517,97 @@ class OrgDiagramController extends Controller
         }
     }
 
+    public function listDataStrukturPusat(){
+
+        $orgTable = DB::table('org_diagram_pusat');
+        
+        #creeate idx
+        $cek_count_org = $orgTable->count();
+
+        if ($cek_count_org == 0) {
+            
+            $result_new_idx = "KORPUSAT";
+
+        }else{
+
+            $count_org     = $orgTable->max('idx'); 
+    
+            $exp        = explode(".", $count_org);
+            $result_exp = (int) $exp[1]+1;
+
+            $result_new_idx  = "KORPUSAT.".$result_exp;
+        }
+
+        $org      = $orgTable->select('title','name','photo','idx')->whereNotNull('nik')->orderBy('idx','asc')->get();
+        $no       = 1;
+
+
+        return view('pages.admin.strukturorg.pusat.index', compact('org','no','result_new_idx'));
+
+    }
+
+    public function saveOrgPusat(Request $request){
+        
+
+        #CEK ketersedian NIK di tb users, harus true
+        $cek_nik_user = User::where('nik', $request->nik)->count();
+        if ($cek_nik_user == 0) {
+            return redirect()->back()->with(['error' => 'NIK tidak terdaftar dalam sistem!']);
+
+        }else{
+
+            $user = User::select('name','photo')->where('nik', $request->nik)->first();
+
+            #CEK nik di tb org_diagram_pusat, harus false
+            $cek_nik_org = DB::table('org_diagram_pusat')->where('nik', $request->nik)->count();
+            if ($cek_nik_org > 0) return redirect()->back()->with(['error' => 'NIK sudah terdaftar dalam struktur!']);
+    
+            DB::table('org_diagram_pusat')->insert([
+                'idx' => $request->idx,
+                'pidx' => 'KORPUSAT',
+                'title' => strtoupper($request->jabatan),
+                'nik' => $request->nik,
+                'name' => $user->name,
+                'photo' => $user->photo ?? ''
+            ]);
+        }
+
+        return redirect()->back()->with(['success' => 'NIK telah tersimpan!']);
+
+    }
+
+    public function setOrderStrukturOrgPusat(){
+
+        DB::beginTransaction();
+        try {
+            
+            $idx = request()->data;
+
+            $orgTable =  DB::table('org_diagram_pusat');
+
+            $old_data = $orgTable->select('idx')->orderBy('idx','asc')->get();
+
+            #get data where idx
+            // $results = [];
+            // foreach ($idx as $key => $value) {
+            //     $results[] = [
+            //         'old' => $old_data,
+            //         'new' => $idx
+            //     ];
+            // }
+
+            DB::commit();
+            return ResponseFormatter::success([
+                'data' => $results,
+                'message' => 'Berhasil set!'
+         ],200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
 }

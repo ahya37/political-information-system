@@ -382,6 +382,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::group(['prefix' => 'struktur'], function(){
             Route::get('/dashboard','OrgDiagramController@orgDiagramTest')->name('admin-struktur-organisasi-test');
             Route::get('/village/create','OrgDiagramController@createOrgVillage')->name('admin-struktur-organisasi-create');
+            Route::get('/pusat','OrgDiagramController@listDataStrukturPusat')->name('admin-struktur-organisasi-pusat');
+            Route::post('/pusat/save','OrgDiagramController@saveOrgPusat')->name('admin-struktur-organisasi-pusat-save');
 
         });
           

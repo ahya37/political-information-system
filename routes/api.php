@@ -64,6 +64,8 @@ Route::get('org/pusat', 'Admin\OrgDiagramController@getDataOrgDiagramPusat');
 Route::post('org/village/save', 'Admin\OrgDiagramController@setSaveOrgVillage');
 Route::post('org/district/save', 'Admin\OrgDiagramController@setSaveOrgDistrict');
 
+#SET URUTAN STRUKTUR
+Route::post('org/pusat/setorder/save', 'Admin\OrgDiagramController@setOrderStrukturOrgPusat');
 
 Route::get('member/nation/{daterange}','API\DashboardController@memberReportPerMountNation');
 Route::get('member/province/{daterange}/{provinceID}','API\DashboardController@memberReportPerMountProvince');
