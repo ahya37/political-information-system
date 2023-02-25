@@ -206,4 +206,12 @@ class LocationController extends Controller
         return response()->json($list);
     }
 
+    public function getRTByVIllage(){
+
+        $rt = DB::table('users')->select('rt')->groupBy('rt')->orderBy('rt','asc')
+                ->where('village_id',request()->village_id)->get();
+                
+        return response()->json($rt);
+    }
+
 }

@@ -314,20 +314,83 @@ class OrgDiagramController extends Controller
         return response()->json($results);
     }
 
-    public function createOrgVillage(){
+    public function indexOrgVillage(){
 
-        $data = DB::table('org_diagram_village as a')
-                ->select('a.idx','a.pidx','a.title','a.nik','a.name','a.base','a.photo','b.name as village')
-                ->join('villages as b','b.id','=','a.village_id')
-                ->orderBy('a.id','asc')->get();
+        $regency = Regency::select('id','name')->where('id', 3602)->first();
 
-        return view('pages.admin.strukturorg.village.create', compact('data'));
+        $rt      = 30;
+
+        return view('pages.admin.strukturorg.village.index', compact('regency','rt'));
 
     }
 
-    public function getDataOrgVillage(){
+    public function getDataOrgVillage(Request $request){
 
-        // DATATABLE 
+        // DATATABLE
+        $orderBy = 'a.name';
+        switch ($request->input('order.0.column')) {
+            case '1':
+                $orderBy = 'a.name';
+                break;
+            // case '3':
+            //     $orderBy = 'a.rt';
+            //     break;
+            // case '3':
+            //     $orderBy = 'districts.name';
+            //     break;
+            // case '4':
+            //     $orderBy = 'villages.name';
+            //     break;
+            // case '5':
+            //     $orderBy = 'b.name';
+            //     break;
+            // case '6':
+            //     $orderBy = 'c.name';
+            //     break;
+            // case '7':
+            //     $orderBy = 'a.created_at';
+            //     break;
+        }
+
+        $data = DB::table('org_diagram_village as a')
+                ->select('a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','b.phone_number')
+                ->join('users as b','b.nik','=','a.nik');
+
+            
+        if($request->input('search.value')!=null){
+                $data = $data->where(function($q)use($request){
+                    $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                    // $q->whereRaw('LOWER(a.rt) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                    // ->orWhereRaw('LOWER(regencies.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                    // ->orWhereRaw('LOWER(districts.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                    // ->orWhereRaw('LOWER(villages.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                    // ->orWhereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                    // ->orWhereRaw('LOWER(c.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                    // ->orWhereRaw('LOWER(a.created_at) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                    
+                });
+            }
+
+            if ($request->input('village') != null) {
+                            $data->where('a.village_id', $request->village);
+            }
+
+            if ($request->input('rt') != null) {
+                            $data->where('a.rt', $request->rt);
+            }
+
+          $recordsFiltered = $data->get()->count();
+          if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+          $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+          
+          $recordsTotal = $data->count();
+
+          return response()->json([
+                'draw'=>$request->input('draw'),
+                'recordsTotal'=>$recordsTotal,
+                'recordsFiltered'=>$recordsFiltered,
+                'data'=> $data
+            ]);
     }
 
     public function setSaveOrgVillage(){

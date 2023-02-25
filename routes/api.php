@@ -27,6 +27,7 @@ Route::post('searchprovincesById', 'API\LocationController@getSearchProvinceById
 Route::post('searchregencyById', 'API\LocationController@getSearchRegencyById');
 Route::post('searchdistrictById', 'API\LocationController@getSearchDistrictById');
 Route::post('searchVillageById', 'API\LocationController@getSearchVillageById');
+Route::post('getrtbyvillage', 'API\LocationController@getRTByVIllage');
 
 Route::get('selectvillage', 'API\LocationController@getVillageSelect');
 Route::get('searchvillage', 'API\LocationController@getVillageSearch');
@@ -55,6 +56,9 @@ Route::get('nik/name/{nik}', 'Auth\RegisterController@reveralNameByNik');
 Route::post('store/org', 'Admin\OrgDiagramController@storeOrg');
 Route::post('org/update', 'Admin\OrgDiagramController@updateOrg');
 Route::post('org/delete', 'Admin\OrgDiagramController@deleteOrg');
+
+#DATATABLE STRUKTUR ORG
+Route::post('org/getdataorgvillage', 'Admin\OrgDiagramController@getDataOrgVillage');
 
 #new org diagram
 Route::get('org/village', 'Admin\OrgDiagramController@getDataOrgDiagramVillage');

@@ -31,7 +31,6 @@
             <nav class="navbar fixed-top navbar-light bg-light">
                 <div class="col-md-2">
                     <div class="form-group">
-                        {{-- <select name="" id="selectArea" class="form-control filter" required></select> --}}
                         <input value="{{ $regency->id }}" type="hidden" id="regencyId" class="form-control">
                         <input value="KOR PUSAT" type="text" id="btnKorPusat" readonly class="btn btn-sm btn-primary">
                     </div>
