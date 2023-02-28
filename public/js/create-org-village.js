@@ -90,8 +90,6 @@ $("#selectVillageId").change(async function () {
         $("#selectRt").append("<option value=''>-Pilih RT-</option>");
         getListRTUi(dataRT);
 
-        table.ajax.reload(null, false);
-        
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
@@ -105,8 +103,7 @@ $("#selectVillageId").change(async function () {
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
-        table.ajax.reload(null, false);
-        
+
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
@@ -124,8 +121,7 @@ $("#selectRt").change(async function () {
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
-        table.ajax.reload(null, false);
-        
+
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
@@ -138,13 +134,24 @@ $("#selectRt").change(async function () {
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
-        table.ajax.reload(null, false);
-        
+
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
+    }
+});
+
+$('#jabatan').change(function () {
+    let jabatanId = $("#jabatan").val();
+    if (jabatanId === 'KOR RT') {
+        $('#divSelectRt').show();
+        $("#selectRt").attr('required', true);
+    } else {
+        $('#divSelectRt').hide();
+        $("#selectRt").val("")
+        $("#selectRt").attr('required', false);
     }
 });
 
@@ -188,7 +195,7 @@ async function getDapilNames(regencyId) {
         return response.json();
     }).catch(error => {
     });
-    
+
 }
 function getDapilNamesUi(listDapils) {
     let divListDapil = "";
@@ -303,72 +310,3 @@ function getListRTUi(dataRT) {
 function showDivHtmlRT(m) {
     return `<option value="${m.rt}">${m.rt}</option>`;
 }
-
-let table = $("#data").DataTable({
-    pageLength: 10,
-
-    bLengthChange: true,
-    bFilter: true,
-    bInfo: true,
-    processing: true,
-    bServerSide: true,
-    order: [[1, "desc"]],
-    autoWidth: false,
-    ajax: {
-        url: "/api/org/getdataorgvillage",
-        type: "POST",
-        data: function (d) {
-            d.village = selectVillageId;
-            d.rt = selectRT;
-            return d;
-        },
-    },
-    columnDefs: [
-        {
-            targets: 0,
-            sortable: false,
-            render: function (data, type, row, meta) {
-                return `<a href="/admin/member/profile/${row.id}">
-                        <img  class="rounded" width="40" src="/storage/${row.photo}">
-                      </a>`;
-            },
-        },
-        {
-            targets: 1,
-            sortable: true,
-            render: function (data, type, row, meta) {
-                return `<p>${row.name}</p>`;
-            },
-        },
-        {
-            targets: 2,
-            render: function (data, type, row, meta) {
-                return `<p>${row.address}</p>`;
-            },
-        },
-        {
-            targets: 3,
-            render: function (data, type, row, meta) {
-                return `<p>${row.rt ?? ''}</p>`;
-            },
-        },
-        {
-            targets: 4,
-            render: function (data, type, row, meta) {
-                return `<p>${row.rw ?? ''}</p>`;
-            },
-        },
-        {
-            targets: 5,
-            render: function (data, type, row, meta) {
-                return `<p>${row.title}</p>`;
-            },
-        },
-        {
-            targets: 6,
-            render: function (data, type, row, meta) {
-                return `<p>${row.phone_number ?? ''}</p>`;
-            },
-        },
-    ],
-});

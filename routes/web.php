@@ -384,6 +384,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/village','OrgDiagramController@indexOrgVillage')->name('admin-struktur-organisasi-create');
             Route::get('/pusat','OrgDiagramController@listDataStrukturPusat')->name('admin-struktur-organisasi-pusat');
             Route::post('/pusat/save','OrgDiagramController@saveOrgPusat')->name('admin-struktur-organisasi-pusat-save');
+            Route::get('/village/create','OrgDiagramController@createOrgVillage')->name('admin-struktur-organisasi-village-create');
+            Route::post('/village/save','OrgDiagramController@saveOrgVillage')->name('admin-struktur-organisasi-village-save');
 
         });
           

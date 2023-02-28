@@ -353,7 +353,7 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_village as a')
-                ->select('a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','b.phone_number')
+                ->select('a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number')
                 ->join('users as b','b.nik','=','a.nik');
 
             
@@ -671,6 +671,72 @@ class OrgDiagramController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
+    }
+
+    public function createOrgVillage(){
+
+        $regency = Regency::select('id','name')->where('id', 3602)->first();
+
+        return view('pages.admin.strukturorg.village.create', compact('regency'));
+    }
+
+    public function saveOrgVillage(Request $request){
+
+        DB::beginTransaction();
+        try {
+
+            #cek ketersediaan nik di tb users
+            $userTable     = DB::table('users');
+            $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
+
+            if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
+
+            $user         = $userTable->select('name','photo')->where('nik', $request->nik)->first();
+
+            $orgTable = DB::table('org_diagram_village');
+        
+            #creeate idx
+            $cek_count_org = $orgTable->count();
+
+            if ($cek_count_org == 0) {
+                
+                $result_new_idx = "KORDES";
+
+            }else{
+
+                $count_org     = $orgTable->max('idx'); 
+        
+                $exp        = explode(".", $count_org);
+                $result_exp = (int) $exp[1]+1;
+
+                $result_new_idx  = "KORDES.".$result_exp;
+            }
+            
+            #save to tb org_diagram_village
+            DB::table('org_diagram_village')->insert([
+                'idx'    => $result_new_idx,
+                'pidx'   => $result_new_idx,
+                'title'  => strtoupper($request->jabatan),
+                'nik'    => $request->nik,
+                'name'   => $user->name,
+                'base'   => 'KORDES',
+                'photo'  => $user->photo ?? '',
+                'telp'  => $request->telp,
+                'regency_id'  => $request->regency_id,
+                'district_id' => $request->district_id,
+                'village_id'  => $request->village_id,
+                'rt'  => $request->rt,
+            ]);
+
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+           
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with(['error' => 'Data gagal tersimpan!']);
+        }
+
+        
     }
 
 }

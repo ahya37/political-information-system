@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="row col-md-12">
-                        <a class="btn btn-sm btn-sc-primary text-white">+ Tambah</a>
+                        <a class="btn btn-sm btn-sc-primary text-white" href="{{ route('admin-struktur-organisasi-village-create') }}">+ Tambah</a>
                     </div>
                 </div>
                 <div class="row">
@@ -65,7 +65,7 @@
                                             <th scope="col">RT</th>
                                             <th scope="col">RW</th>
                                             <th scope="col">JABATAN</th>
-                                            <th scope="col">KONTAK</th>
+                                            <th scope="col">NO HP / WA</th>
                                           </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -79,6 +79,7 @@
         </div>
     </div>
 @endsection
+
 @push('addon-script')
 <script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
