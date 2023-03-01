@@ -315,7 +315,7 @@ let table = $("#data").DataTable({
     order: [[1, "desc"]],
     autoWidth: false,
     ajax: {
-        url: "/api/org/getdataorgvillage",
+        url: "/api/org/rt",
         type: "POST",
         data: function (d) {
             d.village = selectVillageId;
@@ -349,11 +349,17 @@ let table = $("#data").DataTable({
         {
             targets: 3,
             render: function (data, type, row, meta) {
-                return `<p>${row.title}</p>`;
+                return `<p>${row.rt ?? ''}</p>`;
             },
         },
         {
             targets: 4,
+            render: function (data, type, row, meta) {
+                return `<p>${row.title}</p>`;
+            },
+        },
+        {
+            targets: 5,
             render: function (data, type, row, meta) {
                 return `<p>${row.phone_number ?? ''}</p>`;
             },

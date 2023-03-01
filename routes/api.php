@@ -59,6 +59,7 @@ Route::post('org/delete', 'Admin\OrgDiagramController@deleteOrg');
 
 #DATATABLE STRUKTUR ORG
 Route::post('org/getdataorgvillage', 'Admin\OrgDiagramController@getDataOrgVillage');
+Route::post('org/rt', 'Admin\OrgDiagramController@getDataOrgRT');
 
 #new org diagram
 Route::get('org/village', 'Admin\OrgDiagramController@getDataOrgDiagramVillage');

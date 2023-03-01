@@ -19,11 +19,15 @@
                 <li class="nav-item">
                     <a href="{{ route('admin-struktur-organisasi-pusat') }}"
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
-                        Daftar Struktur Pusat
+                        Kor. Pusat
                     </a>
                     <a href="{{ route('admin-struktur-organisasi-create') }}"
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
-                        Daftar Struktur Desa
+                        Kor. Desa
+                    </a>
+                    <a href="{{ route('admin-struktur-organisasi-rt') }}"
+                        class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
+                        Kor. RT
                     </a>
 
                     <a href="{{ route('admin-struktur-organisasi-test') }}" target="_blank"

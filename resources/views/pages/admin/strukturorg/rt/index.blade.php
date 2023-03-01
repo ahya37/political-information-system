@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Koordinator Desa')
+@section('title', 'Koordinator RT')
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -11,7 +11,7 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Koordinator Desa</h2>
+                <h2 class="dashboard-title">Daftar Koordinator RT</h2>
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
                 <div class="card card-body mb-4">
@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="row col-md-12">
-                        <a class="btn btn-sm btn-sc-primary text-white" href="{{ route('admin-struktur-organisasi-village-create') }}">+ Tambah</a>
+                        <a class="btn btn-sm btn-sc-primary text-white" href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
                     </div>
                 </div>
                 <div class="row">
@@ -62,6 +62,7 @@
                                             <th scope="col"></th>
                                             <th scope="col">NAMA</th>
                                             <th scope="col">ALAMAT</th>
+                                            <th scope="col">RT</th>
                                             <th scope="col">JABATAN</th>
                                             <th scope="col">NO HP / WA</th>
                                           </tr>
@@ -82,7 +83,7 @@
 <script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
-    <script src="{{ asset('js/org-village-index.js') }}"></script>
+    <script src="{{ asset('js/org-rt-index.js') }}"></script>
     <script>
         AOS.init();
     </script>
