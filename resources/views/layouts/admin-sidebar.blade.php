@@ -11,7 +11,7 @@
             class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/intelegency*') ? 'active custom-active-color' : '' }}">
             Intelegensi Politik
         </a> --}}
-        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/struktur*') ? 'active custom-active-color ' : '' }}"
+        {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/struktur*') ? 'active custom-active-color ' : '' }}"
             href="#org" data-toggle="collapse" data-target="#org">
             <span class="d-none d-sm-inline"></span>Struktur Organisasi</a>
         <div class="collapse" id="org" aria-expanded="false">
@@ -36,7 +36,7 @@
                     </a>
                 </li>
             </ul>
-        </div>
+        </div> --}}
 
         <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/member*') ? 'active custom-active-color ' : '' }}"
             href="#Anggota" data-toggle="collapse" data-target="#Anggota">
