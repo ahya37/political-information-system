@@ -1120,9 +1120,29 @@ class OrgDiagramController extends Controller
                 DB::rollback();
                 return ResponseFormatter::error([
                     'message' => 'Something when wrong!',
-                    'error' => $e->getMessage()
+                    'error'   => $e->getMessage()
                 ]);
             }
+
+    }
+
+    public function detailAnggotaByKorRT($idx){
+
+        $kor_rt = DB::table('org_diagram_rt as a')
+                ->select('a.rt','a.name')
+                ->join('users as b','b.nik','=','a.nik')
+                ->where('idx', $idx)
+                ->first();
+
+        $data = DB::table('org_diagram_rt as a')
+                    ->select('a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','a.base','a.id')
+                    ->join('users as b','b.nik','=','a.nik')
+                    ->where('pidx', $idx)
+                    ->get();
+
+        $no = 1;
+
+       return view('pages.admin.strukturorg.village.detailanggota', compact('data','no','kor_rt'));
 
     }
 

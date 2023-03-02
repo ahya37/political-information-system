@@ -374,6 +374,7 @@ let table = $("#data").DataTable({
                 // return `<a href='/admin/struktur/rt/add/anggota/${row.idx}' class='btn btn-sm btn-sc-primary text-white'>Anggota</a>`;
                 return `
                         <button type="button" class="btn btn-sm btn-sc-primary text-white" data-toggle="modal" data-target="#exampleModal" data-whatever="${row.idx}">+ Anggota</button>
+                        <a class="btn btn-sm btn-sc-primary text-white" href="/admin/struktur/rt/detail/anggota/${row.idx}">Detail Anggota</a>
                         <button type="button" class="btn btn-sm btn-info" onclick="onEdit(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-edit"></i></button>
                         `
             },
