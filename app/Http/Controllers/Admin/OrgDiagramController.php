@@ -774,7 +774,7 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_rt as a')
-                ->select('a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number')
+                ->select('a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number')
                 ->join('users as b','b.nik','=','a.nik');
 
             
@@ -798,11 +798,30 @@ class OrgDiagramController extends Controller
           
           $recordsTotal = $data->count();
 
+          $results = [];
+          $no = 1;
+          foreach ($data as $value) {
+            $results[] = [
+                'no' => $no++,
+                'idx' => $value->idx,
+                'village_id' => $value->village_id,
+                'rt' => $value->rt,
+                'rw' => $value->rw,
+                'address' => $value->address,
+                'title' => $value->title,
+                'nik' => $value->nik,
+                'name' => $value->name,
+                'photo' => $value->photo,
+                'phone_number' => $value->phone_number
+
+            ];
+          }
+
           return response()->json([
                 'draw'=>$request->input('draw'),
                 'recordsTotal'=>$recordsTotal,
                 'recordsFiltered'=>$recordsFiltered,
-                'data'=> $data
+                'data'=> $results
             ]);
     }
 
@@ -886,6 +905,83 @@ class OrgDiagramController extends Controller
             return redirect()->back()->with(['error' => 'Data gagal tersimpan!'. $e->getMessage()]);
         }
         
+    }
+
+    public function saveAnggotaByKorRT(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+
+
+            #cek ketersediaan nik di tb users
+            $userTable     = DB::table('users');
+            $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
+            
+            if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
+
+            #cek jika nik sudah terdaftar di tb org_diagram_village
+            $cek_nik_org  = DB::table('org_diagram_rt')->where('nik', $request->nik)->count();
+            if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
+
+
+            #get villlage, regency, district, rt where idx
+            $domisili = DB::table('org_diagram_rt')->select('regency_id','district_id','village_id','rt')->where('idx', $request->pidx)->first();
+
+            #create idx
+            $cek_count_org = DB::table('org_diagram_rt')->where('idx', $request->pidx)->count();
+
+            $result_new_idx = "";
+
+            if ($cek_count_org > 0) {
+                
+                $count_org     = DB::table('org_diagram_rt')->where('idx', $request->pidx)->max('idx'); 
+
+                $exp        = explode(".", $count_org);
+                $count_exp  = count($exp);
+                
+                if($count_exp == 1) {
+
+                    $result_new_idx = $exp[0].".1";
+
+                }else{
+
+                    $result_exp = (int) $exp[1]+1;
+    
+                    $result_new_idx  = "KORRT.".$result_exp;
+
+                }         
+                
+            }else{
+
+                $result_new_idx = "KORRT";
+                
+            }
+
+            $user         = $userTable->select('name','photo','phone_number')->where('nik', $request->nik)->first();
+
+            #save to tb org_diagram_rt
+            DB::table('org_diagram_rt')->insert([
+                'idx'    => $result_new_idx,
+                'pidx'   => $request->pidx,
+                'title'  => 'ANGGOTA',
+                'nik'    => $request->nik,
+                'name'   => $user->name,
+                'base'   => 'ANGGOTA',
+                'photo'  => $user->photo ?? '',
+                'telp'  => $user->phone_number,
+                'regency_id'  => $domisili->regency_id,
+                'district_id' => $domisili->district_id,
+                'village_id'  => $domisili->village_id,
+                'rt'  => $domisili->rt,
+            ]);
+
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+           
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with(['error' => 'Data gagal tersimpan!'. $e->getMessage()]);
+        }
     }
 
 }

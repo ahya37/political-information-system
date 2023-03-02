@@ -389,6 +389,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/rt','OrgDiagramController@indexOrgRT')->name('admin-struktur-organisasi-rt');
             Route::get('/rt/create','OrgDiagramController@createOrgRT')->name('admin-struktur-organisasi-rt-create');
             Route::post('/rt/save','OrgDiagramController@saveOrgRT')->name('admin-struktur-organisasi-rt-save');
+            Route::post('/rt/add/save','OrgDiagramController@saveAnggotaByKorRT')->name('admin-struktur-organisasi-rt-anggota-save');;
 
         });
           

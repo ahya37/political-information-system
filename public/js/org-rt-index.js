@@ -312,7 +312,7 @@ let table = $("#data").DataTable({
     bInfo: true,
     processing: true,
     bServerSide: true,
-    order: [[1, "desc"]],
+    order: [[0, "desc"]],
     autoWidth: false,
     ajax: {
         url: "/api/org/rt",
@@ -326,18 +326,16 @@ let table = $("#data").DataTable({
     columnDefs: [
         {
             targets: 0,
-            sortable: false,
+            sortable: true,
             render: function (data, type, row, meta) {
-                return `<a href="/admin/member/profile/${row.id}">
-                        <img  class="rounded" width="40" src="/storage/${row.photo}">
-                      </a>`;
+                return row.no
             },
         },
         {
             targets: 1,
             sortable: true,
             render: function (data, type, row, meta) {
-                return `<p>${row.name}</p>`;
+                return `<p> <img  class="rounded" width="40" src="/storage/${row.photo}"> ${row.name}</p>`;
             },
         },
         {
@@ -364,5 +362,66 @@ let table = $("#data").DataTable({
                 return `<p>${row.phone_number ?? ''}</p>`;
             },
         },
+        {
+            targets: 6,
+            render: function (data, type, row, meta) {
+                // return `<a href='/admin/struktur/rt/add/anggota/${row.idx}' class='btn btn-sm btn-sc-primary text-white'>Anggota</a>`;
+                return `<button type="button" class="btn btn-sm btn-sc-primary text-white" data-toggle="modal" data-target="#exampleModal"
+                data-whatever="${row.idx}">+ Anggota</button>`
+            },
+        },
     ],
 });
+
+$('#exampleModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this)
+    modal.find('.modal-body input[name="pidx"]').val(recipient)
+
+//    new Vue({
+//         el: "#register",
+//         data() {
+//             return {
+//                 nik: null,
+//             };
+//         },
+//         methods: {
+//             checkForNikAvailability: function () {
+//                 var self = this;
+//                 axios
+//                     .get("/api/nik/check", {
+//                         params: {
+//                             nik: this.nik,
+//                         },
+//                     })
+//                     .then(function (response) {
+//                         if (response.data == "Available") {
+//                             self.$toasted.error(
+//                                 "NIK Ketua Tidak Terdaftar!",
+//                                 {
+//                                     position: "top-center",
+//                                     className: "rounded",
+//                                     duration: 2000,
+//                                 }
+//                             );
+//                             self.nik_unavailable = false;
+//                         } else {
+//                             self.$toasted.show(
+//                                 "NIK Ketua Terdaftar, Lanujutkan!",
+//                                 {
+//                                     position: "top-center",
+//                                     className: "rounded",
+//                                     duration: 2000,
+//                                 }
+//                             );
+//                             self.nik_unavailable = true;
+//                         }
+//                     });
+//             },
+    
+//         },
+//     });
+  });

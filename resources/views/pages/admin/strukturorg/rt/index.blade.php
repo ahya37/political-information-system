@@ -16,36 +16,37 @@
             <div class="dashboard-content mt-4" id="transactionDetails">
                 <div class="card card-body mb-4">
                     <div class="row">
-                            {{-- <div class="col-md-3"> --}}
-                                <div class="form-group">
-                                    <input value="{{ $regency->id }}" type="hidden" id="regencyId" class="form-control">
-                                </div>
-                            {{-- </div> --}}
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select name="dapil_id" id="selectListArea" class="form-control filter" required></select>
-                                </div>
+                        {{-- <div class="col-md-3"> --}}
+                        <div class="form-group">
+                            <input value="{{ $regency->id }}" type="hidden" id="regencyId" class="form-control">
+                        </div>
+                        {{-- </div> --}}
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select name="dapil_id" id="selectListArea" class="form-control filter" required></select>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select name="district_id" id="selectDistrictId" class="form-control filter"></select>
-                                </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select name="district_id" id="selectDistrictId" class="form-control filter"></select>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select name="village_id" id="selectVillageId" class="form-control filter"></select>
-                                </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select name="village_id" id="selectVillageId" class="form-control filter"></select>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select name="rt" id="selectRt" class="form-control filter">
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select name="rt" id="selectRt" class="form-control filter">
+                                </select>
                             </div>
+                        </div>
                     </div>
 
                     <div class="row col-md-12">
-                        <a class="btn btn-sm btn-sc-primary text-white" href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
+                        <a class="btn btn-sm btn-sc-primary text-white"
+                            href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
                     </div>
                 </div>
                 <div class="row">
@@ -58,17 +59,18 @@
                                 <div class="card-body">
                                     <table id="data" class="table table-sm table-striped" width="100%">
                                         <thead>
-                                          <tr>
-                                            <th scope="col"></th>
-                                            <th scope="col">NAMA</th>
-                                            <th scope="col">ALAMAT</th>
-                                            <th scope="col">RT</th>
-                                            <th scope="col">JABATAN</th>
-                                            <th scope="col">NO HP / WA</th>
-                                          </tr>
+                                            <tr>
+                                                <th scope="col">No</th>
+                                                <th scope="col">NAMA</th>
+                                                <th scope="col">ALAMAT</th>
+                                                <th scope="col">RT</th>
+                                                <th scope="col">JABATAN</th>
+                                                <th scope="col">NO HP / WA</th>
+                                                <th scope="col">AKSI</th>
+                                            </tr>
                                         </thead>
                                         <tbody></tbody>
-                                      </table>
+                                    </table>
                                 </div>
                             </div>
                         </form>
@@ -77,10 +79,44 @@
             </div>
         </div>
     </div>
+
+    @push('prepend-script')
+        <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Tambah Anggota Kor RT</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('admin-struktur-organisasi-rt-anggota-save') }}" method="POST" id="register">
+                            @csrf
+                            <input type="hidden" name="pidx" class="form-control" id="recipient-name"
+                                placeholder="Isikan NIK">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">NIK</label>
+                                <input type="number" class="form-control" name="nik" value=""
+                                    placeholder="Cari Berdasarkan NIK" required />
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-sm btn-sc-primary">Simpan</button>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endpush
 @endsection
 
 @push('addon-script')
-<script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
+<script src="{{ asset('assets/vendor/vuetoasted/vue-toasted.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script> --}}
+    <script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
     <script src="{{ asset('js/org-rt-index.js') }}"></script>
