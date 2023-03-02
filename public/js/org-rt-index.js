@@ -315,7 +315,7 @@ let table = $("#data").DataTable({
     order: [[0, "desc"]],
     autoWidth: false,
     ajax: {
-        url: "/api/org/rt",
+        url: "/api/org/list/rt",
         type: "POST",
         data: function (d) {
             d.village = selectVillageId;
@@ -353,21 +353,29 @@ let table = $("#data").DataTable({
         {
             targets: 4,
             render: function (data, type, row, meta) {
-                return `<p>${row.title}</p>`;
+                return `<p>${row.base}</p>`;
             },
         },
         {
             targets: 5,
             render: function (data, type, row, meta) {
-                return `<p>${row.phone_number ?? ''}</p>`;
+                return `<p class="text-center">${row.count_anggota}</p>`;
             },
         },
         {
             targets: 6,
             render: function (data, type, row, meta) {
+                return `<p>${row.phone_number ?? ''}</p>`;
+            },
+        },
+        {
+            targets: 7,
+            render: function (data, type, row, meta) {
                 // return `<a href='/admin/struktur/rt/add/anggota/${row.idx}' class='btn btn-sm btn-sc-primary text-white'>Anggota</a>`;
-                return `<button type="button" class="btn btn-sm btn-sc-primary text-white" data-toggle="modal" data-target="#exampleModal"
-                data-whatever="${row.idx}">+ Anggota</button>`
+                return `
+                        <button type="button" class="btn btn-sm btn-sc-primary text-white" data-toggle="modal" data-target="#exampleModal" data-whatever="${row.idx}">+ Anggota</button>
+                        <button type="button" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></button>
+                        `
             },
         },
     ],

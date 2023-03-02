@@ -1,6 +1,7 @@
 $('#tree').hide();
 $('#orgDistrict').hide();
 $('#orgDapil').hide();
+$('#orgRT').hide();
 let CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
 function getChartOrgVillage(villageId) {
@@ -38,10 +39,22 @@ function getChartOrgVillage(villageId) {
 $('#selectVillageId').on('change', function () {
     $('#orgVillage').empty();
     $('#orgDistrict').empty();
-    selectVillageId = $("#selectVillageId").val();
+    $('#orgRT').empty();
+    let selectVillageId = $("#selectVillageId").val();
+    let selectRt = "";
     getChartOrgVillage(selectVillageId);
+    getChartOrgRT(selectVillageId, selectRt);
 })
 
+$('#selectRt').on('change', function () {
+    $('#orgRT').empty();
+    $('#orgVillage').empty();
+    $('#orgDistrict').empty();
+    $('#orgRT').show();
+    let selectRt = $("#selectRt").val();
+    let selectVillageId = $("#selectVillageId").val();
+    getChartOrgRT(selectVillageId, selectRt);
+});
 
 function initialChartOrg(idElement, data, regionId, URL_ADD_CHILD, type) {
 
@@ -85,12 +98,12 @@ function initialChartOrg(idElement, data, regionId, URL_ADD_CHILD, type) {
             },
             borderColor: 'white',
             nodeWidth: 60,
-            events: {
-                click: function (points) {
-                    let { id, name, title } = points.point
-                    modalAddChild(id, name, title, regionId, URL_ADD_CHILD, type);
-                }
-            }
+            // events: {
+            //     click: function (points) {
+            //         let { id, name, title } = points.point
+            //         modalAddChild(id, name, title, regionId, URL_ADD_CHILD, type);
+            //     }
+            // }
 
         }],
         tooltip: {
@@ -233,6 +246,7 @@ function getChartOrgDapil(selectListArea) {
     $('#orgDistrict').hide();
     $('#orgPusat').hide();
     $('#orgDapil').show();
+    $('#orgRT').hide();
     return new Promise((resolve, reject) => {
         const URL_ADD_CHILD = '';
         const type = 'dapil';
@@ -301,6 +315,89 @@ $('#btnKorPusat').on('click', function () {
     $('#orgVillage').hide();
     $('#orgDistrict').hide();
     $('#orgDapil').hide();
+    $('#orgRT').hide();
     $('#orgPusat').show();
     getChartOrgPusat();
-})
+});
+
+function getChartOrgRT(selectVillageId, rt) {
+    $('#orgDistrict').hide();
+    $('#orgDapil').hide();
+    $('#orgRT').show();
+    return new Promise((resolve, reject) => {
+        const URL_ADD_CHILD = '/api/org/village/save';
+        const type = 'rt';
+
+        $.ajax({
+            url: `/api/org/rt`,
+            method: 'GET',
+            dataType: 'json',
+            data: { _token: CSRF_TOKEN, rt: rt, village:selectVillageId },
+            beforeSend: function () {
+                $('#loading').append(`<div class="text-center">
+                                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden"></span>
+                                    </div>
+                                </div>`
+                )
+
+            },
+            success: function (data) {
+                Highcharts.chart("orgRT", {
+                    chart: {
+                        height: 400,
+                        inverted: true
+                    },
+                    title: {
+                        text: ' '
+                    },
+                    accessibility: {
+                        point: {
+                            descriptionFormatter: function (point) {
+                                var nodeName = point.toNode.name,
+                                    nodeId = point.toNode.id,
+                                    nodeDesc = nodeName === nodeId ? nodeName : nodeName + ', ' + nodeId,
+                                    parentDesc = point.fromNode.id;
+                                return point.index + '. ' + nodeDesc + ', reports to ' + parentDesc + '.';
+                            }
+                        }
+                    },
+
+                    series: [{
+                        type: 'organization',
+                        keys: ['from', 'to'],
+                        data: data.data,
+                        levels: [{
+                            level: 0,
+                            color: 'silver',
+                            dataLabels: {
+                                color: 'black'
+                            },
+                            height: 10
+                        }],
+                        nodes: data.nodes,
+                        colorByPoint: false,
+                        color: '#007ad0',
+                        dataLabels: {
+                            color: 'white'
+                        },
+                        borderColor: 'white',
+                        nodeWidth: 60,
+                    }],
+                    tooltip: {
+                        outside: true
+                    },
+                    exporting: {
+                        allowHTML: true,
+                        sourceWidth: 800,
+                        sourceHeight: 600
+                    },
+
+                });
+            },
+            complete: function () {
+                $('#loading').empty();
+            }
+        }).done(resolve).fail(reject)
+    })
+}

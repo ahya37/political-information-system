@@ -5,6 +5,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/datatable/datatables.min.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 @section('content')
     <!-- Section Content -->
@@ -65,6 +66,7 @@
                                                 <th scope="col">ALAMAT</th>
                                                 <th scope="col">RT</th>
                                                 <th scope="col">JABATAN</th>
+                                                <th scope="col">ANGGOTA</th>
                                                 <th scope="col">NO HP / WA</th>
                                                 <th scope="col">AKSI</th>
                                             </tr>
@@ -94,12 +96,12 @@
                     <div class="modal-body">
                         <form action="{{ route('admin-struktur-organisasi-rt-anggota-save') }}" method="POST" id="register">
                             @csrf
-                            <input type="hidden" name="pidx" class="form-control" id="recipient-name"
+                            <input type="text" name="pidx" class="form-control" id="recipient-name"
                                 placeholder="Isikan NIK">
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">NIK</label>
                                 <input type="number" class="form-control" name="nik" value=""
-                                    placeholder="Cari Berdasarkan NIK" required />
+                                    placeholder="Cari Berdasarkan NIK" required/>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Batal</button>
                                     <button type="submit" class="btn btn-sm btn-sc-primary">Simpan</button>
@@ -113,9 +115,6 @@
 @endsection
 
 @push('addon-script')
-{{-- <script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
-<script src="{{ asset('assets/vendor/vuetoasted/vue-toasted.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script> --}}
     <script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>

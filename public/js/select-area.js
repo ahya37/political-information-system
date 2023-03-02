@@ -72,7 +72,7 @@ $("#selectDistrictId").change(async function () {
 });
 
 // DESA
-$("#selectVillageId").change(function () {
+$("#selectVillageId").change(async function () {
     selectVillageId = $("#selectVillageId").val();
 
     if (selectVillageId !== "") {
@@ -81,6 +81,10 @@ $("#selectVillageId").change(function () {
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
+
+        const dataRT = await getListRT(selectVillageId);
+        $("#selectRt").append("<option value=''>-Pilih RT-</option>");
+        getListRTUi(dataRT);
         
         $("#reqprovince").val(province);
         $("#reqregency").val(selectArea);
@@ -101,6 +105,38 @@ $("#selectVillageId").change(function () {
         $("#reqvillage").val("");
     }
 });
+
+async function getListRT(villageId) {
+    $("#selectRt").append(
+        "<option value=''>Loading..</option>"
+    );
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    const response = await fetch(`/api/getrtbyvillage`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({
+            token: CSRF_TOKEN,
+            village_id: villageId,
+        }),
+    });
+    $("#selectRt").empty();
+    return await response.json();
+}
+
+function getListRTUi(dataRT) {
+    let divRT = "";
+    dataRT.forEach((m) => {
+        divRT += showDivHtmlRT(m);
+    });
+    const divRTContainer = $("#selectRt");
+    divRTContainer.append(divRT);
+}
+function showDivHtmlRT(m) {
+    return `<option value="${m.rt}">${m.rt}</option>`;
+}
 
 async function getDapilRegency(province) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");

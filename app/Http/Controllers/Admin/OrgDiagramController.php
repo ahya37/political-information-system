@@ -217,6 +217,45 @@ class OrgDiagramController extends Controller
         return response()->json($results);
     }
 
+    public function getDataOrgDiagramRT(){
+
+        $rt           = request('rt');
+        $village_id   = request('village');
+        $orgs = DB::table('org_diagram_rt')
+                ->select('idx','pidx','color','title','nik','name','photo')
+                ->whereNotNull('pidx')
+                ->where('village_id', $village_id);
+
+        if ($rt != '') {
+            $orgs = $orgs->where('rt', $rt);
+        }
+
+        $orgs = $orgs->orderBy('idx','asc')->get();
+
+        $data = [];
+        foreach ($orgs as $value) {
+            $data[] = [$value->pidx,$value->idx];
+        }
+
+        $nodes = [];
+        foreach ($orgs as $value) {
+            $nodes[] = [
+                'id' => $value->idx,
+                'title' => $value->title ?? $value->name,
+                'name' => $value->name,
+                'color' => $value->color ?? '',
+                'image' => '/storage/'.$value->photo ?? '',
+            ];
+        }
+
+        $results = [
+            'nodes' => $nodes,
+            'data' => $data,
+        ];
+
+        return response()->json($results);
+    }
+
     public function getDataOrgDiagramDistrict(){
 
         $district_id = request('district');
@@ -774,8 +813,9 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_rt as a')
-                ->select('a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number')
-                ->join('users as b','b.nik','=','a.nik');
+                ->select('a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','a.base')
+                ->join('users as b','b.nik','=','a.nik')
+                ->where('base','KORRT');
 
             
         if($request->input('search.value')!=null){
@@ -792,6 +832,7 @@ class OrgDiagramController extends Controller
                             $data->where('a.rt', $request->rt);
             }
 
+
           $recordsFiltered = $data->get()->count();
           if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
           $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
@@ -801,6 +842,7 @@ class OrgDiagramController extends Controller
           $results = [];
           $no = 1;
           foreach ($data as $value) {
+            $count_anggota = DB::table('org_diagram_rt')->where('pidx', $value->idx)->count();
             $results[] = [
                 'no' => $no++,
                 'idx' => $value->idx,
@@ -812,7 +854,9 @@ class OrgDiagramController extends Controller
                 'nik' => $value->nik,
                 'name' => $value->name,
                 'photo' => $value->photo,
-                'phone_number' => $value->phone_number
+                'phone_number' => $value->phone_number,
+                'count_anggota' => $count_anggota,
+                'base' => "KOR RT"
 
             ];
           }
@@ -885,7 +929,7 @@ class OrgDiagramController extends Controller
             DB::table('org_diagram_rt')->insert([
                 'idx'    => $request->idx,
                 'pidx'   => 'KORRT',
-                'title'  => 'KORRT',
+                'title'  => 'RT '.$request->rt,
                 'nik'    => $request->nik,
                 'name'   => $user->name,
                 'base'   => 'KORRT',
@@ -934,20 +978,23 @@ class OrgDiagramController extends Controller
 
             if ($cek_count_org > 0) {
                 
-                $count_org     = DB::table('org_diagram_rt')->where('idx', $request->pidx)->max('idx'); 
+                $count_org     = DB::table('org_diagram_rt')->where('pidx', $request->pidx)->max('idx'); 
 
                 $exp        = explode(".", $count_org);
                 $count_exp  = count($exp);
+
                 
                 if($count_exp == 1) {
 
-                    $result_new_idx = $exp[0].".1";
+                    $result_new_idx  = $request->pidx.$exp[0].".1";
 
                 }else{
 
-                    $result_exp = (int) $exp[1]+1;
+                    // get nilai terakhir dari idx where pidx
+                    $end_number = end($exp); 
+                    $result_exp = (int) $end_number + 1;
     
-                    $result_new_idx  = "KORRT.".$result_exp;
+                    $result_new_idx  = $request->pidx.".".$result_exp;
 
                 }         
                 
@@ -956,7 +1003,7 @@ class OrgDiagramController extends Controller
                 $result_new_idx = "KORRT";
                 
             }
-
+            
             $user         = $userTable->select('name','photo','phone_number')->where('nik', $request->nik)->first();
 
             #save to tb org_diagram_rt

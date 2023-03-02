@@ -35,22 +35,26 @@
                         <input value="KOR PUSAT" type="text" id="btnKorPusat" readonly class="btn btn-sm btn-primary">
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <select name="dapil_id" id="selectListArea" class="form-control filter" required></select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <select name="district_id" id="selectDistrictId" class="form-control filter"></select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <select name="village_id" id="selectVillageId" class="form-control filter"></select>
                     </div>
                 </div>
-
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <select name="rt" id="selectRt" class="form-control filter"></select>
+                    </div>
+                </div>
             </nav>
         </div>
         <div class="row mt-4"></div>
@@ -62,6 +66,7 @@
                 <div id="orgDistrict"></div>
                 <div id="orgDapil"></div>
                 <div id="orgPusat"></div>
+                <div id="orgRT"></div>
             </div>
         </div>
     </div>
