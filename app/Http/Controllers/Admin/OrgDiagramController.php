@@ -200,13 +200,23 @@ class OrgDiagramController extends Controller
 
         $nodes = [];
         foreach ($orgs as $value) {
-            $nodes[] = [
-                'id' => $value->idx,
-                'title' => $value->title ?? $value->name,
-                'name' => $value->name,
-                'color' => $value->color ?? '',
-                'image' => '/storage/'.$value->photo ?? '',
-            ];
+            if ($value->photo) {
+                # code...
+                $nodes[] = [
+                    'id' => $value->idx,
+                    'title' => $value->title ?? $value->name,
+                    'name' => $value->name,
+                    'color' => $value->color ?? '',
+                    'image' => '/storage/'.$value->photo ?? '',
+                ];
+            }else{
+                $nodes[] = [
+                    'id' => $value->idx,
+                    'title' => $value->title ?? $value->name,
+                    'name' => $value->name,
+                    'color' => $value->color ?? '',
+                ];
+            }
         }
 
         $results = [
@@ -239,13 +249,23 @@ class OrgDiagramController extends Controller
 
         $nodes = [];
         foreach ($orgs as $value) {
-            $nodes[] = [
-                'id' => $value->idx,
-                'title' => $value->title ?? $value->name,
-                'name' => $value->name,
-                'color' => $value->color ?? '',
-                'image' => '/storage/'.$value->photo ?? '',
-            ];
+            if ($value->photo) {
+                # code...
+                $nodes[] = [
+                    'id' => $value->idx,
+                    'title' => $value->title ?? $value->name,
+                    'name' => $value->name,
+                    'color' => $value->color ?? '',
+                    'image' => '/storage/'.$value->photo ?? '',
+                ];
+            }else{
+                $nodes[] = [
+                    'id' => $value->idx,
+                    'title' => $value->title ?? $value->name,
+                    'name' => $value->name,
+                    'color' => $value->color ?? '',
+                ];
+            }
         }
 
         $results = [
@@ -260,7 +280,7 @@ class OrgDiagramController extends Controller
 
         $district_id = request('district');
         $orgs = DB::table('org_diagram_district')
-                ->select('idx','pidx','color','title','nik','name','photo')
+                ->select('idx','pidx','color','title','nik','name','photo','id')
                 ->whereNotNull('pidx')
                 ->where('district_id', $district_id)
                 ->get();
@@ -272,13 +292,23 @@ class OrgDiagramController extends Controller
 
         $nodes = [];
         foreach ($orgs as $value) {
-            $nodes[] = [
-                'id' => $value->idx,
-                'title' => $value->title ?? $value->name,
-                'name' => $value->name,
-                'color' => $value->color ?? '',
-                'image' => '/storage/'.$value->photo ?? '',
-            ];
+            if ($value->photo) {
+                # code...
+                $nodes[] = [
+                    'id' => $value->idx,
+                    'title' => $value->title ?? $value->name,
+                    'name' => $value->name,
+                    'color' => $value->color ?? '',
+                    'image' => '/storage/'.$value->photo ?? '',
+                ];
+            }else{
+                $nodes[] = [
+                    'id' => $value->idx,
+                    'title' => $value->title ?? $value->name,
+                    'name' => $value->name,
+                    'color' => $value->color ?? '',
+                ];
+            }
         }
 
         $results = [
@@ -305,13 +335,23 @@ class OrgDiagramController extends Controller
 
         $nodes = [];
         foreach ($orgs as $value) {
-            $nodes[] = [
-                'id' => $value->idx,
-                'title' => $value->title ?? $value->name,
-                'name' => $value->name,
-                'color' => $value->color ?? '',
-                'image' => '/storage/'.$value->photo ?? '',
-            ];
+            if ($value->photo) {
+                # code...
+                $nodes[] = [
+                    'id' => $value->idx,
+                    'title' => $value->title ?? $value->name,
+                    'name' => $value->name,
+                    'color' => $value->color ?? '',
+                    'image' => '/storage/'.$value->photo ?? '',
+                ];
+            }else{
+                $nodes[] = [
+                    'id' => $value->idx,
+                    'title' => $value->title ?? $value->name,
+                    'name' => $value->name,
+                    'color' => $value->color ?? '',
+                ];
+            }
         }
 
         $results = [
@@ -336,13 +376,24 @@ class OrgDiagramController extends Controller
 
         $nodes = [];
         foreach ($orgs as $value) {
-            $nodes[] = [
-                'id' => $value->idx,
-                'title' => $value->title ?? $value->name,
-                'name' => $value->name,
-                'color' => $value->color ?? '',
-                'image' => '/storage/'.$value->photo ?? '',
-            ];
+
+            if ($value->photo) {
+                # code...
+                $nodes[] = [
+                    'id' => $value->idx,
+                    'title' => $value->title ?? $value->name,
+                    'name' => $value->name,
+                    'color' => $value->color ?? '',
+                    'image' => '/storage/'.$value->photo ?? '',
+                ];
+            }else{
+                $nodes[] = [
+                    'id' => $value->idx,
+                    'title' => $value->title ?? $value->name,
+                    'name' => $value->name,
+                    'color' => $value->color ?? '',
+                ];
+            }
         }
 
         $results = [
@@ -813,7 +864,7 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_rt as a')
-                ->select('a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','a.base')
+                ->select('a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','a.base','a.id')
                 ->join('users as b','b.nik','=','a.nik')
                 ->where('base','KORRT');
 
@@ -845,6 +896,7 @@ class OrgDiagramController extends Controller
             $count_anggota = DB::table('org_diagram_rt')->where('pidx', $value->idx)->count();
             $results[] = [
                 'no' => $no++,
+                'id' => $value->id,
                 'idx' => $value->idx,
                 'village_id' => $value->village_id,
                 'rt' => $value->rt,
@@ -1029,6 +1081,49 @@ class OrgDiagramController extends Controller
             DB::rollback();
             return redirect()->back()->with(['error' => 'Data gagal tersimpan!'. $e->getMessage()]);
         }
+    }
+
+    public function updateOrgRT(){
+
+            DB::beginTransaction();
+            try {
+
+                $id   = request()->id;
+                $nik  = request()->nik;
+
+                #cek nik di tb users, true
+                $userTable     = DB::table('users');
+                $cek_nik_user  = $userTable->where('nik', $nik)->count();
+                if ($cek_nik_user == 0) return ResponseFormatter::error(['message' => 'NIK tidak terdaftar disistem!']);
+                
+                #cek nik di tb org_diagram_rt, false
+                $cek_nik_org  = DB::table('org_diagram_rt')->where('nik', $nik)->count();
+                if ($cek_nik_org > 0) return ResponseFormatter::error(['message' => 'NIK sudah terdaftar distruktur!']);
+
+                #update org
+                $user         = $userTable->select('name','photo','phone_number','nik')->where('nik', $nik)->first();
+                
+                DB::table('org_diagram_rt')->where('id', $id)->update([
+                    'nik'    => $user->nik,
+                    'name'   => $user->name,
+                    'photo'  => $user->photo ?? '',
+                    'telp'  => $user->phone_number,
+                ]);
+
+            
+                DB::commit();
+                return ResponseFormatter::success([
+                    'message' => 'Berhasil update struktur!'
+                ],200);
+
+            } catch (\Exception $e) {
+                DB::rollback();
+                return ResponseFormatter::error([
+                    'message' => 'Something when wrong!',
+                    'error' => $e->getMessage()
+                ]);
+            }
+
     }
 
 }

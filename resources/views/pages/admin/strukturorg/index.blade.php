@@ -79,8 +79,8 @@
     <script src="{{ asset('assets/vendor/highcharts/accessibility10.3.js') }}"></script>
 
     <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}" type="text/javascript"></script>
-    <script type="text/javascript" src="{{ asset('js/orgdiagram-test.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/select-area.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/orgdiagram-test.js') }}"></script>
 
 </body>
 </html>

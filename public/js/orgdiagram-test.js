@@ -7,6 +7,7 @@ let CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 function getChartOrgVillage(villageId) {
     $('#orgDistrict').hide();
     $('#orgDapil').hide();
+    $('#orgPusat').hide();
     $('#orgVillage').show();
     return new Promise((resolve, reject) => {
         const URL_ADD_CHILD = '/api/org/village/save';
@@ -317,6 +318,7 @@ $('#btnKorPusat').on('click', function () {
     $('#orgDapil').hide();
     $('#orgRT').hide();
     $('#orgPusat').show();
+
     getChartOrgPusat();
 });
 
