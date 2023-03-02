@@ -41,7 +41,7 @@
                                                 <tr>
                                                     <td>{{ $no++ }}</td>
                                                     <td>
-                                                        <img src="{{ asset('/storage/'.$row->photo) }}" width="45px" />
+                                                        <img src="{{ asset('/storage/'.$row->photo) }}" width="40px" />
                                                         {{ $row->name }}
                                                     </td>
                                                     <td>{{ $row->address }}</td>
