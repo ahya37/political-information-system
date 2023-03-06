@@ -674,27 +674,27 @@ class OrgDiagramController extends Controller
 
     public function listDataStrukturPusat(){
 
-        $orgTable = DB::table('org_diagram_pusat');
+        // $orgTable = DB::table('org_diagram_pusat');
         
-        #creeate idx
-        $cek_count_org = $orgTable->count();
+        // #creeate idx
+        // $cek_count_org = $orgTable->count();
 
-        if ($cek_count_org == 0) {
+        // if ($cek_count_org == 0) {
             
-            $result_new_idx = "KORPUSAT";
+        //     $result_new_idx = "KORPUSAT";
 
-        }else{
+        // }else{
 
-            $count_org     = $orgTable->max('idx'); 
+        //     $count_org     = $orgTable->max('idx'); 
     
-            $exp        = explode(".", $count_org);
-            $result_exp = (int) $exp[1]+1;
+        //     $exp        = explode(".", $count_org);
+        //     $result_exp = (int) $exp[1]+1;
 
-            $result_new_idx  = "KORPUSAT.".$result_exp;
-        }
+        //     $result_new_idx  = "KORPUSAT.".$result_exp;
+        // }
 
-        $org      = $orgTable->select('title','name','photo','idx')->whereNotNull('nik')->orderBy('idx','asc')->get();
-        $no       = 1;
+        // $org      = $orgTable->select('title','name','photo','idx')->whereNotNull('nik')->orderBy('idx','asc')->get();
+        // $no       = 1;
 
 
         return view('pages.admin.strukturorg.pusat.index', compact('org','no','result_new_idx'));

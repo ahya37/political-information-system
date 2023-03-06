@@ -37,13 +37,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($org as $item)
+                                        {{-- @foreach ($org as $item)
                                             <tr id="{{ $item->idx }}">
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ $item->title }}</td>
                                             </tr>
-                                        @endforeach
+                                        @endforeach --}}
                                     </tbody>
                                 </table>
                             </div>
