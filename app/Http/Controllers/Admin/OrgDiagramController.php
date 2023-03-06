@@ -1236,6 +1236,235 @@ class OrgDiagramController extends Controller
 
 }
 
+public function indexOrgDistrict(){
+
+    $regency = Regency::select('id','name')->where('id', 3602)->first();
+
+    $rt      = 30;
+
+    return view('pages.admin.strukturorg.district.index', compact('regency','rt'));
+
+}
+
+public function createOrgDistrict(){
+
+    $regency = Regency::select('id','name')->where('id', 3602)->first();
+
+    #creeate idx
+        $cek_count_org = DB::table('org_diagram_district')->count();
+
+        $result_new_idx = "";
+
+        if ($cek_count_org > 0) {
+            
+            $count_org     = DB::table('org_diagram_district')->max('idx'); 
+
+            $exp        = explode(".", $count_org);
+            $count_exp  = count($exp);
+            
+            if($count_exp == 1) {
+
+                $result_new_idx = $exp[0].".1";
+
+            }else{
+
+                $result_exp = (int) $exp[1]+1;
+
+                $result_new_idx  = "KORCAM.".$result_exp;
+
+            }         
+            
+        }else{
+
+            $result_new_idx = "KORCAM";
+            
+        }
+
+
+    return view('pages.admin.strukturorg.district.create', compact('regency','result_new_idx'));
+}
+
+public function getDataOrgDistrict(Request $request){
+
+    // DATATABLE
+    $orderBy = 'a.name';
+    switch ($request->input('order.0.column')) {
+        case '1':
+            $orderBy = 'a.name';
+            break;
+        // case '3':
+        //     $orderBy = 'a.rt';
+        //     break;
+        // case '3':
+        //     $orderBy = 'districts.name';
+        //     break;
+        // case '4':
+        //     $orderBy = 'villages.name';
+        //     break;
+        // case '5':
+        //     $orderBy = 'b.name';
+        //     break;
+        // case '6':
+        //     $orderBy = 'c.name';
+        //     break;
+        // case '7':
+        //     $orderBy = 'a.created_at';
+        //     break;
+    }
+
+    $data = DB::table('org_diagram_district as a')
+            ->select('a.id','a.idx','a.district_id','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','c.name as village','d.name as district')
+            ->join('users as b','b.nik','=','a.nik')
+            ->join('villages as c','c.id','=','b.village_id')
+            ->join('districts as d','d.id','=','c.district_id');
+
+        
+    if($request->input('search.value')!=null){
+            $data = $data->where(function($q)use($request){
+                $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                // $q->whereRaw('LOWER(a.rt) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                // ->orWhereRaw('LOWER(regencies.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(districts.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(villages.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(c.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(a.created_at) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                
+            });
+        }
+
+        if ($request->input('district') != null) {
+                        $data->where('a.district_id', $request->district);
+        }
+
+        if ($request->input('rt') != null) {
+                        $data->where('a.rt', $request->rt);
+        }
+
+      $recordsFiltered = $data->get()->count();
+      if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+      $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+      
+      $recordsTotal = $data->count();
+
+      return response()->json([
+            'draw'=>$request->input('draw'),
+            'recordsTotal'=>$recordsTotal,
+            'recordsFiltered'=>$recordsFiltered,
+            'data'=> $data
+        ]);
+}
+
+public function saveOrgDistrict(Request $request){
+
+    DB::beginTransaction();
+    try {
+
+        #cek ketersediaan nik di tb users
+        $userTable     = DB::table('users');
+        $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
+        
+        if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
+
+        #cek jika nik sudah terdaftar di tb org_diagram_village
+        $cek_nik_org  = DB::table('org_diagram_district')->where('nik', $request->nik)->where('district_id', $request->district_id)->count();
+        if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
+
+        $user         = $userTable->select('name','photo')->where('nik', $request->nik)->first();
+
+        
+        #save to tb org_diagram_district
+        DB::table('org_diagram_district')->insert([
+            'idx'    => $request->idx,
+            'pidx'   => 'KORCAM',
+            'title'  => strtoupper($request->jabatan),
+            'nik'    => $request->nik,
+            'name'   => $user->name,
+            'base'   => 'KORCAM',
+            'photo'  => $user->photo ?? '',
+            'telp'  => $request->telp,
+            'regency_id'  => $request->regency_id,
+            'district_id' => $request->district_id,
+        ]);
+
+        DB::commit();
+        return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+       
+    } catch (\Exception $e) {
+        DB::rollback();
+        return redirect()->back()->with(['error' => 'Data gagal tersimpan!'. $e->getMessage()]);
+    }
+    
+}
+
+public function deleteKorCam(){
+
+    DB::beginTransaction();
+    try {
+
+        $id   = request()->id;
+        
+        DB::table('org_diagram_district')->where('id', $id)->delete();
+
+
+        DB::commit();
+        return ResponseFormatter::success([
+            'message' => 'Berhasil hapus pengurus!'
+        ],200);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        return ResponseFormatter::error([
+            'message' => 'Something when wrong!',
+            'error'   => $e->getMessage()
+        ]);
+    }
+
+ }
+
+ public function updateOrgDistrict(){
+
+    DB::beginTransaction();
+    try {
+
+        $id   = request()->id;
+        $nik  = request()->nik;
+
+        #cek nik di tb users, true
+        $userTable     = DB::table('users');
+        $cek_nik_user  = $userTable->where('nik', $nik)->count();
+        if ($cek_nik_user == 0) return ResponseFormatter::error(['message' => 'NIK tidak terdaftar disistem!']);
+        
+        #cek nik di tb org_diagram_rt, false
+        $cek_nik_org  = DB::table('org_diagram_district')->where('nik', $nik)->count();
+        if ($cek_nik_org > 0) return ResponseFormatter::error(['message' => 'NIK sudah terdaftar distruktur!']);
+
+        #update org
+        $user         = $userTable->select('name','photo','phone_number','nik')->where('nik', $nik)->first();
+        
+        DB::table('org_diagram_district')->where('id', $id)->update([
+            'nik'    => $user->nik,
+            'name'   => $user->name,
+            'photo'  => $user->photo ?? '',
+            'telp'  => $user->phone_number,
+        ]);
+
+    
+        DB::commit();
+        return ResponseFormatter::success([
+            'message' => 'Berhasil update struktur!'
+        ],200);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        return ResponseFormatter::error([
+            'message' => 'Something when wrong!',
+            'error'   => $e->getMessage()
+        ]);
+    }
+
+}
+
 
 
 }

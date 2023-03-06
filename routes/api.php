@@ -59,10 +59,13 @@ Route::post('org/delete', 'Admin\OrgDiagramController@deleteOrg');
 
 #DATATABLE STRUKTUR ORG
 Route::post('org/getdataorgvillage', 'Admin\OrgDiagramController@getDataOrgVillage');
+Route::post('org/getdataorgdistict', 'Admin\OrgDiagramController@getDataOrgDistrict');
 Route::post('org/getdataanggotabykorrt', 'Admin\OrgDiagramController@getListDataAnggotaByKorRt');
 Route::post('org/list/rt', 'Admin\OrgDiagramController@getDataOrgRT');
 Route::post('org/rt/update', 'Admin\OrgDiagramController@updateOrgRT');
 Route::post('org/rt/anggota/delete', 'Admin\OrgDiagramController@deleteAnggotaByKorgRT');
+Route::post('org/district/delete', 'Admin\OrgDiagramController@deleteKorCam');
+Route::post('org/district/update', 'Admin\OrgDiagramController@updateOrgDistrict');
 
 #new org diagram
 Route::get('org/rt', 'Admin\OrgDiagramController@getDataOrgDiagramRT');
