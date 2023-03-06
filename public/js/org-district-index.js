@@ -301,7 +301,7 @@ let table = $("#data").DataTable({
     ],
 });
 
-async function onDelete(data) {
+function onDelete(data) {
     const id = data.id;
     const name = data.getAttribute("data-name");
 

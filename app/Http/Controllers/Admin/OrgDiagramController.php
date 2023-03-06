@@ -443,8 +443,10 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_village as a')
-                ->select('a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number')
-                ->join('users as b','b.nik','=','a.nik');
+                ->select('a.id','a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','c.name as village','d.name as district')
+                ->join('users as b','b.nik','=','a.nik')
+                ->join('villages as c','c.id','=','b.village_id')
+                ->join('districts as d','d.id','=','c.district_id');
 
             
         if($request->input('search.value')!=null){
@@ -1409,7 +1411,31 @@ public function deleteKorCam(){
 
         DB::commit();
         return ResponseFormatter::success([
-            'message' => 'Berhasil hapus pengurus!'
+            'message' => 'Berhasil hapus struktur!'
+        ],200);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        return ResponseFormatter::error([
+            'message' => 'Something when wrong!',
+            'error'   => $e->getMessage()
+        ]);
+    }
+
+ }
+
+ public function deleteKorDes(){
+
+    DB::beginTransaction();
+    try {
+
+        $id   = request()->id;
+        
+        DB::table('org_diagram_village')->where('id', $id)->delete();
+
+        DB::commit();
+        return ResponseFormatter::success([
+            'message' => 'Berhasil hapus struktur!'
         ],200);
 
     } catch (\Exception $e) {
@@ -1443,6 +1469,49 @@ public function deleteKorCam(){
         $user         = $userTable->select('name','photo','phone_number','nik')->where('nik', $nik)->first();
         
         DB::table('org_diagram_district')->where('id', $id)->update([
+            'nik'    => $user->nik,
+            'name'   => $user->name,
+            'photo'  => $user->photo ?? '',
+            'telp'  => $user->phone_number,
+        ]);
+
+    
+        DB::commit();
+        return ResponseFormatter::success([
+            'message' => 'Berhasil update struktur!'
+        ],200);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        return ResponseFormatter::error([
+            'message' => 'Something when wrong!',
+            'error'   => $e->getMessage()
+        ]);
+    }
+
+}
+
+public function updateOrgVillage(){
+
+    DB::beginTransaction();
+    try {
+
+        $id   = request()->id;
+        $nik  = request()->nik;
+
+        #cek nik di tb users, true
+        $userTable     = DB::table('users');
+        $cek_nik_user  = $userTable->where('nik', $nik)->count();
+        if ($cek_nik_user == 0) return ResponseFormatter::error(['message' => 'NIK tidak terdaftar disistem!']);
+        
+        #cek nik di tb org_diagram_rt, false
+        $cek_nik_org  = DB::table('org_diagram_village')->where('nik', $nik)->count();
+        if ($cek_nik_org > 0) return ResponseFormatter::error(['message' => 'NIK sudah terdaftar distruktur!']);
+
+        #update org
+        $user         = $userTable->select('name','photo','phone_number','nik')->where('nik', $nik)->first();
+        
+        DB::table('org_diagram_village')->where('id', $id)->update([
             'nik'    => $user->nik,
             'name'   => $user->name,
             'photo'  => $user->photo ?? '',
