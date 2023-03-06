@@ -1146,4 +1146,96 @@ class OrgDiagramController extends Controller
 
     }
 
+    public function getListDataAnggotaByKorRt(Request $request){
+
+        // DATATABLE
+        $orderBy = 'a.name';
+        switch ($request->input('order.0.column')) {
+            case '1':
+                $orderBy = 'a.name';
+                break;
+        }
+
+        $data = DB::table('org_diagram_rt as a')
+                    ->select('a.id','a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','a.base','a.id')
+                    ->join('users as b','b.nik','=','a.nik')
+                    ->where('pidx', $request->idx);
+
+            
+        if($request->input('search.value')!=null){
+                $data = $data->where(function($q)use($request){
+                    $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                });
+            }
+
+            if ($request->input('village') != null) {
+                            $data->where('a.village_id', $request->village);
+            }
+
+            if ($request->input('rt') != null) {
+                            $data->where('a.rt', $request->rt);
+            }
+
+
+          $recordsFiltered = $data->get()->count();
+          if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+          $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+          
+          $recordsTotal = $data->count();
+
+          $results = [];
+          $no = 1;
+          foreach ($data as $value) {
+            $results[] = [
+                'no' => $no++,
+                'id' => $value->id,
+                'idx' => $value->idx,
+                'village_id' => $value->village_id,
+                'address' => $value->address,
+                'title' => $value->title,
+                'nik' => $value->nik,
+                'name' => $value->name,
+                'photo' => $value->photo,
+                'phone_number' => $value->phone_number,
+                'base' => "KOR RT"
+
+            ];
+          }
+
+          return response()->json([
+                'draw'=>$request->input('draw'),
+                'recordsTotal'=>$recordsTotal,
+                'recordsFiltered'=>$recordsFiltered,
+                'data'=> $results
+            ]);
+    }
+
+    public function deleteAnggotaByKorgRT(){
+
+        DB::beginTransaction();
+        try {
+
+            $id   = request()->id;
+            
+            DB::table('org_diagram_rt')->where('id', $id)->delete();
+
+            #mekanisme sortir idx jika ada yang terhapus
+
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil hapus anggota!'
+            ],200);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error'   => $e->getMessage()
+            ]);
+        }
+
+}
+
+
+
 }
