@@ -5,18 +5,21 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 @section('content')
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Struktur Organisasi Pusat</h2>
+                <h2 class="dashboard-title">Daftar Koordinator Pusat</h2>
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
                 <div class="row mb-2">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                            data-whatever="@mdo">+ Tambah</button>
+                        <a class="btn btn-sm btn-sc-primary text-white"
+                        href="{{ route('admin-struktur-organisasi-pusat-create') }}">+ Tambah</a>
                     </div>
                 </div>
                 <div class="row mb-2">
@@ -31,9 +34,12 @@
                                 <table id="data" class="table table-sm table-striped">
                                     <thead>
                                         <tr>
-                                            <th scope="col">NO</th>
+                                            <th scope="col"></th>
                                             <th scope="col">NAMA</th>
+                                            <th scope="col">ALAMAT</th>
                                             <th scope="col">JABATAN</th>
+                                            <th scope="col">NO HP / WA</th>
+                                            <th scope="col">AKSI</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -92,8 +98,10 @@
     <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('assets/vendor/tablednd/dist/jquery.tablednd.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/create-org-pusat.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/org-pusat-index.js') }}"></script>
     <script>
         AOS.init();
     </script>

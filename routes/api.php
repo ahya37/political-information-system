@@ -70,6 +70,10 @@ Route::post('org/village/delete', 'Admin\OrgDiagramController@deleteKorDes');
 Route::post('org/village/update', 'Admin\OrgDiagramController@updateOrgVillage');
 Route::post('org/getdataorgdapil', 'Admin\OrgDiagramController@getDataOrgDapil');
 Route::post('org/dapil/delete', 'Admin\OrgDiagramController@deleteKorDapil');
+Route::post('org/getdataorgpusat', 'Admin\OrgDiagramController@getDataOrgPusat');
+Route::post('org/pusat/delete', 'Admin\OrgDiagramController@deleteKorPusat');
+Route::post('org/pusat/update', 'Admin\OrgDiagramController@updateOrgPusat');
+
 
 
 #new org diagram

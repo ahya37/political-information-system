@@ -701,35 +701,6 @@ class OrgDiagramController extends Controller
 
     }
 
-    public function saveOrgPusat(Request $request){
-        
-
-        #CEK ketersedian NIK di tb users, harus true
-        $cek_nik_user = User::where('nik', $request->nik)->count();
-        if ($cek_nik_user == 0) {
-            return redirect()->back()->with(['error' => 'NIK tidak terdaftar dalam sistem!']);
-
-        }else{
-
-            $user = User::select('name','photo')->where('nik', $request->nik)->first();
-
-            #CEK nik di tb org_diagram_pusat, harus false
-            $cek_nik_org = DB::table('org_diagram_pusat')->where('nik', $request->nik)->count();
-            if ($cek_nik_org > 0) return redirect()->back()->with(['error' => 'NIK sudah terdaftar dalam struktur!']);
-    
-            DB::table('org_diagram_pusat')->insert([
-                'idx' => $request->idx,
-                'pidx' => 'KORPUSAT',
-                'title' => strtoupper($request->jabatan),
-                'nik' => $request->nik,
-                'name' => $user->name,
-                'photo' => $user->photo ?? ''
-            ]);
-        }
-
-        return redirect()->back()->with(['success' => 'NIK telah tersimpan!']);
-
-    }
 
     public function setOrderStrukturOrgPusat(){
 
@@ -1712,6 +1683,219 @@ public function deleteKorDapil(){
     }
 
  }
+
+public function deleteKorPusat(){
+
+    DB::beginTransaction();
+    try {
+
+        $id   = request()->id;
+        
+        DB::table('org_diagram_pusat')->where('id', $id)->delete();
+
+
+        DB::commit();
+        return ResponseFormatter::success([
+            'message' => 'Berhasil hapus struktur!'
+        ],200);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        return ResponseFormatter::error([
+            'message' => 'Something when wrong!',
+            'error'   => $e->getMessage()
+        ]);
+    }
+
+ }
+
+ public function createOrgPusat(){
+
+    $regency = Regency::select('id','name')->where('id', 3602)->first();
+
+    #creeate idx
+        $cek_count_org = DB::table('org_diagram_pusat')->count();
+
+        $result_new_idx = "";
+
+        if ($cek_count_org > 0) {
+            
+            $count_org     = DB::table('org_diagram_pusat')->max('idx'); 
+
+            $exp        = explode(".", $count_org);
+            $count_exp  = count($exp);
+            
+            if($count_exp == 1) {
+
+                $result_new_idx = $exp[0].".1";
+
+            }else{
+
+                $result_exp = (int) $exp[1]+1;
+
+                $result_new_idx  = "KORPUSAT.".$result_exp;
+
+            }         
+            
+        }else{
+
+            $result_new_idx = "KORPUSAT";
+            
+        }
+
+
+    return view('pages.admin.strukturorg.pusat.create', compact('regency','result_new_idx'));
+}
+
+public function saveOrgPusat(Request $request){
+
+    DB::beginTransaction();
+    try {
+
+        #cek ketersediaan nik di tb users
+        $userTable     = DB::table('users');
+        $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
+        
+        if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
+
+        #cek jika nik sudah terdaftar di tb org_diagram_village
+        $cek_nik_org  = DB::table('org_diagram_pusat')->where('nik', $request->nik)->count();
+        if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
+
+        $user         = $userTable->select('name','photo')->where('nik', $request->nik)->first();
+
+        
+        #save to tb org_diagram_pusat
+        DB::table('org_diagram_pusat')->insert([
+            'idx'    => $request->idx,
+            'pidx'   => 'KORPUSAT',
+            'title'  => strtoupper($request->jabatan),
+            'nik'    => $request->nik,
+            'name'   => $user->name,
+            'base'   => 'KORPUSAT',
+            'photo'  => $user->photo ?? '',
+            'telp'  => $request->telp,
+        ]);
+
+        DB::commit();
+        return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+       
+    } catch (\Exception $e) {
+        DB::rollback();
+        return redirect()->back()->with(['error' => 'Data gagal tersimpan!'. $e->getMessage()]);
+    }
+    
+}
+
+public function getDataOrgPusat(Request $request){
+
+    // DATATABLE
+    $orderBy = 'a.name';
+    switch ($request->input('order.0.column')) {
+        case '1':
+            $orderBy = 'a.name';
+            break;
+        // case '3':
+        //     $orderBy = 'a.rt';
+        //     break;
+        // case '3':
+        //     $orderBy = 'districts.name';
+        //     break;
+        // case '4':
+        //     $orderBy = 'villages.name';
+        //     break;
+        // case '5':
+        //     $orderBy = 'b.name';
+        //     break;
+        // case '6':
+        //     $orderBy = 'c.name';
+        //     break;
+        // case '7':
+        //     $orderBy = 'a.created_at';
+        //     break;
+    }
+
+    $data = DB::table('org_diagram_pusat as a')
+            ->select('a.id','a.idx','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','c.name as village','d.name as district')
+            ->join('users as b','b.nik','=','a.nik')
+            ->join('villages as c','c.id','=','b.village_id')
+            ->join('districts as d','d.id','=','c.district_id');
+
+        
+    if($request->input('search.value')!=null){
+            $data = $data->where(function($q)use($request){
+                $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                // $q->whereRaw('LOWER(a.rt) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                // ->orWhereRaw('LOWER(regencies.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(districts.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(villages.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(c.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(a.created_at) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                
+            });
+        }
+
+        if ($request->input('dapil') != null) {
+                        $data->where('a.dapil_id', $request->dapil);
+        }
+
+      $recordsFiltered = $data->get()->count();
+      if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+      $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+      
+      $recordsTotal = $data->count();
+
+      return response()->json([
+            'draw'=>$request->input('draw'),
+            'recordsTotal'=>$recordsTotal,
+            'recordsFiltered'=>$recordsFiltered,
+            'data'=> $data
+        ]);
+}
+public function updateOrgPusat(){
+
+    DB::beginTransaction();
+    try {
+
+        $id   = request()->id;
+        $nik  = request()->nik;
+
+        #cek nik di tb users, true
+        $userTable     = DB::table('users');
+        $cek_nik_user  = $userTable->where('nik', $nik)->count();
+        if ($cek_nik_user == 0) return ResponseFormatter::error(['message' => 'NIK tidak terdaftar disistem!']);
+        
+        #cek nik di tb org_diagram_rt, false
+        $cek_nik_org  = DB::table('org_diagram_pusat')->where('nik', $nik)->count();
+        if ($cek_nik_org > 0) return ResponseFormatter::error(['message' => 'NIK sudah terdaftar distruktur!']);
+
+        #update org
+        $user         = $userTable->select('name','photo','phone_number','nik')->where('nik', $nik)->first();
+        
+        DB::table('org_diagram_pusat')->where('id', $id)->update([
+            'nik'    => $user->nik,
+            'name'   => $user->name,
+            'photo'  => $user->photo ?? '',
+            'telp'  => $user->phone_number,
+        ]);
+
+    
+        DB::commit();
+        return ResponseFormatter::success([
+            'message' => 'Berhasil update struktur!'
+        ],200);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        return ResponseFormatter::error([
+            'message' => 'Something when wrong!',
+            'error'   => $e->getMessage()
+        ]);
+    }
+
+}
+
 
 
 }

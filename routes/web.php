@@ -383,7 +383,6 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/dashboard','OrgDiagramController@orgDiagramTest')->name('admin-struktur-organisasi-test');
             Route::get('/village','OrgDiagramController@indexOrgVillage')->name('admin-struktur-organisasi-create');
             Route::get('/pusat','OrgDiagramController@listDataStrukturPusat')->name('admin-struktur-organisasi-pusat');
-            Route::post('/pusat/save','OrgDiagramController@saveOrgPusat')->name('admin-struktur-organisasi-pusat-save');
             Route::get('/village/create','OrgDiagramController@createOrgVillage')->name('admin-struktur-organisasi-village-create');
             Route::post('/village/save','OrgDiagramController@saveOrgVillage')->name('admin-struktur-organisasi-village-save');
             Route::get('/rt','OrgDiagramController@indexOrgRT')->name('admin-struktur-organisasi-rt');
@@ -397,6 +396,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/dapil','OrgDiagramController@indexOrgDapil')->name('admin-struktur-organisasi-dapil-index');
             Route::get('/dapil/create','OrgDiagramController@createOrgDapil')->name('admin-struktur-organisasi-dapil-create');
             Route::post('/dapil/save','OrgDiagramController@saveOrgDapil')->name('admin-struktur-organisasi-dapil-save');
+            Route::get('/pusat/create','OrgDiagramController@createOrgPusat')->name('admin-struktur-organisasi-pusat-create');
+            Route::post('/pusat/save','OrgDiagramController@saveOrgPusat')->name('admin-struktur-organisasi-pusat-save');
 
         });
           
