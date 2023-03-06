@@ -697,7 +697,7 @@ class OrgDiagramController extends Controller
         // $no       = 1;
 
 
-        return view('pages.admin.strukturorg.pusat.index', compact('org','no','result_new_idx'));
+        return view('pages.admin.strukturorg.pusat.index');
 
     }
 

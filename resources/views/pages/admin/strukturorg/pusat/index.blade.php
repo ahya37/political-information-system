@@ -70,7 +70,7 @@
                             @csrf
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">NIK</label>
-                                <input type="hidden" name="idx" value="{{ $result_new_idx }}" />
+                                <input type="hidden" name="idx" value="" />
                                 <input type="text" name="nik" class="form-control" id="recipient-name" placeholder="Isikan NIK">
                             </div>
                             <div class="form-group">
