@@ -394,6 +394,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/district','OrgDiagramController@indexOrgDistrict')->name('admin-struktur-organisasi-district-index');
             Route::get('/district/create','OrgDiagramController@createOrgDistrict')->name('admin-struktur-organisasi-district-create');
             Route::post('/district/save','OrgDiagramController@saveOrgDistrict')->name('admin-struktur-organisasi-district-save');
+            Route::get('/dapil','OrgDiagramController@indexOrgDapil')->name('admin-struktur-organisasi-dapil-index');
+            Route::get('/dapil/create','OrgDiagramController@createOrgDapil')->name('admin-struktur-organisasi-dapil-create');
+            Route::post('/dapil/save','OrgDiagramController@saveOrgDapil')->name('admin-struktur-organisasi-dapil-save');
 
         });
           

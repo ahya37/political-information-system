@@ -46,9 +46,7 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         @include('layouts.message')
-                        <form action="{{ route('admin-event-store') }}" id="register" method="POST"
-                            enctype="multipart/form-data">
-                            @csrf
+                       
                             <div class="card">
                                 <div class="card-body">
                                     <table id="data" class="table table-sm table-striped" width="100%">
@@ -66,7 +64,6 @@
                                       </table>
                                 </div>
                             </div>
-                        </form>
                     </div>
                 </div>
             </div>

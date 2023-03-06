@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Koordinator Kecamatan')
+@section('title', 'Koordinator Dapil')
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -14,7 +14,7 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Koordinator Kecamatan</h2>
+                <h2 class="dashboard-title">Daftar Koordinator Dapil</h2>
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
                 <div class="card card-body mb-4">
@@ -29,22 +29,16 @@
                                 <select name="dapil_id" id="selectListArea" class="form-control filter" required></select>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <select name="district_id" id="selectDistrictId" class="form-control filter"></select>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="row col-md-12">
                         <a class="btn btn-sm btn-sc-primary text-white"
-                            href="{{ route('admin-struktur-organisasi-district-create') }}">+ Tambah</a>
+                            href="{{ route('admin-struktur-organisasi-dapil-create') }}">+ Tambah</a>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         @include('layouts.message')
-
                         <div class="card">
                             <div class="card-body">
                                 <table id="data" class="table table-sm table-striped" width="100%">
@@ -74,7 +68,7 @@
     <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('js/org-district-index.js') }}"></script>
+    <script src="{{ asset('js/org-dapil-index.js') }}"></script>
     <script>
         AOS.init();
     </script>

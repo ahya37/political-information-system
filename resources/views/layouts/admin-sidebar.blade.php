@@ -21,6 +21,10 @@
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
                         Kor. Pusat
                     </a>
+                    <a href="{{ route('admin-struktur-organisasi-dapil-index') }}"
+                        class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
+                        Kor. Dapil
+                    </a>
                     <a href="{{ route('admin-struktur-organisasi-district-index') }}"
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
                         Kor. Kecamatan
