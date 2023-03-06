@@ -12,7 +12,7 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Koordinator Desa</h2>
+                <h2 class="dashboard-title">Daftar Koordinator Kecamatan</h2>
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
                 <div class="card card-body mb-4">
