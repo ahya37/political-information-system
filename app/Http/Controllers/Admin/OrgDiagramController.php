@@ -1302,13 +1302,13 @@ public function createOrgDistrict(){
             
             if($count_exp == 1) {
 
-                $result_new_idx = $exp[0].".1";
+                $result_new_idx = time().$exp[0].".1";
 
             }else{
 
                 $result_exp = (int) $exp[1]+1;
 
-                $result_new_idx  = "KORCAM.".$result_exp;
+                $result_new_idx  = time()."KORCAM.".$result_exp;
 
             }         
             
@@ -1438,23 +1438,21 @@ public function saveOrgDistrict(Request $request){
 
         #cek ketersediaan nik di tb users
         $userTable     = DB::table('users');
-        $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
-        
-        if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
+        // $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
+        $user         = $userTable->select('name','photo','nik')->where('id', $request->member)->first();
+
+        // if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
 
         #cek jika nik sudah terdaftar di tb org_diagram_village
-        $cek_nik_org  = DB::table('org_diagram_district')->where('nik', $request->nik)->where('district_id', $request->district_id)->count();
+        $cek_nik_org  = DB::table('org_diagram_district')->where('nik', $user->nik)->where('district_id', $request->district_id)->count();
         if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
-
-        $user         = $userTable->select('name','photo')->where('nik', $request->nik)->first();
-
         
         #save to tb org_diagram_district
         DB::table('org_diagram_district')->insert([
             'idx'    => $request->idx,
             'pidx'   => 'KORCAM',
             'title'  => strtoupper($request->jabatan),
-            'nik'    => $request->nik,
+            'nik'    => $user->nik,
             'name'   => $user->name,
             'base'   => 'KORCAM',
             'photo'  => $user->photo ?? '',

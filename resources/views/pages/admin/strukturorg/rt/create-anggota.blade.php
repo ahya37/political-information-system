@@ -29,7 +29,7 @@
                             enctype="multipart/form-data" method="POST">
                             @csrf
                             <div class="form-group">
-                                <label>Pilih RT</label>
+                                <label>Pilih Lokasi</label>
                                 <div class="row">
                                     <div class="form-group">
                                         <input value="{{ $regency->id }}" type="hidden" id="regencyId"

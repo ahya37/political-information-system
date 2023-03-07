@@ -46,9 +46,13 @@ $("#selectDistrictId").change(async function () {
     selectDistrictId = $("#selectDistrictId").val();
 
     if (selectDistrictId !== "") {
+        const dataVillages = await getListVillage(selectDistrictId);
+
         $("#selectVillageId").empty();
         $("#selectVillageId").show();
         $("#selectVillageId").append("<option value=''>-Pilih Desa-</option>");
+        getListVillageUi(dataVillages);
+
 
         province = $("#province").val();
         selectArea = $("#selectArea").val();
@@ -74,6 +78,49 @@ $("#selectDistrictId").change(async function () {
     }
 });
 
+// DESA
+$("#selectVillageId").change(async function () {
+    selectVillageId = $("#selectVillageId").val();
+
+    if (selectVillageId !== "") {
+        // province = $("#province").val();
+        // selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+        $("#selectRt").append("<option value=''>-Pilih RT-</option>");
+
+        // $("#reqprovince").val(province);
+        // $("#reqregency").val(selectArea);
+        $("#reqdapil").val(selectListArea);
+        $("#reqdistrict").val(selectDistrictId);
+        $("#reqvillage").val(selectVillageId);
+        $("#selectRt").val("");
+
+
+        initialSelect2Member(selectVillageId, null)
+
+
+    } else {
+        // province = $("#province").val();
+        // selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+
+
+        // $("#reqprovince").val(province);
+        // $("#reqregency").val(selectArea);
+        $("#reqdapil").val(selectListArea);
+        $("#reqdistrict").val(selectDistrictId);
+        $("#reqvillage").val("");
+        $("#selectRt").val("");
+
+        initialSelect2Member(selectVillageId, null)
+
+    }
+});
+
 
 
 $('#jabatan').change(function () {
@@ -87,6 +134,37 @@ $('#jabatan').change(function () {
         $("#selectRt").attr('required', false);
     }
 });
+
+async function getListVillage(selectDistrictId) {
+    $("#selectVillageId").append(
+        "<option value=''>Loading..</option>"
+    );
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    const response = await fetch(`/api/getlistvillagetdapil`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({
+            token: CSRF_TOKEN,
+            district_id: selectDistrictId,
+        }),
+    });
+    $("#selectVillageId").empty();
+    return await response.json();
+}
+function getListVillageUi(dataVillages) {
+    let divVillage = "";
+    dataVillages.forEach((m) => {
+        divVillage += showDivHtmlVillage(m);
+    });
+    const divVillageContainer = $("#selectVillageId");
+    divVillageContainer.append(divVillage);
+}
+function showDivHtmlVillage(m) {
+    return `<option value="${m.id}">${m.name}</option>`;
+}
 
 
 async function getDapilRegency(province) {
@@ -180,4 +258,39 @@ function getListDistrictUi(listDistricts) {
 
 function showDivHtmlListDistrict(m) {
     return `<option value="${m.district_id}">${m.name}</option>`;
+}
+
+function initialSelect2Member(selectVillageId, selectRT) {
+    // GET ANGGOTA BERDASARKAN SORTIR
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+
+    let URL = `/api/getdatamember/${selectVillageId}`;
+
+    $(".nik").select2({
+        theme: "bootstrap4",
+        width: $(this).data("width")
+            ? $(this).data("width")
+            : $(this).hasClass("w-100")
+                ? "100%"
+                : "style",
+        placeholder: "Pilih Anggota",
+        allowClear: Boolean($(this).data("allow-clear")),
+        ajax: {
+            dataType: "json",
+            url: URL,
+            method: 'GET',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            text: `${item.nik}-${item.name}`,
+                            id: item.id,
+                        };
+                    }),
+                };
+            },
+        },
+    });
+
 }
