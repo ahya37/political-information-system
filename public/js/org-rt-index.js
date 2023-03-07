@@ -347,7 +347,7 @@ let table = $("#data").DataTable({
         {
             targets: 3,
             render: function (data, type, row, meta) {
-                return `<p>${row.rt ?? ''}</p>`;
+                return row.rt
             },
         },
         {
