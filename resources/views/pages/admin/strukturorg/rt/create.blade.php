@@ -62,7 +62,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>NIK</label>
+                                <label>Anggota</label>
                                 <input class="form-control" type="hidden" name="idx" value="{{$result_new_idx}}">
                                 <select class="multiple-select nik" name="member" id="nik"></select>
                             </div>
