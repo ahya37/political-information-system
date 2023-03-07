@@ -68,11 +68,11 @@
                             </div>
                             <div class="form-group">
                                 <label>RT</label>
-                                <input class="form-control" name="rts" required>
+                                <input type="number" class="form-control" name="rts" required>
                             </div>
                             <div class="form-group">
                                 <label>No.Hp / WA</label>
-                                <input class="form-control" name="telp" required>
+                                <input type="tex" class="form-control" name="telp" required>
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-sm btn-sc-primary text-white" type="submit">Simpan</button>
