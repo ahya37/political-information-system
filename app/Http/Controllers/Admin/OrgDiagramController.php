@@ -861,8 +861,7 @@ class OrgDiagramController extends Controller
 
           $recordsFiltered = $data->get()->count();
           if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
-          $data = $data->orderBy($orderBy,$request->input('order.0.dir'));
-          $data = $data->orderBy('a.rt','asc')->get();
+          $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
           
           $recordsTotal = $data->count();
 
