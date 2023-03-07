@@ -837,8 +837,10 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_rt as a')
-                ->select('a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','a.base','a.id')
+                ->select('a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','a.base','a.id','c.name as village','d.name as district')
                 ->join('users as b','b.nik','=','a.nik')
+                ->join('villages as c','c.id','=','b.village_id')
+                ->join('districts as d','d.id','=','c.district_id')
                 ->where('base','KORRT');
 
             
@@ -875,6 +877,8 @@ class OrgDiagramController extends Controller
                 'rt' => $value->rt,
                 'rw' => $value->rw,
                 'address' => $value->address,
+                'village' => $value->village,
+                'district' => $value->district,
                 'title' => $value->title,
                 'nik' => $value->nik,
                 'name' => $value->name,

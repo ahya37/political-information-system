@@ -341,7 +341,7 @@ let table = $("#data").DataTable({
         {
             targets: 2,
             render: function (data, type, row, meta) {
-                return `<p>${row.address}</p>`;
+                return `<p>${row.address}, DS.${row.village}, KEC.${row.district}</p>`;
             },
         },
         {

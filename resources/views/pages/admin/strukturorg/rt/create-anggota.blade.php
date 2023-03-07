@@ -62,7 +62,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>NIK</label>
+                                <label>ANGGOTA</label>
                                 <input class="form-control" type="hidden" name="idx" value="{{$result_new_idx}}">
                                 <input class="form-control" type="hidden" name="pidx" value="{{$idx}}">
                                 <select class="multiple-select nik" name="member" id="nik"></select>
