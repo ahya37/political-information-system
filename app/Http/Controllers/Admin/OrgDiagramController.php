@@ -1009,7 +1009,7 @@ class OrgDiagramController extends Controller
             DB::table('org_diagram_rt')->insert([
                 'idx'    => $request->idx,
                 'pidx'   => 'KORRT',
-                'title'  => 'RT '.$request->rt,
+                'title'  => 'RT '.$request->rts,
                 'nik'    => $user->nik,
                 'name'   => $user->name,
                 'base'   => 'KORRT',
@@ -1018,7 +1018,7 @@ class OrgDiagramController extends Controller
                 'regency_id'  => $request->regency_id,
                 'district_id' => $request->district_id,
                 'village_id'  => $request->village_id,
-                'rt'  => $request->rt,
+                'rt'  => $request->rts,
             ]);
 
             DB::commit();

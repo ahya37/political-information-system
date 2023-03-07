@@ -63,8 +63,12 @@
                             </div>
                             <div class="form-group">
                                 <label>NIK</label>
-                                <input class="form-control" type="" name="idx" value="{{$result_new_idx}}">
+                                <input class="form-control" type="hidden" name="idx" value="{{$result_new_idx}}">
                                 <select class="multiple-select nik" name="member" id="nik"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>RT</label>
+                                <input class="form-control" name="rts" required>
                             </div>
                             <div class="form-group">
                                 <label>No.Hp / WA</label>
