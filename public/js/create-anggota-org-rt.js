@@ -90,14 +90,14 @@ $("#selectVillageId").change(async function () {
         $("#selectRt").append("<option value=''>-Pilih RT-</option>");
         getListRTUi(dataRT);
 
-        table.ajax.reload(null, false);
-
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
         $("#selectRt").val("");
+
+        initialSelect2Member(selectVillageId, selectRT)
     } else {
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
@@ -105,7 +105,6 @@ $("#selectVillageId").change(async function () {
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
-        table.ajax.reload(null, false);
 
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
@@ -124,13 +123,16 @@ $("#selectRt").change(async function () {
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
-        table.ajax.reload(null, false);
 
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
+
+
+        initialSelect2Member(selectVillageId, selectRT)
+
     } else {
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
@@ -138,15 +140,78 @@ $("#selectRt").change(async function () {
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
-        table.ajax.reload(null, false);
 
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
+
+
+        // initialSelect2Member(selectVillageId, selectRT)
+
     }
 });
+
+$('#jabatan').change(function () {
+    let jabatanId = $("#jabatan").val();
+    if (jabatanId === 'KOR RT') {
+        $('#divSelectRt').show();
+        $("#selectRt").attr('required', true);
+    } else {
+        $('#divSelectRt').hide();
+        $("#selectRt").val("")
+        $("#selectRt").attr('required', false);
+    }
+});
+
+$('#nik').on('keyup',function (e) {
+
+    console.log(e)
+
+})
+// $('#nik').on(function (e) {
+//     //    initialSelect2Member(selectVillageId, selectRT, q)
+// });
+
+function initialSelect2Member(selectVillageId, selectRT) {
+    // GET ANGGOTA BERDASARKAN SORTIR
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+
+    let URL = selectRT === null ? `/api/getdatamember/${selectVillageId}` : `/api/getdatamemberrt/${selectVillageId}/${selectRT}`
+
+    $(".nik").select2({
+        theme: "bootstrap4",
+        width: $(this).data("width")
+            ? $(this).data("width")
+            : $(this).hasClass("w-100")
+                ? "100%"
+                : "style",
+        placeholder: "Pilih Anggota",
+        allowClear: Boolean($(this).data("allow-clear")),
+        ajax: {
+            dataType: "json",
+            url: URL,
+            method: 'GET',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            text: item.name,
+                            id: item.id,
+                        };
+                    }),
+                };
+            },
+        },
+    });
+
+}
+
+
+// initialSelect2Member(selectVillageId, selectRT);
+
 
 
 async function getDapilRegency(province) {
@@ -304,241 +369,3 @@ function showDivHtmlRT(m) {
     return `<option value="${m.rt}">${m.rt}</option>`;
 }
 
-let table = $("#data").DataTable({
-    pageLength: 10,
-
-    bLengthChange: true,
-    bFilter: true,
-    bInfo: true,
-    processing: true,
-    bServerSide: true,
-    order: [[0, "desc"]],
-    autoWidth: false,
-    ajax: {
-        url: "/api/org/list/rt",
-        type: "POST",
-        data: function (d) {
-            d.village = selectVillageId;
-            d.rt = selectRT;
-            return d;
-        },
-    },
-    columnDefs: [
-        {
-            targets: 0,
-            sortable: true,
-            render: function (data, type, row, meta) {
-                return row.no
-            },
-        },
-        {
-            targets: 1,
-            sortable: true,
-            render: function (data, type, row, meta) {
-                return `<p> <img  class="rounded" width="40" src="/storage/${row.photo}"> ${row.name}</p>`;
-            },
-        },
-        {
-            targets: 2,
-            render: function (data, type, row, meta) {
-                return `<p>${row.address}</p>`;
-            },
-        },
-        {
-            targets: 3,
-            render: function (data, type, row, meta) {
-                return `<p>${row.rt ?? ''}</p>`;
-            },
-        },
-        {
-            targets: 4,
-            render: function (data, type, row, meta) {
-                return `<p>${row.base}</p>`;
-            },
-        },
-        {
-            targets: 5,
-            render: function (data, type, row, meta) {
-                return `<p class="text-center">${row.count_anggota}</p>`;
-            },
-        },
-        {
-            targets: 6,
-            render: function (data, type, row, meta) {
-                return `<p>${row.phone_number ?? ''}</p>`;
-            },
-        },
-        {
-            targets: 7,
-            render: function (data, type, row, meta) {
-                // return `<a href='/admin/struktur/rt/add/anggota/${row.idx}' class='btn btn-sm btn-sc-primary text-white'>Anggota</a>`;
-                return `
-                        <a class="btn btn-sm btn-sc-primary text-white" href="/admin/struktur/rt/create/anggota/${row.idx}">+ Anggota</a>
-                        <a class="btn btn-sm btn-sc-primary text-white" href="/admin/struktur/rt/detail/anggota/${row.idx}">Detail Anggota</a>
-                        <button type="button" class="btn btn-sm btn-info" onclick="onEdit(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-edit"></i></button>
-                        `
-            },
-        },
-    ],
-});
-
-$('#exampleModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var recipient = button.data('whatever') // Extract info from data-* attributes
-    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    var modal = $(this)
-    modal.find('.modal-body input[name="pidx"]').val(recipient)
-
-    //    new Vue({
-    //         el: "#register",
-    //         data() {
-    //             return {
-    //                 nik: null,
-    //             };
-    //         },
-    //         methods: {
-    //             checkForNikAvailability: function () {
-    //                 var self = this;
-    //                 axios
-    //                     .get("/api/nik/check", {
-    //                         params: {
-    //                             nik: this.nik,
-    //                         },
-    //                     })
-    //                     .then(function (response) {
-    //                         if (response.data == "Available") {
-    //                             self.$toasted.error(
-    //                                 "NIK Ketua Tidak Terdaftar!",
-    //                                 {
-    //                                     position: "top-center",
-    //                                     className: "rounded",
-    //                                     duration: 2000,
-    //                                 }
-    //                             );
-    //                             self.nik_unavailable = false;
-    //                         } else {
-    //                             self.$toasted.show(
-    //                                 "NIK Ketua Terdaftar, Lanujutkan!",
-    //                                 {
-    //                                     position: "top-center",
-    //                                     className: "rounded",
-    //                                     duration: 2000,
-    //                                 }
-    //                             );
-    //                             self.nik_unavailable = true;
-    //                         }
-    //                     });
-    //             },
-
-    //         },
-    //     });
-});
-
-async function onEdit(data) {
-    const id = data.id;
-    const name = data.getAttribute("data-name");
-
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-
-    const { value: nik } = await Swal.fire({
-        title: `Edit ${name}`,
-        input: 'number',
-        inputPlaceholder: 'NIK',
-        focusConfirm: false,
-        showCancelButton: true,
-        cancelButtonText: "Batal",
-        confirmButtonText: "Simpan",
-        timerProgressBar: true,
-    })
-
-    if (nik) {
-        $.ajax({
-            url: "/api/org/rt/update",
-            method: "POST",
-            cache: false,
-            data: {
-                id: id,
-                nik: nik,
-                _token: CSRF_TOKEN,
-            },
-            success: function (data) {
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: `${data.data.message}`,
-                    showConfirmButton: false,
-                    width: 500,
-                    timer: 900,
-                },
-                );
-                const table = $("#data").DataTable();
-                table.ajax.reload();
-            },
-            error: function (error) {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: `${error.responseJSON.data.message}`,
-                    showConfirmButton: false,
-                    width: 500,
-                    timer: 1000,
-                });
-            },
-        });
-    }
-
-    // const { value: formValues } = await Swal.fire({
-    //     title: "NIK",
-    //     html: `
-    //     <input id="swal-input2" class="swal2-input" value="${name}">
-    //     `,
-    //     focusConfirm: false,
-    //     showCancelButton: true,
-    //     cancelButtonText: "Batal",
-    //     confirmButtonText: "Simpan",
-    //     timerProgressBar: true,
-    //     preConfirm: () => {
-    //         return [
-    //             document.getElementById("swal-input2").value,
-    //         ];
-    //     },
-    // });
-
-    // if (formValues) {
-    //     // ajax save judul
-    //     $.ajax({
-    //         url: "/tugas/sop/copy",
-    //         method: "POST",
-    //         cache: false,
-    //         data: {
-    //             id: id,
-    //             name: formValues,
-    //             _token: CSRF_TOKEN,
-    //         },
-    //         success: function (data) {
-    //             Swal.fire({
-    //                 position: "center",
-    //                 icon: "success",
-    //                 title: `${data.data.message}`,
-    //                 showConfirmButton: false,
-    //                 width: 500,
-    //                 timer: 900,
-    //             },
-    //             );
-    //             const table = $("#data").DataTable();
-    //             table.ajax.reload();
-    //         },
-    //         error: function (error) {
-    //             Swal.fire({
-    //                 position: "center",
-    //                 icon: "danger",
-    //                 title: `${data.data.message}`,
-    //                 showConfirmButton: false,
-    //                 width: 500,
-    //                 timer: 900,
-    //             });
-    //         },
-    //     });
-    // }
-}

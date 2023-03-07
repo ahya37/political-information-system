@@ -7,7 +7,7 @@ use App\User;
 use App\Admin;
 use App\Models\Province;
 use App\Models\Village;
-use GuzzleHttp\Psr7\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Excel;
@@ -141,5 +141,36 @@ class MemberController extends Controller
     }
 
 
+    public function getDataMemberBySortirVillage(Request $request, $village)
+    {
+       
+        
+        $data = User::select('id','name')->where('village_id', $village)->get();
+    
+    
+        if($request->has('q')){
+            $search = $request->q;
+            $data = User::select('id','name')->where('village_id', $village)->where('name','LIKE',"%$search%")->get();
+            
+        }
+
+        return response()->json($data);
+
+    }
+
+    public function getDataMemberBySortirRT(Request $request, $village, $rt)
+    {
+       
+        $data = User::select('id','name')->where('village_id', $village)->where('rt', $rt)->get();
+
+        if($request->has('q')){
+           $search = $request->q;
+           $data = User::select('id','name')->where('village_id', $village)->where('rt', $rt)->where('name','LIKE',"%$search%")->get();
+
+       }
+
+        return response()->json($data);
+
+    }
 
 }

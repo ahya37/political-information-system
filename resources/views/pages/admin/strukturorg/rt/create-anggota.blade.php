@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Koordinator RT')
+@section('title', 'Anggota KOR RT')
 @push('addon-style')
 <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/plugins/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" />
@@ -14,7 +14,7 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Tambah Koordinator RT</h2>
+                <h2 class="dashboard-title">Tambah Anggota Koordinator RT</h2>
                 <p class="dashboard-subtitle">
                 </p>
             </div>
@@ -25,7 +25,7 @@
                         <div class="mt-1 mb-1">
                             @include('layouts.message')
                         </div>
-                        <form action="{{ route('admin-struktur-organisasi-rt-save') }}" id="register"
+                        <form action="{{ route('admin-struktur-organisasi-rt-anggota-save') }}" id="register"
                             enctype="multipart/form-data" method="POST">
                             @csrf
                             <div class="form-group">
@@ -64,6 +64,7 @@
                             <div class="form-group">
                                 <label>NIK</label>
                                 <input class="form-control" type="hidden" name="idx" value="{{$result_new_idx}}">
+                                <input class="form-control" type="hidden" name="pidx" value="{{$idx}}">
                                 <select class="multiple-select nik" name="member" id="nik"></select>
                             </div>
                             <div class="form-group">
@@ -86,5 +87,5 @@
     <script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
     <script src="{{ asset('assets/vendor/vuetoasted/vue-toasted.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
-    <script src="{{ asset('js/create-org-rt.js') }}"></script>
+    <script src="{{ asset('js/create-anggota-org-rt.js') }}"></script>
 @endpush

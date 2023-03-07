@@ -57,6 +57,9 @@ Route::post('store/org', 'Admin\OrgDiagramController@storeOrg');
 Route::post('org/update', 'Admin\OrgDiagramController@updateOrg');
 Route::post('org/delete', 'Admin\OrgDiagramController@deleteOrg');
 
+Route::get('getdatamember/{village}', 'API\MemberController@getDataMemberBySortirVillage');
+Route::get('getdatamemberrt/{village}/{rt}', 'API\MemberController@getDataMemberBySortirRT');
+
 #DATATABLE STRUKTUR ORG
 Route::post('org/getdataorgvillage', 'Admin\OrgDiagramController@getDataOrgVillage');
 Route::post('org/getdataorgdistict', 'Admin\OrgDiagramController@getDataOrgDistrict');

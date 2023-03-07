@@ -905,8 +905,8 @@ class OrgDiagramController extends Controller
 
             if ($cek_count_org > 0) {
                 
-                $count_org     = DB::table('org_diagram_rt')->max('idx'); 
-
+                $count_org     = DB::table('org_diagram_rt')->select('idx')->orderBy('id','desc')->first(); 
+                $count_org   = $count_org->idx;
                 $exp        = explode(".", $count_org);
                 $count_exp  = count($exp);
                 
@@ -928,26 +928,76 @@ class OrgDiagramController extends Controller
                 
             }
 
-
         return view('pages.admin.strukturorg.rt.create', compact('regency','result_new_idx'));
     }
 
+    public function createOrgRTAnggota($idx){
+
+        $regency = Regency::select('id','name')->where('id', 3602)->first();
+
+        // get village id where idx
+        // $cek_kor = DB::table('org_diagram_rt as a')->select('b.village_id')
+        //             ->join('users as b','b.nik','=','a.nik')
+        //             ->where('a.idx', $idx)->first();
+
+        // $village_id = $cek_kor->village_id;
+
+        #creeate idx
+            $cek_count_org = DB::table('org_diagram_rt')->where('pidx', $idx)->count();
+
+            $result_new_idx = "";
+
+            if ($cek_count_org > 0) {
+                
+                $count_org     = DB::table('org_diagram_rt')->select('idx')->where('pidx', $idx)->orderBy('id','desc')->first(); 
+                $count_org   = $count_org->idx;
+                $exp        = explode(".", $count_org);
+                $count_exp  = count($exp);
+                
+                if($count_exp == 1) {
+
+                    $result_new_idx = $exp[0].".1";
+
+                }else{
+                    
+                    $result_exp = (int) $exp[2]+1;
+                    $result_new_idx  = $exp[0].".".$exp[1].".".$result_exp;
+                    // dd($result_exp);
+                    // dd($result_new_idx);
+
+                }         
+                
+            }else{
+
+                $result_new_idx = $idx.'.1';
+                
+            }
+
+
+        return view('pages.admin.strukturorg.rt.create-anggota', compact('regency','result_new_idx','idx'));
+    }
+
     public function saveOrgRT(Request $request){
+
+        // return $request->all();
 
         DB::beginTransaction();
         try {
 
             #cek ketersediaan nik di tb users
             $userTable     = DB::table('users');
-            $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
+
+            $user         = $userTable->select('name','photo','nik')->where('id', $request->member)->first();
+
+            // $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
             
-            if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
+            // if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
 
             #cek jika nik sudah terdaftar di tb org_diagram_village
-            $cek_nik_org  = DB::table('org_diagram_rt')->where('nik', $request->nik)->where('village_id', $request->village_id)->count();
+            $cek_nik_org  = DB::table('org_diagram_rt')->where('nik', $user->nik)->where('village_id', $request->village_id)->count();
             if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
 
-            $user         = $userTable->select('name','photo')->where('nik', $request->nik)->first();
+            // $user         = $userTable->select('name','photo')->where('nik', $request->nik)->first();
 
             
             #save to tb org_diagram_rt
@@ -955,7 +1005,7 @@ class OrgDiagramController extends Controller
                 'idx'    => $request->idx,
                 'pidx'   => 'KORRT',
                 'title'  => 'RT '.$request->rt,
-                'nik'    => $request->nik,
+                'nik'    => $user->nik,
                 'name'   => $user->name,
                 'base'   => 'KORRT',
                 'photo'  => $user->photo ?? '',
@@ -984,59 +1034,58 @@ class OrgDiagramController extends Controller
 
             #cek ketersediaan nik di tb users
             $userTable     = DB::table('users');
-            $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
+            // $cek_nik_user  = $userTable->where('id', $request->member)->count();
+            $user         = $userTable->select('name','photo','phone_number','nik')->where('id', $request->member)->first();
             
-            if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
+            // if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
 
-            #cek jika nik sudah terdaftar di tb org_diagram_village
-            $cek_nik_org  = DB::table('org_diagram_rt')->where('nik', $request->nik)->count();
+            // #cek jika nik sudah terdaftar di tb org_diagram_village
+            $cek_nik_org  = DB::table('org_diagram_rt')->where('nik', $user->nik)->count();
             if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
-
 
             #get villlage, regency, district, rt where idx
             $domisili = DB::table('org_diagram_rt')->select('regency_id','district_id','village_id','rt')->where('idx', $request->pidx)->first();
 
-            #create idx
-            $cek_count_org = DB::table('org_diagram_rt')->where('idx', $request->pidx)->count();
+            // #create idx
+            // $cek_count_org = DB::table('org_diagram_rt')->where('idx', $request->pidx)->count();
 
-            $result_new_idx = "";
+            // $result_new_idx = "";
 
-            if ($cek_count_org > 0) {
+            // if ($cek_count_org > 0) {
                 
-                $count_org     = DB::table('org_diagram_rt')->where('pidx', $request->pidx)->max('idx'); 
+            //     $count_org     = DB::table('org_diagram_rt')->where('pidx', $request->pidx)->max('idx'); 
 
-                $exp        = explode(".", $count_org);
-                $count_exp  = count($exp);
+            //     $exp        = explode(".", $count_org);
+            //     $count_exp  = count($exp);
 
                 
-                if($count_exp == 1) {
+            //     if($count_exp == 1) {
 
-                    $result_new_idx  = $request->pidx.$exp[0].".1";
+            //         $result_new_idx  = $request->pidx.$exp[0].".1";
 
-                }else{
+            //     }else{
 
-                    // get nilai terakhir dari idx where pidx
-                    $end_number = end($exp); 
-                    $result_exp = (int) $end_number + 1;
+            //         // get nilai terakhir dari idx where pidx
+            //         $end_number = end($exp); 
+            //         $result_exp = (int) $end_number + 1;
     
-                    $result_new_idx  = $request->pidx.".".$result_exp;
+            //         $result_new_idx  = $request->pidx.".".$result_exp;
 
-                }         
+            //     }         
                 
-            }else{
+            // }else{
 
-                $result_new_idx = "KORRT";
+            //     $result_new_idx = "KORRT";
                 
-            }
+            // }
             
-            $user         = $userTable->select('name','photo','phone_number')->where('nik', $request->nik)->first();
 
             #save to tb org_diagram_rt
             DB::table('org_diagram_rt')->insert([
-                'idx'    => $result_new_idx,
+                'idx'    => $request->idx,
                 'pidx'   => $request->pidx,
                 'title'  => 'ANGGOTA',
-                'nik'    => $request->nik,
+                'nik'    => $user->nik,
                 'name'   => $user->name,
                 'base'   => 'ANGGOTA',
                 'photo'  => $user->photo ?? '',
