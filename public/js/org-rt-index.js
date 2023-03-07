@@ -312,7 +312,7 @@ let table = $("#data").DataTable({
     bInfo: true,
     processing: true,
     bServerSide: true,
-    order: [[0, "asc"]],
+    order: [[3, "asc"]],
     autoWidth: false,
     ajax: {
         url: "/api/org/list/rt",
@@ -328,7 +328,7 @@ let table = $("#data").DataTable({
             targets: 0,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.rt
+                return row.no
             },
         },
         {
@@ -346,7 +346,7 @@ let table = $("#data").DataTable({
         },
         {
             targets: 3,
-            sortable: true,
+            orderable: true,
             render: function (data, type, row, meta) {
                 return row.rt
             },

@@ -59,7 +59,7 @@
                                     <table id="data" class="table table-sm table-striped" width="100%">
                                         <thead>
                                             <tr>
-                                                <th scope="col">RT</th>
+                                                <th scope="col">No</th>
                                                 <th scope="col">NAMA</th>
                                                 <th scope="col">ALAMAT</th>
                                                 <th scope="col">RT</th>
