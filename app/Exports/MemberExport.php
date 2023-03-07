@@ -33,7 +33,7 @@ class MemberExport implements FromCollection, WithHeadings, WithEvents
                 $total_referal = User::where('user_id', $val->id)->whereNotNull('village_id')->count();
                 $result[] = [
                     'no' => $no++,
-                    'nik' => $val->nik,
+                    'nik' => " $val->nik",
                     'name' => $val->name,
                     'address' => $val->address,
                     'rt' => $val->rt,
