@@ -909,9 +909,10 @@ class OrgDiagramController extends Controller
 
             if ($cek_count_org > 0) {
                 
-                $count_org     = DB::table('org_diagram_rt')->select('idx')->orderBy('id','desc')->first(); 
+                $count_org     = DB::table('org_diagram_rt')->select('idx')->where('base','KORRT')->orderBy('id','desc')->first(); 
                 $count_org   = $count_org->idx;
                 $exp        = explode(".", $count_org);
+                // dd($exp);
                 $count_exp  = count($exp);
                 
                 if($count_exp == 1) {
