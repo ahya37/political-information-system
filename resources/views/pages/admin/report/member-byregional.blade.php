@@ -76,6 +76,7 @@
                 <thead>
                     <tr>
                         <th>NO</th>
+                        <th>NIK</th>
                         <th>NAMA</th>
                         <th>ALAMAT</th>
                         <th>RT</th>
@@ -95,6 +96,7 @@
                     @foreach ($result as $row)
                     <tr>
                         <td>{{ $row['no'] }}</td>
+                        <td>{{ $row['nik'] }}</td>
                         <td>{{ $row['name'] }}</td>
                         <td>{{ $row['address'] }}</td>
                         <td>{{ $row['rt'] }}</td>

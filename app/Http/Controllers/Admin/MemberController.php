@@ -790,7 +790,7 @@ class MemberController extends Controller
 
         // query
         $data = DB::table('users as a')
-                        ->select('a.id','a.user_id','a.name','a.photo','a.rt','a.rw','a.phone_number','a.whatsapp','a.address','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email')
+                        ->select('a.nik','a.id','a.user_id','a.name','a.photo','a.rt','a.rw','a.phone_number','a.whatsapp','a.address','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email')
                         ->join('villages','villages.id','a.village_id')
                         ->join('districts','districts.id','villages.district_id')
                         ->join('regencies','regencies.id','districts.regency_id')
@@ -843,6 +843,7 @@ class MemberController extends Controller
                 $total_referal = User::where('user_id', $val->id)->whereNotNull('village_id')->count();
                 $result[] = [
                     'no' => $no++,
+                    'nik' => $val->nik,
                     'name' => $val->name,
                     'address' => $val->address,
                     'rt' => $val->rt,
