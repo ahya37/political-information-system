@@ -1295,7 +1295,8 @@ public function createOrgDistrict(){
 
         if ($cek_count_org > 0) {
             
-            $count_org     = DB::table('org_diagram_district')->max('idx'); 
+            $count_org     = DB::table('org_diagram_district')->select('idx')->orderBy('id','desc')->first();
+            $count_org     = $count_org->idx; 
 
             $exp        = explode(".", $count_org);
             $count_exp  = count($exp);
@@ -1773,20 +1774,21 @@ public function deleteKorPusat(){
 
         if ($cek_count_org > 0) {
             
-            $count_org     = DB::table('org_diagram_pusat')->max('idx'); 
-
+            $count_org     = DB::table('org_diagram_pusat')->select('idx')->orderBy('id','desc')->first(); 
+            $count_org     = $count_org->idx;
+            
             $exp        = explode(".", $count_org);
             $count_exp  = count($exp);
             
             if($count_exp == 1) {
 
-                $result_new_idx = $exp[0].".1";
+                $result_new_idx = time().$exp[0].".1";
 
             }else{
 
                 $result_exp = (int) $exp[1]+1;
 
-                $result_new_idx  = "KORPUSAT.".$result_exp;
+                $result_new_idx  = time()."KORPUSAT.".$result_exp;
 
             }         
             
@@ -1795,6 +1797,8 @@ public function deleteKorPusat(){
             $result_new_idx = "KORPUSAT";
             
         }
+
+
 
 
     return view('pages.admin.strukturorg.pusat.create', compact('regency','result_new_idx'));
@@ -1807,15 +1811,15 @@ public function saveOrgPusat(Request $request){
 
         #cek ketersediaan nik di tb users
         $userTable     = DB::table('users');
-        $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
+        // $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
+        $user         = $userTable->select('name','photo','nik')->where('id', $request->member)->first();
         
-        if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
+        // if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
 
         #cek jika nik sudah terdaftar di tb org_diagram_village
-        $cek_nik_org  = DB::table('org_diagram_pusat')->where('nik', $request->nik)->count();
+        $cek_nik_org  = DB::table('org_diagram_pusat')->where('nik', $user->nik)->count();
         if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
 
-        $user         = $userTable->select('name','photo')->where('nik', $request->nik)->first();
 
         
         #save to tb org_diagram_pusat
@@ -1823,7 +1827,7 @@ public function saveOrgPusat(Request $request){
             'idx'    => $request->idx,
             'pidx'   => 'KORPUSAT',
             'title'  => strtoupper($request->jabatan),
-            'nik'    => $request->nik,
+            'nik'    => $user->nik,
             'name'   => $user->name,
             'base'   => 'KORPUSAT',
             'photo'  => $user->photo ?? '',
