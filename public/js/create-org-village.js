@@ -196,7 +196,6 @@ function initialSelect2Member(selectVillageId, selectRT) {
             method: 'GET',
             delay: 250,
             processResults: function (data) {
-                console.log('data :', data);
                 return {
                     results: $.map(data, function (item) {
                         return {
