@@ -312,7 +312,7 @@ let table = $("#data").DataTable({
     bInfo: true,
     processing: true,
     bServerSide: true,
-    order: [[0, "desc"]],
+    order: [[3, "asc"]],
     autoWidth: false,
     ajax: {
         url: "/api/org/list/rt",

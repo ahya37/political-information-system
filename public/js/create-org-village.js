@@ -96,6 +96,12 @@ $("#selectVillageId").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
         $("#selectRt").val("");
+
+        console.log(selectVillageId)
+
+        initialSelect2Member(selectVillageId, selectRT)
+
+
     } else {
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
@@ -110,6 +116,9 @@ $("#selectVillageId").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
         $("#selectRt").val("");
+
+        initialSelect2Member(selectVillageId, selectRT)
+
     }
 });
 
@@ -127,6 +136,8 @@ $("#selectRt").change(async function () {
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
+        initialSelect2Member(selectVillageId, selectRT)
+
     } else {
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
@@ -140,6 +151,8 @@ $("#selectRt").change(async function () {
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
+        initialSelect2Member(selectVillageId, selectRT)
+
     }
 });
 
@@ -197,6 +210,43 @@ async function getDapilNames(regencyId) {
     });
 
 }
+
+function initialSelect2Member(selectVillageId, selectRT) {
+    // GET ANGGOTA BERDASARKAN SORTIR
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+
+    let URL = selectRT === null ? `/api/getdatamember/${selectVillageId}` : `/api/getdatamemberrt/${selectVillageId}/${selectRT}`
+
+    $(".nik").select2({
+        theme: "bootstrap4",
+        width: $(this).data("width")
+            ? $(this).data("width")
+            : $(this).hasClass("w-100")
+                ? "100%"
+                : "style",
+        placeholder: "Pilih Anggota",
+        allowClear: Boolean($(this).data("allow-clear")),
+        ajax: {
+            dataType: "json",
+            url: URL,
+            method: 'GET',
+            delay: 250,
+            processResults: function (data) {
+                console.log('data :', data);
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            text: `${item.nik}-${item.name}`,
+                            id: item.id,
+                        };
+                    }),
+                };
+            },
+        },
+    });
+
+}
+
 function getDapilNamesUi(listDapils) {
     let divListDapil = "";
     listDapils.forEach((m) => {

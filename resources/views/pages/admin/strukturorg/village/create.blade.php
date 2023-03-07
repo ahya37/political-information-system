@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 @section('title', 'Koordinator Desa')
 @push('addon-style')
+<link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/plugins/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css" />
@@ -58,6 +60,7 @@
                                 <label>NIK</label>
                                 <input class="form-control" type="hidden" name="idx" value="{{$result_new_idx}}">
                                 <input class="form-control" name="nik" placeholder="Input NIK">
+                                {{-- <select class="multiple-select nik" name="member" id="nik"></select> --}}
                             </div>
                             <div class="form-group">
                                 <label>Jabatan</label>
@@ -87,6 +90,7 @@
     </div>
 @endsection
 @push('addon-script')
+<script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
     <script src="{{ asset('assets/vendor/vuetoasted/vue-toasted.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
