@@ -150,7 +150,10 @@ class MemberController extends Controller
     
         if($request->has('q')){
             $search = $request->q;
-            $data = User::select('id','name','nik')->where('village_id', $village)->where('name','LIKE',"%$search%")->get();
+            $data = User::select('id','name','nik')->where('village_id', $village)
+            ->where('name','LIKE',"%$search%")
+            ->orWhere('nik','LIKE',"%$search%")
+            ->get();
             
         }
 
@@ -165,7 +168,11 @@ class MemberController extends Controller
 
         if($request->has('q')){
            $search = $request->q;
-           $data = User::select('id','name','nik')->where('village_id', $village)->where('rt', $rt)->where('name','LIKE',"%$search%")->get();
+           $data = User::select('id','name','nik')->where('village_id', $village)
+                        ->where('rt', $rt)
+                        ->where('name','LIKE',"%$search%")
+                        ->orWhere('nik','LIKE',"%$search%")
+                        ->get();
 
        }
 
