@@ -145,12 +145,12 @@ class MemberController extends Controller
     {
        
         
-        $data = User::select('id','name')->where('village_id', $village)->get();
+        $data = User::select('id','name','nik')->where('village_id', $village)->get();
     
     
         if($request->has('q')){
             $search = $request->q;
-            $data = User::select('id','name')->where('village_id', $village)->where('name','LIKE',"%$search%")->get();
+            $data = User::select('id','name','nik')->where('village_id', $village)->where('name','LIKE',"%$search%")->get();
             
         }
 
@@ -161,11 +161,11 @@ class MemberController extends Controller
     public function getDataMemberBySortirRT(Request $request, $village, $rt)
     {
        
-        $data = User::select('id','name')->where('village_id', $village)->where('rt', $rt)->get();
+        $data = User::select('id','name','nik')->where('village_id', $village)->where('rt', $rt)->get();
 
         if($request->has('q')){
            $search = $request->q;
-           $data = User::select('id','name')->where('village_id', $village)->where('rt', $rt)->where('name','LIKE',"%$search%")->get();
+           $data = User::select('id','name','nik')->where('village_id', $village)->where('rt', $rt)->where('name','LIKE',"%$search%")->get();
 
        }
 

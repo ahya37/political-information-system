@@ -198,7 +198,7 @@ function initialSelect2Member(selectVillageId, selectRT) {
                 return {
                     results: $.map(data, function (item) {
                         return {
-                            text: item.name,
+                            text: `${item.nik}-${item.name}`,
                             id: item.id,
                         };
                     }),
