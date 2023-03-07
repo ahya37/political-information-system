@@ -58,9 +58,9 @@
                             </div>
                             <div class="form-group">
                                 <label>NIK</label>
-                                <input class="form-control" type="hidden" name="idx" value="{{$result_new_idx}}">
-                                <input class="form-control" name="nik" placeholder="Input NIK">
-                                {{-- <select class="multiple-select nik" name="member" id="nik"></select> --}}
+                                <input class="form-control" type="" name="idx" value="{{$result_new_idx}}">
+                                {{-- <input class="form-control" name="nik" placeholder="Input NIK"> --}}
+                                <select class="multiple-select nik" name="member" id="nik"></select>
                             </div>
                             <div class="form-group">
                                 <label>Jabatan</label>

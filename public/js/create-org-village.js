@@ -1,7 +1,6 @@
 let selectListArea = $("#selectListArea").val();
 let selectDistrictId = $("#selectDistrictId").val();
 let selectVillageId = $("#selectVillageId").val();
-let selectRT = $("#selectRt").val();
 
 // KABKOT , langsung get dapil by kab lebak
 
@@ -97,9 +96,8 @@ $("#selectVillageId").change(async function () {
         $("#reqvillage").val(selectVillageId);
         $("#selectRt").val("");
 
-        console.log(selectVillageId)
 
-        initialSelect2Member(selectVillageId, selectRT)
+        initialSelect2Member(selectVillageId, null)
 
 
     } else {
@@ -117,41 +115,7 @@ $("#selectVillageId").change(async function () {
         $("#reqvillage").val("");
         $("#selectRt").val("");
 
-        initialSelect2Member(selectVillageId, selectRT)
-
-    }
-});
-
-// RT
-$("#selectRt").change(async function () {
-    selectRT = $("#selectRt").val();
-
-    if (selectRT !== "") {
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
-        $("#reqdapil").val(selectListArea);
-        $("#reqdistrict").val(selectDistrictId);
-        $("#reqvillage").val(selectVillageId);
-        initialSelect2Member(selectVillageId, selectRT)
-
-    } else {
-        // province = $("#province").val();
-        // selectArea = $("#selectArea").val();
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-
-
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
-        $("#reqdapil").val(selectListArea);
-        $("#reqdistrict").val(selectDistrictId);
-        $("#reqvillage").val("");
-        initialSelect2Member(selectVillageId, selectRT)
+        initialSelect2Member(selectVillageId, null)
 
     }
 });
@@ -215,7 +179,7 @@ function initialSelect2Member(selectVillageId, selectRT) {
     // GET ANGGOTA BERDASARKAN SORTIR
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
-    let URL = selectRT === null ? `/api/getdatamember/${selectVillageId}` : `/api/getdatamemberrt/${selectVillageId}/${selectRT}`
+    let URL = `/api/getdatamember/${selectVillageId}`;
 
     $(".nik").select2({
         theme: "bootstrap4",
