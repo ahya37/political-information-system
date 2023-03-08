@@ -381,6 +381,7 @@ let table = $("#data").DataTable({
                         <a class="btn btn-sm btn-sc-primary text-white" href="/admin/struktur/rt/create/anggota/${row.idx}">+ Anggota</a>
                         <a class="btn btn-sm btn-sc-primary text-white" href="/admin/struktur/rt/detail/anggota/${row.idx}">Detail Anggota</a>
                         <button type="button" class="btn btn-sm btn-info" onclick="onEdit(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>
                         `
             },
         },
@@ -388,56 +389,10 @@ let table = $("#data").DataTable({
 });
 
 $('#exampleModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var recipient = button.data('whatever') // Extract info from data-* attributes
-    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var button = $(event.relatedTarget) 
+    var recipient = button.data('whatever') 
     var modal = $(this)
     modal.find('.modal-body input[name="pidx"]').val(recipient)
-
-    //    new Vue({
-    //         el: "#register",
-    //         data() {
-    //             return {
-    //                 nik: null,
-    //             };
-    //         },
-    //         methods: {
-    //             checkForNikAvailability: function () {
-    //                 var self = this;
-    //                 axios
-    //                     .get("/api/nik/check", {
-    //                         params: {
-    //                             nik: this.nik,
-    //                         },
-    //                     })
-    //                     .then(function (response) {
-    //                         if (response.data == "Available") {
-    //                             self.$toasted.error(
-    //                                 "NIK Ketua Tidak Terdaftar!",
-    //                                 {
-    //                                     position: "top-center",
-    //                                     className: "rounded",
-    //                                     duration: 2000,
-    //                                 }
-    //                             );
-    //                             self.nik_unavailable = false;
-    //                         } else {
-    //                             self.$toasted.show(
-    //                                 "NIK Ketua Terdaftar, Lanujutkan!",
-    //                                 {
-    //                                     position: "top-center",
-    //                                     className: "rounded",
-    //                                     duration: 2000,
-    //                                 }
-    //                             );
-    //                             self.nik_unavailable = true;
-    //                         }
-    //                     });
-    //             },
-
-    //         },
-    //     });
 });
 
 async function onEdit(data) {
@@ -492,58 +447,58 @@ async function onEdit(data) {
             },
         });
     }
+}
 
-    // const { value: formValues } = await Swal.fire({
-    //     title: "NIK",
-    //     html: `
-    //     <input id="swal-input2" class="swal2-input" value="${name}">
-    //     `,
-    //     focusConfirm: false,
-    //     showCancelButton: true,
-    //     cancelButtonText: "Batal",
-    //     confirmButtonText: "Simpan",
-    //     timerProgressBar: true,
-    //     preConfirm: () => {
-    //         return [
-    //             document.getElementById("swal-input2").value,
-    //         ];
-    //     },
-    // });
+async function onDelete(data) {
+    const id = data.id;
+    const name = data.getAttribute("data-name");
 
-    // if (formValues) {
-    //     // ajax save judul
-    //     $.ajax({
-    //         url: "/tugas/sop/copy",
-    //         method: "POST",
-    //         cache: false,
-    //         data: {
-    //             id: id,
-    //             name: formValues,
-    //             _token: CSRF_TOKEN,
-    //         },
-    //         success: function (data) {
-    //             Swal.fire({
-    //                 position: "center",
-    //                 icon: "success",
-    //                 title: `${data.data.message}`,
-    //                 showConfirmButton: false,
-    //                 width: 500,
-    //                 timer: 900,
-    //             },
-    //             );
-    //             const table = $("#data").DataTable();
-    //             table.ajax.reload();
-    //         },
-    //         error: function (error) {
-    //             Swal.fire({
-    //                 position: "center",
-    //                 icon: "danger",
-    //                 title: `${data.data.message}`,
-    //                 showConfirmButton: false,
-    //                 width: 500,
-    //                 timer: 900,
-    //             });
-    //         },
-    //     });
-    // }
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    Swal.fire({
+        title: `Yakin hapus ${name}`,
+        text: "Menghapus KOR RT, dapat menghapus beserta anggotanya!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Hapus',
+        cancelButtonText: 'Batal',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "/api/org/korrt/delete",
+                method: "POST",
+                cache: false,
+                data: {
+                    id: id,
+                    _token: CSRF_TOKEN,
+                },
+                success: function (data) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: `${data.data.message}`,
+                        showConfirmButton: false,
+                        width: 500,
+                        timer: 900,
+                    },
+                    );
+                    const table = $("#data").DataTable();
+                    table.ajax.reload();
+                },
+                error: function (error) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: `${error.responseJSON.data.message}`,
+                        showConfirmButton: false,
+                        width: 500,
+                        timer: 1000,
+                    });
+                },
+            });
+        }
+    })
+
+
 }

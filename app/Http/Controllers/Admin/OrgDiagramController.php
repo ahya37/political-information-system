@@ -1329,6 +1329,33 @@ class OrgDiagramController extends Controller
 
 }
 
+public function deleteKorgRT(){
+
+    DB::beginTransaction();
+    try {
+
+        $id   = request()->id;
+        
+        $kor_rt =  DB::table('org_diagram_rt')->select('idx')->where('id', $id)->first();
+        DB::table('org_diagram_rt')->where('pidx', $kor_rt->idx)->delete(); // delete child dari korrt
+        DB::table('org_diagram_rt')->where('id', $id)->delete();
+
+        DB::commit();
+        return ResponseFormatter::success([
+            'message' => 'Berhasil hapus KOR RT!'
+        ],200);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        return ResponseFormatter::error([
+            'message' => 'Something when wrong!',
+            'error'   => $e->getMessage()
+        ]);
+    }
+
+}
+
+
 public function indexOrgDistrict(){
 
     $regency = Regency::select('id','name')->where('id', 3602)->first();
