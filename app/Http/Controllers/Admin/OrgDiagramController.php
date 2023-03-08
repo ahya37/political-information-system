@@ -923,7 +923,7 @@ class OrgDiagramController extends Controller
 
                     $result_exp = (int) $exp[1]+1;
     
-                    $result_new_idx  = "KORRT.".$result_exp;
+                    $result_new_idx  = time()."KORRT.".$result_exp;
 
                 }         
                 
