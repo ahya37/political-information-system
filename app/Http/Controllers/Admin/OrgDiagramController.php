@@ -941,6 +941,16 @@ class OrgDiagramController extends Controller
         return view('pages.admin.strukturorg.rt.create', compact('regency','result_new_idx'));
     }
 
+    public function editAnggotaOrgRT($id){
+
+        
+        $regency = Regency::select('id','name')->where('id', 3602)->first();
+
+        $anggota_korte = DB::table('org_diagram_rt')->select('name','telp')->where('id', $id)->first();
+        
+        return view('pages.admin.strukturorg.rt.edit-anggota', compact('regency','id','anggota_korte'));
+    }
+
     public function createOrgRTAnggota($idx){
 
         $regency = Regency::select('id','name')->where('id', 3602)->first();
@@ -1099,12 +1109,59 @@ class OrgDiagramController extends Controller
                 'name'   => $user->name,
                 'base'   => 'ANGGOTA',
                 'photo'  => $user->photo ?? '',
-                'telp'  => $user->phone_number,
+                'telp'  => $request->telp,
                 'regency_id'  => $domisili->regency_id,
                 'district_id' => $domisili->district_id,
                 'village_id'  => $domisili->village_id,
                 'rt'  => $domisili->rt,
             ]);
+
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+           
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with(['error' => 'Data gagal tersimpan!'. $e->getMessage()]);
+        }
+    }
+
+    public function updateAnggotaByKorRT(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+
+            if ($request->member != null ) {
+                #cek ketersediaan nik di tb users
+                $userTable     = DB::table('users');
+                // $cek_nik_user  = $userTable->where('id', $request->member)->count();
+                $user         = $userTable->select('name','photo','phone_number','nik')->where('id', $request->member)->first();
+                
+                // if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
+    
+                // #cek jika nik sudah terdaftar di tb org_diagram_village
+                $cek_nik_org  = DB::table('org_diagram_rt')->where('nik', $user->nik)->count();
+                if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
+                
+                $old_anggota_korte = DB::table('org_diagram_rt')->select('name','pidx')->where('id', $id)->first();
+    
+                // #get villlage, regency, district, rt where idx
+                // $domisili = DB::table('org_diagram_rt')->select('regency_id','district_id','village_id','rt')->where('idx', $old_anggota_korte->pidx)->first();
+                // dd($domisili);
+    
+                DB::table('org_diagram_rt')->where('id', $id)->update([
+                    'nik'    => $user->nik,
+                    'name'   => $user->name,
+                    'base'   => 'ANGGOTA',
+                    'photo'  => $user->photo ?? '',
+                    'telp'  => $request->telp,
+                ]);
+
+            }else{
+
+                DB::table('org_diagram_rt')->where('id', $id)->update([
+                    'telp'  => $request->telp,
+                ]);
+            }
 
             DB::commit();
             return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
@@ -1174,7 +1231,7 @@ class OrgDiagramController extends Controller
 
         $no = 1;
 
-       return view('pages.admin.strukturorg.village.detailanggota', compact('data','no','kor_rt'));
+       return view('pages.admin.strukturorg.rt.detailanggota', compact('data','no','kor_rt'));
 
     }
 
@@ -1964,7 +2021,6 @@ public function updateOrgPusat(){
     }
 
 }
-
 
 
 }
