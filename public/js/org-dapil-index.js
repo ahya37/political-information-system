@@ -6,6 +6,7 @@ let selectListArea = $("#selectListArea").val();
 // DAPIL
 $("#selectListArea").change(async function () {
     selectListArea = $("#selectListArea").val();
+    $('#keterangan').empty();
 
     if (selectListArea !== "") {
        
@@ -13,6 +14,8 @@ $("#selectListArea").change(async function () {
         selectListArea = $("#selectListArea").val();
 
         $("#reqdapil").val(selectListArea);
+
+        $('#keterangan').text('KOORDINATOR : ' + $("#selectListArea option:selected").text());
 
         table.ajax.reload(null, false);
 
@@ -22,6 +25,7 @@ $("#selectListArea").change(async function () {
         selectListArea = $("#selectListArea").val();
 
         table.ajax.reload(null, false);
+        $('#keterangan').empty();
 
     }
 });

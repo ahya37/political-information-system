@@ -98,6 +98,9 @@ $("#selectVillageId").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
         $("#selectRt").val("");
+        $('#keterangan').empty();
+        geLocationVillage(selectVillageId)
+
     } else {
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
@@ -147,6 +150,7 @@ $("#selectRt").change(async function () {
         $("#reqvillage").val("");
     }
 });
+
 
 
 async function getDapilRegency(province) {

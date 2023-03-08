@@ -64,6 +64,9 @@ $("#selectDistrictId").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
 
+        $("#keterangan").empty();
+        geLocationDistrict(selectDistrictId)
+
         table.ajax.reload(null, false);
 
     } else {

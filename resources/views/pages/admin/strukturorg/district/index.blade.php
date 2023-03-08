@@ -42,6 +42,16 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-md-12 mt-2 mb-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 id="keterangan"></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-12 col-sm-12">
                         @include('layouts.message')
 
@@ -74,6 +84,7 @@
     <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/getlocation.js') }}"></script>
     <script src="{{ asset('js/org-district-index.js') }}"></script>
     <script>
         AOS.init();
