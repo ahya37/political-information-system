@@ -951,6 +951,16 @@ class OrgDiagramController extends Controller
         return view('pages.admin.strukturorg.rt.edit-anggota', compact('regency','id','anggota_korte'));
     }
 
+    public function editOrgRT($id){
+
+        
+        $regency = Regency::select('id','name')->where('id', 3602)->first();
+
+        $korte = DB::table('org_diagram_rt')->select('name','telp','rt')->where('id', $id)->first();
+        
+        return view('pages.admin.strukturorg.rt.edit', compact('regency','id','korte'));
+    }
+
     public function createOrgRTAnggota($idx){
 
         $regency = Regency::select('id','name')->where('id', 3602)->first();
@@ -1151,12 +1161,12 @@ class OrgDiagramController extends Controller
                 DB::table('org_diagram_rt')->where('id', $id)->update([
                     'nik'    => $user->nik,
                     'name'   => $user->name,
-                    'base'   => 'ANGGOTA',
                     'photo'  => $user->photo ?? '',
                     'telp'  => $request->telp,
                 ]);
 
             }else{
+                $old_anggota_korte = DB::table('org_diagram_rt')->select('name','pidx')->where('id', $id)->first();
 
                 DB::table('org_diagram_rt')->where('id', $id)->update([
                     'telp'  => $request->telp,
@@ -1164,7 +1174,56 @@ class OrgDiagramController extends Controller
             }
 
             DB::commit();
+            return redirect()->route('admin-struktur-organisasi-rt-detail-anggota',['idx' => $old_anggota_korte->pidx]);
             return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+           
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with(['error' => 'Data gagal tersimpan!'. $e->getMessage()]);
+        }
+    }
+
+    public function updateKorRT(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+
+            if ($request->member != null ) {
+                #cek ketersediaan nik di tb users
+                $userTable     = DB::table('users');
+                // $cek_nik_user  = $userTable->where('id', $request->member)->count();
+                $user         = $userTable->select('name','photo','phone_number','nik')->where('id', $request->member)->first();
+                
+                // if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
+    
+                // #cek jika nik sudah terdaftar di tb org_diagram_village
+                $cek_nik_org  = DB::table('org_diagram_rt')->where('nik', $user->nik)->count();
+                if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
+                
+                $old_anggota_korte = DB::table('org_diagram_rt')->select('name','pidx')->where('id', $id)->first();
+    
+                // #get villlage, regency, district, rt where idx
+                // $domisili = DB::table('org_diagram_rt')->select('regency_id','district_id','village_id','rt')->where('idx', $old_anggota_korte->pidx)->first();
+                // dd($domisili);
+    
+                DB::table('org_diagram_rt')->where('id', $id)->update([
+                    'nik'    => $user->nik,
+                    'name'   => $user->name,
+                    'photo'  => $user->photo ?? '',
+                    'telp'  => $request->telp,
+                    'rt'  => $request->rts,
+                ]);
+
+            }else{
+
+                DB::table('org_diagram_rt')->where('id', $id)->update([
+                    'telp'  => $request->telp,
+                    'rt'  => $request->rts,
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('admin-struktur-organisasi-rt');
            
         } catch (\Exception $e) {
             DB::rollback();

@@ -389,9 +389,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/rt/create','OrgDiagramController@createOrgRT')->name('admin-struktur-organisasi-rt-create');
             Route::get('/rt/create/anggota/{idx}','OrgDiagramController@createOrgRTAnggota')->name('admin-struktur-organisasi-rt-create-anggota');
             Route::get('/rt/edit/anggota/{idx}','OrgDiagramController@editAnggotaOrgRT');
+            Route::get('/rt/edit/{idx}','OrgDiagramController@editOrgRT');
             Route::post('/rt/save','OrgDiagramController@saveOrgRT')->name('admin-struktur-organisasi-rt-save');
             Route::post('/rt/add/save','OrgDiagramController@saveAnggotaByKorRT')->name('admin-struktur-organisasi-rt-anggota-save');
             Route::post('/rt/add/update/{id}','OrgDiagramController@updateAnggotaByKorRT')->name('admin-struktur-organisasi-rt-anggota-update');
+            Route::post('/rt/update/{id}','OrgDiagramController@updateKorRT')->name('admin-struktur-organisasi-rt-update');
             Route::get('/rt/detail/anggota/{idx}','OrgDiagramController@detailAnggotaByKorRT')->name('admin-struktur-organisasi-rt-detail-anggota');
             Route::get('/district','OrgDiagramController@indexOrgDistrict')->name('admin-struktur-organisasi-district-index');
             Route::get('/district/create','OrgDiagramController@createOrgDistrict')->name('admin-struktur-organisasi-district-create');

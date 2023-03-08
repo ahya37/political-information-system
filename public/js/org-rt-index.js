@@ -377,10 +377,11 @@ let table = $("#data").DataTable({
             targets: 7,
             render: function (data, type, row, meta) {
                 // return `<a href='/admin/struktur/rt/add/anggota/${row.idx}' class='btn btn-sm btn-sc-primary text-white'>Anggota</a>`;
+                // <button type="button" class="btn btn-sm btn-info" onclick="onEdit(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-edit"></i></button>
                 return `
                         <a class="btn btn-sm btn-sc-primary text-white" href="/admin/struktur/rt/create/anggota/${row.idx}">+ Anggota</a>
                         <a class="btn btn-sm btn-sc-primary text-white" href="/admin/struktur/rt/detail/anggota/${row.idx}">Detail Anggota</a>
-                        <button type="button" class="btn btn-sm btn-info" onclick="onEdit(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-edit"></i></button>
+                        <a class="btn btn-sm btn-info text-white" href="/admin/struktur/rt/edit/${row.id}">Edit</a>
                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>
                         `
             },
