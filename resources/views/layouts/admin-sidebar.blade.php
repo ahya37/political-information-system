@@ -40,7 +40,7 @@
 
                     <a href="{{ route('admin-struktur-organisasi-test') }}" target="_blank"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/struktur/dashboard') ? 'active custom-active-color' : '' }}">
-                        Dashboard
+                        Bagan Struktur
                     </a>
                 </li>
             </ul>

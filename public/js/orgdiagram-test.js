@@ -61,7 +61,7 @@ function initialChartOrg(idElement, data, regionId, URL_ADD_CHILD, type) {
 
     Highcharts.chart(idElement, {
         chart: {
-            height: 400,
+            height: 300,
             inverted: true
         },
         title: {

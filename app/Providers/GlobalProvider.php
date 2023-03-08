@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use App\TargetNumber;
 use Illuminate\Support\Str;
+use DB;
 
 class GlobalProvider extends ServiceProvider
 {
@@ -447,5 +448,29 @@ class GlobalProvider extends ServiceProvider
         }
 
         return $nominal;
+    }
+
+    public function generateLevelPengurus($data, $level, $dapil, $district, $village){
+
+        $result = '';
+
+        if ($level === 'pusat') { // jalankan pemeriksaan di level pusat
+            $result = '';
+            $tblOrgPusat = DB::table('org_diagram_pusat');
+            #cek apakah jabatan ketua sudah ada
+            $cek_ketua = $tblOrgPusat->where('title','KETUA')->count();
+            #jika ada get idx jabatan ketua dari tb org_diagram_pusat
+            if ($cek_ketua > 0) {
+                $ketua = $tblOrgPusat->select('idx')->where('title','KETUA')->first();
+                $result = $ketua->idx;
+            }else{
+
+                $result = 0;
+            }
+
+        }
+        
+        return $result;
+
     }
 }

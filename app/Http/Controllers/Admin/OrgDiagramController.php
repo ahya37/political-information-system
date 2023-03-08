@@ -12,6 +12,7 @@ use DB;
 use App\Http\Controllers\Auth\RegisterController;
 use App\User;
 use Illuminate\Support\Facades\Validator;
+use App\Providers\GlobalProvider;
 
 class OrgDiagramController extends Controller
 {
@@ -1812,7 +1813,7 @@ public function saveOrgPusat(Request $request){
         #cek ketersediaan nik di tb users
         $userTable     = DB::table('users');
         // $cek_nik_user  = $userTable->where('nik', $request->nik)->count();
-        $user         = $userTable->select('name','photo','nik')->where('id', $request->member)->first();
+        $user          = $userTable->select('name','photo','nik')->where('id', $request->member)->first();
         
         // if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
 
@@ -1820,8 +1821,16 @@ public function saveOrgPusat(Request $request){
         $cek_nik_org  = DB::table('org_diagram_pusat')->where('nik', $user->nik)->count();
         if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
 
+        //jika jabatan selain ketua                    
+        // $gf = new GlobalProvider();
+        // $generateLevel = $gf->generateLevelPengurus($request->jabatan,'pusat',null,null,null);
 
-        
+        // if ($generateLevel == 0) {
+
+        //     return 'Belum ada ketua, buat terlebih dahulu!';
+
+        // }
+
         #save to tb org_diagram_pusat
         DB::table('org_diagram_pusat')->insert([
             'idx'    => $request->idx,
