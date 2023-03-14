@@ -44,7 +44,7 @@ $('#selectVillageId').on('change', function () {
     let selectVillageId = $("#selectVillageId").val();
     let selectRt = "";
     getChartOrgVillage(selectVillageId);
-    getChartOrgRT(selectVillageId, selectRt);
+    // getChartOrgRT(selectVillageId, selectRt);
 })
 
 $('#selectRt').on('change', function () {
@@ -327,14 +327,11 @@ function getChartOrgRT(selectVillageId, rt) {
     $('#orgDapil').hide();
     $('#orgRT').show();
     return new Promise((resolve, reject) => {
-        const URL_ADD_CHILD = '/api/org/village/save';
-        const type = 'rt';
-
         $.ajax({
-            url: `/api/org/rt`,
-            method: 'GET',
+            url: `/api/org/rt/new`,
+            method: 'POST',
             dataType: 'json',
-            data: { _token: CSRF_TOKEN, rt: rt, village:selectVillageId },
+            data: { _token: CSRF_TOKEN, rt: rt, village: selectVillageId },
             beforeSend: function () {
                 $('#loading').append(`<div class="text-center">
                                     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -345,61 +342,40 @@ function getChartOrgRT(selectVillageId, rt) {
 
             },
             success: function (data) {
-                Highcharts.chart("orgRT", {
-                    chart: {
-                        height: 400,
-                        inverted: true
-                    },
-                    title: {
-                        text: ' '
-                    },
-                    accessibility: {
-                        point: {
-                            descriptionFormatter: function (point) {
-                                var nodeName = point.toNode.name,
-                                    nodeId = point.toNode.id,
-                                    nodeDesc = nodeName === nodeId ? nodeName : nodeName + ', ' + nodeId,
-                                    parentDesc = point.fromNode.id;
-                                return point.index + '. ' + nodeDesc + ', reports to ' + parentDesc + '.';
-                            }
-                        }
-                    },
-
-                    series: [{
-                        type: 'organization',
-                        keys: ['from', 'to'],
-                        data: data.data,
-                        levels: [{
-                            level: 0,
-                            color: 'silver',
-                            dataLabels: {
-                                color: 'black'
-                            },
-                            height: 10
-                        }],
-                        nodes: data.nodes,
-                        colorByPoint: false,
-                        color: '#007ad0',
-                        dataLabels: {
-                            color: 'white'
-                        },
-                        borderColor: 'white',
-                        nodeWidth: 60,
-                    }],
-                    tooltip: {
-                        outside: true
-                    },
-                    exporting: {
-                        allowHTML: true,
-                        sourceWidth: 800,
-                        sourceHeight: 600
-                    },
-
-                });
+                divMemberKorrt(data);
             },
             complete: function () {
                 $('#loading').empty();
             }
         }).done(resolve).fail(reject)
     })
+}
+
+function divMemberKorrt(data) {
+
+    let divMember = "";
+    data.forEach((m) => {
+        divMember += showDivHtmlRTMember(m);
+    });
+
+    const divRTMemberContainer = $("#orgRT");
+    divRTMemberContainer.append(divMember);
+}
+
+function showDivHtmlRTMember(m) {
+
+    let html1 = '<div class="col-md-6"><div class="card border-dark mb-3" style="max-width: 18rem;"><div class="card-header">' + m.name + '</div><div class="card-body text-dark col-md-12"> <ul class="list-group">' + childData(m.child_org) + '</ul></div><div id="child"></div></div></div>';
+    let html2 = '</div>';
+
+    return html1 += html2;
+}
+
+function childData(t) {
+    let tr = '';
+
+    t.map(child => {
+        tr += `<li class="list-group-item border-0"><img src="/storage/${child.photo}" > ${child.name}</li>`
+    })
+
+    return tr;
 }

@@ -277,6 +277,36 @@ class OrgDiagramController extends Controller
         return response()->json($results);
     }
 
+    public function getDataOrgDiagramRTNew(){
+
+        $rt           = request('rt');
+        $village_id   = request('village');
+
+        $orgs = DB::table('org_diagram_rt')
+                ->select('idx','pidx','title','nik','name','photo')
+                ->whereNotNull('pidx')
+                ->where('base','KORRT')
+                ->where('village_id', $village_id)->where('rt', $rt)
+                ->orderBy('name','asc')->get();
+
+        $results = [];
+        foreach ($orgs as $value) {
+            $child = DB::table('org_diagram_rt')
+                ->select('idx','pidx','title','name','photo')->whereNotNull('pidx')->where('base','ANGGOTA')->where('pidx', $value->idx)->get();
+            
+            $results[]= [
+                'idx' => $value->idx,
+                'pidx' => $value->pidx,
+                'name' => $value->name,
+                'photo' => $value->photo,
+                'child_org' => $child
+            ];
+        }
+
+
+        return response()->json($results);
+    }
+
     public function getDataOrgDiagramDistrict(){
 
         $district_id = request('district');
