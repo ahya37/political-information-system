@@ -71,6 +71,10 @@
                 <div id="orgPusat"></div>
             </div>
         </div>
+         <div class="col-md-12 mt-4">
+            <div class="row" id="orgRTChart">
+            </div>
+        </div>
         <div class="col-md-12 mt-4">
             <div class="row" id="orgRT">
             </div>
@@ -83,6 +87,8 @@
     <script src="{{ asset('assets/vendor/highcharts/sankey.js') }}"></script>
     <script src="{{ asset('assets/vendor/highcharts/organization.js') }}"></script>
     <script src="{{ asset('assets/vendor/highcharts/accessibility10.3.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}" type="text/javascript"></script>
     <script type="text/javascript" src="{{ asset('js/select-area.js') }}"></script>

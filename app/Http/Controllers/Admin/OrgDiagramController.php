@@ -230,54 +230,82 @@ class OrgDiagramController extends Controller
 
     public function getDataOrgDiagramRT(){
 
-        $rt           = request('rt');
         $village_id   = request('village');
+
         $orgs = DB::table('org_diagram_rt')
-                ->select('idx','pidx','color','title','nik','name','photo')
+                ->select('idx','pidx','title','nik','name','photo','rt')
                 ->whereNotNull('pidx')
-                ->where('village_id', $village_id);
+                ->where('base','KORRT')
+                ->where('nik','!=',null)
+                ->where('village_id', $village_id)
+                ->orderBy('rt','asc')->get();
 
-        if ($rt != '') {
-            $orgs = $orgs->where('rt', $rt);
-        }
-
-        $orgs = $orgs->orderBy('idx','asc')->get();
-
-        $data = [];
+        $results = [];
         foreach ($orgs as $value) {
-            $data[] = [$value->pidx,$value->idx];
+            $child = DB::table('org_diagram_rt')
+                ->select('idx','pidx','title','name','photo')->whereNotNull('pidx')->where('base','ANGGOTA')->where('pidx', $value->idx)->get();
+            
+            $results[]= [
+                'idx' => $value->idx,
+                'pidx' => $value->pidx,
+                'name' => $value->name,
+                'photo' => $value->photo,
+                'rt' => $value->rt,
+                'child_org' => $child
+            ];
         }
 
-        $nodes = [];
-        foreach ($orgs as $value) {
-            if ($value->photo) {
-                # code...
-                $nodes[] = [
-                    'id' => $value->idx,
-                    'title' => $value->title ?? $value->name,
-                    'name' => $value->name,
-                    'color' => $value->color ?? '',
-                    'image' => '/storage/'.$value->photo ?? '',
-                ];
-            }else{
-                $nodes[] = [
-                    'id' => $value->idx,
-                    'title' => $value->title ?? $value->name,
-                    'name' => $value->name,
-                    'color' => $value->color ?? '',
-                ];
-            }
-        }
-
-        $results = [
-            'nodes' => $nodes,
-            'data' => $data,
-        ];
 
         return response()->json($results);
+
+        // // $rt           = request('rt');
+        // $village_id   = request('village');
+        // $orgs = DB::table('org_diagram_rt')
+        //         ->select('idx','pidx','color','title','nik','name','photo')
+        //         ->whereNotNull('pidx')
+        //         ->where('village_id', $village_id);
+
+        // // if ($rt != '') {
+        // //     $orgs = $orgs->where('rt', $rt);
+        // // }
+
+        // $orgs = $orgs->orderBy('idx','asc')->get();
+
+        // $data = [];
+        // foreach ($orgs as $value) {
+        //     $data[] = [$value->pidx,$value->idx];
+        // }
+
+        // $nodes = [];
+        // foreach ($orgs as $value) {
+        //     if ($value->photo) {
+        //         # code...
+        //         $nodes[] = [
+        //             'id' => $value->idx,
+        //             'title' => $value->title ?? $value->name,
+        //             'name' => $value->name,
+        //             'color' => $value->color ?? '',
+        //             'image' => '/storage/'.$value->photo ?? '',
+        //         ];
+        //     }else{
+        //         $nodes[] = [
+        //             'id' => $value->idx,
+        //             'title' => $value->title ?? $value->name,
+        //             'name' => $value->name,
+        //             'color' => $value->color ?? '',
+        //         ];
+        //     }
+        // }
+
+        // $results = [
+        //     'nodes' => $nodes,
+        //     'data' => $data,
+        // ];
+
+        // return response()->json($results);
     }
 
-    public function getDataOrgDiagramRTNew(){
+    public function getDataOrgDiagramRTMemberNew(){
 
         $rt           = request('rt');
         $village_id   = request('village');

@@ -81,8 +81,9 @@ Route::post('org/pusat/update', 'Admin\OrgDiagramController@updateOrgPusat');
 
 
 #new org diagram
+// Route::get('org/rt', 'Admin\OrgDiagramController@getDataOrgDiagramRT');
 Route::get('org/rt', 'Admin\OrgDiagramController@getDataOrgDiagramRT');
-Route::post('org/rt/new', 'Admin\OrgDiagramController@getDataOrgDiagramRTNew');
+Route::post('org/rt/new', 'Admin\OrgDiagramController@getDataOrgDiagramRTMemberNew');
 Route::get('org/village', 'Admin\OrgDiagramController@getDataOrgDiagramVillage');
 Route::get('org/district', 'Admin\OrgDiagramController@getDataOrgDiagramDistrict');
 Route::get('org/dapil', 'Admin\OrgDiagramController@getDataOrgDiagramDapil');

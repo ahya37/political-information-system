@@ -44,10 +44,79 @@ $('#selectVillageId').on('change', function () {
     let selectVillageId = $("#selectVillageId").val();
     let selectRt = "";
     getChartOrgVillage(selectVillageId);
+    getChartOrgRTNew(selectVillageId);
     // getChartOrgRT(selectVillageId, selectRt);
 })
 
+function getChartOrgRTNew(villageId) {
+    $('#orgDistrict').hide();
+    $('#orgDapil').hide();
+    $('#orgPusat').hide();
+    $('#orgVillage').show();
+    return new Promise((resolve, reject) => {
+
+        $.ajax({
+            url: `/api/org/rt`,
+            method: 'GET',
+            dataType: 'json',
+            data: { _token: CSRF_TOKEN, village: villageId },
+            beforeSend: function () {
+                $('#loading').append(`<div class="text-center">
+                                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden"></span>
+                                    </div>
+                                </div>`
+                )
+
+            },
+            success: function (data) {
+                // console.log('data: ', data);
+                divKorrt(data)
+                // initialChartOrg('orgRTChart', data, villageId, URL_ADD_CHILD, type);
+            },
+            complete: function () {
+                $('#loading').empty();
+            }
+        }).done(resolve).fail(reject)
+    })
+}
+
+function divKorrt(data) {
+
+    let divKortes = "";
+    data.forEach((m) => {
+        divKortes += showDivHtmlRTOrg(m);
+    });
+
+    const divRTContainer = $("#orgRTChart");
+    divRTContainer.append(divKortes);
+}
+
+function showDivHtmlRTOrg(m) {
+    let html1 = '<div class="col-md-4"><div id="accordion"><div class="card border-dark mb-3"><div class="card-header" id="headingOne'+m.idx+'"><img width="30px" class="rounded" src="/storage/'+m.photo+'" ><button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne'+m.idx+'" aria-expanded="false" aria-controls="collapseOne'+m.idx+'">RT' + m.rt + ' : ' + m.name + '</button></div><div id="collapseOne'+m.idx+'" class="collapse" aria-labelledby="headingOne'+m.idx+'" data-parent="#accordion"><div class="card-body text-dark col-md-12"> <ul class="list-group">' + childDataKorte(m.child_org) + '</ul></div></div></div></div>';
+    let html2 = '</div></div>';
+
+    return html1 += html2;
+}
+
+function childDataKorte(t) {
+    let tr = '';
+
+    if (t) {
+        t.map(child => {
+            tr += `<li class="list-group-item border-0"><img width="30px" class="rounded" src="/storage/${child.photo}" > ${child.name}</li>`
+        })
+    }else{
+
+        tr += `<li>-</li>`;
+    }
+
+
+    return tr;
+}
+
 $('#selectRt').on('change', function () {
+    $('#orgRTChart').empty();
     $('#orgRT').empty();
     $('#orgVillage').empty();
     $('#orgDistrict').empty();
@@ -323,6 +392,7 @@ $('#btnKorPusat').on('click', function () {
 });
 
 function getChartOrgRT(selectVillageId, rt) {
+    $('#orgRTChart').hide();
     $('#orgDistrict').hide();
     $('#orgDapil').hide();
     $('#orgRT').show();
