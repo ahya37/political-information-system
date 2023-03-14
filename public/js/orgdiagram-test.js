@@ -2,9 +2,11 @@ $('#tree').hide();
 $('#orgDistrict').hide();
 $('#orgDapil').hide();
 $('#orgRT').hide();
+$('#korrtlabel').hide();
 let CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
 function getChartOrgVillage(villageId) {
+$('#korrtlabel').hide();
     $('#orgDistrict').hide();
     $('#orgDapil').hide();
     $('#orgPusat').hide();
@@ -39,11 +41,13 @@ function getChartOrgVillage(villageId) {
 
 $('#selectVillageId').on('change', function () {
     $('#orgVillage').empty();
+    $('#orgRTChart').empty();
     $('#orgDistrict').empty();
     $('#orgRT').empty();
     let selectVillageId = $("#selectVillageId").val();
     let selectRt = "";
     getChartOrgVillage(selectVillageId);
+    $('#orgRTChart').show();
     getChartOrgRTNew(selectVillageId);
     // getChartOrgRT(selectVillageId, selectRt);
 })
@@ -61,6 +65,7 @@ function getChartOrgRTNew(villageId) {
             dataType: 'json',
             data: { _token: CSRF_TOKEN, village: villageId },
             beforeSend: function () {
+                $('#korrtlabel').hide();
                 $('#loading').append(`<div class="text-center">
                                     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                                     <span class="visually-hidden"></span>
@@ -70,6 +75,7 @@ function getChartOrgRTNew(villageId) {
 
             },
             success: function (data) {
+                $('#korrtlabel').show();
                 // console.log('data: ', data);
                 divKorrt(data)
                 // initialChartOrg('orgRTChart', data, villageId, URL_ADD_CHILD, type);
@@ -93,7 +99,7 @@ function divKorrt(data) {
 }
 
 function showDivHtmlRTOrg(m) {
-    let html1 = '<div class="col-md-4"><div id="accordion"><div class="card border-dark mb-3"><div class="card-header" id="headingOne'+m.idx+'"><img width="30px" class="rounded" src="/storage/'+m.photo+'" ><button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne'+m.idx+'" aria-expanded="false" aria-controls="collapseOne'+m.idx+'">RT' + m.rt + ' : ' + m.name + '</button></div><div id="collapseOne'+m.idx+'" class="collapse" aria-labelledby="headingOne'+m.idx+'" data-parent="#accordion"><div class="card-body text-dark col-md-12"> <ul class="list-group">' + childDataKorte(m.child_org) + '</ul></div></div></div></div>';
+    let html1 = '<div class="col-md-4"><div id="accordion"><div class="card border-dark mb-3"><div class="card-header" id="headingOne' + m.idx + '"><img width="30px" class="rounded" src="/storage/' + m.photo + '" ><button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne' + m.idx + '" aria-expanded="false" aria-controls="collapseOne' + m.idx + '">RT' + m.rt + ' : ' + m.name + '</button></div><div id="collapseOne' + m.idx + '" class="collapse" aria-labelledby="headingOne' + m.idx + '" data-parent="#accordion"><div class="card-body text-dark col-md-12"> <ul class="list-group">' + childDataKorte(m.child_org) + '</ul></div></div></div></div>';
     let html2 = '</div></div>';
 
     return html1 += html2;
@@ -106,7 +112,7 @@ function childDataKorte(t) {
         t.map(child => {
             tr += `<li class="list-group-item border-0"><img width="30px" class="rounded" src="/storage/${child.photo}" > ${child.name}</li>`
         })
-    }else{
+    } else {
 
         tr += `<li>-</li>`;
     }
@@ -249,6 +255,8 @@ async function modalAddChild(id, name, title, regionId, URL_ADD_CHILD, type) {
 }
 
 function getChartOrgDistrict(selectDistrictId) {
+    $('#korrtlabel').hide();
+    $('#orgRTChart').hide();
     $('#orgVillage').hide();
     $('#orgDapil').hide();
     $('#orgPusat').hide();
@@ -312,6 +320,8 @@ $('#selectListArea').on('change', function () {
 })
 
 function getChartOrgDapil(selectListArea) {
+    $('#korrtlabel').hide();
+    $('#orgRTChart').hide();
     $('#orgVillage').hide();
     $('#orgDistrict').hide();
     $('#orgPusat').hide();
@@ -346,6 +356,8 @@ function getChartOrgDapil(selectListArea) {
 
 }
 function getChartOrgPusat() {
+    $('#korrtlabel').hide();
+    $('#orgRTChart').hide();
     $('#orgVillage').hide();
     $('#orgDistrict').hide();
     $('#orgDapil').hide();
@@ -382,11 +394,18 @@ function getChartOrgPusat() {
 getChartOrgPusat();
 
 $('#btnKorPusat').on('click', function () {
+    $('#korrtlabel').hide();
+    $('#orgRTChart').hide();
     $('#orgVillage').hide();
     $('#orgDistrict').hide();
     $('#orgDapil').hide();
     $('#orgRT').hide();
     $('#orgPusat').show();
+
+    $("#selectVillageId").empty();
+    $("#selectDistrictId").empty();
+    $("#selectVillageId").empty();
+    $("#selectRt").empty();
 
     getChartOrgPusat();
 });

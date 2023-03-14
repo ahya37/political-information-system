@@ -72,6 +72,9 @@
             </div>
         </div>
          <div class="col-md-12 mt-4">
+            <h5 id="korrtlabel" class="text-center">KOORDINATOR RT</h5>
+        </div>
+         <div class="col-md-12 mt-4">
             <div class="row" id="orgRTChart">
             </div>
         </div>
