@@ -244,14 +244,15 @@ class OrgDiagramController extends Controller
         foreach ($orgs as $value) {
             $child = DB::table('org_diagram_rt')
                 ->select('idx','pidx','title','name','photo')->whereNotNull('pidx')->where('base','ANGGOTA')->where('pidx', $value->idx)->get();
-            
+            $count_child = count($child);
             $results[]= [
                 'idx' => $value->idx,
                 'pidx' => $value->pidx,
                 'name' => $value->name,
                 'photo' => $value->photo,
                 'rt' => $value->rt,
-                'child_org' => $child
+                'child_org' => $child,
+                'count' => $count_child
             ];
         }
 
@@ -321,13 +322,15 @@ class OrgDiagramController extends Controller
         foreach ($orgs as $value) {
             $child = DB::table('org_diagram_rt')
                 ->select('idx','pidx','title','name','photo')->whereNotNull('pidx')->where('base','ANGGOTA')->where('pidx', $value->idx)->get();
+            $count_child = count($child);
             
             $results[]= [
                 'idx' => $value->idx,
                 'pidx' => $value->pidx,
                 'name' => $value->name,
                 'photo' => $value->photo,
-                'child_org' => $child
+                'child_org' => $child,
+                'count' =>  $count_child
             ];
         }
 
