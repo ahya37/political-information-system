@@ -364,7 +364,7 @@ function divMemberKorrt(data) {
 
 function showDivHtmlRTMember(m) {
 
-    let html1 = '<div class="col-md-6"><div class="card border-dark mb-3" style="max-width: 18rem;"><div class="card-header">' + m.name + '</div><div class="card-body text-dark col-md-12"> <ul class="list-group">' + childData(m.child_org) + '</ul></div><div id="child"></div></div></div>';
+    let html1 = '<div class="col-md-4"><div class="card border-dark mb-3"><div class="card-header"><strong>' + m.name + '</strong></div><div class="card-body text-dark col-md-12"> <ul class="list-group">' + childData(m.child_org) + '</ul></div><div id="child"></div></div></div>';
     let html2 = '</div>';
 
     return html1 += html2;
@@ -374,7 +374,7 @@ function childData(t) {
     let tr = '';
 
     t.map(child => {
-        tr += `<li class="list-group-item border-0"><img width="50px" src="/storage/${child.photo}" > ${child.name}</li>`
+        tr += `<li class="list-group-item border-0"><img width="30px" class="rounded" src="/storage/${child.photo}" > ${child.name}</li>`
     })
 
     return tr;
