@@ -99,7 +99,7 @@ function divKorrt(data) {
 }
 
 function showDivHtmlRTOrg(m) {
-    let html1 = '<div class="col-md-4"><div id="accordion"><div class="card border-dark mb-3"><div class="card-header" id="headingOne' + m.idx + '"><img width="30px" class="rounded" src="/storage/' + m.photo + '" ><button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne' + m.idx + '" aria-expanded="false" aria-controls="collapseOne' + m.idx + '">RT' + m.rt + ' : ' + m.name + '</button> ('+m.count+' Anggota)</div><div id="collapseOne' + m.idx + '" class="collapse" aria-labelledby="headingOne' + m.idx + '" data-parent="#accordion"><div class="card-body text-dark col-md-12"> <ul class="list-group">' + childDataKorte(m.child_org) + '</ul></div></div></div></div>';
+    let html1 = '<div class="col-md-4"><div id="accordion"><div class="card border-dark mb-3"><div class="card-header" id="headingOne' + m.idx + '"><img width="30px" class="rounded" src="/storage/' + m.photo + '" ><button class="btn btn-sm collapsed" data-toggle="collapse" data-target="#collapseOne' + m.idx + '" aria-expanded="false" aria-controls="collapseOne' + m.idx + '"><strong>RT' + m.rt + ' : ' + m.name + '</strong></button>('+m.count+' Anggota)</div><div id="collapseOne' + m.idx + '" class="collapse" aria-labelledby="headingOne' + m.idx + '" data-parent="#accordion"><div class="card-body text-dark col-md-12"> <ul class="list-group">' + childDataKorte(m.child_org) + '</ul></div></div></div></div>';
     let html2 = '</div></div>';
 
     return html1 += html2;
