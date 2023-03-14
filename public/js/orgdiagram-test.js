@@ -374,7 +374,7 @@ function childData(t) {
     let tr = '';
 
     t.map(child => {
-        tr += `<li class="list-group-item border-0"><img src="/storage/${child.photo}" > ${child.name}</li>`
+        tr += `<li class="list-group-item border-0"><img width="50px" src="/storage/${child.photo}" > ${child.name}</li>`
     })
 
     return tr;
