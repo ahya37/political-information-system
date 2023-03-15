@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Koordinator Desa')
+@section('title', 'Daftar Anggota Koordinator RT')
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -13,13 +13,23 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Anggota KOR RT</h2>
+                <h2 class="dashboard-title">Daftar Anggota Koordinator RT</h2>
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
-                <div class="row mt-4 mb-2">
-                    <div class="col-md-1">KOR RT 1:</div>
-                    <div class="col-md-2"><strong>{{ $kor_rt->name }}</strong></div>
-                </div>
+                <table class="mb-3">
+                    <tr>
+                        <td>RT</td><td>&nbsp;:&nbsp;</td><td>{{ $kor_rt->rt }}</td>
+                    </tr>
+                    <tr>
+                        <td>DESA</td><td>&nbsp;:&nbsp;</td><td>{{ $kor_rt->village }}</td>
+                    </tr>
+                    <tr>
+                        <td>KECAMATAN</td><td>&nbsp;:&nbsp;</td><td>{{ $kor_rt->district }}</td>
+                    </tr>
+                    <tr>
+                        <td>NAMA KOORDINATOR</td><td>&nbsp;:&nbsp;</td><td>{{ $kor_rt->name }}</td>
+                    </tr>
+                </table>
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         @include('layouts.message')

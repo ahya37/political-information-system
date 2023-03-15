@@ -1338,8 +1338,10 @@ class OrgDiagramController extends Controller
     public function detailAnggotaByKorRT($idx){
 
         $kor_rt = DB::table('org_diagram_rt as a')
-                ->select('a.rt','a.name')
+                ->select('a.rt','a.name','c.name as village','d.name as district')
                 ->join('users as b','b.nik','=','a.nik')
+                ->join('villages as c','c.id','=','a.village_id')
+                ->join('districts as d','d.id','=','a.district_id')
                 ->where('idx', $idx)
                 ->first();
 
