@@ -62,8 +62,12 @@
             </div>
         </div>
         <div class="row mt-4"></div>
-        <div class="row mt-4"></div>
         <div class="row mt-4">
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12 ml-2">
+                <h5 id="descrLocation">KOORDINATOR PUSAT</h5>
+            </div>
             <div class="col-md-12 mt-4">
                 <div id="loading"></div>
                 <div id="orgVillage"></div>
@@ -73,7 +77,7 @@
             </div>
         </div>
          <div class="col-md-12 mt-4">
-            <h5 id="korrtlabel" class="text-center">KOORDINATOR RT</h5>
+            <h5 id="korrtlabel" class="text-center" style="display:none">KOORDINATOR RT</h5>
         </div>
          <div class="col-md-12 mt-4">
             <div class="row" id="orgRTChart">

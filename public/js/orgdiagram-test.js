@@ -3,6 +3,7 @@ $('#orgDistrict').hide();
 $('#orgDapil').hide();
 $('#orgRT').hide();
 $('#korrtlabel').hide();
+let descrLocation = "";
 let CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
 function getChartOrgVillage(villageId) {
@@ -50,6 +51,8 @@ $('#selectVillageId').on('change', function () {
     $('#orgRTChart').show();
     getChartOrgRTNew(selectVillageId);
     // getChartOrgRT(selectVillageId, selectRt);
+    descrLocation  = $("#selectVillageId option:selected").text().toUpperCase();
+    $("#descrLocation").text(`KOORDINATOR DESA ${descrLocation}`);
 })
 
 function getChartOrgRTNew(villageId) {
@@ -130,6 +133,10 @@ $('#selectRt').on('change', function () {
     let selectRt = $("#selectRt").val();
     let selectVillageId = $("#selectVillageId").val();
     getChartOrgRT(selectVillageId, selectRt);
+
+    descrLocation  = $("#selectVillageId option:selected").text().toUpperCase();
+    let descrLocationRT  = $("#selectRt option:selected").text().toUpperCase();
+    $("#descrLocation").text(`KOORDINATOR RT ${descrLocationRT}, DESA ${descrLocation}`);
 });
 
 function initialChartOrg(idElement, data, regionId, URL_ADD_CHILD, type) {
@@ -140,7 +147,7 @@ function initialChartOrg(idElement, data, regionId, URL_ADD_CHILD, type) {
             inverted: true
         },
         title: {
-            text: 'Struktur Organisasi'
+            text: 'STRUKTUR ORGANISASI'
         },
         accessibility: {
             point: {
@@ -311,11 +318,17 @@ function showAllertToast(type, message) {
 $('#selectDistrictId').on('change', function () {
     $('#orgDistrict').empty();
     selectDistrictId = $("#selectDistrictId").val();
+
+    descrLocation  = $("#selectDistrictId option:selected").text();
+    $("#descrLocation").text(`KOORDINATOR KECAMATAN ${descrLocation}`);
     getChartOrgDistrict(selectDistrictId);
 });
 
 $('#selectListArea').on('change', function () {
     selectListArea = $("#selectListArea").val();
+
+    descrLocation  = $("#selectListArea option:selected").text().toUpperCase();
+    $("#descrLocation").text(`KOORDINATOR ${descrLocation}`);
     getChartOrgDapil(selectListArea);
 })
 
@@ -406,6 +419,8 @@ $('#btnKorPusat').on('click', function () {
     $("#selectDistrictId").empty();
     $("#selectVillageId").empty();
     $("#selectRt").empty();
+
+    $('#descrLocation').text('KOORDINATOR PUSAT')
 
     getChartOrgPusat();
 });
