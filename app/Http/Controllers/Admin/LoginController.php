@@ -28,6 +28,8 @@ class LoginController extends Controller
             return redirect()->intended(route('admin-dashboard'));
         }
 
+        #update token
+
         return redirect()->back()->with(['error' => 'Email / Passwords Salah']);
         
     }

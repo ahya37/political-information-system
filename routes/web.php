@@ -405,9 +405,23 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/pusat/save','OrgDiagramController@saveOrgPusat')->name('admin-struktur-organisasi-pusat-save');
 
         });
+
+        #Catatan
+        Route::group(['prefix' => 'catatan'], function(){
+            Route::get('/','CatatanController@index')->name('admin-catatan');
+            Route::get('/create','CatatanController@create')->name('admin-catatan-create');
+            Route::post('/store','CatatanController@store')->name('admin-catatan-store');
+            Route::get('/edit/{id}','CatatanController@edit')->name('admin-catatan-edit');
+            Route::post('/update/{id}','CatatanController@update')->name('admin-catatan-update');
+        });
+        
           
     });
     
+});
+
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => 'admin'], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 
 Auth::routes();

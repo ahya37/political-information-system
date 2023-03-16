@@ -324,3 +324,7 @@ Route::get('/admin/koordinator/absensi','Admin\KoordinatorController@absensi');
 
 // ORG DIAGRAM
 Route::get('/ordiagram','Admin\OrgDiagramController@show');
+
+#CATATAN
+Route::post('/getlistcatatan', 'Admin\CatatanController@getListCatatan');
+Route::post('/catatan/delete', 'Admin\CatatanController@delete');

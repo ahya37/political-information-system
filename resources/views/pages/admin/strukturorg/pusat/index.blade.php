@@ -42,15 +42,7 @@
                                             <th scope="col">AKSI</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {{-- @foreach ($org as $item)
-                                            <tr id="{{ $item->idx }}">
-                                                <td>{{ $no++ }}</td>
-                                                <td>{{ $item->name }}</td>
-                                                <td>{{ $item->title }}</td>
-                                            </tr>
-                                        @endforeach --}}
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
