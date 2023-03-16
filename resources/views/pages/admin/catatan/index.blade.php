@@ -29,7 +29,7 @@
                                       <tr>
                                         <th scope="col">No</th>
                                         <th scope="col">Judul</th>
-                                        <th scope="col">Tanggal</th>
+                                        <th scope="col">Tanggal Dibuat</th>
                                         <th scope="col">Aksi</th>
                                       </tr>
                                     </thead>
