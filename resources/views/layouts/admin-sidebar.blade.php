@@ -248,7 +248,7 @@
                     <a href="{{ route('admin-inventory') }}"
                         class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('inventory') ? 'active custom-active-color' : '' }}"><span>
                            Daftar Inventory</span></a>
-                    <a href="{{ route('admin-catatan-create') }}"
+                    <a href="{{ route('admin-inventory-create') }}"
                         class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('inventory/create') ? 'active custom-active-color' : '' }}"><span>
                             Buat Inventory Baru</span></a>
                 </li>

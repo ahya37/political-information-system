@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Daftar Catatan')
+@section('title','Daftar Inventory')
 @push('addon-style')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -32,6 +32,7 @@
                                         <th scope="col">Type</th>
                                         <th scope="col">Harga</th>
                                         <th scope="col">Gambar</th>
+                                        <th scope="col">Opsi</th>
                                       </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -49,5 +50,6 @@
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-{{-- <script type="text/javascript" src="{{ asset('js/catatan-index.js') }}"></script> --}}
+<script type="text/javascript" src="{{ asset('js/currency.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/inventory-index.js') }}"></script>
 @endpush
