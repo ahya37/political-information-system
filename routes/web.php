@@ -414,6 +414,15 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/edit/{id}','CatatanController@edit')->name('admin-catatan-edit');
             Route::post('/update/{id}','CatatanController@update')->name('admin-catatan-update');
         });
+
+        #Inventory
+        Route::group(['prefix' => 'inventory'], function(){
+            Route::get('/','InventoryController@index')->name('admin-inventory');
+            Route::get('/create','InventoryController@create')->name('admin-catatan-create');
+            Route::post('/store','CatatanController@store')->name('admin-catatan-store');
+            Route::get('/edit/{id}','CatatanController@edit')->name('admin-catatan-edit');
+            Route::post('/update/{id}','CatatanController@update')->name('admin-catatan-update');
+        });
         
           
     });
