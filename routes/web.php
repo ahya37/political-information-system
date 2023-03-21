@@ -404,6 +404,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/pusat/create','OrgDiagramController@createOrgPusat')->name('admin-struktur-organisasi-pusat-create');
             Route::post('/pusat/save','OrgDiagramController@saveOrgPusat')->name('admin-struktur-organisasi-pusat-save');
 
+            Route::post('/report/excel','OrgDiagramController@reportExcel')->name('admin-struktur-organisasi-report-excel');
+
+
         });
 
         #Catatan

@@ -15,41 +15,46 @@
                 <h2 class="dashboard-title">Daftar Koordinator RT</h2>
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
-                <div class="card card-body mb-4">
-                    <div class="row">
-                        {{-- <div class="col-md-3"> --}}
-                        <div class="form-group">
-                            <input value="{{ $regency->id }}" type="hidden" id="regencyId" class="form-control">
-                        </div>
-                        {{-- </div> --}}
-                        <div class="col-md-3">
+                <form action="{{ route('admin-struktur-organisasi-report-excel') }}" method="POST">
+                    @csrf
+                    <div class="card card-body mb-4">
+                        <div class="row">
+                            {{-- <div class="col-md-3"> --}}
                             <div class="form-group">
-                                <select name="dapil_id" id="selectListArea" class="form-control filter" required></select>
+                                <input value="{{ $regency->id }}" type="hidden" id="regencyId" class="form-control">
+                            </div>
+                            {{-- </div> --}}
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select name="dapil_id" id="selectListArea" class="form-control filter" required></select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select name="district_id" id="selectDistrictId" class="form-control filter"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select name="village_id" id="selectVillageId" class="form-control filter"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select name="rt" id="selectRt" class="form-control filter">
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <select name="district_id" id="selectDistrictId" class="form-control filter"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <select name="village_id" id="selectVillageId" class="form-control filter"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <select name="rt" id="selectRt" class="form-control filter">
-                                </select>
-                            </div>
+                        
+                        <div class="row col-md-12">
+                            <a class="btn btn-sm btn-sc-primary text-white"
+                                href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
+
+                            <button class="btn btn-sm btn-sc-primary text-white ml-2" type="submit">Download Excel</button>
                         </div>
                     </div>
-                    
-                    <div class="row col-md-12">
-                        <a class="btn btn-sm btn-sc-primary text-white"
-                            href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
-                    </div>
-                </div>
+                </form>
                 <div class="row">
                     <div class="col-md-12 mt-2 mb-2">
                         <div class="card">

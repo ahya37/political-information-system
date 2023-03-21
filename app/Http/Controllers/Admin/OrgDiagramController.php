@@ -13,9 +13,17 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\User;
 use Illuminate\Support\Facades\Validator;
 use App\Providers\GlobalProvider;
+use Maatwebsite\Excel\Excel;
+use App\Exports\KorDesExport;
 
 class OrgDiagramController extends Controller
 {
+    public $excel;
+    public function __construct(Excel $excel)
+    {
+        $this->excel = $excel;
+    }
+
     public function index(){
 
         $provinceModel = new Province();
@@ -2171,6 +2179,32 @@ public function updateOrgPusat(){
             'message' => 'Something when wrong!',
             'error'   => $e->getMessage()
         ]);
+    }
+
+}
+
+public function reportExcel(Request $request){
+
+    $dapil_id    = $request->dapil_id;
+    $district_id = $request->district_id;
+    $village_id  = $request->village_id;
+    $rt          = $request->rt;
+
+    if ($rt == null) {
+
+       #report by desa       
+       return $this->excel->download(new KorDesExport($village_id), 'TIM.xls');
+
+    }elseif ($village_id == null) {
+
+        $org = DB::table('org_diagram_districts')->select('name','base','title')->where('district_id', $district_id)->get();
+        return $org;
+
+    }elseif ($district_id == null) {
+
+        $org = DB::table('org_diagram_dapil')->select('name','base','title')->where('dapil_id', $dapil_id)->get();
+        return $org;
+ 
     }
 
 }
