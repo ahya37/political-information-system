@@ -185,9 +185,10 @@
       width: 372px;
       height: 21.37px;
       /* left: 100px;
-      top: 178px; */
+      // // top: -500px; */
       /* background: #002efe; */
-      top:53.5px;
+      // top:53.5px;
+      bottom:0.5px;
     }
     .flat2 {
       position: absolute;
@@ -407,7 +408,7 @@
       /* height: 10px; */
       /* left: 560px; */
       margin-left: 212px;
-      margin-top: 63px;
+      margin-top: 72px;
 
       font-family: "Nunito", sans-serif;
       font-style: normal;
@@ -558,3 +559,4 @@
     </div>
   </body>
 </html>
+
