@@ -871,6 +871,7 @@ class OrgDiagramController extends Controller
                 'nik'    => $user->nik,
                 'name'   => $user->name,
                 'base'   => 'KORDES',
+                'level_org'   => GlobalProvider::generateLevelOrg($request->jabatan),
                 'photo'  => $user->photo ?? '',
                 'telp'  => $request->telp,
                 'regency_id'  => $request->regency_id,
@@ -2207,6 +2208,19 @@ public function reportExcel(Request $request){
  
     }
 
+}
+
+public function updateLelelOrgAll(){
+
+    $org = DB::table('org_diagram_village')->select('id','title')->get();
+
+    foreach ($org as $value) {
+        
+        DB::table('org_diagram_village')->where('id', $value->id)
+                ->update(['level_org' => GlobalProvider::generateLevelOrgUpdate($value->title) ]);
+    }
+
+    return 'ok';
 }
 
 

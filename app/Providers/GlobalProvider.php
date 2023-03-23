@@ -473,4 +473,45 @@ class GlobalProvider extends ServiceProvider
         return $result;
 
     }
+
+    public static function generateLevelOrg($data){
+        
+        $result = 0;
+        if ($data == 'Ketua') {
+            $result = 1;
+        }elseif ($data == 'Wakil Ketua') {
+            $result = 2;
+        }elseif ($data == 'Sekretaris') {
+            $result = 3;
+        }elseif ($data == 'Wakil Sekretaris') {
+            $result = 4;
+        }elseif ($data == 'Bendahara') {
+            $result = 5;
+        }elseif ($data == 'Wakil Bendahara') {
+            $result = 6;
+        }
+
+        return $result;
+    }
+
+    public static function generateLevelOrgUpdate($data){
+        
+        $result = 0;
+        if ($data == 'KETUA') {
+            $result = 1;
+        }elseif ($data == 'WAKIL KETUA') {
+            $result = 2;
+        }elseif ($data == 'SEKRETARIS') {
+            $result = 3;
+        }elseif ($data == 'WAKIL SEKRETARIS') {
+            $result = 4;
+        }elseif ($data == 'BENDAHARA') {
+            $result = 5;
+        }elseif ($data == 'WAKIL BENDAHARA') {
+            $result = 6;
+        }
+
+        return $result;
+    }
+    
 }
