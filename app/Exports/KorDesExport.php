@@ -32,7 +32,9 @@ class KorDesExport implements FromCollection,  WithHeadings, WithEvents, ShouldA
                     ->join('users as b','a.nik','=','b.nik')
                     ->join('villages as c','a.village_id','=','c.id')
                     ->join('districts as d','a.district_id','=','d.id')
-                    ->where('a.village_id', $village_id)->get();
+                    ->where('a.village_id', $village_id)
+                    ->orderBy('a.level_org','asc')
+                    ->get();
 
         $rt      = DB::table('org_diagram_rt as a')->select('a.name','a.base','a.title','a.rt','b.gender','c.name as village','d.name as district')
                     ->join('users as b','a.nik','=','b.nik')
