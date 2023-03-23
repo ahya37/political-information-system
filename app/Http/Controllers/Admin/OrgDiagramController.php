@@ -1680,6 +1680,7 @@ public function saveOrgDistrict(Request $request){
             'nik'    => $user->nik,
             'name'   => $user->name,
             'base'   => 'KORCAM',
+            'level_org'   => GlobalProvider::generateLevelOrg($request->jabatan),
             'photo'  => $user->photo ?? '',
             'telp'  => $request->telp,
             'regency_id'  => $request->regency_id,
@@ -1923,6 +1924,7 @@ public function saveOrgDapil(Request $request){
             'nik'    => $user->nik,
             'name'   => $user->name,
             'base'   => 'KORDAPIL',
+            'level_org'   => GlobalProvider::generateLevelOrg($request->jabatan),
             'photo'  => $user->photo ?? '',
             'telp'  => $request->telp,
             'dapil_id'  => $request->dapil_id,
@@ -2062,6 +2064,7 @@ public function saveOrgPusat(Request $request){
             'nik'    => $user->nik,
             'name'   => $user->name,
             'base'   => 'KORPUSAT',
+            'level_org'   => GlobalProvider::generateLevelOrg($request->jabatan),
             'photo'  => $user->photo ?? '',
             'telp'  => $request->telp,
         ]);
