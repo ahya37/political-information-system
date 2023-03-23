@@ -20,14 +20,14 @@ class MemberPotentialReferal implements FromCollection,WithHeadings, WithEvents
     public function collection()
     {
          $sql = "SELECT a.id, a.cby, a.user_id, a.created_at, a.rt, a.rw, a.address, a.name, COUNT(case when b.id != b.user_id then a.user_id end) as total,
-                c.name as village, d.name as district, e.name as regency, f.name as province, a.phone_number, a.whatsapp
+                c.name as village, d.name as district, e.name as regency, f.name as province, a.phone_number, a.whatsapp, a.gender
                 FROM users as a
                 join users as b on a.id = b.user_id
                 join villages as c on a.village_id = c.id 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
                 join provinces as f on e.province_id = f.id
-                group by a.id, c.name, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp, f.name, a.rt, a.rw, a.cby, a.user_id, a.created_at, a.address
+                group by a.gender, a.id, c.name, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp, f.name, a.rt, a.rw, a.cby, a.user_id, a.created_at, a.address
                 order by COUNT(a.user_id) desc";
         $result = DB::select($sql);
 
@@ -46,6 +46,7 @@ class MemberPotentialReferal implements FromCollection,WithHeadings, WithEvents
             $data[] = [
                 'no' => $no++,
                 'name' => $val->name,
+                'jk' => $val->gender == 0 ? 'L' : 'P',
                 'referal' => $val->total,
                 'referal_undirect' => $total_referal_undirect,
                 'address' => $val->address,
@@ -72,6 +73,7 @@ class MemberPotentialReferal implements FromCollection,WithHeadings, WithEvents
         return [
             'NO',
             'NAMA',
+            'JENIS KELAMIN',
             'REFERAL',
             'REFERAL TIDAK LANGSUNG',
             'ALAMAT',
@@ -93,7 +95,7 @@ class MemberPotentialReferal implements FromCollection,WithHeadings, WithEvents
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:P1')->applyFromArray([
+                $event->sheet->getStyle('A1:Q1')->applyFromArray([
                     'font' => [
                         'bold' => true
                     ]
