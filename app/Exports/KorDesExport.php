@@ -78,12 +78,17 @@ class KorDesExport implements FromCollection,  WithHeadings, WithEvents, ShouldA
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 
-                // $event->sheet->getDelegate()->getRowDimension('1')->setRowHeight(40);
-                // $event->sheet->getDelegate()->getColumnDimension('A')->setWidth(20);
+                // $event->sheet->getDelegate()->getRowDimension('2')->setRowHeight(40);
+                $event->sheet->getDelegate()->getColumnDimension('B')->setAutoSize(true);
+                $event->sheet->getDelegate()->getColumnDimension('C')->setAutoSize(true);
+                $event->sheet->getDelegate()->getColumnDimension('D')->setAutoSize(true);
+                $event->sheet->getDelegate()->getColumnDimension('E')->setAutoSize(true);
+                $event->sheet->getDelegate()->getColumnDimension('F')->setAutoSize(true);
+                $event->sheet->getDelegate()->getColumnDimension('G')->setAutoSize(true);
 
                 $event->sheet->getStyle('A1:H1')->applyFromArray([
                     'font' => [
-                        'bold' => true
+                        'bold' => true,
                     ]
                 ]);
 

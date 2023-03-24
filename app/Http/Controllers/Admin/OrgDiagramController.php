@@ -2201,7 +2201,8 @@ public function reportExcel(Request $request){
     if ($rt == null) {
 
        #report by desa       
-       return $this->excel->download(new KorDesExport($village_id), 'TIM.xls');
+       $village = DB::table('villages')->select('name')->where('id', $village_id)->first();
+       return $this->excel->download(new KorDesExport($village_id), 'TIM KOORDINATOR DESA '.$village->name.'.xls');
 
     }elseif ($village_id == null) {
 
