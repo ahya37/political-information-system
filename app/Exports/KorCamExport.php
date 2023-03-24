@@ -44,7 +44,6 @@ class KorCamExport implements FromCollection, WithHeadings, WithEvents, ShouldAu
                 'no' => $no++,
                 'name' => $value->name,
                 'jk' => $value->gender == 1 ? 'P' : 'L',
-                'rt' => $value->rt,
                 'title' => $value->base == 'KORCAM' ? $value->title : $value->base,
                 'district' => $value->district 
             ];
