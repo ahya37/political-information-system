@@ -10,39 +10,32 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use DB;
 
-class KorDesExport implements FromCollection,  WithHeadings, WithEvents, ShouldAutoSize
+class KorCamExport implements FromCollection, WithHeadings, WithEvents, ShouldAutoSize
 {
     /**
     * @return \Illuminate\Support\Collection
     */
+
     use Exportable;
 
-    protected $villageid;
+    protected $districtid;
 
-    public function __construct(int $village)
+    public function __construct(int $district)
     {
-        $this->villageid = $village;
+        $this->districtid = $district;
+
     }
 
     public function collection()
     {
-        $village_id  =  $this->villageid;
+        $district_id  =  $this->districtid;
 
-        $village = DB::table('org_diagram_village as a')->select('a.name','a.base','a.title','a.rt','b.gender','c.name as village','d.name as district')
+        $data = DB::table('org_diagram_district as a')->select('a.name','a.base','a.title','b.gender','d.name as district')
                     ->join('users as b','a.nik','=','b.nik')
-                    ->join('villages as c','a.village_id','=','c.id')
                     ->join('districts as d','a.district_id','=','d.id')
-                    ->where('a.village_id', $village_id)
+                    ->where('a.district_id', $district_id)
                     ->orderBy('a.level_org','asc')
                     ->get();
-
-        $rt      = DB::table('org_diagram_rt as a')->select('a.name','a.base','a.title','a.rt','b.gender','c.name as village','d.name as district')
-                    ->join('users as b','a.nik','=','b.nik')
-                    ->join('villages as c','a.village_id','=','c.id')
-                    ->join('districts as d','a.district_id','=','d.id')
-                    ->where('a.village_id', $village_id)->whereNotNull('a.nik')->where('a.base','KORRT')->orderBy('a.rt','asc')->get();
-
-        $data    = $village->merge($rt); #merge kedua array
 
         $results = [];
         $no      = 1;
@@ -52,14 +45,14 @@ class KorDesExport implements FromCollection,  WithHeadings, WithEvents, ShouldA
                 'name' => $value->name,
                 'jk' => $value->gender == 1 ? 'P' : 'L',
                 'rt' => $value->rt,
-                'title' => $value->base == 'KORDES' ? $value->title : $value->base,
-                'village' => $value->village,
+                'title' => $value->base == 'KORCAM' ? $value->title : $value->base,
                 'district' => $value->district 
             ];
         }
-
+            
         $result = collect($results);
         return $result;
+
     }
 
     public function headings(): array
@@ -68,12 +61,11 @@ class KorDesExport implements FromCollection,  WithHeadings, WithEvents, ShouldA
             'NO',
             'NAMA',
             'JENIS KELAMIN',
-            'RT',
             'JABATAN',
-            'DESA',
             'KECAMATAN',
         ];
     }
+
     public function registerEvents(): array
     {
         return [
@@ -84,10 +76,8 @@ class KorDesExport implements FromCollection,  WithHeadings, WithEvents, ShouldA
                 $event->sheet->getDelegate()->getColumnDimension('C')->setAutoSize(true);
                 $event->sheet->getDelegate()->getColumnDimension('D')->setAutoSize(true);
                 $event->sheet->getDelegate()->getColumnDimension('E')->setAutoSize(true);
-                $event->sheet->getDelegate()->getColumnDimension('F')->setAutoSize(true);
-                $event->sheet->getDelegate()->getColumnDimension('G')->setAutoSize(true);
 
-                $event->sheet->getStyle('A1:H1')->applyFromArray([
+                $event->sheet->getStyle('A1:E1')->applyFromArray([
                     'font' => [
                         'bold' => true,
                     ]

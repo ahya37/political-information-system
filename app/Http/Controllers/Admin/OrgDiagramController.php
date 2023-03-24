@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Providers\GlobalProvider;
 use Maatwebsite\Excel\Excel;
 use App\Exports\KorDesExport;
+use App\Exports\KorCamExport;
 
 class OrgDiagramController extends Controller
 {
@@ -2198,19 +2199,22 @@ public function reportExcel(Request $request){
     $village_id  = $request->village_id;
     $rt          = $request->rt;
 
-    if ($rt == null) {
+    // dd([$dapil_id, $district_id, $village_id, $rt]);
+
+    if ($rt == null AND $dapil_id != null AND $district_id != null AND $village_id != null ) {
 
        #report by desa       
        $village = DB::table('villages')->select('name')->where('id', $village_id)->first();
        return $this->excel->download(new KorDesExport($village_id), 'TIM KOORDINATOR DESA '.$village->name.'.xls');
 
-    }elseif ($village_id == null) {
+    }elseif ($village_id == null AND $rt == null AND $district_id != null) {
 
-        $org = DB::table('org_diagram_districts')->select('name','base','title')->where('district_id', $district_id)->get();
-        return $org;
 
-    }elseif ($district_id == null) {
+       $district = DB::table('districts')->select('name')->where('id', $district_id)->first();
+       return $this->excel->download(new KorCamExport($district_id), 'TIM KOORDINATOR KECAMATAN '.$district->name.'.xls');
 
+    }elseif ($district_id == null AND $rt == null AND $village_id == null AND $dapil_id != null) {
+        
         $org = DB::table('org_diagram_dapil')->select('name','base','title')->where('dapil_id', $dapil_id)->get();
         return $org;
  
