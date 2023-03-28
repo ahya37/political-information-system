@@ -331,3 +331,5 @@ Route::post('/catatan/delete', 'Admin\CatatanController@delete');
 
 #INVENTORY
 Route::post('/getlistinventory', 'Admin\InventoryController@getListInventory');
+
+Route::post('/member/potential/referal/excel/upper','Admin\MemberController@memberPotentialReferalDownloadExcelUpper');

@@ -2213,7 +2213,7 @@ public function reportExcel(Request $request){
        $district = DB::table('districts')->select('name')->where('id', $district_id)->first();
        return $this->excel->download(new KorCamExport($district_id), 'TIM KOORDINATOR KECAMATAN '.$district->name.'.xls');
 
-    }elseif ($district_id == null AND $rt == null AND $village_id == null AND $dapil_id != null) {
+    }else{
         
         $org = DB::table('org_diagram_dapil')->select('name','base','title')->where('dapil_id', $dapil_id)->get();
         return $org;
@@ -2233,6 +2233,7 @@ public function updateLelelOrgAll(){
     }
 
     return 'ok';
+    
 }
 
 

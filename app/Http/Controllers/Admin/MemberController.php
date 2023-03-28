@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Exports\MemberPotentialInput;
 use App\Exports\MemberPotentialReferal;
+use App\Exports\MemberPotensialReferalByDistrict;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\Facades\DataTables;
@@ -700,6 +701,29 @@ class MemberController extends Controller
     public function memberPotentialInputDownloadExcel()
     {
         return $this->excel->download(new MemberPotentialInput(), 'ANGGOTA POTENSIAL INPUT.xls');
+    }
+
+    public function memberPotentialReferalDownloadExcelUpper(Request $request)
+    {
+        if ($request->order) {
+            $kecamatan = DB::select("SELECT  d.id, d.name, COUNT(a.user_id) as total FROM users as a
+                                    join users as b on a.id = b.user_id
+                                    join villages as c on a.village_id = c.id 
+                                    join districts as d on c.district_id = d.id 
+                                    join regencies as e on d.regency_id = e.id
+                                    join provinces as f on e.province_id = f.id
+                                    group by d.id, d.name
+                                    order by COUNT(a.user_id) desc");
+            return $kecamatan;
+
+        }else{
+            #get kecamatan yang ada referalnya
+            $district = $request->district;
+            $kecamatan = DB::table('districts')->select('name')->where('id', $district)->first();
+            return  $this->excel->download(new MemberPotensialReferalByDistrict($district), 'ANGGOTA POTENSIAL REFERAL '.$kecamatan->name.'.xls');
+
+        }
+
     }
 
     public function memberPotentialReferalDownloadPDF()
