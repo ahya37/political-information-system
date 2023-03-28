@@ -61,10 +61,10 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
                 $kordistrict = DB::table('org_diagram_district')->where('nik', $val->nik)->count();
                 $korpus      = DB::table('org_diagram_pusat')->where('nik', $val->nik)->count();
 
-                if ($korte > 0) $status = 'TIM';
-                if ($korvillage > 0) $status = 'TIM';
-                if ($kordistrict > 0) $status = 'TIM';
-                if ($korpus > 0) $status = 'TIM';
+                if ($korte > 0) $status = 'TIM KORRT';
+                if ($korvillage > 0) $status = 'TIM KORDES';
+                if ($kordistrict > 0) $status = 'TIM KORCAM';
+                if ($korpus > 0) $status = 'TIM KORPUSAT';
                 
                 $data[] = [
                     'no' => $no++,
