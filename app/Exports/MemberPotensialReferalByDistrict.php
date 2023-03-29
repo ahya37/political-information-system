@@ -58,29 +58,29 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
 
                 #cek apakah namanya ada di struktur tim korte / kordes / korcam / kordapi / korpus
                 $status = '';
-                $korte       = DB::table('org_diagram_rt as a')
-                                ->join('villages as b','a.village_id','=','b.id')
-                                ->select('b.name','a.rt')
-                                ->where('a.nik', $val->nik)
-                                ->first();
+                $korte       = DB::table('org_diagram_rt')->where('nik', $val->nik)->count();
+                                // ->join('villages as b','a.village_id','=','b.id')
+                                // ->select('b.name','a.rt')
+                                // ->where('a.nik', $val->nik)
+                                // ->first();
 
-                $korvillage  = DB::table('org_diagram_village as a')
-                                ->join('villages as b','a.village_id','=','b.id')
-                                ->select('b.name')
-                                ->where('a.nik', $val->nik)
-                                ->first();
-
-                $kordistrict = DB::table('org_diagram_district as a')
-                                ->join('districts as b','a.district_id','=','b.id')
+                $korvillage  = DB::table('org_diagram_village')
+                                // ->join('villages as b','a.village_id','=','b.id')
+                                // ->select('b.name')
                                 ->where('nik', $val->nik)
-                                ->select('b.name')
-                                ->first();
+                                ->count();
+
+                $kordistrict = DB::table('org_diagram_district')
+                                // ->join('districts as b','a.district_id','=','b.id')
+                                ->where('nik', $val->nik)
+                                // ->select('b.name')
+                                ->count();
                 
                 $korpus      = DB::table('org_diagram_pusat')->where('nik', $val->nik)->count();
 
-                if ($korte != null) $status = "TIM KORRT RT. $korte->rt DESA $korte->name";
-                if ($korvillage != null) $status = 'TIM KORDES '.$korvillage->name;
-                if ($kordistrict != null) $status = 'TIM KORCAM '.$kordistrict->name;
+                if ($korte > 0) $status = "TIM KORRT"; 
+                if ($korvillage > 0) $status = 'TIM KORDES';
+                if ($kordistrict > 0) $status = 'TIM KORCAM';
                 if ($korpus > 0) $status = 'TIM KORPUSAT';
 
                 #count jenis kelamin dari jumlah referal per nama
