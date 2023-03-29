@@ -36,46 +36,69 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
                 join districts as d on c.district_id = d.id 
                 join regencies as e on d.regency_id = e.id
                 join provinces as f on e.province_id = f.id
-                where d.id =  $district
+                where d.id =  $district and a.id != 35
                 group by a.nik, a.gender, a.id, c.name, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp, f.name, a.rt, a.rw, a.cby, a.user_id, a.created_at, a.address
                 having COUNT(a.user_id) >= 25
                 order by COUNT(a.user_id) desc";
         $result = DB::select($sql);
 
+        // $tim_korte    = DB::table('org_diagram_rt')->select('')
+
         $no = 1;
         $data = [];
         foreach ($result as $val) {
-                $userModel = new User();
-                $id_user = $val->id;
-                $referal_undirect = $userModel->getReferalUnDirect($id_user);
-                $total_referal_undirect = $referal_undirect->total == NULL ? '0' : $referal_undirect->total;
-                $inputer = $userModel->select('name')->where('id', $val->cby)->first();
-                $referal = $userModel->select('name')->where('id', $val->user_id)->first();
-                $by_inputer = $inputer->name;
-                $by_referal = $referal->name;
+                // $userModel = new User();
+                // $id_user = $val->id;
+                // $referal_undirect = $userModel->getReferalUnDirect($id_user);
+                // $total_referal_undirect = $referal_undirect->total == NULL ? '0' : $referal_undirect->total;
+                // $inputer = $userModel->select('name')->where('id', $val->cby)->first();
+                // $referal = $userModel->select('name')->where('id', $val->user_id)->first();
+                // $by_inputer = $inputer->name;
+                // $by_referal = $referal->name;
 
                 #cek apakah namanya ada di struktur tim korte / kordes / korcam / kordapi / korpus
                 $status = '';
-                $korte       = DB::table('org_diagram_rt')->where('nik', $val->nik)->count();
-                $korvillage  = DB::table('org_diagram_village')->where('nik', $val->nik)->count();
-                $kordistrict = DB::table('org_diagram_district')->where('nik', $val->nik)->count();
+                $korte       = DB::table('org_diagram_rt as a')
+                                ->join('villages as b','a.village_id','=','b.id')
+                                ->select('b.name','a.rt')
+                                ->where('a.nik', $val->nik)
+                                ->first();
+
+                $korvillage  = DB::table('org_diagram_village as a')
+                                ->join('villages as b','a.village_id','=','b.id')
+                                ->select('b.name')
+                                ->where('a.nik', $val->nik)
+                                ->first();
+
+                $kordistrict = DB::table('org_diagram_district as a')
+                                ->join('districts as b','a.district_id','=','b.id')
+                                ->where('nik', $val->nik)
+                                ->select('b.name')
+                                ->first();
+                
                 $korpus      = DB::table('org_diagram_pusat')->where('nik', $val->nik)->count();
 
-                if ($korte > 0) $status = 'TIM KORRT';
-                if ($korvillage > 0) $status = 'TIM KORDES';
-                if ($kordistrict > 0) $status = 'TIM KORCAM';
+                if ($korte != null) $status = "TIM KORRT RT. $korte->rt DESA $korte->name";
+                if ($korvillage != null) $status = 'TIM KORDES '.$korvillage->name;
+                if ($kordistrict != null) $status = 'TIM KORCAM '.$kordistrict->name;
                 if ($korpus > 0) $status = 'TIM KORPUSAT';
+
+                #count jenis kelamin dari jumlah referal per nama
+                $male   = DB::table('users')->select('gender')->where('gender',0)->where('user_id', $val->id)->count();
+                $female = DB::table('users')->select('gender')->where('gender',1)->where('user_id', $val->id)->count();
                 
                 $data[] = [
                     'no' => $no++,
                     'name' => $val->name,
                     'jk' => $val->gender == 0 ? 'L' : 'P',
+                    'district' => $val->district,
                     'referal' => $val->total,
                     // 'address' => $val->address,
                     // 'rt' => $val->rt,
                     // 'rw' => $val->rw,
                     // 'village' => $val->village,
-                    'district' => $val->district,
+                    'male'   => $male ?? 0,
+                    'female'   => $female ?? 0,
                     'status' => $status,
     
                 ];
@@ -91,12 +114,14 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
             'NO',
             'NAMA',
             'JENIS KELAMIN',
+            'KECAMATAN',
             'REFERAL',
             // 'ALAMAT',
             // 'RT',
             // 'RW',
             // 'DESA',
-            'KECAMATAN',
+            'LAKI-LAKI',
+            'PEREMPUAN',
             'KETERANGAN',
         ];
     }
@@ -109,8 +134,9 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
                 // $event->sheet->row(1, function($row) { 
                 //     $row->setBackground('#CCCCCC'); 
                 // });
+                // $event->sheet->mergeCells('F1:G1');
 
-                $event->sheet->getStyle('A1:I1')->applyFromArray([
+                $event->sheet->getStyle('A1:H1')->applyFromArray([
                     'font' => [
                         'bold' => true
                     ]
@@ -118,6 +144,16 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
 
                 $data = $this->collection()->where('jk','L');
                 $total_L = collect($data)->count();
+
+                $dataMale = $this->collection();
+                $total_male = collect($dataMale)->sum(function($q){
+                    return $q['male'];
+                });
+
+                $dataFMale = $this->collection();
+                $total_fmale = collect($dataFMale)->sum(function($q){
+                    return $q['female'];
+                });
 
                 $event->sheet->appendRows(array(
                     array('','JUMLAH LAKI',$total_L),
@@ -136,7 +172,7 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
                 });
 
                 $event->sheet->appendRows(array(
-                    array('','JUMLAH REFERAL','',$sum_referal),
+                    array('','JUMLAH REFERAL','','',$sum_referal,$total_male,$total_fmale),
                 ), $event);
 
             }
