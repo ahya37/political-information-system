@@ -28,7 +28,7 @@ class KorDesExport implements FromCollection,  WithHeadings, WithEvents, ShouldA
     {
         $village_id  =  $this->villageid;
 
-        $village = DB::table('org_diagram_village as a')->select('a.name','a.base','a.title','a.rt','b.gender','c.name as village','d.name as district')
+        $village = DB::table('org_diagram_village as a')->select('b.id','a.name','a.base','a.title','a.rt','b.gender','c.name as village','d.name as district')
                     ->join('users as b','a.nik','=','b.nik')
                     ->join('villages as c','a.village_id','=','c.id')
                     ->join('districts as d','a.district_id','=','d.id')
@@ -36,7 +36,7 @@ class KorDesExport implements FromCollection,  WithHeadings, WithEvents, ShouldA
                     ->orderBy('a.level_org','asc')
                     ->get();
 
-        $rt      = DB::table('org_diagram_rt as a')->select('a.name','a.base','a.title','a.rt','b.gender','c.name as village','d.name as district')
+        $rt      = DB::table('org_diagram_rt as a')->select('b.id','a.name','a.base','a.title','a.rt','b.gender','c.name as village','d.name as district')
                     ->join('users as b','a.nik','=','b.nik')
                     ->join('villages as c','a.village_id','=','c.id')
                     ->join('districts as d','a.district_id','=','d.id')
@@ -44,9 +44,17 @@ class KorDesExport implements FromCollection,  WithHeadings, WithEvents, ShouldA
 
         $data    = $village->merge($rt); #merge kedua array
 
+        
         $results = [];
         $no      = 1;
         foreach ($data as $value) {
+
+            #cek jika sudah menjadi anggota memiliki referal diatas 25
+            $member = DB::table('users')->where('user_id', $value->id)->count();
+
+            $desc = '';
+            if ($member >= 25) $desc = 'ANGGOTA POTENSIAL REFERAL'; 
+
             $results[] = [
                 'no' => $no++,
                 'name' => $value->name,
@@ -54,7 +62,8 @@ class KorDesExport implements FromCollection,  WithHeadings, WithEvents, ShouldA
                 'rt' => $value->rt,
                 'title' => $value->base == 'KORDES' ? $value->title : $value->base,
                 'village' => $value->village,
-                'district' => $value->district 
+                'district' => $value->district,
+                'desc' => $desc
             ];
         }
 
@@ -72,6 +81,7 @@ class KorDesExport implements FromCollection,  WithHeadings, WithEvents, ShouldA
             'JABATAN',
             'DESA',
             'KECAMATAN',
+            'KETERANGAN'
         ];
     }
     public function registerEvents(): array
