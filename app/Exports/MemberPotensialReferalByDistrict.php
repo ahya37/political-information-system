@@ -38,7 +38,7 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
                 join provinces as f on e.province_id = f.id
                 where d.id =  $district
                 group by a.nik, a.gender, a.id, c.name, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp, f.name, a.rt, a.rw, a.cby, a.user_id, a.created_at, a.address
-                having COUNT(a.user_id) >= 25
+                -- having COUNT(a.user_id) >= 25
                 order by COUNT(a.user_id) desc";
         $result = DB::select($sql);
 
