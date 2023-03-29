@@ -333,3 +333,4 @@ Route::post('/catatan/delete', 'Admin\CatatanController@delete');
 Route::post('/getlistinventory', 'Admin\InventoryController@getListInventory');
 
 Route::post('/member/potential/referal/excel/upper','Admin\MemberController@memberPotentialReferalDownloadExcelUpper');
+Route::post('/member/potential/district/referal/excel/upper','Admin\MemberController@getKecamatanReferalUpper');

@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\Facades\DataTables;
 use App\Exports\MemberByInputerInDistrict;
 use App\Exports\MemberByReferalInDistrict;
+use App\Exports\MemberPotensialUpperByDistrictUpper;
 
 class MemberController extends Controller
 {
@@ -724,6 +725,12 @@ class MemberController extends Controller
 
         }
 
+    }
+
+    public function getKecamatanReferalUpper(Request $request){
+        
+        return  $this->excel->download(new MemberPotensialUpperByDistrictUpper($request->upper), 'JUMLAH ANGGOTA POTENSIAL REFERAL KECAMATAN DI ATAS '.$request->upper.'.xls');
+        
     }
 
     public function memberPotentialReferalDownloadPDF()

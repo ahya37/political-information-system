@@ -38,13 +38,13 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
                 join provinces as f on e.province_id = f.id
                 where d.id =  $district
                 group by a.nik, a.gender, a.id, c.name, a.name, e.name, d.name, a.photo, a.phone_number, a.whatsapp, f.name, a.rt, a.rw, a.cby, a.user_id, a.created_at, a.address
+                having COUNT(a.user_id) >= 25
                 order by COUNT(a.user_id) desc";
         $result = DB::select($sql);
 
         $no = 1;
         $data = [];
         foreach ($result as $val) {
-            if ($val->total >= 25) {
                 $userModel = new User();
                 $id_user = $val->id;
                 $referal_undirect = $userModel->getReferalUnDirect($id_user);
@@ -71,14 +71,15 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
                     'name' => $val->name,
                     'jk' => $val->gender == 0 ? 'L' : 'P',
                     'referal' => $val->total,
-                    'address' => $val->address,
-                    'rt' => $val->rt,
-                    'rw' => $val->rw,
-                    'village' => $val->village,
+                    // 'address' => $val->address,
+                    // 'rt' => $val->rt,
+                    // 'rw' => $val->rw,
+                    // 'village' => $val->village,
+                    'district' => $val->district,
                     'status' => $status,
     
                 ];
-            }
+            
         }
 
         return collect($data);
@@ -91,11 +92,12 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
             'NAMA',
             'JENIS KELAMIN',
             'REFERAL',
-            'ALAMAT',
-            'RT',
-            'RW',
-            'DESA',
-            'STATUS',
+            // 'ALAMAT',
+            // 'RT',
+            // 'RW',
+            // 'DESA',
+            'KECAMATAN',
+            'KETERANGAN',
         ];
     }
 
@@ -103,6 +105,11 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
+
+                // $event->sheet->row(1, function($row) { 
+                //     $row->setBackground('#CCCCCC'); 
+                // });
+
                 $event->sheet->getStyle('A1:I1')->applyFromArray([
                     'font' => [
                         'bold' => true
@@ -123,8 +130,18 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
                     array('','JUMLAH PEREMPUAN',$total_P),
                 ), $event);
 
+                $datas = $this->collection();
+                $sum_referal = collect($datas)->sum(function($q){
+                    return $q['referal'];
+                });
+
+                $event->sheet->appendRows(array(
+                    array('','JUMLAH REFERAL','',$sum_referal),
+                ), $event);
+
             }
             
         ];
     }
+
 }
