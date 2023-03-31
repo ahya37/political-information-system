@@ -180,4 +180,49 @@ class MemberController extends Controller
 
     }
 
+    public function getDataMemberBySortirKampung(Request $request, $village, $address)
+    {
+       
+        $data = User::select('id','name','nik')
+                ->where('village_id', $village)
+                ->where('address', 'LIKE',  "%$address%")->get();
+
+        if($request->has('q')){
+           $search = $request->q;
+           $data = User::select('id','name','nik')->where('village_id', $village)
+                        ->where('address', $address)
+                        ->where('name','LIKE',"%$search%")
+                        ->orWhere('nik','LIKE',"%$search%")
+                        ->get();
+
+       }
+
+        return response()->json($data);
+
+    }
+
+    public function getDataMemberBySortirRTNew(Request $request, $village, $address, $rt)
+    {
+       
+        $data = User::select('id','name','nik')
+                ->where('village_id', $village)
+                ->where('address', 'LIKE',  "%$address%")
+                ->where('rt', $rt)->get();
+
+        if($request->has('q')){
+           $search = $request->q;
+           $data = User::select('id','name','nik')
+                        ->where('village_id', $village)
+                        ->where('address', 'LIKE',  "%$address%")
+                        ->where('rt', $rt)
+                        ->where('name','LIKE',"%$search%")
+                        ->orWhere('nik','LIKE',"%$search%")
+                        ->get();
+
+       }
+
+        return response()->json($data);
+
+    }
+
 }

@@ -2,6 +2,8 @@ let selectListArea = $("#selectListArea").val();
 let selectDistrictId = $("#selectDistrictId").val();
 let selectVillageId = $("#selectVillageId").val();
 let selectRT = $("#selectRt").val();
+let kp = $("#kp").val();
+let URL = "";
 
 // KABKOT , langsung get dapil by kab lebak
 
@@ -13,6 +15,8 @@ $("#selectListArea").change(async function () {
         const listDistricts = await getListDistrict(selectListArea);
         $("#selectDistrictId").empty();
         $("#selectVillageId").empty();
+        $("#selectRt").empty();
+        $("#kp").empty();
 
         $("#selectDistrictId").show();
         $("#selectDistrictId").append(
@@ -20,7 +24,7 @@ $("#selectListArea").change(async function () {
         );
         getListDistrictUi(listDistricts);
         province = $("#province").val();
-        selectArea = $("#selectArea").val();
+        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
@@ -49,6 +53,8 @@ $("#selectDistrictId").change(async function () {
         const dataVillages = await getListVillage(selectDistrictId);
         $("#selectVillageId").empty();
         $("#selectVillageId").show();
+        $("#selectRt").empty();
+        $("#kp").empty();
         $("#selectVillageId").append("<option value=''>-Pilih Desa-</option>");
         getListVillageUi(dataVillages);
 
@@ -81,23 +87,30 @@ $("#selectVillageId").change(async function () {
     selectVillageId = $("#selectVillageId").val();
 
     if (selectVillageId !== "") {
-        const dataRT = await getListRT(selectVillageId);
+        $("#selectRt").empty();
+        $("#kp").empty();
+       
+        const dataKp = await getListKampung(selectVillageId);
+
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
-        $("#selectRt").append("<option value=''>-Pilih RT-</option>");
-        getListRTUi(dataRT);
+        $("#kp").append("<option value=''>-Pilih Kampung-</option>");
+        getListKampungUi(dataKp);
+        // getListRTUi(dataRT);
 
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
-        $("#selectRt").val("");
 
-        initialSelect2Member(selectVillageId, selectRT)
+
+        let URL = `/api/getdatamember/${selectVillageId}`;
+
+        initialSelect2Member(URL)
     } else {
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
@@ -115,14 +128,21 @@ $("#selectVillageId").change(async function () {
     }
 });
 
-// RT
-$("#selectRt").change(async function () {
-    selectRT = $("#selectRt").val();
+// KAMPUNG
 
-    if (selectRT !== "") {
+// RT
+$("#kp").change(async function () {
+    kp = $("#kp").val();
+
+    if (kp !== "") {
+        const dataRT = await getListRT(selectVillageId,kp);
+
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
+
+        $("#selectRt").append("<option value=''>-Pilih RT-</option>");
+        getListRTUi(dataRT);
 
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
@@ -130,8 +150,8 @@ $("#selectRt").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
 
-
-        initialSelect2Member(selectVillageId, selectRT)
+        let  URL = `/api/getdatamemberkampung/${selectVillageId}/${kp}`;
+        initialSelect2Member(URL)
 
     } else {
         // province = $("#province").val();
@@ -153,6 +173,19 @@ $("#selectRt").change(async function () {
     }
 });
 
+$("#selectRt").change(async function () {
+    selectRT = $("#selectRt").val();
+    kp = $("#kp").val();
+    selectVillageId = $("#selectVillageId").val();
+
+    if (selectRT !== "") {
+
+        let URL = `/api/getdatamemberrtnew/${selectVillageId}/${kp}/${selectRT}`;
+        initialSelect2Member(URL)
+
+    }
+});
+
 $('#jabatan').change(function () {
     let jabatanId = $("#jabatan").val();
     if (jabatanId === 'KOR RT') {
@@ -170,16 +203,9 @@ $('#nik').on('keyup',function (e) {
     console.log(e)
 
 })
-// $('#nik').on(function (e) {
-//     //    initialSelect2Member(selectVillageId, selectRT, q)
-// });
 
-function initialSelect2Member(selectVillageId, selectRT) {
-    // GET ANGGOTA BERDASARKAN SORTIR
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
-    let URL = selectRT === null ? `/api/getdatamember/${selectVillageId}` : `/api/getdatamemberrt/${selectVillageId}/${selectRT}`
-
+function initialSelect2Member(URL) {
     $(".nik").select2({
         theme: "bootstrap4",
         width: $(this).data("width")
@@ -338,12 +364,12 @@ function showDivHtmlVillage(m) {
 }
 
 // GET data RT
-async function getListRT(villageId) {
+async function getListRT(villageId,kp) {
     $("#selectRt").append(
         "<option value=''>Loading..</option>"
     );
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    const response = await fetch(`/api/getrtbyvillage`, {
+    const response = await fetch(`/api/getrtbyvillageNew`, {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -352,6 +378,7 @@ async function getListRT(villageId) {
         body: JSON.stringify({
             token: CSRF_TOKEN,
             village_id: villageId,
+            address: kp,
         }),
     });
     $("#selectRt").empty();
@@ -369,3 +396,35 @@ function showDivHtmlRT(m) {
     return `<option value="${m.rt}">${m.rt}</option>`;
 }
 
+// GET DATA KAMPUNG
+async function getListKampung(villageId) {
+    $("#kp").append(
+        "<option value=''>Loading..</option>"
+    );
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    const response = await fetch(`/api/getkampungbyvillage`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({
+            token: CSRF_TOKEN,
+            village_id: villageId,
+        }),
+    });
+    $("#kp").empty();
+    return await response.json();
+}
+
+function getListKampungUi(data) {
+    let divKampung = "";
+    data.forEach((m) => {
+        divKampung += showDivHtmlKampung(m);
+    });
+    const divKampungContainer = $("#kp");
+    divKampungContainer.append(divKampung);
+}
+function showDivHtmlKampung(m) {
+    return `<option value="${m.address}">${m.address}</option>`;
+}

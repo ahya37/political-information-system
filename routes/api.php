@@ -28,6 +28,9 @@ Route::post('searchregencyById', 'API\LocationController@getSearchRegencyById');
 Route::post('searchdistrictById', 'API\LocationController@getSearchDistrictById');
 Route::post('searchVillageById', 'API\LocationController@getSearchVillageById');
 Route::post('getrtbyvillage', 'API\LocationController@getRTByVIllage');
+Route::post('getkampungbyvillage', 'API\LocationController@getKampungByVIllage');
+Route::post('getrtbyvillageNew', 'API\LocationController@getRTByVIllageNew');
+
 
 Route::get('selectvillage', 'API\LocationController@getVillageSelect');
 Route::get('searchvillage', 'API\LocationController@getVillageSearch');
@@ -58,7 +61,9 @@ Route::post('org/update', 'Admin\OrgDiagramController@updateOrg');
 Route::post('org/delete', 'Admin\OrgDiagramController@deleteOrg');
 
 Route::get('getdatamember/{village}', 'API\MemberController@getDataMemberBySortirVillage');
+Route::get('getdatamemberkampung/{village}/{address}', 'API\MemberController@getDataMemberBySortirKampung');
 Route::get('getdatamemberrt/{village}/{rt}', 'API\MemberController@getDataMemberBySortirRT');
+Route::get('getdatamemberrtnew/{village}/{address}/{rt}', 'API\MemberController@getDataMemberBySortirRTNew');
 
 #DATATABLE STRUKTUR ORG
 Route::post('org/getdataorgvillage', 'Admin\OrgDiagramController@getDataOrgVillage');

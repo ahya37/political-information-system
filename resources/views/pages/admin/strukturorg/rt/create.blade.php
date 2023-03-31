@@ -54,6 +54,12 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
+                                        <div class="form-group">
+                                            <select name="kp" id="kp" class="form-control filter"
+                                                required></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="form-group" id="divSelectRt">
                                             <select name="rt" id="selectRt" class="form-control filter">
                                             </select>

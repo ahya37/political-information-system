@@ -214,4 +214,29 @@ class LocationController extends Controller
         return response()->json($rt);
     }
 
+    public function getRTByVIllageNew(){
+
+        $address = request()->address;
+
+        $rt = DB::table('users')
+                ->select('rt')
+                ->groupBy('rt')
+                ->orderBy('rt','asc')
+                ->where('village_id',request()->village_id)
+                ->where('address','LIKE', "%$address%")
+                ->get();
+                
+        return response()->json($rt);
+    }
+
+    public function getKampungByVIllage(){
+
+        $data = DB::table('users')->select('address')
+                ->groupBy('address')
+                ->orderBy('address','asc')
+                ->where('village_id',request()->village_id)->get();
+                
+        return response()->json($data);
+    }
+
 }
