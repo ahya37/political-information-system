@@ -19,8 +19,12 @@ class Event extends Model
         //         left join users as c on b.user_id = c.id
         //         left join absen_events as d on b.id = d.event_detail_id
         //         group by a.id, a.date, a.time, a.description, a.address";
-        $sql = "SELECT a.id, a.date, a.time, a.description, d.name as village, c.name as district, b.name as regency from events as a
-                left join regencies as b on a.regency_id = b.id
+        // $sql = "SELECT a.id, a.date, a.time, a.description, d.name as village, c.name as district, b.name as regency from events as a
+                // left join regencies as b on a.regency_id = b.id
+                // left join districts as c on a.district_id = c.id 
+                // left join villages as d on a.village_id = d.id order by a.date desc";
+				
+		 $sql = "SELECT a.id, a.date, a.time, a.description, d.name as village, c.name as district from events as a
                 left join districts as c on a.district_id = c.id 
                 left join villages as d on a.village_id = d.id order by a.date desc";
 

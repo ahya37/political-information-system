@@ -58,7 +58,7 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
 
                 #cek apakah namanya ada di struktur tim korte / kordes / korcam / kordapi / korpus
                 $status = '';
-                $korte       = DB::table('org_diagram_rt')->where('nik', $val->nik)->count();
+                $korte       = DB::table('org_diagram_rt')->select('base','title')->where('nik', $val->nik)->first();
                                 // ->join('villages as b','a.village_id','=','b.id')
                                 // ->select('b.name','a.rt')
                                 // ->where('a.nik', $val->nik)
@@ -67,21 +67,25 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
                 $korvillage  = DB::table('org_diagram_village')
                                 // ->join('villages as b','a.village_id','=','b.id')
                                 // ->select('b.name')
+								->select('base','title')
                                 ->where('nik', $val->nik)
-                                ->count();
+                                ->first();
 
                 $kordistrict = DB::table('org_diagram_district')
                                 // ->join('districts as b','a.district_id','=','b.id')
+								->select('base','title')
                                 ->where('nik', $val->nik)
                                 // ->select('b.name')
-                                ->count();
+                                ->first();
                 
-                $korpus      = DB::table('org_diagram_pusat')->where('nik', $val->nik)->count();
+                $korpus      = DB::table('org_diagram_pusat')->select('base','title')->where('nik', $val->nik)->first();
 
-                if ($korte > 0) $status = "TIM KORRT"; 
-                if ($korvillage > 0) $status = 'TIM KORDES';
-                if ($kordistrict > 0) $status = 'TIM KORCAM';
-                if ($korpus > 0) $status = 'TIM KORPUSAT';
+                if ($korte)	$korte->base == 'ANGGOTA' ? '' : $status = "KOR $korte->title";
+				
+				 
+                if ($korvillage) $status = "KORDES ($korvillage->title)";
+                if ($kordistrict) $status = "KORCAM ($kordistrict->title)";
+                if ($korpus) $status = "KORPUSAT ($korpus->title)";
 
                 #count jenis kelamin dari jumlah referal per nama
                 $male   = DB::table('users')->select('gender')->where('gender',0)->where('user_id', $val->id)->count();
@@ -89,17 +93,20 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
                 
                 $data[] = [
                     'no' => $no++,
+                    'nik' => "'$val->nik",
                     'name' => $val->name,
                     'jk' => $val->gender == 0 ? 'L' : 'P',
-                    'district' => $val->district,
                     'referal' => $val->total,
                     // 'address' => $val->address,
                     // 'rt' => $val->rt,
                     // 'rw' => $val->rw,
-                    // 'village' => $val->village,
+                    
                     'male'   => $male ?? 0,
                     'female'   => $female ?? 0,
                     'status' => $status,
+					'village' => $val->village,
+                    'district' => $val->district,
+					'desc' => ''
     
                 ];
             
@@ -112,9 +119,9 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
     {
         return [
             'NO',
+            'NIK',
             'NAMA',
             'JENIS KELAMIN',
-            'KECAMATAN',
             'REFERAL',
             // 'ALAMAT',
             // 'RT',
@@ -122,6 +129,9 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
             // 'DESA',
             'LAKI-LAKI',
             'PEREMPUAN',
+            'TIM',
+			'DESA',
+            'KECAMATAN',
             'KETERANGAN',
         ];
     }
@@ -136,7 +146,7 @@ class MemberPotensialReferalByDistrict implements FromCollection, WithHeadings, 
                 // });
                 // $event->sheet->mergeCells('F1:G1');
 
-                $event->sheet->getStyle('A1:H1')->applyFromArray([
+                $event->sheet->getStyle('A1:K1')->applyFromArray([
                     'font' => [
                         'bold' => true
                     ]

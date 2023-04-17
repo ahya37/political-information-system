@@ -56,6 +56,7 @@ class MemberPotensialUpperByDistrictUpper implements FromCollection, WithHeading
             if ($count > 0) {
                 $results[] = [
                     'no' => $no++,
+                    'id' => $value->id,
                     'name' => $value->name,
                     'jml_referal_upper' => $count,
                     'desc' => ''
@@ -73,6 +74,7 @@ class MemberPotensialUpperByDistrictUpper implements FromCollection, WithHeading
     {
         return [
             'NO',
+            'ID',
             'KECAMATAN',
             'JUMLAH PEMILIK REFERAL',
             'KETERANGAN',

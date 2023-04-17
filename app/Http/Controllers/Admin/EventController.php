@@ -69,14 +69,17 @@ class EventController extends Controller
                                 </a>';
                     })
                     ->addColumn('address', function($item){
-                        if ($item->district == null) {
-                            return $item->regency;
-                        }elseif($item->village == null){
-                            return 'KEC. ' .$item->district.',<br>'.''.$item->regency.'';
-                        }
-                        else{
-                            return 'DS.' .$item->village.',<br>'.'KEC.'.$item->district.'<br>'.''.$item->regency.'';
-                        }
+                        // if ($item->district == null) {
+                            // return $item->regency;
+                        // }elseif($item->village == null){
+                            // return 'KEC. ' .$item->district.',<br>'.''.$item->regency.'';
+                        // }
+                        // else{
+                            // return 'DS.' .$item->village.',<br>'.'KEC.'.$item->district.'<br>'.''.$item->regency.'';
+                        // }
+						
+						return 'DS.' .$item->village ?? ''.'KEC.'.$item->district ?? '';
+						
                     })                   
                     ->rawColumns(['action','dates','times','delete','address'])
                     ->make();
