@@ -29,7 +29,7 @@
                                       <tr>
                                         <th scope="col"></th>
                                         <th scope="col">Tanggal</th>
-                                        <th scope="col">Waktu</th>
+                                        <th scope="col">Judul</th>
                                         <th scope="col">Deskripsi</th>
                                         <th scope="col">Alamat</th>
                                         <th scope="col">Aksi</th>
@@ -64,7 +64,7 @@
             columns:[
                {data:'date', name:'date'},
                {data:'dates', name:'dates'},
-               {data:'times', name:'times'},
+               {data:'title', name:'title'},
                {data:'description', name:'description'},
                {data:'address', name:'address'},
                {data:'action', name:'action'}

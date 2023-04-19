@@ -24,12 +24,11 @@ class Event extends Model
                 // left join districts as c on a.district_id = c.id 
                 // left join villages as d on a.village_id = d.id order by a.date desc";
 				
-		 $sql = "SELECT a.id, a.date, a.time, a.description, d.name as village, c.name as district from events as a
-                left join districts as c on a.district_id = c.id 
-                left join villages as d on a.village_id = d.id order by a.date desc";
+		 $sql = "SELECT a.id, a.date, a.created_at as date, a.time, a.description, d.name as village, a.title from events as a
+                join villages as d on a.village_id = d.id order by a.date desc";
 
         $result = DB::select($sql);
-        return $result;
+        return $result; 
     }
 
     public function getAddressEvent($id)

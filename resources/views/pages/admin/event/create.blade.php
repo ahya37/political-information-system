@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Edit Event')
+@section('title','Buat Event')
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -14,7 +14,7 @@
           >
             <div class="container-fluid">
                 <div class="dashboard-heading">
-                    <h2 class="dashboard-title">Edit Event</h2>
+                    <h2 class="dashboard-title">Buat Event</h2>
                 <p class="dashboard-subtitle">
                 </p>
             </div>

@@ -61,9 +61,11 @@ class EventController extends Controller
                         ';
                     })->addColumn('dates', function($item){
                         return date('d-m-Y', strtotime($item->date));
-                    })->addColumn('times', function($item){
-                        return date('H:i', strtotime($item->time));
-                    })->addColumn('delete', function($item){
+                    })
+					// ->addColumn('times', function($item){
+                        // return date('H:i', strtotime($item->time));
+                    // })
+					->addColumn('delete', function($item){
                         return ' <a class="dropdown-item" href="'.route('admin-event-delete', $item->id).'">
                                         Hapus
                                 </a>';
@@ -78,10 +80,10 @@ class EventController extends Controller
                             // return 'DS.' .$item->village.',<br>'.'KEC.'.$item->district.'<br>'.''.$item->regency.'';
                         // }
 						
-						return 'DS.' .$item->village ?? ''.'KEC.'.$item->district ?? '';
+						return 'DS.' .$item->village ?? '';
 						
                     })                   
-                    ->rawColumns(['action','dates','times','delete','address'])
+                    ->rawColumns(['action','dates','delete','address'])
                     ->make();
         }
 
@@ -280,7 +282,8 @@ class EventController extends Controller
             'regency_id' => $request->regency_id,
             'dapil_id' => $request->dapil_id,
             'district_id' => $request->district_id,
-            'village_id' => $request->village_id
+            'village_id' => $request->village_id,
+			'cby' => auth()->guard('admin')->user()->id
         ]);
 
         return redirect()->route('admin-event')->with(['success' => 'Event baru telah dibuat']);
