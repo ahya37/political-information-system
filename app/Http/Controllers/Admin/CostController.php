@@ -10,6 +10,7 @@ use App\ForecastDesc;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Village;
+use App\CostFiles;
 use App\Providers\GlobalProvider;
 use Carbon\Carbon;
 use PDF;
@@ -180,6 +181,14 @@ class CostController extends Controller
         return view('pages.admin.cost.edit', compact('forecast','forecast_desc','id','cost'));
     }
 
+    public function listFiles($id)
+    {
+        $files = CostFiles::where('cost_les_id', $id)->get();
+        $no    = 1;
+
+        return view('pages.admin.cost.files', compact('files','id','no'));
+    }
+
     public function update(Request $request, $id)
     {
 
@@ -210,6 +219,30 @@ class CostController extends Controller
         ]);
 
         return redirect()->route('admin-cost-index')->with(['success' => 'Pengeluaran telah diubah']);
+    }
+
+    public function uploadFile(Request $request, $id)
+    {
+        
+        $this->validate($request, [
+               'file' => 'required',
+        ]);
+
+        $name  = $request->file('file')->getClientOriginalName();
+        $ext   = $request->file('file')->getClientOriginalExtension();
+
+        $file  = $request->file('file')->store('assets/cost','public');
+
+        CostFiles::create([
+            'cost_les_id' => $id,
+            'name'  => $name,
+            'file'  => $file,
+            'type'  =>  $ext,
+            'cby'   => auth()->guard('admin')->user()->id
+        ]);
+
+        return redirect()->back()->with(['success' => 'File telah disimpan!']);
+
     }
 
 }

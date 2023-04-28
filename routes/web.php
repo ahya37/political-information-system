@@ -343,8 +343,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('cost/index','CostController@listCostPolitic')->name('admin-cost-index');
         Route::get('cost/create','CostController@create')->name('admin-cost-cost');
         Route::get('cost/edit/{id}','CostController@edit')->name('admin-cost-edit');
+        Route::get('cost/index/files/{id}','CostController@listFiles')->name('admin-cost-files');
         Route::post('cost/save','CostController@store')->name('admin-cost-store');
         Route::post('cost/update/{id}','CostController@update')->name('admin-cost-update');
+        Route::post('cost/uploadfile/{id}','CostController@uploadFile')->name('admin-cost-uploadfile');
         Route::post('forecast/save','CostController@addForecast')->name('admin-forecast-store');
         Route::post('forecastdesc/save','CostController@addForecastDesc')->name('admin-forecastdesc-store');
         Route::get('cost/index/pdf/{daterange}','CostController@downloadPDF');

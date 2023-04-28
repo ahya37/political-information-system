@@ -63,7 +63,7 @@
                                          <th>ALAMAT</th>
                                          <th>JUMLAH (Rp)</th>
                                          <th>FILE</th>
-                                         <th>AKSI</th>
+                                         <th class="col-1">AKSI</th>
                                      </tr>
                                  </thead>
                                  <tbody>
@@ -83,6 +83,7 @@
                                          </td>
                                          <td>
                                              <a href="{{ route('admin-cost-edit', $item->id) }}" class="btn btn-sm btn-sc-primary text-white rounded" title="Edit"><i class="fa fa-edit"></i></a>
+                                             <a href="{{ route('admin-cost-files', $item->id) }}" class="btn btn-sm btn-sc-primary text-white rounded" title="Edit">File</a>
                                          </td>
                                      </tr>
                                      @endforeach
