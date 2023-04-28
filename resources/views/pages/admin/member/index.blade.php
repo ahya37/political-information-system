@@ -113,6 +113,7 @@
                                     <thead>
                                       <tr>
                                         <th></th>
+                                        <th></th>
                                         <th scope="col">NAMA</th>
                                         <th scope="col">DESA</th>
                                         <th scope="col">KECAMATAN</th>

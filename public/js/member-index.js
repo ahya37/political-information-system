@@ -41,6 +41,13 @@ const table = $("#data").DataTable({
     columnDefs: [
         {
             targets: 0,
+            visible: false,
+            render: function (data, type, row, meta) {
+                return `<p>${row.nik}</p>`;
+            },
+        },
+        {
+            targets: 1,
             sortable: false,
             render: function (data, type, row, meta) {
                 return `<a href="/admin/member/profile/${row.id}">
@@ -49,55 +56,55 @@ const table = $("#data").DataTable({
             },
         },
         {
-            targets: 1,
+            targets: 2,
             render: function (data, type, row, meta) {
                 return `<p>${row.name}</p>`;
             },
         },
         {
-            targets: 2,
+            targets: 3,
             render: function (data, type, row, meta) {
                 return `<p>${row.village}</p>`;
             },
         },
         {
-            targets: 3,
+            targets: 4,
             render: function (data, type, row, meta) {
                 return `<p>${row.district}</p>`;
             },
         },
         {
-            targets: 4,
+            targets: 5,
             render: function (data, type, row, meta) {
                 return `<p>${row.regency}</p>`;
             },
         },
         {
-            targets: 5,
+            targets: 6,
             render: function (data, type, row, meta) {
                 return `<p>${row.referal}</p>`;
             },
         },
         {
-            targets: 6,
+            targets: 7,
             render: function (data, type, row, meta) {
                 return `<p>${row.cby}</p>`;
             },
         },
         {
-            targets: 7,
+            targets: 8,
             render: function (data, type, row, meta) {
                 return `<p>${row.created_at}</p>`;
             },
         },
         {
-            targets: 8,
+            targets: 9,
             render: function (data, type, row, meta) {
                 return `<p align="right">${row.total_referal}</p>`;
             },
         },
         {
-            targets: 9,
+            targets: 10,
             render: function (data, type, row, meta) {
                 let view = ``;
                 if (row.status === 1 && row.email !== null) {

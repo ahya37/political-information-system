@@ -15,33 +15,36 @@ class MemberDatatableController extends Controller
     public function dTableMember(Request $request)
     {
 
-        $orderBy = 'a.name';
+        $orderBy = 'a.nik';
         switch ($request->input('order.0.column')) {
-            case '1':
+            case '0':
                 $orderBy = 'a.name';
                 break;
             case '2':
-                $orderBy = 'regencies.name';
+                $orderBy = 'a.name';
                 break;
             case '3':
-                $orderBy = 'districts.name';
-                break;
-            case '4':
                 $orderBy = 'villages.name';
                 break;
+            case '4':
+                $orderBy = 'districts.name';
+                break;
             case '5':
-                $orderBy = 'b.name';
+                $orderBy = 'regencies.name';
                 break;
             case '6':
-                $orderBy = 'c.name';
+                $orderBy = 'b.name';
                 break;
             case '7':
+                $orderBy = 'c.name';
+                break;
+            case '8':
                 $orderBy = 'a.created_at';
                 break;
         }
 
         $data = DB::table('users as a')
-                        ->select('a.id','a.user_id','a.name','a.photo','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email')
+                        ->select('a.id','a.nik','a.user_id','a.name','a.photo','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email')
                         ->join('villages','villages.id','a.village_id')
                         ->join('districts','districts.id','villages.district_id')
                         ->join('regencies','regencies.id','districts.regency_id')
@@ -59,6 +62,7 @@ class MemberDatatableController extends Controller
                 ->orWhereRaw('LOWER(villages.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
                 ->orWhereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
                 ->orWhereRaw('LOWER(c.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                ->orWhereRaw('LOWER(a.nik) like ? ',['%'.strtolower($request->input('search.value')).'%'])
                 ->orWhereRaw('LOWER(a.created_at) like ? ',['%'.strtolower($request->input('search.value')).'%'])
                 ;
             });
@@ -96,6 +100,7 @@ class MemberDatatableController extends Controller
              $result[] = [
                  'id' => $val->id,
                  'photo' => $val->photo,
+                 'nik' => $val->nik,
                  'name' => $val->name,
                  'regency' => $val->regency,
                  'district' => $val->district,
