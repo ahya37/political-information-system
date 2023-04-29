@@ -339,3 +339,5 @@ Route::post('/getlistinventory', 'Admin\InventoryController@getListInventory');
 
 Route::post('/member/potential/referal/excel/upper','Admin\MemberController@memberPotentialReferalDownloadExcelUpper');
 Route::post('/member/potential/district/referal/excel/upper','Admin\MemberController@getKecamatanReferalUpper');
+
+Route::post('cost/delete/file','Admin\CostController@deleteFile');

@@ -36,6 +36,7 @@
                                                 <th>NO</th>
                                                 <th>FILE</th>
                                                 <th>TANGGAL</th>
+                                                <th>OPSI</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -43,11 +44,15 @@
                                                 <tr>
                                                     <td>{{ $no++ }}</td>
                                                     <td>
-                                                        <a href="">
+                                                        <a href="{{ route('admin-cost-downloadfile', $item->id) }}" title="Download">
                                                             {{ $item->name }}
                                                         </a>
                                                     </td>
                                                     <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-sm btn-danger"
+                                                            onclick="onDelete(this)" data-name="{{ $item->name }}" id="{{ $item->id }}"><i class="fa fa-trash"></i></button>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -95,6 +100,8 @@
     <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/vendor/daterangepicker/daterangepicker.min.js') }}"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="{{ asset('js/files.js') }}"></script>
     <script>
         AOS.init();
         $('#data').DataTable();

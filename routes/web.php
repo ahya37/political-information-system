@@ -351,6 +351,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::post('forecastdesc/save','CostController@addForecastDesc')->name('admin-forecastdesc-store');
         Route::get('cost/index/pdf/{daterange}','CostController@downloadPDF');
         Route::get('cost/index/excel/{daterange}','CostController@downloadExcel');
+        Route::get('cost/downloadfile/{file}','CostController@downloadFileCost')->name('admin-cost-downloadfile');
 
         // Download angota potensial
         Route::get('/member/potential/referal/excel','MemberController@memberPotentialReferalDownloadExcel')->name('admin-member-potential-referal-excel');

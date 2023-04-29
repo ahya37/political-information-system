@@ -15,6 +15,9 @@ use App\Providers\GlobalProvider;
 use Carbon\Carbon;
 use PDF;
 use Maatwebsite\Excel\Excel;
+use DB;
+use App\Helpers\ResponseFormatter;
+use Illuminate\Support\Facades\File;
 
 class CostController extends Controller
 {
@@ -242,6 +245,59 @@ class CostController extends Controller
         ]);
 
         return redirect()->back()->with(['success' => 'File telah disimpan!']);
+
+    }
+
+    public function downloadFileCost($id){
+
+
+        #get file by id
+        $data = CostFiles::select('file','name')->where('id', $id)->first();
+
+        $file = storage_path('app').'/public/'.$data->file;
+
+        if ($file) {
+            $headers = array(
+                'Content-Type:aplication/pdf',
+            );
+    
+            return response()->download($file, $data->name, $headers);
+        }
+
+        return redirect()->back()->with(['error' => 'Tidak ada file!']);
+
+    }
+
+    public function deleteFile(){
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+
+            $data = CostFiles::where('id', $id)->first();
+
+            #delete file in directory
+            $file = storage_path('app').'/public/'.$data->file;
+            if (file_exists($file)) {
+                File::delete($file);
+            }
+
+            #delete file in db
+            $data->delete();
+
+            DB::commit();
+            return ResponseFormatter::success([
+                   'message' => 'Berhasil hapus catatan!'
+            ],200);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
 
     }
 
