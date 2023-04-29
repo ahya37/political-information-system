@@ -84,6 +84,7 @@
                         @csrf
                         <div class="form-group">
                             <input type="file" class="form-control" name="file" id="recipient-name" required>
+                        <small class="text-danger">(.xlx/pdf/docx/ppt/image)</small>
                         </div>
                 </div>
                 <div class="modal-footer">
