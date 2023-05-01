@@ -26,8 +26,26 @@
                       <div class="card">
                           <div class="card-body">
                               <img class="img-fluid" src="{{ asset('storage/'.$event_gallery->file) }}" width="500px">
-                              <h4>{{ $event_gallery->title }}</h4>
-                              <p>{{ $event_gallery->descr }}</p>
+                             <form action="{{route('admin-event-gallery-update-foto', $event_gallery->id)}}" method="POST" enctype="multipart/form-data">
+								@csrf
+									<div class="form-group">
+										<label for="recipient-name" class="col-form-label">Judul</label>
+										<input type="text" name="title" class="form-control" id="recipient-name" value="{{ $event_gallery->title }}" required>
+									</div>
+									<div class="form-group">
+										<label for="message-text" class="col-form-label">Deskripsi</label>
+										<textarea class="form-control" name="desc" id="message-text" required>{{ $event_gallery->descr }}</textarea>
+									</div>
+									<div class="form-group">
+										<label for="recipient-name" class="col-form-label" required>File (gambar)</label>
+										<br>
+										<input type="file" name="file" >
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-sm btn-sc-primary text-white">Ubah</button>
+								</div>
+							</form>
                           </div>
                       </div>
                   </div>

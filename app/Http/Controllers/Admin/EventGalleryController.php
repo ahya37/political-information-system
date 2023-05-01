@@ -6,6 +6,8 @@ use App\Event;
 use App\EventGallery;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use DB;
+use File;
 
 class EventGalleryController extends Controller
 {
@@ -36,6 +38,46 @@ class EventGalleryController extends Controller
         ]);
 
         return redirect()->back()->with(['success' => 'Galeri telah ditambahkan']);
+
+    }
+	
+	public function upodateFoto(Request $request, $id)
+    {
+        
+        $this->validate($request, [
+               'file' => 'mimes:png,jpg,jpeg',
+        ]);
+		
+		#get file by id
+		$gallery = EventGallery::where('id', $id)->first();
+		
+		#jika ada file baru, maka update
+		if($request->file == null){
+			
+			$file = $gallery->file;
+			
+		}else{
+			
+			$file = $request->file('file')->store('assets/user/galleries','public');
+			#hapus file lama
+			$dir_file = storage_path('app').'/public/'.$gallery->file;
+            if (file_exists($dir_file)) {
+                File::delete($dir_file);
+            }
+			
+		}
+		
+		#update di db
+		$gallery->update([
+				'title' => $request->title,
+				'descr' => $request->desc,
+				'file'  => $file,
+				'file_type'  => 'image',
+				'cby'   => auth()->guard('admin')->user()->id
+		]);
+
+       
+        return redirect()->back()->with(['success' => 'Galeri telah diubah!']);
 
     }
 

@@ -202,6 +202,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         // Gallery Event
         Route::get('/event/gallery/{id}','EventGalleryController@index')->name('admin-event-gallery');
         Route::post('/event/gallery/store/{id}','EventGalleryController@store')->name('admin-event-gallery-store');
+        Route::post('/event/gallery/update/{id}','EventGalleryController@upodateFoto')->name('admin-event-gallery-update-foto');
         Route::post('/event/gallery/store/video/{id}','EventGalleryController@storeVideo')->name('admin-event-gallery-store-video');
         Route::get('/event/gallery/detail/{id}','EventGalleryController@detailEventGallery');
 
