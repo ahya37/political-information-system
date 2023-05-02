@@ -264,7 +264,10 @@ class MemberController extends Controller
 
             Excels::import(new ReplaceAddressImport, request()->file('file'));
             
-            return 'ok';
+            return response()->json([
+                'status' => 200,
+                'message' => 'Updated successfully!'
+            ]);
 
         } catch (\Exception $th) {
             return $th->getMessage();
