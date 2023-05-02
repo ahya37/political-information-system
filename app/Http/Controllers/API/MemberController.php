@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Exports\MemberExport;
+use App\Imports\ReplaceAddressImport;
 use App\User;
 use App\Admin;
 use App\Models\Province;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Excel;
 use App\Providers\GlobalProvider;
 use PDF;
+use Maatwebsite\Excel\Facades\Excel as Excels;
 
 class MemberController extends Controller
 {
@@ -223,6 +225,52 @@ class MemberController extends Controller
 
         return response()->json($data);
 
+    }
+
+    // public function replaceAddress(Request $request){
+
+    //     try {
+
+    //         // $data['nik'] = $request->all();
+
+    //         // $result = [];
+
+    //         // foreach($data['nik'] as $val){
+    //         //     $result[] = [
+    //         //         'nik' => $val['NIK']
+    //         //     ];
+
+    //         //     DB::table('users')->where('nik', $val['NIK'])->update(['address' => $val['ALAMAT']]);
+    //         // }
+
+    //         // return 'update';
+            
+    //        $data = Excels::import(new ReplaceAddressImport, $request->file);
+
+    //     //    return 'success';
+
+    //     } catch (\Exception $th) {
+            
+    //         return $th->getMessage();
+
+    //     }
+
+    // }
+
+    public function replaceAddress(){
+        
+
+        try {
+
+            Excels::import(new ReplaceAddressImport, request()->file('file'));
+            
+            return 'ok';
+
+        } catch (\Exception $th) {
+            return $th->getMessage();
+        }
+
+        
     }
 
 }
