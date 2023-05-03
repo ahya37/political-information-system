@@ -451,6 +451,32 @@ class User extends Authenticatable
         return $result;
     }
 
+    public function generationAgeAdminMemberCaleg($user_id)
+    {
+        $sql = "SELECT 
+                CASE 
+                when age between 17 and 40 then '17 - 40'
+                when age between 41 and 50 then '41 - 50'
+                when age > 50 then '50 - ...'
+                when age is null then '(NULL)'                 
+                end as gen_age,
+                count(*) as total
+                
+            from 
+            (
+                select date_berth, TIMESTAMPDIFF(YEAR, date_berth, CURDATE()) as age from users as a
+                join villages as b on a.village_id = b.id
+                join districts as c on b.district_id = c.id
+                join admin_dapil_district as d on c.id = d.district_id 
+                join admin_dapils as e on d.admin_dapils_id = e.id
+                where e.admin_user_id = $user_id
+                and a.user_id = $user_id
+            ) as tb_age
+            group by gen_age order by gen_age asc";
+        $result = DB::select($sql);
+        return $result;
+    }
+
     public function generationAgeDistrict($district_id)
     {
         $sql = "SELECT 
@@ -530,6 +556,39 @@ class User extends Authenticatable
                 join admin_dapil_district as d on c.id = d.district_id 
                 join admin_dapils as e on d.admin_dapils_id = e.id
                 where e.admin_user_id = $user_id
+            ) as tb_age
+            group by range_age order by range_age asc";
+        $result = DB::select($sql);
+        return $result;
+    }
+
+    public function rangeAgeAdminMemberCaleg($user_id)
+    {
+        $sql = "SELECT 
+            CASE 
+               when age < 20 then '... - 20'
+                when age between 20 and 25 then '20 - 25'
+                when age between 25 and 30 then '25 - 30'
+                when age between 30 and 35 then '30 - 35'
+                when age between 35 and 40 then '35 - 40'
+                when age between 40 and 45 then '40 - 45'
+                when age between 45 and 50 then '45 - 50'
+                when age between 50 and 60 then '50 - 55'
+                when age between 55 and 60 then '55 - 60'
+                when age >= 60 then '60 - ...'
+                when age is null then '(NULL)'
+                end as range_age,
+                count(*) as total
+                
+            from 
+            (
+                select date_berth, TIMESTAMPDIFF(YEAR, date_berth, CURDATE()) as age from users as a
+                 join villages as b on a.village_id = b.id
+                join districts as c on b.district_id = c.id
+                join admin_dapil_district as d on c.id = d.district_id 
+                join admin_dapils as e on d.admin_dapils_id = e.id
+                where e.admin_user_id = $user_id
+                and a.user_id = $user_id
             ) as tb_age
             group by range_age order by range_age asc";
         $result = DB::select($sql);
@@ -703,6 +762,22 @@ class User extends Authenticatable
                     join admin_dapils as e on d.admin_dapils_id = e.id 
                     where a.created_at between '".$start."' and '".$end."' and e.admin_user_id = $user_id
                     and a.village_id is not null
+                    group by day  order by DATE(a.created_at) asc";
+        $result = DB::select($sql);
+        return $result;
+    }
+
+    public function getMemberRegisteredByDayAdminMemberCaleg($user_id, $start, $end)
+    {
+        $sql  = "SELECT count(a.id) as total, DATE(a.created_at) as day from users as a
+                    join villages as b on a.village_id = b.id 
+                    join districts as c on b.district_id = c.id
+                    join admin_dapil_district as d on c.id = d.district_id 
+                    join admin_dapils as e on d.admin_dapils_id = e.id 
+                    where a.created_at between '".$start."' and '".$end."' 
+                    and e.admin_user_id = $user_id
+                    and a.village_id is not null
+                    and a.user_id = $user_id
                     group by day  order by DATE(a.created_at) asc";
         $result = DB::select($sql);
         return $result;

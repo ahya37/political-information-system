@@ -108,6 +108,27 @@ class DashboardController extends Controller
         return $data;
     }
 
+    public function memberReportPerMountAdminMemberCaleg($daterange, $user_id)
+    {
+        if ($daterange != '') {
+            $date  = explode('+', $daterange);
+            $start = Carbon::parse($date[0])->format('Y-m-d');
+            $end   = Carbon::parse($date[1])->format('Y-m-d'); 
+        }
+
+        $userModel = new User();
+        $member    = $userModel->getMemberRegisteredByDayAdminMemberCaleg($user_id, $start, $end);
+       
+        $data = [];
+        foreach ($member as $value) {
+            $data[] = [
+                'day' => date('d-m-Y', strtotime($value->day)),
+                'count' => $value->total
+            ];
+        }
+        return $data;
+    }
+
     public function memberReportPerMountDistrict($daterange, $districtID)
     {
         if ($daterange != '') {
@@ -593,12 +614,12 @@ class DashboardController extends Controller
 
     }
 
-    public function getJobsAdminMember($user_id)
+    public function getJobsAdminMemberCaleg($user_id)
     {
         $GrafikProvider = new GrafikProvider();
         $jobModel  = new Job();
         // $most_jobs = $jobModel->getMostJobs();
-        $jobs      = $jobModel->getJobAdminMember($user_id);
+        $jobs      = $jobModel->getJobAdminMemberCaleg($user_id);
         $ChartJobs = $GrafikProvider->getGrafikJobs($jobs);
         $chart_jobs_label= $ChartJobs['chart_jobs_label'];
         $chart_jobs_data= $ChartJobs['chart_jobs_data'];
@@ -700,6 +721,25 @@ class DashboardController extends Controller
         $userModel = new User();
 
         $range_age     = $userModel->rangeAgeAdminMember($user_id);
+        $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
+        $cat_range_age = $CatRange['cat_range_age'];
+        $cat_range_age_data = $CatRange['cat_range_age_data'];
+
+        $data = [
+            'cat_range_age' => $cat_range_age,
+            'cat_range_age_data' => $cat_range_age_data
+        ];
+
+        return response()->json($data);
+
+    }
+
+    public function getAgeGroupAdminMemberCaleg($user_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $range_age     = $userModel->rangeAgeAdminMemberCaleg($user_id);
         $CatRange      = $GrafikProvider->getGrafikRangeAge($range_age);
         $cat_range_age = $CatRange['cat_range_age'];
         $cat_range_age_data = $CatRange['cat_range_age_data'];
@@ -824,6 +864,43 @@ class DashboardController extends Controller
 
     }
 
+    public function genAgeAdminMemberCaleg($user_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $gen_age     = $userModel->generationAgeAdminMemberCaleg($user_id);
+        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        $cat_gen_age = $GenAge['cat_gen_age'];
+        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
+
+        $data = [
+            'cat_gen_age' => $cat_gen_age,
+            'cat_gen_age_data' => $cat_gen_age_data
+        ];
+        return response()->json($data);
+
+    }
+
+    public function genAgeAdminMemberMember($user_id)
+    {
+        $GrafikProvider = new GrafikProvider();
+        $userModel = new User();
+
+        $gen_age     = $userModel->generationAgeAdminMember($user_id);
+        $GenAge      = $GrafikProvider->getGrafikGenAge($gen_age);
+        $cat_gen_age = $GenAge['cat_gen_age'];
+        $cat_gen_age_data = $GenAge['cat_gen_age_data'];
+
+        $data = [
+            'cat_gen_age' => $cat_gen_age,
+            'cat_gen_age_data' => $cat_gen_age_data
+        ];
+
+        return response()->json($data);
+
+    }
+
      public function genAgeDistrtict($district_id)
     {
         $GrafikProvider = new GrafikProvider();
@@ -930,6 +1007,29 @@ class DashboardController extends Controller
 
         // input admin terbanyak
         $inputer      = $referalModel->getInputerAdminMember($user_id);
+        // get fungsi grafik admin input terbanyak
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer
+        ];
+        return response()->json($data);
+
+    }
+
+
+    public function getInputerAdminMemberCaleg($user_id)
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getDataInputerAdminMemberCaleg($user_id);
         // get fungsi grafik admin input terbanyak
         $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
         $cat_inputer_label = $ChartInputer['cat_inputer_label'];
@@ -1060,6 +1160,27 @@ class DashboardController extends Controller
 
         // input admin terbanyak
         $inputer      = $referalModel->getReferalAdminMember($user_id);
+        $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
+        $cat_inputer_label = $ChartInputer['cat_inputer_label'];
+        $cat_inputer_data = $ChartInputer['cat_inputer_data'];
+        $color_inputer = $ChartInputer['colors'];
+
+        $data = [
+            'cat_inputer_label' => $cat_inputer_label,
+            'cat_inputer_data' => $cat_inputer_data,
+            'color_inputer' => $color_inputer,
+        ];
+        return response()->json($data);
+
+    }
+
+    public function getRegefalAdminMemberCaleg($user_id)
+    {
+        $referalModel = new Referal();
+        $GrafikProvider = new GrafikProvider();
+
+        // input admin terbanyak
+        $inputer      = $referalModel->getReferalAdminMemberCaleg($user_id);
         $ChartInputer = $GrafikProvider->getGrafikInputer($inputer);
         $cat_inputer_label = $ChartInputer['cat_inputer_label'];
         $cat_inputer_data = $ChartInputer['cat_inputer_data'];

@@ -295,6 +295,14 @@ Route::get('/admin/member/inputer/{user_id}','API\DashboardController@getInputer
 Route::get('/admin/member/referal/{user_id}','API\DashboardController@getRegefalAdminMember');
 Route::get('/admin/member/{daterange}/{user_id}','API\DashboardController@memberReportPerMountAdminMember');
 
+#FOR CALEG
+Route::get('/admin/member/caleg/{daterange}/{user_id}','API\DashboardController@memberReportPerMountAdminMemberCaleg');
+Route::get('/admin/member/referal/caleg/{user_id}','API\DashboardController@getRegefalAdminMemberCaleg');
+Route::get('/admin/member/inputer/caleg/{user_id}','API\DashboardController@getInputerAdminMemberCaleg');
+Route::get('/admin/member/genage/caleg/{user_id}','API\DashboardController@genAgeAdminMemberCaleg');
+Route::get('/admin/member/agegroup/caleg/{user_id}','API\DashboardController@getAgeGroupAdminMemberCaleg');
+Route::get('/admin/member/jobs/caleg/{user_id}','API\DashboardController@getJobsAdminMemberCaleg');
+
 // GRAFIK INTEGENCY
 Route::get('/intelegency/byvillage/{village_id}','Admin\InformationController@getGrafikIntelegencyVillage');
 Route::get('/intelegency/byvillage/figure/{village_id}','Admin\InformationController@getFigureGrafikVillage');

@@ -130,6 +130,25 @@ class District extends Model
         return DB::select($sql);
     }
 
+    public function achievementAdminMemberCaleg($user_id)
+    {
+        $sql = "SELECT c.id, c.name,
+                count(DISTINCT(b.id)) as total_village,
+                c.target as target_member,
+                CEIL(c.target /  count(DISTINCT(b.id)))  as total_target_member,
+                count(a.id) as realisasi_member,
+                count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
+                from users as a
+                right join villages as b on a.village_id = b.id
+                right join districts as c on b.district_id = c.id
+                right join admin_dapil_district as d on c.id = d.district_id 
+                right join admin_dapils as e on d.admin_dapils_id = e.id 
+                where e.admin_user_id = $user_id
+                and a.user_id = $user_id
+                group by c.id, c.name, c.target HAVING count(a.id) != 0  order by c.name asc";
+        return DB::select($sql);
+    }
+
     public function getTotalRegion($district_id)
     {
         $sql = "SELECT b.name as district, COUNT(DISTINCT(c.id)) as village 
