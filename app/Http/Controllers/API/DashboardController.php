@@ -528,6 +528,28 @@ class DashboardController extends Controller
         
     }
 
+    public function getGenderAdminMemberCaleg($user_id)
+    {
+        $gF   = app('GlobalProvider'); // global function
+        $GrafikProvider = new GrafikProvider();
+
+        $userModel = new User();
+        $gender     = $userModel->getGenderAdminMemberCaleg($user_id);
+        $CatGender  = $GrafikProvider->getGrafikGender($gender);
+       
+        $cat_gender = $CatGender['cat_gender'];
+        $total_male_gender  = $CatGender['total_male_gender'];
+        $total_female_gender = $CatGender['total_female_gender'];
+
+        $data  = [
+            'cat_gender' => $cat_gender,
+            'total_male_gender' => $total_male_gender,
+            'total_female_gender' => $total_female_gender
+        ];
+        return response()->json($data);
+        
+    }
+
     public function getGenderDistrict($district_id)
     {
         $gF   = app('GlobalProvider'); // global function

@@ -302,6 +302,7 @@ Route::get('/admin/member/inputer/caleg/{user_id}','API\DashboardController@getI
 Route::get('/admin/member/genage/caleg/{user_id}','API\DashboardController@genAgeAdminMemberCaleg');
 Route::get('/admin/member/agegroup/caleg/{user_id}','API\DashboardController@getAgeGroupAdminMemberCaleg');
 Route::get('/admin/member/jobs/caleg/{user_id}','API\DashboardController@getJobsAdminMemberCaleg');
+Route::get('/admin/member/gender/caleg/{user_id}','API\DashboardController@getGenderAdminMemberCaleg');
 
 // GRAFIK INTEGENCY
 Route::get('/intelegency/byvillage/{village_id}','Admin\InformationController@getGrafikIntelegencyVillage');

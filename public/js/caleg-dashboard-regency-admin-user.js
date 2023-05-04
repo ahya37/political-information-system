@@ -354,7 +354,7 @@ $(document).ready(function () {
 
     // gender
     $.ajax({
-        url: "/api/admin/member/gender" + "/" + userID,
+        url: "/api/admin/member/gender/caleg" + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {

@@ -152,6 +152,20 @@ class User extends Authenticatable
         return DB::select($sql);
     }
 
+    public function getGenderAdminMemberCaleg($user_id)
+    {
+        $sql = "SELECT a.gender, count(DISTINCT (a.id)) as total
+                from users as a 
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id
+                join admin_dapil_district as d on c.id = d.district_id
+                join admin_dapils as e on d.admin_dapils_id = e.id
+                where e.admin_user_id = $user_id
+                and a.user_id = $user_id
+                group by a.gender  order by a.gender ASC";
+        return DB::select($sql);
+    }
+
     public function getGenders()
     {
         $sql = "SELECT a.gender, count(a.id) as total

@@ -35,6 +35,7 @@ class Job extends Model
         return DB::select($sql);
     }
 
+    
     public function getJobAdminMemberCaleg($user_id)
     {
         $sql = "SELECT a.name, count(a.id) as total_job from jobs as a
