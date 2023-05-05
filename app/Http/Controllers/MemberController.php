@@ -6,10 +6,12 @@ use App\FigureDetail;
 use App\User;
 use App\Models\District;
 use App\Models\Province;
+use App\Models\Village;
+use App\VillageCalegTarget;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
-use DB;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
@@ -128,6 +130,150 @@ class MemberController extends Controller
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
+
+    }
+
+    public function targetMemberCaleg(){
+
+        $user_id = Auth::user()->id;
+
+        #get data kecamatan berdasarkan dapil caleg tersebut, dan tampilkan targetnya
+        $data = DB::table('dapil_areas as a')
+                ->select('b.user_id','a.district_id','d.name','c.id as idtarget','c.target',
+                    DB::raw('count(e.id) as jml_village'))
+                ->join('dapil_calegs as b','a.dapil_id','=','b.dapil_id')
+                ->leftJoin('districts_caleg_target as c','c.district_id','=','a.district_id')
+                ->join('districts as d','d.id','=','a.district_id')
+                ->leftJoin('villages_caleg_target as e','e.district_id','=','c.district_id')
+                ->where('b.user_id', $user_id)
+                ->groupBy('b.user_id','a.district_id','d.name','c.id','c.target')
+                ->get();
+
+        $no  = 1;
+
+        return view('pages.calegtarget.index', compact('data','no'));
+
+    }
+
+    public function editTargetCaleg($villageId, $userId){
+
+        return view('pages.calegtarget.edit', compact('villageId','userId'));
+
+    }
+
+    public function updateTargetDistrictCaleg(Request $request, $userId){
+
+
+        $targetModel = DB::table('districts_caleg_target');
+
+        $cek_target = $targetModel->where('caleg_user_id', $userId)->where('district_id', $request->districtId)->count();
+       
+        if($cek_target == 0) {
+
+            #create data
+            $targetModel->insert([
+                'district_id' => $request->districtId,
+                'target' => $request->target,
+                'caleg_user_id' => $userId,
+                'cby' => Auth::user()->id,
+                'mby' =>  Auth::user()->id,
+            ]);
+
+        }else{
+
+            $targetModel->where('district_id', $request->districtId)->where('caleg_user_id', $userId)->update([
+                'target' => $request->target,
+                'mby' => Auth::user()->id,
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+        }
+
+        return redirect()->route('member-caleg-target')->with(['success' => 'Data telah tersimpan!']);
+
+    }
+
+    public function sinkronVillageCaleg(Request $request, $districtId, $userId){
+
+        DB::beginTransaction();
+        try {
+            
+            #get data desa by $districtId
+            $village = Village::select('id')->where('district_id', $districtId)->get();
+            
+
+            foreach ($village as $value) {
+                        
+                $villageTarget = new VillageCalegTarget();
+                $villageTarget->village_id = $value->id;
+                $villageTarget->district_id = $districtId;
+                $villageTarget->target = 0;
+                $villageTarget->caleg_user_id = $userId;
+                $villageTarget->cby = Auth::user()->id;
+                $villageTarget->mby = Auth::user()->id;
+                $villageTarget->save();
+
+            }
+
+            #count jumlah target by districtId
+            $targetVillage = DB::table('villages_caleg_target')->select('target')->where('district_id', $districtId)->where('caleg_user_id', $userId)->get();
+            $sumTargetVillage = collect($targetVillage)->sum(function($q){
+                return $q->target;
+            });
+
+            #save ke tb districts_caleg_target
+            $targetModel = DB::table('districts_caleg_target');
+            $targetModel->insert([
+                'district_id' => $districtId,
+                'target' => $sumTargetVillage,
+                'caleg_user_id' => $userId,
+                'cby' => Auth::user()->id,
+                'mby' =>  Auth::user()->id,
+            ]);
+
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
+
+        }
+
+
+    }
+
+    public function villageTargetCaleg($districtId, $userId){
+
+
+        #get data kecamatan berdasarkan dapil caleg tersebut, dan tampilkan targetnya
+        $data = DB::table('villages as a')
+                ->select('b.id','a.name','b.target','b.district_id','b.caleg_user_id as user_id')
+                ->join('villages_caleg_target as b','b.village_id','=','a.id')
+                ->where('a.district_id', $districtId)
+                ->where('b.caleg_user_id', $userId)
+                ->orderBy('a.name','asc')
+                ->get();
+
+        $no  = 1;
+
+        return view('pages.calegtarget.village', compact('data','no'));
+
+    }
+
+    public function editTargetVillageCaleg($id){
+
+        return view('pages.calegtarget.edit-village', compact('id'));
+
+    }
+
+    public function updateTargetVIllageCaleg(Request $request, $id){
+
+
+       $targetVillage = DB::table('villages_caleg_target');
+       $data          = $targetVillage->select('district_id','caleg_user_id')->where('id', $id)->first();
+       $targetVillage->update(['target' => $request->target]);
+
+        return redirect()->route('member-caleg-target-village', ['districtId', $data->district_id,'userId' => $data->caleg_user_id])->with(['success' => 'Data telah tersimpan!']);
 
     }
 }
