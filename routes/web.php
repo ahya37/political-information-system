@@ -83,7 +83,7 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::post('/event/update/{id}','EventController@update')->name('member-event-update');
 
         
-        Route::get('/registered','UserController@memberRegister')->name('member-registered-user');
+        Route::get('/registered','UserController@memberRegisterIndex')->name('member-registered-user');
         Route::get('/registered/edit/{id}','UserController@EditmemberRegister')->name('member-registered-user-edit');
         Route::post('/registered/update/{id}','UserController@updateMemberRegister')->name('member-registered-user-update');
         Route::get('/registered/create/account/{id}','UserController@createAccount')->name('member-registered-create-account');
@@ -132,7 +132,7 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 		// ANGGOTA POTENSIAL BY ADMIN INPUT
 		Route::get('referal/rekruter','MemberController@memberPotensialByAdminInput')->name('member-referal-rekruter');
         
-        #TARGET CALEG
+        #CALEG
 		Route::get('caleg/target','MemberController@targetMemberCaleg')->name('member-caleg-target');
 		Route::get('caleg/target/edit/{districtId}/{userId}','MemberController@editTargetCaleg')->name('member-caleg-target-edit');
 		Route::post('caleg/target/update/{userId}','MemberController@updateTargetDistrictCaleg')->name('member-caleg-target-update');
@@ -141,6 +141,9 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 		
         Route::get('caleg/village/target/edit/{id}','MemberController@editTargetVillageCaleg')->name('member-caleg-target-village-edit');
         Route::post('caleg/target/village/update/{id}','MemberController@updateTargetVIllageCaleg')->name('member-caleg-target-village-update');
+
+        Route::post('/member/download/excel/caleg', 'MemberController@getDownloadExcelCaleg')->name('member-download-excel-caleg');
+
 
     });
 

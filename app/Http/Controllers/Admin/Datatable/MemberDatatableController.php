@@ -394,6 +394,7 @@ class MemberDatatableController extends Controller
                         ->join('users as c','c.id','a.cby')
                         ->join('dapil_areas','districts.id','dapil_areas.district_id')
                         ->whereNotNull('a.village_id')
+                        ->where('a.user_id', $request->userId)
                         ->orderBy('a.created_at','desc');
 
             
@@ -459,7 +460,7 @@ class MemberDatatableController extends Controller
                 'draw'=>$request->input('draw'),
                 'recordsTotal'=>$recordsTotal,
                 'recordsFiltered'=>$recordsFiltered,
-                'data'=> $data
+                'data'=> $result
             ]);
     }
 }

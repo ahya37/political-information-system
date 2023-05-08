@@ -2,19 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\FigureDetail;
+use PDF;
 use App\User;
+use App\FigureDetail;
+use App\Models\Regency;
+use App\Models\Village;
 use App\Models\District;
 use App\Models\Province;
-use App\Models\Village;
 use App\VillageCalegTarget;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Excel;
+use App\Exports\MemberExport;
+use App\Providers\GlobalProvider;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
 class MemberController extends Controller
 {
+    public $excel;
+    public function __construct(Excel $excel)
+    {
+        $this->excel = $excel;
+    }
+    
     public function memberProvince($id)
     {
         $province_id = decrypt($id);
@@ -274,6 +285,94 @@ class MemberController extends Controller
        $targetVillage->update(['target' => $request->target]);
 
         return redirect()->route('member-caleg-target-village', ['districtId', $data->district_id,'userId' => $data->caleg_user_id])->with(['success' => 'Data telah tersimpan!']);
+
+    }
+
+    public function getDownloadExcelCaleg()
+    {
+        $province = request()->input('province');
+        $regency = request()->input('regency');
+        $dapil = request()->input('dapil');
+        $district = request()->input('district');
+        $village = request()->input('village');
+        $type = request()->input('type');
+        $userId = Auth::user()->id;
+
+        // query
+        $data = DB::table('users as a')
+                        ->select('a.nik','a.id','a.user_id','a.name','a.photo','a.rt','a.rw','a.phone_number','a.whatsapp','a.address','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email')
+                        ->join('villages','villages.id','a.village_id')
+                        ->join('districts','districts.id','villages.district_id')
+                        ->join('regencies','regencies.id','districts.regency_id')
+                        ->join('users as b','b.id','a.user_id')
+                        ->join('users as c','c.id','a.cby')
+                        ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
+                        ->whereNotNull('a.village_id')
+                        ->where('a.user_id', $userId)
+                        ->orderBy('villages.name','asc')
+                        ->orderBy('a.name','asc');
+                        
+            $title = 'LAPORAN ANGGOTA';
+            if ($province != null) {
+                        $data->where('regencies.province_id', $province);
+                        $provinces = Province::select('name')->where('id', $province)->first();
+                        $title = "PROVINSI $provinces->name";
+            }
+
+            if ($regency != null) {
+                            $data->where('regencies.id',  $regency);
+                            $regencies = Regency::select('name')->where('id', $regency)->first();
+                            $title = $regencies->name;
+
+                }
+
+            if ($dapil != null) {
+                            $data ->where('dapil_areas.dapil_id', $dapil);
+                            $title = 'Dapil';
+                }
+            if ($district != null) {
+                            $data->where('districts.id', $district);
+                            $districts = District::select('name')->where('id', $district)->first();
+                            $title = "KECAMATAN $districts->name";
+                }
+            if ($village != null) {
+                            $data->where('villages.id', $village);
+                            $villages = Village::select('name')->where('id', $village)->first();
+                            $title = "DESA  $villages->name";
+            }
+
+            $data = $data->get();
+
+        // EXPORT EXCEL
+        if ($type == 'excel') {
+            return $this->excel->download(new MemberExport($data), 'LAPORAN ANGGOTA '.$title.'.xls');
+        }else{
+            $gF = new GlobalProvider();
+            $result = [];
+            $no = 1;
+            foreach($data as $val){
+                $total_referal = User::where('user_id', $val->id)->whereNotNull('village_id')->count();
+                $result[] = [
+                    'no' => $no++,
+                    'nik' => $val->nik,
+                    'name' => $val->name,
+                    'address' => $val->address,
+                    'rt' => $val->rt,
+                    'rw' => $val->rw,
+                    'village' => $val->village,
+                    'district' => $val->district,
+                    'regency' => $val->regency,
+                    'telp'    => $val->phone_number,
+                    'wa' => $val->whatsapp,
+                    'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                    'cby' => $val->cby,
+                    'referal' => $val->referal,
+                    'total_referal' => $gF->decimalFormat($total_referal),
+                ];
+            }
+            $pdf = PDF::LoadView('pages.admin.report.caleg.member-byregional',compact('result','no','gF','title'))->setPaper('f4','landscape');
+            return  $pdf->download('LAPORAN ANGGOTA '.$title.'.pdf');
+        }
 
     }
 }

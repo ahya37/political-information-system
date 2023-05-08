@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use PDF;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use App\Bank;
 use App\Menu;
 use App\User;
 use App\Figure;
 use App\UserMenu;
 use App\LogEditUser;
 use App\AdminDistrict;
-use App\Bank;
 use App\Models\District;
+use App\Models\Province;
 use App\Providers\StrRandom;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
@@ -480,6 +481,21 @@ class UserController extends Controller
         
         return redirect()->route('home');
     }
+    
+    public function memberRegisterIndex(){
+
+        $level  = Auth::user()->level;
+        if ($level == 4) {
+            
+           return $this->memberRegisterCaleg();
+
+        }else{
+
+           return $this->memberRegister();
+
+        }
+        
+    }
 
     public function memberRegister()
     {
@@ -546,6 +562,15 @@ class UserController extends Controller
                         ->make();
                     }
                     return view('pages.member.member-register', compact('figure'));
+    }
+
+    public function memberRegisterCaleg(){
+
+        $userId        = Auth::user()->id;
+        $provinceModel = new Province();
+        $province = $provinceModel->getDataProvinceCaleg($userId);
+        return view('pages.member.caleg.member-register', compact('province','userId'));
+
     }
 
     public function EditmemberRegister($id)

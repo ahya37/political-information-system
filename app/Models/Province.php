@@ -74,6 +74,20 @@ class Province extends Model
         return $result;
     }
 
+    public function getDataProvinceCaleg($userId)
+    {
+            $sql = "SELECT a.id, a.name from provinces as a
+                join regencies as b on a.id = b.province_id 
+                join districts as c on b.id = c.regency_id 
+                join villages as d on c.id = d.district_id 
+                join users as e on d.id = e.village_id
+                where e.user_id = $userId and e.cby = $userId
+                group by a.id, a.name order by a.name asc
+                ";
+        $result = DB::select($sql);
+        return $result;
+    }
+
     public function getAllcountMember(){
          $sql = "SELECT COUNT(*) as allcount from users ";
          $result = collect(\DB::select($sql))->first();
