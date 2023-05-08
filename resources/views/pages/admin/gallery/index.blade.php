@@ -112,5 +112,6 @@
 </div>
 @endpush
 @push('addon-script')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/event.js') }}"></script>
 @endpush

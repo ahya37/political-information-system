@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use File;
 use App\Event;
 use App\EventGallery;
 use Illuminate\Http\Request;
+use App\Helpers\ResponseFormatter;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use DB;
-use File;
 
 class EventGalleryController extends Controller
 {
@@ -109,5 +110,29 @@ class EventGalleryController extends Controller
         $event_gallery = EventGallery::where('id', $id)->first();
         return view('pages.admin.gallery.detail', compact('event_gallery'));
     }
+
+    public function deleteGallery(){
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+
+            #hapus gallery
+            EventGallery::where('id', $id)->delete();
+
+            DB::commit();
+            return ResponseFormatter::success([
+                   'message' => 'Berhasil hapus catatan!'
+            ],200);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
+	}
 
 }
