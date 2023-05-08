@@ -191,7 +191,6 @@ function add(user_id) {
     }).then(
         function (e) {
             if (e.value === true) {
-                console.log(eventId);
                 $.ajax({
                     type: "POST",
                     url: `/api/addparticipantevent`,
@@ -233,7 +232,6 @@ const _url = $.ajax({
         $("#loadResult").removeClass("d-none");
     },
     success: function (data) {
-        console.log("data:", data);
         if (data.data.length === 0) {
             $("#result").append(
                 "<div class='row col-12'><h5>Tidak ada galeri</h5></div>"
@@ -259,7 +257,7 @@ const _url = $.ajax({
                         "<span class='font-weight-bold text-white'>Lihat</span>";
                     divEl += "</div></a>";
                     divEl +=
-                        "<button class='btn btn-sm btn-danger mt-1' onclick='onDelete(this)'><i class='fa fa-trash'></i></span>";
+                        "<button class='btn btn-sm btn-danger mt-1' onclick='onDelete(this)' id="+item.id+"><i class='fa fa-trash'></i></span>";
                     divEl += "</div>";
                     divEl += "</div>";
                     divEl += "</div>";
@@ -296,7 +294,6 @@ function Complete(idLoader) {
 
 function onDelete(data){
 	const id = data.id;
-
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     Swal.fire({
         title: `Yakin hapus foto ?`,

@@ -123,7 +123,7 @@ class EventGalleryController extends Controller
 
             DB::commit();
             return ResponseFormatter::success([
-                   'message' => 'Berhasil hapus catatan!'
+                   'message' => 'Berhasil hapus galleri!'
             ],200);
 
         } catch (\Exception $e) {
