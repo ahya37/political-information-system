@@ -257,9 +257,9 @@ const _url = $.ajax({
                         "'> <div class='d-flex align-items-center  justify-content-between rounded-pill bg-primary px-3 py-2 mt-4'>";
                     divEl +=
                         "<span class='font-weight-bold text-white'>Lihat</span>";
+                    divEl += "</div></a>";
                     divEl +=
                         "<button class='btn btn-sm btn-danger mt-1' onclick='onDelete(this)'><i class='fa fa-trash'></i></span>";
-                    divEl += "</div></a>";
                     divEl += "</div>";
                     divEl += "</div>";
                     divEl += "</div>";
