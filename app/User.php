@@ -714,6 +714,23 @@ class User extends Authenticatable
         return $result;
     }
 
+    public function getMemberRegisteredAdminMemberCaleg($user_id)
+    {
+         $sql = "SELECT c.id, c.name,
+                f.target as target_member,
+                count(DISTINCT (a.id)) as realisasi_member
+                from users as a
+                join villages as b on a.village_id = b.id
+                join districts as c on b.district_id = c.id
+                join admin_dapil_district as d on c.id = d.district_id
+                join admin_dapils as e on d.admin_dapils_id = e.id
+                join districts_caleg_target as f on f.district_id = c.id
+                where e.admin_user_id = $user_id and a.user_id = $user_id
+                group by c.id, c.name, f.target order by count(DISTINCT (a.id)) desc";
+        $result = DB::select($sql);
+        return $result;
+    }
+
     public function getMemberRegisteredDistrct($district_id)
     {
          $sql = "SELECT b.id, b.name,

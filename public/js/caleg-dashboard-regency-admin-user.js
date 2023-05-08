@@ -166,7 +166,7 @@ $(document).ready(function () {
                         var ctx = document
                             .getElementById("memberPerMonth")
                             .getContext("2d");
-                        var chart = new Chart(ctx, {
+                        new Chart(ctx, {
                             type: "bar",
                             data: {
                                 labels: label,
@@ -304,7 +304,7 @@ $(document).ready(function () {
 
     // anggota terdaftar vs target
     $.ajax({
-        url: "/api/admin/membervsterget" + "/" + userID,
+        url: "/api/admin/membervsterget/caleg" + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {

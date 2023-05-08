@@ -441,6 +441,27 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
+    public function getMemberVsTargetAdminMemberCaleg($user_id)
+    {
+        // $gF   = app('GlobalProvider'); // global function
+
+        $userModel        = new User();
+        $member_registered  = $userModel->getMemberRegisteredAdminMemberCaleg($user_id);
+        $chart_member_target = [];
+        foreach ($member_registered as $val) {
+            $chart_member_target['label'][] = $val->name;
+            $chart_member_target['target'][] = $val->target_member;
+            // $chart_member_target['persentage'][] = $gF->persen(($val->realisasi_member/$val->target_member)*100);
+            $chart_member_target['persentage'][] = $val->realisasi_member;
+        }
+        $data = [
+            'label' => $chart_member_target['label'],
+            'persentage' => $chart_member_target['persentage'],
+            'value_target' =>  $chart_member_target['target'] 
+        ];
+        return response()->json($data);
+    }
+
     public function getMemberVsTargetDistrict($district_id)
     {
         $gF   = app('GlobalProvider'); // global function

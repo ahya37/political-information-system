@@ -357,3 +357,4 @@ Route::post('cost/delete/file','Admin\CostController@deleteFile');
 
 #CELEG
 Route::post('/admin/member/dtmember/caleg','Admin\Datatable\MemberDatatableController@dTableMemberCaleg');
+Route::get('/admin/membervsterget/caleg/{user_id}','API\DashboardController@getMemberVsTargetAdminMemberCaleg');

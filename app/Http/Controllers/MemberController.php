@@ -281,10 +281,22 @@ class MemberController extends Controller
 
 
        $targetVillage = DB::table('villages_caleg_target');
-       $data          = $targetVillage->select('district_id','caleg_user_id')->where('id', $id)->first();
-       $targetVillage->update(['target' => $request->target]);
+       $targetVillage->where('id', $id)->update(['target' => $request->target]);
+       
+       #sum all target by district_id
+       $getDistrictId     = $targetVillage->select('district_id','caleg_user_id','village_id')->where('id', $id)->first();
+       $getSumData        = DB::table('villages_caleg_target')->select('target')->where('district_id', $getDistrictId->district_id)->where('caleg_user_id', $getDistrictId->caleg_user_id)->get();
+       $sumTargetDistrict = collect($getSumData)->sum(function($q){
+        return $q->target;
+       });
 
-        return redirect()->route('member-caleg-target-village', ['districtId', $data->district_id,'userId' => $data->caleg_user_id])->with(['success' => 'Data telah tersimpan!']);
+       #update target district
+       DB::table('districts_caleg_target')
+       ->where('district_id', $getDistrictId->district_id)
+       ->where('caleg_user_id', $getDistrictId->caleg_user_id)
+       ->update(['target' => $sumTargetDistrict]);
+
+        return redirect()->route('member-caleg-target-village', ['districtId' => $getDistrictId->district_id,'userId' => $getDistrictId->caleg_user_id])->with(['success' => 'Data telah tersimpan!']);
 
     }
 
