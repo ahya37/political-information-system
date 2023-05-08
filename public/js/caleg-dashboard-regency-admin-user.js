@@ -201,7 +201,7 @@ $(document).ready(function () {
 
     // anggota terdaftar
     $.ajax({
-        url: `/api/admin/member/rergister/regency/${userID}`,
+        url: `/api/admin/member/rergister/regency/caleg/${userID}`,
         method: "GET",
         dataType: "json",
         beforeSend: function () {

@@ -2467,6 +2467,29 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
+    public function getMemberAdminMemberCaleg($user_id)
+    {
+        $districtModel    = new District();
+
+        $districts = $districtModel->getGrafikTotalMemberAdminMemberCaleg($user_id);
+        $cat_districts      = [];
+        $cat_districts_data = [];
+        foreach ($districts as $val) {
+            $cat_districts[] = $val->district; 
+            $cat_districts_data[] = [
+                "y" => $val->total_member,
+                "url" => route('adminuser-dashboard-district', $val->distric_id)
+            ];
+        }
+        
+        $data = [
+            'cat_districts' => $cat_districts,
+            'cat_districts_data' => $cat_districts_data,
+            // 'colors' => $colors
+        ];
+        return response()->json($data);
+    }
+
     public function getTotalInputByMonthProvince(Request $request)
     {
         $gF = new GlobalProvider();
