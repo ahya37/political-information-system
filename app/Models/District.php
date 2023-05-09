@@ -85,7 +85,7 @@ class District extends Model
 
     public function getGrafikTotalMemberAdminMemberCaleg($user_id)
     {
-        $sql = "SELECT a.id as distric_id, a.name as district, COUNT(DISTINCT(e.id)) as total_member
+        $sql = "SELECT a.id as district_id, a.name as district, COUNT(DISTINCT(e.id)) as total_member
                 from districts as a 
                 join admin_dapil_district as b on a.id = b.district_id
                 join admin_dapils as c on b.admin_dapils_id = c.id
@@ -104,6 +104,18 @@ class District extends Model
                 join villages as b on a.village_id = b.id 
                 join districts as c on b.district_id = c.id 
                 where c.id = $district_id
+                GROUP by  b.name, b.id order by b.name asc";
+        return DB::select($sql);
+    }
+
+    public function getGrafikTotalMemberDistrictCaleg($district_id, $userId)
+    {
+        $sql = "SELECT b.id as village_id, b.name as district,
+                count(a.name) as total_member
+                from users as a 
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id 
+                where c.id = $district_id and a.user_id = $userId
                 GROUP by  b.name, b.id order by b.name asc";
         return DB::select($sql);
     }

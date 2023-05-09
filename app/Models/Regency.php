@@ -168,6 +168,12 @@ class Regency extends Model
                 where e.admin_user_id = $user_id";
         return collect(\ DB::select($sql))->first();
     }
+
+    public function getAllTargetCaleg($user_id)
+    {
+        $sql = "SELECT SUM(target) as target from districts_caleg_target where caleg_user_id = $user_id";
+        return collect(\ DB::select($sql))->first();
+    }
     
     
 }

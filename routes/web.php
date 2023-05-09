@@ -143,7 +143,8 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::post('caleg/target/village/update/{id}','MemberController@updateTargetVIllageCaleg')->name('member-caleg-target-village-update');
 
         Route::post('/member/download/excel/caleg', 'MemberController@getDownloadExcelCaleg')->name('member-download-excel-caleg');
-
+        Route::get('/dashboard/regency/district/caleg/{district_id}','DashboardController@districtCaleg')->name('adminuser-dashboard-district-caleg');
+        Route::get('/dashboard/regency/district/village/caleg/{district_id}/{village_id}','DashboardController@villageCaleg')->name('adminuser-dashboard-village-caleg');
 
     });
 

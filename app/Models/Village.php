@@ -65,6 +65,13 @@ class Village extends Model
         return DB::select($sql);
     }
 
+    public function getVillagesDistrctCaleg($district_id, $userId)
+    {
+        $sql = "SELECT a.id from villages_caleg_target as a
+                where a.caleg_user_id = $userId and a.district_id = $district_id";
+        return DB::select($sql);
+    }
+
     public function getVillageFilledRegency($regency_id)
     {
         $sql = "SELECT a.village_id as total_village FROM  users as a
@@ -80,6 +87,15 @@ class Village extends Model
                 join villages as b on a.village_id = b.id 
                 join districts as c on b.district_id = c.id
                 where c.id = $district_id group by a.village_id";
+        return DB::select($sql);
+    }
+
+    public function getVillageFilledDistrictCaleg($district_id, $userId)
+    {
+        $sql = "SELECT a.village_id as total_village FROM  users as a
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id
+                where c.id = $district_id and a.user_id = $userId group by a.village_id";
         return DB::select($sql);
     }
 
@@ -132,12 +148,37 @@ class Village extends Model
         return DB::select($sql);
     }
 
+    public function achievementVillageCaleg($district_id, $userId)
+    {
+        $sql = "SELECT b.id, b.name,
+                c.target as target_member,
+                COUNT(a.id) as realisasi_member, 
+                count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement,
+                (count(a.id) / c.target) * 100 as percen
+                from users as a
+                join villages as b on a.village_id = b.id
+                join villages_caleg_target as c on c.village_id = b.id
+                where b.district_id = $district_id and a.user_id = $userId
+                group by b.id, b.name, c.target";
+        return DB::select($sql);
+    }
+
     public function getMemberVillage($village_id)
     {
         $sql = "SELECT a.name
                 from users as a 
                 join villages as b on a.village_id = b.id 
                 where b.id = $village_id";
+        return DB::select($sql);
+    }
+
+    public function getMemberVillageCaleg($village_id, $userId)
+    {
+        $sql = "SELECT a.name
+                from users as a 
+                join villages as b on a.village_id = b.id
+                where b.id = $village_id 
+                and a.user_id = $userId";
         return DB::select($sql);
     }
 
@@ -148,6 +189,16 @@ class Village extends Model
                 from users as a
                 join villages as b on a.village_id = b.id
                 where b.id = $village_id";
+        return collect(\DB::select($sql))->first();
+    }
+
+    public function achievementVillageFirstCaleg($village_id, $userId)
+    {
+        $sql = "SELECT
+                count(IF(date(a.created_at) = CURDATE() , a.id, NULL)) as todays_achievement
+                from users as a
+                join villages as b on a.village_id = b.id
+                where b.id = $village_id and a.user_id = $userId";
         return collect(\DB::select($sql))->first();
     }
     
@@ -232,6 +283,17 @@ class Village extends Model
         return collect(\DB::select($sql))->first();
     }
 
+    public function getTotalVillageAdminMemberCaleg($user_id)
+    {
+        $sql = "SELECT count(a.name) as total_village from villages as a
+                join districts as b on a.district_id = b.id
+                join admin_dapil_district as c on b.id = c.district_id
+                join admin_dapils as d on c.admin_dapils_id = d.id
+                join dapil_calegs as e on e.dapil_id = d.dapil_id
+                where d.admin_user_id = $user_id and e.user_id  = $user_id";
+        return collect(\DB::select($sql))->first();
+    }
+
     public function getVillageFilledAdminMember($user_id)
     {
         $sql = "SELECT COUNT(DISTINCT (a.village_id)) as total_village FROM  users as a
@@ -240,6 +302,17 @@ class Village extends Model
                 join admin_dapil_district as d on c.id = d.district_id 
                 join admin_dapils as e on d.admin_dapils_id = e.id
                 where e.admin_user_id = $user_id";
+        return collect(\DB::select($sql))->first();
+    }
+
+    public function getVillageFilledAdminMemberCaleg($user_id)
+    {
+        $sql = "SELECT COUNT(DISTINCT (a.village_id)) as total_village FROM  users as a
+                join villages as b on a.village_id = b.id 
+                join districts as c on b.district_id = c.id
+                join admin_dapil_district as d on c.id = d.district_id 
+                join admin_dapils as e on d.admin_dapils_id = e.id
+                where a.user_id = $user_id";
         return collect(\DB::select($sql))->first();
     }
 

@@ -108,6 +108,19 @@ class Referal extends Model
         return DB::select($sql);
     }
 
+    public function getInputerDistrictCaleg($district_id, $userId)
+    {
+        $sql = "SELECT a.id, a.name, count(c.id) as total_data from users as a
+                join admin_dapils as b on a.id = b.admin_user_id
+                join users as c on a.id = c.cby
+                join villages as d on c.village_id = d.id
+                join admin_dapil_district as e on b.id = e.admin_dapils_id
+                where e.district_id = $district_id and  d.district_id = $district_id
+                and a.user_id = $userId
+                group by a.id, a.name order by count(c.id) desc";
+        return DB::select($sql);
+    }
+
     public function getReferalRegency($regency_id)
     {
         $sql = "SELECT b.id, b.name , count(a.id) as total_data
@@ -140,15 +153,15 @@ class Referal extends Model
     
     public function getReferalAdminMemberCaleg($user_id)
     {
-        $sql = "SELECT b.id, b.name , count(a.id) as total_data
+        $sql = "SELECT b.id, b.name , count(distinct(a.id)) as total_data
                 from users as a
                 join users as b on a.user_id = b.id
                 left join villages as c on a.village_id = c.id
                 left join districts as d on c.district_id = d.id
                 join admin_dapil_district as e on d.id = e.district_id
-                join admin_dapils as f on e.admin_dapils_id = f.id 
-                where  a.village_id is not null  and f.admin_user_id = $user_id
-                and a.user_id = $user_id
+                join admin_dapils as f on e.admin_dapils_id = f.id
+                where  a.village_id is not null
+                and b.user_id = $user_id
                 group by b.name, b.id
                 order by count(a.id) desc
                 limit 5";
@@ -180,6 +193,18 @@ class Referal extends Model
         return DB::select($sql);
     }
 
+    public function getInputerVillageCaleg($village_id, $userId)
+    {
+        $sql = "SELECT a.id, a.name, count(c.id) as total_data from users as a
+                join admin_dapils as b on a.id = b.admin_user_id
+                join users as c on a.id = c.cby
+                join villages as d on c.village_id = d.id
+                join admin_dapil_village as e on b.id = e.admin_dapil_id 
+                where e.village_id = $village_id and d.id = $village_id and c.user_id = $userId
+                group by a.id, a.name order by count(c.id) desc";
+        return DB::select($sql);
+    }
+
     public function getReferalVillage($village_id)
     {
         $sql = "SELECT b.id, b.name , count(a.id) as total_data
@@ -187,6 +212,19 @@ class Referal extends Model
                 join users as b on a.user_id = b.id
                 left join villages as c on a.village_id = c.id
                 where c.id = $village_id
+                group by b.name, b.id
+                order by count(a.id) desc
+                limit 5";
+        return DB::select($sql);
+    }
+
+    public function getReferalVillageCaleg($village_id, $userId)
+    {
+        $sql = "SELECT b.id, b.name , count(a.id) as total_data
+                from users as a
+                join users as b on a.user_id = b.id
+                left join villages as c on a.village_id = c.id
+                where c.id = $village_id and b.user_id = $userId
                 group by b.name, b.id
                 order by count(a.id) desc
                 limit 5";
@@ -524,6 +562,19 @@ class Referal extends Model
                 ->where('g.type','Referal')
                 ->groupBy('b.id','a.photo','a.name','c.name','d.name','e.name','f.name')
                 ->get();
+        return DB::select($sql);
+    }
+
+    public function getReferalDistrictCaleg($district_id, $userId)
+    {
+        $sql = "SELECT b.id, b.name , count(a.id) as total_data
+                from users as a
+                join users as b on a.user_id = b.id
+                left join villages as c on a.village_id = c.id
+                where c.district_id = $district_id and b.user_id = $userId
+                group by b.name, b.id
+                order by count(a.id) desc
+                limit 5";
         return DB::select($sql);
     }
 

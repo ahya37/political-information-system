@@ -3,15 +3,15 @@ $(document).ready(function () {
 
     let start = moment().startOf("month");
     let end = moment().endOf("month");
-    const regencyID = $("#regencyID").val();
+    let districtID = $("#districtID").val();
     $.ajax({
         url:
-            "/api/admin/member/" +
+            "/api/member/district/caleg/" +
             start.format("YYYY-MM-DD") +
             "+" +
             end.format("YYYY-MM-DD") +
             "/" +
-            userID,
+            districtID + "/" + userID,
         method: "GET",
         data: { first: self.first, last: self.last },
         dataType: "json",
@@ -96,12 +96,12 @@ $(document).ready(function () {
             var self = this;
             $.ajax({
                 url:
-                    "/api/admin/member/caleg/" +
+                    "/api/member/district/" +
                     first.format("YYYY-MM-DD") +
                     "+" +
                     last.format("YYYY-MM-DD") +
                     "/" +
-                    userID,
+                    districtID,
                 method: "GET",
                 data: { first: self.first, last: self.last },
                 dataType: "json",
@@ -199,9 +199,31 @@ $(document).ready(function () {
         }
     );
 
+    $.ajax({
+        url: "/api/member/totaldistrict/caleg/" + districtID + "/" + userID,
+        method: "GET",
+        dataType: "json",
+        beforeSend: function () {
+            $("#total_member").text("loading...");
+            $("#total_member_persen").text("loading...");
+            $("#target_anggota").text("loading...");
+            $("#village_filled").text("loading...");
+            $("#village_filled_persen").text("loading...");
+            $("#total_village").text("loading...");
+        },
+        success: function (data) {
+            $("#total_member").text(data.total_member);
+            $("#total_member_persen").text(data.persentage_target_member);
+            $("#target_anggota").text(data.target_member);
+            $("#village_filled").text(data.total_village_filled);
+            $("#village_filled_persen").text(data.presentage_village_filled);
+            $("#total_village").text(data.total_village);
+        },
+    });
+
     // anggota terdaftar
     $.ajax({
-        url: `/api/admin/member/rergister/regency/caleg/${userID}`,
+        url: "/api/adminuser/member/rergister/district/caleg/" + districtID + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -280,31 +302,9 @@ $(document).ready(function () {
         },
     });
 
-    $.ajax({
-        url: `/api/admin/member/totalregency/caleg/${userID}`,
-        method: "GET",
-        dataType: "json",
-        beforeSend: function () {
-            $("#total_member").text("loading...");
-            $("#total_member_persen").text("loading...");
-            $("#target_anggota").text("loading...");
-            $("#village_filled").text("loading...");
-            $("#village_filled_persen").text("loading...");
-            $("#total_village").text("loading...");
-        },
-        success: function (data) {
-            $("#total_member").text(data.total_member);
-            $("#total_member_persen").text(data.persentage_target_member);
-            $("#target_anggota").text(data.target_member);
-            $("#village_filled").text(data.total_village_filled);
-            $("#village_filled_persen").text(data.presentage_village_filled);
-            $("#total_village").text(data.total_village);
-        },
-    });
-
     // anggota terdaftar vs target
     $.ajax({
-        url: "/api/admin/membervsterget/caleg" + "/" + userID,
+        url: "/api/membervsterget/district/caleg/" + districtID + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -354,7 +354,7 @@ $(document).ready(function () {
 
     // gender
     $.ajax({
-        url: "/api/admin/member/gender/caleg" + "/" + userID,
+        url: "/api/member/gender/district/caleg/" + districtID + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -380,7 +380,7 @@ $(document).ready(function () {
 
     // Jobs
     $.ajax({
-        url: "/api/admin/member/jobs/caleg" + "/" + userID,
+        url: "/api/member/jobs/district/caleg/" + districtID + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -414,7 +414,7 @@ $(document).ready(function () {
 
     // kelompok umur
     $.ajax({
-        url: "/api/admin/member/agegroup/caleg" + "/" + userID,
+        url: "/api/member/agegroup/district/caleg/" + districtID + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -454,7 +454,7 @@ $(document).ready(function () {
 
     //generasi umur
     $.ajax({
-        url: "/api/admin/member/genage/caleg" + "/" + userID,
+        url: "/api/member/genage/district/caleg/" + districtID + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -494,7 +494,7 @@ $(document).ready(function () {
 
     // admin input terbanyak
     $.ajax({
-        url: "/api/admin/member/inputer/caleg" + "/" + userID,
+        url: "/api/member/inputer/district/caleg/" + districtID + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -534,7 +534,7 @@ $(document).ready(function () {
 
     // anggota referal terbanyak
     $.ajax({
-        url: "/api/admin/member/referal/caleg" + "/" + userID,
+        url: "/api/member/referal/district/caleg/" + districtID + "/" + userID,
         method: "GET",
         dataType: "json",
         beforeSend: function () {
@@ -578,12 +578,12 @@ $(document).ready(function () {
             const totalRegional = await getDataTotalRegional();
             const getTotalRegional = totalRegional.data;
             infoTotalRegionalUi(getTotalRegional);
-        } catch (err) {}
+        } catch (err) { }
     }
 
     gerTotalRegional();
     function getDataTotalRegional() {
-        return fetch(`/api/totalregional/regency/${regencyID}`)
+        return fetch("/api/totalregional/district/" + districtID)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(response.statusText);
@@ -602,28 +602,4 @@ $(document).ready(function () {
         let text = document.createTextNode(getTotalRegional);
         div.appendChild(text);
     }
-
-    // anggota referal terbanyak perbulan
-    $(".datepicker").datepicker({
-        format: "MM",
-        viewMode: "months",
-        minViewMode: "months",
-        autoClose: true,
-    });
-
-    // Data Default
-    $("#referalOfMount", async function () {
-        let date = new Date();
-        const mounthSelected = date.getMonth() + 1;
-        const yearSelected = date.getFullYear();
-        BeforeSend("LoadaReferalByMounth");
-        $("#totalReferalByMonth").empty();
-        try {
-            const referalByMounth = await getReferalByDefault();
-            const resultReferalByMounth = referalByMounth.data;
-            const calculate = referalByMounth.referal_acumulate;
-            updateReferalByMounth(resultReferalByMounth, calculate);
-        } catch (err) {}
-        Complete("LoadaReferalByMounth");
-    });
 });

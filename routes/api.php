@@ -296,14 +296,7 @@ Route::get('/admin/member/inputer/{user_id}','API\DashboardController@getInputer
 Route::get('/admin/member/referal/{user_id}','API\DashboardController@getRegefalAdminMember');
 Route::get('/admin/member/{daterange}/{user_id}','API\DashboardController@memberReportPerMountAdminMember');
 
-#FOR CALEG
-Route::get('/admin/member/caleg/{daterange}/{user_id}','API\DashboardController@memberReportPerMountAdminMemberCaleg');
-Route::get('/admin/member/referal/caleg/{user_id}','API\DashboardController@getRegefalAdminMemberCaleg');
-Route::get('/admin/member/inputer/caleg/{user_id}','API\DashboardController@getInputerAdminMemberCaleg');
-Route::get('/admin/member/genage/caleg/{user_id}','API\DashboardController@genAgeAdminMemberCaleg');
-Route::get('/admin/member/agegroup/caleg/{user_id}','API\DashboardController@getAgeGroupAdminMemberCaleg');
-Route::get('/admin/member/jobs/caleg/{user_id}','API\DashboardController@getJobsAdminMemberCaleg');
-Route::get('/admin/member/gender/caleg/{user_id}','API\DashboardController@getGenderAdminMemberCaleg');
+
 
 // GRAFIK INTEGENCY
 Route::get('/intelegency/byvillage/{village_id}','Admin\InformationController@getGrafikIntelegencyVillage');
@@ -359,3 +352,29 @@ Route::post('cost/delete/file','Admin\CostController@deleteFile');
 Route::post('/admin/member/dtmember/caleg','Admin\Datatable\MemberDatatableController@dTableMemberCaleg');
 Route::get('/admin/membervsterget/caleg/{user_id}','API\DashboardController@getMemberVsTargetAdminMemberCaleg');
 Route::get('/admin/member/rergister/regency/caleg/{user_id}','API\DashboardController@getMemberAdminMemberCaleg');
+Route::get('/admin/member/totalregency/caleg/{user_id}','API\DashboardController@getTotalMemberByAdminMemberCaleg');
+Route::get('member/district/caleg/{daterange}/{districtID}/{userId}','API\DashboardController@memberReportPerMountDistrictCaleg');
+Route::get('member/referal/district/caleg/{district_id}/{userId}','API\DashboardController@getRegefalDistrictCaleg');
+Route::get('/admin/member/caleg/{daterange}/{user_id}','API\DashboardController@memberReportPerMountAdminMemberCaleg');
+Route::get('/admin/member/referal/caleg/{user_id}','API\DashboardController@getRegefalAdminMemberCaleg');
+Route::get('/admin/member/inputer/caleg/{user_id}','API\DashboardController@getInputerAdminMemberCaleg');
+Route::get('/admin/member/genage/caleg/{user_id}','API\DashboardController@genAgeAdminMemberCaleg');
+Route::get('/admin/member/agegroup/caleg/{user_id}','API\DashboardController@getAgeGroupAdminMemberCaleg');
+Route::get('/admin/member/jobs/caleg/{user_id}','API\DashboardController@getJobsAdminMemberCaleg');
+Route::get('/admin/member/gender/caleg/{user_id}','API\DashboardController@getGenderAdminMemberCaleg');
+Route::get('member/inputer/district/caleg/{district_id}/{user_id}','API\DashboardController@getInputerDistrictCaleg');
+Route::get('member/genage/district/caleg/{district_id}/{user_id}','API\DashboardController@genAgeDistrtictCaleg');
+Route::get('member/agegroup/district/caleg/{district_id}/{user_id}','API\DashboardController@getAgeGroupDistrictcaleg');
+Route::get('member/jobs/district/caleg/{district_id}/{user_id}','API\DashboardController@getJobsDistrictCaleg');
+Route::get('member/gender/district/caleg/{district_id}/{user_id}','API\DashboardController@getGenderDistrictCaleg');
+Route::get('membervsterget/district/caleg/{district_id}/{user_id}','API\DashboardController@getMemberVsTargetDistrictCaleg');
+Route::get('adminuser/member/rergister/district/caleg/{district_id}/{user_id}','API\DashboardController@getMemberDistrictAdminUserCaleg');
+Route::get('member/totaldistrict/caleg/{district_id}/{user_id}','API\DashboardController@getTotalMemberDistrictCaleg');
+Route::get('member/village/caleg/{daterange}/{villageID}/{user_id}','API\DashboardController@memberReportPerMountVillageCaleg');
+Route::get('member/referal/village/caleg/{village_id}/{user_id}','API\DashboardController@getRegefalVillageCaleg');
+Route::get('member/inputer/village/caleg/{village_id}/{user_id}','API\DashboardController@getInputerVillageCaleg');
+Route::get('member/genage/village/caleg/{village_id}/{user_id}','API\DashboardController@genAgeVillageCaleg');
+Route::get('member/agegroup/village/caleg/{village_id}/{user_id}','API\DashboardController@getAgeGroupVillageCaleg');
+Route::get('member/jobs/village/caleg/{village_id}/{user_id}','API\DashboardController@getJobsVillageCaleg');
+Route::get('member/gender/village/caleg/{village_id}/{user_id}','API\DashboardController@getGenderVillageCaleg');
+Route::get('member/totalvillage/caleg/{district_id}/{village_id}/{user_id}','API\DashboardController@getTotalMemberVillageCaleg');
