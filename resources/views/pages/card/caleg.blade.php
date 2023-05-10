@@ -73,7 +73,7 @@
       /* position: absolute; */
       width: 60px;
       height: 70px;
-      margin-top: 20px;
+      margin-top: 40px;
       margin-left: 10px;
       border-radius: 8px;
     }
@@ -435,13 +435,13 @@
 
     }
     .title-logo{
-        position: absolute;
-      width: 80px;
-      left: 635px;
-      top: 422px;
+      position: absolute;
+      width: 100%;
+      left: 465px;
+      top: 555.8px;
 
       font-family: "Nunito", sans-serif;
-      font-size: 3.2px;
+      font-size:10px;
       font-style: bold;
     }
   </style>
@@ -492,7 +492,7 @@
     </div>
     <div class="title-logo">
       <b>
-      JARINGAN DULUR KANG ASEP AWALUDIN
+      GERUS - JARINGAN DULUR KANG ASEP AWALUDIN
       </b>
     </div>
     <div class="scan">S C A N</div>

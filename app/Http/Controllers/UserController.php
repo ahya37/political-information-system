@@ -384,7 +384,7 @@ class UserController extends Controller
 		if($profile->user_id == 359 ){
 			
 			$pdf = PDF::LoadView('pages.card.caleg', compact('profile','gF'))->setPaper('a4');
-			return $pdf->download('e-kta-'.$profile->name.'.pdf');
+			return $pdf->stream('e-kta-'.$profile->name.'.pdf');
 			
 		}else{
 			 
