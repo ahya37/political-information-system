@@ -252,6 +252,7 @@ class MemberController extends Controller
 
 
     }
+    
 
     public function villageTargetCaleg($districtId, $userId){
 
@@ -386,5 +387,26 @@ class MemberController extends Controller
             return  $pdf->download('LAPORAN ANGGOTA '.$title.'.pdf');
         }
 
+    }
+
+    public function profileMember($id)
+    {
+        $id_user = $id;
+        $userModel = new User();
+        $profile = $userModel->with(['village'])->where('id', $id_user)->first();
+        $member  = $userModel->with(['village','reveral'])->where('user_id', $id_user)
+                             ->whereNotIn('id', [$id_user])
+                             ->whereNotNull('village_id')
+                             ->get();
+        $referal_direct = $userModel->getReferalDirect($id_user);
+
+        $referal_direct = $referal_direct->total == NULL ? 0 : $referal_direct->total; // referal langsung
+        $referal_undirect = $userModel->getReferalUnDirect($id_user);
+        $referal_undirect = $referal_undirect->total == NULL ? 0 : $referal_undirect->total; // referal tidak langsung
+        $total_member = count($member);
+        $total_referal  = $total_member;
+
+        $gF = new GlobalProvider();
+        return view('pages.member.profile', compact('gF','profile','member','total_member','referal_direct','referal_undirect','total_referal'));
     }
 }

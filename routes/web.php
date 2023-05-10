@@ -146,6 +146,8 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/dashboard/regency/district/caleg/{district_id}','DashboardController@districtCaleg')->name('adminuser-dashboard-district-caleg');
         Route::get('/dashboard/regency/district/village/caleg/{district_id}/{village_id}','DashboardController@villageCaleg')->name('adminuser-dashboard-village-caleg');
 
+        Route::get('profile/{id}','MemberController@profileMember')->name('admin-profile-member');
+
     });
 
 
