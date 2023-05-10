@@ -61,6 +61,14 @@
       margin-top: -15px;
       margin-bottom: 101.9px;
     }
+	.logo-gerus {
+      position: absolute;
+      width: 50px;
+      
+      margin-left: 225px;
+      margin-top: -15px;
+      margin-bottom: 101.9px;
+    }
     .img {
       /* position: absolute; */
       width: 60px;
@@ -250,7 +258,14 @@
     .logo2 {
       width: 70px;
       /* height: 50px; */
-      margin-left: 281px;
+      margin-left: 294px;
+      margin-top: -150px;
+      margin-bottom: 101.9px;
+    }
+	
+	.logo2-gerus {
+      width: 50px;
+      margin-left: 240px;
       margin-top: -60px;
       margin-bottom: 101.9px;
     }
@@ -258,7 +273,7 @@
       width: 35px;
       /* height: 50px; */
       margin-left: 261px;
-      margin-top: -17px;
+      margin-top: -43px;
       margin-bottom: 101.9px;
     }
     .name-label {
@@ -316,7 +331,7 @@
     .desc {
       width: 100%;
       margin-left: 4px;
-      margin-top: -210px;
+      margin-top: -230px;
 
       font-family: "Nunito", sans-serif;
       font-style: normal;
@@ -407,7 +422,7 @@
       width: 100%;
       /* height: 10px; */
       /* left: 560px; */
-      margin-left: 212px;
+      margin-left: 170px;
       margin-top: 72px;
 
       font-family: "Nunito", sans-serif;
@@ -437,6 +452,7 @@
     </div>
     <div class="layout-left">
       <div class="title">KARTU TANDA ANGGOTA</div>
+      <img class="logo-gerus" src="{{ public_path('assets/images/Gerus.png') }}" />
       <img class="logo" src="{{ public_path('assets/images/logo-aaw.png') }}" />
       <div>
         <img class="img" src="{{ public_path('storage/'.$profile->photo) }}" />
@@ -455,7 +471,7 @@
       </div>
       <div>
         <p class="title-bottom">
-          JARINGAN DULUR KANG ASEP AW
+          GERUS - JARINGAN DULUR KANG ASEP AW
         </p>
       </div>
     </div>
@@ -512,8 +528,9 @@
             <td>{{ date('d-m-Y', strtotime($profile->created_at)) }}</td>
           </tr>
         </table>
-        <div class="name-lable3">KARTU TANDA ANGGOTA JALUR AAW</div>
+        <div class="name-lable3">KARTU TANDA ANGGOTA GERUS - JALUR AAW</div>
         <div>
+		<img class="logo2-gerus" src="{{ public_path('assets/images/Gerus.png') }}" />
           <img class="logo2" src="{{ public_path('assets/images/logo2-3.png') }}" />
           <img class="cap" src="{{ public_path('assets/images/cap.png') }}" />
         </div>
@@ -521,7 +538,7 @@
           <tr>
             <td>1.</td>
             <td>
-              Pemegang Kartu ini adalah Anggota Terdaftar pada e-KTA JALUR AAW
+              Pemegang Kartu ini adalah Anggota Terdaftar pada e-KTA GERUS - JALUR AAW
             </td>
           </tr>
           <tr>

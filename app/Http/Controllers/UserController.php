@@ -376,10 +376,23 @@ class UserController extends Controller
 
     public function downloadCard($id)
     {
+		
         $gF = new GlobalProvider();
+		
         $profile = User::with('village')->where('id', $id)->first();
-        $pdf = PDF::LoadView('pages.card', compact('profile','gF'))->setPaper('a4');
-        return $pdf->download('e-kta-'.$profile->name.'.pdf');
+		
+		if($profile->user_id == 359 ){
+			
+			$pdf = PDF::LoadView('pages.card.caleg', compact('profile','gF'))->setPaper('a4');
+			return $pdf->stream('e-kta-'.$profile->name.'.pdf');
+			
+		}else{
+			 
+			$pdf = PDF::LoadView('pages.card', compact('profile','gF'))->setPaper('a4');
+			return $pdf->download('e-kta-'.$profile->name.'.pdf');
+		}
+			
+       
     }
 
     public function savedNasdem($id)
