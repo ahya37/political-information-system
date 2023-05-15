@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+
+use App\CatatanFiles;
 use App\CatatanModel;
-use DB;
+use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 
 class CatatanController extends Controller
 {
@@ -108,9 +111,11 @@ class CatatanController extends Controller
 
     public function edit($id){
 
-        $catatan = CatatanModel::where('id', $id)->first();
+        $catatan        = CatatanModel::where('id', $id)->first();
+        $catatan_files  = CatatanFiles::where('catatan_id', $id)->get();
+        $no             = 1;
         
-        return view('pages.admin.catatan.edit', compact('catatan'));
+        return view('pages.admin.catatan.edit', compact('catatan','id','catatan_files','no'));
 
     }
 
@@ -129,6 +134,63 @@ class CatatanController extends Controller
         ]);
 
         return redirect()->route('admin-catatan')->with(['success' => 'Catatan telah disimpan!']);
+
+    }
+
+    public function uploadFile(Request $request, $id)
+    {
+
+        $this->validate($request, [
+               'file' => 'required',
+        ]);
+
+        $name  = $request->file('file')->getClientOriginalName();
+        $ext   = $request->file('file')->getClientOriginalExtension();
+
+        $file  = $request->file('file')->store('assets/catatan','public');
+
+        CatatanFiles::create([
+            'catatan_id' => $id,
+            'name'  => $name,
+            'file'  => $file,
+            'type'  =>  $ext,
+            'cby'   => auth()->guard('admin')->user()->id
+        ]);
+
+        return redirect()->back()->with(['success' => 'File telah disimpan!']);
+
+    }
+
+    public function deleteFile(){
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+
+            $data = CatatanFiles::where('id', $id)->first();
+
+            #delete file in directory
+            $file = storage_path('app').'/public/'.$data->file;
+            if (file_exists($file)) {
+                File::delete($file);
+            }
+
+            #delete file in db
+            $data->delete();
+
+            DB::commit();
+            return ResponseFormatter::success([
+                   'message' => 'Berhasil hapus catatan!'
+            ],200);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
 
     }
 }

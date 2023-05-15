@@ -187,6 +187,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/member/create/account/{id}','MemberController@createAccount')->name('admin-member-create-account');
         Route::post('/member/create/account/store/{id}','MemberController@storeAccount')->name('admin-member-create-account-store');
         Route::post('/member/store','MemberController@store')->name('admin-member-store');
+        Route::post('/member/spam','MemberController@spamMember')->name('admin-member-spam');
 
         Route::get('/member/profile/{id}','MemberController@profileMember')->name('admin-profile-member');
         Route::get('/member/profile/edit/{id}','MemberController@editMember')->name('admin-profile-member-edit');
@@ -439,6 +440,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/store','CatatanController@store')->name('admin-catatan-store');
             Route::get('/edit/{id}','CatatanController@edit')->name('admin-catatan-edit');
             Route::post('/update/{id}','CatatanController@update')->name('admin-catatan-update');
+            Route::post('/upload/file/{id}','CatatanController@uploadFile')->name('admin-catatan-upload-file');
         });
 
         #Inventory
@@ -448,6 +450,12 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/store','InventoryController@store')->name('admin-inventory-store');
             Route::get('/edit/{id}','CatatanController@edit')->name('admin-catatan-edit');
             Route::post('/update/{id}','CatatanController@update')->name('admin-catatan-update');
+        });
+
+
+        #Inventory
+        Route::group(['prefix' => 'spam'], function(){
+            Route::get('/anggota','SpamController@index')->name('admin-spam-member');
         });
         
           

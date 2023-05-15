@@ -15,7 +15,7 @@ use App\Providers\GlobalProvider;
 use Carbon\Carbon;
 use PDF;
 use Maatwebsite\Excel\Excel;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Helpers\ResponseFormatter;
 use Illuminate\Support\Facades\File;
 

@@ -231,7 +231,7 @@
                 <li class="nav-item">
                     <a href="{{ route('admin-catatan') }}"
                         class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('catatan') ? 'active custom-active-color' : '' }}"><span>
-                           Daftar Catatan</span></a>
+                            Daftar Catatan</span></a>
                     <a href="{{ route('admin-catatan-create') }}"
                         class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('catatan/create') ? 'active custom-active-color' : '' }}"><span>
                             Buat Catatan Baru</span></a>
@@ -247,10 +247,23 @@
                 <li class="nav-item">
                     <a href="{{ route('admin-inventory') }}"
                         class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('inventory') ? 'active custom-active-color' : '' }}"><span>
-                           Daftar Inventory</span></a>
+                            Daftar Inventory</span></a>
                     <a href="{{ route('admin-inventory-create') }}"
                         class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('inventory/create') ? 'active custom-active-color' : '' }}"><span>
                             Buat Inventory Baru</span></a>
+                </li>
+            </ul>
+        </div>
+
+        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
+            href="#spam" data-toggle="collapse" data-target="#spam">
+            <span class="d-none d-sm-inline"></span>Spam</a>
+        <div class="collapse" id="spam" aria-expanded="false">
+            <ul class="flex-column pl-2 nav">
+                <li class="nav-item">
+                    <a href="{{ route('admin-spam-member') }}"
+                        class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('spam') ? 'active custom-active-color' : '' }}"><span>
+                            Anggota</span></a>
                 </li>
             </ul>
         </div>

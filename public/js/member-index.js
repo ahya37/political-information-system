@@ -116,7 +116,10 @@ const table = $("#data").DataTable({
                                     <div class="dropdown-menu">
                                          <a href='/admin/member/create/account/${row.id}' class="dropdown-item">
                                                 Buat Akun
-                                        </a> 
+                                        </a>
+                                         <button type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm btn-danger text-danger">
+                                               Spam
+                                        </button>
                                     </div>
                                 </div>
                             </div>`;
@@ -126,6 +129,27 @@ const table = $("#data").DataTable({
         },
     ],
 });
+
+$('#exampleModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var recipient = button.data('whatever')
+    var id = button.data('id')
+    var modal = $(this)
+    modal.find('.modal-title').text('Spam Anggota - ' + recipient)
+    modal.find('.modal-body #id').val(id)
+});
+
+$("#check").click(function () {
+    if ($(this).is(":checked")) {
+        $("#divNiks").show();
+        $("#niks").attr('required', true);
+    } else {
+        $("#divNiks").hide();
+        $("#niks").val('');
+        $("#niks").attr('required', false);
+    }
+});
+
 
 $("#province").change(async function () {
     province = $("#province").val();

@@ -139,8 +139,45 @@
           </div>
 @endsection
 
+@push('prepend-script')
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ route('admin-member-spam') }}" method="POST">
+          @csrf
+         
+          <label for="recipient-name" class="col-form-label">Duplikat data</label>
+          <input type="checkbox" id="check" class="check" autocomplete="off">
+          <div class="form-group" style="display:none" id="divNiks">
+            <label for="recipient-name" class="col-form-label">NIK <span class="text-danger">(isi NIK asli jika spam karena duplikat!)</span></label>
+            <input type="number" name="niks" id="niks" class="form-control niks" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Alasan</label>
+            <input type="hidden" name="id" class="form-control" id="id">
+            <textarea class="form-control" name="reason" id="message-text" required></textarea>
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+@endpush
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 {{-- <script src="{{ asset('js/list-target.js') }}"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/member-index.js') }}"></script>
 @endpush

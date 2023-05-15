@@ -347,6 +347,7 @@ Route::post('/member/potential/referal/excel/upper','Admin\MemberController@memb
 Route::post('/member/potential/district/referal/excel/upper','Admin\MemberController@getKecamatanReferalUpper');
 
 Route::post('cost/delete/file','Admin\CostController@deleteFile');
+Route::post('catatan/delete/file','Admin\CatatanController@deleteFile');
 
 #CELEG
 Route::post('/admin/member/dtmember/caleg','Admin\Datatable\MemberDatatableController@dTableMemberCaleg');

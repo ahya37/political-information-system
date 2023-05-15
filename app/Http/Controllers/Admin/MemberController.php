@@ -21,6 +21,7 @@ use App\Exports\MemberExport;
 use App\Providers\GlobalProvider;
 use App\Providers\QrCodeProvider;
 use App\Exports\MemberMostReferal;
+use App\Helpers\ResponseFormatter;
 use Illuminate\Support\Facades\DB;
 use App\Exports\MemberByInputerAll;
 use App\Exports\MemberByReferalAll;
@@ -30,12 +31,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Exports\MemberPotentialInput;
 use App\Exports\MemberPotentialReferal;
-use App\Exports\MemberPotensialReferalByDistrict;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\Facades\DataTables;
 use App\Exports\MemberByInputerInDistrict;
 use App\Exports\MemberByReferalInDistrict;
+use App\Exports\MemberPotensialReferalByDistrict;
 use App\Exports\MemberPotensialUpperByDistrictUpper;
 
 class MemberController extends Controller
@@ -1092,6 +1093,28 @@ class MemberController extends Controller
         $title = 'LAPORAN PENERIMA BONUS KHUSUS ADMIN'; 
         $pdf   = PDF::loadView('pages.admin.report.member-bonus-khusus-admin-pdf', compact('admins','title','no','count_total_bonus'))->setPaper('landscape');
         return $pdf->download($title.'.pdf');
+
+    }
+
+    public function spamMember(Request $request){
+
+       #get user_real_id by nik di tb users
+       if ($request->niks != null) {
+
+            $user = User::select('id')->where('nik', $request->niks)->first();
+            $user_real_id = $user->id;
+
+            return $user_real_id;
+
+       }else{
+
+            return 'no nik';
+
+       }
+
+       #save ke table spam by id
+
+       #delete dari tb users
 
     }
 
