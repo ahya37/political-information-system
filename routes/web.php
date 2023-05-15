@@ -441,6 +441,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/edit/{id}','CatatanController@edit')->name('admin-catatan-edit');
             Route::post('/update/{id}','CatatanController@update')->name('admin-catatan-update');
             Route::post('/upload/file/{id}','CatatanController@uploadFile')->name('admin-catatan-upload-file');
+            Route::get('/download/file/{id}','CatatanController@downloadFileCost')->name('admin-catatan-download-file');
         });
 
         #Inventory

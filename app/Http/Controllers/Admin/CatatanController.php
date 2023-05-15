@@ -193,4 +193,24 @@ class CatatanController extends Controller
         }
 
     }
+
+    public function downloadFileCost($id){
+
+
+        #get file by id
+        $data = CatatanFiles::select('file','name')->where('id', $id)->first();
+
+        $file = storage_path('app').'/public/'.$data->file;
+
+        if ($file) {
+            $headers = array(
+                'Content-Type:aplication/pdf',
+            );
+    
+            return response()->download($file, $data->name, $headers);
+        }
+
+        return redirect()->back()->with(['error' => 'Tidak ada file!']);
+
+    }
 }

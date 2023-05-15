@@ -84,7 +84,7 @@
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>
-                                                    <a href="{{ route('admin-cost-downloadfile', $item->id) }}" title="Download">
+                                                    <a href="{{ route('admin-catatan-download-file', $item->id) }}" title="Download">
                                                         {{ $item->name }}
                                                     </a>
                                                 </td>
