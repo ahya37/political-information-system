@@ -80,7 +80,7 @@ class GlobalProvider extends ServiceProvider
 
         $user_menu = [];
 
-        if ($level == 3) {
+        if ($level == 4) {
             // jika anggota login itu caleg
             $user_menu      = $userMenuModel->getUserMenuCaleg($user_id);
         }else{

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use PDF;
-use Illuminate\Support\Facades\Auth;
 use App\Bank;
 use App\Menu;
 use App\User;
@@ -18,6 +17,8 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
 use App\Providers\GlobalProvider;
 use App\Providers\QrCodeProvider;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
@@ -380,10 +381,17 @@ class UserController extends Controller
         $gF = new GlobalProvider();
 		
         $profile = User::with('village')->where('id', $id)->first();
+
+        #cek cby nya siapa
+        $cby     = $profile->cby;
+
+        #cek cby ada di admin caleg mana
+        $adminCaleg = DB::table('admin_caleg')->where('admin_caleg_user_id', $cby)->first();
+        #cetak KTA by caleg_user_id
 		
-		if($profile->user_id == 359 ){
+		if($adminCaleg->caleg_user_id == 359 ){ // jika caleg = usep
 			
-			$pdf = PDF::LoadView('pages.card.caleg', compact('profile','gF'))->setPaper('a4');
+			$pdf = PDF::LoadView('pages.card.usep.caleg', compact('profile','gF'))->setPaper('a4');
 			return $pdf->download('e-kta-'.$profile->name.'.pdf');
 			
 		}else{

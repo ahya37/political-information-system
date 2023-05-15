@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\AdminCaleg;
 use App\User;
 use App\Caleg;
 use App\UserMenu;
+use App\DapilArea;
+use App\AdminCaleg;
 use App\AdminDapil;
+use App\DapilCalegs;
 use App\Models\Village;
 use App\Models\Province;
 use App\AdminDapilVillage;
 use App\AdminDapilDistrict;
-use App\DapilArea;
-use App\DapilCalegs;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class CalegController extends Controller
@@ -112,9 +113,15 @@ class CalegController extends Controller
         // GET DAPIL ID DARI USER TERSEBUT
         $caleg = Caleg::with('user')->where('user_id', $caleg_user_id)->first();
         $dapil_id = $caleg->dapil_id;
-        $caleg_name = $caleg->user->name; 
+        $caleg_name = $caleg->user->name;
 
-        return view('pages.admin.caleg.create-admin-for-caleg', compact('caleg','dapil_id','caleg_name','caleg_user_id'));
+        $adminCaleg = DB::table('admin_caleg as a')
+                        ->select('a.id','b.name')
+                        ->join('users as b','a.admin_caleg_user_id','=','b.id')
+                        ->where('a.caleg_user_id', $caleg_user_id)->get();
+        $no         = 1;
+
+        return view('pages.admin.caleg.create-admin-for-caleg', compact('caleg','dapil_id','caleg_name','caleg_user_id','adminCaleg','no'));
 
     }
 

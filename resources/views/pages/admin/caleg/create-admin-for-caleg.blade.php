@@ -54,6 +54,44 @@
                     </form>
                   </div>
                 </div>
+
+                <div class="row mt-3">
+                  <div class="col-md-12 col-sm-12">
+                    <h5 class="dashboard-title">Daftrar Admin </h5>
+                      @csrf
+                      <div class="card">
+                        <div class="card-body">
+                         <div class="row row-login">
+                                <div class="col-12">
+                                  <div class="table-responsipe mt-4">
+                                    <table id="data" class="table table-sm table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>NO</th>
+                                                <th>NAMA</th>
+                                                <th>OPSI</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                          @foreach ($adminCaleg as $item)
+                                              <tr>
+                                                <td>{{ $no++ }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td></td>
+                                              </tr>
+                                          @endforeach
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+
+
               </div>
             </div>
           </div>
