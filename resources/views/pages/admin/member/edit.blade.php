@@ -135,7 +135,6 @@
                                                         class="form-control"
                                                         name="nik"
                                                         value="{{ $profile->nik }}" 
-                                                        readonly
                                                     />
                                             </div>
                                             <div class="col-6">
