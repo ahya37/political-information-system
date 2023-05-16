@@ -137,7 +137,7 @@ class AdminController extends Controller
                 #tidak perlu update email
                 #update status user sebagai admin
                 $userModel->where('code', $request->code)->update([
-                    'level' => 2,
+                    'level' => 5,
                     'password' => Hash::make($request->password),
                     'status' => 1,
                     'set_admin' => 'Y'
@@ -145,7 +145,12 @@ class AdminController extends Controller
             }
 
             #store menus untuk admin
-            $menus = Menu::select('id')->where('id', '!=', 8)->where('id', '!=', 1)->get();
+            $menus = Menu::select('id')
+                    ->where('id', '!=', 8)
+                    ->where('id', '!=', 1)
+                    ->where('id', '!=', 7)
+                    ->where('id', '!=', 5)
+                    ->get();
             foreach ($menus as $value) {
                 $userMenuModel    = new UserMenu();
                 $userMenuModel->user_id = $user->id;

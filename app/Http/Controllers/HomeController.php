@@ -150,6 +150,16 @@ class HomeController extends Controller
             #call all data by referal caleg
             return $this->dashboardAdminForCaleg($regency_id);
 
+        }elseif ($level == 5) {
+            
+            #jika user seorang admin caleg
+            
+            #query ke tb dapil_calegs
+            #join ke tb users
+            
+            #call all data by referal caleg
+            return $this->dashboardAdminForAdminCaleg($regency_id);
+
         }
     }
 
@@ -252,6 +262,37 @@ class HomeController extends Controller
     }
 
     public function dashboardAdminForCaleg($regency_id){
+
+        $user_id          = Auth::user()->id;
+        $regency          = Regency::with('province')->where('id', $regency_id)->first();
+        
+        $districtModel    = new District();
+        // Daftar pencapaian lokasi / daerah
+        $achievments   = $districtModel->achievementAdminMemberCaleg($user_id);
+
+
+        if (request()->ajax()) {
+            return DataTables::of($achievments)
+                    ->addColumn('persentage', function($item){
+                        $gF   = app('GlobalProvider'); // global function
+                        $persentage = ($item->realisasi_member / $item->total_target_member)*100;
+                        $persentage = $gF->persen($persentage);
+                        $persentageWidth = $persentage + 30;
+                        return '
+                        <div class="mt-3 progress" style="width:100%;">
+                            <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
+                        </div>
+                        ';
+                    })
+                    ->rawColumns(['persentage'])
+                    ->make();
+        }
+
+        return view('pages.dashboard.caleg.regency', compact('regency','user_id'));
+        
+    }
+
+    public function dashboardAdminForAdminCaleg($regency_id){
 
         $user_id          = Auth::user()->id;
         $regency          = Regency::with('province')->where('id', $regency_id)->first();
