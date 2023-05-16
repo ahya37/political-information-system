@@ -145,7 +145,7 @@ class AdminController extends Controller
             }
 
             #store menus untuk admin
-            $menus = Menu::select('id')->where('id', '!=', 8)->get();
+            $menus = Menu::select('id')->where('id', '!=', 8)->where('id', '!=', 1)->get();
             foreach ($menus as $value) {
                 $userMenuModel    = new UserMenu();
                 $userMenuModel->user_id = $user->id;
