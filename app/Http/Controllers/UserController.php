@@ -386,20 +386,23 @@ class UserController extends Controller
         $cby     = $profile->cby;
 
         #cek cby ada di admin caleg mana
-        $adminCaleg = DB::table('admin_caleg')->where('admin_caleg_user_id', $cby)->first();
+        $adminCalegCount = DB::table('admin_caleg')->where('admin_caleg_user_id', $cby)->count();
         #cetak KTA by caleg_user_id
+        if ($adminCalegCount > 0) {
+            # code...
+             $adminCaleg = DB::table('admin_caleg')->where('admin_caleg_user_id', $cby)->first();
+
+            if($adminCaleg->caleg_user_id == 359 ){ 
+                $pdf = PDF::LoadView('pages.card.usep.caleg', compact('profile','gF'))->setPaper('a4');
+                return $pdf->download('e-kta-'.$profile->name.'.pdf');
+                
+            }
+        }else{
+
+            $pdf = PDF::LoadView('pages.card', compact('profile','gF'))->setPaper('a4');
+            return $pdf->download('e-kta-'.$profile->name.'.pdf');
+        }
 		
-		if($adminCaleg->caleg_user_id == 359 ){ // jika caleg = usep
-			
-			$pdf = PDF::LoadView('pages.card.usep.caleg', compact('profile','gF'))->setPaper('a4');
-			return $pdf->download('e-kta-'.$profile->name.'.pdf');
-			
-		}else{
-			 
-			$pdf = PDF::LoadView('pages.card', compact('profile','gF'))->setPaper('a4');
-			return $pdf->download('e-kta-'.$profile->name.'.pdf');
-		}
-			
        
     }
 
