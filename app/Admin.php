@@ -27,8 +27,8 @@ class Admin extends Authenticatable
     {
          $sql = "SELECT b.photo, b.id as user_id , b.name, b.level, count(c.id) as total_data from admin_caleg as a
                 join users as b on a.admin_caleg_user_id  = b.id
-                join users as c on b.id = c.cby
-                where c.village_id is not null and a.caleg_user_id = $user_id
+                left join users as c on b.id = c.cby
+                where a.caleg_user_id = $user_id
                 group by b.photo, b.id, b.name, b.level
                 order by count(c.id) desc";
         return DB::select($sql);

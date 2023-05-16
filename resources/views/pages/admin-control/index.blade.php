@@ -25,6 +25,9 @@
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
+                        <div class="mb-4">
+                          <a href="{{ route('member-create-admin-caleg') }}" class="btn btn-sm btn-sc-primary text-white"><i class="fa fa-plus"></i> Tambah Admin</a>
+                        </div>
                        <div class="table-responsive">
                                   <table id="data" class="table table-sm table-striped" width="100%">
                                     <thead>

@@ -127,6 +127,8 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         
         // ADMIN DIBAWAH CALEG
         Route::get('/admin','AdminController@index')->name('member-admin-index');
+        Route::get('/create/admin/caleg','AdminController@createAdminCaleg')->name('member-create-admin-caleg');
+        Route::post('/store/admin/caleg','AdminController@storeAdminCaleg')->name('member-store-admin-caleg');
         Route::get('/dtlistadmin/{user_id}','AdminController@dtListAdmin');
 		
 		// ANGGOTA POTENSIAL BY ADMIN INPUT
