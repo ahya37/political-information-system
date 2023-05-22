@@ -23,27 +23,27 @@
                     <div class="card">
                       <div class="card-body">
                        <div class="table-responsive">
-                                  <table id="data" class="table table-sm table-striped" width="100%">
-                                    <thead>
-                                      <tr>
-                                        <th scope="col">ID</th>
-                                        <th>NAMA</th>
-                                        <th>REFERAL</th>
-                                        <th>KABUPATEN / KOTA</th>
-                                        <th>KECAMATAN</th>
-                                        <th>DESA</th>
-                                        <th>JUMLAH REFERAL</th>
-                                        <th>REFERAL DARI</th>
-                                        <th scope="col">TERDAFTAR</th>
-                                        <th scope="col">INPUT DARI</th>
-                                        <th scope="col">KETERANGAN</th>
-                                        <th scope="col">AKSI</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                     
-                                    </tbody>
-                                  </table>
+                        <table id="data" class="table table-sm table-striped" width="100%">
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th></th>
+                              <th scope="col">NAMA</th>
+                              <th scope="col">DESA</th>
+                              <th scope="col">KECAMATAN</th>
+                              <th scope="col">KABUPATEN/KOTA</th>
+                              <th scope="col">REFERAL DARI</th>
+                              <th scope="col">INPUT DARI</th>
+                              <th scope="col">JUMLAH REFERAL</th>
+                              <th scope="col">ALASAN</th>
+                              <th scope="col">KETERANGAN</th>
+                              <th scope="col">AKSI</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                           
+                          </tbody>
+                        </table>
                         </div>
                       </div>
                     </div>
@@ -55,42 +55,6 @@
 @endsection
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
-    <script>
-     var datatable = $('#data').DataTable(
-        // {
-        //     processing: true,
-        //     language:{
-        //       processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>'
-        //     },
-        //     serverSide: true,
-        //     ordering: true,
-        //     ajax: {
-        //         url: '{!! url()->current() !!}',
-        //     },
-        //     columns:[
-        //         {data: 'id', name:'id'},
-        //         {data: 'photo', name:'photo'},
-        //         {data: 'code', name:'code'},
-        //         {data: 'village.district.regency.name', name:'village.district.regency.name'},
-        //         {data: 'village.district.name', name:'village.district.name'},
-        //         {data: 'village.name', name:'village.name'},
-        //         {data: 'countreferal', name:'countreferal'},
-        //         {data: 'reveral.name', name:'reveral.name'},
-        //         {data: 'register', name:'register'},
-        //         {data: 'create_by.name', name:'create_by.name'},
-        //         {data: 'action', name:'action'},
-        //     ],
-        //     order: [[0, "desc"]],
-        //     columnDefs:[
-        //       {
-        //         "targets": [ 0 ],
-        //         "visible": false
-        //       }
-        //     ]
-
-            
-        // }
-        );
-  </script>
-  <script type="text/javascript" src="{{asset('/js/search-member-nik.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="{{asset('/js/spam-member-index.js')}}"></script>
 @endpush

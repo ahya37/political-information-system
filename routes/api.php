@@ -316,6 +316,10 @@ Route::post('/table/members/province','API\SettingController@getMember');
 
 Route::post('/admin/member/dtmember','Admin\Datatable\MemberDatatableController@dTableMember');
 
+#SPAM
+Route::post('/admin/spam/member/dtmember','Admin\Datatable\MemberDatatableController@dTableSpamMember');
+Route::post('/admin/spam/member/restore','Admin\SpamController@restoreSpamAnggota');
+
 
 // voucher history by mount
 Route::post('/admin/voucherhistory','Admin\RewardController@getListVoucherReferalByMount');

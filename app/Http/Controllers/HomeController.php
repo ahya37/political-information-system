@@ -301,7 +301,6 @@ class HomeController extends Controller
         // Daftar pencapaian lokasi / daerah
         $achievments   = $districtModel->achievementAdminMemberCaleg($user_id);
 
-
         if (request()->ajax()) {
             return DataTables::of($achievments)
                     ->addColumn('persentage', function($item){

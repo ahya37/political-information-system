@@ -7,6 +7,7 @@ use App\Crop;
 use App\Menu;
 use App\User;
 use App\Admin;
+use App\CategoryInactiveMember;
 use App\UserMenu;
 use App\Models\Regency;
 use App\Models\Village;
@@ -38,6 +39,7 @@ use App\Exports\MemberByInputerInDistrict;
 use App\Exports\MemberByReferalInDistrict;
 use App\Exports\MemberPotensialReferalByDistrict;
 use App\Exports\MemberPotensialUpperByDistrictUpper;
+use App\TmpSpamUser;
 
 class MemberController extends Controller
 {
@@ -241,6 +243,15 @@ class MemberController extends Controller
         $user = User::select('id','name')->where('id', $id)->first();
         return view('pages.admin.member.create-account', compact('user'));
     }
+
+    public function nonActiveAccount($id)
+    {
+
+        $user = User::select('id','name')->where('id', $id)->first();
+        $categoryInactiveMember = CategoryInactiveMember::select('id','name')->orderBy('name','asc')->get();
+
+        return view('pages.admin.member.create-nonactiveaccount', compact('user','categoryInactiveMember'));
+    }
     
     public function storeAccount(Request $request, $id)
     {
@@ -273,6 +284,69 @@ class MemberController extends Controller
         // Mail::to($request->email)->send(new RegisterMail($user)); // send email untuk verifikasi akun
 
         return redirect()->route('admin-member')->with(['success' => 'Akun untuk '.$user->name.' telah dibuat']);
+        
+    }
+
+    public function storeAccountNonActive(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+
+            $user = User::where('id', $id)->first();
+    
+            #save ke tb tmp_spam_user
+            TmpSpamUser::create([
+                'user_id' => $user->user_id,
+                'number'  => $user->number,
+                'code'    => $user->code,
+                'nik'     => $user->nik,
+                'name'    => $user->name,
+                'gender'  => $user->gender,
+                'place_berth' => $user->place_berth,
+                'date_berth'  => $user->date_berth,
+                'blood_group' => $user->blood_group,
+                'marital_status' => $user->marital_status,
+                'job_id' => $user->job_id,
+                'religion' => $user->religion,
+                'education_id' => $user->education_id,
+                'email' => $user->email,
+                'email_verified_at' => $user->email_verified_at,
+                'password' => $user->password,
+                'address'  => $user->address,
+                'village_id' => $user->village_id,
+                'rt' => $user->rt,
+                'rw' => $user->rw,
+                'phone_number' => $user->phone_number,
+                'photo' => $user->photo,
+                'ktp' => $user->ktp,
+                'level' => $user->level,
+                'cby' => $user->cby,
+                'saved_nasdem' => $user->saved_nasdem,
+                'activate_token' => $user->activate_token,
+                'status' => $user->status,
+                'remember_token' => $user->remember_token,
+                'set_admin' => $user->set_admin,
+                'category_inactive_member_id' => $request->category_inactive_member_id,
+                'reason' => $request->reason,
+                'created_at' => $user->created_at,
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+
+            #delete di tb users sebagai anggota
+            $user->delete();
+
+            DB::commit();
+    
+            return redirect()->route('admin-member')->with(['success' => 'Anggota telah dinonaktifkan!']);
+
+        } catch (\Exception $e) {
+
+            return $e->getMessage();
+            return redirect()->back()->with(['warning' => 'Anggota gagal dinonaktifkan!']);
+
+        }
+
+
         
     }
 

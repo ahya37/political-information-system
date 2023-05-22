@@ -16,6 +16,8 @@
                 <h2 class="dashboard-title">Anggota Terdaftar</h2>
                 <p class="dashboard-subtitle">
                 </p>
+                    @include('layouts.message')
+
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
                 <div class="row mb-2">
@@ -104,7 +106,6 @@
                 
                 <div class="row">
                   <div class="col-12">
-                    @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
                         <div id="members"></div>

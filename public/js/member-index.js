@@ -117,6 +117,9 @@ const table = $("#data").DataTable({
                                          <a href='/admin/member/create/account/${row.id}' class="dropdown-item">
                                                 Buat Akun
                                         </a>
+                                        <a href='/admin/member/nonactive/account/${row.id}' class="dropdown-item text-danger">
+                                            Non Aktif
+                                        </a>
                                          <button type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm btn-danger text-danger">
                                                Spam
                                         </button>
@@ -363,13 +366,6 @@ function downloadExcel() {
     $("#reqdistrict").val(selectDistrictId);
     $("#reqvillage").val(selectVillageId);
 
-    console.log("form: ", [
-        $("#reqprovince").val(province),
-        $("#reqregency").val(selectArea),
-        $("#reqdapil").val(selectListArea),
-        $("#reqdistrict").val(selectDistrictId),
-        $("#reqvillage").val(selectVillageId),
-    ]);
     // $.ajax({
     //     url: "/api/member/download/excel",
     //     method: "POST",

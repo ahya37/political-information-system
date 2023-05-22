@@ -190,6 +190,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::post('/member/create/account/store/{id}','MemberController@storeAccount')->name('admin-member-create-account-store');
         Route::post('/member/store','MemberController@store')->name('admin-member-store');
         Route::post('/member/spam','MemberController@spamMember')->name('admin-member-spam');
+        
+        Route::get('/member/nonactive/account/{id}','MemberController@nonActiveAccount')->name('admin-member-nonactive-account');
+        Route::post('/member/nonactive/account/store/{id}','MemberController@storeAccountNonActive')->name('admin-member-nonactive-account-store');
 
         Route::get('/member/profile/{id}','MemberController@profileMember')->name('admin-profile-member');
         Route::get('/member/profile/edit/{id}','MemberController@editMember')->name('admin-profile-member-edit');
@@ -461,6 +464,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/anggota','SpamController@index')->name('admin-spam-member');
         });
         
+        Route::post('/reason/category','ReasonCategorySpamMember@store')->name('admin-spamcategory-store');
           
     });
     
