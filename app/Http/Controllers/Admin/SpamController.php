@@ -32,9 +32,8 @@ class SpamController extends Controller
 
             $tmpuser  = TmpSpamUser::where('id', $id)->first();
 
-            
             #save kembali ke tb users
-            User::create([
+            DB::table('users')->insert([
                 'user_id' => $tmpuser->user_id,
                 'number'  => $tmpuser->number,
                 'code'    => $tmpuser->code,
@@ -71,7 +70,7 @@ class SpamController extends Controller
             
             #delete file in tb tmp_spam_user
             $tmpuser->delete();
-            
+
             DB::commit();
             return ResponseFormatter::success([
                    'message' => 'Berhasil restore anggota!'

@@ -317,6 +317,7 @@ class MemberController extends Controller
                 'rt' => $user->rt,
                 'rw' => $user->rw,
                 'phone_number' => $user->phone_number,
+                'whatsapp' => $user->whatsapp,
                 'photo' => $user->photo,
                 'ktp' => $user->ktp,
                 'level' => $user->level,
@@ -1172,23 +1173,89 @@ class MemberController extends Controller
 
     public function spamMember(Request $request){
 
-       #get user_real_id by nik di tb users
-       if ($request->niks != null) {
+        try {
+            
+            #jika duplikat
+            #get user origiall by nik di tb users
+                if ($request->niks != null) {
 
-            $user = User::select('id')->where('nik', $request->niks)->first();
-            $user_real_id = $user->id;
+                $originaluser = User::select('nik')->where('nik', $request->niks)->first();
 
-            return $user_real_id;
+                if(!$originaluser) return redirect()->back()->with(['warning' => 'NIk tidak ditemukan!']);
+                
+                $category_inactive_member = 9;
+                #save ke tmp  users beserta alasan
+                $user = User::where('id', $request->id)->first();
+                $this->setStoreSpamMember($user,$originaluser,$request, $category_inactive_member);
+                
+                #delete di tb users sebagai anggota
+                $user->delete(); 
 
-       }else{
+               
+                DB::commit();
+                return redirect()->back()->with(['success' => 'Anggota disimpan sebagai spam!']);
 
-            return 'no nik';
+            }else{
 
-       }
+                 #save ke tmp  users beserta alasan
+                 $user = User::where('id', $request->id)->first();
+                 $this->setStoreSpamMember($user,null,$request,null);
+                 
+                 #delete di tb users sebagai anggota
+                 $user->delete(); 
+                 DB::commit();
+                 return redirect()->back()->with(['success' => 'Anggota disimpan sebagai spam!']);
+            }
 
-       #save ke table spam by id
 
-       #delete dari tb users
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
+        }
+
+    }
+
+    public function setStoreSpamMember($user,$originaluser,$request, $category_inactive_member){
+
+        #save ke tb tmp_spam_user
+        return TmpSpamUser::create([
+            'user_id' => $user->user_id,
+            'original_nik' => $originaluser->nik ?? null,
+            'number'  => $user->number,
+            'code'    => $user->code,
+            'nik'     => $user->nik,
+            'name'    => $user->name,
+            'gender'  => $user->gender,
+            'place_berth' => $user->place_berth,
+            'date_berth'  => $user->date_berth,
+            'blood_group' => $user->blood_group,
+            'marital_status' => $user->marital_status,
+            'job_id' => $user->job_id,
+            'religion' => $user->religion,
+            'education_id' => $user->education_id,
+            'email' => $user->email,
+            'email_verified_at' => $user->email_verified_at,
+            'password' => $user->password,
+            'address'  => $user->address,
+            'village_id' => $user->village_id,
+            'rt' => $user->rt,
+            'rw' => $user->rw,
+            'phone_number' => $user->phone_number,
+            'whatsapp' => $user->whatsapp,
+            'photo' => $user->photo,
+            'ktp' => $user->ktp,
+            'level' => $user->level,
+            'cby' => $user->cby,
+            'saved_nasdem' => $user->saved_nasdem,
+            'activate_token' => $user->activate_token,
+            'status' => $user->status,
+            'remember_token' => $user->remember_token,
+            'set_admin' => $user->set_admin,
+            'category_inactive_member_id' => $category_inactive_member ?? null,
+            'reason' => $request->reason,
+            'created_at' => $user->created_at,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
 
     }
 

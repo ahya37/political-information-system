@@ -509,7 +509,7 @@ class MemberDatatableController extends Controller
                         ->leftJoin('users as b','b.id','a.user_id')
                         ->leftJoin('users as c','c.id','a.cby')
                         ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
-                        ->join('category_inactive_member as f','a.category_inactive_member_id','=','f.id')
+                        ->leftJoin('category_inactive_member as f','a.category_inactive_member_id','=','f.id')
                         ->whereNotNull('a.village_id');
 
             
@@ -572,7 +572,7 @@ class MemberDatatableController extends Controller
                  'total_referal' => $total_referal,
                  'status' => $val->status,
                  'email' => $val->email,
-                 'reason' => $val->reason,
+                 'reason' => $val->reason ?? '',
                  'reason_desc' => $val->reason_desc
              ];
         }
