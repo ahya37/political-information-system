@@ -106,28 +106,22 @@ const table = $("#data").DataTable({
         {
             targets: 10,
             render: function (data, type, row, meta) {
-                let view = ``;
-                if (row.status === 1 && row.email !== null) {
-                    view += `<span class="badge badge-success">Akun Aktif</span>`;
-                } else {
-                    view += ` <div class="btn-group">
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
-                                    <div class="dropdown-menu">
-                                         <a href='/admin/member/create/account/${row.id}' class="dropdown-item">
-                                                Buat Akun
-                                        </a>
-                                        <a href='/admin/member/nonactive/account/${row.id}' class="dropdown-item text-danger">
-                                            Non Aktif
-                                        </a>
-                                         <button type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm btn-danger text-danger">
-                                               Spam
-                                        </button>
-                                    </div>
+                return `<div class="btn-group">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
+                                <div class="dropdown-menu">
+                                    <a href='/admin/member/create/account/${row.id}' class="dropdown-item">
+                                            Buat Akun
+                                    </a>
+                                    <a href='/admin/member/nonactive/account/${row.id}' class="dropdown-item text-danger">
+                                        Non Aktif
+                                    </a>
+                                    <button type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm btn-danger text-danger">
+                                        Spam
+                                    </button>
                                 </div>
-                            </div>`;
-                }
-                return view;
+                            </div>
+                        </div>`;
             },
         },
     ],
