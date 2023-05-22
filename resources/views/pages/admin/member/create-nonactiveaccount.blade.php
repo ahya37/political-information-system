@@ -29,7 +29,7 @@
                                             <div class="form-group">
                                                 <span class="required">*</span>
                                                 <label>Alasan</label>
-                                                <select name="category_inactive_member_id" class="form-control">
+                                                <select name="category_inactive_member_id" class="form-control" required>
                                                     <option value="">Pilih alasan</option>
                                                     @foreach ($categoryInactiveMember as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>

@@ -248,7 +248,7 @@ class MemberController extends Controller
     {
 
         $user = User::select('id','name')->where('id', $id)->first();
-        $categoryInactiveMember = CategoryInactiveMember::select('id','name')->orderBy('name','asc')->get();
+        $categoryInactiveMember = CategoryInactiveMember::select('id','name')->where('name','!=','Duplikat')->orderBy('name','asc')->get();
 
         return view('pages.admin.member.create-nonactiveaccount', compact('user','categoryInactiveMember'));
     }
@@ -1183,7 +1183,7 @@ class MemberController extends Controller
 
                 if(!$originaluser) return redirect()->back()->with(['warning' => 'NIk tidak ditemukan!']);
                 
-                $category_inactive_member = 9;
+                $category_inactive_member = 5;
                 #save ke tmp  users beserta alasan
                 $user = User::where('id', $request->id)->first();
                 $this->setStoreSpamMember($user,$originaluser,$request, $category_inactive_member);
