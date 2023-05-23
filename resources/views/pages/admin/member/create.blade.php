@@ -194,7 +194,7 @@
                                             </select>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
-                                                <label>Kabpuaten/Kota</label>
+                                                <label>Kabupaten/Kota</label>
                                                 <select id="regencies_id" class="form-control select2" v-model="regencies_id" v-if="regencies">
                                                 <option v-for="regency in regencies" :value="regency.id">@{{ regency.name }}</option>
                                                 </select>
