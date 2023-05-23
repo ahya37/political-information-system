@@ -220,6 +220,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/event/add/participant/store/{event_id}/{user_id}','EventController@storeAddParticipant');
         Route::post('/event/add/participantother/store/{event_id}','EventController@storeAddParticipantOther')->name('admin-event-partisipant-other');
         
+        Route::post('/event/category/store','EventCategoryController@store')->name('admin-eventcategory-store');
 
         // Gallery Event
         Route::get('/event/gallery/{id}','EventGalleryController@index')->name('admin-event-gallery');

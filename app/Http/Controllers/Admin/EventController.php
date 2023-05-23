@@ -7,6 +7,7 @@ use App\Event;
 use App\CostLess;
 use App\Forecast;
 use App\CostEvent;
+use App\EventCategory;
 use App\EventDetail;
 use App\ForecastDesc;
 use App\Models\Regency;
@@ -98,13 +99,15 @@ class EventController extends Controller
     }
     public function create()
     {
-        return view('pages.admin.event.create');
+        $eventCategories = EventCategory::select('id','name')->orderBy('name','asc')->get();
+        return view('pages.admin.event.create',compact('eventCategories'));
     }
 
     public function edit($id)
     {
         $event = Event::where('id', $id)->first();
-        return view('pages.admin.event.edit', compact('event'));
+        $eventCategories = EventCategory::select('id','name')->orderBy('name','asc')->get();
+        return view('pages.admin.event.edit', compact('event','eventCategories'));
     }
     
     public function delete($id)
@@ -271,10 +274,11 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required',
+            'event_category_id' => 'required',
         ]);
 
         Event::create([
+            'event_category_id' => $request->event_category_id,
             'title' => $request->title,
             'description' => $request->desc,
             'time' => date('H:i', strtotime($request->time)),
@@ -291,14 +295,15 @@ class EventController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $this->validate($request, [
-            'title' => 'required',
+            'event_category_id' => 'required',
             'desc' => 'required',
         ]);
 
         $event = Event::where('id', $id)->first();
         $event->update([
-            'title' => $request->title,
+            'event_category_id' => $request->event_category_id,
             'description' => $request->desc,
             'time' => date('H:i', strtotime($request->time)),
             'date' => date('Y-m-d', strtotime($request->date)),

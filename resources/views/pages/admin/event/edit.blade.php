@@ -3,6 +3,9 @@
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 @endpush
 @section('content')
 <!-- Section Content -->
@@ -30,7 +33,15 @@
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12">
                                                 <label>Judul Event</label>
-                                                <input type="text" name="title" value="{{ $event->title }}" required class="form-control" />
+                                                <select name="event_category_id" class="form-control" id="title" required>
+                                                    <option value="">Pilih Judul</option>
+                                                    @foreach ($eventCategories as $item)
+                                                        <option value="{{ $item->id }}" {{ $event->event_category_id == $item->id ? 'selected' : ''}}>{{ $item->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <button type="button" class="btn text-primary" data-toggle="modal"
+                                                data-target="#exampleModal" data-whatever="@mdo"><i
+                                                    class="fa fa-plus"></i> Buat Judul</button>
                                             </div>
                                         </div>
                                     </div>
@@ -124,6 +135,35 @@
             </div>
           </div>
 @endsection
+@push('prepend-script')
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Judul Baru</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin-eventcategory-store') }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Judul:</label>
+                            <input type="text" class="form-control" name="name" id="recipient-name" required>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+@endpush
 
 @push('addon-script')
 <script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
@@ -132,6 +172,7 @@
 <script>
     AOS.init();
 </script>
+<script src="{{asset('assets/select2/dist/js/select2.min.js')}}"></script>
 <script src="{{ asset('js/event-create.js') }}"></script>
 
 @endpush

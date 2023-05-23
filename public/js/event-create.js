@@ -233,3 +233,9 @@ jQuery("#timepicker6").datetimepicker({
     format: "H:i",
 });
 $.datetimepicker.setLocale("id");
+
+
+$("#title").select2({
+    allowClear: true,
+    placeholder: "Pilih Judul",
+});
