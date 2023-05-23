@@ -24,7 +24,7 @@ class Event extends Model
                 // left join districts as c on a.district_id = c.id 
                 // left join villages as d on a.village_id = d.id order by a.date desc";
 				
-		 $sql = "SELECT a.id, a.date, a.created_at as date, a.time, a.description, d.name as village, e.name as title from events as a
+		 $sql = "SELECT a.id, a.date, a.created_at as date, a.time, a.description, d.name as village, e.name as title, a.title as old_title from events as a
                  join villages as d on a.village_id = d.id
                  left join event_categories as e on a.event_category_id = e.id
                  order by a.date desc";

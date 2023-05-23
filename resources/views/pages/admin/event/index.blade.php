@@ -29,6 +29,7 @@
                                       <tr>
                                         <th scope="col"></th>
                                         <th scope="col">Tanggal</th>
+                                        <th scope="col">Judul (Old)</th>
                                         <th scope="col">Judul</th>
                                         <th scope="col">Deskripsi</th>
                                         <th scope="col">Alamat</th>
@@ -64,6 +65,7 @@
             columns:[
                {data:'date', name:'date'},
                {data:'dates', name:'dates'},
+               {data:'old_title', name:'old_title'},
                {data:'title', name:'title'},
                {data:'description', name:'description'},
                {data:'address', name:'address'},
