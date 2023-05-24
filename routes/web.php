@@ -464,6 +464,13 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::group(['prefix' => 'spam'], function(){
             Route::get('/anggota','SpamController@index')->name('admin-spam-member');
         });
+
+         #TPS
+         Route::group(['prefix' => 'tps'], function(){
+            Route::get('/','TpsController@index')->name('admin-tps');
+            Route::get('/create','TpsController@create')->name('admin-tps-create');
+            Route::post('/store','TpsController@store')->name('admin-tps-store');
+        });
         
         Route::post('/reason/category','ReasonCategorySpamMember@store')->name('admin-spamcategory-store');
           

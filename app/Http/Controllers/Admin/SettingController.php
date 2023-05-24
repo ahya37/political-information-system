@@ -12,6 +12,7 @@ use App\RightChosseVillage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\GlobalProvider;
+use App\RightChoose;
 use Yajra\DataTables\Facades\DataTables;
 
 class SettingController extends Controller
@@ -254,7 +255,14 @@ class SettingController extends Controller
     {
         $dapils = new Dapil();
         $dataDapils = $dapils->getRegencyDapil();
-        return view('pages.admin.setting.rightchoose', compact('dataDapils'));
+
+        $righChooseModel = new RightChoose();
+
+        #show list hak pilih level province
+        $righChoose = $righChooseModel->getDataRightChooseProvince();
+        $no         = 1;
+        
+        return view('pages.admin.setting.rightchoose', compact('dataDapils','righChoose','no'));
     }
 
     public function SaveRightChooseVillage(Request $request)

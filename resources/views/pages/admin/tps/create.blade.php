@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Atur Hak Pilih Suara')
+@section('title','Buat TPS')
 @push('addon-style')
 <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
@@ -13,7 +13,7 @@
           >
             <div class="container-fluid">
                 <div class="dashboard-heading">
-                    <h2 class="dashboard-title">Atur Hak Pilih Suara</h2>
+                    <h2 class="dashboard-title">Buat TPS</h2>
                 <p class="dashboard-subtitle">
                 </p>
             </div>
@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-7 col-sm-12">
                       @include('layouts.message')
-                    <form action="{{ route('admin-rightchoose-save') }}" id="register" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin-tps-store') }}" id="register" method="POST" enctype="multipart/form-data">
                       @csrf
                       <div class="card">
                         <div class="card-body">
@@ -68,15 +68,21 @@
                                      <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12 ">
-                                                
-                                                <input type="number" name="value" id="idValue" class="form-control"/>
+                                                <input type="number" name="tpnumber" id="idValue" placeholder="Isikan nomor TPS" class="form-control" required/>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12 ">
-                                                <small style="color: red">Tidak perlu memilih kecamatan jika admin adalah Korwil/Dapil</small>
+                                                <input type="number" name="rt" id="rt" class="form-control" placeholder="Isikan nomor RT lokasi TPS" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 ">
+                                                <input type="number" name="rw" id="rw" class="form-control" placeholder="Isikan nomor RW lokasi TPS" />
                                             </div>
                                         </div>
                                     </div>
@@ -103,5 +109,5 @@
 @endsection
 
 @push('addon-script')
-<script src="{{ asset('js/admin-rightchoose.js') }}"></script>
+<script src="{{ asset('js/create-tps.js') }}"></script>
 @endpush

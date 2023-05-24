@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -15,6 +17,7 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        
         $this->validate($request, [
             'email' => 'required|email|exists:admins,email',
     		'password' => 'required|string'
@@ -23,12 +26,18 @@ class LoginController extends Controller
         $auth = $request->only('email','password');
         $auth['status'] = 1; #yg bisa login hanya status 1 (aktiv)
         
+        #update remember_token
+        $remember_token = Hash::make(md5(time().$request->password));
+        DB::table('admins')->where('email', $request->email)->update(['remember_token' => $remember_token]);
+
         #proses authentication
         if (auth()->guard('admin')->attempt($auth)) {
+
+
             return redirect()->intended(route('admin-dashboard'));
         }
 
-        #update token
+
 
         return redirect()->back()->with(['error' => 'Email / Passwords Salah']);
         

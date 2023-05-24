@@ -1,9 +1,10 @@
 @extends('layouts.admin')
-@section('title','Atur Hak Pilih Suara')
+@section('title','Seting Admin')
 @push('addon-style')
 <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 @endpush
 @section('content')
 <!-- Section Content -->

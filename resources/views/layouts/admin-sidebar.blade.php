@@ -132,14 +132,14 @@
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/dapil/create') ? 'active custom-active-color' : '' }}">
                         Tambah Dapil
                     </a>
-                    <a href="{{ route('admin-koordinator-create') }}"
-                        class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/koordinator/create') ? 'active custom-active-color' : '' }}">
-                        Tambah Koordinator
+                    <a href="{{ route('admin-tps') }}"
+                        class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/tps') ? 'active custom-active-color' : '' }}">
+                        TPS
                     </a>
-                    <a href="{{ route('admin-koordinator-pusat-index') }}"
+                    {{-- <a href="{{ route('admin-koordinator-pusat-index') }}"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/koordinator/pusat/create') ? 'active custom-active-color' : '' }}">
                         Koordinator
-                    </a>
+                    </a> --}}
                 </li>
             </ul>
         </div>

@@ -87,6 +87,8 @@ Route::post('org/pusat/delete', 'Admin\OrgDiagramController@deleteKorPusat');
 Route::post('org/pusat/update', 'Admin\OrgDiagramController@updateOrgPusat');
 
 
+#TPS
+Route::post('/list/tps', 'Admin\TpsController@getDataTps');
 
 #new org diagram
 // Route::get('org/rt', 'Admin\OrgDiagramController@getDataOrgDiagramRT');
