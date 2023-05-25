@@ -385,3 +385,6 @@ Route::get('member/agegroup/village/caleg/{village_id}/{user_id}','API\Dashboard
 Route::get('member/jobs/village/caleg/{village_id}/{user_id}','API\DashboardController@getJobsVillageCaleg');
 Route::get('member/gender/village/caleg/{village_id}/{user_id}','API\DashboardController@getGenderVillageCaleg');
 Route::get('member/totalvillage/caleg/{district_id}/{village_id}/{user_id}','API\DashboardController@getTotalMemberVillageCaleg');
+
+#TPS
+Route::post('/getdatatps','Admin\TpsController@getDataTpsAPI');

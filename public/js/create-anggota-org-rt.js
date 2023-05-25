@@ -98,6 +98,8 @@ $("#selectVillageId").change(async function () {
         $("#selectRt").val("");
 
         initialSelect2Member(selectVillageId, selectRT)
+        getDataTps(selectVillageId);
+
     } else {
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
@@ -369,3 +371,39 @@ function showDivHtmlRT(m) {
     return `<option value="${m.rt}">${m.rt}</option>`;
 }
 
+function getDataTps(selectVillageId){
+
+    // GET ANGGOTA BERDASARKAN SORTIR
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+
+    let URL = `/api/getdatatps`;
+
+    $(".tps").select2({
+        theme: "bootstrap4",
+        width: $(this).data("width")
+            ? $(this).data("width")
+            : $(this).hasClass("w-100")
+                ? "100%"
+                : "style",
+        placeholder: "Pilih TPS",
+        allowClear: Boolean($(this).data("allow-clear")),
+        ajax: {
+            dataType: "json",
+            url: URL,
+            method: 'POST',
+            data  : { villageId : selectVillageId, _token: CSRF_TOKEN},
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            text: `${item.tps_number}`,
+                            id: item.id,
+                        };
+                    }),
+                };
+            },
+        },
+    });
+    
+}

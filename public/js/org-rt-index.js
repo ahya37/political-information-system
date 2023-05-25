@@ -381,6 +381,7 @@ let table = $("#data").DataTable({
                 return `
                         <a class="btn btn-sm btn-sc-primary text-white" href="/admin/struktur/rt/create/anggota/${row.idx}">+ Anggota</a>
                         <a class="btn btn-sm btn-sc-primary text-white" href="/admin/struktur/rt/detail/anggota/${row.idx}">Detail Anggota</a>
+                        <a class="btn btn-sm btn-warning" href="/admin/struktur/rt/edittps/${row.id}">Edit TPS</a>
                         <a class="btn btn-sm btn-info text-white" href="/admin/struktur/rt/edit/${row.id}">Edit</a>
                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>
                         `

@@ -14,6 +14,12 @@
             <div class="dashboard-heading">
                 <h2 class="dashboard-title">Daftar Koordinator RT</h2>
             </div>
+
+            <div class="mt-4">
+                @include('layouts.message')
+            </div>
+
+
             <div class="dashboard-content mt-4" id="transactionDetails">
                 <form action="{{ route('admin-struktur-organisasi-report-excel') }}" method="POST">
                     @csrf
@@ -67,7 +73,6 @@
 
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
-                        @include('layouts.message')
                        
                             <div class="card">
                                 <div class="card-body">

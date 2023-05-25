@@ -71,6 +71,10 @@
                                 <input type="number" class="form-control" name="rts" required>
                             </div>
                             <div class="form-group">
+                                <label>TPS</label>
+                                <select name="tps" id="tps" class="form-control filter tps"></select>
+                            </div>
+                            <div class="form-group">
                                 <label>No.Hp / WA</label>
                                 <input type="tex" class="form-control" name="telp" required>
                             </div>

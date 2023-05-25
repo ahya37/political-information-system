@@ -51,6 +51,7 @@ let table = $("#data").DataTable({
             render: function (data, type, row, meta) {
                 // return `<a href='/admin/struktur/rt/add/anggota/${row.idx}' class='btn btn-sm btn-sc-primary text-white'>Anggota</a>`;
                 return `
+                        <a href="/admin/struktur/rt/edittps/anggota/${row.id}" class="btn btn-sm btn-warning">Edit TPS</a>
                         <a href="/admin/struktur/rt/edit/anggota/${row.id}" class="btn btn-sm btn-info text-white">Edit</a>
                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>
                         `

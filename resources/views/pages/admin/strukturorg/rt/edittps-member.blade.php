@@ -14,8 +14,9 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Tambah Anggota Koordinator RT</h2>
-                <p class="dashboard-subtitle">
+                <h2 class="dashboard-title">Edit TPS Anggota</h2>
+                <p class="dashboard-title">
+                    Nama Anggota : {{ $korte->name }}
                 </p>
             </div>
 
@@ -25,7 +26,7 @@
                         <div class="mt-1 mb-1">
                             @include('layouts.message')
                         </div>
-                        <form action="{{ route('admin-struktur-organisasi-rt-anggota-save') }}" id="register"
+                        <form action="{{ route('update-tps-kor-member', $id) }}" id="register"
                             enctype="multipart/form-data" method="POST">
                             @csrf
                             <div class="form-group">
@@ -38,7 +39,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <select name="dapil_id" id="selectListArea" class="form-control filter"
-                                                required></select>
+                                                ></select>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -49,8 +50,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <select name="village_id" id="selectVillageId" class="form-control filter"
-                                                required></select>
+                                            <select name="village_id" id="selectVillageId" class="form-control filter"></select>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -59,21 +59,13 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group" id="divSelectRt">
+                                            <label>TPS</label>
+                                            <select name="tpsid" id="tps" class="form-control filter tps" required></select>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label>ANGGOTA</label>
-                                <input class="form-control" type="hidden" name="idx" value="{{$result_new_idx}}">
-                                <input class="form-control" type="hidden" name="pidx" value="{{$idx}}">
-                                <select class="multiple-select nik" name="member" id="nik"></select>
-                            </div>
-                            <div class="form-group">
-                                <label>TPS</label>
-                                <select name="tpsid" id="tps" class="form-control filter tps"></select>
-                            </div>
-                            <div class="form-group">
-                                <label>No.Hp / WA</label>
-                                <input class="form-control" name="telp" required>
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-sm btn-sc-primary text-white" type="submit">Simpan</button>
@@ -91,5 +83,5 @@
     <script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
     <script src="{{ asset('assets/vendor/vuetoasted/vue-toasted.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
-    <script src="{{ asset('js/create-anggota-org-rt.js') }}"></script>
+    <script src="{{ asset('js/create-org-rt.js') }}"></script>
 @endpush

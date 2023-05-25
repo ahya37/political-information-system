@@ -8,7 +8,7 @@ use App\OrgDiagram;
 use App\Models\Province;
 use App\Models\Regency;
 use App\Helpers\ResponseFormatter;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Auth\RegisterController;
 use App\User;
 use Illuminate\Support\Facades\Validator;
@@ -1033,6 +1033,26 @@ class OrgDiagramController extends Controller
         return view('pages.admin.strukturorg.rt.edit', compact('regency','id','korte'));
     }
 
+    public function editTps($id){
+
+        
+        $regency = Regency::select('id','name')->where('id', 3602)->first();
+
+        $korte = DB::table('org_diagram_rt')->select('name','telp','rt')->where('id', $id)->first();
+        
+        return view('pages.admin.strukturorg.rt.edittps', compact('regency','id','korte'));
+    }
+
+    public function editTpsMember($id){
+
+        
+        $regency = Regency::select('id','name')->where('id', 3602)->first();
+
+        $korte = DB::table('org_diagram_rt')->select('name','telp','rt')->where('id', $id)->first();
+        
+        return view('pages.admin.strukturorg.rt.edittps-member', compact('regency','id','korte'));
+    }
+
     public function createOrgRTAnggota($idx){
 
         $regency = Regency::select('id','name')->where('id', 3602)->first();
@@ -1081,8 +1101,6 @@ class OrgDiagramController extends Controller
 
     public function saveOrgRT(Request $request){
 
-        // return $request->all();
-
         DB::beginTransaction();
         try {
 
@@ -1116,6 +1134,13 @@ class OrgDiagramController extends Controller
                 'district_id' => $request->district_id,
                 'village_id'  => $request->village_id,
                 'rt'  => $request->rts,
+                'cby' => auth()->guard('admin')->user()->id,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+
+            #update tps_id ke tb users
+            DB::table('users')->where('nik', $user->nik)->update([
+                'tps_id' => $request->tps
             ]);
 
             DB::commit();
@@ -1180,26 +1205,42 @@ class OrgDiagramController extends Controller
             //     $result_new_idx = "KORRT";
                 
             // }
-            
 
-            #save to tb org_diagram_rt
-            DB::table('org_diagram_rt')->insert([
-                'idx'    => $request->idx,
-                'pidx'   => $request->pidx,
-                'title'  => 'ANGGOTA',
-                'nik'    => $user->nik,
-                'name'   => $user->name,
-                'base'   => 'ANGGOTA',
-                'photo'  => $user->photo ?? '',
-                'telp'  => $request->telp,
-                'regency_id'  => $domisili->regency_id,
-                'district_id' => $domisili->district_id,
-                'village_id'  => $domisili->village_id,
-                'rt'  => $domisili->rt,
-            ]);
+            #cek jika tps koordinator tidak sama dengan tps calon anggotanya
+            $koor = DB::table('org_diagram_rt as a')->select('b.tps_id')
+                        ->join('users as b','a.nik','=','b.nik')
+                        ->where('a.idx', $request->pidx)
+                        ->first();
+            $tpsKoor = $koor->tps_id;
 
-            DB::commit();
-            return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+            if ($tpsKoor != $request->tpsid) {
+
+                return redirect()->back()->with(['error' => 'Gagal, TPS anggota tidak sama dengan TPS Koordinator!']);
+
+            } else{
+
+                #save to tb org_diagram_rt
+                DB::table('org_diagram_rt')->insert([
+                    'idx'    => $request->idx,
+                    'pidx'   => $request->pidx,
+                    'title'  => 'ANGGOTA',
+                    'nik'    => $user->nik,
+                    'name'   => $user->name,
+                    'base'   => 'ANGGOTA',
+                    'photo'  => $user->photo ?? '',
+                    'telp'  => $request->telp,
+                    'regency_id'  => $domisili->regency_id,
+                    'district_id' => $domisili->district_id,
+                    'village_id'  => $domisili->village_id,
+                    'rt'  => $domisili->rt,
+                ]);
+    
+                DB::table('users')->where('nik', $user->nik)->update(['tps_id' => $request->tpsid]);
+    
+                DB::commit();
+                return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+
+            }
            
         } catch (\Exception $e) {
             DB::rollback();
@@ -2234,6 +2275,50 @@ public function updateLelelOrgAll(){
 
     return 'ok';
     
+}
+
+public function updateTps(Request $request, $id){
+
+    $this->validate($request, [
+        'tpsid' => 'required',
+    ]);
+
+    #get nik by id
+    $org     = DB::table('org_diagram_rt')->select('nik')->where('id', $id)->first();
+    $nik     = $org->nik;
+
+    #update tps where nik di tb users
+    DB::table('users')->where('nik', $nik)->update(['tps_id' => $request->tpsid]);
+    return redirect()->route('admin-struktur-organisasi-rt')->with(['success' => 'TPS berhasil tersimpan!']);
+
+}
+
+public function updateTpsMember(Request $request, $id){
+
+
+    $this->validate($request, [
+        'tpsid' => 'required',
+    ]);
+
+    #get nik by id
+    $org     = DB::table('org_diagram_rt')->select('nik','pidx','name')->where('id', $id)->first();
+    $nik     = $org->nik;
+
+    $koor = DB::table('org_diagram_rt as a')->select('b.tps_id')
+        ->join('users as b','a.nik','=','b.nik')
+        ->where('a.idx', $org->pidx)
+        ->first();
+
+    #cek apakah koordinator nya sudah memiliki TPS
+    if (!$koor->tps_id) return redirect()->back()->with(['error' => "Koordinator Anggota $org->name belum memiliki data TPS!"]);
+    
+    #cek apakah TPS koordinator sama dengan TPS anggota nya
+    if ($koor->tps_id != $request->tpsid) return redirect()->back()->with(['error' => 'Gagal, TPS anggota tidak sama dengan TPS Koordinator!']);
+
+    #update tps where nik di tb users
+    DB::table('users')->where('nik', $nik)->update(['tps_id' => $request->tpsid]);
+    return redirect()->route('admin-struktur-organisasi-rt-detail-anggota', ['idx' => $org->pidx])->with(['success' => 'TPS anggota berhasil tersimpan!']);
+
 }
 
 

@@ -14,7 +14,7 @@ class TpsController extends Controller
     public function index(){
 
         $regency = Regency::select('id','name')->where('id', 3602)->first();
-        
+
         return view('pages.admin.tps.index', compact('regency'));
 
     }
@@ -33,7 +33,7 @@ class TpsController extends Controller
                 ->select('a.tps_number','a.rt', 'a.rw', 'b.name as village')
                 ->join('villages as b','a.village_id','=','b.id');
 
-            
+
         if($request->input('search.value')!=null){
                 $data = $data->where(function($q)use($request){
                     $q->whereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
@@ -51,12 +51,12 @@ class TpsController extends Controller
 
           $recordsFiltered = $data->get()->count();
           if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
-        
+
           $data = $data->orderBy('a.village_id','asc');
           $data = $data->orderBy('a.tps_number','asc');
           $data = $data->orderBy($orderBy,$request->input('order.0.dir'));
           $data = $data->get();
-          
+
           $recordsTotal = $data->count();
 
           return response()->json([
@@ -94,5 +94,22 @@ class TpsController extends Controller
 
     }
 
+    public function getDataTpsAPI(Request $request){
+
+        $data = Tps::select('id','tps_number','village_id')->where('village_id', request()->villageId)->orderBy('tps_number','asc')->get();
+
+        if($request->has('q')){
+            $search = $request->q;
+            $data = Tps::select('id','tps_number','village_id')
+            ->where('village_id', request()->villageId)
+            ->where('tps_number','LIKE',"%$search%")
+            ->orderBy('tps_number','asc')
+            ->get();
+
+        }
+
+        return response()->json($data);
+
+    }
 
 }
