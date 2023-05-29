@@ -8,7 +8,7 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Tambah Inventory</h2>
+                <h2 class="dashboard-title">Edit Inventory</h2>
                 <p class="dashboard-subtitle">
                 </p>
             </div>
@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         @include('layouts.message')
-                        <form action="{{ route('admin-inventory-store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin-inventory-update', $inventory->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="card">
                                 <div class="card-body">
@@ -27,7 +27,7 @@
                                                     <div class="col-md-12 col-sm-12">
                                                         <label>Nama Barang</label>
                                                         <input type="text" name="name" required
-                                                            class="form-control" />
+                                                            class="form-control" value="{{ $inventory->name }}" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -35,7 +35,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12 col-sm-12">
                                                         <label>Type</label>
-                                                        <input type="text" name="type" class="form-control" />
+                                                        <input type="text" name="type" class="form-control" value="{{ $inventory->type }}" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -51,7 +51,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12 col-sm-12">
                                                         <label>Harga Satuan</label>
-                                                        <input type="number" name="price" class="form-control" />
+                                                        <input type="number" name="price" class="form-control" value="{{ $inventory->price }}" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -59,7 +59,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12 col-sm-12">
                                                         <label>qty</label>
-                                                        <input type="number" name="qty" class="form-control" />
+                                                        <input type="number" name="qty" class="form-control" value="{{ $inventory->qty }}" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -67,7 +67,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12 col-sm-12">
                                                         <label>Catatan</label>
-                                                        <textarea name="note" class="form-control"></textarea>
+                                                        <textarea name="note" class="form-control">{{ $inventory->note }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>

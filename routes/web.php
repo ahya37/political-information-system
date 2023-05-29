@@ -459,12 +459,14 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/','InventoryController@index')->name('admin-inventory');
             Route::get('/create','InventoryController@create')->name('admin-inventory-create');
             Route::post('/store','InventoryController@store')->name('admin-inventory-store');
-            Route::get('/edit/{id}','CatatanController@edit')->name('admin-catatan-edit');
-            Route::post('/update/{id}','CatatanController@update')->name('admin-catatan-update');
+            Route::get('/edit/{id}','InventoryController@edit')->name('admin-inventory-edit');
+            Route::post('/update/{id}','InventoryController@update')->name('admin-inventory-update');
+            Route::get('/users/{id}','InventoryController@inventoryUser')->name('admin-inventory-users');
+            Route::post('/user/store/{id}','InventoryController@storeInventoryUser')->name('admin-inventory-user-store');
         });
 
 
-        #Inventory
+        #Spam
         Route::group(['prefix' => 'spam'], function(){
             Route::get('/anggota','SpamController@index')->name('admin-spam-member');
         });

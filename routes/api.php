@@ -348,6 +348,9 @@ Route::post('/catatan/delete', 'Admin\CatatanController@delete');
 
 #INVENTORY
 Route::post('/getlistinventory', 'Admin\InventoryController@getListInventory');
+Route::post('/getlistinventory/users', 'Admin\InventoryController@getListInventoryUsers');
+Route::post('/inventory/delete','Admin\InventoryController@delete')->name('admin-inventory-update');
+Route::post('/inventoryuser/delete','Admin\InventoryController@deleteInventoryUser');
 
 Route::post('/member/potential/referal/excel/upper','Admin\MemberController@memberPotentialReferalDownloadExcelUpper');
 Route::post('/member/potential/district/referal/excel/upper','Admin\MemberController@getKecamatanReferalUpper');

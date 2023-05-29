@@ -1,3 +1,5 @@
+const invId = $('#invid').val();
+
 let table = $("#data").DataTable({
     pageLength: 10,
 
@@ -6,13 +8,13 @@ let table = $("#data").DataTable({
     bInfo: true,
     processing: true,
     bServerSide: true,
-    order: [[2, "asc"]],
+    order: [[1, "asc"]],
     autoWidth: false,
     ajax: {
-        url: "/api/getlistinventory",
+        url: "/api/getlistinventory/users",
         type: "POST",
         data: function (d) {
-            // d.dapil = selectListArea;
+            d.id   = invId
             return d;
         },
     },
@@ -35,28 +37,20 @@ let table = $("#data").DataTable({
         {
             targets: 2,
             render: function (data, type, row, meta) {
-                return row.type;
+                return `<p> DS. ${row.village}, KEC. ${row.district}</p>`;
             },
         },
         {
             targets: 3,
             render: function (data, type, row, meta) {
-                return `<span class='float-right'>Rp ${currency(row.price)}</span>`;
+                return row.note ?? '';
             },
         },
         {
             targets: 4,
             render: function (data, type, row, meta) {
-                return `<img  class="rounded" width="40" src="/storage/${row.image}">`
-            },
-        },
-        {
-            targets: 5,
-            render: function (data, type, row, meta) {
                 // return `<a href='/admin/struktur/rt/add/anggota/${row.idx}' class='btn btn-sm btn-sc-primary text-white'>Anggota</a>`;
                 return `
-                <a class="btn btn-sm btn-info" href="/admin/inventory/users/${row.id}">Pengguna</a>
-                        <a class="btn btn-sm btn-sc-primary text-white" href="/admin/inventory/edit/${row.id}">Edit</a>
                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>
                         `
             },
@@ -81,7 +75,7 @@ function onDelete(data) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "/api/inventory/delete",
+                url: "/api/inventoryuser/delete",
                 method: "POST",
                 cache: false,
                 data: {
