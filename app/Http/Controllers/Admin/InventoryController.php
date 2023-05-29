@@ -90,6 +90,7 @@ class InventoryController extends Controller
                 'name' => $value->name,
                 'type' => $value->type,
                 'price' => $value->price,
+                'qty' => $value->qty,
                 'image' => $value->image,
                 'note' => $value->note,
             ];

@@ -31,6 +31,7 @@
                                         <th scope="col">Nama</th>
                                         <th scope="col">Type</th>
                                         <th scope="col">Harga</th>
+                                        <th scope="col">Qty</th>
                                         <th scope="col">Gambar</th>
                                         <th scope="col">Opsi</th>
                                       </tr>

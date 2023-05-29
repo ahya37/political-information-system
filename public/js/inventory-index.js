@@ -47,11 +47,17 @@ let table = $("#data").DataTable({
         {
             targets: 4,
             render: function (data, type, row, meta) {
-                return `<img  class="rounded" width="40" src="/storage/${row.image}">`
+                return `<span class='float-right'>${row.qty}</span>`;
             },
         },
         {
             targets: 5,
+            render: function (data, type, row, meta) {
+                return `<img  class="rounded" width="40" src="/storage/${row.image}">`
+            },
+        },
+        {
+            targets: 6,
             render: function (data, type, row, meta) {
                 // return `<a href='/admin/struktur/rt/add/anggota/${row.idx}' class='btn btn-sm btn-sc-primary text-white'>Anggota</a>`;
                 return `
