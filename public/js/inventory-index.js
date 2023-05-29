@@ -47,7 +47,7 @@ let table = $("#data").DataTable({
         {
             targets: 4,
             render: function (data, type, row, meta) {
-                return `<span class='float-right'>${row.qty}</span>`;
+                return `<span class='float-right'>${row.qty ?? ''}</span>`;
             },
         },
         {
