@@ -79,18 +79,37 @@ class TpsController extends Controller
 
     public function store(Request $request){
 
-        $this->validate($request, [
-            'tpnumber' => 'required',
-        ]);
+        DB::beginTransaction();
+        try {
+            
+            $this->validate($request, [
+                'tpnumber' => 'required',
+            ]);
 
-        Tps::create([
-            'village_id' => $request->village_id,
-            'tps_number' => $request->tpnumber,
-            'rt' => $request->rt,
-            'rw' => $request->rw
-        ]);
+            #hitung angka ari tps_number
+            $countTpsNumber = $request->tpnumber;
 
-        return redirect()->back()->with(['success' => 'TPS berhasil tersimpan!']);
+            for ($i= 1; $i <= $countTpsNumber ; $i++) { 
+                
+                Tps::create([
+                    'village_id' => $request->village_id,
+                    'tps_number' => $i,
+                    // 'rt' => $request->rt,
+                    // 'rw' => $request->rw
+                ]);
+            }
+
+            DB::commit();
+    
+            return redirect()->back()->with(['success' => 'TPS berhasil tersimpan!']);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
+
+        }
+
 
     }
 

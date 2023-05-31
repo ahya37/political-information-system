@@ -68,11 +68,11 @@
                                      <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12 ">
-                                                <input type="number" name="tpnumber" id="idValue" placeholder="Isikan nomor TPS" class="form-control" required/>
+                                                <input type="number" name="tpnumber" id="idValue" placeholder="Isikan jumlah TPS di desa tersebut" class="form-control" required/>
                                             </div>
                                         </div>
                                     </div>
-                                     <div class="form-group">
+                                     {{-- <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12 ">
                                                 <input type="number" name="rt" id="rt" class="form-control" placeholder="Isikan nomor RT lokasi TPS" />
@@ -85,7 +85,7 @@
                                                 <input type="number" name="rw" id="rw" class="form-control" placeholder="Isikan nomor RW lokasi TPS" />
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group">
                                         <button
                                         type="submit"

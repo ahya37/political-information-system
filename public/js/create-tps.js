@@ -2,16 +2,16 @@ const selectArea = $("#selectArea");
 const selectListArea = $("#selectListArea");
 const selectDistrictId = $("#selectDistrictId");
 const idValue = $("#idValue");
-const rt = $("#rt");
-const rw = $("#rw");
+// const rt = $("#rt");
+// const rw = $("#rw");
 // selectArea.hide();
 selectListArea.hide();
 selectDistrictId.hide();
 const selectVillageId = $("#selectVillageId");
 selectVillageId.hide();
 idValue.hide();
-rt.hide();
-rw.hide();
+// rt.hide();
+// rw.hide();
 
 // get list dapil names
 selectArea.on("change", async function () {
@@ -136,8 +136,8 @@ function getListVillageUi(dataVillages) {
 
 selectVillageId.on("change", function () {
     idValue.show();
-    rt.show();
-    rw.show();
+    // rt.show();
+    // rw.show();
 });
 
 function showDivHtmlVillage(m) {

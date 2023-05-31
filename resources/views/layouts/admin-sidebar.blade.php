@@ -180,6 +180,11 @@
                         class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('setting/rightchoose') ? 'active custom-active-color' : '' }}"><span>Atur
                             Hak Pilih</span></a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin-listrightchoose') }}"
+                        class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('setting/rightchoose') ? 'active custom-active-color' : '' }}"><span>Daftar
+                            Hak Pilih</span></a>
+                </li>
 
             </ul>
         </div>

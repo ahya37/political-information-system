@@ -68,8 +68,7 @@
                                      <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12 ">
-                                                
-                                                <input type="number" name="value" id="idValue" class="form-control"/>
+                                                <input type="number" name="count_vooter" id="idValue" class="form-control idValue" placeholder="Isikan jumlah hak pilih disini"/>
                                             </div>
                                         </div>
                                     </div>

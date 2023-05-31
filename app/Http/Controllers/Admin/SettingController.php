@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\GlobalProvider;
 use App\RightChoose;
+use App\RightChooseDistrict;
+use App\RightChooseProvince;
+use App\RightChooseRegency;
+use App\Tps;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class SettingController extends Controller
@@ -251,6 +256,16 @@ class SettingController extends Controller
         return $result;
     }
 
+    public function listRightChoose()
+    {
+
+        $no = 1;
+        $righChooseModel = new RightChooseProvince();
+        $righChoose      = $righChooseModel->getDataRightChooseProvince();
+        
+        return view('pages.admin.setting.listrightchoose', compact('no','righChoose'));
+    }
+
     public function settingRightChoose()
     {
         $dapils = new Dapil();
@@ -267,25 +282,185 @@ class SettingController extends Controller
 
     public function SaveRightChooseVillage(Request $request)
     {
-        $request->validate([
-            'value' => 'required|numeric'
-        ]);
+        DB::beginTransaction();
+        try {
 
-        $choose = RightChosseVillage::where('village_id', $request->village_id)->count();
-        if ($choose == 0) {
-            RightChosseVillage::create([
-                'village_id' => $request->village_id,
-                'choose' => $request->value
+            $request->validate([
+                'count_vooter' => 'required|numeric'
             ]);
+
+            $villageId    = $request->village_id;
+            $districtId   = $request->district_id;
+            $count_vooter = $request->count_vooter;
+            
+            #jumlah tps dihitung dari data di tb tps bersasarkan desa
+            $count_tps       = Tps::where('village_id', $villageId)->count();
+            $district        = District::with(['regency'])->select('regency_id')->where('id', $districtId)->first();
+            $provinceId      = $district->regency->province_id; 
+            
+
+            $rightChooseVillageModel     = new RightChosseVillage();
+            $rightChooseDistrictModel    = new RightChooseDistrict();
+            $rightChooseRegencyModel     = new RightChooseRegency();
+            $rightChooseProvinceModel    = new RightChooseProvince();
+
+            #simpan hak pilih desa
+            $this->setUpdateRightChooseVillage($rightChooseVillageModel, $villageId,$districtId,$count_tps,$count_vooter);
+            
+            #simpan hak pilih ke level distrtct
+            $this->setUpdateRightChooseDistrict($rightChooseVillageModel,$rightChooseDistrictModel, $districtId,$district);
+
+            #simpan hak pilih ke level kabkot
+            $this->setUpdateRightChooseRegency($rightChooseDistrictModel,$rightChooseRegencyModel,$district);
+
+            #simpan hak pilih ke level privinsi
+            $this->setUpdateRightChooseProvince($rightChooseRegencyModel,$rightChooseProvinceModel,$provinceId);
+
+            DB::commit();
 
             return redirect()->back()->with(['success' => 'Jumlah hak pilih telah disimpan']);
-        }else{
-            $update = RightChosseVillage::where('village_id', $request->village_id)->first();
-             $update->update([
-                'choose' => $request->value
-            ]);
-            return redirect()->back()->with(['success' => 'Jumlah hak pilih telah diubah']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
         }
+
+    }
+
+    public function setUpdateRightChooseVillage($rightChooseVillageModel, $villageId,$districtId,$count_tps,$count_vooter){
+
+        $cek          = $rightChooseVillageModel->where('village_id', $villageId)->count();
+        $adminId      = auth()->guard('admin')->user()->id;
+
+        if ($cek > 0) {
+
+            #jika target sudah ada, maka update saja
+            $rightChooseVillageModel->where('village_id', $villageId)->update([
+                'count_tps' => $count_tps,
+                'count_vooter' => $count_vooter,
+                'mby' => $adminId
+            ]);
+
+        }else{
+
+            $rightChooseVillageModel->create([
+                'district_id' => $districtId,
+                'village_id' => $villageId,
+                'count_tps' => $count_tps,
+                'count_vooter' => $count_vooter,
+                'cby' => $adminId
+            ]);
+
+        }
+
+        return;
+
+    }
+
+    public function setUpdateRightChooseDistrict($rightChooseVillageModel,$rightChooseDistrictModel, $districtId,$district){
+
+         #hitung, simpan hak pilih ke level distrtct
+         $countChooseVillage       = $rightChooseVillageModel->select('count_vooter','count_tps')->where('district_id', $districtId)->get();
+         $countChooseVooterVillage = collect($countChooseVillage)->sum(function($q){ return $q->count_vooter; });
+         $countTpsVillage          = collect($countChooseVillage)->sum(function($q){ return $q->count_tps; });
+
+        #jika data dengan districtId sudah ada, maka update sata
+        $cek = $rightChooseDistrictModel->where(['district_id' => $districtId])->count();
+        $adminId      = auth()->guard('admin')->user()->id;
+
+        if ($cek > 0) {
+            
+            $rightChooseDistrictModel->where(['district_id' => $districtId])->update([
+                'count_tps'   => $countTpsVillage,
+                'count_vooter'=> $countChooseVooterVillage,
+                'mby' => $adminId
+            ]);
+
+        }else{
+
+            $rightChooseDistrictModel->create([
+                'district_id' => $districtId,
+                'regency_id'  => $district->regency_id,
+                'count_tps'   => $countTpsVillage,
+                'count_vooter'=> $countChooseVooterVillage,
+                'cby' => $adminId
+            ]);
+
+        }
+
+        return;
+
+    }
+
+    public function setUpdateRightChooseRegency($rightChooseDistrictModel,$rightChooseRegencyModel, $district){
+
+        #hitung, simpan hak pilih ke level kabkot
+        $chooseVooterDistrict     = $rightChooseDistrictModel->select('count_tps','count_vooter')->where('regency_id', $district->regency_id)->get();
+        $countChooseVooterDistrict= collect($chooseVooterDistrict)->sum(function($q){ return $q->count_vooter;});
+        $countChooseTpsDistrict   = collect($chooseVooterDistrict)->sum(function($q){ return $q->count_tps;});
+        $regency                  = Regency::select('province_id')->where('id', $district->regency_id)->first();
+
+        $adminId      = auth()->guard('admin')->user()->id;
+
+        #jika data dengan regencyid sudah ada, maka update sata
+        $cek = $rightChooseRegencyModel->select('count_tps','count_vooter')->where('regency_id', $district->regency_id)->count();
+        if ($cek > 0) {
+           
+            $rightChooseRegencyModel->where('regency_id', $district->regency_id)->update([
+                'regency_id'  => $district->regency_id,
+                'count_tps'   => $countChooseTpsDistrict,
+                'count_vooter'=> $countChooseVooterDistrict,
+                'mby' => $adminId
+            ]);
+
+        }else{
+
+            $rightChooseRegencyModel->create([
+                'regency_id'  => $district->regency_id,
+                'province_id'  => $regency->province_id,
+                'count_tps'   => $countChooseTpsDistrict,
+                'count_vooter'=> $countChooseVooterDistrict,
+                'cby' => $adminId
+            ]);
+
+        }
+
+        return;
+
+
+    }
+
+    public function setUpdateRightChooseProvince($rightChooseRegencyModel,$rightChooseProvinceModel,$provinceId){
+
+        #hitung, simpan hak pilih ke level privinsi
+        $chooseVooterRegency      = $rightChooseRegencyModel->select('count_tps','count_vooter')->where('province_id', $provinceId)->get();
+        $countChooseVooterRegency = collect($chooseVooterRegency)->sum(function($q){ return $q->count_vooter;});
+        $countChooseTpsRegency    = collect($chooseVooterRegency)->sum(function($q){ return $q->count_tps;});
+
+        $adminId      = auth()->guard('admin')->user()->id;
+        #jika data dengan provinceid sudah ada, maka update sata
+        $cek = $rightChooseProvinceModel->select('count_tps','count_vooter')->where('province_id', $provinceId)->count();
+        if ($cek > 0) {
+            
+            $rightChooseProvinceModel->where('province_id', $provinceId)->update([
+                'count_tps'   => $countChooseTpsRegency,
+                'count_vooter'=> $countChooseVooterRegency,
+                'mby' => $adminId
+            ]);
+
+        }else{
+
+            $rightChooseProvinceModel->create([
+                'province_id'  => $provinceId,
+                'count_tps'   => $countChooseTpsRegency,
+                'count_vooter'=> $countChooseVooterRegency,
+                'cby' => $adminId
+            ]);
+
+        }
+
+        return;
+
 
     }
 

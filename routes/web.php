@@ -329,6 +329,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/targetdistrict/{district_id}','SettingController@listTargetDistric')->name('admin-list-target-district');
         Route::get('/rightchoose','SettingController@settingRightChoose')->name('admin-rightchoose');
         Route::post('/saverightchoose','SettingController@SaveRightChooseVillage')->name('admin-rightchoose-save');
+        Route::get('/listrightchoose','SettingController@listRightChoose')->name('admin-listrightchoose');
 
         // anggota potensial download
         Route::post('/by_referal/downloadpdfall/{user_id}','MemberController@memberByReferalAllDownloadPDF')->name('by-referal-downloadpdfall');
