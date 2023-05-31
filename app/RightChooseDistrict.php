@@ -16,6 +16,7 @@ class RightChooseDistrict extends Model
                ->select('a.district_id','a.count_tps','a.count_vooter','a.choose','b.name')
                ->join('districts as b','a.district_id','=','b.id')
                ->where('a.regency_id', $regencyId)
+               ->orderBy('b.name','asc')
                ->get();
 
         return $sql;

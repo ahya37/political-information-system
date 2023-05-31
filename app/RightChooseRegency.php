@@ -16,6 +16,7 @@ class RightChooseRegency extends Model
                ->select('a.regency_id','a.count_tps','a.count_vooter','a.choose','b.name')
                ->join('regencies as b','a.regency_id','=','b.id')
                ->where('a.province_id', $provinceId)
+               ->orderBy('b.name','asc')
                ->get();
 
         return $sql;

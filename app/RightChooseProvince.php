@@ -15,6 +15,7 @@ class RightChooseProvince extends Model
         $sql = DB::table('right_to_choose_provinces as a')
                ->select('a.province_id','a.count_tps','a.count_vooter','a.choose','b.name')
                ->join('provinces as b','a.province_id','=','b.id')
+               ->orderBy('b.name','asc')
                ->get();
         return $sql;
 

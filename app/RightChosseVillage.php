@@ -24,6 +24,7 @@ class RightChosseVillage extends Model
            ->select('a.village_id','a.count_tps','a.count_vooter','a.choose','b.name')
            ->join('villages as b','a.village_id','=','b.id')
            ->where('a.district_id', $districtId)
+           ->orderBy('a.count_tps','asc')
            ->get();
 
     return $sql;
