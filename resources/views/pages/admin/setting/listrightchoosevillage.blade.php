@@ -12,14 +12,14 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Hak Pilih</h2>
+                <h2 class="dashboard-title">DAFTAR HAK PILIH {{ $district->name }}</h2>
                 <p class="dashboard-subtitle">
                 </p>
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
 
                 <div class="row">
-                  <div class="col-12">
+                  <div class="col-7">
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
@@ -28,20 +28,18 @@
                                     <thead>
                                       <tr>
                                         <th class="col-1">NO</th>
-                                        <th>PROVINSI</th>
-                                        <th>JUMLAH TPS</th>
-                                        <th>HAK PILIH</th>
+                                        <th>KABUPATEN</th>
+                                        <th class="text-right">JUMLAH TPS</th>
+                                        <th class="text-right">HAK PILIH</th>
                                       </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($rightChoose as $item)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
-                                                <td>
-                                                    <a href="{{ route('admin-listrightchoose-regency', $item->province_id) }}">{{ $item->name }}</a>
-                                                </td>
-                                                <td>{{ $gF->decimalFormat($item->count_tps) }}</td>
-                                                <td>{{ $gF->decimalFormat($item->count_vooter) }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td class="text-right">{{ $gF->decimalFormat($item->count_tps) }}</td>
+                                                <td class="text-right">{{ $gF->decimalFormat($item->count_vooter) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

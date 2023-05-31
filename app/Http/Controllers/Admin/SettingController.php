@@ -258,12 +258,50 @@ class SettingController extends Controller
 
     public function listRightChoose()
     {
+        $gF = new GlobalProvider();
 
         $no = 1;
-        $righChooseModel = new RightChooseProvince();
-        $righChoose      = $righChooseModel->getDataRightChooseProvince();
+        $rightChooseModel = new RightChooseProvince();
+        $rightChoose      = $rightChooseModel->getDataRightChooseProvince();
         
-        return view('pages.admin.setting.listrightchoose', compact('no','righChoose'));
+        return view('pages.admin.setting.listrightchoose', compact('no','rightChoose','gF'));
+    }
+
+    public function listRightChooseRegency($provinceId)
+    {
+        $gF = new GlobalProvider();
+
+        $no = 1;
+        $province = Province::select('name')->where('id', $provinceId)->first();
+        $rightChooseModel = new RightChooseRegency();
+        $rightChoose      = $rightChooseModel->getDataRightChooseRegency($provinceId);
+        
+        return view('pages.admin.setting.listrightchooseregency', compact('no','rightChoose','gF','province'));
+    }
+
+    public function listRightChooseDistrict($regencyId)
+    {
+        $gF = new GlobalProvider();
+
+        $no = 1;
+        $regency = Regency::select('name')->where('id', $regencyId)->first();
+        $rightChooseModel = new RightChooseDistrict();
+        $rightChoose      = $rightChooseModel->getDataRightChooseDistrict($regencyId);
+        
+        return view('pages.admin.setting.listrightchoosedistrict', compact('no','rightChoose','gF','regency'));
+    }
+
+    public function listRightChooseVillage($districtId)
+    {
+        $gF = new GlobalProvider();
+
+        $no = 1;
+        $district = District::select('name')->where('id', $districtId)->first();
+        $rightChooseModel = new RightChosseVillage();
+        $rightChoose      = $rightChooseModel->getDataRightChooseVillage($districtId);
+
+        
+        return view('pages.admin.setting.listrightchoosevillage', compact('no','rightChoose','gF','district'));
     }
 
     public function settingRightChoose()
@@ -279,6 +317,7 @@ class SettingController extends Controller
         
         return view('pages.admin.setting.rightchoose', compact('dataDapils','righChoose','no'));
     }
+    
 
     public function SaveRightChooseVillage(Request $request)
     {
