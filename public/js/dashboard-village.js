@@ -79,7 +79,6 @@ setAjaxCapaianAnggotaPerhari().then((data) => {
 					});
 				}
 }).catch((error) => {
-	console.log('error pencapaian : ', error);
 });
 // CAPAIAN ANGGOTA PERHARI
 
@@ -227,7 +226,7 @@ $("#created_at").daterangepicker(
 							});
 						}
 		}).catch((error) => {
-			console.log('error pencapaian per tanggal : ', error);
+			
 		});
 		
     }
@@ -247,6 +246,8 @@ function setAjaxInfoCard(){
 				$("#total_member_persen").text("loading...");
 				$("#target_anggota").text("loading...");
 				$("#village_filled").text("loading...");
+				$("#dpt").text("loading...");
+				$("#tps").text("loading...");
 			},
 			success: function (data) {
 				setTimeout(() => {
@@ -265,8 +266,9 @@ setAjaxInfoCard().then((data) => {
 	$("#total_member_persen").text(data.persentage_target_member);
 	$("#target_anggota").text(data.target_member);
 	$("#village_filled").text(data.achievments);
+	$("#dpt").text(data.rightChooseVillage);
+	$("#tps").text(data.tpsVillag);
 }).catch((error) => {
-	console.log('error info: ', error);
 });
 // SECTION 1 INFO CARD
 
@@ -309,7 +311,6 @@ setAjaxGender().then((data) => {
 				$("#totalMaleGender").text(data.total_male_gender);
 				$("#totalfemaleGender").text(data.total_female_gender);	
 }).catch((error) => {
-	console.log('error gender : ', error);
 });
 // SECTION 2 LEFT GENDER
 
@@ -362,7 +363,6 @@ setAjaxJob().then((data) => {
 					},
 				});
 }).catch((error) => {
-	console.log('error job : ', error);
 });
 
 
@@ -419,7 +419,6 @@ setAjaxgAgeGroup().then((data) => {
 					},
 			});
 }).catch((error) => {
-	console.log('error kelompok usia: ', error);
 });
 
 // SECTION 3 KELOMPOK UMUR
@@ -477,7 +476,6 @@ setAjaxgAgeGeneration().then((data) => {
 					},
 				});
 }).catch((error) => {
-	console.log('error generasi umur : ', error);
 });
 // SECTION 3 GENERASI UMUR
 
@@ -534,7 +532,6 @@ setAjaxAdminInputTerbanyak().then((data) => {
 					},
 				});
 }).catch((error) => {
-	console.log('error admin input terbanyak : ', error);
 });
 // SECTION 4 ADMIN BERDASARKAN INPUT TERBANYAK
 
@@ -591,7 +588,6 @@ setAjaxMemberReferalTerbanyak().then((data) => {
 					},
 				});
 }).catch((error) => {
-	console.log('error referal terbanyak : ', error);
 });
 // SECTION 5 ANGGOTA BERDASARKAN REFERAL TERBANYAK
 
@@ -853,7 +849,6 @@ function getTotalReferalByMonth(dateReferal, yearReferal, villageID) {
 				`Total : <strong>${data.referal_acumulate}</strong>`
 			);
 	}).catch((error) => {
-		console.log('error total referal per bulan : ', error);
 	});
 	
    
@@ -976,7 +971,6 @@ function getTotalInputByMonth(dateInputer, yearInputer, villageID) {
 				`Total : <strong>${data.input_acumulate}</strong>`
 			);
 	}).catch((error) => {
-		console.log('error total input per bulan: ', error);
 	});
 	
 }

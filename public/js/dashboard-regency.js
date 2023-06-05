@@ -290,6 +290,7 @@ $(document).ready(function () {
             $("#village_filled").text("loading...");
             $("#village_filled_persen").text("loading...");
             $("#total_village").text("loading...");
+            $("#dpt").text("loading...");
         },
         success: function (data) {
             $("#total_member").text(data.total_member);
@@ -298,6 +299,7 @@ $(document).ready(function () {
             $("#village_filled").text(data.total_village_filled);
             $("#village_filled_persen").text(data.presentage_village_filled);
             $("#total_village").text(data.total_village);
+            $("#dpt").text(data.rightChooseRegency);
         },
     });
 
@@ -592,7 +594,7 @@ $(document).ready(function () {
             const totalRegional = await getDataTotalRegional();
             const getTotalRegional = totalRegional.data;
             infoTotalRegionalUi(getTotalRegional);
-        } catch (err) {}
+        } catch (err) { }
     }
 
     gerTotalRegional();
@@ -941,11 +943,10 @@ const tableReferal = $("#dtshowReferalDataReferalByMounth").DataTable({
             targets: 3,
             render: function (data, type, row, meta) {
                 return ` <div class="badge badge-pill badge-warning">
-              ${
-                  row.referal_undirect === null
-                      ? 0
-                      : decimalFormat(row.referal_undirect)
-              }
+              ${row.referal_undirect === null
+                        ? 0
+                        : decimalFormat(row.referal_undirect)
+                    }
               </div>`;
             },
         },
@@ -953,11 +954,10 @@ const tableReferal = $("#dtshowReferalDataReferalByMounth").DataTable({
             targets: 4,
             render: function (data, type, row, meta) {
                 return ` <div class="badge badge-pill badge-success">
-              ${
-                  row.total_referal === null
-                      ? 0
-                      : decimalFormat(row.total_referal)
-              }
+              ${row.total_referal === null
+                        ? 0
+                        : decimalFormat(row.total_referal)
+                    }
               </div>`;
             },
         },
@@ -1115,7 +1115,7 @@ function getTotalInputByMonth(dateInputer, yearInputer, regencyID) {
             regency_id: regencyID,
         },
         success: function (data) {
-			
+
             $("#totalInputByMonth").empty();
             $("#totalInputByMonth").append(
                 `Total : <strong>${data.input_acumulate}</strong>`

@@ -326,6 +326,7 @@ $(document).ready(function () {
             $("#village_filled").text("loading...");
             $("#village_filled_persen").text("loading...");
             $("#total_village").text("loading...");
+            $("#dpt").text("loading...");
         },
         success: function (data) {
             $("#total_member").text(data.total_member);
@@ -334,6 +335,7 @@ $(document).ready(function () {
             $("#village_filled").text(data.total_village_filled);
             $("#village_filled_persen").text(data.presentage_village_filled);
             $("#total_village").text(data.total_village);
+            $("#dpt").text(data.rightChooseProvince);
         },
     });
 

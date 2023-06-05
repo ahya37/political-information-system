@@ -15,6 +15,11 @@ use App\Providers\GlobalProvider;
 use App\Providers\GrafikProvider;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\RightChooseDistrict;
+use App\RightChooseProvince;
+use App\RightChooseRegency;
+use App\RightChosseVillage;
+use App\Tps;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -307,7 +312,6 @@ class DashboardController extends Controller
         //     return $q->total;
         // });
         $userModel        = new User();
-        $regencyModel     = new Regency();
         $targetMember     = $gF->calculateTargetNational();
         $total_member     = $gF->decimalFormat($userModel->where('village_id', '!=', NULL)->count());
         $target_member    = (string) $targetMember;
@@ -319,13 +323,17 @@ class DashboardController extends Controller
         $total_village_filled      = count($village_filled);
         $presentage_village_filled = $gF->persen(($total_village_filled / $total_village) * 100); // persentasi jumlah desa terisi
 
+        #total dpt nasioanal, sum count_vooter level provinsi
+        $rightChooseProvince = RightChooseProvince::sum('count_vooter');
+
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
             'presentage_village_filled' => $presentage_village_filled,
             'total_member' => $total_member,
             'target_member' => $gF->decimalFormat($target_member),
-            'persentage_target_member' => $persentage_target_member
+            'persentage_target_member' => $persentage_target_member,
+            'rightChooseProvince' => $gF->decimalFormat($rightChooseProvince) ?? 0
         ];
         return response()->json($data);
 
@@ -351,6 +359,7 @@ class DashboardController extends Controller
         $village_filled = $villageModel->getVillageFilledRegency($regency_id); //fungsi total desa yang terisi 
         $total_village_filled      = count($village_filled); // total desa yang terisi
         $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
+        $rightChooseRegency        = RightChooseDistrict::where('regency_id', $regency_id)->sum('count_vooter');
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
@@ -358,7 +367,8 @@ class DashboardController extends Controller
             'presentage_village_filled' => $gF->persen($presentage_village_filled),
             'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $gF->decimalFormat($target_member),
-            'persentage_target_member' => $gF->persen($persentage_target_member)
+            'persentage_target_member' => $gF->persen($persentage_target_member),
+            'rightChooseRegency' => $gF->decimalFormat($rightChooseRegency) ?? 0
         ];
         return response()->json($data);
 
@@ -384,6 +394,7 @@ class DashboardController extends Controller
         $village_filled = $villageModel->getVillageFilledDistrict($district_id); //fungsi total desa yang terisi 
         $total_village_filled      = count($village_filled); // total desa yang terisi
         $presentage_village_filled = $gF->persen(($total_village_filled / $total_village) * 100); // persentasi jumlah desa terisi
+        $rightChooseDistrict       = RightChosseVillage::where('district_id', $district_id)->sum('count_vooter');
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
@@ -391,7 +402,8 @@ class DashboardController extends Controller
             'presentage_village_filled' => $presentage_village_filled,
             'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $gF->decimalFormat($target_member),
-            'persentage_target_member' => $persentage_target_member
+            'persentage_target_member' => $persentage_target_member,
+            'rightChooseDistrict' => $gF->decimalFormat($rightChooseDistrict) ?? 0
         ];
         return response()->json($data);
 
@@ -453,11 +465,16 @@ class DashboardController extends Controller
         // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillageFirst($village_id);
 
+        $rightChooseVillage = RightChosseVillage::where('village_id', $village_id)->sum('count_vooter');
+        $tpsVillag          = Tps::select('id')->where('village_id', $village_id)->count();
+
         $data = [
             'achievments' => $gF->decimalFormat($achievments->todays_achievement ?? ''),
             'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $target_member,
-            'persentage_target_member' => $gF->persen($persentage_target_member)
+            'persentage_target_member' => $gF->persen($persentage_target_member),
+            'rightChooseVillage' => $gF->decimalFormat($rightChooseVillage) ?? 0,
+            'tpsVillag' => $gF->decimalFormat($tpsVillag)
         ];
         return response()->json($data);
 
@@ -1656,6 +1673,7 @@ class DashboardController extends Controller
         $village_filled = $villageModel->getVillageFillProvince($province_id); // fungsi total desa di provinsi banten
         $total_village_filled      = count($village_filled);
         $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
+        $rightChooseProvince       = RightChooseRegency::where('province_id', $province_id)->sum('count_vooter');
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
@@ -1663,7 +1681,8 @@ class DashboardController extends Controller
             'presentage_village_filled' => $gF->persen($presentage_village_filled),
             'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $gF->decimalFormat($target_member),
-            'persentage_target_member' => $gF->persen($persentage_target_member)
+            'persentage_target_member' => $gF->persen($persentage_target_member),
+            'rightChooseProvince' => $gF->decimalFormat($rightChooseProvince) ?? 0
         ];
         return response()->json($data);
     }

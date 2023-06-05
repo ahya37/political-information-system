@@ -148,6 +148,23 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card mb-2 bg-info">
+                        <div class="card-body">
+                          <div class="dashboard-card-title text-white">
+                            Jumlah Hak Pilih (DPT)
+                          </div>
+                          <div class="dashboard-card-subtitle">
+                            <h4 class="text-white" id="dpt"></h4>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+
+
               </div>
                <div class="dashboard-content mt-3">
                 <div class="row">

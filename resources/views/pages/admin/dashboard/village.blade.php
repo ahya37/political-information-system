@@ -113,6 +113,34 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="card mb-2 bg-info">
+                        <div class="card-body">
+                          <div class="dashboard-card-title text-white">
+                            Jumlah Hak Pilih (DPT)
+                          </div>
+                          <div class="dashboard-card-subtitle">
+                            <h4 class="text-white" id="dpt"></h4>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="card mb-2 text-white cd-card-primary">
+                        <div class="card-body">
+                          <div class="dashboard-card-title text-white">
+                            Jumlah TPS
+                          </div>
+                          <div class="dashboard-card-subtitle">
+                            <h4 class="text-white" id="tps"></h4>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
               <div class="dashboard-content mt-3">
