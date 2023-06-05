@@ -62,9 +62,14 @@ class MemberController extends Controller
 
     public function store(Request $request)
     {
+
            $this->validate($request, [
                'phone_number' => 'numeric',
            ]);
+
+           #hitung panjang nik, harus 16
+           $cekLengthNik = strlen($request->nik);
+           if($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
 
            $cby = Admin::select('id')->first();
         //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();

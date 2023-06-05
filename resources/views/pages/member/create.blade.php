@@ -31,15 +31,15 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Nama Lengkap</label>
-                                                <input type="text" name="name" value="" required class="form-control" />
+                                                <input type="text" name="name" value=""   class="form-control" />
                                             
                                             </div>
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Jenis Kelamin</label>
-                                                <select name="gender" class="form-control" required>
+                                                <select name="gender" class="form-control"  >
                                                     <option value="">-Pilih jenis kelamin-</option>
                                                     <option value="0">Laki-laki</option>
                                                     <option value="1">Perempuan</option>
@@ -50,18 +50,18 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Tempat Lahir</label>
                                                 <input
                                                 type="text"
                                                 class="form-control"
                                                 name="place_berth"
                                                 autocomplete="off" 
-                                                required
+                                                 
                                                 />
                                             </div>
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Tanggal Lahir</label>
                                                 <input
                                                 id="datetimepicker6"
@@ -69,7 +69,7 @@
                                                 class="form-control"
                                                 name="date_berth"
                                                 autocomplete="off" 
-                                                required >
+                                                  >
                                             </div>
                                         </div>
                                     </div>
@@ -87,7 +87,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Status Perkawinan</label>
                                             <select name="marital_status" class="form-control">
                                                     <option value="">-Pilih status perkawinan-</option>
@@ -101,9 +101,9 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Status Pekerjaan</label>
-                                                <select class="form-control" id="pekerjaan" name="job_id" required
+                                                <select class="form-control" id="pekerjaan" name="job_id"  
                                             autocomplete="off" v-model="job_id" v-if="jobs">
                                                 <option disabled value="">-Pilih status pekerjaan-</option>
                                             <option v-for="job in jobs" :value="job.id">@{{ job.name }}</option>
@@ -111,9 +111,9 @@
                                         </select>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Agama</label>
-                                                <select class="form-control" name="religion" required autocomplete="off">
+                                                <select class="form-control" name="religion"   autocomplete="off">
                                                     <option> -Pilih agama- </option>
                                                 <option value="Islam">Islam</option>
                                                 <option value="Iristen">Kristen</option>
@@ -129,22 +129,22 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>NIK</label>
                                                     <input
                                                             type="number"
                                                             class="form-control"
                                                             name="nik"
                                                             value="" 
-                                                            required
+                                                             
                                                             v-model="nik"
                                                             @change="checkForNikAvailability()"
                                                         />
                                             </div>
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Pendidikan Terakhir</label>
-                                                    <select class="form-control" name="education_id" required
+                                                    <select class="form-control" name="education_id"  
                                                 autocomplete="off" v-model="education_id" v-if="educations">
                                                 <option disabled value="">-Pilih pendidikan-</option>
                                                 <option v-for="education in educations" :value="education.id">@{{ education.name }}</option>
@@ -157,7 +157,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label
                                                 >No. Telp/HP
                                                 </label
@@ -166,11 +166,11 @@
                                                 type="text"
                                                 class="form-control"
                                                 name="phone_number"
-                                                required
+                                                 
                                                 />
                                             </div>
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label
                                                 >Whatsapp
                                                 </label
@@ -179,7 +179,7 @@
                                                 type="text"
                                                 class="form-control"
                                                 name="whatsapp"
-                                                required
+                                                 
                                                 />
                                             </div>
                                         </div>
@@ -188,7 +188,7 @@
                                     <div class="form-group">
                                             <div class="row">
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Provinsi</label>
                                                 <select id="provinces_id" class="form-control" v-model="provinces_id" v-if="provinces">
                                                 <option v-for="province in provinces" :value="province.id">@{{ province.name }}</option>
@@ -205,16 +205,16 @@
                                     <div class="form-group">
                                             <div class="row">
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Kecamatan</label>
                                                 <select id="districts_id" class="form-control" v-model="districts_id" v-if="districts">
                                                 <option v-for="district in districts" :value="district.id">@{{ district.name }}</option>
                                             </select>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Desa</label>
-                                                <select name="village_id" id="villages_id" required class="form-control" v-model="villages_id" v-if="districts">
+                                                <select name="village_id" id="villages_id"   class="form-control" v-model="villages_id" v-if="districts">
                                                 <option v-for="village in villages" :value="village.id">@{{ village.name }}</option>
                                                 </select>
                                             </div>
@@ -223,31 +223,31 @@
                                     <div class="form-group">
                                             <div class="row">
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>RT</label>
                                                 <input
                                                 type="number"
                                                 name="rt"
                                                 class="form-control"
-                                                required
+                                                 
                                                 />
                                             </div>
                                             <div class="col-md-6 col-sm-12">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>RW</label>
                                                 <input
                                                 type="number"
                                                 name="rw"
                                                 class="form-control"
-                                                required
+                                                 
                                                 />
                                             </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                             <label>Alamat Lengkap</label>
-                                            <textarea name="address" required class="form-control"></textarea>
+                                            <textarea name="address"   class="form-control"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <input type="checkbox"
@@ -263,11 +263,11 @@
                                                 type="email"
                                                 name="email"
                                                 class="form-control"
-                                                required
+                                                 
                                                 />
                                             </div>
                                             <div class="form-group">
-                                                <span class="required">*</span>
+                                                <span class=" ">*</span>
                                                 <label>Kode Reveral</label>
                                                 <input id="code" 
                                                     v-model="code"
@@ -277,24 +277,24 @@
                                                     :class="{'is_invalid' : this.code_unavailable}" 
                                                     name="code" 
                                                     value="{{ old('code') }}" 
-                                                    required
+                                                     
                                                     >
                                             </div>
                                         <hr class="mb-4 mt-4">
                                     <div class="form-group">
-                                            <span class="required">*</span>
+                                            <span class=" ">*</span>
                                             <label>Foto</label>
                                             <input type="file" name="crop_image_photo" class="form-control" id="upload_image_photo">
-                                            <input type="hidden" name="photo" id="result_photo" required>
+                                            <input type="hidden" name="photo" id="result_photo"  >
                                         </div>
                                         <div class="form-group">
-                                            <span class="required">*</span>
+                                            <span class=" ">*</span>
                                             <label>Foto KTP</label>
                                             <input type="file" name="crop_image_ktp" class="form-control" id="upload_image_ktp">
-                                            <input type="hidden" name="ktp" id="result_ktp" required>
+                                            <input type="hidden" name="ktp" id="result_ktp"  >
                                         </div>
                                     <div class="form-group">
-                                    <small class="required"><i>(*) Wajib isi</i></small>
+                                    <small class=" "><i>(*) Wajib isi</i></small>
                                     </div>
 
                                     <div class="form-group">

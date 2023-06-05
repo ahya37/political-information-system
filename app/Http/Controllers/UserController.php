@@ -103,7 +103,12 @@ class UserController extends Controller
     {
            $this->validate($request, [
                'phone_number' => 'numeric',
+               'nik' => 'required|min:16'
            ]);
+
+            #hitung panjang nik, harus 16
+            $cekLengthNik = strlen($request->nik);
+            if($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
            
            $cek_nik = User::select('nik')->where('nik', $request->nik)->first();
            #cek nik jika sudah terpakai
