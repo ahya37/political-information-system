@@ -43,6 +43,7 @@ Route::post('getmemberbyvillage', 'API\MemberController@getMemberByVillage');
 
 #replace address
 Route::post('address/replace', 'API\MemberController@replaceAddress');
+Route::post('nik/replace', 'API\MemberController@replaceNik');
 
 Route::get('jobs','Auth\RegisterController@jobs')->name('api-jobs');
 Route::get('educations','Auth\RegisterController@educations')->name('api-educations');

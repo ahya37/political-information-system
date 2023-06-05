@@ -11,6 +11,7 @@ use App\Models\Village;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Imports\ReplaceNikImport;
 use Maatwebsite\Excel\Excel;
 use App\Providers\GlobalProvider;
 use PDF;
@@ -263,6 +264,24 @@ class MemberController extends Controller
         try {
 
             Excels::import(new ReplaceAddressImport, request()->file('file'));
+            
+            return response()->json([
+                'status' => 200,
+                'message' => 'Updated successfully!'
+            ]);
+
+        } catch (\Exception $th) {
+            return $th->getMessage();
+        }
+
+        
+    }
+    public function replaceNik(){
+        
+
+        try {
+
+            Excels::import(new ReplaceNikImport, request()->file('file'));
             
             return response()->json([
                 'status' => 200,
