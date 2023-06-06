@@ -10,6 +10,7 @@ use App\CostEvent;
 use App\EventCategory;
 use App\EventDetail;
 use App\ForecastDesc;
+use App\GiftRecipients;
 use App\Models\Regency;
 use App\Models\Village;
 use App\Models\Province;
@@ -48,6 +49,9 @@ class EventController extends Controller
                                             </a>
                                             <a class="dropdown-item" href="'.route('admin-event-addmember', $item->id).'">
                                                 Tambah Peserta
+                                            </a>
+                                            <a class="dropdown-item" href="'.route('admin-event-addgiftreceipents', $item->id).'">
+                                                Tambah Penerima Bingkisan
                                             </a>
                                         </div>
                                     </div>
@@ -155,6 +159,15 @@ class EventController extends Controller
         $provinceModel = new Province();
         $province = $provinceModel->getDataProvince();
         return view('pages.admin.event.add-participant', compact('province','event_id'));
+    }
+
+    public function addGiftRecipient($id)
+    {
+        $event_id = $id;
+        $provinceModel = new Province();
+        $province = $provinceModel->getDataProvince();
+        $regency  = 3602;
+        return view('pages.admin.event.add-giftrecipients', compact('province','event_id','regency'));
     }
 
     public function storeAddMemberEvent(Request $request)
@@ -271,6 +284,48 @@ class EventController extends Controller
 
     }
 
+    public function storeAddRecipient(Request $request, $event_id)
+    {
+
+        if ($request->status == 'member') {
+
+            #user_id
+            $user  = User::select('id')->where('id', $request->member)->first();
+            
+            #get alamat
+            $villages = Village::with(['district.regency'])->where('id', $request->village_id)->first();
+            $village  = $villages->name;
+            $district = $villages->district->name;
+            $regency  = $villages->district->regency->name;
+
+            $address = "DS. $village, KEC. $district, $regency";
+
+            GiftRecipients::create([
+                'user_id' => $user->id,
+                'event_id' => $event_id,
+                'address' => $address,
+                'notes' => $request->note,
+                'cby' => auth()->guard('admin')->user()->id
+            ]);
+
+
+        }else {
+
+            GiftRecipients::create([
+                'event_id' => $event_id,
+                'name' => strtoupper($request->name),
+                'address' => strtoupper($request->address),
+                'notes' => $request->note,
+                'cby' => auth()->guard('admin')->user()->id
+            ]);
+
+        }
+       
+
+        return redirect()->back()->with(['success' => 'Berhasil menambahkan penerima bingkisan']);
+
+    }
+
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -328,15 +383,24 @@ class EventController extends Controller
                             $date = date('d-m-Y', strtotime($item->created_at));
                             return $date;
                         })
-                        ->rawColumns(['register'])
+                        ->addColumn('no', function($item){
+                            $no = 1;
+                            return $no++;
+                        })
+                        ->rawColumns(['register','no'])
                         ->make(true);
                     }
 
         // biaya
         $cost = CostEvent::where('event_id', $event_id)->get();
+
+        #penerima bingkisan
+        $giftRicipient = GiftRecipients::with(['user'])->where('event_id', $event_id)->get();
         $gF = new GlobalProvider();
+        $no1= 1;
+        $no2= 1;
         
-        return view('pages.admin.event.detail', compact('event','cost','gF'));
+        return view('pages.admin.event.detail', compact('event','cost','gF','giftRicipient','no1','no2'));
     }
 
     public function costEventStore(Request $request, $id)
