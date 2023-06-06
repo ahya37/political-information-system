@@ -7,15 +7,16 @@ use App\Event;
 use App\CostLess;
 use App\Forecast;
 use App\CostEvent;
-use App\EventCategory;
 use App\EventDetail;
 use App\ForecastDesc;
+use App\EventCategory;
 use App\GiftRecipients;
-use App\Models\Regency;
 use App\Models\Village;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use App\Providers\GlobalProvider;
+use App\Helpers\ResponseFormatter;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -448,6 +449,29 @@ class EventController extends Controller
         ]);
 
         return redirect()->route('admin-event')->with(['success' => 'Biaya event telah tersimpan']);
+    }
+
+    public function deleteGiftRicipient()
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+
+            GiftRecipients::where('id', $id)->delete();
+
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil hapus penerima bingkisan!'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
     

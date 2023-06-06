@@ -392,3 +392,6 @@ Route::get('member/totalvillage/caleg/{district_id}/{village_id}/{user_id}','API
 
 #TPS
 Route::post('/getdatatps','Admin\TpsController@getDataTpsAPI');
+
+#EVENT
+Route::post('/event/giftricipient/delete','Admin\EventController@deleteGiftRicipient');

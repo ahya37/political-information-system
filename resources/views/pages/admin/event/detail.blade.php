@@ -88,6 +88,7 @@
                                                 <th scope="col">NAMA</th>
                                                 <th scope="col">ALAMAT</th>
                                                 <th scope="col">TERDAFTAR</th>
+                                                <th scope="col">AKSI</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -97,6 +98,9 @@
                                                 <td>{{ $item->name ?? $item->user->name }}</td>
                                                 <td>{{ $item->address }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($item->created_at))  }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="{{ $item->name ?? $item->user->name }}" id="{{ $item->id }}"><i class="fa fa-trash"></i></button>
+                                                </td>
                                               </tr>
                                           @endforeach
                                         </tbody>
@@ -148,4 +152,6 @@
 
         $('#cost').DataTable()
     </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="{{ asset('js/event-ricipient.js') }}"></script>
 @endpush
