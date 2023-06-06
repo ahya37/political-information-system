@@ -372,7 +372,7 @@ class EventController extends Controller
         return redirect()->route('admin-event')->with(['success' => 'Event telah diubah']);
     }
 
-    public function evenDetials($id)
+    public function eventDetails($id)
     {
         $event_id =$id;
         $event_detail = EventDetail::orderBy('participant','asc')->where('event_id', $event_id)->get();
