@@ -25,6 +25,9 @@
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
                  <div class="row">
+                  <div class="col-md-12 col-sm-12 mt-2 mb3">
+                    @include('layouts.message')
+                  </div>
                   <div class="col-md-9 col-sm-9"></div>
                   <div class="input-group mb-3 col-md-3 float-right">
                             <button onclick="acumulate()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
@@ -57,7 +60,7 @@
                 </div>
                 <div class="row">
                   <div class="col-12">
-                    @include('layouts.message')
+                    
                     <div class="card">
                       <div class="card-body">
                         <div class="row">
@@ -131,18 +134,25 @@
       </div>
         @csrf
         <div class="modal-body">
-          <div class="form-group">
-            <label>Nomor Rekening</label>
-            <input type="text"  id="bankNumber" class="form-control" readonly>
-          </div>
-          <div class="form-group">
-            <label>Nama Pemilik</label>
-            <input type="text"  id="bankOwner" class="form-control" readonly>
-          </div>
-          <div class="form-group">
-            <label>Nama Bank</label>
-            <input type="text"  id="bankName" class="form-control" readonly>
-          </div>
+          <form action="{{ route('admin-bank-store') }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label>Nomor Rekening</label>
+                <input type="hidden" id="userId" name="userid" class="form-control" >
+                <input type="text" id="bankNumber" name="number" class="form-control" >
+            </div>
+            <div class="form-group">
+                <label>Nama Pemilik</label>
+                <input type="text" id="bankOwner" name="owner" class="form-control" >
+            </div>
+            <div class="form-group">
+                <label>Nama Bank</label>
+                <input type="text" id="bankName" name="bank" class="form-control" >
+            </div>
+            <div class="form-group">
+                <button class="btn btn-sm btn-sc-primary text-white float-right">Simpan</button>
+            </div>
+          </form>
           </div>
         </div>
     </div>
@@ -178,10 +188,12 @@
         let bankNumber = button.data('banknumber')
         let bankOwner = button.data('bankowner')
         let bankName = button.data('bankname')
+        let userId = button.data('userid')
         let modal = $(this)
         modal.find('.modal-body #bankNumber').val(bankNumber)
         modal.find('.modal-body #bankOwner').val(bankOwner)
         modal.find('.modal-body #bankName').val(bankName)
+        modal.find('.modal-body #userId').val(userId)
         modal.find('.modal-title').text('Rekening Bank : ' + recipient)
       })
     </script>

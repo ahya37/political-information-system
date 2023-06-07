@@ -493,6 +493,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         });
         
         Route::post('/reason/category','ReasonCategorySpamMember@store')->name('admin-spamcategory-store');
+
+        #BANK
+        Route::post('/bank/store','BankController@store')->name('admin-bank-store');
           
     });
     

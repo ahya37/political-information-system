@@ -72,20 +72,16 @@ $("#data", async function () {
     Complete("LoadaReferalByMounth");
 });
 
-function getInputPointDefault() {
-    return fetch(`/api/admin/member/rewardefault`)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
-            return response.json();
-        })
-        .then((response) => {
-            if (response.Response === "False") {
-                throw new Error(response.statusText);
-            }
-            return response;
-        });
+async function getInputPointDefault() {
+    const response = await fetch(`/api/admin/member/rewardefault`);
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    const response_1 = await response.json();
+    if (response_1.Response === "False") {
+        throw new Error(response_1.statusText);
+    }
+    return response_1;
 }
 
 // after change
@@ -196,6 +192,7 @@ function showdivGetPoint(m) {
                 type="button"  
                 class="btn btn-sm btn-default text-center"  
               data-toggle="modal" data-target="#setBank"
+              data-userid="${m.userId}"
                 data-name="${m.name}"
                 data-banknumber="${m.bank_number}"
                 data-bankowner="${m.bank_owner}"
