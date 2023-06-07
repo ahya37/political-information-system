@@ -16,12 +16,21 @@ use Illuminate\Http\Request;
 use App\DetailVoucherHistory;
 use App\Providers\GlobalProvider;
 use App\DetailVoucherHistoryAdmin;
+use App\Exports\RewardAdminExport;
+use App\Exports\RewardExport;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Excel;
 
 class RewardController extends Controller
 {
+    public $excel;
+    public function __construct(Excel $excel)
+    {
+        $this->excel = $excel;
+    }
+
     public function index()
     {
         return view('pages.admin.reward.index');
@@ -1384,6 +1393,24 @@ class RewardController extends Controller
                 'recordsFiltered'=>$recordsFiltered,
                 'data'=> $result
             ]);
+
+    }
+
+    public function getPoinByMonthDefaultExcel(){
+
+        $referal = $this->getPoinByMonthDefault();
+
+        $excel = $this->excel->download(new RewardExport($referal),'REWARD-REFERAL.xls');
+
+        return $excel;
+
+    }
+
+    public function getPoinAdminByMonthDefaultExcel(){
+
+        $admin = $this->getPoinByMonthMemberAdminDefaul();
+
+        return $this->excel->download(new RewardAdminExport($admin),'REWARD-ADMIN.xls');
 
     }
 }

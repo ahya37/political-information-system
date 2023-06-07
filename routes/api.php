@@ -59,7 +59,7 @@ Route::get('reveral/check', 'Auth\RegisterController@reveral')->name('api-revera
 Route::get('reveral/name/{code}', 'Auth\RegisterController@reveralName');
 Route::get('nik/name/{nik}', 'Auth\RegisterController@reveralNameByNik');
 
-#store org 
+#store org
 Route::post('store/org', 'Admin\OrgDiagramController@storeOrg');
 Route::post('org/update', 'Admin\OrgDiagramController@updateOrg');
 Route::post('org/delete', 'Admin\OrgDiagramController@deleteOrg');
@@ -250,10 +250,12 @@ Route::post('addparticipantevent','Admin\EventController@storeAddMemberEventAjax
 // reward anggota biasa
 Route::get('/rewardefault','Admin\RewardController@getPoinByMonthDefault');
 Route::post('/reward','Admin\RewardController@getPoinByMonth');
+Route::get('/rewardefault/excel','Admin\RewardController@getPoinByMonthDefaultExcel');
 
 // reward member admin
 Route::get('/admin/member/rewardefault','Admin\RewardController@getPoinByMonthMemberAdminDefaul');
 Route::post('/admin/member/reward','Admin\RewardController@getPoinByMonthMemberAdmin');
+Route::get('/admin/member/rewardefault/excel','Admin\RewardController@getPoinAdminByMonthDefaultExcel');
 
 Route::post('/savevoucher','Admin\RewardController@saveVoucherHistory');
 Route::post('/savevoucheradmin','Admin\RewardController@saveVoucherHistoryAdmin');
@@ -314,7 +316,7 @@ Route::get('/cost/list','Admin\CostController@getDataCost');
 
 Route::post('/target/list','Admin\SettingController@getDatatarget');
 
-// 
+//
 Route::post('/table/members/province','API\SettingController@getMember');
 
 Route::post('/admin/member/dtmember','Admin\Datatable\MemberDatatableController@dTableMember');

@@ -70,20 +70,17 @@ $("#data", async function () {
     Complete("LoadaReferalByMounth");
 });
 
-function getReferalPointDefault() {
-    return fetch(`/api/rewardefault`)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
-            return response.json();
-        })
-        .then((response) => {
-            if (response.Response === "False") {
-                throw new Error(response.statusText);
-            }
-            return response;
-        });
+async function getReferalPointDefault() {
+    getLinkExcel(`/api/rewardefault`,'GET');
+    const response = await fetch(`/api/rewardefault`);
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    const response_1 = await response.json();
+    if (response_1.Response === "False") {
+        throw new Error(response_1.statusText);
+    }
+    return response_1;
 }
 
 // after change
@@ -122,27 +119,24 @@ $("#date").on("changeDate", async function (selected) {
     Complete("LoadaReferalByMounth");
 });
 
-function getReferalPoint(range) {
-    return fetch(`/api/reward`, {
+async function getReferalPoint(range) {
+    const response = await fetch(`/api/reward`, {
         method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ range: range }),
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
-            return response.json();
-        })
-        .then((response) => {
-            if (response.Response === "False") {
-                throw new Error(response.statusText);
-            }
-            return response;
-        });
+    });
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    const response_1 = await response.json();
+    if (response_1.Response === "False") {
+        throw new Error(response_1.statusText);
+    }
+    return response_1;
+
 }
 
 function referalPointUi(
@@ -291,4 +285,10 @@ function BeforeSend(idLoader) {
 
 function Complete(idLoader) {
     $("#" + idLoader + "").addClass("d-none");
+}
+
+function getLinkExcel(link,method){
+
+    $('#report').attr('action', `${link}/excel`)
+    $('#report').attr('method', method)
 }

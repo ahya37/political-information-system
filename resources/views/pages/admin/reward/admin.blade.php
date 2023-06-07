@@ -32,6 +32,10 @@
                   <div class="input-group mb-3 col-md-3 float-right">
                             <button onclick="acumulate()" class="btn btn-sm btn-default border mr-2">Akumulasi</button>
                             <button type="button" id="date" name="referalOfMount"  class="btn btn-sm btn-sc-primary datepicker">Bulan</button>
+                            <button type="submit" onclick="event.preventDefault(); document.getElementById('report').submit()"   class="btn btn-sm btn-success datepicker ml-2 text-white">Excel (Bulan Ini)</button>
+                            <form id="report" style="display: none;">
+                              @csrf
+                            </form>
                          </div>
                 </div>
                  <div class="row mb-2">

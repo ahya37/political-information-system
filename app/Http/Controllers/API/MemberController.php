@@ -2,19 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Exports\MemberExport;
 use App\Imports\ReplaceAddressImport;
 use App\User;
-use App\Admin;
 use App\Models\Province;
-use App\Models\Village;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Imports\ReplaceNikImport;
 use Maatwebsite\Excel\Excel;
-use App\Providers\GlobalProvider;
-use PDF;
 use Maatwebsite\Excel\Facades\Excel as Excels;
 
 class MemberController extends Controller

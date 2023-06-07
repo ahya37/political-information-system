@@ -73,6 +73,8 @@ $("#data", async function () {
 });
 
 async function getInputPointDefault() {
+    getLinkExcel(`/api/admin/member/rewardefault`,'GET')
+
     const response = await fetch(`/api/admin/member/rewardefault`);
     if (!response.ok) {
         throw new Error(response.statusText);
@@ -120,27 +122,23 @@ $("#date").on("changeDate", async function (selected) {
     Complete("LoadaReferalByMounth");
 });
 
-function getReferalPoint(range) {
-    return fetch(`/api/admin/member/reward`, {
+async function getReferalPoint(range) {
+    const response = await fetch(`/api/admin/member/reward`, {
         method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ range: range }),
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
-            return response.json();
-        })
-        .then((response) => {
-            if (response.Response === "False") {
-                throw new Error(response.statusText);
-            }
-            return response;
-        });
+    });
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    const response_1 = await response.json();
+    if (response_1.Response === "False") {
+        throw new Error(response_1.statusText);
+    }
+    return response_1;
 }
 
 function inputPointUi(
@@ -282,4 +280,10 @@ function BeforeSend(idLoader) {
 
 function Complete(idLoader) {
     $("#" + idLoader + "").addClass("d-none");
+}
+
+function getLinkExcel(link,method){
+
+    $('#report').attr('action', `${link}/excel`)
+    $('#report').attr('method', method)
 }
