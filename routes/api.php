@@ -395,3 +395,6 @@ Route::post('/getdatatps','Admin\TpsController@getDataTpsAPI');
 
 #EVENT
 Route::post('/event/giftricipient/delete','Admin\EventController@deleteGiftRicipient');
+
+#HISTORY MONITORING
+Route::post('/historymonitoring/delete','Admin\HistoryMonitoringController@delete');

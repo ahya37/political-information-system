@@ -485,6 +485,12 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/create','TpsController@create')->name('admin-tps-create');
             Route::post('/store','TpsController@store')->name('admin-tps-store');
         });
+
+         #TPS
+         Route::group(['prefix' => 'hisrotymonitoring'], function(){
+            Route::get('/','HistoryMonitoringController@index')->name('admin-hisrotymonitoring');
+            Route::post('/store','HistoryMonitoringController@store')->name('admin-hisrotymonitoring-store');
+        });
         
         Route::post('/reason/category','ReasonCategorySpamMember@store')->name('admin-spamcategory-store');
           

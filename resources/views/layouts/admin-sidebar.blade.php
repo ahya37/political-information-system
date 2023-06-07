@@ -260,6 +260,20 @@
             </ul>
         </div>
 
+        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/hisrotymonitoring/*') ? 'active custom-active-color' : '' }}"
+            href="#hisrotymonitoring" data-toggle="collapse" data-target="#hisrotymonitoring">
+            <span class="d-none d-sm-inline"></span>Monitoring</a>
+        <div class="collapse" id="hisrotymonitoring" aria-expanded="false">
+            <ul class="flex-column pl-2 nav">
+                <li class="nav-item">
+                    <a href="{{ route('admin-hisrotymonitoring') }}"
+                        class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('hisrotymonitoring') ? 'active custom-active-color' : '' }}"><span>
+                            Daftar Monitoring</span></a>
+                </li>
+            </ul>
+        </div>
+
+
         <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
             href="#spam" data-toggle="collapse" data-target="#spam">
             <span class="d-none d-sm-inline"></span>Spam</a>
