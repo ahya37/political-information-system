@@ -48,7 +48,9 @@
                                                     <td>{{ $item->address }}</td>
                                                     <td>{{ $item->notes }}</td>
                                                     <td>
-                                                        <img src="{{ asset('storage/'.$item->image) }}" width="50" >
+                                                        <a href="{{ asset('storage/'.$item->image) }}" target="_blank">
+                                                            <img src="{{ asset('storage/'.$item->image) }}" width="50" >
+                                                        </a>
                                                     </td>
                                                     <td>
                                                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="{{ $item->user->name }}" id="{{ $item->id }}"><i class="fa fa-trash"></i></button>
