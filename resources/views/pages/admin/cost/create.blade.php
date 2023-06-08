@@ -165,7 +165,7 @@
                             @csrf
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title">Non Anggota</h5>
+                                    <h5 class="card-title">Non Anggota (Umum)</h5>
                                 </div>
                                 <div class="card-body">
                                     <div class="row row-login">
