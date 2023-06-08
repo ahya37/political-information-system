@@ -30,5 +30,14 @@ $(document).ready(function () {
         datepicker: false,
         format: "H:i",
     });
+    jQuery("#datetimepicker7").datetimepicker({
+        timepicker: false,
+        format: "d-m-Y",
+    });
+    jQuery("#timepicker7").datetimepicker({
+        datepicker: false,
+        format: "H:i",
+    });
+
     $.datetimepicker.setLocale("id");
 });

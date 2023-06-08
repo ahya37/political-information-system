@@ -31,7 +31,8 @@ class CostController extends Controller
     {
         $forecast = Forecast::orderBy('name','desc')->get();
         $forecast_desc = ForecastDesc::orderBy('name','desc')->get();
-        return view('pages.admin.cost.create', compact('forecast','forecast_desc'));
+        $regency  = 3602;
+        return view('pages.admin.cost.create', compact('forecast','forecast_desc','regency'));
     }
 
     public function store(Request $request)
@@ -54,7 +55,7 @@ class CostController extends Controller
         //
         
         if($request->village_id == ''){
-            $address = '';
+            $address = $request->address;
         }else{
             $village = Village::with(['district.regency'])->where('id', $request->village_id)->first();
             $address = 'DS. '. $village->name. ', KEC. ' .$village->district->name. ', '. $village->district->regency->name;
@@ -66,6 +67,8 @@ class CostController extends Controller
             'forecast_desc_id' => $request->forecast_desc_id,
             'received_name' => $request->received_name,
             'address' => $address,
+            'village_id' => $request->village_id,
+            'rt' => $request->rt,
             'nominal' => $request->nominal,
             'file' => $fileImage,
         ]);
@@ -299,6 +302,65 @@ class CostController extends Controller
             ]);
         }
 
+    }
+
+    public function updateVillageCost(){
+
+        DB::beginTransaction();
+        try {
+
+            $data = CostLess::select('address','id')->where('address','!=','')->orderBy('address','asc')->get();
+
+            $address = [];
+            foreach ($data as $key => $value) {
+
+                $village1 = explode(".", $value->address);
+                $village1 = $village1[1];
+
+                $village2 = explode(",", $village1);
+                $village2 = $village2[0];
+                $resVillage = trim($village2);
+
+                #query untuk get village_id dari table villages yang di relasi dengan district where regency_id = 3602
+                $results = DB::table('villages as a')
+                        ->join('districts as b','a.district_id','=','b.id')
+                        ->where('b.regency_id', 3602)
+                        ->where('a.name','like',"%$resVillage%")
+                        ->pluck('a.id')->first();
+                
+                $address[] = [
+                    'id_cost' => $value->id,
+                    'village_id' => (int) $results
+                ];
+            }
+
+            #update village_id in tb cost
+            // $updates = [];
+            foreach ($address as $key => $value) {
+                $id_cost    = $value['id_cost'];
+                $village_id = $value['village_id'];
+
+                // $updates[]   = $village_id;
+
+
+                DB::table('cost_les')->where('id', $id_cost)->update([
+                    'village_id' => $village_id
+                ]);
+            }
+            
+            DB::commit();
+            return response()->json([
+                'message' => 'Updated successfully!',
+                'data' => $address
+
+            ],200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Updated failed!',
+                'error' => $e->getMessage()
+            ],500);
+        }
     }
 
 }

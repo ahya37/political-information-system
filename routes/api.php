@@ -311,6 +311,7 @@ Route::post('/getdataintelegensipolitik','Admin\InformationController@getDataInt
 
 // Cost
 Route::get('/cost/list','Admin\CostController@getDataCost');
+Route::post('/cost/updatevillage','Admin\CostController@updateVillageCost');
 
 // Target
 
