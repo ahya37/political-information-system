@@ -345,8 +345,8 @@ class RewardController extends Controller
     {
         $userId   = $request->userId;
         $point = preg_replace("/[^0-9]/", "", $request->point);
-        $nominal = preg_replace("/[^0-9]/", "", $request->nominal);
-        $referal = preg_replace("/[^0-9]/", "", $request->referal);
+        // $nominal = preg_replace("/[^0-9]/", "", $request->nominal);
+        // $referal = preg_replace("/[^0-9]/", "", $request->referal);
         $pointReq = $request->pointReq;
 
         $requestNominal = $pointReq * 100000;
@@ -369,7 +369,7 @@ class RewardController extends Controller
                      'total_data' => 0,
                  ]);
 
-                $saveDetailVh =  DetailVoucherHistory::create([
+                DetailVoucherHistory::create([
                     'voucher_history_id' => $saveVh->id,
                     'point' => $pointReq,
                     'nominal' => $requestNominal,
@@ -400,7 +400,7 @@ class RewardController extends Controller
                 // create voucher_history
                 // create_detail_voucher_history
                 $cekVhUpdte = $vhModel->where('user_id', $userId)->first();
-                $saveDetailVh =  DetailVoucherHistory::create([
+                DetailVoucherHistory::create([
                     'voucher_history_id' => $cekVhUpdte->id,
                     'point' => $pointReq,
                     'nominal' => $requestNominal,
@@ -442,6 +442,7 @@ class RewardController extends Controller
                     'forecast_desc_id' => $request->type == 'referal' ? 3 : 6, // voucher referal atau voucher admina
                     'received_name' => $user->name,
                     'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'village_id' => $user->village_id,
                     'nominal' => $total_nominal,
                     'file' => NULL,
                 ]);
@@ -462,7 +463,7 @@ class RewardController extends Controller
                      'total_data' => 0,
                  ]);
 
-                $saveDetailVh =  DetailVoucherHistory::create([
+                DetailVoucherHistory::create([
                     'voucher_history_id' => $saveVh->id,
                     'point' => $pointReq,
                     'nominal' => $requestNominal,
@@ -493,7 +494,7 @@ class RewardController extends Controller
                 // create voucher_history
                 // create_detail_voucher_history
                 $cekVhUpdte = $vhModel->where('user_id', $userId)->first();
-                $saveDetailVh =  DetailVoucherHistory::create([
+                DetailVoucherHistory::create([
                     'voucher_history_id' => $cekVhUpdte->id,
                     'point' => $pointReq,
                     'nominal' => $requestNominal,
@@ -529,6 +530,7 @@ class RewardController extends Controller
                     'forecast_desc_id' => $request->type == 'referal' ? 3 : 6, // voucher referal atau voucher admina
                     'received_name' => $user->name,
                     'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'village_id' => $user->village_id,
                     'nominal' => $total_nominal,
                     'file' => NULL,
                 ]);
@@ -542,8 +544,8 @@ class RewardController extends Controller
     {
         $userId   = $request->userId;
         $point = preg_replace("/[^0-9]/", "", $request->point);
-        $nominal = preg_replace("/[^0-9]/", "", $request->nominal);
-        $referal = preg_replace("/[^0-9]/", "", $request->referal);
+        // $nominal = preg_replace("/[^0-9]/", "", $request->nominal);
+        // $referal = preg_replace("/[^0-9]/", "", $request->referal);
         $pointReq = $request->pointReq;
 
         $requestNominal = $pointReq * 100000;
@@ -566,7 +568,7 @@ class RewardController extends Controller
                      'total_data' => 0,
                  ]);
 
-                $saveDetailVh =  $dvhModel->create([
+                $dvhModel->create([
                     'voucher_history_id' => $saveVh->id,
                     'point' => $pointReq,
                     'nominal' => $requestNominal,
@@ -597,7 +599,7 @@ class RewardController extends Controller
                 // create voucher_history
                 // create_detail_voucher_history
                 $cekVhUpdte = $vhModel->where('user_id', $userId)->first();
-                $saveDetailVh =  $dvhModel->create([
+                $dvhModel->create([
                     'voucher_history_id' => $cekVhUpdte->id,
                     'point' => $pointReq,
                     'nominal' => $requestNominal,
@@ -633,6 +635,7 @@ class RewardController extends Controller
                     'forecast_desc_id' => $request->type == 'referal' ? 3 : 6, // voucher referal atau voucher admina
                     'received_name' => $user->name,
                     'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'village_id' => $user->village_id,
                     'nominal' => $total_nominal,
                     'file' => NULL,
                 ]);
@@ -650,7 +653,7 @@ class RewardController extends Controller
                      'total_data' => 0,
                  ]);
 
-                $saveDetailVh =  $dvhModel->create([
+                $dvhModel->create([
                     'voucher_history_id' => $saveVh->id,
                     'point' => $pointReq,
                     'nominal' => $requestNominal,
@@ -681,7 +684,7 @@ class RewardController extends Controller
                 // create voucher_history
                 // create_detail_voucher_history
                 $cekVhUpdte = $vhModel->where('user_id', $userId)->first();
-                $saveDetailVh =  $dvhModel->create([
+                $dvhModel->create([
                     'voucher_history_id' => $cekVhUpdte->id,
                     'point' => $pointReq,
                     'nominal' => $requestNominal,
@@ -717,6 +720,7 @@ class RewardController extends Controller
                     'forecast_desc_id' => $request->type == 'referal' ? 3 : 6, // voucher referal atau voucher admina
                     'received_name' => $user->name,
                     'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'village_id' => $user->village_id,
                     'nominal' => $total_nominal,
                     'file' => NULL,
                 ]);
@@ -734,8 +738,8 @@ class RewardController extends Controller
         if ($token != null) {
             $userId = request()->userId;
             $point = preg_replace("/[^0-9]/", "", request()->point);
-            $nominal = preg_replace("/[^0-9]/", "", request()->nominal);
-            $referal = preg_replace("/[^0-9]/", "", request()->referal);
+            // $nominal = preg_replace("/[^0-9]/", "", request()->nominal);
+            // $referal = preg_replace("/[^0-9]/", "", request()->referal);
 
             $requestNominal = $point * 100000;
             $requestTotalData = $point * 50;
@@ -820,6 +824,7 @@ class RewardController extends Controller
                     'forecast_desc_id' => 3, // voucher referal atau voucher admina
                     'received_name' => $user->name,
                     'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'village_id' => $user->village_id,
                     'nominal' => $total_nominal,
                     'file' => NULL,
                 ]);
@@ -936,6 +941,7 @@ class RewardController extends Controller
                     'forecast_desc_id' => 6, // voucher referal atau voucher admina
                     'received_name' => $user->name,
                     'address' => 'DS. '.$village->name.', KEC. '.$village->district->name.','. $village->district->regency->name.','.$village->district->regency->province->name,
+                    'village_id' => $user->village_id,
                     'nominal' => $total_nominal,
                     'file' => NULL,
                 ]);
