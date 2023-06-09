@@ -94,6 +94,8 @@
                                                     <option value="Belum Kawin">Belum Kawin</option>
                                                     <option value="Sudah Kawin">Sudah Kawin</option>
                                                     <option value="Pernah Kawin">Pernah Kawin</option>
+                                                     <option value="Cerai Mati">Cerai Mati</option>
+                                                     <option value="Cerai Hidup">Cerai Hidup</option>
                                                 </select>
                                             </div>
                                         </div>
