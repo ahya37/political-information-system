@@ -42,7 +42,7 @@
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">DAPIL</th>
-                                                    <th scope="col">AKSI</th>
+                                                    <th scope="col">OPSI</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

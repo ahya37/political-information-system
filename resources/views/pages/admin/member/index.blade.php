@@ -123,7 +123,7 @@
                                           <th scope="col">INPUT DARI</th>
                                           <th scope="col">TERDAFTAR</th>
                                         <th scope="col">JUMLAH REFERAL</th>
-                                        <th scope="col">AKSI</th>
+                                        <th scope="col">OPSI</th>
                                       </tr>
                                     </thead>
                                     <tbody>

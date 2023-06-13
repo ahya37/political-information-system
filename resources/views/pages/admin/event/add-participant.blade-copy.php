@@ -103,7 +103,7 @@
                                       <tr>
                                         <th></th>
                                         <th scope="col">NAMA</th>
-                                        <th scope="col">AKSI</th>
+                                        <th scope="col">OPSI</th>
                                       </tr>
                                     </thead>
                                     <tbody>

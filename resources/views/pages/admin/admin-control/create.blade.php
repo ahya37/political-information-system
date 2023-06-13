@@ -32,7 +32,7 @@
                                         <th scope="col">KABUPATEN/KOTA</th>
                                         <th scope="col">KECAMATAN</th>
                                         <th scope="col">DESA</th>
-                                        <th scope="col">AKSI</th>
+                                        <th scope="col">OPSI</th>
                                       </tr>
                                     </thead>
                                     <tbody>

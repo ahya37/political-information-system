@@ -88,7 +88,7 @@
                                                 <th scope="col">NAMA</th>
                                                 <th scope="col">ALAMAT</th>
                                                 <th scope="col">TERDAFTAR</th>
-                                                <th scope="col">AKSI</th>
+                                                <th scope="col">OPSI</th>
                                             </tr>
                                         </thead>
                                         <tbody>

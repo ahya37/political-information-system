@@ -63,7 +63,7 @@
                                         <th scope="col">TOTAL POIN</th>
                                         <th scope="col">TOTAL DATA</th>
                                         <th scope="col">TOTAL NOMINAL</th>
-                                        <th scope="col">AKSI</th>
+                                        <th scope="col">OPSI</th>
                                       </tr>
                                     </thead>
                                     <tbody>

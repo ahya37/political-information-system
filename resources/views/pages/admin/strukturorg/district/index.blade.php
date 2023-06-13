@@ -65,7 +65,7 @@
                                             <th scope="col">ALAMAT</th>
                                             <th scope="col">JABATAN</th>
                                             <th scope="col">NO HP / WA</th>
-                                            <th scope="col">AKSI</th>
+                                            <th scope="col">OPSI</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>

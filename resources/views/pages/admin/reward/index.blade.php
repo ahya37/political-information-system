@@ -76,7 +76,7 @@
                                       <th scope="col">POIN</th>
                                       <th scope="col">NOMINAL</th>
                                       <th scope="col">REKENING</th>
-                                      <th scope="col">AKSI</th>
+                                      <th scope="col">OPSI</th>
                                     </tr>
                                     <tr>
                                     <th colspan="6" id="LoadaReferalByMounth" class="d-none lds-dual-ring hidden overlay"></th>

@@ -401,3 +401,7 @@ Route::post('/event/giftricipient/delete','Admin\EventController@deleteGiftRicip
 
 #HISTORY MONITORING
 Route::post('/historymonitoring/delete','Admin\HistoryMonitoringController@delete');
+
+#FAMILY GROUP
+Route::post('/familygroup/delete','Admin\FamilyGroupController@delete');
+Route::post('/familygroupmember/delete','Admin\FamilyGroupController@deleteMember');

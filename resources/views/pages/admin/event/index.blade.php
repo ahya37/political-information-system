@@ -32,7 +32,7 @@
                                         <th scope="col">Judul</th>
                                         <th scope="col">Deskripsi</th>
                                         <th scope="col">Alamat</th>
-                                        <th scope="col">Aksi</th>
+                                        <th scope="col">OPSI</th>
                                       </tr>
                                     </thead>
                                     <tbody></tbody>

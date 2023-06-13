@@ -31,7 +31,7 @@
                                         <th scope="col">Nama</th>
                                         <th scope="col">Level Admin</th>
                                         <th scope="col">Jumlah Anggota</th>
-                                        <th scope="col">Aksi</th>
+                                        <th scope="col">OPSI</th>
                                       </tr>
                                     </thead>
                                     <tbody></tbody>

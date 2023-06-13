@@ -37,7 +37,7 @@
                               <th scope="col">JUMLAH REFERAL</th>
                               <th scope="col">ALASAN</th>
                               <th scope="col">KETERANGAN</th>
-                              <th scope="col">AKSI</th>
+                              <th scope="col">OPSI</th>
                             </tr>
                           </thead>
                           <tbody>

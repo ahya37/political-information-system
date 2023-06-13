@@ -30,7 +30,7 @@
                                         <th class="col-1">NO</th>
                                         <th>KECAMATAN</th>
                                         <th>TARGET</th>
-                                        <th>AKSI</th>
+                                        <th>OPSI</th>
                                       </tr>
                                     </thead>
                                     <tbody>

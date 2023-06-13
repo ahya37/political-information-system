@@ -248,7 +248,7 @@
                                                     <th scope="col">REFERAL TIDAK LANGSUNG</th>
                                                     <th scope="col">ALAMAT</th>
                                                     <th scope="col">KONTAK</th>
-                                                    <th scope="col">Aksi</th>
+                                                    <th scope="col">OPSI</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody id="showReferalData">
@@ -283,7 +283,7 @@
                                                     <th scope="col">JUMLAH</th>
                                                     <th scope="col">ALAMAT</th>
                                                     <th scope="col">KONTAK</th>
-                                                    <th scope="col">Aksi</th>
+                                                    <th scope="col">OPSI</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody id="showInputData">

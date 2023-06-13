@@ -63,7 +63,7 @@
                                          <th>ALAMAT</th>
                                          <th>JUMLAH (Rp)</th>
                                          <th>FILE</th>
-                                         <th class="col-1">AKSI</th>
+                                         <th class="col-1">OPSI</th>
                                      </tr>
                                  </thead>
                                  <tbody>

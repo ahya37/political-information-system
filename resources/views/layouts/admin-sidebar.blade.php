@@ -273,6 +273,24 @@
             </ul>
         </div>
 
+        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
+            href="#familygroup" data-toggle="collapse" data-target="#familygroup">
+            <span class="d-none d-sm-inline"></span>Keluarga Serumah</a>
+        <div class="collapse" id="familygroup" aria-expanded="false">
+            <ul class="flex-column pl-2 nav">
+                <li class="nav-item">
+                    <a href="{{ route('admin-familygroup') }}"
+                        class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('familygroup') ? 'active custom-active-color' : '' }}"><span>
+                            Daftar Keluarga</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin-familygroup-create') }}"
+                        class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('familygroup') ? 'active custom-active-color' : '' }}"><span>
+                            Buat Daftar Keluarga</span></a>
+                </li>
+            </ul>
+        </div>
+
 
         <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
             href="#spam" data-toggle="collapse" data-target="#spam">

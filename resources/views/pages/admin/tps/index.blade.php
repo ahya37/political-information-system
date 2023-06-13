@@ -74,7 +74,7 @@
                                             <tr>
                                                 <th scope="col">TPS</th>
                                                 <th scope="col">DESA</th>
-                                                <th scope="col">AKSI</th>
+                                                <th scope="col">OPSI</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>

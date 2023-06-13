@@ -34,7 +34,7 @@
                                                     <th scope="col"></th>
                                                     <th scope="col">NAMA</th>
                                                     <th scope="col">REFERAL LANGSUNG</th>
-                                                    <th scope="col">Aksi</th>
+                                                    <th scope="col">OPSI</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody id="showReferalData">
