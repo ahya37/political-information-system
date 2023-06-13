@@ -22,7 +22,7 @@ class FamilyGroupController extends Controller
     }
     public function index(){
 
-        $familyGroups      = $this->FamilyGroupModel->getDataFamilyGroups();
+        $familyGroups      = $this->FamilyGroupModel->getDataFamilyGroupWithAddress();
 
         $no = 1;
 
@@ -70,7 +70,7 @@ class FamilyGroupController extends Controller
 
         $headFamilyGroup        = $this->FamilyGroupModel->getDataFamilyGroup($id);
 
-        $detailFamilyGroup      = $this->DetailFamilyGroupModel->getMemberByFamilyGroupId($id);
+        $detailFamilyGroup      = $this->DetailFamilyGroupModel->getMemberByFamilyGroupIdWithAddress($id);
 
         $regency = Regency::select('id')->where('id', 3602)->first();
 

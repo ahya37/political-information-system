@@ -27,6 +27,7 @@
                                             <tr>
                                                 <th scope="col">NO</th>
                                                 <th scope="col">KEPALA KELUARGA SERUMAH</th>
+                                                <th scope="col">ALAMAT</th>
                                                 <th scope="col">KEETRANGAN</th>
                                                 <th scope="col">OPSI</th>
                                             </tr>
@@ -36,6 +37,7 @@
                                                 <tr>
                                                     <td>{{ $no++ }}</td>
                                                     <td>{{ $item->name }}</td>
+                                                    <td>{{ $item->address.', DS. '.$item->village.', KEC. '.$item->district }}</td>
                                                     <td>{{ $item->notes }}</td>
                                                     <td>
                                                         <a href="{{ route('admin-familygroup-member', $item->id) }}" class="btn btn-sm btn-primary" id="{{ $item->id }}">Anggota Kelurga Serumah</a>

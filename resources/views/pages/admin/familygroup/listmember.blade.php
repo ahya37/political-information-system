@@ -35,6 +35,7 @@
                                             <tr>
                                                 <th scope="col">NO</th>
                                                 <th scope="col">NAMA</th>
+                                                <th scope="col">ALAMAT</th>
                                                 <th scope="col">KETERANGAN</th>
                                                 <th scope="col">OPSI</th>
                                             </tr>
@@ -44,6 +45,7 @@
                                                 <tr>
                                                     <td>{{ $no++ }}</td>
                                                     <td>{{ $item->name }}</td>
+                                                    <td>{{ $item->address.', DS. '.$item->village.', KEC. '.$item->district }}</td>
                                                     <td>{{ $item->notes }}</td>
                                                     <td>
                                                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)"
