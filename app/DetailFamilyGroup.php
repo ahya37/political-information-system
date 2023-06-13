@@ -14,8 +14,21 @@ class DetailFamilyGroup extends Model
 
         $sql = DB::table('detail_family_group as a')
                ->join('users as b','a.user_id','=','b.id')
-               ->select('a.id','b.name','a.notes')
+               ->select('a.id','b.name','a.notes','a.user_id')
                ->where('a.family_group_id', $id)
+               ->orderBy('b.name','asc')
+               ->get();
+
+        return $sql;
+    }
+
+    public function getSearchMemberByFamilyGroupId($id,$search){
+
+        $sql = DB::table('detail_family_group as a')
+               ->join('users as b','a.user_id','=','b.id')
+               ->select('a.id','b.name','a.notes','a.user_id')
+               ->where('a.family_group_id', $id)
+               ->where('b.name','like','%'.$search.'%')
                ->orderBy('b.name','asc')
                ->get();
 

@@ -222,6 +222,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         Route::get('/event/add/addgiftreceipents/{id}','EventController@addGiftRecipient')->name('admin-event-addgiftreceipents');
         Route::post('/event/add/addgiftreceipents/store/{event_id}','EventController@storeAddRecipient')->name('admin-event-addgiftreceipents-store');
+        Route::post('/event/add/addgiftreceipentsfamilygroup/store/{event_id}','EventController@storeAddRecipientFamilyGroup')->name('admin-event-addgiftreceipentsfamilygroup-store');
 
         
         Route::post('/event/category/store','EventCategoryController@store')->name('admin-eventcategory-store');

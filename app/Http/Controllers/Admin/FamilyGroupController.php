@@ -197,4 +197,33 @@ class FamilyGroupController extends Controller
         }
  
      }
+
+    public function getDataFamilyGroup(Request $request)
+    {
+       
+        $data = $this->FamilyGroupModel->getDataFamilyGroups();
+    
+        if($request->has('q')){
+            $search = $request->q;
+            $data = $this->FamilyGroupModel->getSearchDataFamilyGroups($search);
+            
+        }
+
+        return response()->json($data);
+
+    }
+    
+    public function getDataMemberByFamilyGroup(Request $request, $familyId){
+
+
+        $data    = $this->DetailFamilyGroupModel->getMemberByFamilyGroupId($familyId);
+
+        if($request->has('q')){
+            $search = $request->q;
+            $data = $this->DetailFamilyGroupModel->getSearchMemberByFamilyGroupId($familyId,$search);
+            
+        }
+
+        return response()->json($data);
+    }
 }

@@ -102,7 +102,7 @@
                               </div>
                               <div class="form-group">
                                   <label>Alamat</label>
-                                  <textarea class="form-control" name="address" placeholder="Isikan alamat disini, contoh: Ds. Muara, Kec. Wanasalam, Kabupate Lebak"></textarea>
+                                  <textarea class="form-control" name="address" placeholder="Isikan alamat disini, contoh: Ds. Muara, Kec. Wanasalam, Kabupaten Lebak"></textarea>
                               </div>
                               <div class="form-group">
                                   <label>Keterangan</label>
@@ -117,6 +117,39 @@
                   </div>
               </div>
           </div>
+
+          <div class="row mt-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                      <div class="mb-4">
+                        <h5>Keluarga Serumah</h5>
+                      </div>
+                        <form action="{{ route('admin-event-addgiftreceipentsfamilygroup-store', $event_id) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                    <label>Keluarga</label>
+                                    <select class="multiple-select family" name="family" id="family" required></select>
+                                    <input type="checkbox" value="1" name="selectedReceipent" id="selectedReceipent" autocomplete="off" /> Tentukan sebagai penerima
+                            </div>
+                            <div class="form-group" id="receipent">
+                                    <label>Penerima (Anggota Keluarga Serumah)</label>
+                                    <select class="multiple-select memberfamily" name="memberfamily" id="memberfamily"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Keterangan</label>
+                                <textarea class="form-control" name="note"></textarea>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
       </div>
         </div>
     </div>
@@ -130,4 +163,5 @@
     <script type="text/javascript" src="{{ asset('js/currency.js') }}"></script>
     <script src="{{ asset('js/create-org-rt.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/inventory-user-index.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/add-giftrecipients.js') }}"></script>
 @endpush

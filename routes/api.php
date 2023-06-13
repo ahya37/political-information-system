@@ -405,3 +405,6 @@ Route::post('/historymonitoring/delete','Admin\HistoryMonitoringController@delet
 #FAMILY GROUP
 Route::post('/familygroup/delete','Admin\FamilyGroupController@delete');
 Route::post('/familygroupmember/delete','Admin\FamilyGroupController@deleteMember');
+Route::get('getdatafamilygroup', 'Admin\FamilyGroupController@getDataFamilyGroup');
+Route::post('getdatafamilygroup/member/{familyId}', 'Admin\FamilyGroupController@getDataMemberByFamilyGroup');
+

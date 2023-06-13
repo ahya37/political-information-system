@@ -10,6 +10,7 @@ use App\CostEvent;
 use App\EventDetail;
 use App\ForecastDesc;
 use App\EventCategory;
+use App\FamilyGroup;
 use App\GiftRecipients;
 use App\Models\Village;
 use App\Models\Province;
@@ -168,7 +169,12 @@ class EventController extends Controller
         $provinceModel = new Province();
         $province = $provinceModel->getDataProvince();
         $regency  = 3602;
-        return view('pages.admin.event.add-giftrecipients', compact('province','event_id','regency'));
+
+        #get data keluarga serumah
+        $familyGroupModel = new FamilyGroup();
+        $familyGroup      = $familyGroupModel->getDataFamilyGroups();
+
+        return view('pages.admin.event.add-giftrecipients', compact('province','event_id','regency','familyGroup'));
     }
 
     public function storeAddMemberEvent(Request $request)
@@ -291,7 +297,7 @@ class EventController extends Controller
         if ($request->status == 'member') {
 
             #user_id
-            $user  = User::select('id')->where('id', $request->member)->first();
+            $user  = User::select('id','name')->where('id', $request->member)->first();
             
             #get alamat
             $villages = Village::with(['district.regency'])->where('id', $request->village_id)->first();
@@ -303,6 +309,7 @@ class EventController extends Controller
 
             GiftRecipients::create([
                 'user_id' => $user->id,
+                'name' => $user->name,
                 'event_id' => $event_id,
                 'address' => $address,
                 'notes' => $request->note,
@@ -322,6 +329,53 @@ class EventController extends Controller
 
         }
        
+
+        return redirect()->back()->with(['success' => 'Berhasil menambahkan penerima bingkisan']);
+
+    }
+
+    public function storeAddRecipientFamilyGroup(Request $request, $event_id)
+    {
+        $RequestFamilyGroupId = $request->family;
+        $RequestMemberFamily  = $request->memberfamily;
+
+        $userModel     = new User();
+
+        #jika ketua familygroup ditentukan sebagai penerima
+        #get user_id nya di tb users where user_id yg ada di tb family_group
+        $userId = '';
+        if ($request->selectedReceipent == '1') {
+            $familyGroupModel = new FamilyGroup();
+            $familyGroup      = $familyGroupModel->getDataFamilyGroup($RequestFamilyGroupId);
+
+            $user   = $userModel->select('id','village_id','name')->where('id', $familyGroup->user_id)->first();
+            $userId = $user->id;
+            
+        }else{
+            
+            $userId = $RequestMemberFamily; #bisa digunakna sebagai user_id
+            $user  = $userModel->select('village_id','name')->where('id', $userId)->first();
+            
+        }
+
+
+        #get alamat
+        $villages = Village::with(['district.regency'])->where('id', $user->village_id)->first();
+        $village  = $villages->name;
+        $district = $villages->district->name;
+        $regency  = $villages->district->regency->name;
+
+        $address = "DS. $village, KEC. $district, $regency";
+
+        GiftRecipients::create([
+            'user_id' => $userId,
+            'name' => $user->name,
+            'event_id' => $event_id,
+            'family_group_id' => $RequestFamilyGroupId,
+            'address' => $address,
+            'notes' => $request->note,
+            'cby' => auth()->guard('admin')->user()->id
+        ]);
 
         return redirect()->back()->with(['success' => 'Berhasil menambahkan penerima bingkisan']);
 
