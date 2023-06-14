@@ -69,8 +69,8 @@
                                         <select class="multiple-select nik" name="member" id="nik" required></select>
                                     </div>
                                     <div class="form-group">
-                                        <label>Keterangan</label>
-                                        <textarea class="form-control" name="note"></textarea>
+                                        <label>Keterangan Barang / Bingkisan</label>
+                                        <textarea class="form-control" name="note" required></textarea>
                                     </div>
                             </div>
                             <div class="modal-footer">
@@ -105,8 +105,8 @@
                                   <textarea class="form-control" name="address" placeholder="Isikan alamat disini, contoh: Ds. Muara, Kec. Wanasalam, Kabupaten Lebak"></textarea>
                               </div>
                               <div class="form-group">
-                                  <label>Keterangan</label>
-                                  <textarea class="form-control" name="note"></textarea>
+                                  <label>Keterangan Barang / Bingkisan</label>
+                                        <textarea class="form-control" name="note" required></textarea>
                               </div>
                       </div>
                       <div class="modal-footer">
@@ -138,8 +138,8 @@
                                     <select class="multiple-select memberfamily" name="memberfamily" id="memberfamily"></select>
                             </div>
                             <div class="form-group">
-                                <label>Keterangan</label>
-                                <textarea class="form-control" name="note"></textarea>
+                                <label>Keterangan Barang / Bingkisan</label>
+                                        <textarea class="form-control" name="note" required></textarea>
                             </div>
                     </div>
                     <div class="modal-footer">

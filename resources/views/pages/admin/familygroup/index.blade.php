@@ -41,6 +41,7 @@
                                                     <td>{{ $item->notes }}</td>
                                                     <td>
                                                         <a href="{{ route('admin-familygroup-member', $item->id) }}" class="btn btn-sm btn-primary" id="{{ $item->id }}">Anggota Kelurga Serumah</a>
+                                                        <a href="{{ route('admin-familygroup-gift', $item->id) }}" class="btn btn-sm btn-info">Barang Pemberian</a>
                                                         <a href="{{ route('admin-familygroup-edit', $item->id) }}" class="btn btn-sm btn-primary">Edit</a>
                                                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="{{ $item->name }}" id="{{ $item->id }}"><i class="fa fa-trash"></i></button>
                                                     </td>

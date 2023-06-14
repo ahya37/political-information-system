@@ -487,13 +487,13 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/store','TpsController@store')->name('admin-tps-store');
         });
 
-        #hisrotymonitoring
+        #historymonitoring
         Route::group(['prefix' => 'hisrotymonitoring'], function(){
             Route::get('/','HistoryMonitoringController@index')->name('admin-hisrotymonitoring');
             Route::post('/store','HistoryMonitoringController@store')->name('admin-hisrotymonitoring-store');
         });
 
-        #hisrotymonitoring
+        #familygroup
         Route::group(['prefix' => 'familygroup'], function(){
             Route::get('/','FamilyGroupController@index')->name('admin-familygroup');
             Route::get('/create','FamilyGroupController@create')->name('admin-familygroup-create');
@@ -502,6 +502,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/member/store/{id}','FamilyGroupController@storeMemberFamilyGroup')->name('admin-familygroup-member-store');
             Route::get('/edit/{id}','FamilyGroupController@editGroupLeader')->name('admin-familygroup-edit');
             Route::post('/update/{id}','FamilyGroupController@updateGroupLeader')->name('admin-familygroup-update');
+            Route::get('/gift/{id}','FamilyGroupController@gift')->name('admin-familygroup-gift');
+            Route::post('/store/gift/{id}','FamilyGroupController@storeAddRecipientFamilyGroup')->name('admin-groupleader-storegift');
         });
         
         Route::post('/reason/category','ReasonCategorySpamMember@store')->name('admin-spamcategory-store');

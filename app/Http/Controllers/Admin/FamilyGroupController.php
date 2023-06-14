@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\User;
 use App\FamilyGroup;
+use App\GiftRecipients;
 use App\Models\Regency;
+use App\Models\Village;
 use App\DetailFamilyGroup;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
@@ -225,5 +228,47 @@ class FamilyGroupController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    public function gift($familyGroupId){
+
+        $headFamilyGroup        = $this->FamilyGroupModel->getDataFamilyGroup($familyGroupId);
+
+        #get data pemberian di tbl gift_recipients berdasarkan family_group_id
+        $gifts = GiftRecipients::select('name','address','notes','id')->where('family_group_id', $familyGroupId)->get();
+
+        $no    = 1;
+
+        return view('pages.admin.familygroup.listgift', compact('no','gifts','headFamilyGroup'));
+        
+
+    }
+
+    public function storeAddRecipientFamilyGroup(Request $request, $familyGroupId)
+    {
+        $RequestMemberFamily  = $request->memberfamily;
+
+        $userModel     = new User();
+
+        $user  = $userModel->with(['village.district.regency'])->where('id', $RequestMemberFamily)->first();
+
+        #get alamat
+        $village  = $user->village->name;
+        $district = $user->village->district->name;
+        $regency  = $user->village->district->regency->name;
+
+        $address = "DS. $village, KEC. $district, $regency";
+
+        GiftRecipients::create([
+            'user_id' => $RequestMemberFamily,
+            'name' => $user->name,
+            'family_group_id' => $familyGroupId,
+            'address' => $address,
+            'notes' => $request->note,
+            'cby' => auth()->guard('admin')->user()->id
+        ]);
+
+        return redirect()->back()->with(['success' => 'Berhasil menambahkan pemberian']);
+
     }
 }
