@@ -92,6 +92,8 @@
                                                     <option value="Belum Kawin" {{ $profile->marital_status == 'Belum Kawin' ? 'selected' : '' }}>Belum Kawin</option>
                                                     <option value="Sudah Kawin" {{ $profile->marital_status == 'Sudah Kawin' ? 'selected' : '' }}>Sudah Kawin</option>
                                                     <option value="Pernah Kawin" {{ $profile->marital_status == 'Pernah Kawin' ? 'selected' : '' }}>Pernah Kawin</option>
+													<option value="Cerai Hidup" {{ $profile->marital_status == 'Cerai Hidup' ? 'selected' : '' }}>Cerai Hidup</option>
+													<option value="Cerai Mati" {{ $profile->marital_status == 'Cerai Mati' ? 'selected' : '' }}>Cerai Mati</option>
                                                 </select>
                                             </div>
                                         </div>
