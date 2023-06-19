@@ -40,8 +40,14 @@
                                         Download
                                       </a>
                                       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                          <a href="{{ route('by-referal-downloadpdf', ['user_id' => $user->id,'district_id' => $row->id]) }}" class="dropdown-item">PDF</a>
-                                          <a href="{{ route('by-referal-downloadexcel', ['user_id' => $user->id,'district_id' => $row->id]) }}" class="dropdown-item">Excel</a>
+                                          <a href="{{ route('by-referal-downloadpdf', ['user_id' => $user->id,'district_id' => $row->id]) }}" class="dropdown-item" onclick="event.preventDefault();document.getElementById('formDownloadPDF').submit()">PDF</a>
+                                          <a href="{{ route('by-referal-downloadexcel', ['user_id' => $user->id,'district_id' => $row->id]) }}" class="dropdown-item" onclick="event.preventDefault();document.getElementById('formDownloadExcel').submit()">Excel</a>
+                                          <form id="formDownloadExcel" action="{{ route('by-referal-downloadexcel', ['user_id' => $user->id,'district_id' => $row->id]) }}" method="POST" style="display: none;">
+                                          @csrf
+                                          </form>
+                                          <form id="formDownloadPDF" action="{{ route('by-referal-downloadpdf', ['user_id' => $user->id,'district_id' => $row->id]) }}" method="POST" style="display: none;">
+                                          @csrf
+                                          </form>
                                       </div>
                                   </div>
                                   </div>
