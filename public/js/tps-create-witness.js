@@ -90,16 +90,16 @@ $("#selectVillageId").change(async function () {
         $("#selectRt").append("<option value=''>-Pilih RT-</option>");
         getListRTUi(dataRT);
 
-        table.ajax.reload(null, false);
-
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
         $("#selectRt").val("");
-        $('#keterangan').empty();
-        geLocationVillage(selectVillageId)
+
+        initialSelect2Member(selectVillageId, selectRT);
+
+        getDataTps(selectVillageId);
 
     } else {
         // province = $("#province").val();
@@ -108,7 +108,6 @@ $("#selectVillageId").change(async function () {
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
-        table.ajax.reload(null, false);
 
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
@@ -118,6 +117,43 @@ $("#selectVillageId").change(async function () {
         $("#selectRt").val("");
     }
 });
+
+function getDataTps(selectVillageId){
+
+    // GET ANGGOTA BERDASARKAN SORTIR
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+
+    let URL = `/api/getdatatps`;
+
+    $(".tps").select2({
+        theme: "bootstrap4",
+        width: $(this).data("width")
+            ? $(this).data("width")
+            : $(this).hasClass("w-100")
+                ? "100%"
+                : "style",
+        placeholder: "Pilih TPS",
+        allowClear: Boolean($(this).data("allow-clear")),
+        ajax: {
+            dataType: "json",
+            url: URL,
+            method: 'POST',
+            data  : { villageId : selectVillageId, _token: CSRF_TOKEN},
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            text: `${item.tps_number}`,
+                            id: item.id,
+                        };
+                    }),
+                };
+            },
+        },
+    });
+    
+}
 
 // RT
 $("#selectRt").change(async function () {
@@ -127,13 +163,16 @@ $("#selectRt").change(async function () {
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
-        table.ajax.reload(null, false);
 
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
+
+
+        initialSelect2Member(selectVillageId, selectRT)
+
     } else {
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
@@ -141,15 +180,76 @@ $("#selectRt").change(async function () {
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
-        table.ajax.reload(null, false);
 
         // $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
+
+
+        // initialSelect2Member(selectVillageId, selectRT)
+
     }
 });
+
+$('#jabatan').change(function () {
+    let jabatanId = $("#jabatan").val();
+    if (jabatanId === 'KOR RT') {
+        $('#divSelectRt').show();
+        $("#selectRt").attr('required', true);
+    } else {
+        $('#divSelectRt').hide();
+        $("#selectRt").val("")
+        $("#selectRt").attr('required', false);
+    }
+});
+
+$('#nik').on('keyup',function (e) {
+
+
+})
+// $('#nik').on(function (e) {
+//     //    initialSelect2Member(selectVillageId, selectRT, q)
+// });
+
+function initialSelect2Member(selectVillageId, selectRT) {
+    // GET ANGGOTA BERDASARKAN SORTIR
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+
+    let URL = selectRT === null ? `/api/getdatamember/${selectVillageId}` : `/api/getdatamemberrt/${selectVillageId}/${selectRT}`
+
+    $(".nik").select2({
+        theme: "bootstrap4",
+        width: $(this).data("width")
+            ? $(this).data("width")
+            : $(this).hasClass("w-100")
+                ? "100%"
+                : "style",
+        placeholder: "Pilih Anggota",
+        allowClear: Boolean($(this).data("allow-clear")),
+        ajax: {
+            dataType: "json",
+            url: URL,
+            method: 'GET',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            text: `${item.nik}-${item.name}`,
+                            id: item.id,
+                        };
+                    }),
+                };
+            },
+        },
+    });
+
+}
+
+
+// initialSelect2Member(selectVillageId, selectRT);
 
 
 
@@ -307,52 +407,3 @@ function getListRTUi(dataRT) {
 function showDivHtmlRT(m) {
     return `<option value="${m.rt}">${m.rt}</option>`;
 }
-
-let table = $("#data").DataTable({
-    pageLength: 10,
-
-    bLengthChange: true,
-    bFilter: true,
-    bInfo: true,
-    processing: true,
-    bServerSide: true,
-    order: [[0, 'asc']],
-    autoWidth: false,
-    ajax: {
-        url: "/api/list/tps",
-        type: "POST",
-        data: function (d) {
-            d.village = selectVillageId;
-            d.rt = selectRT;
-            return d;
-        },
-    },
-    columnDefs: [
-        {
-            targets: 0,
-            sortable: true,
-            render: function (data, type, row, meta) {
-                return row.tps_number;
-            },
-        },
-        {
-            targets: 1,
-            render: function (data, type, row, meta) {
-                return row.village ?? '';
-            },
-        },
-        {
-            targets: 2,
-            render: function (data, type, row, meta) {
-                return `<a href='/admin/tps/witnesses/${row.id}' class='btn btn-sm btn-sc-primary text-white'>Saksi</a>`;
-            },
-        },
-    ],
-});
-
-$('#exampleModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) 
-    var recipient = button.data('whatever') 
-    var modal = $(this)
-    modal.find('.modal-body input[name="pidx"]').val(recipient)
-});

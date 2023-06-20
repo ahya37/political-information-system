@@ -485,6 +485,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/','TpsController@index')->name('admin-tps');
             Route::get('/create','TpsController@create')->name('admin-tps-create');
             Route::post('/store','TpsController@store')->name('admin-tps-store');
+            Route::get('/witnesses/{tpsId}','TpsController@witnesses')->name('admin-tps-witnesses');
+            Route::post('/witnesses/store/{tpsId}','TpsController@storeWitness')->name('admin-tps-witnesses-store');
         });
 
         #historymonitoring
