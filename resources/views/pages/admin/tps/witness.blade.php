@@ -28,7 +28,7 @@
                                 <div class="mb-4">
                                     <button type="button" class="btn btn-sm btn-sc-primary text-white" data-toggle="modal"
                                         data-target=".bd-example-modal-lg"><i class="fa fa-plus"></i> Tambah
-                                        Monitoring</button>
+                                        Saksi</button>
                                 </div>
                                 <table id="data" class="table table-sm table-striped" width="100%">
                                     <thead>
