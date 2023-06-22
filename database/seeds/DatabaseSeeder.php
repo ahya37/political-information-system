@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
         // $this->call(OrgDiagramVillageSeeder::class);
         // $this->call(CategoryInactiveMmemberSeeder::class);
         // $this->call(EventCategorySeeder::class);
-        $this->call(TpsSeeder::class);
+        // $this->call(TpsSeeder::class);
+        $this->call(QuestionnaireSeeder::class);
 
     }
 }

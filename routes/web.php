@@ -510,6 +510,12 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         #BANK
         Route::post('/bank/store','BankController@store')->name('admin-bank-store');
+
+        #QESTIONNAIRE
+        Route::group(['prefix' => 'questionnaire'], function(){
+            Route::get('/','QuestionnaireController@index')->name('admin-questionnaire');
+            Route::get('/create','QuestionnaireController@create')->name('admin-questionnaire-create');
+        });
           
     });
     

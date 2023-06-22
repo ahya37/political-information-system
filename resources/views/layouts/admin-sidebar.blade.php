@@ -291,6 +291,25 @@
             </ul>
         </div>
 
+        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/questionnaire/*') ? 'active custom-active-color' : '' }}"
+            href="#questionnaire" data-toggle="collapse" data-target="#questionnaire">
+            <span class="d-none d-sm-inline"></span>Kuisioner</a>
+        <div class="collapse" id="questionnaire" aria-expanded="false">
+            <ul class="flex-column pl-2 nav">
+                <li class="nav-item">
+                    <a href="{{ route('admin-questionnaire') }}"
+                        class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('questionnaire') ? 'active custom-active-color' : '' }}"><span>
+                            Daftar Kuisioner</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin-questionnaire-create') }}"
+                        class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('familygroup') ? 'active custom-active-color' : '' }}"><span>
+                            Buat Kuisioner</span></a>
+                </li>
+
+            </ul>
+        </div>
+
 
         <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
             href="#spam" data-toggle="collapse" data-target="#spam">
