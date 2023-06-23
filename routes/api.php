@@ -408,3 +408,6 @@ Route::post('/familygroupmember/delete','Admin\FamilyGroupController@deleteMembe
 Route::get('getdatafamilygroup', 'Admin\FamilyGroupController@getDataFamilyGroup');
 Route::post('getdatafamilygroup/member/{familyId}', 'Admin\FamilyGroupController@getDataMemberByFamilyGroup');
 
+#Questionare
+Route::post('/questionare', 'Admin\QuestionnaireController@getDataQuestionnaire');
+Route::post('/questionare/delete', 'Admin\QuestionnaireController@delete');
