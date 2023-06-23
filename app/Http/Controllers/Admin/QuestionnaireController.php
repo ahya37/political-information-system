@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Questionnaire;
 use App\Helpers\ResponseFormatter;
+use App\Http\Controllers\Admin\generate_string;
 
 class QuestionnaireController extends Controller
 {
@@ -31,10 +32,13 @@ class QuestionnaireController extends Controller
         //ambil data ke dalam variabel
         $nama = $request->name;
         $tanggal = date('Y-m-d h:i:s');
+        $permitted_chars = 'abcdefghijklmnopqrstuvwxyz';
+        $url = str_random(10);
 
         Questionnaire::create([
             'name' => $nama,
             'created_by' => '1',
+            'url' => $url,
             'created_at' => $tanggal,
         ]);
 
