@@ -32,7 +32,7 @@ class QuestionnaireController extends Controller
         //ambil data ke dalam variabel
         $nama = $request->name;
         $tanggal = date('Y-m-d h:i:s');
-        $permitted_chars = 'abcdefghijklmnopqrstuvwxyz';
+        $permitted_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
         $url = str_random(10);
 
         Questionnaire::create([
