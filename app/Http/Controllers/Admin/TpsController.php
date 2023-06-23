@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Tps;
+use App\User;
 use App\Dapil;
+use App\Witness;
 use App\Models\Regency;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use App\Models\Village;
-use App\RightChooseDistrict;
-use App\RightChooseProvince;
 use App\RightChooseRegency;
 use App\RightChosseVillage;
+use App\RightChooseDistrict;
+use App\RightChooseProvince;
+use Illuminate\Http\Request;
+use App\Helpers\ResponseFormatter;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class TpsController extends Controller
 {
@@ -35,9 +38,8 @@ class TpsController extends Controller
         }
 
         $data = DB::table('tps as a')
-                ->select('a.tps_number','a.rt', 'a.rw', 'b.name as village')
+                ->select('a.tps_number','a.rt', 'a.rw', 'b.name as village','a.id')
                 ->join('villages as b','a.village_id','=','b.id');
-
 
         if($request->input('search.value')!=null){
                 $data = $data->where(function($q)use($request){
@@ -223,6 +225,89 @@ class TpsController extends Controller
 
         return response()->json($data);
 
+    }
+
+    public function witnesses($tpsId){
+
+       $regency      = Regency::select('id')->where('id', 3602)->first();
+
+       $tpsModel     = new Tps();
+       $tps          = $tpsModel->getDataTpsByTpsId($tpsId);
+        
+       $witnessModel = new Witness();
+       $witnesses    = $witnessModel->getDataWitnrsses($tpsId);
+       
+       $no           = 1;
+
+       return view('pages.admin.tps.witness', compact('regency','tpsId','witnesses','no','tps'));
+
+    }
+
+    public function storeWitness(Request $request, $tpsId){
+
+        DB::beginTransaction();
+        try {
+            
+            $this->validate($request, [
+                'member' => 'required|min:1',
+                'status' => 'required',
+            ]);
+
+            $userId       = $request->member;
+
+            $witnessModel = new Witness();
+            $user         = User::select('village_id')->where('id', $userId)->first();
+            
+            #cek apakah anggota sudah menjadi tim saksi
+            $check       = $witnessModel->where('user_id', $userId)->count();
+            if($check > 0) return redirect()->back()->with(['warning' => 'Gagal simpan, Sudah terdaftar sebagai saksi!']);
+
+            $tps          = Tps::select('village_id')->where('id', $tpsId)->first();
+            #cek apakah anggota tersebut domisilinya sama dengan data lokasi TPS
+            #parameternya adalah village_id di tbl tps dan village_id di tb users
+            if ($user->village_id != $tps->village_id) return redirect()->back()->with(['warning' => 'Gagal simpan, Alamat desa anggota tidak sama dengan alamat TPS berada!']);
+            
+            Witness::create([
+                'tps_id' => $tpsId,
+                'user_id' => $request->member,
+                'status' => $request->status,
+                'cby' =>  auth()->guard('admin')->user()->id
+            ]);
+
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Saksi telah disimpan!']);
+        
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            return redirect()->back()->with(['error' => $e->getMessage()]);
+
+        }
+
+    }
+
+    public function deleteWitness()
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+
+            Witness::where('id', $id)->delete();
+
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil hapus saksi!'
+            ], 200);
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
 }
