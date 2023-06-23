@@ -13,7 +13,7 @@ class QuestionnaireQuestionsSeeder extends Seeder
     public function run()
     {
         $data = [
-            ['questionnaire_title_id' => 1, 'number' => 1,'desc' => 'Apakah Anda mendukung H.Asep AW maju sebagai DPR Provinsi Banten','required' => 'Y','created_by' => 35]
+            ['questionnaire_title_id' => 2, 'number' => 2,'desc' => 'Apakah Anda mendukung partai Nasdem','required' => 'Y','created_by' => 35]
         ];
 
         foreach ($data as $value) {

@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AnswerChoiceCategory extends Model
+class QuestionnaireAnswer extends Model
 {
-    protected $table = 'answer_choice_categories';
+    protected $table   = 'questionnaire_answers';
     protected $guarded = [];
 }
