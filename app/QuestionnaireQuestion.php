@@ -11,7 +11,7 @@ class QuestionnaireQuestion extends Model
 
     public function getDataQuestionsByTitle($titleId){
 
-        $sql = DB::table('questionnaire_questions')->select('id','number','desc','required','type')->where('questionnaire_title_id', $titleId)->get();
+        $sql = DB::table('questionnaire_questions')->select('id','desc')->where('questionnaire_title_id', $titleId)->get();
         return $sql;
     }
 }

@@ -26,14 +26,12 @@
                         <table id="data" class="table table-sm table-striped" width="100%">
                           <thead>
                             <tr>
-                              <th></th>
-                              <th scope="col">NAMA</th>
-                              <th scope="col">DESA</th>
-                              <th scope="col">OPSI</th>
+                              <th>Kuisioner</th>
+                              <th>Respondent</th>
+                              <th>Opsi</th>
                             </tr>
                           </thead>
                           <tbody>
-                           
                           </tbody>
                         </table>
                         </div>
@@ -46,7 +44,9 @@
           </div>
 @endsection
 @push('addon-script')
+<script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/questionares-index.js') }}"></script>
 {{-- <script type="text/javascript" src="{{asset('/js/spam-member-index.js')}}"></script> --}}
 @endpush

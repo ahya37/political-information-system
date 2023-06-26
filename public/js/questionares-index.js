@@ -1,0 +1,98 @@
+let table = $("#data").DataTable({
+    pageLength: 10,
+
+    bLengthChange: true,
+    bFilter: true,
+    bInfo: true,
+    processing: true,
+    bServerSide: true,
+    order: [[0, 'asc']],
+    autoWidth: false,
+    ajax: {
+        url: "/api/questionare",
+        type: "POST",
+        data: function (d) {
+            return d;
+        },
+    },
+    columnDefs: [
+        {
+            targets: 0,
+            sortable: true,
+            render: function (data, type, row, meta) {
+                return row.name;
+            },
+        },
+        {
+            targets: 1,
+            sortable: true,
+            render: function (data, type, row, meta) {
+                return `<span>${row.number_of_respondent}</span>`;
+            }
+            
+        },
+        {
+            targets: 2,
+            sortable: true,
+            render: function (data, type, row, meta) {
+                return `
+                <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}">Hapus</button>
+                <a class="btn btn-sm btn-sc-primary text-white" href="/admin/questionnaire/edit/${row.id}">Edit</a>
+                `;
+            }
+        }
+    ],
+});
+
+function onDelete(data) {
+    const id = data.id;
+    const name = data.getAttribute("data-name");
+
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    Swal.fire({
+        title: `Yakin hapus ${name}`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Hapus',
+        cancelButtonText: 'Batal',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "/api/questionare/delete",
+                method: "POST",
+                cache: false,
+                data: {
+                    id: id,
+                    _token: CSRF_TOKEN,
+                },
+                success: function (data) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: `${data.data.message}`,
+                        showConfirmButton: false,
+                        width: 500,
+                        timer: 900,
+                    },
+                    );
+                    const table = $("#data").DataTable();
+                    table.ajax.reload();
+                },
+                error: function (error) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: `Gagal`,
+                        showConfirmButton: false,
+                        width: 500,
+                        timer: 1000,
+                    });
+                },
+            });
+        }
+    })
+
+
+}
