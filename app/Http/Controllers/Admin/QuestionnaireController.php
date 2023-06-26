@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Questionnaire;
 use App\Helpers\ResponseFormatter;
-use App\Http\Controllers\Admin\generate_string;
+
 
 class QuestionnaireController extends Controller
 {
@@ -87,7 +87,7 @@ class QuestionnaireController extends Controller
 
             $id    = request()->id;
 
-            $data = DB::table('questionnaires')->where('id',$id)->delete();
+            DB::table('questionnaires')->where('id',$id)->delete();
 
             DB::commit();
             return ResponseFormatter::success([
@@ -128,6 +128,40 @@ class QuestionnaireController extends Controller
 
         return redirect()->route('admin-questionnaire')->with(['success' => 'Data Berhasil Diedit']);
     
+    }
+
+    public function detail($id){
+
+        $sql = "SELECT id,  name,created_at FROM questionnaire_titles
+        WHERE questionnaire_id = $id";  
+
+        $data = DB::select($sql);
+
+        return view('pages.admin.questionnaires.detail');
+    }
+
+
+    public function detailQuestionnaire(Request $request, $id){
+
+        // DATATABLE
+        $orderBy = 'name';
+        switch ($request->input('order.0.column')) {
+            case '3':
+                $orderBy = 'name';
+                break;
+        }
+
+        $sql = "SELECT id,  name,created_at FROM questionnaire_titles
+                WHERE questionnaire_id = $id";  
+
+        $data = DB::select($sql);
+
+
+          return response()->json([
+                'data'=> $data
+            ]);
+
+
     }
 
 }

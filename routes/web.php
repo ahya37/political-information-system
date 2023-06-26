@@ -518,6 +518,13 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/store', 'QuestionnaireController@store')->name('admin-questionnaire-store');
             Route::get('/edit/{id}', 'QuestionnaireController@edit')->name('admin-questionnaire-edit');
             Route::post('/update', 'QuestionnaireController@update')->name('admin-questionnaire-update');
+            Route::get('/detail/{id}', 'QuestionnaireController@detail')->name('admin-questionnaire-detail');
+        });
+
+        #QUESTIONNAIRE TITLE
+        Route::group(['prefix' => 'questionnairetitle'], function(){
+            Route::get('/edit/{id}', 'QuestionnaireTitleController@edit')->name('admin-questionnairetitle-edit');
+            Route::post('/store', 'QuestionnaireTitleController@update')->name('admin-questionnairetitle-update');
         });
           
     });
