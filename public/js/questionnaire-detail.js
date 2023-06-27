@@ -39,7 +39,8 @@ let table = $("#data").DataTable({
             sortable: true,
             render: function (data, type, row, meta) {
                 return `
-                <a href="/admin/questionnairetitle/edit/${row.id}/${id}" class='btn btn-primary fa fa-pencil text-light' title='Edit'></a>
+                <a href="/admin/questionnairequestion" class='btn btn-primary btn-sm'>Detail</a>
+                <a href="/admin/questionnairetitle/edit/${row.id}/${id}" class='btn btn-sc-primary fa fa-pencil text-light' title='Edit'></a>
                 <button class='btn btn-danger fa fa-trash text-light' onclick="onDelete(this)" data-name="${row.name}" id="${row.id}" title='Hapus'></button>
                 `;
             }

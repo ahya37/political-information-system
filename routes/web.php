@@ -528,6 +528,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/create', 'QuestionnaireTitleController@create')->name('admin-questionnairetitle-create');
             Route::post('/store/{id}', 'QuestionnaireTitleController@store')->name('admin-questionnairetitle-store');
         });
+
+        #QUESTIONNAIRE QUESTION
+        Route::group(['prefix' => 'questionnairequestion'], function(){
+            Route::get('/', 'QuestionnaireQuestionController@index');
+        });
           
     });
     
