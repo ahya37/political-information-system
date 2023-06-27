@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 use App\QuestionnaireTitle;
+use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 
 class QuestionnaireTitleController extends Controller
 {
@@ -25,14 +27,17 @@ class QuestionnaireTitleController extends Controller
             'name' => 'required',
         ]);
 
+        // untuk mendapatkan id akun admin yang sedang login
+         $userId = auth()->guard('admin')->user()->id;
+
 
         $name = $request->name;
         $id = $request->id;
 
         $model = new QuestionnaireTitle();
-        $data = $model->updateData($id,$name);
+        $data = $model->updateData($id,$name,$userId);
 
-        return redirect()->route('admin-questionnaire');
+        return redirect()->back()->with(['success' => 'Judul kuisioner telah diedit!']);
     }
 
 
@@ -62,4 +67,24 @@ class QuestionnaireTitleController extends Controller
             ]);
         }
     }
+
+    public function create(){
+        return view('pages.admin.questionnaire_title.create');
+    }
+
+    public function store(Request $request, $id){
+
+        // untuk mendapatkan id akun admin yang sedang login
+        $userId = auth()->guard('admin')->user()->id;
+
+        $nama = $request->name;
+        $tanggal = date('Y-m-d h:i:s');
+
+        $model = new QuestionnaireTitle();
+        $model->insertData($userId,$nama,$tanggal,$id);
+
+        return redirect()->back()->with(['success' => 'Judul kuisioner telah ditambahkan!']);
+    }
+
+ 
 }

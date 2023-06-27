@@ -415,3 +415,4 @@ Route::post('/questionare/detail/{id}', 'Admin\QuestionnaireController@detailQue
 
 #Questionnaire Title
 Route::post('/questionnairetitle/delete', 'Admin\QuestionnaireTitleController@delete');
+// Route::post('/questionniaretitle/store/{id}', 'Admin\QuestionnaireTitleController@store');

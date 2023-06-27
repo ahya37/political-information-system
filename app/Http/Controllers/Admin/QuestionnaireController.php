@@ -9,6 +9,7 @@ use App\Questionnaire;
 use App\Helpers\ResponseFormatter;
 
 
+
 class QuestionnaireController extends Controller
 {
     public function index(){
@@ -29,17 +30,17 @@ class QuestionnaireController extends Controller
             'name' => 'required',
         ]);
 
+         // untuk mendapatkan id akun admin yang sedang login
+         $userId = auth()->guard('admin')->user()->id;
+
         //ambil data ke dalam variabel
         $nama = $request->name;
         $tanggal = date('Y-m-d h:i:s');
         $url = str_random(10);
 
-        Questionnaire::create([
-            'name' => $nama,
-            'created_by' => '1',
-            'url' => $url,
-            'created_at' => $tanggal,
-        ]);
+
+        $model = new Questionnaire();
+        $model->insertData($nama,$tanggal,$url,$userId);
 
         return redirect()->route('admin-questionnaire')->with(['success' => 'Data Berhasil Ditambahkan']);
     }
@@ -115,16 +116,15 @@ class QuestionnaireController extends Controller
             'name' => 'required',
         ]);
 
+         // untuk mendapatkan id akun admin yang sedang login
+         $userId = auth()->guard('admin')->user()->id;
+
         $id = $request->id;
         $nama = $request->name;
         $tanggal = date('Y-m-d h:i:s');
 
-        DB::table('questionnaires')->where('id',$id)->update([
-            'name' => $nama,
-            'created_by' => '1',
-            'created_at' => $tanggal,
-
-        ]);
+        $model = new Questionnaire();
+        $model->updateData($id,$nama,$tanggal,$userId);
 
         return redirect()->route('admin-questionnaire')->with(['success' => 'Data Berhasil Diedit']);
     
@@ -132,12 +132,8 @@ class QuestionnaireController extends Controller
 
     public function detail($id){
 
-        $sql = "SELECT id,  name,created_at FROM questionnaire_titles
-        WHERE questionnaire_id = $id";  
+        return view('pages.admin.questionnaires.detail', compact('id'));
 
-        $data = DB::select($sql);
-
-        return view('pages.admin.questionnaires.detail');
     }
 
 
