@@ -12,15 +12,15 @@ use Illuminate\Support\Facades\Auth;
 
 class QuestionnaireTitleController extends Controller
 {
-    public function edit($id){
+    public function edit($id, $questionnaireId){
 
         $model = new QuestionnaireTitle();
-        $data = $model->editData($id);
+        $data  = $model->editData($id);
 
-        return view('pages.admin.questionnaire_title.edit', compact('data'));
+        return view('pages.admin.questionnaire_title.edit', compact('data','questionnaireId'));
     }
 
-    public function update(Request $request){
+    public function update(Request $request, $id){
 
         //validasi data
         $request->validate([
@@ -29,15 +29,15 @@ class QuestionnaireTitleController extends Controller
 
         // untuk mendapatkan id akun admin yang sedang login
          $userId = auth()->guard('admin')->user()->id;
+         $questionnaireId = $request->questionnaireId;
 
 
         $name = $request->name;
-        $id = $request->id;
 
         $model = new QuestionnaireTitle();
         $data = $model->updateData($id,$name,$userId);
 
-        return redirect()->back()->with(['success' => 'Judul kuisioner telah diedit!']);
+        return redirect()->route('admin-questionnaire-detail', ['id' => $questionnaireId])->with(['success' => 'Judul kuisioner telah diedit!']);
     }
 
 

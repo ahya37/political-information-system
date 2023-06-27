@@ -523,8 +523,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         #QUESTIONNAIRE TITLE
         Route::group(['prefix' => 'questionnairetitle'], function(){
-            Route::get('/edit/{id}', 'QuestionnaireTitleController@edit')->name('admin-questionnairetitle-edit');
-            Route::post('/update', 'QuestionnaireTitleController@update')->name('admin-questionnairetitle-update');
+            Route::get('/edit/{id}/{questionnaireId}', 'QuestionnaireTitleController@edit')->name('admin-questionnairetitle-edit');
+            Route::post('/update/{id}', 'QuestionnaireTitleController@update')->name('admin-questionnairetitle-update');
             Route::get('/create', 'QuestionnaireTitleController@create')->name('admin-questionnairetitle-create');
             Route::post('/store/{id}', 'QuestionnaireTitleController@store')->name('admin-questionnairetitle-store');
         });

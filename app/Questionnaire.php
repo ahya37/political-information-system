@@ -27,5 +27,5 @@ class Questionnaire extends Model
 
     //     $data = DB::select($sql);
 
-    }
+    
 }
