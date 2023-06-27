@@ -153,6 +153,7 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         #KUISIONER
         Route::get('/questionnaire','QuestionnaireController@index')->name('member-kuisioner-index');
         Route::get('/questionnaire/{questionnaireId}','QuestionnaireController@createRespondent')->name('member-kuisioner-createrespondent');
+        Route::get('/questionnaire/respondent/{questionnaireId}','QuestionnaireController@detailQuestionnaireId')->name('member-kuisioner-detail');
         Route::post('/questionnaire/respondent/store/{questionnaireId}','QuestionnaireController@storeRespondent')->name('member-kuisioner-storerespondent');
 
     });

@@ -39,7 +39,8 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->number_of_respondent }}</td>
                                     <td>
-                                        <a href="{{ route('member-kuisioner-createrespondent', $item->id) }}" class="btn btn-sm btn-sc-primary text-white"><i class="fa fa-plus"></i> Responden</a>
+                                      <a href="{{ route('member-kuisioner-createrespondent', $item->id) }}" class="btn btn-sm btn-sc-primary text-white"><i class="fa fa-plus"></i> Responden</a>
+                                      <a href="{{ route('member-kuisioner-detail', $item->id) }}" class="btn btn-sm btn-sc-primary text-white">Detail</a>
                                     </td>
                                </tr>
                            @endforeach

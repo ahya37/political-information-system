@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\UpdateRespondent;
 use App\Questionnaire;
 use App\QuestionnaireAnswer;
 use App\QuestionnaireAnswerChoice;
@@ -70,7 +71,7 @@ class QuestionnaireController extends Controller
         return view('pages.questionnaire.create-respondent', compact('questions','no','questionnaireId'));
     }
 
-    public function storeRespondent(Request $request, $questionId){
+    public function storeRespondent(Request $request, $questionnaireId){
 
         DB::beginTransaction();
         try {
@@ -84,25 +85,33 @@ class QuestionnaireController extends Controller
                 'phone_number' => 'required|numeric',
                 'address' => 'required|string',
             ]);
+
+            #model
+            $questionnaireRespondentModel    = new QuestionnaireRespondent();
+            $questionnaireAnswerChoicesModel = new QuestionnaireAnswerChoice();
     
             #hitung panjang nik, harus 16
             $cekLengthNik = strlen($request->nik);
             if($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
-    
+
+            #cek jika nik sudah menjadi respondent
+            $checkNik =  $questionnaireRespondentModel->where('nik', $request->nik)->count();
+            if($checkNik > 0) return redirect()->back()->with(['error' => 'NIK sudah menjadi responden!']);
+
             #save ke tb respondent
-            $respondent = QuestionnaireRespondent::create([
-                'questionnaire_id' => $questionId,
+            $respondent = $questionnaireRespondentModel->create([
+                'questionnaire_id' => $questionnaireId,
                 'nik' => $request->nik,
                 'name' => $request->name,
                 'address' => $request->address,
                 'gender' => $request->gender,
                 'age' => $request->age,
+                'phone_number' => $request->phone_number,
                 'created_by' => Auth::user()->id
             ]);
     
             $answerChoice['answerChoice'] = $request->answerchoice;
 
-            $questionnaireAnswerChoicesModel = new QuestionnaireAnswerChoice();
     
             foreach ($answerChoice['answerChoice'] as $key => $value) {
     
@@ -123,6 +132,9 @@ class QuestionnaireController extends Controller
                 ]);
     
             }
+
+            #update jumlah respondent ke tabel questionnaires
+           UpdateRespondent::update($questionnaireId);
     
             #save jawaban kuisioner essay
             DB::commit();
@@ -130,8 +142,24 @@ class QuestionnaireController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            // return $e->getMessage();
             return redirect()->back()->with(['error' => 'Kuisioner gagal disimpan!'. $e->getMessage()]);
         }
 
     }
+
+    public function detailQuestionnaireId($questionnaireId){
+
+        $userId = Auth::user()->id;
+
+        #get data respondent
+        $questionnaireRespondentModel = QuestionnaireRespondent::select('id','questionnaire_id','nik','name','address','gender','age','phone_number')
+                                        ->where('questionnaire_id', $questionnaireId)
+                                        ->where('created_by', $userId)
+                                        ->get();
+
+        dd($questionnaireRespondentModel);
+
+    }
+
 }
