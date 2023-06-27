@@ -33,6 +33,7 @@ class MemberExport implements FromCollection, WithHeadings, WithEvents
                 $total_referal = User::where('user_id', $val->id)->whereNotNull('village_id')->count();
                 $result[] = [
                     'no' => $no++,
+                    'id' => " $val->id",
                     'nik' => " $val->nik",
                     'name' => $val->name,
                     'address' => $val->address,
@@ -57,6 +58,7 @@ class MemberExport implements FromCollection, WithHeadings, WithEvents
     {
         return [
             'NO',
+            'ID',
             'NIK',
             'NAMA',
             'ALAMAT',
@@ -78,7 +80,7 @@ class MemberExport implements FromCollection, WithHeadings, WithEvents
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:N1')->applyFromArray([
+                $event->sheet->getStyle('A1:P1')->applyFromArray([
                     'font' => [
                         'bold' => true
                     ]
