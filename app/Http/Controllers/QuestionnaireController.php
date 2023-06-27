@@ -102,7 +102,7 @@ class QuestionnaireController extends Controller
             $respondent = $questionnaireRespondentModel->create([
                 'questionnaire_id' => $questionnaireId,
                 'nik' => $request->nik,
-                'name' => $request->name,
+                'name' => strtoupper($request->name),
                 'address' => $request->address,
                 'gender' => $request->gender,
                 'age' => $request->age,
@@ -153,12 +153,14 @@ class QuestionnaireController extends Controller
         $userId = Auth::user()->id;
 
         #get data respondent
-        $questionnaireRespondentModel = QuestionnaireRespondent::select('id','questionnaire_id','nik','name','address','gender','age','phone_number')
+        $questionnaireRespondent = QuestionnaireRespondent::select('id','questionnaire_id','nik','name','address','gender','age','phone_number','created_at')
                                         ->where('questionnaire_id', $questionnaireId)
                                         ->where('created_by', $userId)
                                         ->get();
 
-        dd($questionnaireRespondentModel);
+        $no = 1;
+
+        return view('pages.questionnaire.detail', compact('no','questionnaireRespondent'));
 
     }
 
