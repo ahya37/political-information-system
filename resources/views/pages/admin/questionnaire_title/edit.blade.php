@@ -1,11 +1,11 @@
 @extends('layouts.admin')
-@section('title', 'Tambah Kuisioner')
+@section('title', 'Edit Judul Kuisioner')
 @section('content')
     <!-- Section Content -->
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Tambah Kuisioner</h2>
+                <h2 class="dashboard-title">Edit Judul Kuisioner</h2>
                 <p class="dashboard-subtitle">
                 </p>
             </div>
@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         @include('layouts.message')
-                        <form action="{{ route('admin-questionnaire-store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin-questionnairetitle-update', $data->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="card">
                                 <div class="card-body">
@@ -23,8 +23,9 @@
                                                 <div class="row">
                                                     <div class="col-md-12 col-sm-12">
                                                         <label>Nama</label>
+                                                        <input type="hidden" name="questionnaireId" value="{{ $questionnaireId }}">
                                                         <input type="text" name="name" required
-                                                            class="form-control" />
+                                                            class="form-control" value="{{ $data->name }}"/>
                                                     </div>
                                                 </div>
                                             </div>

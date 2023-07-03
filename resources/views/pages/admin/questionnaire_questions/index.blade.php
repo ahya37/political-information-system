@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Kuisioner')
+@section('title','Pertanyaan Kuisioner')
 @push('addon-style')
          <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
       <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -15,7 +15,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Kuisioner</h2>
+                <h2 class="dashboard-title">Pertanyaan Kuisioner</h2>
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
                 
@@ -28,8 +28,8 @@
                         <table id="data" class="table table-sm table-striped" width="100%">
                           <thead>
                             <tr>
-                              <th>Kuisioner</th>
-                              <th>Respondent</th>
+                              <th>Deskripsi</th>
+                              <th>Tipe Pertanyaan</th>
                               <th>Opsi</th>
                             </tr>
                           </thead>
@@ -49,6 +49,6 @@
 <script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('js/questionares-index.js') }}"></script>
+<script src="{{ asset('js/questionnaire-question.js') }}"></script>
 {{-- <script type="text/javascript" src="{{asset('/js/spam-member-index.js')}}"></script> --}}
 @endpush

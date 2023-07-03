@@ -517,6 +517,23 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::group(['prefix' => 'questionnaire'], function(){
             Route::get('/','QuestionnaireController@index')->name('admin-questionnaire');
             Route::get('/create','QuestionnaireController@create')->name('admin-questionnaire-create');
+            Route::post('/store', 'QuestionnaireController@store')->name('admin-questionnaire-store');
+            Route::get('/edit/{id}', 'QuestionnaireController@edit')->name('admin-questionnaire-edit');
+            Route::post('/update', 'QuestionnaireController@update')->name('admin-questionnaire-update');
+            Route::get('/detail/{id}', 'QuestionnaireController@detail')->name('admin-questionnaire-detail');
+        });
+
+        #QUESTIONNAIRE TITLE
+        Route::group(['prefix' => 'questionnairetitle'], function(){
+            Route::get('/edit/{id}/{questionnaireId}', 'QuestionnaireTitleController@edit')->name('admin-questionnairetitle-edit');
+            Route::post('/update/{id}', 'QuestionnaireTitleController@update')->name('admin-questionnairetitle-update');
+            Route::get('/create', 'QuestionnaireTitleController@create')->name('admin-questionnairetitle-create');
+            Route::post('/store/{id}', 'QuestionnaireTitleController@store')->name('admin-questionnairetitle-store');
+        });
+
+        #QUESTIONNAIRE QUESTION
+        Route::group(['prefix' => 'questionnairequestion'], function(){
+            Route::get('/', 'QuestionnaireQuestionController@index');
         });
           
     });

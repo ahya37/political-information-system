@@ -27,7 +27,9 @@ class DatabaseSeeder extends Seeder
         // $this->call(CategoryInactiveMmemberSeeder::class);
         // $this->call(EventCategorySeeder::class);
         // $this->call(TpsSeeder::class);
-        $this->call(QuestionnaireSeeder::class);
+        // $this->call(QuestionnaireSeeder::class);
+        // $this->call(QuestionnaireTitleSeeder::class);
+        $this->call(QuestionnaireQuestionsSeeder::class);
 
     }
 }
