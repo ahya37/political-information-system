@@ -1,6 +1,3 @@
-const query = document.URL;
-const id = query.substring(query.lastIndexOf("/") + 1);
-
 let table = $("#data").DataTable({
     pageLength: 10,
 
@@ -12,8 +9,8 @@ let table = $("#data").DataTable({
     order: [[0, 'asc']],
     autoWidth: false,
     ajax: {
-        url: `/api/questionnairequestion/${id}`,
-        type: "post",
+        url: "/api/answerCategory",
+        type: "POST",
         data: function (d) {
             return d;
         },
@@ -23,14 +20,14 @@ let table = $("#data").DataTable({
             targets: 0,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.description;
+                return row.name;
             },
         },
         {
             targets: 1,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.type;
+                return row.created_at;
             }
             
         },
@@ -39,8 +36,8 @@ let table = $("#data").DataTable({
             sortable: true,
             render: function (data, type, row, meta) {
                 return `
-                <a href="/admin/questionnairequestion/edit" class="btn btn-sm btn-primary fa fa-pencil" title="Edit"></a>
-                <button class="btn btn-sm btn-danger fa fa-trash" onclick="onDelete(this)" id="${row.id}" title="Hapus"></button>
+                <a href="/admin/answercategory/edit/${row.id}" class="btn btn-primary btn-sm fa fa-pencil" title="Edit"></a>
+                <button class="btn btn-danger btn-sm fa fa-trash" title="Hapus" onclick="onDelete(this)" id="${row.id}" data-name="${row.name}"></button>
                 `;
             }
         }
@@ -50,10 +47,10 @@ let table = $("#data").DataTable({
 function onDelete(data){
     
     const id = data.id;
-
+    const name = data.getAttribute("data-name");
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     Swal.fire({
-        title: `Yakin hapus?`,
+        title: `Yakin hapus ${name}?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -63,7 +60,7 @@ function onDelete(data){
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "/api/questionnairequestion/delete",
+                url: "/api/answerCategory/delete",
                 method: "POST",
                 cache: false,
                 data: {
