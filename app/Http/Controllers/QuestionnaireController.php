@@ -164,4 +164,14 @@ class QuestionnaireController extends Controller
 
     }
 
+
+    public function answersByRespondent($respondentId){
+
+        #get data pertanyaan dan jawaban berdasarkan respondent id
+        $questionnaireAnswerModel = new QuestionnaireAnswer();
+        $answers                  = $questionnaireAnswerModel->getDataAnswerByRespondentId($respondentId);
+        
+        $no = 1;
+        return view('pages.questionnaire.answers', compact('no','answers'));
+    }
 }

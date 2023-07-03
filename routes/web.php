@@ -155,6 +155,7 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
         Route::get('/questionnaire/{questionnaireId}','QuestionnaireController@createRespondent')->name('member-kuisioner-createrespondent');
         Route::get('/questionnaire/respondent/{questionnaireId}','QuestionnaireController@detailQuestionnaireId')->name('member-kuisioner-detail');
         Route::post('/questionnaire/respondent/store/{questionnaireId}','QuestionnaireController@storeRespondent')->name('member-kuisioner-storerespondent');
+        Route::get('/respondent/answers/{respondentId}', 'QuestionnaireController@answersByRespondent')->name('member-questionnaire-respondent');
 
     });
 

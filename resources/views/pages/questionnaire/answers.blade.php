@@ -13,7 +13,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Responden</h2>
+                <h2 class="dashboard-title">Daftar Jawaban Dari Responden </h2>
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
                 
@@ -26,33 +26,19 @@
                         <table id="data" class="table table-sm table-striped" width="100%">
                           <thead>
                             <tr>
-                              <th>NO</th>
-                              <th scope="col">NIK</th>
-                              <th scope="col">NAME</th>
-                              <th scope="col">USIA</th>
-                              <th scope="col">JENIS KELAMIN</th>
-                              <th scope="col">NO. TELP</th>
-                              <th scope="col">ALAMAT</th>
-                              <th scope="col">TANGGAL</th>
-                              <th scope="col">OPSI</th>
+                              <th>No</th>
+                              <th scope="col">Pertanyaan</th>
+                              <th scope="col">Jawaban</th>
                             </tr>
                           </thead>
                           <tbody>
-                          @foreach ($questionnaireRespondent as $item)
-                              <tr>
-                                <td>{{ $no++ }}</td>
-                                <td>{{ $item->nik }}</td>
-                                <td>{{ $item->name }}</td>
-                                <td>{{ $item->age }}</td>
-                                <td>{{ $item->gender }}</td>
-                                <td>{{ $item->phone_number }}</td>
-                                <td>{{ $item->address }}</td>
-                                <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
-                                <td>
-                                  <a class="btn btn-sm btn-sc-primary text-white" href="{{ route('member-questionnaire-respondent', $item->id) }}">Jawaban</a>
-                                </td>
-                              </tr>
-                          @endforeach
+                            @foreach ($answers as $item)
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    <td>{{ $item->question }}</td>
+                                    <td>{{ $item->answer }}</td>
+                                </tr>
+                            @endforeach
                           </tbody>
                         </table>
                         </div>
