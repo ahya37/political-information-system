@@ -412,13 +412,10 @@ Route::post('getdatafamilygroup/member/{familyId}', 'Admin\FamilyGroupController
 #Questionare
 Route::post('/questionare', 'Admin\QuestionnaireController@getDataQuestionnaire');
 Route::post('/questionare/delete', 'Admin\QuestionnaireController@delete');
-
 Route::post('/questionare/detail/{id}', 'Admin\QuestionnaireController@detailQuestionnaire');
 
 #Questionnaire Title
 Route::post('/questionnairetitle/delete', 'Admin\QuestionnaireTitleController@delete');
 
 #Questionnaire Question
-Route::post('/questionnairequestion', 'Admin\QuestionnaireQuestionController@getData');
-
 Route::post('/questionnairequestion/{id}', 'Admin\QuestionnaireQuestionController@getData');

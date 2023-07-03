@@ -29,11 +29,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(TpsSeeder::class);
         // $this->call(QuestionnaireSeeder::class);
         // $this->call(QuestionnaireTitleSeeder::class);
-        // $this->call(QuestionnaireQuestionsSeeder::class);
-        // $this->call(AnswerChoiceCategorySeeder::class);
-        $this->call(QuestionnaireAnswerChoiceSeeder::class);
-        // $this->call(QuestionnaireAnswerSeeder::class);
-        // $this->call(QuestionnaireRespondentSeeder::class);
+        $this->call(QuestionnaireQuestionsSeeder::class);
 
     }
 }

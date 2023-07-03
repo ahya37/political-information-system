@@ -10,11 +10,6 @@ class Questionnaire extends Model
     protected $table   = 'questionnaires';
     protected $guarded = [];
 
-    public function getDetailQuestionnaireByIdAndSurveiTim($questionId){
-
-
-    }
-
 
     public function insertData($nama,$tanggal,$userId,$url){
         $sql = "INSERT INTO questionnaires (name,created_at,url,created_by) VALUES('$nama','$tanggal','$userId','$url')";
@@ -39,5 +34,4 @@ class Questionnaire extends Model
     //     $data = DB::select($sql);
 
     
-
 }

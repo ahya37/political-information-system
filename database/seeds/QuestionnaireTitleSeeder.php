@@ -13,7 +13,7 @@ class QuestionnaireTitleSeeder extends Seeder
     public function run()
     {
         $data = [
-            ['questionnaire_id' => 1, 'name' => 'Dukungan Partai','created_by' => 35]
+            ['questionnaire_id' => 1, 'name' => 'Dukungan','created_by' => 35]
         ];
 
         foreach ($data as $value) {

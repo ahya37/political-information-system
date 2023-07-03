@@ -150,13 +150,6 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 
         Route::get('profile/{id}','MemberController@profileMember')->name('admin-profile-member');
 
-        #KUISIONER
-        Route::get('/questionnaire','QuestionnaireController@index')->name('member-kuisioner-index');
-        Route::get('/questionnaire/{questionnaireId}','QuestionnaireController@createRespondent')->name('member-kuisioner-createrespondent');
-        Route::get('/questionnaire/respondent/{questionnaireId}','QuestionnaireController@detailQuestionnaireId')->name('member-kuisioner-detail');
-        Route::post('/questionnaire/respondent/store/{questionnaireId}','QuestionnaireController@storeRespondent')->name('member-kuisioner-storerespondent');
-        Route::get('/respondent/answers/{respondentId}', 'QuestionnaireController@answersByRespondent')->name('member-questionnaire-respondent');
-
     });
 
 
@@ -540,8 +533,6 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         #QUESTIONNAIRE QUESTION
         Route::group(['prefix' => 'questionnairequestion'], function(){
-            Route::get('/', 'QuestionnaireQuestionController@index');
-
             Route::get('/{id}', 'QuestionnaireQuestionController@index');
         });
           
