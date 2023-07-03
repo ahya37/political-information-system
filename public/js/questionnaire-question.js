@@ -1,3 +1,6 @@
+const query = document.URL;
+const id = query.substring(query.lastIndexOf("/") + 1);
+
 let table = $("#data").DataTable({
     pageLength: 10,
 
@@ -9,7 +12,7 @@ let table = $("#data").DataTable({
     order: [[0, 'asc']],
     autoWidth: false,
     ajax: {
-        url: "/api/questionnairequestion",
+        url: `/api/questionnairequestion/${id}`,
         type: "POST",
         data: function (d) {
             return d;
@@ -20,7 +23,7 @@ let table = $("#data").DataTable({
             targets: 0,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.desc;
+                return row.description;
             },
         },
         {
