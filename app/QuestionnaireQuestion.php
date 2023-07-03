@@ -13,5 +13,12 @@ class QuestionnaireQuestion extends Model
 
         $sql = DB::table('questionnaire_questions')->select('id','desc')->where('questionnaire_title_id', $titleId)->get();
         return $sql;
+
+    }
+
+    public function getDataTable(){
+        $sql = "SELECT * FROM questionnaire_questions";
+        return DB::select($sql);
+
     }
 }

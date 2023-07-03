@@ -1,3 +1,6 @@
+const query = document.URL;
+const id = query.substring(query.lastIndexOf("/") + 1);
+
 let table = $("#data").DataTable({
     pageLength: 10,
 
@@ -9,7 +12,7 @@ let table = $("#data").DataTable({
     order: [[0, 'asc']],
     autoWidth: false,
     ajax: {
-        url: "/api/questionare",
+        url: `/api/questionare/detail/${id}`,
         type: "POST",
         data: function (d) {
             return d;
@@ -27,7 +30,7 @@ let table = $("#data").DataTable({
             targets: 1,
             sortable: true,
             render: function (data, type, row, meta) {
-                return `<span>${row.number_of_respondent}</span>`;
+                return row.created_at;
             }
             
         },
@@ -36,16 +39,18 @@ let table = $("#data").DataTable({
             sortable: true,
             render: function (data, type, row, meta) {
                 return `
-                <a class="btn btn-sm btn-primary" href="/admin/questionnaire/detail/${row.id}">Detail</a>
-                <a class="btn btn-sm btn-sc-primary text-white fa fa-pencil" href="/admin/questionnaire/edit/${row.id}"></a>
-                <button type="button" class="btn btn-sm btn-danger fa fa-trash" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"></button>
+                <a href="/admin/questionnairequestion" class='btn btn-primary btn-sm'>Detail</a>
+                <a href="/admin/questionnairetitle/edit/${row.id}/${id}" class='btn btn-sc-primary fa fa-pencil text-light' title='Edit'></a>
+                <button class='btn btn-danger fa fa-trash text-light' onclick="onDelete(this)" data-name="${row.name}" id="${row.id}" title='Hapus'></button>
                 `;
             }
+            
         }
     ],
 });
 
-function onDelete(data) {
+function onDelete(data){
+    
     const id = data.id;
     const name = data.getAttribute("data-name");
 
@@ -61,7 +66,7 @@ function onDelete(data) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "/api/questionare/delete",
+                url: "/api/questionnairetitle/delete",
                 method: "POST",
                 cache: false,
                 data: {
@@ -94,6 +99,5 @@ function onDelete(data) {
             });
         }
     })
-
 
 }

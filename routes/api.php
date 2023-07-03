@@ -395,6 +395,7 @@ Route::get('member/totalvillage/caleg/{district_id}/{village_id}/{user_id}','API
 
 #TPS
 Route::post('/getdatatps','Admin\TpsController@getDataTpsAPI');
+Route::post('/tps/witness/delete','Admin\TpsController@deleteWitness');
 
 #EVENT
 Route::post('/event/giftricipient/delete','Admin\EventController@deleteGiftRicipient');
@@ -411,4 +412,12 @@ Route::post('getdatafamilygroup/member/{familyId}', 'Admin\FamilyGroupController
 #Questionare
 Route::post('/questionare', 'Admin\QuestionnaireController@getDataQuestionnaire');
 Route::post('/questionare/delete', 'Admin\QuestionnaireController@delete');
+
+Route::post('/questionare/detail/{id}', 'Admin\QuestionnaireController@detailQuestionnaire');
+
+#Questionnaire Title
+Route::post('/questionnairetitle/delete', 'Admin\QuestionnaireTitleController@delete');
+
+#Questionnaire Question
+Route::post('/questionnairequestion', 'Admin\QuestionnaireQuestionController@getData');
 
