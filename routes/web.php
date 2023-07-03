@@ -531,7 +531,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         #QUESTIONNAIRE QUESTION
         Route::group(['prefix' => 'questionnairequestion'], function(){
-            Route::get('/', 'QuestionnaireQuestionController@index');
+            Route::get('/{id}', 'QuestionnaireQuestionController@index');
         });
           
     });

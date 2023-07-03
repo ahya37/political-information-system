@@ -11,10 +11,11 @@ use App\QuestionnaireQuestion;
 class QuestionnaireQuestionController extends Controller
 {
     public function index(){
+
         return view('pages.admin.questionnaire_questions.index');
     }
 
-    public function getData(Request $request){
+    public function getData(Request $request, $id){
          // DATATABLE
          $orderBy = 'desc';
          switch ($request->input('order.0.column')) {
@@ -22,9 +23,10 @@ class QuestionnaireQuestionController extends Controller
                  $orderBy = 'desc';
                  break;
          }
+
  
          $model = new QuestionnaireQuestion();
-         $data = $model->getDataTable();
+         $data = $model->getDataTable($id);
  
 
            return response()->json([

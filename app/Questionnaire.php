@@ -21,6 +21,12 @@ class Questionnaire extends Model
         return DB::update($sql);
     }
 
+    public function dataDetail($id){
+        $sql = "SELECT id,  name,created_at FROM questionnaire_titles
+        WHERE questionnaire_id = $id";
+        return DB::select($sql);
+    }
+
     // public function detail(){
     //     $sql = "SELECT id,  name,created_at FROM questionnaire_titles
     //             WHERE questionnaire_id = $id";  
