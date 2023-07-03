@@ -171,10 +171,8 @@ class QuestionnaireController extends Controller
                 break;
         }
 
-        $sql = "SELECT id,  name,created_at FROM questionnaire_titles
-                WHERE questionnaire_id = $id";
-
-        $data = DB::select($sql);
+        $model = new Questionnaire();
+        $data = $model->dataDetail($id);
 
 
         return response()->json([
