@@ -1234,6 +1234,7 @@ class OrgDiagramController extends Controller
                     'village_id'  => $domisili->village_id,
                     'rt'  => $domisili->rt,
                     'cby' => auth()->guard('admin')->user()->id,
+                    'created_at' => date('Y-m-d H:i:s')
                 ]);
     
                 DB::table('users')->where('nik', $user->nik)->update(['tps_id' => $request->tpsid]);
