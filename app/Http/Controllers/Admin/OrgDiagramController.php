@@ -1233,6 +1233,7 @@ class OrgDiagramController extends Controller
                     'district_id' => $domisili->district_id,
                     'village_id'  => $domisili->village_id,
                     'rt'  => $domisili->rt,
+                    'cby' => auth()->guard('admin')->user()->id,
                 ]);
     
                 DB::table('users')->where('nik', $user->nik)->update(['tps_id' => $request->tpsid]);
@@ -1288,7 +1289,7 @@ class OrgDiagramController extends Controller
 
             DB::commit();
             return redirect()->route('admin-struktur-organisasi-rt-detail-anggota',['idx' => $old_anggota_korte->pidx]);
-            return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+            // return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
            
         } catch (\Exception $e) {
             DB::rollback();
