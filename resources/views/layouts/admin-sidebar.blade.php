@@ -300,12 +300,22 @@
                     <a href="{{ route('admin-questionnaire') }}"
                         class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('questionnaire') ? 'active custom-active-color' : '' }}"><span>
                             Daftar Kuisioner</span></a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin-questionnaire-create') }}"
-                        class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('familygroup') ? 'active custom-active-color' : '' }}"><span>
-                            Buat Kuisioner</span></a>
-                </li>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin-questionnaire-create') }}"
+                            class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('familygroup') ? 'active custom-active-color' : '' }}"><span>
+                                Buat Kuisioner</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin-answercategory') }}"
+                                    class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('answer_choice_categories') ? 'active custom-active-color' : '' }}"><span>
+                                        Daftar Kategori Jawaban</span></a>
+                            </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin-create-answercategory') }}"
+                            class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('familygroup') ? 'active custom-active-color' : '' }}"><span>
+                                Buat Kategori Jawaban</span></a>
+                    </li>
 
             </ul>
         </div>
@@ -323,6 +333,8 @@
                 </li>
             </ul>
         </div>
+
+
 
 
         {{-- <a
