@@ -108,7 +108,6 @@ class MemberController extends Controller
                       'marital_status' => $request->marital_status,
                       'job_id' => $request->job_id,
                       'religion' => $request->religion,
-                      'nik'  => $request->nik,
                       'education_id'  => $request->education_id,
                       'email' => $request->email,
                       'phone_number' => $request->phone_number,
