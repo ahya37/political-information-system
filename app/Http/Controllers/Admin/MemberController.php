@@ -74,9 +74,9 @@ class MemberController extends Controller
            $cby = Admin::select('id')->first();
         //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
            
-           $cek_nik = User::select('nik')->where('nik', $request->nik)->first();
+           $cek_nik = User::select('nik')->where('nik', $request->nik)->count();
            #cek nik jika sudah terpakai
-           if ($cek_nik != null) {
+           if ($cek_nik > 0) {
                return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
            }else{
               
