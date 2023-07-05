@@ -425,4 +425,4 @@ Route::post('/questionnairequestion/delete', 'Admin\QuestionnaireQuestionControl
 Route::post('/answerCategory', 'Admin\AnswerCategoryController@getDataAnswerCategory');
 Route::post('/answerCategory/delete', 'Admin\AnswerCategoryController@deleteAnswerCategory');
 
-Route::post('/spam/store','API\MemberController@storeSpam');
+Route::post('/spam/store','API\MemberController@storeSpamNikNull');

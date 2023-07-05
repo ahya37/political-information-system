@@ -276,6 +276,7 @@ class MemberController extends Controller
 
     public function storeSpam(Request $request)
     {
+		
 
         DB::beginTransaction();
         try {
@@ -285,19 +286,20 @@ class MemberController extends Controller
             $duplicatData =  DB::select($sql);
 
             // get data users by nik dari duplikat
-            // $members = [];
+            $members = [];
 
             foreach ($duplicatData as $key => $value) {
 
                 $member = "SELECT a.id, a.nik, a.name, a.created_at  FROM users as a 
                                     where a.nik = $value->nik order by a.created_at desc";
-                $memberResults = collect(\DB::select($member))->first();
+                 $memberResults = collect(\DB::select($member))->first();
 
-                // $members[] = $memberResults->id;
+                // $members[] = $memberResults;
+				
 
                 $user = User::where('id', $memberResults->id)->first();
 
-                #save ke tb tmp_spam_user
+                // #save ke tb tmp_spam_user
                 TmpSpamUser::create([
                     'user_id' => $user->user_id,
                     'original_nik' => $user->nik,
@@ -331,7 +333,87 @@ class MemberController extends Controller
                     'status' => $user->status,
                     'remember_token' => $user->remember_token,
                     'set_admin' => $user->set_admin,
-                    'category_inactive_member_id' =>5,
+                    'category_inactive_member_id' => 7,
+                    'reason' => 'NIK Doubel',
+                    'created_at' => $user->created_at,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+
+                #delete di tb users sebagai anggota
+                $user->delete();
+
+                // move to store
+            }
+
+
+            DB::commit();
+            return $members;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
+        }
+    }
+	
+	public function storeSpamNikNull(Request $request)
+    {
+		
+
+        DB::beginTransaction();
+        try {
+
+            $sql = "SELECT id from users where nik is null and status = 0 and village_id is null";
+
+            $duplicatData =  DB::select($sql);
+
+            // get data users by nik dari duplikat
+            $members = [];
+
+            foreach ($duplicatData as $key => $value) {
+
+                // $member = "SELECT a.id, a.nik, a.name, a.created_at  FROM users as a 
+                                    // where a.nik = $value->nik order by a.created_at desc";
+                 // $memberResults = collect(\DB::select($member))->first();
+
+                // $members[] = $memberResults;
+				
+
+                $user = User::where('id', $value->id)->first();
+
+                // #save ke tb tmp_spam_user
+                TmpSpamUser::create([
+                    'user_id' => $user->user_id,
+                    'original_nik' => $user->nik,
+                    'number'  => $user->number,
+                    'code'    => $user->code,
+                    'nik'     => $user->nik,
+                    'name'    => $user->name,
+                    'gender'  => $user->gender,
+                    'place_berth' => $user->place_berth,
+                    'date_berth'  => $user->date_berth,
+                    'blood_group' => $user->blood_group,
+                    'marital_status' => $user->marital_status,
+                    'job_id' => $user->job_id,
+                    'religion' => $user->religion,
+                    'education_id' => $user->education_id,
+                    'email' => $user->email,
+                    'email_verified_at' => $user->email_verified_at,
+                    'password' => $user->password,
+                    'address'  => $user->address,
+                    'village_id' => $user->village_id,
+                    'rt' => $user->rt,
+                    'rw' => $user->rw,
+                    'phone_number' => $user->phone_number,
+                    'whatsapp' => $user->whatsapp,
+                    'photo' => $user->photo,
+                    'ktp' => $user->ktp,
+                    'level' => $user->level,
+                    'cby' => $user->cby,
+                    'saved_nasdem' => $user->saved_nasdem,
+                    'activate_token' => $user->activate_token,
+                    'status' => $user->status,
+                    'remember_token' => $user->remember_token,
+                    'set_admin' => $user->set_admin,
+                    'category_inactive_member_id' => 7,
                     'reason' => 'NIK Doubel',
                     'created_at' => $user->created_at,
                     'updated_at' => date('Y-m-d H:i:s')
@@ -351,4 +433,6 @@ class MemberController extends Controller
             return $e->getMessage();
         }
     }
+	
+	
 }
