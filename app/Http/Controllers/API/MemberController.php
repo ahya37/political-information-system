@@ -288,5 +288,11 @@ class MemberController extends Controller
 
         
     }
+	
+	public function storeSpam(Request $request){
+		 
+		 return 'OK';
+		
+	}
 
 }
