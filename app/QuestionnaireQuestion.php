@@ -11,22 +11,22 @@ class QuestionnaireQuestion extends Model
     protected $guarded = [];
 
     public function getDataQuestionnaireQuestion($id){
-        $sql = "SELECT id, description, type FROM questionnaire_questions WHERE questionnaire_title_id=$id";
+        $sql = "SELECT id, `desc`, type FROM questionnaire_questions WHERE questionnaire_title_id=$id";
         return DB::select($sql);
     }
 
     public function editData($titleId){
-        $sql = "SELECT id, description, type FROM questionnaire_questions WHERE id=$titleId";
+        $sql = "SELECT id, `desc`, type FROM questionnaire_questions WHERE id=$titleId";
         return collect(\DB::select($sql))->first();
     }
 
     public function insertData($userId,$date,$desc){
-        $sql = "INSERT INTO questionnaire_questions (description,created_at,created_by) VALUES('$desc','$date','$userId')";
+        $sql = "INSERT INTO questionnaire_questions (`desc`,created_at,created_by) VALUES('$desc','$date','$userId')";
         return DB::insert($sql);
     }
 
     public function updateData($id,$desc,$type,$userId,$date){
-        $sql = "UPDATE questionnaire_questions SET description='$desc', type='$type', updated_at='$date', updated_by='$userId' WHERE id=$id";
+        $sql = "UPDATE questionnaire_questions SET `desc`='$desc', type='$type', updated_at='$date', updated_by='$userId' WHERE id=$id";
         return DB::update($sql);
     }
 
@@ -34,5 +34,12 @@ class QuestionnaireQuestion extends Model
     //     $sql = "DELETE FROM questionnaire_questions WHERE id=$id";
     //     return DB::delete($sql);
     // }
+
+    public function countNumberQuestionByTitleId($id){
+
+        $sql    = "SELECT max(number) as last_number from questionnaire_questions where questionnaire_title_id = $id";
+        $count  = collect(\DB::select($sql))->first();
+        return $count;
+    }
 
 }
