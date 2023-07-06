@@ -419,7 +419,7 @@ Route::post('/questionnairetitle/delete', 'Admin\QuestionnaireTitleController@de
 
 #Questionnaire Question
 Route::post('/questionnairequestion/{id}', 'Admin\QuestionnaireQuestionController@getData');
-Route::post('/questionnairequestion/delete', 'Admin\QuestionnaireQuestionController@delete');
+Route::post('/questionnairequestion/delete/{id}', 'Admin\QuestionnaireQuestionController@delete');
 
 #Answer Choice Category
 Route::post('/answerCategory', 'Admin\AnswerCategoryController@getDataAnswerCategory');
