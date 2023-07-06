@@ -46,63 +46,6 @@
             </div>
           </div>
 @endsection
-@push('prepend-script')
-           <!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Tambah Judul Kuisioner</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="{{ route('admin-questionnairequestion-store', $id) }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="card">
-                                <div class="card-body">
-                                    <div>
-                                        <div>
-                                            <div class="form-group">
-                                                <div>
-                                                    <div>
-                                                        <label>Pilihan</label>
-                                                        <input type="text" name="pilihan" required
-                                                            class="form-control"/>
-                                                    </div>
-                                                    <div>
-                                                      <label>Jawaban</label>
-                                                      @foreach ($dataAnswer as $data)
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" name="jawaban[]" type="checkbox" value="{{ $data->id }}" id="defaultCheck1">
-                                                            <label class="form-check-label" for="defaultCheck1">
-                                                              {{ $data->name }}
-                                                            </label>
-                                                          </div>
-                                                  
-                                                        @endforeach
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="form-group">
-                                                <button type="submit"
-                                                    class="btn btn-sc-primary text-white  btn-sm w-00 mt-4">
-                                                    Simpan
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-      </div>
-    </div>
-  </div>
-</div>
-@endpush
 @push('addon-script')
 <script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>

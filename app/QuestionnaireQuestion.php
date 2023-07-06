@@ -20,8 +20,13 @@ class QuestionnaireQuestion extends Model
         return collect(\DB::select($sql))->first();
     }
 
-    public function insertData($userId,$date,$desc){
-        $sql = "INSERT INTO questionnaire_questions (description,created_at,created_by) VALUES('$desc','$date','$userId')";
+    // public function insertData($userId,$date,$desc){
+    //     $sql = "INSERT INTO questionnaire_questions (description,created_at,created_by) VALUES('$desc','$date','$userId')";
+    //     return DB::insert($sql);
+    // }
+
+    public function insertDataAnswer($questionnaireQuestions, $value, $date, $userId){
+        $sql = "INSERT INTO questionnaire_answer_choices (questionnaire_question_id, answer_choice_category_id,created_at,created_by) VALUES ('$questionnaireQuestions','$value','$date','$userId')";
         return DB::insert($sql);
     }
 

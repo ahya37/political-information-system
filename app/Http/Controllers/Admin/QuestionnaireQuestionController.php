@@ -117,12 +117,15 @@ class QuestionnaireQuestionController extends Controller
            foreach ($answer['jawaban'] as $key => $value) {
                // insert ke tabel questionnaire_answer_choices
                // $questionnaireQuestionId = $insertQuestionnaireQuestions;
-               DB::table('questionnaire_answer_choices')->insert([
-                   'questionnaire_question_id' => $questionnaireQuestions,
-                   'answer_choice_category_id' => $value,
-                   'created_at' => $date,
-                   'created_by' => $userId
-               ]);
+            //    DB::table('questionnaire_answer_choices')->insert([
+            //        'questionnaire_question_id' => $questionnaireQuestions,
+            //        'answer_choice_category_id' => $value,
+            //        'created_at' => $date,
+            //        'created_by' => $userId
+            //    ]);
+
+               $model = new QuestionnaireQuestion();
+               $model->insertDataAnswer($questionnaireQuestions, $value, $date, $userId);
            }
     
 
