@@ -10,10 +10,10 @@ class QuestionnaireQuestion extends Model
     protected $table   = 'questionnaire_questions';
     protected $guarded = [];
 
-    public function getDataQuestionnaireQuestion($id){
-        $sql = "SELECT id, description, type FROM questionnaire_questions WHERE questionnaire_title_id=$id";
-        return DB::select($sql);
-    }
+    // public function getDataQuestionnaireQuestion($id){
+    //     $sql = "SELECT id, description, type FROM questionnaire_questions WHERE questionnaire_title_id=$id";
+    //     return DB::select($sql);
+    // }
 
     public function editData($titleId){
         $sql = "SELECT id, description, type FROM questionnaire_questions WHERE id=$titleId";
@@ -39,5 +39,12 @@ class QuestionnaireQuestion extends Model
     //     $sql = "DELETE FROM questionnaire_questions WHERE id=$id";
     //     return DB::delete($sql);
     // }
+
+    public function countNumberQuestionByTitleId($id){
+
+        $sql    = "SELECT max(number) as last_number from questionnaire_questions where questionnaire_title_id = $id";
+        $count  = collect(\DB::select($sql))->first();
+        return $count;
+    }
 
 }
