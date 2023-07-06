@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         @include('layouts.message')
-                        <form action="{{ route('admin-questionnairequestion-store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin-questionnairequestion-update', $titleId) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="card">
                                 <div class="card-body">
@@ -23,11 +23,12 @@
                                                 <div class="row">
                                                     <div class="col-md-12 col-sm-12">
                                                         <label>Deskripsi</label>
+                                                        <input type="hidden" name="id" value="{{ $data->id }}">
                                                         <input type="text" name="description" required
-                                                            class="form-control" value="" />
+                                                            class="form-control" value="{{ $data->description }}" />
                                                         <label>Tipe Pertanyaan</label>
                                                         <input type="text" name="type" required
-                                                            class="form-control" value="" />
+                                                            class="form-control" value="{{ $data->type }}" />
                                                     </div>
                                                 </div>
                                             </div>

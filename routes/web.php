@@ -533,9 +533,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         #QUESTIONNAIRE QUESTION
         Route::group(['prefix' => 'questionnairequestion'], function(){
-            Route::get('/{id}', 'QuestionnaireQuestionController@index');
-            Route::get('/edit', 'QuestionnaireQuestionController@edit');
-            Route::post('/store', 'QuestionnaireQuestionController@store')->name('admin-questionnairequestion-store');
+            Route::get('/{id}', 'QuestionnaireQuestionController@index')->name('admin-questionnairequestion-index');
+            Route::get('/edit/{id}/{titleId}', 'QuestionnaireQuestionController@edit');
+            Route::post('/store/{id}', 'QuestionnaireQuestionController@store')->name('admin-questionnairequestion-store');
+            Route::post('/update/{id}', 'QuestionnaireQuestionController@update')->name('admin-questionnairequestion-update');
+            Route::get('/create/{id}', 'QuestionnaireQuestionController@create');
         });
 
         #ANSWER CHOICE CATEGORY

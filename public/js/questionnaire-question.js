@@ -39,7 +39,7 @@ let table = $("#data").DataTable({
             sortable: true,
             render: function (data, type, row, meta) {
                 return `
-                <a href="/admin/questionnairequestion/edit" class="btn btn-sm btn-primary fa fa-pencil" title="Edit"></a>
+                <a href="/admin/questionnairequestion/edit/${row.id}/${id}" class="btn btn-sm btn-primary fa fa-pencil" title="Edit"></a>
                 <button class="btn btn-sm btn-danger fa fa-trash" onclick="onDelete(this)" id="${row.id}" title="Hapus"></button>
                 `;
             }
@@ -49,7 +49,7 @@ let table = $("#data").DataTable({
 
 function onDelete(data){
     
-    const id = data.id;
+    const dataid = data.id;
 
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     Swal.fire({
@@ -63,11 +63,11 @@ function onDelete(data){
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "/api/questionnairequestion/delete",
+                url: `/api/questionnairequestion/delete/${id}`,
                 method: "POST",
                 cache: false,
                 data: {
-                    id: id,
+                    id: dataid,
                     _token: CSRF_TOKEN,
                 },
                 success: function (data) {

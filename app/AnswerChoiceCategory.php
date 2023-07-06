@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class AnswerChoiceCategory extends Model
 {
     public function getData(){
-        $sql = "SELECT name, created_at FROM answer_choice_categories";
+        $sql = "SELECT id, name, created_at FROM answer_choice_categories";
         return DB::select($sql);
     }
 
