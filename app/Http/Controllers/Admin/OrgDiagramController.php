@@ -2265,6 +2265,26 @@ public function reportExcel(Request $request){
 
 }
 
+public function reportOrgDistrictExcel(Request $request){
+
+    $district_id = $request->district_id;
+
+    // dd([$dapil_id, $district_id, $village_id, $rt]);
+    $district = DB::table('districts')->select('name')->where('id', $district_id)->first();
+    return $this->excel->download(new KorCamExport($district_id), 'TIM KOORDINATOR KECAMATAN '.$district->name.'.xls');
+
+}
+
+public function reportOrgVillagetExcel(Request $request){
+
+    $village_id  = $request->village_id;
+
+    // dd([$dapil_id, $district_id, $village_id, $rt]);
+    $village = DB::table('villages')->select('name')->where('id', $village_id)->first();
+    return $this->excel->download(new KorDesExport($village_id), 'TIM KOORDINATOR DESA '.$village->name.'.xls');
+
+}
+
 public function updateLelelOrgAll(){
 
     $org = DB::table('org_diagram_village')->select('id','title')->get();
