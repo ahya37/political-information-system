@@ -48,10 +48,13 @@
                                 </div>
                             </div>
                         </form>
-                        <form action="" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('admin-questionnairequestion-storeEssay',$id) }}" method="post" enctype="multipart/form-data">
+                            @csrf
                             <div class="card border" style="margin-top: 75px">
                                 <div class="card-body">
                                     <div class="form-group">
+                                        <input type="hidden" name="number" class="form-control col-sm-3"
+                                                value="{{ $number }}" />
                                         <label>Pertanyaan Essay</label>
                                         <input type="text" name="essay" required class="form-control" />
                                     </div>

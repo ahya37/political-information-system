@@ -38,7 +38,7 @@ class QuestionnaireQuestion extends Model
     
 
     public function insertDataAnswer($questionnaireQuestions, $value, $date, $userId){
-        $sql = "INSERT INTO questionnaire_answer_choices (questionnaire_question_id, answer_choice_category_id,created_at,created_by) VALUES ('$questionnaireQuestions','$value','$date','$userId')";
+        $sql = "INSERT INTO questionnaire_answer_choices (questionnaire_question_id, answer_choice_category_id,created_at,created_by,number) VALUES ('$questionnaireQuestions','$value','$date','$userId','$value')";
         return DB::insert($sql);
     }
 
@@ -62,6 +62,11 @@ class QuestionnaireQuestion extends Model
         $sql    = "SELECT max(number) as last_number from questionnaire_questions where questionnaire_title_id = $id";
         $count  = collect(\DB::select($sql))->first();
         return $count;
+    }
+
+    public function insertFormEssay($id,$number,$desc,$date,$userId){
+        $sql = "INSERT INTO questionnaire_questions (questionnaire_title_id,number,`desc`,created_at,created_by) VALUES ('$id','$number','$desc','$date','$userId')";
+        $insert = DB::insert($sql);
     }
 
 }
