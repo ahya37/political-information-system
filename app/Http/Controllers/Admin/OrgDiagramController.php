@@ -633,6 +633,8 @@ class OrgDiagramController extends Controller
                                     'regency_id'  => $domisili->regency_id,
                                     'district_id' => $domisili->district_id,
                                     'village_id'  => $domisili->village_id,
+                                    'created_by' => auth()->guard('admin')->user()->id,
+                                    'created_at' => date('Y-m-d H:i:s')
                                 ]);
         
                     DB::commit();
@@ -724,6 +726,8 @@ class OrgDiagramController extends Controller
                                     'photo'  => $user->photo ?? '',
                                     'regency_id'  => $domisili->regency_id,
                                     'district_id' => $domisili->id,
+                                    'created_by' => auth()->guard('admin')->user()->id,
+                                    'created_at' => date('Y-m-d H:i:s')
                                 ]);
         
                     DB::commit();
@@ -879,6 +883,8 @@ class OrgDiagramController extends Controller
                 'regency_id'  => $request->regency_id,
                 'district_id' => $request->district_id,
                 'village_id'  => $request->village_id,
+                'created_by' => auth()->guard('admin')->user()->id,
+                'created_at' => date('Y-m-d H:i:s')
             ]);
 
             DB::commit();
@@ -1730,6 +1736,8 @@ public function saveOrgDistrict(Request $request){
             'telp'  => $request->telp,
             'regency_id'  => $request->regency_id,
             'district_id' => $request->district_id,
+            'created_by' => auth()->guard('admin')->user()->id,
+            'created_at' => date('Y-m-d H:i:s')
         ]);
 
         DB::commit();
@@ -1974,6 +1982,7 @@ public function saveOrgDapil(Request $request){
             'photo'  => $user->photo ?? '',
             'telp'  => $request->telp,
             'dapil_id'  => $request->dapil_id,
+            'created_by' => auth()->guard('admin')->usre()->id
         ]);
 
         DB::commit();
@@ -2113,6 +2122,8 @@ public function saveOrgPusat(Request $request){
             'level_org'   => GlobalProvider::generateLevelOrg($request->jabatan),
             'photo'  => $user->photo ?? '',
             'telp'  => $request->telp,
+            'created_by' => auth()->guard('admin')->usre()->id,
+            'created_at' => date('Y-m-d H:i:s')
         ]);
 
         DB::commit();
