@@ -22,22 +22,22 @@ class QuestionnaireQuestionController extends Controller
 
     public function getData(Request $request, $id){
         // DATATABLE
-        $orderBy = 'description';
+        $orderBy = 'desc';
         switch ($request->input('order.0.column')) {
             case '3':
-                $orderBy = 'description';
+                $orderBy = 'desc';
                 break;
         }
 
         // $model = new QuestionnaireQuestion();
         // $data = $model->getDataQuestionnaireQuestion($id);
 
-        $data = DB::table('questionnaire_questions')->where('questionnaire_title_id',$id)->select('id','description','type');
+        $data = DB::table('questionnaire_questions')->where('questionnaire_title_id',$id)->select('id','desc','type');
 
 
         if($request->input('search.value')!=null){
                 $data = $data->where(function($q)use($request){
-                    $q->whereRaw('LOWER(description) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                    $q->whereRaw('LOWER(desc) like ? ',['%'.strtolower($request->input('search.value')).'%']);
                 });
             }
 
@@ -101,9 +101,10 @@ class QuestionnaireQuestionController extends Controller
         $desc = $request->description;
         $type = $request->type;
         $date = date('Y-m-d h:i:s');
+        $number = $request->number;
 
         $model = new QuestionnaireQuestion();
-        $data = $model->updateData($id,$desc,$type,$userId,$date);
+        $data = $model->updateData($id,$desc,$type,$userId,$date,$number);
 
         return redirect()->route('admin-questionnairequestion-index', ['id' => $titleId])->with(['success' => 'Data Berhasil Diedit']);
     }
@@ -119,18 +120,30 @@ class QuestionnaireQuestionController extends Controller
            $date = date('Y-m-d h:i:s');
            $answer['jawaban'] = $request->jawaban;
            $number = $request->number;
+          
     
-           // $model = new QuestionnaireQuestion();
-           // $model->insertData($desc,$userId,$date);
     
            // insert ke tabel questionnaire_questions
-           $questionnaireQuestions = DB::table('questionnaire_questions')->insertGetId([
-               'questionnaire_title_id' => $id,
-               'number' => $number,
-               'description' => $desc,
-               'created_at' => $date,
-               'created_by' => $userId
-           ]);
+           $model = new QuestionnaireQuestion();
+           $questionnaireQuestions = $model->insertDataQuestion($id,$number,$desc,$date,$userId);
+        //    $questionnaireQuestions = DB::table('questionnaire_questions')->insertGetId([
+        //        'questionnaire_title_id' => $id,
+        //        'number' => $number,
+        //        'description' => $desc,
+        //        'created_at' => $date,
+        //        'created_by' => $userId
+        //    ]);
+
+        // $model = new QuestionnaireQuestion();
+        // $questionnaireQuestions = $model->getIdQuestion();
+
+        // $model = new QuestionnaireQuestion();
+        // $questionnaireQuestions = DB::table('questionnaire_questions')->where('questionnaire_title_id',$id)->select('id')->get();
+        
+
+
+
+
 
            foreach ($answer['jawaban'] as $key => $value) {
                // insert ke tabel questionnaire_answer_choices
@@ -151,7 +164,7 @@ class QuestionnaireQuestionController extends Controller
            
            DB::commit();
            return redirect()->route('admin-questionnairequestion-index', ['id' => $id])->with(['success' => 'Judul Kuisioner Telah Ditambahkan']);
-
+ 
         } catch (\Exception $e) {
             DB::rollback();
             return $e->getMessage();

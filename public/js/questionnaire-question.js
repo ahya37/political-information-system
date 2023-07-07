@@ -23,7 +23,7 @@ let table = $("#data").DataTable({
             targets: 0,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.description;
+                return row.desc;
             },
         },
         {
