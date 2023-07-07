@@ -31,7 +31,7 @@
                                                         <label>Deskripsi</label>
                                                         <input type="hidden" name="id" value="{{ $data->id }}">
                                                         <input type="text" name="description" required
-                                                            class="form-control" value="{{ $data->description }}" />
+                                                            class="form-control" value="{{ $data->desc }}" />
                                                         <label>Tipe Pertanyaan</label>
                                                         <input type="text" name="type" required class="form-control"
                                                             value="{{ $data->type }}" />
