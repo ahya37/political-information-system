@@ -13,26 +13,32 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         @include('layouts.message')
-                        <form action="{{ route('admin-questionnairequestion-update', $titleId) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin-questionnairequestion-update', $titleId) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row row-login">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-12 col-sm-12">
+                                                <div class="col-md-12 col-sm-12">
+
+                                                    <div class="row">
+                                                        <label>No</label>
+                                                        <input type="text" name="number" class="form-control"
+                                                            value="{{ $data->number }}" />
+
                                                         <label>Deskripsi</label>
                                                         <input type="hidden" name="id" value="{{ $data->id }}">
                                                         <input type="text" name="description" required
                                                             class="form-control" value="{{ $data->description }}" />
                                                         <label>Tipe Pertanyaan</label>
-                                                        <input type="text" name="type" required
-                                                            class="form-control" value="{{ $data->type }}" />
+                                                        <input type="text" name="type" required class="form-control"
+                                                            value="{{ $data->type }}" />
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="form-group">
                                                 <button type="submit"
                                                     class="btn btn-sc-primary text-white  btn-block w-00 mt-4">

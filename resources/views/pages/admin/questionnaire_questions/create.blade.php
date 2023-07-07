@@ -17,11 +17,14 @@
                             @csrf
                             <div class="card border">
                                 <div class="card-body">
+                              
                                             <div class="form-group">
                                                 <div class="form-group">
                                                     <label>No.</label>
                                                     <input type="text" name="number" class="form-control col-sm-3" value="{{ $number }}" />
                                                 </div>
+                                                
+                                                
                                                 
                                                         <label>Pilihan</label>
                                                         <input type="text" name="pilihan" required
