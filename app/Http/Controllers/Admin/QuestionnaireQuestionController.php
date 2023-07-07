@@ -21,21 +21,39 @@ class QuestionnaireQuestionController extends Controller
     }
 
     public function getData(Request $request, $id){
-         // DATATABLE
-         $orderBy = 'description';
-         switch ($request->input('order.0.column')) {
-             case '3':
-                 $orderBy = 'description';
-                 break;
-         }
+        // DATATABLE
+        $orderBy = 'description';
+        switch ($request->input('order.0.column')) {
+            case '3':
+                $orderBy = 'description';
+                break;
+        }
 
-         $model = new QuestionnaireQuestion();
-         $data = $model->getDataQuestionnaireQuestion($id);
- 
+        // $model = new QuestionnaireQuestion();
+        // $data = $model->getDataQuestionnaireQuestion($id);
 
-           return response()->json([
-                 'data'=> $data
-             ]);
+        $data = DB::table('questionnaire_questions')->where('questionnaire_title_id',$id)->select('id','description','type');
+
+
+        if($request->input('search.value')!=null){
+                $data = $data->where(function($q)use($request){
+                    $q->whereRaw('LOWER(description) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                });
+            }
+
+         
+          $recordsFiltered = $data->get()->count();
+          $data = $data->orderBy($orderBy,$request->input('order.0.dir'));
+          $data = $data->get();
+
+          $recordsTotal = $data->count();
+
+          return response()->json([
+                'draw'=>$request->input('draw'),
+                'recordsTotal'=>$recordsTotal,
+                'recordsFiltered'=>$recordsFiltered,
+                'data'=> $data
+            ]);
 
 
     }
@@ -100,7 +118,7 @@ class QuestionnaireQuestionController extends Controller
            $desc = $request->pilihan;
            $date = date('Y-m-d h:i:s');
            $answer['jawaban'] = $request->jawaban;
-           $number = 1;
+           $number = $request->number;
     
            // $model = new QuestionnaireQuestion();
            // $model->insertData($desc,$userId,$date);
@@ -108,7 +126,7 @@ class QuestionnaireQuestionController extends Controller
            // insert ke tabel questionnaire_questions
            $questionnaireQuestions = DB::table('questionnaire_questions')->insertGetId([
                'questionnaire_title_id' => $id,
-               'number' => $number + 1,
+               'number' => $number,
                'description' => $desc,
                'created_at' => $date,
                'created_by' => $userId
@@ -117,12 +135,15 @@ class QuestionnaireQuestionController extends Controller
            foreach ($answer['jawaban'] as $key => $value) {
                // insert ke tabel questionnaire_answer_choices
                // $questionnaireQuestionId = $insertQuestionnaireQuestions;
-               DB::table('questionnaire_answer_choices')->insert([
-                   'questionnaire_question_id' => $questionnaireQuestions,
-                   'answer_choice_category_id' => $value,
-                   'created_at' => $date,
-                   'created_by' => $userId
-               ]);
+            //    DB::table('questionnaire_answer_choices')->insert([
+            //        'questionnaire_question_id' => $questionnaireQuestions,
+            //        'answer_choice_category_id' => $value,
+            //        'created_at' => $date,
+            //        'created_by' => $userId
+            //    ]);
+
+               $model = new QuestionnaireQuestion();
+               $model->insertDataAnswer($questionnaireQuestions, $value, $date, $userId);
            }
     
 
@@ -139,11 +160,21 @@ class QuestionnaireQuestionController extends Controller
     }
 
     public function create($id){
+
         $model = new AnswerChoiceCategory();
         $dataAnswer = $model->getData();
 
-        return view('pages.admin.questionnaire_questions.create', compact('dataAnswer','id'));
+        $questionnaireQuestion = new QuestionnaireQuestion();
+
+        $count  = $questionnaireQuestion->countNumberQuestionByTitleId($id);
+        
+        // hitung nomor terakhir dari sebuah pertanyaan berdasarkan judul
+        $number = $count->last_number == null ? 0 + 1 : $count->last_number + 1;
+        // dd($number);
+
+        return view('pages.admin.questionnaire_questions.create', compact('dataAnswer','id','number'));
     }
+
 
 
 }
