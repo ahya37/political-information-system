@@ -66,7 +66,7 @@ class QuestionnaireQuestion extends Model
 
     public function insertFormEssay($id,$number,$desc,$date,$userId){
         $sql = "INSERT INTO questionnaire_questions (questionnaire_title_id,number,`desc`,created_at,created_by) VALUES ('$id','$number','$desc','$date','$userId')";
-        $insert = DB::insert($sql);
+        return DB::insert($sql);
     }
 
 }

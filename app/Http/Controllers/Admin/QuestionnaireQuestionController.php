@@ -88,10 +88,7 @@ class QuestionnaireQuestionController extends Controller
     }
 
     public function update(Request $request, $titleId){
-        // $request->validate([
-        //     `desc` => 'required',
-        //     'type' => 'required'
-        // ]);
+     
 
           // untuk mendapatkan id akun admin yang sedang login
         $userId = auth()->guard('admin')->user()->id;
@@ -153,7 +150,7 @@ class QuestionnaireQuestionController extends Controller
         
         // hitung nomor terakhir dari sebuah pertanyaan berdasarkan judul
         $number = $count->last_number == null ? 0 + 1 : $count->last_number + 1;
-        // dd($number);
+       
 
         return view('pages.admin.questionnaire_questions.create', compact('dataAnswer','id','number'));
     }
@@ -164,7 +161,6 @@ class QuestionnaireQuestionController extends Controller
         $userId = auth()->guard('admin')->user()->id;
            $desc = $request->essay;
            $date = date('Y-m-d h:i:s');
-           $answer['jawaban'] = $request->jawaban;
            $number = $request->number;
 
         //insert ke dalam database
