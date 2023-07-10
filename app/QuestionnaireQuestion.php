@@ -52,6 +52,11 @@ class QuestionnaireQuestion extends Model
         return DB::update($sql);
     }
 
+    public function updateDataAnswer($id,$value){
+        $sql = "UPDATE questionnaire_answer_choices SET number='$value' WHERE questionnaire_question_id =$id";
+        return DB::update($sql);
+    }
+
     // public function delete($id){
     //     $sql = "DELETE FROM questionnaire_questions WHERE id=$id";
     //     return DB::delete($sql);
