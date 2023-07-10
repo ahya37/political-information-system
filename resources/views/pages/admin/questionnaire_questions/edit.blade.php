@@ -65,7 +65,7 @@
                                                                                type="checkbox"
                                                                                value="{{ $field->id }}"
                                                                                id="defaultCheck{{ $field->id }}"
-                                                                               @if ($dataQuestion->id == $field->id)
+                                                                               @if ($dataTable->number == $field->id)
                                                                                    checked
                                                                                @endif>
                                                                         <label class="form-check-label"
@@ -96,9 +96,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <label>Tipe Pertanyaan</label>
-                                                            <input type="text" name="type" required
-                                                                class="form-control" value="{{ $data->type }}" />
+                                                           
                                                         </div>
                                                     </div>
                                                 </div>
