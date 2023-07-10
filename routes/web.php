@@ -540,6 +540,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/store/{id}', 'QuestionnaireQuestionController@store')->name('admin-questionnairequestion-store');
             Route::post('/update/{id}', 'QuestionnaireQuestionController@update')->name('admin-questionnairequestion-update');
             Route::get('/create/{id}', 'QuestionnaireQuestionController@create');
+            Route::post('/storeEssay/{id}', 'QuestionnaireQuestionController@storeEssay')->name('admin-questionnairequestion-storeEssay');
         });
 
         #ANSWER CHOICE CATEGORY
