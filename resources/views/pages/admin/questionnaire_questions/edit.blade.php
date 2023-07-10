@@ -38,21 +38,7 @@
                                                             <div>
                                                                 <label>Jawaban</label>
                                                                 <div class="form-check">
-                                                                    <div>
-
-                                                                       
-                                                                            
-                                                                        
-                                                                        {{-- <input class="form-check-input" name="jawaban"
-                                                                            type="checkbox" value="{{ $dataQuestion->id }}"
-                                                                            @if ($dataQuestion->id == 5 or $dataQuestion->id == 6)
-                                                                             checked 
-                                                                             @endif
-                                                                            id="defaultCheck1">
-                                                                        <label class="form-check-label" for="defaultCheck1">
-                                                                            {{ $dataQuestion->id }}
-                                                                        </label> --}}
-                                                                        
+                                                                    <div>                                                               
                                                                     </div>
                                                                     <div>
 
@@ -65,7 +51,7 @@
                                                                                type="checkbox"
                                                                                value="{{ $field->id }}"
                                                                                id="defaultCheck{{ $field->id }}"
-                                                                               @if ($dataTable->number == $field->id)
+                                                                               @if ($dataQuestion->number == $field->id)
                                                                                    checked
                                                                                @endif>
                                                                         <label class="form-check-label"
@@ -74,29 +60,9 @@
                                                                         </label>
                                                                     </div>
                                                                     @endforeach
-                                                                          
-                                                                        {{-- @endif --}}
-                                                                        
-
-                                                                        {{-- @if ($dataQuestion->id == 6)
-                                                                            <input class="form-check-input" name="jawaban"
-                                                                                type="checkbox" value="6"
-                                                                                id="defaultCheck1">
-                                                                            <label class="form-check-label"
-                                                                                for="defaultCheck1">
-                                                                                {{ $field->name }}
-                                                                            </label>
-                                                                        @endif --}}
-                                                                       
-                                                                       
-
-                                                                       
-
                                                                     </div>
                                                                 </div>
-                                                            </div>
-
-                                                           
+                                                            </div>  
                                                         </div>
                                                     </div>
                                                 </div>
