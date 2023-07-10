@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\HandleToken;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,9 @@ class LoginController extends Controller
         $remember_token = Hash::make(md5(time().$request->password));
         DB::table('admins')->where('email', $request->email)->update(['remember_token' => $remember_token]);
 
+        #save token ke tabel token_management
+        HandleToken::storeToken($remember_token);
+
         #proses authentication
         if (auth()->guard('admin')->attempt($auth)) {
 
@@ -45,7 +49,13 @@ class LoginController extends Controller
 
     public function logout()
     {
-        auth()->guard('admin')->logout();
+        $auth = auth()->guard('admin');
+
+        #non aktifkan token
+        // HandleToken::isActiveToken($auth->user()->remember_token);
+
+        #logout
+        $auth->logout();
         return redirect(route('admin-login'));
     }
 }

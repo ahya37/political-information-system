@@ -345,7 +345,7 @@ class MemberController extends Controller
 
         } catch (\Exception $e) {
 
-            return $e->getMessage();
+            // return $e->getMessage();
             return redirect()->back()->with(['warning' => 'Anggota gagal dinonaktifkan!']);
 
         }

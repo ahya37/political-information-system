@@ -109,7 +109,7 @@ class QuestionnaireQuestionController extends Controller
         $number = $request->number;
 
         $model = new QuestionnaireQuestion();
-        $data = $model->updateData($id, $desc, $type, $userId, $date, $number);
+        $model->updateData($id, $desc, $type, $userId, $date, $number);
 
         return redirect()->route('admin-questionnairequestion-index', ['id' => $titleId])->with(['success' => 'Data Berhasil Diedit']);
     }
@@ -119,7 +119,7 @@ class QuestionnaireQuestionController extends Controller
 
         DB::beginTransaction();
         try {
-            # code...
+           
             // untuk mendapatkan id akun admin yang sedang login
             $userId = auth()->guard('admin')->user()->id;
             $desc = $request->pilihan;
