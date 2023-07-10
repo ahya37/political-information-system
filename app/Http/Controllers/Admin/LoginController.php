@@ -52,10 +52,10 @@ class LoginController extends Controller
         $auth = auth()->guard('admin');
 
         #non aktifkan token
-        // HandleToken::isActiveToken($auth->user()->remember_token);
+        HandleToken::isActiveToken($auth->user()->remember_token);
 
         #logout
         $auth->logout();
-        return redirect(route('admin-login'));
+        return view('auth.login-admin');
     }
 }
