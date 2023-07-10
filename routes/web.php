@@ -447,6 +447,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/report/excel','OrgDiagramController@reportExcel')->name('admin-struktur-organisasi-report-excel');
             Route::post('/report/district/excel','OrgDiagramController@reportOrgDistrictExcel')->name('admin-struktur-organisasi-district-report-excel');
             Route::post('/report/village/excel','OrgDiagramController@reportOrgVillagetExcel')->name('admin-struktur-organisasi-village-report-excel');
+            Route::post('/report/rt/excel','OrgDiagramController@reportOrgRTExcel')->name('admin-struktur-organisasi-rt-report-excel');
 
             #update level org all
             Route::get('/village/update/level','OrgDiagramController@updateLelelOrgAll');

@@ -16,6 +16,7 @@ use App\Providers\GlobalProvider;
 use Maatwebsite\Excel\Excel;
 use App\Exports\KorDesExport;
 use App\Exports\KorCamExport;
+use App\Exports\KorteExport;
 
 class OrgDiagramController extends Controller
 {
@@ -2273,6 +2274,18 @@ public function reportExcel(Request $request){
         return $org;
  
     }
+
+}
+
+public function reportOrgRTExcel(Request $request){
+
+    $village_id  = $request->village_id;
+
+    // dd([$dapil_id, $district_id, $village_id, $rt]);
+
+    #report by desa       
+    $village = DB::table('villages')->select('name')->where('id', $village_id)->first();
+    return $this->excel->download(new KorteExport($village_id), 'TIM KOORDINATOR RT '.$village->name.'.xls');
 
 }
 
