@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Helpers\ResponseFormatter;
 use App\QuestionnaireQuestion;
 use App\AnswerChoiceCategory;
+use App\QuestionnaireAnswer;
 
 class QuestionnaireQuestionController extends Controller
 {
@@ -15,7 +16,7 @@ class QuestionnaireQuestionController extends Controller
 
         $model = new AnswerChoiceCategory();
         $dataAnswer = $model->getData(); /// $dataAnswers
-        // dd($tableAnswer);
+  
 
         return view('pages.admin.questionnaire_questions.index', compact('dataAnswer','id'));
     }
@@ -29,8 +30,7 @@ class QuestionnaireQuestionController extends Controller
                 break;
         }
 
-        // $model = new QuestionnaireQuestion();
-        // $data = $model->getDataQuestionnaireQuestion($id);
+       
 
         $data = DB::table('questionnaire_questions')->where('questionnaire_title_id',$id)->select('id','desc','type');
 
@@ -65,8 +65,7 @@ class QuestionnaireQuestionController extends Controller
 
             $id    = request()->id;
 
-            // $model = new QuestionnaireQuestion();
-            // $model->delete($id);
+           
             DB::table('questionnaire_questions')->where('id',$id)->delete();
             DB::table('questionnaire_answer_choices')->where('questionnaire_question_id',$id)->delete();
 
@@ -86,27 +85,58 @@ class QuestionnaireQuestionController extends Controller
     public function edit($id, $titleId){
         $model = new QuestionnaireQuestion();
         $data = $model->editData($id);
-        return view('pages.admin.questionnaire_questions.edit', compact('data', 'titleId'));
+
+        // $model = new AnswerChoiceCategory();
+        // $dataAnswer = $model->getData();
+
+        $modelQuestion = new QuestionnaireAnswer();
+        $dataQuestion = $modelQuestion->getData($id);
+
+        $model = new AnswerChoiceCategory();
+        $dataAnswer = $model->getData();
+
+        // dd('data answer:',$dataAnswer,'data question: ',$dataQuestion);
+
+
+        return view('pages.admin.questionnaire_questions.edit', compact('data', 'titleId', 'dataQuestion', 'dataAnswer'));
     }
 
     public function update(Request $request, $titleId){
-        $request->validate([
-            'description' => 'required',
-            'type' => 'required'
-        ]);
+     
 
           // untuk mendapatkan id akun admin yang sedang login
-        $userId = auth()->guard('admin')->user()->id;
-        $id = $request->id;
-        $desc = $request->description;
-        $type = $request->type;
-        $date = date('Y-m-d h:i:s');
-        $number = $request->number;
+          DB::beginTransaction();
+          try {
+            $userId = auth()->guard('admin')->user()->id;
+          $id = $request->id;
+          $desc = $request->description;
+          $type = $request->type;
+          $date = date('Y-m-d h:i:s');
+          $number = $request->number;
+          $answer['jawaban'] = $request->jawaban;
+  
+          $model = new QuestionnaireQuestion();
+          $data = $model->updateData($id,$desc,$type,$userId,$date,$number);
+  
+             
+                
+                foreach ($answer['jawaban'] as $key => $value) {
 
-        $model = new QuestionnaireQuestion();
-        $data = $model->updateData($id,$desc,$type,$userId,$date,$number);
+                    $model = new QuestionnaireQuestion();
+                    $data = $model->updateDataAnswer($id,$value);
+                }
 
-        return redirect()->route('admin-questionnairequestion-index', ['id' => $titleId])->with(['success' => 'Data Berhasil Diedit']);
+                // dd($id,$value);
+               
+             
+             DB::commit();
+             return redirect()->route('admin-questionnairequestion-index', ['id' => $titleId])->with(['success' => 'Data Berhasil Diedit']);
+  
+          } catch (\Exception $e) {
+              DB::rollback();
+              return $e->getMessage();
+          }
+  
     }
 
     public function store(Request $request, $id){
@@ -121,49 +151,22 @@ class QuestionnaireQuestionController extends Controller
            $answer['jawaban'] = $request->jawaban;
            $number = $request->number;
           
+           
     
     
            // insert ke tabel questionnaire_questions
            $model = new QuestionnaireQuestion();
            $questionnaireQuestions = $model->insertDataQuestion($id,$number,$desc,$date,$userId);
-        //    $questionnaireQuestions = DB::table('questionnaire_questions')->insertGetId([
-        //        'questionnaire_title_id' => $id,
-        //        'number' => $number,
-        //        'description' => $desc,
-        //        'created_at' => $date,
-        //        'created_by' => $userId
-        //    ]);
-
-        // $model = new QuestionnaireQuestion();
-        // $questionnaireQuestions = $model->getIdQuestion();
-
-        // $model = new QuestionnaireQuestion();
-        // $questionnaireQuestions = DB::table('questionnaire_questions')->where('questionnaire_title_id',$id)->select('id')->get();
-        
-
-
-
-
 
            foreach ($answer['jawaban'] as $key => $value) {
-               // insert ke tabel questionnaire_answer_choices
-               // $questionnaireQuestionId = $insertQuestionnaireQuestions;
-            //    DB::table('questionnaire_answer_choices')->insert([
-            //        'questionnaire_question_id' => $questionnaireQuestions,
-            //        'answer_choice_category_id' => $value,
-            //        'created_at' => $date,
-            //        'created_by' => $userId
-            //    ]);
 
                $model = new QuestionnaireQuestion();
                $model->insertDataAnswer($questionnaireQuestions, $value, $date, $userId);
            }
     
-
-           // dd($questionnaireQuestions,$answer);
            
            DB::commit();
-           return redirect()->route('admin-questionnairequestion-index', ['id' => $id])->with(['success' => 'Judul Kuisioner Telah Ditambahkan']);
+           return redirect()->route('admin-questionnairequestion-index', ['id' => $id])->with(['success' => 'Pertanyaan Kuisioner Telah Ditambahkan']);
  
         } catch (\Exception $e) {
             DB::rollback();
@@ -183,9 +186,24 @@ class QuestionnaireQuestionController extends Controller
         
         // hitung nomor terakhir dari sebuah pertanyaan berdasarkan judul
         $number = $count->last_number == null ? 0 + 1 : $count->last_number + 1;
-        // dd($number);
+       
 
         return view('pages.admin.questionnaire_questions.create', compact('dataAnswer','id','number'));
+    }
+
+    public function storeEssay(Request $request,$id){
+  
+        //ambil data kedalam variabel
+        $userId = auth()->guard('admin')->user()->id;
+           $desc = $request->essay;
+           $date = date('Y-m-d h:i:s');
+           $number = $request->number;
+
+        //insert ke dalam database
+        $model = new QuestionnaireQuestion();
+        $model->insertFormEssay($id,$number,$desc,$date,$userId);
+ 
+        return redirect()->route('admin-questionnairequestion-index', ['id' => $id])->with(['success' => 'Pertanyaan Kuisioner Telah Ditambahkan']);
     }
 
 
