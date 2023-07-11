@@ -89,13 +89,14 @@ class QuestionnaireQuestionController extends Controller
         // $model = new AnswerChoiceCategory();
         // $dataAnswer = $model->getData();
 
-        $modelQuestion = new QuestionnaireAnswer();
-        $dataQuestion = $modelQuestion->getData($id);
+       
+
+        $modelAnswer = new QuestionnaireAnswer();
+        $dataQuestion = $modelAnswer->data($id);
 
         $model = new AnswerChoiceCategory();
         $dataAnswer = $model->getData();
-
-        // dd('data answer:',$dataAnswer,'data question: ',$dataQuestion);
+        
 
 
         return view('pages.admin.questionnaire_questions.edit', compact('data', 'titleId', 'dataQuestion', 'dataAnswer'));
@@ -116,7 +117,7 @@ class QuestionnaireQuestionController extends Controller
           $answer['jawaban'] = $request->jawaban;
   
           $model = new QuestionnaireQuestion();
-          $data = $model->updateData($id,$desc,$type,$userId,$date,$number);
+          $data = $model->updateData($id,$desc,$userId,$date,$number);
   
              
                 

@@ -23,9 +23,10 @@ class QuestionnaireAnswer extends Model
         return $sql;
 
     }
-    public function getData($id){
-        $sql = "SELECT answer.id, name FROM answer_choice_categories as answer JOIN questionnaire_answer_choices as questionnaire ON answer.id = questionnaire.answer_choice_category_id WHERE questionnaire_question_id = $id";
-        return collect(\DB::select($sql))->first();
+  
+    public function data($id){
+        $sql = "SELECT a.number FROM questionnaire_answer_choices AS a JOIN answer_choice_categories AS b ON a.number = b.id WHERE questionnaire_question_id = $id ";
+        return collect(DB::select($sql))->first();
     }
 
 }
