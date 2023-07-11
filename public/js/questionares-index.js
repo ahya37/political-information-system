@@ -27,7 +27,10 @@ let table = $("#data").DataTable({
             targets: 1,
             sortable: true,
             render: function (data, type, row, meta) {
-                return `<span>${row.number_of_respondent}</span>`;
+                return `
+                <span class="btn btn-sm btn-info">${row.number_of_respondent}</span>
+                <a href="/admin/respondent/${row.id}" class="btn btn-sm btn-sc-primary text-light">Responden</a>
+                `;
             }
             
         },

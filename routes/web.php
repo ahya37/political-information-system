@@ -547,6 +547,12 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/edit/{id}', 'AnswerCategoryController@edit');
             Route::post('/update', 'AnswerCategoryController@update')->name('admin-update-answercategory');
         });
+
+        #QUESTIONNAIRE RESPONDENT
+        Route::group(['prefix' => 'respondent'], function(){
+            Route::get('/{id}', 'QuestionnaireRespondentController@index');
+            Route::get('/detail/{id}', 'QuestionnaireRespondentController@detail');
+        });
           
     });
     
