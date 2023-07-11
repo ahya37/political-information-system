@@ -7,6 +7,10 @@
             class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/dashboard*') ? 'active custom-active-color' : '' }}">
             Dashboard
         </a>
+        <a href="{{ route('admin-sip') }}" target="_blank"
+            class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/sip*') ? 'active custom-active-color' : '' }}">
+            SIP
+        </a>
         {{-- <a href="{{ route('admin-intelegency-index') }}"
             class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/intelegency*') ? 'active custom-active-color' : '' }}">
             Intelegensi Politik

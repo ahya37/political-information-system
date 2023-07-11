@@ -25,7 +25,7 @@
       <div class="d-flex" id="wrapper" data-aos="fade-right">
         <!-- Sidebae -->
         
-        @include('layouts.admin-sidebar')
+        {{-- @include('layouts.admin-sidebar') --}}
         
         <!-- Page Content -->
         <div id="page-content-wrapper">
@@ -39,7 +39,7 @@
       <div class="container">
         <div class="row">
           <div class="col-12 text-center">
-            <p class="">{{ date('Y') }} Copyright. All Right Reserved</p>
+            <p class="">{{ date('Y') }}  Copyright. All Right Reserved</p>
           </div>
         </div>
       </div>
