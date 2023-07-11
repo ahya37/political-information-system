@@ -28,27 +28,55 @@
                                                         <input type="text" name="number" class="form-control"
                                                             value="{{ $data->number }}" />
 
+
                                                         <label>Deskripsi</label>
                                                         <input type="hidden" name="id" value="{{ $data->id }}">
                                                         <input type="text" name="description" required
                                                             class="form-control" value="{{ $data->desc }}" />
-                                                        <label>Tipe Pertanyaan</label>
-                                                        <input type="text" name="type" required class="form-control"
-                                                            value="{{ $data->type }}" />
+                                                        <br>
+                                                        <div>
+                                                            <div>
+                                                                <label>Jawaban</label>
+                                                                <div class="form-check">
+                                                                    <div>                                                               
+                                                                    </div>
+                                                                    <div>
+
+
+                                                                        
+                                                                        @foreach ($dataAnswer as $field)
+                                                                        <div>
+                                                                        <input class="form-check-input"
+                                                                               name="jawaban[]"
+                                                                               type="checkbox"
+                                                                               value="{{ $field->id }}"
+                                                                               id="defaultCheck{{ $field->id }}"
+                                                                               @if ($dataQuestion->number == $field->id)
+                                                                                   checked
+                                                                               @endif>
+                                                                        <label class="form-check-label"
+                                                                               for="defaultCheck{{ $field->id }}">
+                                                                            {{ $field->name }}
+                                                                        </label>
+                                                                    </div>
+                                                                    @endforeach
+                                                                    </div>
+                                                                </div>
+                                                            </div>  
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="form-group">
-                                                <button type="submit"
-                                                    class="btn btn-sc-primary text-white  btn-block w-00 mt-4">
-                                                    Simpan
-                                                </button>
+                                                <div class="form-group">
+                                                    <button type="submit"
+                                                        class="btn btn-sc-primary text-white  btn-block w-00 mt-4">
+                                                        Simpan
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </form>
                     </div>
                 </div>

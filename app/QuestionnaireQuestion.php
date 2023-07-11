@@ -47,8 +47,13 @@ class QuestionnaireQuestion extends Model
     }
 
 
-    public function updateData($id,$desc,$type,$userId,$date,$number){
-        $sql = "UPDATE questionnaire_questions SET `desc`='$desc', type='$type', number='$number', updated_at='$date', updated_by='$userId' WHERE id=$id";
+    public function updateData($id,$desc,$userId,$date,$number){
+        $sql = "UPDATE questionnaire_questions SET `desc`='$desc', number='$number', updated_at='$date', updated_by='$userId' WHERE id=$id";
+        return DB::update($sql);
+    }
+
+    public function updateDataAnswer($id,$value){
+        $sql = "UPDATE questionnaire_answer_choices SET number='$value' WHERE questionnaire_question_id =$id";
         return DB::update($sql);
     }
 

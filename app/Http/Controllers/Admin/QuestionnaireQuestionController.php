@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Helpers\ResponseFormatter;
 use App\QuestionnaireQuestion;
 use App\AnswerChoiceCategory;
+use App\QuestionnaireAnswer;
 
 class QuestionnaireQuestionController extends Controller
 {
@@ -93,25 +94,52 @@ class QuestionnaireQuestionController extends Controller
     {
         $model = new QuestionnaireQuestion();
         $data = $model->editData($id);
-        return view('pages.admin.questionnaire_questions.edit', compact('data', 'titleId'));
+
+        // $model = new AnswerChoiceCategory();
+        // $dataAnswer = $model->getData();
+
+
+
+        $modelAnswer = new QuestionnaireAnswer();
+        $dataQuestion = $modelAnswer->data($id);
+
+        $model = new AnswerChoiceCategory();
+        $dataAnswer = $model->getData();
+
+
+
+        return view('pages.admin.questionnaire_questions.edit', compact('data', 'titleId', 'dataQuestion', 'dataAnswer'));
     }
 
     public function update(Request $request, $titleId)
     {
 
-
         // untuk mendapatkan id akun admin yang sedang login
-        $userId = auth()->guard('admin')->user()->id;
-        $id = $request->id;
-        $desc = $request->description;
-        $type = $request->type;
-        $date = date('Y-m-d h:i:s');
-        $number = $request->number;
+        DB::beginTransaction();
+        try {
+            $userId = auth()->guard('admin')->user()->id;
+            $id = $request->id;
+            $desc = $request->description;
+            $type = $request->type;
+            $date = date('Y-m-d h:i:s');
+            $number = $request->number;
+            $answer['jawaban'] = $request->jawaban;
 
-        $model = new QuestionnaireQuestion();
-        $model->updateData($id, $desc, $type, $userId, $date, $number);
+            $model = new QuestionnaireQuestion();
+            $model->updateData($id, $desc, $userId, $date, $number);
 
-        return redirect()->route('admin-questionnairequestion-index', ['id' => $titleId])->with(['success' => 'Data Berhasil Diedit']);
+            foreach ($answer['jawaban'] as $key => $value) {
+
+                $model->updateDataAnswer($id, $value);
+            }
+
+
+            DB::commit();
+            return redirect()->route('admin-questionnairequestion-index', ['id' => $titleId])->with(['success' => 'Data Berhasil Diedit']);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
     }
 
     public function store(Request $request, $id)
@@ -119,7 +147,7 @@ class QuestionnaireQuestionController extends Controller
 
         DB::beginTransaction();
         try {
-           
+            # code...
             // untuk mendapatkan id akun admin yang sedang login
             $userId = auth()->guard('admin')->user()->id;
             $desc = $request->pilihan;
@@ -127,16 +155,15 @@ class QuestionnaireQuestionController extends Controller
             $answer['jawaban'] = $request->jawaban;
             $number = $request->number;
 
-            // insert ke tabel questionnaire_answer_choices
-            $model = new QuestionnaireQuestion();
 
+            // insert ke tabel questionnaire_questions
+            $model = new QuestionnaireQuestion();
             $questionnaireQuestions = $model->insertDataQuestion($id, $number, $desc, $date, $userId);
 
             foreach ($answer['jawaban'] as $key => $value) {
 
                 $model = new QuestionnaireQuestion();
                 $model->insertDataAnswer($questionnaireQuestions, $value, $date, $userId);
-               
             }
 
 
