@@ -426,3 +426,11 @@ Route::post('/answerCategory', 'Admin\AnswerCategoryController@getDataAnswerCate
 Route::post('/answerCategory/delete', 'Admin\AnswerCategoryController@deleteAnswerCategory');
 
 Route::post('/spam/store','API\MemberController@storeSpamNikNull');
+
+Route::post('/getdatadummy', function(Request $request) {
+
+    return $request->all();
+
+    #cek token 
+    #cocokan dengan hash yg ada
+});

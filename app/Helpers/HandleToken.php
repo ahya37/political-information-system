@@ -20,4 +20,10 @@ class HandleToken
         ]);
 
     }
+
+    public function checkToken($token){
+
+        $token = TokenManagement::where('access_token', $token)->where('is_active', 1)->count();
+        return $token;
+    }
 }
