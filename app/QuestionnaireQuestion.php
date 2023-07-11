@@ -69,5 +69,11 @@ class QuestionnaireQuestion extends Model
         return DB::insert($sql);
     }
 
+    public function getDataQuestionsByTitle($titleId){
+
+        $sql = "SELECT id, `desc` from questionnaire_questions where questionnaire_title_id = $titleId";
+        return DB::select($sql);
+    }
+
 
 }
