@@ -524,6 +524,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/edit/{id}', 'QuestionnaireController@edit')->name('admin-questionnaire-edit');
             Route::post('/update', 'QuestionnaireController@update')->name('admin-questionnaire-update');
             Route::get('/detail/{id}', 'QuestionnaireController@detail')->name('admin-questionnaire-detail');
+            Route::get('/respondent/{id}', 'QuestionnaireController@respondenByQuestionnaireId')->name('admin-questionnaire-respondent');
         });
 
         #QUESTIONNAIRE TITLE
