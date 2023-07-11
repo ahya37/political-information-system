@@ -28,6 +28,7 @@
                         <table id="data" class="table table-sm table-striped" width="100%">
                           <thead>
                             <tr>
+                              <th>No Pertanyaan</th>
                               <th>Pertanyaan</th>
                               <th>Jawaban</th>
                             </tr>

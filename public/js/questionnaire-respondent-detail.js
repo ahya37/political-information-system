@@ -23,11 +23,19 @@ let table = $("#data").DataTable({
             targets: 0,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.desc;
+                return row.number;
             },
         },
         {
             targets: 1,
+            sortable: true,
+            render: function (data, type, row, meta) {
+                return row.desc;
+            }
+            
+        },
+        {
+            targets: 2,
             sortable: true,
             render: function (data, type, row, meta) {
                 return row.name;
