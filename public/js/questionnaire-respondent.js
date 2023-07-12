@@ -45,7 +45,7 @@ let table = $("#data").DataTable({
             targets: 3,
             sortable: true,
             render: function (data, type, row, meta) {
-                return `<a href="/admin/respondent/detail/${row.id}" class="btn btn-sm btn-sc-primary text-light">Detail Jawaban</a>`;
+                return `<a href="/admin/respondent/detail/${id}/${row.id}" class="btn btn-sm btn-sc-primary text-light">Detail Jawaban</a>`;
             }
         }
     ],
