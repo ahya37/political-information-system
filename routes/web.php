@@ -552,6 +552,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/edit/{id}/{titleId}', 'QuestionnaireQuestionController@edit');
             Route::post('/store/{id}', 'QuestionnaireQuestionController@store')->name('admin-questionnairequestion-store');
             Route::post('/update/{id}', 'QuestionnaireQuestionController@update')->name('admin-questionnairequestion-update');
+            Route::post('/update/essay/{id}', 'QuestionnaireQuestionController@updateEssay')->name('admin-questionnairequestion-essay-update');
             Route::get('/create/{id}', 'QuestionnaireQuestionController@create');
             Route::post('/storeEssay/{id}', 'QuestionnaireQuestionController@storeEssay')->name('admin-questionnairequestion-storeEssay');
         });

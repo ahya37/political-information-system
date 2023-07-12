@@ -79,7 +79,7 @@ class QuestionnaireQuestionController extends Controller
 
             DB::commit();
             return ResponseFormatter::success([
-                'message' => 'Berhasil hapus inventori!'
+                'message' => 'Berhasil hapus pertanyaan!'
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
@@ -95,20 +95,25 @@ class QuestionnaireQuestionController extends Controller
         $model = new QuestionnaireQuestion();
         $data = $model->editData($id);
 
-        // $model = new AnswerChoiceCategory();
-        // $dataAnswer = $model->getData();
+        $type = $data->type;
+
+        if ($type == 'umum') {
+            # code...
+            $modelAnswer = new QuestionnaireAnswer();
+            $dataQuestion = $modelAnswer->data($id);
+    
+    
+            $model = new AnswerChoiceCategory();
+            $dataAnswer = $model->getData();
+    
+            return view('pages.admin.questionnaire_questions.edit', compact('data', 'titleId', 'dataQuestion', 'dataAnswer'));
+        }else{
+
+            return view('pages.admin.questionnaire_questions.editessay', compact('data', 'titleId'));
+
+        }
 
 
-
-        $modelAnswer = new QuestionnaireAnswer();
-        $dataQuestion = $modelAnswer->data($id);
-
-        $model = new AnswerChoiceCategory();
-        $dataAnswer = $model->getData();
-
-
-
-        return view('pages.admin.questionnaire_questions.edit', compact('data', 'titleId', 'dataQuestion', 'dataAnswer'));
     }
 
     public function update(Request $request, $titleId)
@@ -132,6 +137,31 @@ class QuestionnaireQuestionController extends Controller
 
                 $model->updateDataAnswer($id, $value);
             }
+
+
+            DB::commit();
+            return redirect()->route('admin-questionnairequestion-index', ['id' => $titleId])->with(['success' => 'Data Berhasil Diedit']);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
+    }
+
+    public function updateEssay(Request $request, $titleId)
+    {
+
+        // untuk mendapatkan id akun admin yang sedang login
+        DB::beginTransaction();
+        try {
+            
+            $userId = auth()->guard('admin')->user()->id;
+            $id = $request->id;
+            $desc = $request->description;
+            $date = date('Y-m-d h:i:s');
+            $number = $request->number;
+
+            $model = new QuestionnaireQuestion();
+            $model->updateData($id, $desc, $userId, $date, $number);
 
 
             DB::commit();

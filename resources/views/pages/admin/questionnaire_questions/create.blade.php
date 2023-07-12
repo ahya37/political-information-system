@@ -56,7 +56,7 @@
                                         <input type="hidden" name="number" class="form-control col-sm-3"
                                             value="{{ $number }}" />
                                         <label>Pertanyaan Essay</label>
-                                        <input type="text" name="essay" required class="form-control" />
+                                        <textarea name="essay" id="my-editor"  required class="form-control" ></textarea>
                                     </div>
                                     <div class="form-group">
                                         <button type="submit"
@@ -75,3 +75,21 @@
         </div>
     </div>
 @endsection
+
+@push('addon-script')
+<script src="{{asset('assets/plugins/ckeditor/ckeditor.js')}}"></script>   
+<script>
+    AOS.init();
+
+    let options = {
+      filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+      filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
+      filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+      filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token='
+    };
+
+    CKEDITOR.replace('my-editor', options);
+
+</script>
+
+@endpush
