@@ -39,8 +39,6 @@ class QuestionnaireQuestion extends Model
         return $questionnaireQuestions;
     }
 
-    
-
     public function insertDataAnswer($questionnaireQuestions, $value, $date, $userId){
         $sql = "INSERT INTO questionnaire_answer_choices (questionnaire_question_id, answer_choice_category_id,created_at,created_by,number) VALUES ('$questionnaireQuestions','$value','$date','$userId','$value')";
         return DB::insert($sql);
@@ -71,8 +69,14 @@ class QuestionnaireQuestion extends Model
 
     public function getDataQuestionsByTitle($titleId){
 
-        $sql = "SELECT id, `desc` from questionnaire_questions where questionnaire_title_id = $titleId";
+        $sql = "SELECT id, `desc`, `type` from questionnaire_questions where questionnaire_title_id = $titleId";
         return DB::select($sql);
+    }
+
+    public function deleteAnswerChoiceByQuetionnairId($id){
+
+        $sql = "DELETE from questionnaire_answer_choices where questionnaire_question_id = $id";
+        return DB::delete($sql);
     }
 
 

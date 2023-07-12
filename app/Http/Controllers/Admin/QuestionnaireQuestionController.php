@@ -102,11 +102,26 @@ class QuestionnaireQuestionController extends Controller
             $modelAnswer = new QuestionnaireAnswer();
             $dataQuestion = $modelAnswer->data($id);
     
-    
             $model = new AnswerChoiceCategory();
-            $dataAnswer = $model->getData();
+            $dataAnswer = $model->getDataForMerge();
+
+            $results = array_merge($dataQuestion, $dataAnswer);
+
+            $dataResults = [];
+            foreach ($results as $key => $value) {
+                
+                $dataResults[] = [
+                    'answer_choice_category_id' => $value->answer_choice_category_id,
+                    'number' => $value->number ?? null,
+                    'name' => $value->name
+                ];
+            }
+            
+
+            $dataResults = $this->removeDuplicatArrayValue($dataResults, "answer_choice_category_id");
     
-            return view('pages.admin.questionnaire_questions.edit', compact('data', 'titleId', 'dataQuestion', 'dataAnswer'));
+            return view('pages.admin.questionnaire_questions.edit', compact('data', 'titleId','dataResults'));
+
         }else{
 
             return view('pages.admin.questionnaire_questions.editessay', compact('data', 'titleId'));
@@ -115,6 +130,21 @@ class QuestionnaireQuestionController extends Controller
 
 
     }
+
+    public function removeDuplicatArrayValue($array, $keyname){
+
+        $new_array =  [];
+        foreach ($array as $key => $value) {
+            if(!isset($new_array[$value[$keyname]])){
+                $new_array[$value[$keyname]] = $value;
+            }
+        }
+
+        $new_array = array_values($new_array);
+
+        return $new_array;
+    }
+
 
     public function update(Request $request, $titleId)
     {
@@ -125,7 +155,6 @@ class QuestionnaireQuestionController extends Controller
             $userId = auth()->guard('admin')->user()->id;
             $id = $request->id;
             $desc = $request->description;
-            $type = $request->type;
             $date = date('Y-m-d h:i:s');
             $number = $request->number;
             $answer['jawaban'] = $request->jawaban;
@@ -133,11 +162,14 @@ class QuestionnaireQuestionController extends Controller
             $model = new QuestionnaireQuestion();
             $model->updateData($id, $desc, $userId, $date, $number);
 
+            #metode replace untuk edit jawaban by kusioner id
+            $model->deleteAnswerChoiceByQuetionnairId($id);
+
             foreach ($answer['jawaban'] as $key => $value) {
 
-                $model->updateDataAnswer($id, $value);
+                // $model->updateDataAnswer($id, $value);
+                $model->insertDataAnswer($id, $value, $date, $userId);
             }
-
 
             DB::commit();
             return redirect()->route('admin-questionnairequestion-index', ['id' => $titleId])->with(['success' => 'Data Berhasil Diedit']);
@@ -192,7 +224,6 @@ class QuestionnaireQuestionController extends Controller
 
             foreach ($answer['jawaban'] as $key => $value) {
 
-                $model = new QuestionnaireQuestion();
                 $model->insertDataAnswer($questionnaireQuestions, $value, $date, $userId);
             }
 

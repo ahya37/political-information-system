@@ -38,31 +38,26 @@
                                                             <div>
                                                                 <label>Jawaban</label>
                                                                 <div class="form-check">
-                                                                    <div>                                                               
+                                                                    <div>
                                                                     </div>
                                                                     <div>
 
-
-                                                                        
-                                                                        @foreach ($dataAnswer as $field)
-                                                                        <div>
-                                                                        <input class="form-check-input"
-                                                                               name="jawaban[]"
-                                                                               type="checkbox"
-                                                                               value="{{ $field->id }}"
-                                                                               id="defaultCheck{{ $field->id }}"
-                                                                               @if ($dataQuestion->number == $field->id)
-                                                                                   checked
-                                                                               @endif>
-                                                                        <label class="form-check-label"
-                                                                               for="defaultCheck{{ $field->id }}">
-                                                                            {{ $field->name }}
-                                                                        </label>
-                                                                    </div>
-                                                                    @endforeach
+                                                                        @foreach ($dataResults as $field)
+                                                                            <div>
+                                                                                <input class="form-check-input"
+                                                                                    name="jawaban[]" type="checkbox"
+                                                                                    value="{{ $field['answer_choice_category_id'] }}"
+                                                                                    id="defaultCheck{{ $field['answer_choice_category_id'] }}"
+                                                                                    {{ $field['number'] != null ? 'checked' : '' }}>
+                                                                                <label class="form-check-label"
+                                                                                    for="defaultCheck{{ $field['answer_choice_category_id'] }}">
+                                                                                    {{ $field['name'] }}
+                                                                                </label>
+                                                                            </div>
+                                                                        @endforeach
                                                                     </div>
                                                                 </div>
-                                                            </div>  
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
