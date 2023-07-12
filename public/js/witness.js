@@ -52,3 +52,42 @@ function onDelete(data) {
 
 
 }
+
+$(".nik").on('change', function(){
+
+    const id = $('#nik').val();
+    const CSRF_TOKEN = $('meta[name="csrf-token-user"]').attr("content");
+    const email = $('#email');
+    
+    // get api email by nik
+    $.ajax({
+        url:`/api/member/email`,
+        method:"POST",
+        data: {id: id, _token: CSRF_TOKEN},
+        beforeSend: function(){
+            email.val("")
+        },
+        success: function(result){
+            email.val(result.data.data.email);
+        },
+        error: function(error){
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              });
+              
+              Toast.fire({
+                icon: 'error',
+                title: error.responseJSON.data.message
+              });
+
+        }
+    });
+})

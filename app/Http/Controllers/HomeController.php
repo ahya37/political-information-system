@@ -160,6 +160,10 @@ class HomeController extends Controller
             #call all data by referal caleg
             return $this->dashboardAdminForAdminCaleg($regency_id);
 
+        }else{
+            
+            // level tim tps
+            return redirect()->route('member-realisation');
         }
     }
 

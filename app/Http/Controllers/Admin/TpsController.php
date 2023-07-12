@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\UserMenu;
 
 class TpsController extends Controller
 {
@@ -114,6 +115,7 @@ class TpsController extends Controller
                     Tps::create([
                         'village_id' => $villageid,
                         'tps_number' => $i,
+                        'cby' => auth()->guard('admin')->user()->id
                     ]);
                 }
 
@@ -127,6 +129,7 @@ class TpsController extends Controller
                     Tps::create([
                         'village_id' => $villageid,
                         'tps_number' => $i,
+                        'cby' => auth()->guard('admin')->user()->id
                     ]);
                 }
 
@@ -274,6 +277,16 @@ class TpsController extends Controller
                 'cby' =>  auth()->guard('admin')->user()->id
             ]);
 
+            #buat akun untuk saksi tps
+            #jadikan admin level kecamatan, dan berikan akses menu realisasi suara
+            #set user level = 1, and status = 1
+            UserMenu::create([
+                'user_id' => $request->member,
+                'menu_id' => 11, // id menu realiasi member
+            ]);
+
+            $user->update(['status' => 1]);
+
             DB::commit();
             return redirect()->back()->with(['success' => 'Saksi telah disimpan!']);
         
@@ -294,7 +307,12 @@ class TpsController extends Controller
 
             $id    = request()->id;
 
-            Witness::where('id', $id)->delete();
+            $witness =  Witness::where('id', $id)->first();
+
+            #delete akses ke menu realisasi
+            UserMenu::where('user_id', $witness->user_id)->where('menu_id', 11)->delete();
+
+            $witness->delete();
 
             DB::commit();
             return ResponseFormatter::success([

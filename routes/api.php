@@ -427,10 +427,8 @@ Route::post('/answerCategory/delete', 'Admin\AnswerCategoryController@deleteAnsw
 
 Route::post('/spam/store','API\MemberController@storeSpamNikNull');
 
-Route::post('/getdatadummy', function(Request $request) {
 
-    return $request->all();
-
-    #cek token 
-    #cocokan dengan hash yg ada
+Route::group(['middleware' => 'checkToken'], function(){
+    Route::post('/member/email', 'API\MemberController@getEmail');
+    
 });

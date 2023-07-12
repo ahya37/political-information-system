@@ -115,8 +115,12 @@
                                 <select class="multiple-select nik" name="member" id="nik"></select>
                             </div>
                             <div class="form-group">
+                                <label>Email (jika tidak ada, contoh : aaw.nomorhp@aaw.com)</label>
+                                <input type="email" id="email" class="form-control" name="telp" required>
+                            </div>
+                            <div class="form-group">
                                 <label>No.Hp / WA</label>
-                                <input type="tex" class="form-control" name="telp" required>
+                                <input type="text" class="form-control" name="telp" required>
                             </div>
                             <div class="form-group">
                                 <label>Status</label>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\ResponseFormatter;
 use App\Imports\ReplaceAddressImport;
 use App\User;
 use App\Models\Province;
@@ -432,6 +433,19 @@ class MemberController extends Controller
             DB::rollBack();
             return $e->getMessage();
         }
+    }
+
+    public function getEmail(Request $request){
+
+        $user = User::select('email')->where('id', $request->id)->first();
+
+        $result = [
+            'email' => $user->email ?? ''
+        ];
+
+        return ResponseFormatter::success([
+            'data' => $result, 
+        ], 402);
     }
 	
 	
