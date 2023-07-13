@@ -12,7 +12,7 @@ let table = $("#data").DataTable({
     order: [[0, 'asc']],
     autoWidth: false,
     ajax: {
-        url: `/api/respondent/${id}`,
+        url: `/api/respondentdetail/${id}`,
         type: "POST",
         data: function (d) {
             return d;
@@ -23,14 +23,14 @@ let table = $("#data").DataTable({
             targets: 0,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.name;
+                return row.number;
             },
         },
         {
             targets: 1,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.gender;
+                return row.desc;
             }
             
         },
@@ -38,15 +38,9 @@ let table = $("#data").DataTable({
             targets: 2,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.age;
+                return row.name;
             }
-        },
-        {
-            targets: 3,
-            sortable: true,
-            render: function (data, type, row, meta) {
-                return `<a href="/admin/respondent/detail/${id}/${row.id}" class="btn btn-sm btn-sc-primary text-light">Detail Jawaban</a>`;
-            }
+            
         }
     ],
 });

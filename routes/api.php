@@ -432,3 +432,7 @@ Route::post('/searchmemberniktype', 'API\MemberController@getSearchMemberByNikty
 Route::group(['middleware' => 'checkToken'], function () {
     Route::post('/member/email', 'API\MemberController@getEmail');
 });
+
+#Questionnaire Respondent
+Route::post('/respondent/{id}', 'Admin\QuestionnaireRespondentController@getDataRespondent');
+Route::post('/respondentdetail/{id}', 'Admin\QuestionnaireRespondentController@dataAnswerRespondent');

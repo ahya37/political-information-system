@@ -32,7 +32,7 @@ class LoginController extends Controller
         DB::table('admins')->where('email', $request->email)->update(['remember_token' => $remember_token]);
 
         #save token ke tabel token_management
-        HandleToken::storeToken($remember_token);
+        // HandleToken::storeToken($remember_token);
 
         #proses authentication
         if (auth()->guard('admin')->attempt($auth)) {
@@ -52,7 +52,7 @@ class LoginController extends Controller
         $auth = auth()->guard('admin');
 
         #non aktifkan token
-        HandleToken::isActiveToken($auth->user()->remember_token);
+        // HandleToken::isActiveToken($auth->user()->remember_token);
 
         #logout
         $auth->logout();
