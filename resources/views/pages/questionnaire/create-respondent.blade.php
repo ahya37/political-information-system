@@ -21,8 +21,8 @@
                                             <h5>Responden :</h5>
                                             <div class="form-group">
                                                 <label>NIK</label>
-                                                <input type="number" name="nik" required
-                                                    class="form-control {{ $errors->has('nik') ? ' is-invalid' : '' }}"  value="{{ old('nik') }}"/>
+                                                <input type="text" name="nik" required
+                                                    class="form-control {{ $errors->has('nik') ? ' is-invalid' : '' }}" id="nik" onInput="edValueKeyPress()" value="{{ old('nik') }}"/>
 
                                                 @if ($errors->has('nik'))
                                                     <span class="invalid-feedback" role="alert">
@@ -33,7 +33,7 @@
                                             <div class="form-group">
                                                 <label>Nama</label>
                                                 <input type="text" name="name" required
-                                                    class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') }}" />
+                                                    class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') }}" id="name" />
                                                 @if ($errors->has('name'))
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $errors->first('name') }}</strong>
@@ -66,7 +66,7 @@
                                             <div class="form-group">
                                                 <label>Nomor Telepon</label>
                                                 <input type="number" name="phone_number" required
-                                                    class="form-control {{ $errors->has('phone_number') ? ' is-invalid' : '' }}" />
+                                                    class="form-control {{ $errors->has('phone_number') ? ' is-invalid' : '' }}" id="phone" />
                                                     @if ($errors->has('phone_number'))
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $errors->first('phone_number') }}</strong>
@@ -75,7 +75,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Alamat</label>
-                                                <textarea class="form-control" name="address" required></textarea>
+                                                <textarea class="form-control" name="address" required id="address"></textarea>
                                             </div>
                                         </div>
 
@@ -133,3 +133,7 @@
         </div>
     </div>
 @endsection
+
+@push('addon-script')
+<script src="{{ asset('/js/create-respondent.js') }}"></script>
+@endpush

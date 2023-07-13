@@ -1368,6 +1368,12 @@ class User extends Authenticatable
         return $result;
     }
 
+    public function getSearchNikBytype($nik){
+
+        $sql = "SELECT name , phone_number , address  from users where nik = $nik";
+        return collect(DB::select($sql))->first();
+    }
+
     public function getMemberReferalByMember($id_user)
     {
         $sql = "SELECT a.id, a.phone_number, a.whatsapp, a.name, e.name as regency, d.name as district, c.name as village, a.photo, 
