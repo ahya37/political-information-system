@@ -150,6 +150,17 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 
         Route::get('profile/{id}','MemberController@profileMember')->name('admin-profile-member');
 
+        #KUISIONER
+        Route::get('questionnaire','QuestionnaireController@index')->name('member-kuisioner-index');
+        Route::get('questionnaire/create/respondent/{questionnaireId}','QuestionnaireController@createRespondent')->name('member-kuisioner-createrespondent');
+        Route::get('questionnaire/respondent/detail/{id}','QuestionnaireController@detailQuestionnaireId')->name('member-kuisioner-detail');
+        Route::post('questionnaire/respondent/store/{id}','QuestionnaireController@storeRespondent')->name('member-kuisioner-storerespondent');
+        Route::post('questionnaire/{id}','QuestionnaireController@detailQuestionnaireId')->name('member-questionnaire-respondent');
+
+        #REALISASI
+        Route::get('realisation','RealisationController@index')->name('member-realisation');
+        Route::get('realisation/create','RealisationController@create')->name('member-realisation-create');
+
     });
 
 
@@ -445,6 +456,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/pusat/save','OrgDiagramController@saveOrgPusat')->name('admin-struktur-organisasi-pusat-save');
 
             Route::post('/report/excel','OrgDiagramController@reportExcel')->name('admin-struktur-organisasi-report-excel');
+            Route::post('/report/district/excel','OrgDiagramController@reportOrgDistrictExcel')->name('admin-struktur-organisasi-district-report-excel');
+            Route::post('/report/village/excel','OrgDiagramController@reportOrgVillagetExcel')->name('admin-struktur-organisasi-village-report-excel');
+            Route::post('/report/rt/excel','OrgDiagramController@reportOrgRTExcel')->name('admin-struktur-organisasi-rt-report-excel');
 
             #update level org all
             Route::get('/village/update/level','OrgDiagramController@updateLelelOrgAll');
@@ -521,6 +535,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/edit/{id}', 'QuestionnaireController@edit')->name('admin-questionnaire-edit');
             Route::post('/update', 'QuestionnaireController@update')->name('admin-questionnaire-update');
             Route::get('/detail/{id}', 'QuestionnaireController@detail')->name('admin-questionnaire-detail');
+            Route::get('/respondent/{id}', 'QuestionnaireController@respondenByQuestionnaireId')->name('admin-questionnaire-respondent');
         });
 
         #QUESTIONNAIRE TITLE
@@ -537,6 +552,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/edit/{id}/{titleId}', 'QuestionnaireQuestionController@edit');
             Route::post('/store/{id}', 'QuestionnaireQuestionController@store')->name('admin-questionnairequestion-store');
             Route::post('/update/{id}', 'QuestionnaireQuestionController@update')->name('admin-questionnairequestion-update');
+            Route::post('/update/essay/{id}', 'QuestionnaireQuestionController@updateEssay')->name('admin-questionnairequestion-essay-update');
             Route::get('/create/{id}', 'QuestionnaireQuestionController@create');
             Route::post('/storeEssay/{id}', 'QuestionnaireQuestionController@storeEssay')->name('admin-questionnairequestion-storeEssay');
         });

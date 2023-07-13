@@ -27,4 +27,9 @@ class AnswerChoiceCategory extends Model
         return DB::update($sql);
     }
 
+    public function getDataForMerge(){
+        $sql = "SELECT id as answer_choice_category_id, name FROM answer_choice_categories";
+        return DB::select($sql);
+    }
+
 }

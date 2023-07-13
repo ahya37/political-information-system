@@ -48,6 +48,7 @@ class QuestionnaireController extends Controller
                 $choices[] = [
                     'id' => $item->id,
                     'questions' => $item->desc,
+                    'type' => $item->type,
                     'answerChoices' => $answerChoices
                 ];
             }

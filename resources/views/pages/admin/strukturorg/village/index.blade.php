@@ -17,6 +17,8 @@
                 <h2 class="dashboard-title">Daftar Koordinator Desa</h2>
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
+                <form action="{{ route('admin-struktur-organisasi-village-report-excel') }}" method="POST">
+                    @csrf
                 <div class="card card-body mb-4">
                     <div class="row">
                         {{-- <div class="col-md-3"> --}}
@@ -44,10 +46,12 @@
                     <div class="row col-md-12">
                         <a class="btn btn-sm btn-sc-primary text-white"
                             href="{{ route('admin-struktur-organisasi-village-create') }}">+ Tambah</a>
+                            <button class="btn btn-sm btn-sc-primary text-white ml-2" type="submit">Download Excel</button>
                     </div>
 
                     
                 </div>
+                </form>
                 <div class="row">
                     <div class="col-md-12 mt-2 mb-2">
                         <div class="card">

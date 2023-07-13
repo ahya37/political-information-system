@@ -74,9 +74,9 @@ class MemberController extends Controller
            $cby = Admin::select('id')->first();
         //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
            
-           $cek_nik = User::select('nik')->where('nik', $request->nik)->first();
+           $cek_nik = User::select('nik')->where('nik', $request->nik)->count();
            #cek nik jika sudah terpakai
-           if ($cek_nik != null) {
+           if ($cek_nik > 0) {
                return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
            }else{
               
@@ -108,7 +108,6 @@ class MemberController extends Controller
                       'marital_status' => $request->marital_status,
                       'job_id' => $request->job_id,
                       'religion' => $request->religion,
-                      'nik'  => $request->nik,
                       'education_id'  => $request->education_id,
                       'email' => $request->email,
                       'phone_number' => $request->phone_number,
@@ -219,7 +218,6 @@ class MemberController extends Controller
                 'marital_status' => $request->marital_status,
                 'job_id' => $request->job_id,
                 'religion' => $request->religion,
-                'nik'  => $request->nik,
                 'education_id'  => $request->education_id,
                 'phone_number' => $request->phone_number,
                 'whatsapp' => $request->whatsapp,
@@ -347,7 +345,7 @@ class MemberController extends Controller
 
         } catch (\Exception $e) {
 
-            return $e->getMessage();
+            // return $e->getMessage();
             return redirect()->back()->with(['warning' => 'Anggota gagal dinonaktifkan!']);
 
         }

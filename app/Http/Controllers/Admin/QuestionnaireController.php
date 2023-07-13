@@ -7,13 +7,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Questionnaire;
 use App\Helpers\ResponseFormatter;
-
-
+use App\QuestionnaireRespondent;
 
 class QuestionnaireController extends Controller
 {
     public function index(){
-        DB::table('questionnaires')->get();
 
         return view('pages.admin.questionnaires.index');
     }
@@ -136,6 +134,13 @@ class QuestionnaireController extends Controller
 
     }
 
+    public function respondenByQuestionnaireId($id){
+
+        #get data respondent by kuisioner id
+
+        return view('pages.admin.questionnaires.respondent', compact('id'));
+
+    }
 
     public function detailQuestionnaire(Request $request, $id){
 

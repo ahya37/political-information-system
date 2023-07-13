@@ -110,9 +110,9 @@ class UserController extends Controller
             $cekLengthNik = strlen($request->nik);
             if($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
            
-           $cek_nik = User::select('nik')->where('nik', $request->nik)->first();
+           $cek_nik = User::select('nik')->where('nik', $request->nik)->count();
            #cek nik jika sudah terpakai
-           if ($cek_nik != null) {
+           if ($cek_nik > 0) {
                return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
            }else{
               
@@ -144,7 +144,6 @@ class UserController extends Controller
                       'marital_status' => $request->marital_status,
                       'job_id' => $request->job_id,
                       'religion' => $request->religion,
-                      'nik'  => $request->nik,
                       'education_id'  => $request->education_id,
                       'email' => $request->email,
                       'phone_number' => $request->phone_number,

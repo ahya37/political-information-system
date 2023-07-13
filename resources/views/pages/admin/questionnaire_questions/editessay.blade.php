@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         @include('layouts.message')
-                        <form action="{{ route('admin-questionnairequestion-update', $titleId) }}" method="POST"
+                        <form action="{{ route('admin-questionnairequestion-essay-update', $titleId) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             <div class="card">
@@ -31,34 +31,8 @@
 
                                                         <label>Deskripsi</label>
                                                         <input type="hidden" name="id" value="{{ $data->id }}">
-                                                        <input type="text" name="description" required
-                                                            class="form-control" value="{{ $data->desc }}" />
+                                                            <textarea name="description" id="my-editor"  required class="form-control" >{!! $data->desc !!}</textarea>
                                                         <br>
-                                                        <div>
-                                                            <div>
-                                                                <label>Jawaban</label>
-                                                                <div class="form-check">
-                                                                    <div>
-                                                                    </div>
-                                                                    <div>
-
-                                                                        @foreach ($dataResults as $field)
-                                                                            <div>
-                                                                                <input class="form-check-input"
-                                                                                    name="jawaban[]" type="checkbox"
-                                                                                    value="{{ $field['answer_choice_category_id'] }}"
-                                                                                    id="defaultCheck{{ $field['answer_choice_category_id'] }}"
-                                                                                    {{ $field['number'] != null ? 'checked' : '' }}>
-                                                                                <label class="form-check-label"
-                                                                                    for="defaultCheck{{ $field['answer_choice_category_id'] }}">
-                                                                                    {{ $field['name'] }}
-                                                                                </label>
-                                                                            </div>
-                                                                        @endforeach
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -79,3 +53,21 @@
         </div>
     </div>
 @endsection
+
+@push('addon-script')
+<script src="{{asset('assets/plugins/ckeditor/ckeditor.js')}}"></script>   
+<script>
+    AOS.init();
+
+    let options = {
+      filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+      filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
+      filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+      filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token='
+    };
+
+    CKEDITOR.replace('my-editor', options);
+
+</script>
+
+@endpush

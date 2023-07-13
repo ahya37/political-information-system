@@ -95,7 +95,11 @@
                                                     @endphp
                                                     @foreach ($item['questions'] as $q)
                                                         <div class="form-group col-md-12">
+                                                            @if ($q['type'] == 'umum')
                                                             <label class="">{{ $noq++ }}. {{ $q['questions'] }}</label>
+                                                            @else 
+                                                            <label class="">{{ $noq++ }}. {!! $q['questions'] !!}</label>
+                                                            @endif
                                                             @if (count($q['answerChoices']) > 0)
                                                             <ul class="list-group">
                                                                     @foreach ($q['answerChoices'] as $c)

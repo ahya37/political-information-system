@@ -16,6 +16,7 @@ use App\Providers\GlobalProvider;
 use Maatwebsite\Excel\Excel;
 use App\Exports\KorDesExport;
 use App\Exports\KorCamExport;
+use App\Exports\KorteExport;
 
 class OrgDiagramController extends Controller
 {
@@ -633,6 +634,8 @@ class OrgDiagramController extends Controller
                                     'regency_id'  => $domisili->regency_id,
                                     'district_id' => $domisili->district_id,
                                     'village_id'  => $domisili->village_id,
+                                    'created_by' => auth()->guard('admin')->user()->id,
+                                    'created_at' => date('Y-m-d H:i:s')
                                 ]);
         
                     DB::commit();
@@ -724,6 +727,8 @@ class OrgDiagramController extends Controller
                                     'photo'  => $user->photo ?? '',
                                     'regency_id'  => $domisili->regency_id,
                                     'district_id' => $domisili->id,
+                                    'created_by' => auth()->guard('admin')->user()->id,
+                                    'created_at' => date('Y-m-d H:i:s')
                                 ]);
         
                     DB::commit();
@@ -879,6 +884,8 @@ class OrgDiagramController extends Controller
                 'regency_id'  => $request->regency_id,
                 'district_id' => $request->district_id,
                 'village_id'  => $request->village_id,
+                'created_by' => auth()->guard('admin')->user()->id,
+                'created_at' => date('Y-m-d H:i:s')
             ]);
 
             DB::commit();
@@ -1233,6 +1240,8 @@ class OrgDiagramController extends Controller
                     'district_id' => $domisili->district_id,
                     'village_id'  => $domisili->village_id,
                     'rt'  => $domisili->rt,
+                    'cby' => auth()->guard('admin')->user()->id,
+                    'created_at' => date('Y-m-d H:i:s')
                 ]);
     
                 DB::table('users')->where('nik', $user->nik)->update(['tps_id' => $request->tpsid]);
@@ -1288,7 +1297,7 @@ class OrgDiagramController extends Controller
 
             DB::commit();
             return redirect()->route('admin-struktur-organisasi-rt-detail-anggota',['idx' => $old_anggota_korte->pidx]);
-            return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+            // return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
            
         } catch (\Exception $e) {
             DB::rollback();
@@ -1728,6 +1737,8 @@ public function saveOrgDistrict(Request $request){
             'telp'  => $request->telp,
             'regency_id'  => $request->regency_id,
             'district_id' => $request->district_id,
+            'created_by' => auth()->guard('admin')->user()->id,
+            'created_at' => date('Y-m-d H:i:s')
         ]);
 
         DB::commit();
@@ -1972,6 +1983,7 @@ public function saveOrgDapil(Request $request){
             'photo'  => $user->photo ?? '',
             'telp'  => $request->telp,
             'dapil_id'  => $request->dapil_id,
+            'created_by' => auth()->guard('admin')->usre()->id
         ]);
 
         DB::commit();
@@ -2111,6 +2123,8 @@ public function saveOrgPusat(Request $request){
             'level_org'   => GlobalProvider::generateLevelOrg($request->jabatan),
             'photo'  => $user->photo ?? '',
             'telp'  => $request->telp,
+            'created_by' => auth()->guard('admin')->usre()->id,
+            'created_at' => date('Y-m-d H:i:s')
         ]);
 
         DB::commit();
@@ -2260,6 +2274,38 @@ public function reportExcel(Request $request){
         return $org;
  
     }
+
+}
+
+public function reportOrgRTExcel(Request $request){
+
+    $village_id  = $request->village_id;
+
+    // dd([$dapil_id, $district_id, $village_id, $rt]);
+
+    #report by desa       
+    $village = DB::table('villages')->select('name')->where('id', $village_id)->first();
+    return $this->excel->download(new KorteExport($village_id), 'TIM KOORDINATOR RT '.$village->name.'.xls');
+
+}
+
+public function reportOrgDistrictExcel(Request $request){
+
+    $district_id = $request->district_id;
+
+    // dd([$dapil_id, $district_id, $village_id, $rt]);
+    $district = DB::table('districts')->select('name')->where('id', $district_id)->first();
+    return $this->excel->download(new KorCamExport($district_id), 'TIM KOORDINATOR KECAMATAN '.$district->name.'.xls');
+
+}
+
+public function reportOrgVillagetExcel(Request $request){
+
+    $village_id  = $request->village_id;
+
+    // dd([$dapil_id, $district_id, $village_id, $rt]);
+    $village = DB::table('villages')->select('name')->where('id', $village_id)->first();
+    return $this->excel->download(new KorDesExport($village_id), 'TIM KOORDINATOR DESA '.$village->name.'.xls');
 
 }
 

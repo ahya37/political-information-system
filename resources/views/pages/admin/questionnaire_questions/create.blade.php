@@ -13,20 +13,18 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         @include('layouts.message')
-                        <form action="{{ route('admin-questionnairequestion-store', $id) }}" method="POST"
-                            enctype="multipart/form-data">
-                            @csrf
-                            <div class="card border">
-                                <div class="card-body">
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="{{ route('admin-questionnairequestion-store', $id) }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
                                     <div class="form-group">
-                                        <div class="form-group">
-                                            <label>No.</label>
-                                            <input type="text" name="number" class="form-control col-sm-3"
-                                                value="{{ $number }}" />
-                                        </div>
-                                        <label>Pilihan</label>
-                                        <input type="text" name="pilihan" required class="form-control" />
+                                        <label>No.</label>
+                                        <input type="text" name="number" class="form-control col-sm-3"
+                                            value="{{ $number }}" />
                                     </div>
+                                    <label>Pilihan</label>
+                                    <input type="text" name="pilihan" required class="form-control" />
                                     <div>
                                         <label>Jawaban</label>
                                         @foreach ($dataAnswer as $data)
@@ -39,24 +37,26 @@
                                             </div>
                                         @endforeach
                                     </div>
+        
                                     <div class="form-group">
-                                        <button type="submit"
-                                            class="btn btn-sc-primary text-white  btn-sm w-00 mt-4 float-right">
+                                        <button type="submit" class="btn btn-sc-primary text-white  btn-sm w-00 mt-4 float-right">
                                             Simpan
                                         </button>
                                     </div>
-                                </div>
+        
+                                </form>
                             </div>
-                        </form>
-                        <form action="{{ route('admin-questionnairequestion-storeEssay',$id) }}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="card border" style="margin-top: 75px">
-                                <div class="card-body">
+                        </div>
+                        <div class="card border" style="margin-top: 75px">
+                            <div class="card-body">
+                                <form action="{{ route('admin-questionnairequestion-storeEssay', $id) }}" method="post"
+                                    enctype="multipart/form-data">
+                                    @csrf
                                     <div class="form-group">
                                         <input type="hidden" name="number" class="form-control col-sm-3"
-                                                value="{{ $number }}" />
+                                            value="{{ $number }}" />
                                         <label>Pertanyaan Essay</label>
-                                        <input type="text" name="essay" required class="form-control" />
+                                        <textarea name="essay" id="my-editor"  required class="form-control" ></textarea>
                                     </div>
                                     <div class="form-group">
                                         <button type="submit"
@@ -64,12 +64,32 @@
                                             Simpan
                                         </button>
                                     </div>
-                                </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
+
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('addon-script')
+<script src="{{asset('assets/plugins/ckeditor/ckeditor.js')}}"></script>   
+<script>
+    AOS.init();
+
+    let options = {
+      filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+      filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
+      filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+      filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token='
+    };
+
+    CKEDITOR.replace('my-editor', options);
+
+</script>
+
+@endpush

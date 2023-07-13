@@ -10,84 +10,74 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Support\Facades\DB;
 
-class KorCamExport implements FromCollection, WithHeadings, WithEvents, ShouldAutoSize
+class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAutoSize
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-
     use Exportable;
 
-    protected $districtid;
+    protected $villageid;
 
-    public function __construct(int $district)
+    public function __construct(int $village)
     {
-        $this->districtid = $district;
-
+        $this->villageid = $village;
     }
 
     public function collection()
     {
-        $district_id  =  $this->districtid;
+        $village_id  =  $this->villageid;
 
-        $data = DB::table('org_diagram_district as a')->select('b.id','b.nik','a.name','a.base','a.title','b.gender','d.name as district','e.name as village')
+
+
+        $data    = DB::table('org_diagram_rt as a')->select('b.id','a.name','a.base','a.title','a.rt','b.gender','c.name as village','d.name as district')
                     ->join('users as b','a.nik','=','b.nik')
+                    ->join('villages as c','a.village_id','=','c.id')
                     ->join('districts as d','a.district_id','=','d.id')
-					->join('villages as e','b.village_id','=','e.id')
-                    ->where('a.district_id', $district_id)
-                    ->orderBy('e.name','asc')
-					->orderBy('a.level_org','asc')
-                    
-                    ->get();
-					
- 
+                    ->where('a.village_id', $village_id)->whereNotNull('a.nik')->where('a.base','KORRT')->orderBy('a.rt','asc')->get();
+
+        // $data    = $village->merge($rt); #merge kedua array
+
+        
         $results = [];
         $no      = 1;
         foreach ($data as $value) {
-			# BERAPA ANGGOTA YANG MEMILIKI REFERAL PERKECAMATAN
-			// $male   = DB::table('users')->select('gender')->where('gender',0)->where('user_id', $value->id)->count();
-            // $female = DB::table('users')->select('gender')->where('gender',1)->where('user_id', $value->id)->count();
-						
-			$tim = "KORCAM ($value->title)";
-			
-			
+
+            // #cek jika sudah menjadi anggota memiliki referal diatas 25
+            // $member = DB::table('users')->where('user_id', $value->id)->count();
+
+            // $desc = '';
+            // if ($member >= 25) $desc = 'ANGGOTA POTENSIAL REFERAL'; 
+
             $results[] = [
                 'no' => $no++,
-				'nik' => "'$value->nik",
                 'name' => $value->name,
                 'jk' => $value->gender == 1 ? 'P' : 'L',
-				// 'referal' => $male+$female,
-				// 'male' => $male,
-				// 'female' => $female,
-                'title' => $tim,
+                'rt' => $value->rt,
+                'title' => $value->base == 'KORDES' ? $value->title : $value->base,
                 'village' => $value->village,
                 'district' => $value->district,
-				'desc' => ''
+                'desc' => ""
             ];
         }
-            
+
         $result = collect($results);
         return $result;
-
     }
 
     public function headings(): array
     {
         return [
             'NO',
-            'NIK',
             'NAMA',
             'JENIS KELAMIN',
-            // 'REFERAL',
-            // 'LAKI-LAKI',
-            // 'PEREMPUAN',
-            'TIM',
+            'RT',
+            'JABATAN',
             'DESA',
             'KECAMATAN',
-            'KETERANGAN',
+            'KETERANGAN'
         ];
     }
-
     public function registerEvents(): array
     {
         return [
@@ -98,6 +88,8 @@ class KorCamExport implements FromCollection, WithHeadings, WithEvents, ShouldAu
                 $event->sheet->getDelegate()->getColumnDimension('C')->setAutoSize(true);
                 $event->sheet->getDelegate()->getColumnDimension('D')->setAutoSize(true);
                 $event->sheet->getDelegate()->getColumnDimension('E')->setAutoSize(true);
+                $event->sheet->getDelegate()->getColumnDimension('F')->setAutoSize(true);
+                $event->sheet->getDelegate()->getColumnDimension('G')->setAutoSize(true);
 
                 $event->sheet->getStyle('A1:H1')->applyFromArray([
                     'font' => [

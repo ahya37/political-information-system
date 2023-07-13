@@ -21,7 +21,7 @@
 
 
             <div class="dashboard-content mt-4" id="transactionDetails">
-                <form action="{{ route('admin-struktur-organisasi-report-excel') }}" method="POST">
+                <form action="{{ route('admin-struktur-organisasi-rt-report-excel') }}" method="POST">
                     @csrf
                     <div class="card card-body mb-4">
                         <div class="row">

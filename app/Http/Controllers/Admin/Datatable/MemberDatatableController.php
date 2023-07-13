@@ -15,30 +15,30 @@ class MemberDatatableController extends Controller
     public function dTableMember(Request $request)
     {
 
-        $orderBy = 'a.nik';
+        $orderBy = 'a.name';
         switch ($request->input('order.0.column')) {
             case '0':
                 $orderBy = 'a.name';
                 break;
-            case '2':
-                $orderBy = 'a.name';
+            case '1':
+                $orderBy = 'a.nik';
                 break;
-            case '3':
+            case '2':
                 $orderBy = 'villages.name';
                 break;
-            case '4':
+            case '3':
                 $orderBy = 'districts.name';
                 break;
-            case '5':
+            case '4':
                 $orderBy = 'regencies.name';
                 break;
-            case '6':
-                $orderBy = 'b.name';
-                break;
-            case '7':
-                $orderBy = 'c.name';
-                break;
-            case '8':
+            // case '6':
+            //     $orderBy = 'b.name';
+            //     break;
+            // case '7':
+            //     $orderBy = 'c.name';
+            //     break;
+            case '5':
                 $orderBy = 'a.created_at';
                 break;
         }
@@ -60,8 +60,8 @@ class MemberDatatableController extends Controller
                 ->orWhereRaw('LOWER(regencies.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
                 ->orWhereRaw('LOWER(districts.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
                 ->orWhereRaw('LOWER(villages.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(c.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                // ->orWhereRaw('LOWER(c.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
                 ->orWhereRaw('LOWER(a.nik) like ? ',['%'.strtolower($request->input('search.value')).'%'])
                 ->orWhereRaw('LOWER(a.created_at) like ? ',['%'.strtolower($request->input('search.value')).'%'])
                 ;
