@@ -61,39 +61,33 @@ class QuestionnaireRespondentController extends Controller
                 ->where('questionnaire_title_id', $titleItem->id)
                 ->get();
 
-            // get jawaban berdasarkan respondent id dan pertanyaan id
+            // berelasi ke table questionnaire_answer_choices untuk mendapatkan
+            // berlasi ke tabel  answer_choice_categories untuk mendapatkan keterangan jawaban (Ya/Tidak/...);
             foreach ($question as $questionItem) {
                 $answer = DB::table('questionnaire_answers')
-                    ->where('questionnaire_respondent_id', $respondentId)
-                    ->where('questionnaire_question_id', $questionItem->id)
+                    ->join('questionnaire_answer_choices', 'questionnaire_answers.questionnaire_answer_choice_id', '=', 'questionnaire_answer_choices.id')
+                    ->join('answer_choice_categories', 'questionnaire_answer_choices.answer_choice_category_id', '=', 'answer_choice_categories.id')
+
+                    //ambil jawaban berdasarkan id responden dan id pertanyaan
+                    ->select('answer_choice_categories.name')
+                    ->where('questionnaire_answers.questionnaire_respondent_id', $respondentId) // 17
+                    ->where('questionnaire_answers.questionnaire_question_id', $questionItem->id) // 104
                     ->get();
 
-                // berelasi ke table questionnaire_answer_choices untuk mendapatkan answer_choice_category_id
-            }
-            foreach ($answer as $answerItem) {
-                $questionChoice = DB::table('questionnaire_answer_choices')
-                    ->select('answer_choice_category_id')
-                    ->where('id', $answerItem->questionnaire_answer_choice_id)
-                    ->first();
 
-                // berlasi ke tabel  answer_choice_categories untuk mendapatkan keterangan jawaban (Ya/Tidak/...);
-                foreach ($questionChoice as $questionChoiceItem) {
-                    $answerChoice = DB::table('answer_choice_categories')
-                        ->select('name')
-                        ->where('id', $questionChoiceItem)
-                        ->first();
-                }
             }
 
             $results[] = [
                 'title' => $titleItem->name,
-                'questions' => $answer,
+                'questions' => $questionItem->desc,
+                'answer' => $answer,
             ];
         }
 
-        // dd('results', $results);
 
-        dd('tabel pertanyan: ', $question, 'tabel answer: ', $answer, $questionChoice, $answerChoice);
+        dd('results', $results);
+
+        // dd('tabel pertanyan: ', $question, 'tabel answer: ', $answer, $questionItem->id);
 
         return view('pages.admin.questionnaire_respondent.detail');
     }
