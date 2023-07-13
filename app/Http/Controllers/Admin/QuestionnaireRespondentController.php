@@ -86,10 +86,9 @@ class QuestionnaireRespondentController extends Controller
         }
 
         $noTitle = 1;
-        $noQuestion = 1;
 
 
-        return view('pages.admin.questionnaire_respondent.detail', compact('results','noTitle','noQuestion'));
+        return view('pages.admin.questionnaire_respondent.detail', compact('results','noTitle'));
     }
 
     public function dataAnswerRespondent(Request $request, $id)
