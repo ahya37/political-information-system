@@ -30,7 +30,7 @@ class QuestionnaireAnswer extends Model
         return DB::select($sql);
     }
 
-    public function getDataAnswerByRespondentIdAndQuesttionnaireId($respondentId, $questionid)
+    public function getDataAnswerByRespondentIdAndQuestionnaireId($respondentId, $questionid)
     {
 
         $sql =  DB::table('questionnaire_answers as a')

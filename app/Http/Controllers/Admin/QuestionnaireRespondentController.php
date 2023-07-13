@@ -68,7 +68,7 @@ class QuestionnaireRespondentController extends Controller
 
             $resultAnsewrs = [];
             foreach ($question as $questionItem) {
-                $answer = $QuestionnaireAnswer->getDataAnswerByRespondentIdAndQuesttionnaireId($respondentId, $questionItem->id);
+                $answer = $QuestionnaireAnswer->getDataAnswerByRespondentIdAndQuestionnaireId($respondentId, $questionItem->id);
 
                 $resultAnsewrs[] = [
                     'number' => $questionItem->number,
