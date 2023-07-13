@@ -69,7 +69,7 @@ class QuestionnaireQuestion extends Model
 
     public function getDataQuestionsByTitle($titleId){
 
-        $sql = "SELECT id, `desc`, `type` from questionnaire_questions where questionnaire_title_id = $titleId";
+        $sql = "SELECT id, `desc`, `type`, `number` from questionnaire_questions where questionnaire_title_id = $titleId order by `number` asc";
         return DB::select($sql);
     }
 
