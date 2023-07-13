@@ -50,52 +50,58 @@ class QuestionnaireRespondentController extends Controller
 
     public function detail($id, $respondentId)
     {
-        $sql = "SELECT * FROM questionnaire_titles WHERE questionnaire_id = $id";
-        $data = DB::select($sql);
+        $data = DB::table('questionnaire_titles')->select('id','name')->where('questionnaire_id', $id)->get();
+
 
         $results = [];
 
         foreach ($data as $titleItem) {
             // get data pertanyaan where $item->id / id judul kuisioner
             $question = DB::table('questionnaire_questions')
+                ->select('id','number','desc')
                 ->where('questionnaire_title_id', $titleItem->id)
+                ->orderBy('number','asc')
                 ->get();
 
-            // get jawaban berdasarkan respondent id dan pertanyaan id
-            foreach ($question as $questionItem) {
-                $answer = DB::table('questionnaire_answers')
-                    ->where('questionnaire_respondent_id', $respondentId)
-                    ->where('questionnaire_question_id', $questionItem->id)
-                    ->get();
+            // // berelasi ke table questionnaire_answer_choices untuk mendapatkan
+            // // berlasi ke tabel  answer_choice_categories untuk mendapatkan keterangan jawaban (Ya/Tidak/...);
 
-                // berelasi ke table questionnaire_answer_choices untuk mendapatkan answer_choice_category_id
-            }
-            foreach ($answer as $answerItem) {
-                $questionChoice = DB::table('questionnaire_answer_choices')
-                    ->select('answer_choice_category_id')
-                    ->where('id', $answerItem->questionnaire_answer_choice_id)
+            $resultAnsewrs = [];
+            foreach ($question as $questionItem) {
+                $answer = DB::table('questionnaire_answers as a')
+                    ->join('questionnaire_answer_choices as b', 'a.questionnaire_answer_choice_id', '=', 'b.id')
+                    ->join('answer_choice_categories as c', 'b.answer_choice_category_id', '=', 'c.id')
+                    ->select('c.name')
+                    ->where('a.questionnaire_respondent_id', $respondentId) // 17
+                    ->where('a.questionnaire_question_id', $questionItem->id) // 104
                     ->first();
 
-                // berlasi ke tabel  answer_choice_categories untuk mendapatkan keterangan jawaban (Ya/Tidak/...);
-                foreach ($questionChoice as $questionChoiceItem) {
-                    $answerChoice = DB::table('answer_choice_categories')
-                        ->select('name')
-                        ->where('id', $questionChoiceItem)
-                        ->first();
-                }
+                $resultAnsewrs[] = [
+                    'number' => $questionItem->number,
+                    'question' => $questionItem->desc,
+                    'answer' => $answer->name ?? ''
+                ];
+
             }
+
+
 
             $results[] = [
                 'title' => $titleItem->name,
-                'questions' => $answer,
+                'questions' => $resultAnsewrs,
+                // 'answer' => $answer,
             ];
         }
 
+        $noTitle = 1;
+        $noQuestion = 1;
+
+
         // dd('results', $results);
 
-        dd('tabel pertanyan: ', $question, 'tabel answer: ', $answer, $questionChoice, $answerChoice);
+        // dd('tabel pertanyan: ', $question, 'tabel answer: ', $answer, $questionItem->id);
 
-        return view('pages.admin.questionnaire_respondent.detail');
+        return view('pages.admin.questionnaire_respondent.detail', compact('results','noTitle','noQuestion'));
     }
 
     public function dataAnswerRespondent(Request $request, $id)
