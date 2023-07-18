@@ -40,6 +40,15 @@ class MemberController extends Controller
         return response()->json($members);
     }
 
+    public function getSearchMemberByNiktype()
+    {
+        $data = request()->data;
+
+        $memberModel = new User();
+        $members    = $memberModel->getSearchNikBytype($data);
+        return response()->json($members);
+    }
+
     public function getSearchMemberForCaleg()
     {
         $data = request()->data;

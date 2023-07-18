@@ -27,7 +27,9 @@ let table = $("#data").DataTable({
             targets: 1,
             sortable: true,
             render: function (data, type, row, meta) {
-                return `<span>${row.number_of_respondent}</span>`;
+                return `
+                <span>${row.number_of_respondent}</span>
+                `;
             }
             
         },
@@ -36,7 +38,7 @@ let table = $("#data").DataTable({
             sortable: true,
             render: function (data, type, row, meta) {
                 return `
-                <a class="btn btn-sm btn-primary" href="/admin/questionnaire/respondent/${row.id}">Responden</a>
+                <a href="/admin/respondent/${row.id}" class="btn btn-sm btn-sc-primary text-light">Responden</a>
                 <a class="btn btn-sm btn-primary" href="/admin/questionnaire/detail/${row.id}">Detail</a>
                 <a class="btn btn-sm btn-sc-primary text-white fa fa-pencil" href="/admin/questionnaire/edit/${row.id}"></a>
                 <button type="button" class="btn btn-sm btn-danger fa fa-trash" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"></button>

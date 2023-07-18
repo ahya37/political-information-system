@@ -30,6 +30,12 @@ class QuestionnaireTitle extends Model
         $sql = "INSERT INTO questionnaire_titles (questionnaire_id, name,created_by,created_at) VALUES('$id', '$nama','$userId','$tanggal')";
         return $data = DB::insert($sql);
     }
+
+    public function getQuestionnaireTitelByQuestiaonnaireId($id){
+
+       $sql = DB::table('questionnaire_titles')->select('id','name')->where('questionnaire_id', $id)->get();
+       return $sql;
+    }
 }
 
 
