@@ -21,7 +21,7 @@
                                             <h5>Responden :</h5>
                                             <div class="form-group">
                                                 <label>NIK</label>
-                                                <input type="number" name="nik" required
+                                                <input type="number" name="nik" required 
                                                     class="form-control {{ $errors->has('nik') ? ' is-invalid' : '' }}"  value="{{ old('nik') }}"/>
 
                                                 @if ($errors->has('nik'))
@@ -99,6 +99,8 @@
                                                             <label class="">{{ $noq++ }}. {{ $q['questions'] }}</label>
                                                             @else 
                                                             <label class="">{{ $noq++ }}. {!! $q['questions'] !!}</label>
+                                                            {{-- tambahkan input text untuk menampung id pertanyaan --}}
+                                                            <input type="hidden" name="type[]" value="{{ $q['type'] }}" />
                                                             @endif
                                                             @if (count($q['answerChoices']) > 0)
                                                             <ul class="list-group">
@@ -109,7 +111,8 @@
                                                                     @endforeach
                                                             </ul>
                                                             @else
-                                                                <input type="text" class="form-control" name="essay[]" />
+                                                                <input type="text" class="form-control" name="essay[]" value="" />
+                                                                <input type="hidden" name="id[]" value="{{ $q['id'] }}">
                                                             @endif
                                                         </div>
                                                     @endforeach

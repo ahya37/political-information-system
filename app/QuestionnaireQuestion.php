@@ -44,6 +44,11 @@ class QuestionnaireQuestion extends Model
         return DB::insert($sql);
     }
 
+    public function insertEssay($type){
+        $sql = "INSERT INTO questionnaire_answer_essay () VALUES()";
+        return $sql;
+    }
+
 
     public function updateData($id,$desc,$userId,$date,$number){
         $sql = "UPDATE questionnaire_questions SET `desc`='$desc', number='$number', updated_at='$date', updated_by='$userId' WHERE id=$id";
