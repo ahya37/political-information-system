@@ -226,7 +226,7 @@ class QuestionnaireQuestionController extends Controller
                 $model->insertDataAnswer($questionnaireQuestions, $value, $date, $userId);
             }
 
-            dd($answer);
+            // dd($answer);
 
             DB::commit();
             return redirect()->route('admin-questionnairequestion-index', ['id' => $id])->with(['success' => 'Pertanyaan Kuisioner Telah Ditambahkan']);

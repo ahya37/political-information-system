@@ -24,7 +24,6 @@ class QuestionnaireAnswer extends Model
         return $sql;
     }
 
-<<<<<<< HEAD
     public function getAnswerEssay($respondentId){
         $query = DB::table('questionnaire_answer_essay AS a')
         ->join('questionnaire_questions AS b', 'a.questionnaire_question_id', '=', 'b.id')
@@ -35,11 +34,9 @@ class QuestionnaireAnswer extends Model
         return $query;
     }
   
-    public function data($id){
-=======
     public function data($id)
     {
->>>>>>> d03d9ebc3c39813035b68b62dff71dcf36095435
+
         $sql = "SELECT a.answer_choice_category_id, a.number, b.name FROM questionnaire_answer_choices AS a JOIN answer_choice_categories AS b ON a.number = b.id WHERE questionnaire_question_id = $id ";
         return DB::select($sql);
     }

@@ -102,6 +102,7 @@ class AnswerCategoryController extends Controller
         $model = new AnswerChoiceCategory();
         $data = $model->editData($id);
 
+
         return view('pages.admin.answer_choice_categories.edit', compact('data'));
     }
 
