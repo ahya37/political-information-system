@@ -53,6 +53,8 @@ class QuestionnaireRespondentController extends Controller
 
     public function detail($id, $respondentId)
     {
+
+
         $QuestionnaireTitle = new QuestionnaireTitle();
         $data               = $QuestionnaireTitle->getQuestionnaireTitelByQuestiaonnaireId($id);
 
@@ -68,7 +70,7 @@ class QuestionnaireRespondentController extends Controller
 
             $resultAnsewrs = [];
             foreach ($question as $questionItem) {
-                $answer = $QuestionnaireAnswer->getDataAnswerByRespondentIdAndQuesttionnaireId($respondentId, $questionItem->id);
+                $answer = $QuestionnaireAnswer->getDataAnswerByRespondentIdAndQuestionnaireId($respondentId, $questionItem->id);
 
                 $resultAnsewrs[] = [
                     'number' => $questionItem->number,
@@ -78,6 +80,7 @@ class QuestionnaireRespondentController extends Controller
 
             }
 
+
             $results[] = [
                 'title' => $titleItem->name,
                 'questions' => $resultAnsewrs,
@@ -86,9 +89,9 @@ class QuestionnaireRespondentController extends Controller
         
 
         $noTitle = 1;
-        $noQuestion = 1;
 
-        return view('pages.admin.questionnaire_respondent.detail', compact('results','noTitle','noQuestion'));
+
+        return view('pages.admin.questionnaire_respondent.detail', compact('results','noTitle'));
     }
 
     public function dataAnswerRespondent(Request $request, $id)

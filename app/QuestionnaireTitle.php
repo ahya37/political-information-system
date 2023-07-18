@@ -33,9 +33,9 @@ class QuestionnaireTitle extends Model
 
     public function getQuestionnaireTitelByQuestiaonnaireId($id){
 
-        $sql = DB::table('questionnaire_titles')->select('id','name')->where('questionnaire_id', $id)->get();
-        return $sql;
-     }
+       $sql = DB::table('questionnaire_titles')->select('id','name')->where('questionnaire_id', $id)->get();
+       return $sql;
+    }
 }
 
 

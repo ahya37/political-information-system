@@ -39,6 +39,13 @@
                                     <td>{{ $item->answer }}</td>
                                 </tr>
                             @endforeach
+                            @foreach ($essay as $data)
+                              <tr>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $data->question }}</td>
+                                <td>{{ $data->answer }}</td>
+                              </tr>
+                            @endforeach
                           </tbody>
                         </table>
                         </div>
@@ -53,7 +60,7 @@
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
+{{-- <script>
     $('#data').DataTable();
-</script>
+</script> --}}
 @endpush

@@ -26,10 +26,15 @@ class LoginController extends Controller
 
         $auth = $request->only('email','password');
         $auth['status'] = 1; #yg bisa login hanya status 1 (aktiv)
+
+        $admin = DB::table('admins')->where('email', $request->email);
+
+        $checkAdmin = $admin->count();
+        if($checkAdmin == 0) return redirect()->back()->with(['error' => 'Email / Password Salah']); 
         
         #update remember_token
         $remember_token = Hash::make(md5(time().$request->password));
-        DB::table('admins')->where('email', $request->email)->update(['remember_token' => $remember_token]);
+        $admin->update(['remember_token' => $remember_token]);
 
         #save token ke tabel token_management
         // HandleToken::storeToken($remember_token);
@@ -39,11 +44,12 @@ class LoginController extends Controller
 
 
             return redirect()->intended(route('admin-dashboard'));
+
+        }else{
+
+            return redirect()->back()->with(['error' => 'Email / Password Salah']);
         }
 
-
-
-        return redirect()->back()->with(['error' => 'Email / Passwords Salah']);
         
     }
 
