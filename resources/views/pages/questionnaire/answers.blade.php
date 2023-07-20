@@ -19,7 +19,6 @@
                 
                 <div class="row">
                   <div class="col-12">
-                    @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
                        <div class="table-responsive">
@@ -38,18 +37,27 @@
                                     <td>{{ $item->question }}</td>
                                     <td>{{ $item->answer }}</td>
                                 </tr>
+<<<<<<< HEAD
                                 @endforeach
+=======
+                            @endforeach
+>>>>>>> 6b5804a0a8244be774f7cdd838d8f9f7a6a83c10
                           </tbody>
                         </table>
                         </div>
                       </div>
                     </div>
                   </div>
+<<<<<<< HEAD
                 </div>
 
                 <div class="row">
                   <div class="col-12">
                     @include('layouts.message')
+=======
+				  
+				  <div class="col-12">
+>>>>>>> 6b5804a0a8244be774f7cdd838d8f9f7a6a83c10
                     <div class="card">
                       <div class="card-body">
                        <div class="table-responsive">
@@ -64,8 +72,13 @@
                           <tbody>
                             @foreach ($essay as $data)
                               <tr>
+<<<<<<< HEAD
                                 <td>{{ $data->number }}</td>
                                 <td>{{ $data->question }}</td>
+=======
+                                <td>{{ $no++ }}</td>
+                                <td>{!! $data->question !!}</td>
+>>>>>>> 6b5804a0a8244be774f7cdd838d8f9f7a6a83c10
                                 <td>{{ $data->answer }}</td>
                               </tr>
                             @endforeach
@@ -75,6 +88,7 @@
                       </div>
                     </div>
                   </div>
+				  
                 </div>
               </div>
             </div>

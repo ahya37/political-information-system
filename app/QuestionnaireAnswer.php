@@ -36,6 +36,7 @@ class QuestionnaireAnswer extends Model
   
     public function data($id)
     {
+
         $sql = "SELECT a.answer_choice_category_id, a.number, b.name FROM questionnaire_answer_choices AS a JOIN answer_choice_categories AS b ON a.number = b.id WHERE questionnaire_question_id = $id ";
         return DB::select($sql);
     }
