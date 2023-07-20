@@ -34,14 +34,37 @@
                           <tbody>
                             @foreach ($answers as $item)
                                 <tr>
-                                    <td>{{ $no++ }}</td>
+                                    <td>{{ $item->number }}</td>
                                     <td>{{ $item->question }}</td>
                                     <td>{{ $item->answer }}</td>
                                 </tr>
-                            @endforeach
+                                @endforeach
+                          </tbody>
+                        </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12">
+                    @include('layouts.message')
+                    <div class="card">
+                      <div class="card-body">
+                       <div class="table-responsive">
+                        <table id="data" class="table table-sm table-striped" width="100%">
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th scope="col">Pertanyaan</th>
+                              <th scope="col">Jawaban</th>
+                            </tr>
+                          </thead>
+                          <tbody>
                             @foreach ($essay as $data)
                               <tr>
-                                <td>{{ $no++ }}</td>
+                                <td>{{ $data->number }}</td>
                                 <td>{{ $data->question }}</td>
                                 <td>{{ $data->answer }}</td>
                               </tr>

@@ -213,9 +213,10 @@ class QuestionnaireController extends Controller
 
         // get jawaban pilihan ganda
         $answers = $questionnaireAnswerModel->getDataAnswerByRespondentId($respondentId);
+        
+        // get jawaban essay
         $essay = $questionnaireAnswerModel->getAnswerEssay($respondentId);
 
-        // get jawaban essay
 
         //dd($answers);
 
