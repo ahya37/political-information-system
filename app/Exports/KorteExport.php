@@ -30,7 +30,8 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
 
 
 
-        $data    = DB::table('org_diagram_rt as a')->select('b.id','a.name','a.base','a.title','a.rt','b.gender','c.name as village','d.name as district')
+        $data    = DB::table('org_diagram_rt as a')
+                    ->select('b.id','a.name','a.base','a.title','a.rt','b.gender','c.name as village','d.name as district','a.telp')
                     ->join('users as b','a.nik','=','b.nik')
                     ->join('villages as c','a.village_id','=','c.id')
                     ->join('districts as d','a.district_id','=','d.id')
@@ -55,6 +56,7 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
                 'jk' => $value->gender == 1 ? 'P' : 'L',
                 'rt' => $value->rt,
                 'title' => $value->base == 'KORDES' ? $value->title : $value->base,
+                'telp' => $value->telp,
                 'village' => $value->village,
                 'district' => $value->district,
                 'desc' => ""
@@ -73,6 +75,7 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
             'JENIS KELAMIN',
             'RT',
             'JABATAN',
+            'NO.HP',
             'DESA',
             'KECAMATAN',
             'KETERANGAN'
@@ -84,12 +87,15 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
             AfterSheet::class => function (AfterSheet $event) {
                 
                 // $event->sheet->getDelegate()->getRowDimension('2')->setRowHeight(40);
+                $event->sheet->getDelegate()->getColumnDimension('A')->setAutoSize(true);
                 $event->sheet->getDelegate()->getColumnDimension('B')->setAutoSize(true);
                 $event->sheet->getDelegate()->getColumnDimension('C')->setAutoSize(true);
                 $event->sheet->getDelegate()->getColumnDimension('D')->setAutoSize(true);
                 $event->sheet->getDelegate()->getColumnDimension('E')->setAutoSize(true);
                 $event->sheet->getDelegate()->getColumnDimension('F')->setAutoSize(true);
                 $event->sheet->getDelegate()->getColumnDimension('G')->setAutoSize(true);
+                $event->sheet->getDelegate()->getColumnDimension('H')->setAutoSize(true);
+                $event->sheet->getDelegate()->getColumnDimension('I')->setAutoSize(true);
 
                 $event->sheet->getStyle('A1:H1')->applyFromArray([
                     'font' => [
