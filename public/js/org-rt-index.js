@@ -376,23 +376,39 @@ let table = $("#data").DataTable({
         {
             targets: 7,
             render: function (data, type, row, meta) {
-                // return `<a href='/admin/struktur/rt/add/anggota/${row.idx}' class='btn btn-sm btn-sc-primary text-white'>Anggota</a>`;
-                // <button type="button" class="btn btn-sm btn-info" onclick="onEdit(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-edit"></i></button>
-                return `
-                        <a class="btn btn-sm btn-sc-primary text-white" href="/admin/struktur/rt/create/anggota/${row.idx}">+ Anggota</a>
-                        <a class="btn btn-sm btn-sc-primary text-white" href="/admin/struktur/rt/detail/anggota/${row.idx}">Detail Anggota</a>
-                        <a class="btn btn-sm btn-warning" href="/admin/struktur/rt/edittps/${row.id}">Edit TPS</a>
-                        <a class="btn btn-sm btn-info text-white" href="/admin/struktur/rt/edit/${row.id}">Edit</a>
-                        <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>
-                        `
+                return `<div class="btn-group">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown" aria-haspopup="true">...</button>
+                            <div class="dropdown-menu">
+                                <a href='/admin/struktur/rt/create/anggota/${row.idx}' class="dropdown-item">
+                                    Tambah Anggota
+                                </a>
+                                <a href='/admin/struktur/rt/detail/anggota/${row.idx}' class="dropdown-item ">
+                                Detail Anggota
+                                </a>
+                                <a href='/admin/struktur/rt/detail/anggota/download/${row.idx}' class="dropdown-item ">
+                                Download Anggota
+                                </a>
+                                <a href='/admin/struktur/rt/edittps/${row.id}' class="dropdown-item ">
+                                Edit TPS
+                                </a>
+                                <a href='/admin/struktur/rt/edit/${row.id}' class="dropdown-item ">
+                                Edit
+                                </a>
+                                <button type="button" data-toggle="modal" onclick="onDelete(this)" data-id="${row.id}" class="dropdown-item btn btn-sm btn-danger text-danger">
+                                Hapus
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
             },
         },
     ],
 });
 
 $('#exampleModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) 
-    var recipient = button.data('whatever') 
+    var button = $(event.relatedTarget)
+    var recipient = button.data('whatever')
     var modal = $(this)
     modal.find('.modal-body input[name="pidx"]').val(recipient)
 });

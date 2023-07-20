@@ -17,6 +17,7 @@ use Maatwebsite\Excel\Excel;
 use App\Exports\KorDesExport;
 use App\Exports\KorCamExport;
 use App\Exports\KorteExport;
+use App\Exports\KorteMembersExport;
 
 class OrgDiagramController extends Controller
 {
@@ -1406,15 +1407,22 @@ class OrgDiagramController extends Controller
                 ->where('idx', $idx)
                 ->first();
 
-        $data = DB::table('org_diagram_rt as a')
-                    ->select('a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','a.base','a.id')
-                    ->join('users as b','b.nik','=','a.nik')
-                    ->where('pidx', $idx)
-                    ->get();
+       return view('pages.admin.strukturorg.rt.detailanggota', compact('kor_rt'));
 
-        $no = 1;
+    }
 
-       return view('pages.admin.strukturorg.rt.detailanggota', compact('data','no','kor_rt'));
+    public function downloadMembersRt($idx) {
+
+        $kor_rt = DB::table('org_diagram_rt as a')
+                ->select('a.rt','a.name','c.name as village','d.name as district')
+                ->join('users as b','b.nik','=','a.nik')
+                ->join('villages as c','c.id','=','a.village_id')
+                ->join('districts as d','d.id','=','a.district_id')
+                ->where('idx', $idx)
+                ->first();
+        
+        $title = 'ANGGOTA KORTE : '. $kor_rt->name. ' RT ('.$kor_rt->rt.'), DS.'.$kor_rt->village.', KEC.'.$kor_rt->district.'.xls';
+        return $this->excel->download(new KorteMembersExport($idx), $title);
 
     }
 
@@ -1430,7 +1438,7 @@ class OrgDiagramController extends Controller
 
         $data = DB::table('org_diagram_rt as a')
                     ->select('a.id','a.idx','a.village_id','a.rt','a.rw','b.address','a.title','a.nik','a.name','b.photo','a.telp as phone_number','a.base','a.id','c.name as village','d.name as district')
-                    ->join('users as b','b.nik','=','a.nik')
+                    ->leftJoin('users as b','b.nik','=','a.nik')
                     ->join('villages as c','c.id','=','a.village_id')
                     ->join('districts as d','d.id','=','a.district_id')
                     ->where('pidx', $request->idx);

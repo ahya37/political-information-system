@@ -446,6 +446,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/rt/add/update/{id}','OrgDiagramController@updateAnggotaByKorRT')->name('admin-struktur-organisasi-rt-anggota-update');
             Route::post('/rt/update/{id}','OrgDiagramController@updateKorRT')->name('admin-struktur-organisasi-rt-update');
             Route::get('/rt/detail/anggota/{idx}','OrgDiagramController@detailAnggotaByKorRT')->name('admin-struktur-organisasi-rt-detail-anggota');
+            Route::get('/rt/detail/anggota/download/{idx}','OrgDiagramController@downloadMembersRt')->name('admin-struktur-organisasi-rt-detail-anggota-download');
             Route::get('/district','OrgDiagramController@indexOrgDistrict')->name('admin-struktur-organisasi-district-index');
             Route::get('/district/create','OrgDiagramController@createOrgDistrict')->name('admin-struktur-organisasi-district-create');
             Route::post('/district/save','OrgDiagramController@saveOrgDistrict')->name('admin-struktur-organisasi-district-save');

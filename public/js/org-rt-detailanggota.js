@@ -2,7 +2,7 @@ const url = window.location.pathname;
 const idx = url.substring(url.lastIndexOf('/') + 1);
 
 let table = $("#data").DataTable({
-    pageLength: 10,
+    pageLength: 100,
 
     bLengthChange: true,
     bFilter: true,
