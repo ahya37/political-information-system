@@ -134,10 +134,19 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
 
                 // Buat jumlah Korte RT (nomor RT) : (jumlah korte) orang/ anggota = jumlah anggota dari semua korte yg ada di RT tersebut
                     // get data korte berdasarkan desa
-
+					
+					 // join kan dengan user untuk get nama
                     $kortes = DB::table('org_diagram_rt as a')
                                 ->select('a.village_id','rt', DB::raw('count(a.id) as jml_korte'),
-                                    DB::raw("(select count(id) from org_diagram_rt where village_id = a.village_id and rt = a.rt and base = 'ANGGOTA' group by rt) as jml_members"))
+									// joinkan dengan user by nik = nik untuk menghitung hanya data yang tersedia sebagai anggota
+                                    DB::raw("(
+												select count(tb1.id) from org_diagram_rt as tb1
+												left join users as tb2 on tb1.nik = tb2.nik
+												where tb1.village_id = a.village_id and tb1.rt = a.rt and tb1.base = 'ANGGOTA' 
+												group by tb1.rt
+											 ) as jml_members"
+											)
+										)
                                 ->where('base','KORRT')
                                 ->where('village_id', $this->villageid)
                                 ->groupBy('a.village_id','a.rt')
