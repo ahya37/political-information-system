@@ -39,6 +39,7 @@ use App\Exports\MemberByInputerInDistrict;
 use App\Exports\MemberByReferalInDistrict;
 use App\Exports\MemberPotensialReferalByDistrict;
 use App\Exports\MemberPotensialUpperByDistrictUpper;
+use App\Helpers\DeleteNikOrg;
 use App\Helpers\UpdateNikOrg;
 use App\TmpSpamUser;
 
@@ -313,6 +314,7 @@ class MemberController extends Controller
         try {
 
             $user = User::where('id', $id)->first();
+            $oldNik = $user->nik;
     
             #save ke tb tmp_spam_user
             TmpSpamUser::create([
@@ -355,6 +357,8 @@ class MemberController extends Controller
 
             #delete di tb users sebagai anggota
             $user->delete();
+
+            DeleteNikOrg::delete($oldNik);
 
             DB::commit();
     
@@ -1193,6 +1197,7 @@ class MemberController extends Controller
 
     public function spamMember(Request $request){
 
+        DB::beginTransaction();
         try {
             
             #jika duplikat
@@ -1209,11 +1214,9 @@ class MemberController extends Controller
                 $this->setStoreSpamMember($user,$originaluser,$request, $category_inactive_member);
                 
                 #delete di tb users sebagai anggota
-                $user->delete(); 
+                DeleteNikOrg::delete($user->nik);
+                $user->delete();
 
-               
-                DB::commit();
-                return redirect()->back()->with(['success' => 'Anggota disimpan sebagai spam!']);
 
             }else{
 
@@ -1222,10 +1225,13 @@ class MemberController extends Controller
                  $this->setStoreSpamMember($user,null,$request,null);
                  
                  #delete di tb users sebagai anggota
-                 $user->delete(); 
-                 DB::commit();
-                 return redirect()->back()->with(['success' => 'Anggota disimpan sebagai spam!']);
+                 DeleteNikOrg::delete($user->nik);
+                 $user->delete();
             }
+
+
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Anggota disimpan sebagai spam!']);
 
 
         } catch (\Exception $e) {
