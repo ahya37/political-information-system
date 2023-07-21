@@ -35,7 +35,11 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
                     ->join('users as b','a.nik','=','b.nik')
                     ->join('villages as c','a.village_id','=','c.id')
                     ->join('districts as d','a.district_id','=','d.id')
-                    ->where('a.village_id', $village_id)->whereNotNull('a.nik')->where('a.base','KORRT')->orderBy('a.rt','asc')->get();
+                    ->where('a.village_id', $village_id)
+                    ->whereNotNull('a.nik')
+                    ->where('a.base','KORRT')
+                    ->orderBy('a.rt','asc')
+                    ->get();
 
         // $data    = $village->merge($rt); #merge kedua array
 
@@ -49,14 +53,14 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
 
             // $desc = '';
             // if ($member >= 25) $desc = 'ANGGOTA POTENSIAL REFERAL'; 
-            $count_members = DB::table('org_diagram_rt as a')->where('pidx', $value->idx)->where('base','ANGGOTA')->count();
+            $count_members = DB::table('org_diagram_rt')->where('pidx', $value->idx)->where('base','ANGGOTA')->count();
 
             $results[] = [
                 'no' => $no++,
                 'name' => $value->name,
                 'jk' => $value->gender == 1 ? 'P' : 'L',
                 'rt' => $value->rt,
-                'title' => $value->base == 'KORDES' ? $value->title : $value->base,
+                'title' => 'KORTE RT '.$value->rt,
                 'telp' => $value->telp,
                 'count_members' => $count_members,
                 'village' => $value->village,
@@ -120,6 +124,42 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
                 $event->sheet->appendRows(array(
                     array('','JUMLAH PEREMPUAN','',$total_P),
                 ), $event);
+
+                $event->sheet->appendRows(array(
+                    array(' ',' '),
+                ), $event);
+                $event->sheet->appendRows(array(
+                    array('','RINCIAN'),
+                ), $event);
+
+                // Buat jumlah Korte RT (nomor RT) : (jumlah korte) orang/ anggota = jumlah anggota dari semua korte yg ada di RT tersebut
+                    // get data korte berdasarkan desa
+
+                    $kortes = DB::table('org_diagram_rt as a')
+                                ->select('a.village_id','rt', DB::raw('count(a.id) as jml_korte'),
+                                    DB::raw("(select count(id) from org_diagram_rt where village_id = a.village_id and rt = a.rt and base = 'ANGGOTA' group by rt) as jml_members"))
+                                ->where('base','KORRT')
+                                ->where('village_id', $this->villageid)
+                                ->groupBy('a.village_id','a.rt')
+                                ->orderBy('a.rt','asc')
+                                ->get();
+
+                    // count kalkulasi anggota berdasarkan desa dan rt tersebut
+
+                    foreach ($kortes as $korte) {
+                        $event->sheet->appendRows(array(
+                            array('','KORTE RT '.$korte->rt,"$korte->jml_korte orang / anggota",'=', "$korte->jml_members orang"),
+                        ), $event);
+                    }
+
+                /**
+                 * Keterangan
+                 * RT 1 :
+                 *  - jumlah anggota = 100
+                 *  - jumlah korte   = 2
+                 *  - keterangan     = kekurangan 2 korte
+                 */
+                    
             }
         ];
     }

@@ -10,6 +10,7 @@ use App\Figure;
 use App\UserMenu;
 use App\LogEditUser;
 use App\AdminDistrict;
+use App\Helpers\UpdateNikOrg;
 use App\Models\District;
 use App\Models\Province;
 use App\Providers\StrRandom;
@@ -189,8 +190,10 @@ class UserController extends Controller
         $request->validate([
             'nik' => 'required|unique:users'
         ]);
+
         
         $user = User::where('id', $id)->first();
+        $oldNik = $user->nik;
         $id = encrypt($id);         
 
         if ($request->hasFile('photo') || $request->hasFile('ktp')) {
@@ -251,6 +254,8 @@ class UserController extends Controller
                 'address'      => strtoupper($request->address),
             ]);
         }
+
+       
 
         #jika akunnya, redireck ke dashboard akunnya sendiri
         if ($user->id == Auth::user()->id) {
@@ -609,80 +614,94 @@ class UserController extends Controller
 
     public function updateMemberRegister(Request $request, $id)
     {
-        $request->validate([
-            'nik' => 'required'
-        ]);
-
-        $cek_nik = User::select('nik')->where('nik', $request->nik)->whereNotIn('id', [$id])->count();
-
-        if ($cek_nik > 0) {            
-            return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
-        }else{
-
-            $user = User::where('id', $id)->first();
+        try {
+            $request->validate([
+                'nik' => 'required'
+            ]);
     
-            if ($request->photo != null || $request->ktp != null) {
-                // delete foto lama
-                $path = public_path();
-                if ($request->photo != null) {
-                    File::delete($path.'/storage/'.$user->photo);
-                }
-                if ($request->ktp != null) {
-                    File::delete($path.'/storage/'.$user->ktp);
-                }
+               #hitung panjang nik, harus 16
+               $cekLengthNik = strlen($request->nik);
+               if($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
     
-                $request_ktp = $request->ktp;
-                $request_photo = $request->photo;
-                $gF = new GlobalProvider();
-                $ktp = $request->ktp != null ?  $gF->cropImageKtp($request_ktp) : $user->ktp;
-                $photo = $request->photo != null ? $gF->cropImagePhoto($request_photo) : $user->photo;
+            $cek_nik = User::select('nik')->where('nik', $request->nik)->whereNotIn('id', [$id])->count();
     
-                $user->update([
-                    'nik'  => $request->nik,
-                    'name' => strtoupper($request->name),
-                    'gender' => $request->gender,
-                    'place_berth' => strtoupper($request->place_berth),
-                    'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
-                    'blood_group' => $request->blood_group,
-                    'marital_status' => $request->marital_status,
-                    'job_id' => $request->job_id,
-                    'religion' => $request->religion,
-                    'nik'  => $request->nik,
-                    'education_id'  => $request->education_id,
-                    'phone_number' => $request->phone_number,
-                    'whatsapp' => $request->whatsapp,
-                    'village_id'   => $request->village_id,
-                    'rt'           => $request->rt,
-                    'rw'           => $request->rw,
-                    'address'      => strtoupper($request->address),
-                    'photo'        => $photo,
-                    'ktp'          => $ktp
-                ]);
-    
+            if ($cek_nik > 0) {            
+                return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
             }else{
-                $user->update([
-                    'nik'  => $request->nik,
-                    'name' => strtoupper($request->name),
-                    'gender' => $request->gender,
-                    'place_berth' => strtoupper($request->place_berth),
-                    'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
-                    'blood_group' => $request->blood_group,
-                    'marital_status' => $request->marital_status,
-                    'job_id' => $request->job_id,
-                    'religion' => $request->religion,
-                    'nik'  => $request->nik,
-                    'education_id'  => $request->education_id,
-                    'phone_number' => $request->phone_number,
-                    'whatsapp' => $request->whatsapp,
-                    'village_id'   => $request->village_id,
-                    'rt'           => $request->rt,
-                    'rw'           => $request->rw,
-                    'address'      => strtoupper($request->address),
-                ]);
+    
+                $user = User::where('id', $id)->first();
+                $oldNik = $user->nik;
+        
+                if ($request->photo != null || $request->ktp != null) {
+                    // delete foto lama
+                    $path = public_path();
+                    if ($request->photo != null) {
+                        File::delete($path.'/storage/'.$user->photo);
+                    }
+                    if ($request->ktp != null) {
+                        File::delete($path.'/storage/'.$user->ktp);
+                    }
+        
+                    $request_ktp = $request->ktp;
+                    $request_photo = $request->photo;
+                    $gF = new GlobalProvider();
+                    $ktp = $request->ktp != null ?  $gF->cropImageKtp($request_ktp) : $user->ktp;
+                    $photo = $request->photo != null ? $gF->cropImagePhoto($request_photo) : $user->photo;
+        
+                    $user->update([
+                        'nik'  => $request->nik,
+                        'name' => strtoupper($request->name),
+                        'gender' => $request->gender,
+                        'place_berth' => strtoupper($request->place_berth),
+                        'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
+                        'blood_group' => $request->blood_group,
+                        'marital_status' => $request->marital_status,
+                        'job_id' => $request->job_id,
+                        'religion' => $request->religion,
+                        'education_id'  => $request->education_id,
+                        'phone_number' => $request->phone_number,
+                        'whatsapp' => $request->whatsapp,
+                        'village_id'   => $request->village_id,
+                        'rt'           => $request->rt,
+                        'rw'           => $request->rw,
+                        'address'      => strtoupper($request->address),
+                        'photo'        => $photo,
+                        'ktp'          => $ktp
+                    ]);
+        
+                }else{
+                    $user->update([
+                        'nik'  => $request->nik,
+                        'name' => strtoupper($request->name),
+                        'gender' => $request->gender,
+                        'place_berth' => strtoupper($request->place_berth),
+                        'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
+                        'blood_group' => $request->blood_group,
+                        'marital_status' => $request->marital_status,
+                        'job_id' => $request->job_id,
+                        'religion' => $request->religion,
+                        'education_id'  => $request->education_id,
+                        'phone_number' => $request->phone_number,
+                        'whatsapp' => $request->whatsapp,
+                        'village_id'   => $request->village_id,
+                        'rt'           => $request->rt,
+                        'rw'           => $request->rw,
+                        'address'      => strtoupper($request->address),
+                    ]);
+                }
+    
+                UpdateNikOrg::update($oldNik, $request->nik);
+                DB::commit();
+                return redirect()->route('member-registered-user')->with('success','Anggota telah diubah');
             }
+        } catch (\Exception $e) {
+           DB::rollBack();
+           return redirect()->back()->with(['error' => $e->getMessage()]);
         }
 
-        return redirect()->route('member-registered-user')->with('success','Anggota telah diubah');;
+        
+
+
     }
 
     public function createAccount($id)
