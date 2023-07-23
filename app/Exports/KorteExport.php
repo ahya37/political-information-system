@@ -231,13 +231,13 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
 					}
 					
 				 
-				// $event->sheet->appendRows(array(
-                    // array(' ',' '),
-                // ), $event);
+				$event->sheet->appendRows(array(
+                    array(' ',' '),
+                ), $event);
 				
-				// $event->sheet->appendRows(array(
-                    // array('','BELUM ADA KORTE')
-                // ), $event);
+				$event->sheet->appendRows(array(
+                    array('','BELUM ADA KORTE')
+                ), $event); 
 				
 				 /**
 					Belum ada korte
@@ -250,27 +250,28 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
 				 
 				 // ===================
 				// $korteIsNotYets = [];
-				// foreach($catatanKortes as $rt_org){
-						
-						// // get rt di tb users by villageid and rt dari org_diagram_rt
-						// // tampilkan data yang tidak sama dengan rt dari org_diagram_rt
-					// $rt_users = DB::table('users')->select('rt')
-									// ->where('rt','!=', $rt_org->rt)
-									// ->where('village_id', $this->villageid)
-									// ->first();
-					// $korteIsNotYets[] = [
-						// 'rt' => $rt_users->rt
-					// ];
-				// }
+				$korteIsNotYets = DB::table('users as a')
+								->select('a.rt', 
+									DB::raw("(SELECT COUNT(*) from org_diagram_rt where rt = a.rt and village_id = $this->villageid GROUP by rt) as total_korte"),
+									DB::raw("(SELECT COUNT(*) from users WHERE rt = a.rt and village_id = 3602011001) as total_member")
+									)
+								->where('a.village_id', $this->villageid)
+								->where('a.rt', '!=',0)
+								->groupBy('a.rt')
+								->get();
+				foreach($korteIsNotYets as $korteIsNotYet){
+					
+					// hitung jumlah korte yang dibutuhkan
+					$korte_needed = ceil($korteIsNotYet->total_member / 25);
+					
+					if($korteIsNotYet->total_korte == null){
+							$event->sheet->appendRows(array(
+							array('','RT '.$korteIsNotYet->rt, "Jumlah anggota = $korteIsNotYet->total_member (dibutuhkan $korte_needed korte)")
+					), $event);
+					}
+					
+				}
 				
-				// foreach($korteIsNotYets as $korteIsNotYet){
-
-					// $event->sheet->appendRows(array(
-						// array('','RT '.$korteIsNotYet['rt'])
-					// ), $event);
-				// }
-				
-                    
             }
         ];
     }
