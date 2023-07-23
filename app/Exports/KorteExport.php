@@ -128,6 +128,7 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
                 $event->sheet->appendRows(array(
                     array(' ',' '),
                 ), $event);
+				
                 $event->sheet->appendRows(array(
                     array('','RINCIAN'),
                 ), $event);
@@ -137,37 +138,138 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
 					
 					 // join kan dengan user untuk get nama
                     $kortes = DB::table('org_diagram_rt as a')
-                                ->select('a.village_id','rt', DB::raw('count(a.id) as jml_korte'),
+                                ->select('a.village_id','a.rt', DB::raw('count(a.id) as jml_korte'),
 									// joinkan dengan user by nik = nik untuk menghitung hanya data yang tersedia sebagai anggota
                                     DB::raw("(
 												select count(tb1.id) from org_diagram_rt as tb1
-												left join users as tb2 on tb1.nik = tb2.nik
+												join users as tb2 on tb1.nik = tb2.nik
 												where tb1.village_id = a.village_id and tb1.rt = a.rt and tb1.base = 'ANGGOTA' 
 												group by tb1.rt
 											 ) as jml_members"
 											)
 										)
-                                ->where('base','KORRT')
-                                ->where('village_id', $this->villageid)
+								->join('users as b','a.nik','=','b.nik')
+                                ->where('a.base','KORRT')
+                                ->where('a.village_id', $this->villageid)
                                 ->groupBy('a.village_id','a.rt')
                                 ->orderBy('a.rt','asc')
                                 ->get();
-
                     // count kalkulasi anggota berdasarkan desa dan rt tersebut
 
                     foreach ($kortes as $korte) {
                         $event->sheet->appendRows(array(
-                            array('','KORTE RT '.$korte->rt,"$korte->jml_korte orang / anggota",'=', "$korte->jml_members orang"),
+                            array('','KORTE RT '.$korte->rt,"$korte->jml_korte orang / anggota = $korte->jml_members orang"),
                         ), $event);
                     }
-
-                /**
+					
+				
+				$event->sheet->appendRows(array(
+                    array(' ',' '),
+                ), $event);
+				
+				 $event->sheet->appendRows(array(
+                    array('','CATATAN')
+                ), $event);
+				
+				$catatanKortes = DB::table('org_diagram_rt as a')
+                                ->select('a.rt','a.village_id')
+								->join('users as b','a.nik','=','b.nik')
+                                ->where('a.base','KORRT')
+                                ->where('a.village_id', $this->villageid)
+                                ->groupBy('a.rt','a.village_id')
+                                ->orderBy('a.rt','asc')
+                                ->get();
+								
+               
+				$resultsRt = [];
+				foreach($catatanKortes as $ckorte){
+					
+					// count kalkulasi anggota berdasarkan desa dan rt tersebut
+					$countMembers = DB::table('users')->where('rt', $ckorte->rt)->where('village_id', $this->villageid)->count();
+					$countKorte   = DB::table('org_diagram_rt as a')
+									->join('users as b','a.nik','=','b.nik')
+									->where('a.village_id',$this->villageid)
+									->where('a.rt', $ckorte->rt)
+									->where('a.base','KORRT')
+									->where('b.nik','!=',null)
+									->count();
+									
+									
+					$resultsRt[] = [
+						'rt' => $ckorte->rt,
+						'jml_member' => $countMembers,
+						'jml_korte_per_village' => $countKorte
+					];
+				}
+				
+				 /**
                  * Keterangan
                  * RT 1 :
                  *  - jumlah anggota = 100
                  *  - jumlah korte   = 2
                  *  - keterangan     = kekurangan 2 korte
                  */
+
+                foreach($resultsRt as $ckorte) {
+					
+						// hitung kurang korte
+						/**
+						  max anggota = 25
+						  kekurangan_korte = jml_members / max anggota
+						*/
+						$max_anggota      = 25;
+						$kekurangan_korte = ceil($ckorte['jml_member'] / $max_anggota);
+						$kekurangan_korte = $kekurangan_korte - $ckorte['jml_korte_per_village'];
+						
+                        $event->sheet->appendRows(array(
+                            array('','RT '.$ckorte['rt']),
+                            array('','Jumlah Anggota',$ckorte['jml_member']),
+                            array('','Jumlah Korte',$ckorte['jml_korte_per_village']),
+                            array('','Keterangan',"Kurang korte $kekurangan_korte"),
+                            array(' ',' '),
+                        ), $event);
+					}
+					
+				 
+				// $event->sheet->appendRows(array(
+                    // array(' ',' '),
+                // ), $event);
+				
+				// $event->sheet->appendRows(array(
+                    // array('','BELUM ADA KORTE')
+                // ), $event);
+				
+				 /**
+					Belum ada korte
+					get rt di tb org_diagram_rt by villageid
+					
+                 */
+				 // get rt di tb org_diagram_rt by villageid
+				
+				 // get rt mana saja yang belum ada korte nya
+				 
+				 // ===================
+				// $korteIsNotYets = [];
+				// foreach($catatanKortes as $rt_org){
+						
+						// // get rt di tb users by villageid and rt dari org_diagram_rt
+						// // tampilkan data yang tidak sama dengan rt dari org_diagram_rt
+					// $rt_users = DB::table('users')->select('rt')
+									// ->where('rt','!=', $rt_org->rt)
+									// ->where('village_id', $this->villageid)
+									// ->first();
+					// $korteIsNotYets[] = [
+						// 'rt' => $rt_users->rt
+					// ];
+				// }
+				
+				// foreach($korteIsNotYets as $korteIsNotYet){
+
+					// $event->sheet->appendRows(array(
+						// array('','RT '.$korteIsNotYet['rt'])
+					// ), $event);
+				// }
+				
                     
             }
         ];
