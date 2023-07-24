@@ -58,14 +58,14 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
             $results[] = [
                 'no' => $no++,
                 'name' => $value->name,
-                'jk' => $value->gender == 1 ? 'P' : 'L',
-                'rt' => $value->rt,
+                // 'jk' => $value->gender == 1 ? 'P' : 'L',
+                // 'rt' => $value->rt,
                 'title' => 'KORTE RT '.$value->rt,
-                'telp' => $value->telp,
+                // 'telp' => $value->telp,
                 'count_members' => $count_members,
-                'village' => $value->village,
-                'district' => $value->district,
-                'desc' => ""
+                // 'village' => $value->village,
+                // 'district' => $value->district,
+                // 'desc' => ""
             ];
         }
 
@@ -78,14 +78,14 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
         return [
             'NO',
             'NAMA',
-            'JENIS KELAMIN',
-            'RT',
+            // 'JENIS KELAMIN',
+            // 'RT',
             'JABATAN',
-            'NO.HP',
+            // 'NO.HP',
             'JUMLAH ANGGOTA',
-            'DESA',
-            'KECAMATAN',
-            'KETERANGAN'
+            // 'DESA',
+            // 'KECAMATAN',
+            // 'KETERANGAN'
         ];
     }
     public function registerEvents(): array
@@ -111,19 +111,19 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
                     ]
                 ]);
 
-                $data = $this->collection()->where('jk','L');
-                $total_L = collect($data)->count();
+                // $data = $this->collection()->where('jk','L');
+                // $total_L = collect($data)->count();
 
-                $event->sheet->appendRows(array(
-                    array('','JUMLAH LAKI','',$total_L),
-                ), $event);
+                // $event->sheet->appendRows(array(
+                    // array('','JUMLAH LAKI','',$total_L),
+                // ), $event);
                 
-                $data2 = $this->collection()->where('jk','P');
-                $total_P = collect($data2)->count();
+                // $data2 = $this->collection()->where('jk','P');
+                // $total_P = collect($data2)->count();
 
-                $event->sheet->appendRows(array(
-                    array('','JUMLAH PEREMPUAN','',$total_P),
-                ), $event);
+                // $event->sheet->appendRows(array(
+                    // array('','JUMLAH PEREMPUAN','',$total_P),
+                // ), $event);
 
                 $event->sheet->appendRows(array(
                     array(' ',' '),

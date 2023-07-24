@@ -2373,7 +2373,7 @@ public function updateTpsMember(Request $request, $id){
     DB::table('users')->where('nik', $nik)->update(['tps_id' => $request->tpsid]);
     return redirect()->route('admin-struktur-organisasi-rt-detail-anggota', ['idx' => $org->pidx])->with(['success' => 'TPS anggota berhasil tersimpan!']);
 
-}
+} 
 
 
 }
