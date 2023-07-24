@@ -2286,14 +2286,62 @@ public function reportExcel(Request $request){
 }
 
 public function reportOrgRTExcel(Request $request){
-
-    $village_id  = $request->village_id;
-
-    // dd([$dapil_id, $district_id, $village_id, $rt]);
-
-    #report by desa       
-    $village = DB::table('villages')->select('name')->where('id', $village_id)->first();
-    return $this->excel->download(new KorteExport($village_id), 'TIM KOORDINATOR RT '.$village->name.'.xls');
+	
+	$village_id  = $request->village_id;
+	
+	if($request->report_type == 'Download PDF'){
+		
+		// get data kordes by village_id untuk absensi
+		
+		$kordes = DB::table('org_diagram_village as a')
+				  ->select('b.name')
+				  ->join('users as b','a.nik','=','b.nik')
+				  ->where('a.village_id', $village_id)
+				  ->get();
+				  
+		 
+		// get data korte by village_id untuk absensi
+		$korte    = DB::table('org_diagram_rt as a')
+                    ->select('b.id','b.name','a.base','a.title','a.rt','b.gender','idx',
+							DB::raw('(select count(*) from org_diagram_rt where pidx = a.idx and base = "ANGGOTA") as total_members ')
+							)
+                    ->join('users as b','a.nik','=','b.nik')
+                    ->where('a.village_id', $village_id)
+                    ->whereNotNull('a.nik')
+                    ->where('a.base','KORRT')
+                    ->orderBy('a.rt','asc')
+                    ->get();
+		
+		// get data anggota by korte and by village_id;
+		// $resultsMemberByKorte = [];
+		// foreach($korte as $item){
+			
+			// //get members by korte
+			// $members = DB::table('org_diagram_rt')->where('pidx', $item->idx)->where('base','ANGGOTA')->get();
+			
+			// $resultsMemberByKorte[] = [
+				// 'korte' => $item->name,
+				// 'rt' => $item->rt,
+				// 'members' => $members;
+			// ];
+		// }
+		
+		$results = [
+			'kordes' => $kordes,
+			'korte' => $korte,
+			// 'resultsMemberByKorte' => $resultsMemberByKorte
+		];
+		
+		dd($results); 		
+		
+	}else{
+		
+		#report by desa       
+		$village = DB::table('villages')->select('name')->where('id', $village_id)->first();
+		return $this->excel->download(new KorteExport($village_id), 'TIM KOORDINATOR RT '.$village->name.'.xls');
+		
+	}
+    
 
 }
 
@@ -2373,7 +2421,7 @@ public function updateTpsMember(Request $request, $id){
     DB::table('users')->where('nik', $nik)->update(['tps_id' => $request->tpsid]);
     return redirect()->route('admin-struktur-organisasi-rt-detail-anggota', ['idx' => $org->pidx])->with(['success' => 'TPS anggota berhasil tersimpan!']);
 
-} 
+}
 
 
 }

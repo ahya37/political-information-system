@@ -132,6 +132,7 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
                 $event->sheet->appendRows(array(
                     array('','RINCIAN'),
                 ), $event);
+				
 
                 // Buat jumlah Korte RT (nomor RT) : (jumlah korte) orang/ anggota = jumlah anggota dari semua korte yg ada di RT tersebut
                     // get data korte berdasarkan desa
@@ -194,13 +195,21 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
 									->where('b.nik','!=',null)
 									->count();
 									
-									
+					$max_anggota      = 25;
+					$kekurangan_korte = ceil($countMembers / $max_anggota);
+						
 					$resultsRt[] = [
 						'rt' => $ckorte->rt,
 						'jml_member' => $countMembers,
-						'jml_korte_per_village' => $countKorte
+						'jml_korte_per_village' => $countKorte,
+						'kekurangan_korte' => $kekurangan_korte
 					];
 				}
+				
+				// total kekurangan korte per rt 
+				$total_kekurangan_korte_per_rt = collect($resultsRt)->sum(function($q){
+					return $q['kekurangan_korte'];
+				});
 				
 				 /**
                  * Keterangan
@@ -217,15 +226,15 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
 						  max anggota = 25
 						  kekurangan_korte = jml_members / max anggota
 						*/
-						$max_anggota      = 25;
-						$kekurangan_korte = ceil($ckorte['jml_member'] / $max_anggota);
-						$kekurangan_korte = $kekurangan_korte - $ckorte['jml_korte_per_village'];
+						// $max_anggota      = 25;
+						// $kekurangan_korte = ceil($ckorte['jml_member'] / $max_anggota);
+						// $kekurangan_korte = $kekurangan_korte - $ckorte['jml_korte_per_village'];
 						
                         $event->sheet->appendRows(array(
                             array('','RT '.$ckorte['rt']),
                             array('','Jumlah Anggota',$ckorte['jml_member']),
                             array('','Jumlah Korte',$ckorte['jml_korte_per_village']),
-                            array('','Keterangan',"Kurang korte $kekurangan_korte"),
+                            array('','Keterangan','Kurang korte '.$ckorte['kekurangan_korte']),
                             array(' ',' '),
                         ), $event);
 					}
@@ -259,6 +268,8 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
 								->where('a.rt', '!=',0)
 								->groupBy('a.rt')
 								->get();
+							
+				
 				foreach($korteIsNotYets as $korteIsNotYet){
 					
 					// hitung jumlah korte yang dibutuhkan
@@ -267,10 +278,26 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
 					if($korteIsNotYet->total_korte == null){
 							$event->sheet->appendRows(array(
 							array('','RT '.$korteIsNotYet->rt, "Jumlah anggota = $korteIsNotYet->total_member (dibutuhkan $korte_needed korte)")
-					), $event);
-					}
+						), $event);
+				 	}
 					
 				}
+				
+				$total_kekurangan_korte_belum_ada = collect($korteIsNotYets)->sum(function($q){
+					if($q->total_korte == null) return ceil($q->total_member / 25);
+				});
+				 
+				
+				$event->sheet->appendRows(array(
+                    array(' ',' '),
+                ), $event);
+				
+				// total kekurangan rt per desa
+				$total_kekurangan_korte_per_desa = $total_kekurangan_korte_per_rt + $total_kekurangan_korte_belum_ada; 
+				
+				$event->sheet->appendRows(array(
+                    array('','TOTAL KEKURANGAN KORTE', $total_kekurangan_korte_per_desa) 
+                ), $event); 
 				
             }
         ];
