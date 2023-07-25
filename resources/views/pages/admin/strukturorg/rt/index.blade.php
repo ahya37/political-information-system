@@ -57,8 +57,9 @@
                             <a class="btn btn-sm btn-sc-primary text-white"
                                 href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
 
-                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" value="Download Excel" name="report_type">
-                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" value="Download PDF" name="report_type">
+                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" value="Download Korte Excel" name="report_type">
+                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" value="Download Korte + Anggota" name="report_type">
+                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" value="Download Korte PDF" name="report_type">
                         </div>
                     </div>
                 </form>
