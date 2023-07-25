@@ -395,7 +395,7 @@ let table = $("#data").DataTable({
                                 <a href='/admin/struktur/rt/edit/${row.id}' class="dropdown-item ">
                                 Edit
                                 </a>
-                                <button type="button" data-toggle="modal" onclick="onDelete(this)" data-id="${row.id}" class="dropdown-item btn btn-sm btn-danger text-danger">
+                                <button type="button" data-toggle="modal" onclick="onDelete(this)" data-name="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm btn-danger text-danger">
                                 Hapus
                                 </button>
                             </div>
@@ -416,6 +416,7 @@ $('#exampleModal').on('show.bs.modal', function (event) {
 async function onEdit(data) {
     const id = data.id;
     const name = data.getAttribute("data-name");
+	
 
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
@@ -468,8 +469,10 @@ async function onEdit(data) {
 }
 
 async function onDelete(data) {
-    const id = data.id;
+    // const id = data.id;
     const name = data.getAttribute("data-name");
+    const id = data.getAttribute("data-id"); 
+	
 
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     Swal.fire({

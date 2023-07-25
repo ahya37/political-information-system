@@ -202,7 +202,7 @@ class KorteExport implements FromCollection,  WithHeadings, WithEvents, ShouldAu
 						'rt' => $ckorte->rt,
 						'jml_member' => $countMembers,
 						'jml_korte_per_village' => $countKorte,
-						'kekurangan_korte' => $kekurangan_korte
+						'kekurangan_korte' => $kekurangan_korte - $countKorte
 					];
 				}
 				
