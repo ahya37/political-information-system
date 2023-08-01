@@ -53,13 +53,13 @@
                             </div>
                         </div>
                         
-                        <div class="row col-md-12">
-                            <a class="btn btn-sm btn-sc-primary text-white"
+                        <div class="col-md-12">
+                            <a class="btn btn-sm btn-sc-primary text-white mt-2"
                                 href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
-
-                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" value="Download Korte Excel" name="report_type">
-                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" value="Download Korte + Anggota" name="report_type">
-                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" value="Download Korte PDF" name="report_type">
+                            <input class="btn btn-sm btn-success text-white  mt-2" type="submit" value="Download Korte Excel" name="report_type">
+                            <input class="btn btn-sm btn-success text-white mt-2" type="submit" value="Download Korte + Anggota" name="report_type">
+							<input class="btn btn-sm btn-sc-primary text-white  mt-2" type="submit" value="Download Korte + Anggota PDF" name="report_type"> 
+							<input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit" value="Download Absensi Korte Per Desa PDF" name="report_type"> 
                         </div>
                     </div>
                 </form>

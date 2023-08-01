@@ -14,7 +14,7 @@ class KorteExportWithSheet implements WithMultipleSheets
     use Exportable;
 
     protected $kortes;
-    public function __construct($kortes)
+    public function __construct($kortes) 
     {
         $this->kortes = $kortes;
     }

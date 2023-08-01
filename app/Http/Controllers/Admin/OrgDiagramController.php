@@ -19,6 +19,11 @@ use App\Exports\KorDesExport;
 use App\Exports\KorCamExport;
 use App\Exports\KorteExport;
 use App\Exports\KorteMembersExport;
+use App\Models\Village;
+use PDF;
+use Zipper;
+use File;
+use Storage;
 
 class OrgDiagramController extends Controller
 {
@@ -1412,6 +1417,36 @@ class OrgDiagramController extends Controller
         $title = 'ANGGOTA KORTE : ' . $kor_rt->name . ' RT (' . $kor_rt->rt . '), DS.' . $kor_rt->village . ', KEC.' . $kor_rt->district . '.xls';
         return $this->excel->download(new KorteMembersExport($idx), $title);
     }
+	
+	public function downloadMembersRtPDF($idx)
+    {
+
+        $kor_rt = DB::table('org_diagram_rt as a')
+            ->select('a.base','a.rt', 'b.name','c.name as village', 'd.name as district')
+            ->join('users as b', 'b.nik', '=', 'a.nik')
+            ->join('villages as c', 'c.id', '=', 'a.village_id')
+            ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->where('a.idx', $idx)
+			->where('a.base','KORRT')
+            ->first();
+			
+		// get data anggota by korte
+		$members = DB::table('org_diagram_rt as a')
+				->select('a.base','a.rt', 'b.name','c.name as village', 'd.name as district','b.address','a.telp')
+				->join('users as b', 'b.nik', '=', 'a.nik')
+				->join('villages as c', 'c.id', '=', 'a.village_id')
+				->join('districts as d', 'd.id', '=', 'a.district_id')
+				->where('a.pidx', $idx)
+				->where('a.base','ANGGOTA')
+				->get();
+				
+		$no = 1;
+		
+		$pdf = PDF::LoadView('pages.report.memberbykorte', compact('kor_rt','members','no'))->setPaper('a4');
+		return $pdf->download('ANGGOTA KORTE RT '.$kor_rt->rt.' ('. $kor_rt->name.') DS.'.$kor_rt->village.'.pdf');
+		
+		
+    }
 
     public function getListDataAnggotaByKorRt(Request $request)
     {
@@ -2256,21 +2291,23 @@ class OrgDiagramController extends Controller
     {
 
         $village_id  = $request->village_id;
-        $village = DB::table('villages')->select('name')->where('id', $village_id)->first();
-
-        if ($request->report_type == '"Download Korte PDF') {
+        // $village = DB::table('villages')->select('name')->where('id', $village_id)->first();
+		$village = Village::with(['district'])->where('id', $village_id)->first();
+ 
+        if ($request->report_type == 'Download Korte + Anggota PDF') {
 
             // get data kordes by village_id untuk absensi
 
             $kordes = DB::table('org_diagram_village as a')
-                ->select('b.name')
+                ->select('b.name','a.title')
                 ->join('users as b', 'a.nik', '=', 'b.nik')
                 ->where('a.village_id', $village_id)
+				->orderBy('level_org','asc')
                 ->get();
 
 
             // get data korte by village_id untuk absensi
-            $korte    = DB::table('org_diagram_rt as a')
+            $kortes    = DB::table('org_diagram_rt as a')
                 ->select(
                     'b.id',
                     'b.name',
@@ -2278,7 +2315,7 @@ class OrgDiagramController extends Controller
                     'a.title',
                     'a.rt',
                     'b.gender',
-                    'idx',
+                    'a.idx',
                     DB::raw('(select count(*) from org_diagram_rt where pidx = a.idx and base = "ANGGOTA") as total_members ')
                 )
                 ->join('users as b', 'a.nik', '=', 'b.nik')
@@ -2287,28 +2324,61 @@ class OrgDiagramController extends Controller
                 ->where('a.base', 'KORRT')
                 ->orderBy('a.rt', 'asc')
                 ->get();
-
-            // get data anggota by korte and by village_id;
-            // $resultsMemberByKorte = [];
-            // foreach($korte as $item){
-
-            // //get members by korte
-            // $members = DB::table('org_diagram_rt')->where('pidx', $item->idx)->where('base','ANGGOTA')->get();
-
-            // $resultsMemberByKorte[] = [
-            // 'korte' => $item->name,
-            // 'rt' => $item->rt,
-            // 'members' => $members;
-            // ];
-            // }
-
-            $results = [
-                'kordes' => $kordes,
-                'korte' => $korte,
-                // 'resultsMemberByKorte' => $resultsMemberByKorte
-            ];
-
-            dd($results);
+			
+			
+			// buat direktori memberkorte sebanyak data korte
+			
+			$directory = public_path('/docs/pdf/ANGGOTA KORTE DS.'.$village->name);
+			
+			if(File::exists($directory)) {
+				
+				File::deleteDirectory($directory); // hapus dir nya juga
+				File::delete($directory.'.zip'); // hapus zip nya juga 
+			}
+						
+			File::makeDirectory(public_path('/docs/pdf/ANGGOTA KORTE DS.'.$village->name));
+			 
+			foreach($kortes as $korte){
+				
+				$path = '/docs/pdf/ANGGOTA KORTE DS.'.$village->name.'/';
+				
+				 //get members by korte
+				// get data anggota by korte
+				$members = DB::table('org_diagram_rt as a')
+						->select('a.base','a.rt', 'b.name','c.name as village', 'd.name as district','b.address','a.telp')
+						->join('users as b', 'b.nik', '=', 'a.nik')
+						->join('villages as c', 'c.id', '=', 'a.village_id')
+						->join('districts as d', 'd.id', '=', 'a.district_id')
+						->where('a.pidx', $korte->idx)
+						->where('a.base','ANGGOTA')
+						->get();
+				
+			
+				$no = 1;
+				
+				$fileName = 'ANGGOTA KORTE RT. '.$korte->rt.' ('.$korte->name.') DS.'.$village->name.'.pdf'; 
+				
+				$pdf = PDF::LoadView('pages.report.memberbykorte-all', compact('village','members','korte','no'))->setPaper('a4');
+				
+				$pdfFilePath = public_path('/docs/pdf/ANGGOTA KORTE DS.'.$village->name.'/'.$fileName); 
+				file_put_contents($pdfFilePath, $pdf->output());
+				
+				
+			
+			}
+			
+			
+			$files = glob(public_path('/docs/pdf/ANGGOTA KORTE DS.'.$village->name.'/*'));
+			$createZip = public_path('/docs/pdf/ANGGOTA KORTE DS.'.$village->name.'.zip');
+			Zipper::make(public_path($createZip))->add($files)->close(); 
+			
+			return response()->download(public_path($createZip)); 
+			
+			// File::deleteDirectory($directory); // hapus dir nya juga
+			// File::delete($directory.'.zip'); // hapus zip nya juga
+			
+			// return redirect()->back();
+		
         } elseif ($request->report_type == 'Download Korte + Anggota') {
 
             $kortes    = DB::table('org_diagram_rt as a')
@@ -2321,15 +2391,74 @@ class OrgDiagramController extends Controller
                 ->get();
 
                 // return $this->excel->download(new KorteExportWithSheet($kortes),'ANGGOTA PER KORTE' . $village->name . '.xls');
-                return (new KorteExportWithSheet($kortes))->download('ANGGOTA PER KORTE' . $village->name . '.xls');
+                return (new KorteExportWithSheet($kortes))->download('TIM KOORDINATOR RT + ANGGOTA' . $village->name . '.xls');
 
-        } else {
+        } elseif($request->report_type == 'Download Absensi Korte Per Desa PDF'){
+			
+			// get data kordes by village
+			$abs_kordes = DB::table('org_diagram_village')
+						->select('name','title')
+						->where('village_id', $village->id)
+						->whereNotNull('nik')
+						->orderBy('level_org','asc')
+						->get();
+						
+			// jika title ketua tidak ada maka tambahkan value array yang memiliki title kordes 
+			$kordes = [];
+			$cek_kordes = $this->searchArrayValue($abs_kordes, 'KETUA');
+			if($cek_kordes == null){
+				
+				// membuat object baru dengan collection 
+				$array_value = collect([
+				(object)[
+					'name' => '',
+					'title' => 'KETUA'
+					]
+				]);
+				
+				$sorted = $array_value->sortBy('name');
+				$sorted->values()->all();
+				$kordes = $sorted->merge($abs_kordes); // gabungkan object baru dengan collectiono yg ada 
+				
+			}else{
+				
+				$kordes = $abs_kordes;
+			}
+			
+			
+			$abs_kortes    = DB::table('org_diagram_rt as a')
+                ->select('a.name', 'a.title', 'a.rt', 'b.gender', 'a.telp','b.address')
+                ->join('users as b', 'a.nik', '=', 'b.nik')
+                ->where('a.village_id', $village_id)
+                ->whereNotNull('a.nik')
+                ->where('a.base', 'KORRT')
+                ->orderBy('a.rt', 'asc')
+                ->get();
+				
+			$no = 1;
+			
+			$pdf = PDF::LoadView('pages.report.korte', compact('village','kordes','abs_kortes','no'))->setPaper('a4');
+			return $pdf->download('ABSENSI TIM KORTE DESA '.$village->name.'.pdf');
+			
+			
+		}
 
-            #report by desa       
+		else {
+
+            #report by desa 
             
             return $this->excel->download(new KorteExport($village_id), 'TIM KOORDINATOR RT ' . $village->name . '.xls');
         }
     }
+	
+	public function searchArrayValue($data, $field){
+		
+		foreach($data as $row){
+			if($row->title == $field)
+				return $row->title; 
+		}
+	}
+	
 
     public function reportOrgDistrictExcel(Request $request)
     {

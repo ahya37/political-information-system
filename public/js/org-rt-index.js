@@ -386,8 +386,10 @@ let table = $("#data").DataTable({
                                 <a href='/admin/struktur/rt/detail/anggota/${row.idx}' class="dropdown-item ">
                                 Detail Anggota
                                 </a>
-                                <a href='/admin/struktur/rt/detail/anggota/download/${row.idx}' class="dropdown-item ">
-                                Download Anggota
+                                <a href='/admin/struktur/rt/detail/anggota/download/excel/${row.idx}' class="dropdown-item ">
+                                Download Anggota Excel
+                                </a><a href='/admin/struktur/rt/detail/anggota/download/pdf/${row.idx}' class="dropdown-item ">
+                                Download Anggota PDF
                                 </a>
                                 <a href='/admin/struktur/rt/edittps/${row.id}' class="dropdown-item ">
                                 Edit TPS
