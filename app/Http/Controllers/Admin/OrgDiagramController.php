@@ -17,7 +17,7 @@ use Maatwebsite\Excel\Excel;
 use App\Exports\KorDesExport;
 use App\Exports\KorCamExport;
 use App\Exports\KorteExport;
-
+use PDF;
 class OrgDiagramController extends Controller
 {
     public $excel;
@@ -2367,5 +2367,15 @@ public function updateTpsMember(Request $request, $id){
 
 }
 
+public function export(){
+
+    $regency = Regency::select('id','name')->where('id', 3602)->first();
+    
+    $data = PDF::loadview('pages.admin.strukturorg.rt.index', ['regency' => $regency]);
+    
+    return $data->download('laporan.pdf');
+
+
+}
 
 }

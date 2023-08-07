@@ -437,6 +437,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/rt/create/anggota/{idx}','OrgDiagramController@createOrgRTAnggota')->name('admin-struktur-organisasi-rt-create-anggota');
             Route::get('/rt/edit/anggota/{idx}','OrgDiagramController@editAnggotaOrgRT');
             Route::get('/rt/edittps/anggota/{idx}','OrgDiagramController@editTpsMember');
+            Route::get('/rt/exportLaporan', 'OrgDiagramController@export')->name('export');
             Route::get('/rt/edit/{idx}','OrgDiagramController@editOrgRT');
             Route::get('/rt/edittps/{idx}','OrgDiagramController@editTps');
             Route::post('/rt/updatetps/{idx}','OrgDiagramController@updateTps')->name('update-tps-kor');
