@@ -31,6 +31,8 @@ Route::post('getrtbyvillage', 'API\LocationController@getRTByVIllage');
 Route::post('getkampungbyvillage', 'API\LocationController@getKampungByVIllage');
 Route::post('getrtbyvillageNew', 'API\LocationController@getRTByVIllageNew');
 
+Route::post('intelegency/addElement', 'Admin\InformationController@addElementFormIntelegence');
+
 
 Route::get('selectvillage', 'API\LocationController@getVillageSelect');
 Route::get('searchvillage', 'API\LocationController@getVillageSearch');
@@ -436,3 +438,6 @@ Route::group(['middleware' => 'checkToken'], function () {
 #Questionnaire Respondent
 Route::post('/respondent/{id}', 'Admin\QuestionnaireRespondentController@getDataRespondent');
 Route::post('/respondentdetail/{id}', 'Admin\QuestionnaireRespondentController@dataAnswerRespondent');
+
+// untuk update jumlah2 yg ada di tabel excel DPT
+Route::post('/rightchoose/update/field/village','Admin\SettingController@updateFieldDPTLevelDesa')->name('admin-rightchoose-update-field-village');

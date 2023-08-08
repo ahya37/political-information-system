@@ -333,8 +333,19 @@
                 </li>
             </ul>
         </div>
-
-
+		
+		 <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/report/*') ? 'active custom-active-color' : '' }}"
+            href="#report" data-toggle="collapse" data-target="#report">
+            <span class="d-none d-sm-inline"></span>Laporan</a>
+        <div class="collapse" id="report" aria-expanded="false">
+            <ul class="flex-column pl-2 nav">
+                <li class="nav-item">
+                    <a href="{{ route('admin-report-team') }}"
+                        class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('spam') ? 'active custom-active-color' : '' }}"><span>
+                            TIM</span></a>
+                </li>
+            </ul>
+        </div>
 
 
         {{-- <a

@@ -718,7 +718,17 @@ class InformationController extends Controller
 
     }
 
-    public function  shareFormIntelegencyPolitic(){
+    public function  shareFormIntelegencyPolitic(){ 
+        
+        $figures = Figure::all();
+        $detailFigure = DetailFigure::select('idx','name')->groupBy('idx','name')->get();
+        $resourceInfo = ResourceInfo::select('id','name')->get();
+        return view('form-intelegency', compact('figures','detailFigure','resourceInfo'));
+
+    }
+	
+	public function  shareFormIntelegencyPoliticMaintenance(){
+		
         
         $figures = Figure::all();
         $detailFigure = DetailFigure::select('idx','name')->groupBy('idx','name')->get();
@@ -731,6 +741,11 @@ class InformationController extends Controller
 
         DB::beginTransaction();
         try {
+					
+			
+			// cek apakah anggota dengan kta tersebut ada
+			$checkKta = User::where('code', $request->kta)->count();
+			if($checkKta == 0) return redirect()->back()->with(['error' => 'KTA tidak terdaftar!']);
 
             $profession['professi']     = $request->profession;
             $onceserved['onceserved']   = $request->onceserved;
@@ -742,6 +757,7 @@ class InformationController extends Controller
 
             #simpan intelegensi politik
             $IntelegensiPolitik = IntelegensiPolitik::create([
+				'code_member' => $request->kta,
                 'name' => strtoupper($request->name),
                 'village_id' => $request->village_id,
                 'district_id' => $request->district_id,
@@ -803,7 +819,23 @@ class InformationController extends Controller
                     }
                 }
             }
-        
+			
+			// save to table intelegensi_politik_political_situation untuk data perkembangan situasi politik di desa masing2
+			// jika ada nama calong pesaing yang di input
+			$dataSituasiPlotik['pspesaing'] = $request->pspesaing;
+			if(count($dataSituasiPlotik['pspesaing']) > 0){
+					$pspesaing = $dataSituasiPlotik['pspesaing'];
+					foreach($pspesaing as $key => $value){
+						
+						DB::table('intelegensi_politik_political_situation')->insert([
+							'intelegensi_politik_id' => $IntelegensiPolitik->id,
+							'name' => $value,
+							'asal_partai' => $request->pspartai[$key],
+							'description' => $request->pssuporter[$key]
+						]);	
+					}
+			}
+			
             DB::commit();
 
             return view('form-intelegency-success');
@@ -863,7 +895,7 @@ class InformationController extends Controller
 
             DB::commit();
             // return $results;
-
+ 
             return 'Berhasil simpan data';
         } catch (\Exception $e) {
             DB::rollback();
@@ -871,6 +903,36 @@ class InformationController extends Controller
         }
 
 
+    }
+	
+	public function addElementFormIntelegence()
+    {
+        // Add element
+		 $html = "<div class='fieldGroup'>
+						<div class='form-group'>
+							<label class='col-sm-12 col-form-label'>Nama Calon Pesaing</label>
+								<div class='col-sm-12'>
+									<input type='text' name='pspesaing[]' placeholder='Isikan nama pesaing' class='form-control'>
+								</div>
+							</div>
+						<div class='form-group'>
+							<label class='col-sm-12 col-form-label'>Asal Partai</label>
+								<div class='col-sm-12'>
+									<input type='text'  placeholder='Isikan nama pesaing' name='pspartai[]' class='form-control'>
+								</div>
+						</div> 
+						<div class='form-group'>
+							<label class='col-sm-12 col-form-label'>Kekuatan Dukungan</label>
+							<div class='col-sm-12'>
+								<textarea name='pssuporter[]'  placeholder='Isikan keterangan berupa kekuatan dan dukungan yang dimiliki pesaing tersebut' class='form-control'></textarea>
+							</div>
+							<div class='col-sm-12 mt-2'>
+						   <button type='button' class='btn btn-danger btn-sm remove'>Batalkan</button>
+						</div>
+						</div>  
+                    </div>";
+            echo $html;
+            exit;
     }
 
 }

@@ -30,6 +30,7 @@ Route::post('/admin/dashboard/referalbymount','Admin\DashboardController@referal
 Route::post('/event/delete','EventController@delete');
 
 Route::get('/formintelegence','Admin\InformationController@shareFormIntelegencyPolitic')->name('formintelegence');
+Route::get('/formintelegences','Admin\InformationController@shareFormIntelegencyPoliticMaintenance')->name('formintelegence');
 Route::post('/saveformintelegence','Admin\InformationController@saveFormIntelegencyPolitic')->name('saveformintelegence');
 
 
@@ -165,9 +166,7 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 
 
 });
-
-
-
+		
 Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
     Route::get('/auth','LoginController@loginForm')->name('admin-login');
     Route::post('/login','LoginController@login')->name('post-admin-login');
@@ -344,11 +343,15 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/targetregency/{regency_id}','SettingController@listTargetRegency')->name('admin-list-target-regency');
         Route::get('/targetdistrict/{district_id}','SettingController@listTargetDistric')->name('admin-list-target-district');
         Route::get('/rightchoose','SettingController@settingRightChoose')->name('admin-rightchoose');
+       
         Route::post('/saverightchoose','SettingController@SaveRightChooseVillage')->name('admin-rightchoose-save');
         Route::get('/listrightchoose','SettingController@listRightChoose')->name('admin-listrightchoose');
         Route::get('/listrightchoose/regency/{provinceId}','SettingController@listRightChooseRegency')->name('admin-listrightchoose-regency');
         Route::get('/listrightchoose/district/{regencyId}','SettingController@listRightChooseDistrict')->name('admin-listrightchoose-district');
         Route::get('/listrightchoose/village/{districtId}','SettingController@listRightChooseVillage')->name('admin-listrightchoose-village');
+		Route::get('/rightchoose/village/detail/{id}','SettingController@detailHakPilihByVillage')->name('admin-rightchoosevillage-details');
+		
+		
 
         // anggota potensial download
         Route::post('/by_referal/downloadpdfall/{user_id}','MemberController@memberByReferalAllDownloadPDF')->name('by-referal-downloadpdfall');
@@ -463,9 +466,18 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/report/rt/excel','OrgDiagramController@reportOrgRTExcel')->name('admin-struktur-organisasi-rt-report-excel');
 
             #update level org all
-            Route::get('/village/update/level','OrgDiagramController@updateLelelOrgAll');
+            Route::get('/village/update/level','OrgDiagramController@updateLelelOrgAll'); 
+			
+			#hitunga jumlah tim, perdapil, perkecamatan, perdesa, perkorte
+			Route::get('/village/update/level','OrgDiagramController@updateLelelOrgAll');
+			
+			Route::get('/test/pdf','OrgDiagramController@testPdf');
 
         });
+		
+		Route::group(['prefix' => 'report'], function(){
+			Route::get('/summary','OrgDiagramController@laporanSummary');
+		});
 
         #Catatan
         Route::group(['prefix' => 'catatan'], function(){
@@ -572,7 +584,14 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/{id}', 'QuestionnaireRespondentController@index');
             Route::get('/detail/{id}/{respondentId}', 'QuestionnaireRespondentController@detail');
         });
-          
+		
+		#QUESTIONNAIRE RESPONDENT
+        Route::group(['prefix' => 'report'], function(){
+            Route::get('/tim', 'SettingController@reportTeam')->name('admin-report-team');
+            Route::post('/tim/store', 'SettingController@storeReportTeam')->name('admin-report-team-store');
+            Route::post('/surat/pemenangan', 'SettingController@suratPermohonan')->name('admin-suratpemenangan-store');
+        });
+           
     });
     
 });

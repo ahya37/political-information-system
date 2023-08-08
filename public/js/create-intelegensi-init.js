@@ -103,6 +103,35 @@ var register = new Vue({
     },
 });
 
+//melakukan proses multiple input
+    $("#addMore").click(function () {
+        $.ajax({
+            url: "/api/intelegency/addElement",
+            type: "post",
+            success: function (response) {
+                // Append element
+                $("#elements").append(response);
+
+                // Initialize select2
+                // initailizeSelect2();
+            },
+        });
+        // if ($("body").find(".fieldGroup").length < maxGroup) {
+        //     initailizeSelect2();
+        //     var fieldHTML =
+        //         '<div class="form-group fieldGroup">' +
+        //         $(".fieldGroupCopy").html() +
+        //         "</div>";
+        //     $("body").find(".fieldGroup:last").after(fieldHTML);
+        // } else {
+        //     alert("Maksimal " + maxGroup + " data terlebih dahulu.");
+        // }
+    });
+	
+	// remove fields group
+    $("body").on("click", ".remove", function () {
+        $(this).parents(".fieldGroup").remove();
+    });
 
 
 

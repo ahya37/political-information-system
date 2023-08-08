@@ -139,7 +139,7 @@ class LocationController extends Controller
                                   </select>
                               </div>
                               
-                            </div>";
+                   </div>";
             echo $html;
             exit;
 

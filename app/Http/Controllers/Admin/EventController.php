@@ -262,13 +262,12 @@ class EventController extends Controller
             $village = Village::with(['district.regency'])->where('id', $data['village_id'][$key])->first();
             $address = 'DS. '. $village->name. ', KEC. ' .$village->district->name. ', '. $village->district->regency->name;
 
-            $eventDetail = new EventDetail();
+            $eventDetail = new EventDetail(); 
             $eventDetail->event_id  = $event_id;
             $eventDetail->participant  = strtoupper($value);
             $eventDetail->address  = $address;
             $eventDetail->save();
         }
-
 
         // dd($address);
 

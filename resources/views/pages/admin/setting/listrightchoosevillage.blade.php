@@ -19,7 +19,7 @@
               <div class="dashboard-content mt-4" id="transactionDetails">
 
                 <div class="row">
-                  <div class="col-7">
+                  <div class="col-12">
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
@@ -31,6 +31,7 @@
                                         <th>KABUPATEN</th>
                                         <th class="text-right">JUMLAH TPS</th>
                                         <th class="text-right">HAK PILIH</th>
+                                        <th>OPSI</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -40,6 +41,9 @@
                                                 <td>{{ $item->name }}</td>
                                                 <td class="text-right">{{ $gF->decimalFormat($item->count_tps) }}</td>
                                                 <td class="text-right">{{ $gF->decimalFormat($item->count_vooter) }}</td>
+												<td>
+													<a href="{{route('admin-rightchoosevillage-details', $item->id)}}" class="btn btn-sm btn-info text-light">Detail</a>
+												</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

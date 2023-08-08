@@ -50,7 +50,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-3"></div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 mt-2">
                                     @include('layouts.message')
                                     <div class="card">
                                         <div class="card-body">
@@ -58,6 +58,11 @@
                                                 method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="form-group">
+                                                    <label class="col-sm-12 col-form-label">Nomor KTA JALUR AAW</label>
+                                                    <div class="col-sm-12">
+                                                        <input type="text" name="kta" class="form-control" required>
+                                                    </div>
+                                                </div> <div class="form-group">
                                                     <label class="col-sm-12 col-form-label">Nama</label>
                                                     <div class="col-sm-12">
                                                         <input type="text" name="name" class="form-control" required>
@@ -309,18 +314,56 @@
                                                 </div>
 
                                                 <hr>
-
-                                                <div class="form-group row">
+												
+												<div class="form-group row">
                                                     <div class="col-md-12">
-                                                        <button type="submit" class="ml-3 btn btn-sc-primary text-white text-center">Simpan</button>
+                                                        <h5>Perkembangan Situasi Politik Di Desa Masing-Masing</h5>
                                                     </div>
                                                 </div>
+												
+												<div id="elements">
+												
+													<div class="form-group">
+														<label class="col-sm-12 col-form-label" >Nama Calon Pesaing</label>
+														<div class="col-sm-12">
+															<input type="text" name="pspesaing[]"  placeholder="Isikan nama pesaing" class="form-control">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="col-sm-12 col-form-label" >Asal Partai</label>
+														<div class="col-sm-12">
+															<input type="text"  placeholder="Isikan nama pesaing" name="pspartai[]" class="form-control">
+														</div>
+													</div>
+													
+													<div class="form-group">
+														<label class="col-sm-12 col-form-label" >Kekuatan Dukungan</label>
+														<div class="col-sm-12">
+															<textarea name="pssuporter[]"  placeholder="Isikan keterangan berupa kekuatan dan dukungan yang dimiliki pesaing tersebut" class="form-control"></textarea>
+														</div>
+													</div>
+												
+												</div> 
+												
+												<div class="form-group row">
+														<div class="col-md-12">
+															<button type="button" class="ml-3 btn btn-sm btn-success text-white text-center" id="addMore" value="Add"><i class="fa fa-plus"></i>Tambah Calon Pesaing</button>
+														</div>
+													</div>
 
+													<div class="form-group row">
+														<div class="col-md-12">
+															<button type="submit" class="ml-3 btn btn-sc-primary text-white text-center">Simpan</button>
+														</div>
+													</div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3"></div>
+                                <div class="col-md-3">
+									
+								</div>
                             </div>
                         </div>
                     </div>

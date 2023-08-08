@@ -2537,4 +2537,11 @@ class OrgDiagramController extends Controller
         DB::table('users')->where('nik', $nik)->update(['tps_id' => $request->tpsid]);
         return redirect()->route('admin-struktur-organisasi-rt-detail-anggota', ['idx' => $org->pidx])->with(['success' => 'TPS anggota berhasil tersimpan!']);
     }
+	
+	public function testPdf(){
+		
+		$pdf = PDF::LoadView('pages.report.pdf-test')->setPaper('a4');
+		return $pdf->stream('ABSENSI TIM KORTE DESA.pdf');
+	} 
+	
 }
