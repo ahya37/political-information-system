@@ -542,9 +542,40 @@ class SettingController extends Controller
 			->select('a.*','b.name as village')
 			->join('villages as b','a.village_id','=','b.id')
 			->where('a.id', $id)->first();
+
 		return view('pages.admin.setting.detailrightchoosevillage', compact('data'));
 		
 	}
+
+    public function storeDetailSuaraByVillage(Request $request, $id){
+
+        $jml_tms = $request->tidak_memnenuhi_syarat_1 + $request->tidak_memnenuhi_syarat_2 + $request->tidak_memnenuhi_syarat_3 + $request->tidak_memnenuhi_syarat_4 + $request->tidak_memnenuhi_syarat_5 + $request->tidak_memnenuhi_syarat_6 + $request->tidak_memnenuhi_syarat_7;
+        DB::table('right_to_choose_village')->where('id', $id)->update([
+            'jumlah_dps_l' => $request->jumlah_dps_l,
+            'jumlah_dps_p' => $request->jumlah_dps_p,
+            'jumlah_dps' => $request->jumlah_dps_p + $request->jumlah_dps_l,
+            'tidak_memnenuhi_syarat_1' => $request->tidak_memnenuhi_syarat_1,
+            'tidak_memnenuhi_syarat_2' => $request->tidak_memnenuhi_syarat_2,
+            'tidak_memnenuhi_syarat_3' => $request->tidak_memnenuhi_syarat_3,
+            'tidak_memnenuhi_syarat_4' => $request->tidak_memnenuhi_syarat_4,
+            'tidak_memnenuhi_syarat_5' => $request->tidak_memnenuhi_syarat_5,
+            'tidak_memnenuhi_syarat_6' => $request->tidak_memnenuhi_syarat_6,
+            'tidak_memnenuhi_syarat_7' => $request->tidak_memnenuhi_syarat_7,
+            'jml_tms' => $jml_tms,
+            'pemilih_aktif_p' => $request->pemilih_aktif_p,
+            'pemilih_aktif_l' => $request->pemilih_aktif_l,
+            'pemilih_aktif' => $request->pemilih_aktif_p + $request->pemilih_aktif_l,
+            'pemilih_baru' => $request->pemilih_baru,
+            'jml_akhir_dps_tms_baru' => ($request->jumlah_dps_l+$request->jumlah_dps_p)+$request->pemilih_baru - $jml_tms,
+            'perbaikan_data_pemilih' => $request->perbaikan_data_pemilih,
+            'pemilih_potensial_non_ktp' => $request->pemilih_potensial_non_ktp,
+            'jml_dpshp_online_p' => $request->jml_dpshp_online_p,
+            'jml_dpshp_online_l' => $request->jml_dpshp_online_l,
+            'jml_dpshp_online' => $request->jml_dpshp_online_l + $request->jml_dpshp_online_p
+        ]);
+
+        return redirect()->back()->with(['success' => 'Hak pilih telah di ubah!']);
+    }
 	
 	public function reportTeam(){
 		

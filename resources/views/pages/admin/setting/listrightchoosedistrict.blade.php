@@ -28,9 +28,10 @@
                                     <thead>
                                       <tr>
                                         <th class="col-1">NO</th>
-                                        <th>KABUPATEN</th>
+                                        <th>KECAMATAN</th>
                                         <th class="text-right">JUMLAH TPS</th>
                                         <th class="text-right">HAK PILIH</th>
+                                        <th class="text-right">OPSI</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -42,6 +43,9 @@
                                                 </td>
                                                 <td class="text-right">{{ $gF->decimalFormat($item->count_tps) }}</td>
                                                 <td class="text-right">{{ $gF->decimalFormat($item->count_vooter) }}</td>
+                                                <td>
+                                                  <a class="btn btn-sm btn-info text-white">Download</a>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

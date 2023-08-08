@@ -21,7 +21,7 @@ class RightChosseVillage extends Model
    public function getDataRightChooseVillage($districtId){
 
     $sql = DB::table('right_to_choose_village as a')
-           ->select('a.village_id','a.count_tps','a.count_vooter','a.choose','b.name','a.id')
+           ->select('a.*','b.name')
            ->join('villages as b','a.village_id','=','b.id')
            ->where('a.district_id', $districtId)
            ->orderBy('a.count_tps','asc')
