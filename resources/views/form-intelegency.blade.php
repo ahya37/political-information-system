@@ -45,10 +45,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> 
                                 <div class="col-md-3"></div>
                             </div>
-                            <div class="row">
+                            <div class="row">  
                                 <div class="col-md-3"></div>
                                 <div class="col-md-6 mt-2">
                                     @include('layouts.message')
@@ -56,9 +56,9 @@
                                         <div class="card-body">
                                             <form id="register" action="{{ route('saveformintelegence') }}"
                                                 method="POST" enctype="multipart/form-data">
-                                                @csrf
+                                                @csrf 
                                                 <div class="form-group">
-                                                    <label class="col-sm-12 col-form-label">Nomor KTA JALUR AAW</label>
+                                                    <label class="col-sm-12 col-form-label">Nomor Kode Referal JALUR AAW Anda</label>
                                                     <div class="col-sm-12">
                                                         <input type="text" name="kta" class="form-control" required>
                                                     </div>
@@ -267,9 +267,9 @@
                                                         Suara (ketik angka saja)</label>
                                                     <div class="col-sm-12">
                                                         <input type="number" name="politic_potential"
-                                                            class="form-control" required>
+                                                            class="form-control"> 
                                                     </div>
-                                                </div>
+                                                </div> 
 
                                                 <div class="form-group">
                                                     <label class="col-sm-12 col-form-label">Keterangan</label>
@@ -317,7 +317,7 @@
 												
 												<div class="form-group row">
                                                     <div class="col-md-12">
-                                                        <h5>Perkembangan Situasi Politik Di Desa Masing-Masing</h5>
+                                                        <h5>Apakah sudah ada pergerakan dari lawan politik baik se partai maupun partai lain ?, sebutkan dan isi data di bawah ini !</h5>
                                                     </div>
                                                 </div>
 												
@@ -337,12 +337,14 @@
 														</div>
 													</div>
 													
-													<div class="form-group">
-														<label class="col-sm-12 col-form-label" >Kekuatan Dukungan</label>
-														<div class="col-sm-12">
-															<textarea name="pssuporter[]"  placeholder="Isikan keterangan berupa kekuatan dan dukungan yang dimiliki pesaing tersebut" class="form-control"></textarea>
-														</div>
-													</div>
+													<div class="form-group"> 
+														<label class="col-sm-12 col-form-label" >Kekuatan Dukungan pesaing, Perkiraan berapa persen perbandingan kekuatan dan dukungan antara pesaing dengan H.Asep Aw ?</label>
+														
+														<div class="col-sm-12"> 
+														<span>(isi angka saja)</span>
+															<input name="pssuporter[]" type="text"  placeholder="Isikan keterangan berupa kekuatan dan dukungan yang dimiliki pesaing tersebut" class="form-control">
+														</div> 
+													</div> 
 												
 												</div> 
 												

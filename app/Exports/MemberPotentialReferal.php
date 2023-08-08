@@ -40,8 +40,8 @@ class MemberPotentialReferal implements FromCollection,WithHeadings, WithEvents
             $total_referal_undirect = $referal_undirect->total == NULL ? '0' : $referal_undirect->total;
             $inputer = $userModel->select('name')->where('id', $val->cby)->first();
             $referal = $userModel->select('name')->where('id', $val->user_id)->first();
-            $by_inputer = $inputer->name;
-            $by_referal = $referal->name;
+            $by_inputer = $inputer->name ?? '';
+            $by_referal = $referal->name ?? '';
             
             $data[] = [
                 'no' => $no++,

@@ -801,7 +801,7 @@ class SettingController extends Controller
 	
 	public function suratPermohonan(Request $request){
 		
-		return $request->all(); 
+		return $request->all();
 	}
 
 

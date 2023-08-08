@@ -744,8 +744,8 @@ class InformationController extends Controller
 					
 			
 			// cek apakah anggota dengan kta tersebut ada
-			$checkKta = User::where('code', $request->kta)->count();
-			if($checkKta == 0) return redirect()->back()->with(['error' => 'KTA tidak terdaftar!']);
+			// $checkKta = User::where('code', $request->kta)->count();
+			// if($checkKta == 0) return redirect()->back()->with(['error' => 'Referal tidak terdaftar!']);
 
             $profession['professi']     = $request->profession;
             $onceserved['onceserved']   = $request->onceserved;
