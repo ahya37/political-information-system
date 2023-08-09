@@ -41,6 +41,13 @@
 								<label>Desa</label>
 									 <select name="village_id" id="selectVillageId" class="form-control filter"></select>
 								</div>
+								<div class="col-sm-3 form-group">
+								<label>Opsi</label>
+									 <select name="opsi"  class="form-control">
+										<option value="">All</option>
+										<option value="kordes">Hanya Sampai Kordes</option>
+									 </select>
+								</div>
 								  
 								<div class="col-sm-1 form-group">
 								<div class="col-sm-1 form-group mt-4">

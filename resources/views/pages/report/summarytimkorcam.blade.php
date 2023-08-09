@@ -107,7 +107,7 @@
 <body>
     <header>
 	 <img src="{{asset('assets/images/kopsurataaw.png')}}" width="800" style="margin-top:-2px">
-        <h4 style="margin-top:-4px;" class="fonts">SUMMARY TIM TINGKAT KECAMTAN {{strtoupper($resultData['jk']['kecamatan']->name)}}</h4>
+        <h4 style="margin-top:-4px;" class="fonts">SUMMARY TIM TINGKAT KECAMATAN {{strtoupper($resultData['jk']['kecamatan']->name)}}</h4>
 		
     </header>
 	
