@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>ABSENSI TIM KORTE DS. {{$village->name}}</title>
+        <title>TIM KORDES KECAMATAN {{$district->name}}</title>
     </head>
     <style>
             /** Define the margins of your page **/
@@ -108,28 +108,20 @@
 				margin-bottom: 4px;
 				cellspacing:0;
 				font-size: 12px;
+				margin-top:85px;
             }
         </style>
     
 <body>
     <header>
 	<img src="{{asset('assets/images/kopsurataaw.png')}}" width="800" style="margin-top:-2px">
-	<h4 style="margin-top:-4px;" class="fonts">ABSENSI TIM KORTE</h4> 
+	<h4 style="margin-top:-4px;" class="fonts">TIM KORDES KECAMATAN {{$district->name}}</h4> 
     </header> 
-		<table id="table1">
-			<tr>
-				<td>DESA</td><td>:</td><td>{{$village->name}}</td>
-				
-			</tr>
-			<tr>
-				<td>KECAMATAN</td><td>:</td><td>{{$village->district->name}}</td>
-			</tr>
-		</table>
 		
 		<table id="table2">
-			@foreach($kordes as $korde)
+			@foreach($korcam as $kor)
 				<tr class="fonts">
-					<td>{{$korde->title}}</td><td> : </td><td>{{$korde->name}}</td>
+					<td>{{$kor->JABATAN}}</td><td> : </td><td>{{$kor->NAMA}}</td>
 				</tr>
 			@endforeach 
 		</table>
@@ -142,20 +134,20 @@
                         <th>NAMA</th>
                         <th>JABATAN</th>
                         <th>ALAMAT</th>
+                        <th>DESA</th>
                         <th>NO.HP</th>
-                        <th>TTD</th>
                     </tr>
                 </thead>
                 <tbody> 
-				@foreach($abs_kortes as $korte)
+				@foreach($kordes as $kor) 
 					<tr>
 						<td>{{$no++}}</td>
-						<td>{{$korte->name}}</td> 
-						<td>{{'KORTE RT.'.$korte->rt}}</td> 
-						<td>{{$korte->address}}</td>
+						<td>{{$kor->NAMA}}</td> 
+						<td>{{$kor->JABATAN}}</td> 
+						<td>{{$kor->address}}</td>
+						<td>{{$kor->DESA}}</td>
 						<td></td> 
-						<td></td>  
-					</tr>
+					</tr> 
 				@endforeach
 				</tbody>
             </table>

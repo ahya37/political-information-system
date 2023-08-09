@@ -12,7 +12,7 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">LAPORAN DAN SURAT</h2>
+                <h2 class="dashboard-title">SUMMARY LAPORAN TIM</h2>
                 <p class="dashboard-subtitle">
                 </p> 
               </div>
@@ -41,7 +41,7 @@
 								<label>Desa</label>
 									 <select name="village_id" id="selectVillageId" class="form-control filter"></select>
 								</div>
-								 
+								  
 								<div class="col-sm-1 form-group">
 								<div class="col-sm-1 form-group mt-4">
 									<button class="btn btn-sm btn-info mt-2">Download</button>
@@ -54,30 +54,6 @@
                   </div>
                 </div>
               </div>
-			  
-			  <div class="row mt-3">
-                  <div class="col-12">
-                   
-                    <div class="card">
-                      <div class="card-body">
-                       <h6>Surat Permohonan Menjadi Tim Pemenangan</h5>
-					   <form action="{{route('admin-suratpemenangan-store')}}" method="POST">
-						   @csrf
-					   <div class="col-sm-12">
-							<div class="row">
-							<div class="col-sm-2 form-group mt-4">
-									<input  type="date" class="form-control" name="date">
-								</div>
-								<div class="col-sm-1 form-group mt-4">
-									<button class="btn btn-sm btn-info mt-2">Download</button>
-								</div>
-							</div>
-						   </div>
-					   </form>
-                      </div>
-                    </div>
-                  </div>
-				  </div>
 				  
             </div>
           </div>

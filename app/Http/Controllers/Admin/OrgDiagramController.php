@@ -2460,6 +2460,14 @@ class OrgDiagramController extends Controller
 		}
 	}
 	
+	public function searchArrayValueTim($data, $field){
+		
+		foreach($data as $row){
+			if($row->JABATAN == $field)
+				return $row->JABATAN; 
+		}
+	}
+	
 
     public function reportOrgDistrictExcel(Request $request)
     {
@@ -2475,10 +2483,29 @@ class OrgDiagramController extends Controller
     {
 
         $village_id  = $request->village_id;
+        $district_id  = $request->district_id;
+        $report_type  = $request->report_type;
+		
+		if($report_type == 'Download Excel'){
+			
+			// dd([$dapil_id, $district_id, $village_id, $rt]);
+			$village = DB::table('villages')->select('name')->where('id', $village_id)->first();
+			return $this->excel->download(new KorDesExport($village_id), 'TIM KOORDINATOR DESA ' . $village->name . '.xls');
+		
+		}else{
+			
+			$district = DB::table('districts')->select('name')->where('id', $district_id)->first();
+			$OrgModel = new OrgDiagram();
+			 // get data korcam by kecamatan
+			$korcam 		 = $OrgModel->getKorcamByKecamatanForTitle($district_id);
+			$kordes = $OrgModel->getKordesByKecamatan($district_id);
+			$no = 1;
+			  
+			$pdf = PDF::LoadView('pages.admin.report.kordesperkecamatan', compact('district','kordes','korcam','no'))->setPaper('a4');
+			return $pdf->download('TIM KORDES KECAMATAN '.$district->name.'.pdf'); 
+		}
 
-        // dd([$dapil_id, $district_id, $village_id, $rt]);
-        $village = DB::table('villages')->select('name')->where('id', $village_id)->first();
-        return $this->excel->download(new KorDesExport($village_id), 'TIM KOORDINATOR DESA ' . $village->name . '.xls');
+       
     }
 
     public function updateLelelOrgAll()

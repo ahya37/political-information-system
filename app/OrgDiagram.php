@@ -33,16 +33,19 @@ class OrgDiagram extends Model
 		$sql = "SELECT b.nik as NIK , b.name as NAMA, 
 							CASE when b.gender = '0' then 'L' else 'P' end as JENIS_KELAMIN, 
 							DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), b.date_berth)), '%Y') + 0 as 'USIA', a.title as 'JABATAN',
-							c.name as DESA, c.id as village_id,
+							c.name as DESA, c.id as village_id, b.address,
 							a.base
 							from org_diagram_village as a
 							join users as b on a.nik = b.nik
 							join villages as c on b.village_id = c.id
+							join districts as d on c.district_id = d.id
 							where a.district_id = $district_id
-							order by c.name asc, a.level_org asc";
+							order by d.name asc, c.name asc, a.level_org asc";
 							
 		return DB::select($sql);
 	}
+	
+
 	
 	
 	public function getKecamatanByDapil($dapil_id){
@@ -69,6 +72,22 @@ class OrgDiagram extends Model
 						order by d.name asc, c.name asc, a.level_org asc";
 						
 		return DB::select($sql);
+	}
+	
+	public function getKorcamByKecamatanForTitle($district_id){
+		
+		$sql = "SELECT b.nik as NIK , b.name as NAMA,
+				CASE when b.gender = '0' then 'L' else 'P' end as 'JENIS KELAMIN', 
+				DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), b.date_berth)), '%Y') + 0 as 'USIA', a.title as 'JABATAN', c.name as DESA, d.name as KECAMATAN, d.id
+				from org_diagram_district  as a
+				join users as b on a.nik = b.nik
+				join villages as c on b.village_id = c.id
+				join districts as d on c.district_id = d.id
+				where a.district_id = $district_id
+				order by a.level_org asc";
+						
+		return DB::select($sql);
+		
 	}
 	
 	public function getDesaByKecamatanKoordinator($district_id){ 
