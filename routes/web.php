@@ -590,6 +590,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::group(['prefix' => 'report'], function(){
             Route::get('/tim', 'SettingController@reportTeam')->name('admin-report-team');
             Route::post('/tim/store', 'SettingController@storeReportTeam')->name('admin-report-team-store');
+           
             Route::post('/surat/pemenangan', 'SettingController@suratPermohonan')->name('admin-suratpemenangan-store');
         });
            

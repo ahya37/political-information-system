@@ -1442,6 +1442,7 @@ class OrgDiagramController extends Controller
 				
 		$no = 1;
 		
+		
 		$pdf = PDF::LoadView('pages.report.memberbykorte', compact('kor_rt','members','no'))->setPaper('a4');
 		return $pdf->download('ANGGOTA KORTE RT '.$kor_rt->rt.' ('. $kor_rt->name.') DS.'.$kor_rt->village.'.pdf');
 		
