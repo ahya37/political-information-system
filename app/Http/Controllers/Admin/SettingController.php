@@ -549,32 +549,126 @@ class SettingController extends Controller
 
     public function storeDetailSuaraByVillage(Request $request, $id){
 
-        $jml_tms = $request->tidak_memnenuhi_syarat_1 + $request->tidak_memnenuhi_syarat_2 + $request->tidak_memnenuhi_syarat_3 + $request->tidak_memnenuhi_syarat_4 + $request->tidak_memnenuhi_syarat_5 + $request->tidak_memnenuhi_syarat_6 + $request->tidak_memnenuhi_syarat_7;
-        DB::table('right_to_choose_village')->where('id', $id)->update([
-            'jumlah_dps_l' => $request->jumlah_dps_l,
-            'jumlah_dps_p' => $request->jumlah_dps_p,
-            'jumlah_dps' => $request->jumlah_dps_p + $request->jumlah_dps_l,
-            'tidak_memnenuhi_syarat_1' => $request->tidak_memnenuhi_syarat_1,
-            'tidak_memnenuhi_syarat_2' => $request->tidak_memnenuhi_syarat_2,
-            'tidak_memnenuhi_syarat_3' => $request->tidak_memnenuhi_syarat_3,
-            'tidak_memnenuhi_syarat_4' => $request->tidak_memnenuhi_syarat_4,
-            'tidak_memnenuhi_syarat_5' => $request->tidak_memnenuhi_syarat_5,
-            'tidak_memnenuhi_syarat_6' => $request->tidak_memnenuhi_syarat_6,
-            'tidak_memnenuhi_syarat_7' => $request->tidak_memnenuhi_syarat_7,
-            'jml_tms' => $jml_tms,
-            'pemilih_aktif_p' => $request->pemilih_aktif_p,
-            'pemilih_aktif_l' => $request->pemilih_aktif_l,
-            'pemilih_aktif' => $request->pemilih_aktif_p + $request->pemilih_aktif_l,
-            'pemilih_baru' => $request->pemilih_baru,
-            'jml_akhir_dps_tms_baru' => ($request->jumlah_dps_l+$request->jumlah_dps_p)+$request->pemilih_baru - $jml_tms,
-            'perbaikan_data_pemilih' => $request->perbaikan_data_pemilih,
-            'pemilih_potensial_non_ktp' => $request->pemilih_potensial_non_ktp,
-            'jml_dpshp_online_p' => $request->jml_dpshp_online_p,
-            'jml_dpshp_online_l' => $request->jml_dpshp_online_l,
-            'jml_dpshp_online' => $request->jml_dpshp_online_l + $request->jml_dpshp_online_p
+        DB::beginTransaction();
+        try {
+            
+            $jml_tms = $request->tidak_memnenuhi_syarat_1 + $request->tidak_memnenuhi_syarat_2 + $request->tidak_memnenuhi_syarat_3 + $request->tidak_memnenuhi_syarat_4 + $request->tidak_memnenuhi_syarat_5 + $request->tidak_memnenuhi_syarat_6 + $request->tidak_memnenuhi_syarat_7;
+            $update = DB::table('right_to_choose_village')->where('id', $id)->update([
+                'jumlah_dps_l' => $request->jumlah_dps_l,
+                'jumlah_dps_p' => $request->jumlah_dps_p,
+                'jumlah_dps' => $request->jumlah_dps_p + $request->jumlah_dps_l,
+                'tidak_memnenuhi_syarat_1' => $request->tidak_memnenuhi_syarat_1,
+                'tidak_memnenuhi_syarat_2' => $request->tidak_memnenuhi_syarat_2,
+                'tidak_memnenuhi_syarat_3' => $request->tidak_memnenuhi_syarat_3,
+                'tidak_memnenuhi_syarat_4' => $request->tidak_memnenuhi_syarat_4,
+                'tidak_memnenuhi_syarat_5' => $request->tidak_memnenuhi_syarat_5,
+                'tidak_memnenuhi_syarat_6' => $request->tidak_memnenuhi_syarat_6,
+                'tidak_memnenuhi_syarat_7' => $request->tidak_memnenuhi_syarat_7,
+                'jml_tms' => $jml_tms,
+                'pemilih_aktif_p' => $request->pemilih_aktif_p,
+                'pemilih_aktif_l' => $request->pemilih_aktif_l,
+                'pemilih_aktif' => $request->pemilih_aktif_p + $request->pemilih_aktif_l,
+                'pemilih_baru' => $request->pemilih_baru,
+                'jml_akhir_dps_tms_baru' => ($request->jumlah_dps_l+$request->jumlah_dps_p)+$request->pemilih_baru - $jml_tms,
+                'perbaikan_data_pemilih' => $request->perbaikan_data_pemilih,
+                'pemilih_potensial_non_ktp' => $request->pemilih_potensial_non_ktp,
+                'jml_dpshp_online_p' => $request->jml_dpshp_online_p,
+                'jml_dpshp_online_l' => $request->jml_dpshp_online_l,
+                'jml_dpshp_online' => $request->jml_dpshp_online_l + $request->jml_dpshp_online_p
         ]);
 
+        // update kalkulasi level kecamatan
+        $this->updateDataKalkulasiDPTDistrict($id);
+        // update kalkulasi level kabkot
+        $this->updateDataKalkulasiDPTKabkot($id);
+        // update kalkulasi level provinsi
+        DB::commit();
         return redirect()->back()->with(['success' => 'Hak pilih telah di ubah!']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['error' => $e->getMessage()]);
+        }
+
+    }
+
+    public function updateDataKalkulasiDPTDistrictBy($id){
+        // $id = right_to_choose_village id 
+        // hitung semua kalkulasi
+        // get districtId by village_id
+        $dpt = DB::table('right_to_choose_village')->select('district_id')->where('id', $id)->first();
+        $district_id = $dpt->district_id;
+        
+        $RightChosseVillage = new RightChosseVillage();
+        $request            = $RightChosseVillage->getTotalKalkulasiDPTDesaByKecamatan($district_id);
+
+        //update
+        $update  = DB::table('right_to_choose_districts')->where('district_id', $district_id)->update([
+                'jumlah_dps_l' => $request->jumlah_dps_l,
+                'jumlah_dps_p' => $request->jumlah_dps_p,
+                'jumlah_dps' => $request->jumlah_dps,
+                'tidak_memnenuhi_syarat_1' => $request->tidak_memnenuhi_syarat_1,
+                'tidak_memnenuhi_syarat_2' => $request->tidak_memnenuhi_syarat_2,
+                'tidak_memnenuhi_syarat_3' => $request->tidak_memnenuhi_syarat_3,
+                'tidak_memnenuhi_syarat_4' => $request->tidak_memnenuhi_syarat_4,
+                'tidak_memnenuhi_syarat_5' => $request->tidak_memnenuhi_syarat_5,
+                'tidak_memnenuhi_syarat_6' => $request->tidak_memnenuhi_syarat_6,
+                'tidak_memnenuhi_syarat_7' => $request->tidak_memnenuhi_syarat_7,
+                'jml_tms' => $request->jml_tms,
+                'pemilih_aktif_p' => $request->pemilih_aktif_p,
+                'pemilih_aktif_l' => $request->pemilih_aktif_l,
+                'pemilih_aktif' => $request->pemilih_aktif,
+                'pemilih_baru' => $request->pemilih_baru,
+                'jml_akhir_dps_tms_baru' => $request->jml_akhir_dps_tms_baru,
+                'perbaikan_data_pemilih' => $request->perbaikan_data_pemilih,
+                'pemilih_potensial_non_ktp' => $request->pemilih_potensial_non_ktp,
+                'jml_dpshp_online_p' => $request->jml_dpshp_online_p,
+                'jml_dpshp_online_l' => $request->jml_dpshp_online_l,
+                'jml_dpshp_online' => $request->jml_dpshp_online
+        ]); 
+
+        return $update;
+        
+    }
+
+    public function updateDataKalkulasiDPTKabkot($id){
+        // $id = right_to_choose_village id
+        $dpt = DB::table('right_to_choose_village')->select('regency_id')->where('id', $id)->first();
+        $regency_id = $dpt->regency_id;
+
+        $RightChooseDistrict = new RightChooseDistrict();
+        $request             = $RightChooseDistrict->getTotalKalkulasiDPTDesaByKecamatan($regency_id);
+
+        $update = DB::table('right_to_choose_regencies')->where('regency_id', $regency_id)->update([
+                'jumlah_dps_l' => $request->jumlah_dps_l,
+                'jumlah_dps_p' => $request->jumlah_dps_p,
+                'jumlah_dps' => $request->jumlah_dps,
+                'tidak_memnenuhi_syarat_1' => $request->tidak_memnenuhi_syarat_1,
+                'tidak_memnenuhi_syarat_2' => $request->tidak_memnenuhi_syarat_2,
+                'tidak_memnenuhi_syarat_3' => $request->tidak_memnenuhi_syarat_3,
+                'tidak_memnenuhi_syarat_4' => $request->tidak_memnenuhi_syarat_4,
+                'tidak_memnenuhi_syarat_5' => $request->tidak_memnenuhi_syarat_5,
+                'tidak_memnenuhi_syarat_6' => $request->tidak_memnenuhi_syarat_6,
+                'tidak_memnenuhi_syarat_7' => $request->tidak_memnenuhi_syarat_7,
+                'jml_tms' => $request->jml_tms,
+                'pemilih_aktif_p' => $request->pemilih_aktif_p,
+                'pemilih_aktif_l' => $request->pemilih_aktif_l,
+                'pemilih_aktif' => $request->pemilih_aktif,
+                'pemilih_baru' => $request->pemilih_baru,
+                'jml_akhir_dps_tms_baru' => $request->jml_akhir_dps_tms_baru,
+                'perbaikan_data_pemilih' => $request->perbaikan_data_pemilih,
+                'pemilih_potensial_non_ktp' => $request->pemilih_potensial_non_ktp,
+                'jml_dpshp_online_p' => $request->jml_dpshp_online_p,
+                'jml_dpshp_online_l' => $request->jml_dpshp_online_l,
+                'jml_dpshp_online' => $request->jml_dpshp_online
+        ]);
+
+        return $update;
+
+    }
+
+    public function updateDataKalkulasiDPTProvince($id){
+
     }
 	
 	public function reportTeam(){
