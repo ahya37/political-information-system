@@ -36,7 +36,7 @@
                 font-size: 12px;
 
             }
-            table {
+            #table {
             font-family: Arial, Helvetica, sans-serif;
             color: #666;
             text-shadow: 1px 1px 0px #fff;
@@ -44,53 +44,63 @@
             border: #ccc 1px solid;
             width: 100%
             }
-            table th {
-            font-size: 10px;
-            padding: 5px auto;
+            #table th {
+            font-size: 12px;
+            padding: 9px auto;
             border-left:1px solid #e0e0e0;
             border-bottom: 1px solid #e0e0e0;
             background:   #34495e;
             color: #fff;
-            }
-            table td {
-            font-size: 10px;
+            }  
+            #table td {
+            font-size: 12px;
             padding: 5px auto;
             border-left:1px solid #e0e0e0;
             border-bottom: 1px solid #e0e0e0;
             background:  #fff ;
             color: #000;
             padding-left: 5px;
-            }
-			
+            } 
+			  
 			#table1 {
 				font-family: Arial, Helvetica, sans-serif;
 				border: none;
-				width: 50%;
 				cellspacing:0;
 				margin-bottom: 10px;
 				cellspacing:0;
-				margin-top:-20px;
+				margin-top:72px;
+				font-size: 12px;
             }
+			.fonts {
+				font-family: Arial, Helvetica, sans-serif;
+			}
         </style>
     
 <body>
     <header>
-        <h4>
-            ANGGOTA KORTE
-        </h5> 
-    </header>
+	<img src="{{asset('assets/images/kopsurataaw.png')}}" width="800" style="margin-top:-2px">
+	<h4 style="margin-top:-4px;" class="fonts">ANGGOTA KORTE</h4> 
+    </header> 
+		<table id="table1">
+			<tr>
+				<td>DESA</td><td>:</td><td>{{$kor_rt->village}}</td>
+				
+			</tr><tr>
+				
+				<td>KECAMATAN</td><td>:</td><td>{{$kor_rt->district}}</td>
+				
+			</tr><tr>
+				
+				<td>KORTE</td><td>:</td><td>{{$kor_rt->name}}</td>
+				
+			</tr><tr>
+				
+				<td>RT</td><td>:</td><td>{{$kor_rt->rt}}</td>
+			</tr>
+		</table>
 		
-		<section>
-			<h5 style="margin-top:-20px">DESA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$kor_rt->village}}</h5>
-			<h5 style="margin-top:-20px">KEC &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$kor_rt->district}}</h5>
-			<h5 style="margin-top:-10px">KORTE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$kor_rt->name}}</h5>
-			<h5 style="margin-top:-20px">RT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : {{$kor_rt->rt}}</h5>
-		</section>
-		
-		
-		
-        <section >
-            <table cellspacing='0'>
+          <section >
+            <table cellspacing='0' id="table">
                 <thead>
                     <tr>
                         <th>NO</th>
@@ -100,20 +110,20 @@
                         <th>KETERANGAN</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody> 
 				@foreach($members as $member)
 					<tr>
-						<td>{{$no++}}</td>
+						<td align="center">{{$no++}}</td>
 						<td>{{$member->name}}</td> 
 						<td>{{$member->address}}</td> 
 						<td>{{$member->telp}}</td> 
-						<td></td> 
+						<td></td>
 					</tr>
 				@endforeach
 				</tbody>
             </table>
         </section>
-        
+         
          <footer></footer>
 </body>
 </html>

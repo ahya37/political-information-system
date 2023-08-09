@@ -41,12 +41,13 @@
 								<label>Desa</label>
 									 <select name="village_id" id="selectVillageId" class="form-control filter"></select>
 								</div>
+								 
 								<div class="col-sm-1 form-group">
 								<div class="col-sm-1 form-group mt-4">
 									<button class="btn btn-sm btn-info mt-2">Download</button>
 								</div>
 							</div>
-						   </div>
+						   </div> 
 					   </form>
                       </div>
                     </div>

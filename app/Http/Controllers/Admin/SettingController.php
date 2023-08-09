@@ -558,6 +558,7 @@ class SettingController extends Controller
 		$district_id  = $request->district_id;
 		$village_id   = $request->village_id;
 		$rt 		  = $request->rt;
+		$opsi 		  = $request->opsi;
 		
 		$OrgModel     = new OrgDiagram();
 		if(isset($dapil_id) && !isset($district_id) && !isset($village_id) && !isset($rt)){
@@ -792,7 +793,94 @@ class SettingController extends Controller
 			$pdf = PDF::LoadView('pages.report.summarytimkordes', compact('resultData'))->setPaper('a4');
 			return $pdf->download('SUMMARY TIM DESA '.strtoupper($desa->name).'.pdf');
 		 	
-		}else{
+		}elseif(isset($dapil_id) && !isset($district_id) && !isset($village_id) && !isset($rt) && $opsi != ''){
+			$dapil    = $OrgModel->getDapilById($dapil_id);
+			
+			// get data jenis kelamin L, P level kecamatan by dapil
+			$jk_all_korcam = $OrgModel->getJkAllKorcamByDapil($dapil_id);
+			// hitung jenis kelamin laki2 korcam
+			$jk_korcam_L  = collect($jk_all_korcam)->where('jenis_kelamin','L')->sum(function($q){return $q->total_jk_all_korcam;});
+			$jk_korcam_P  = collect($jk_all_korcam)->where('jenis_kelamin','P')->sum(function($q){return $q->total_jk_all_korcam;});
+			
+			  
+			// get dat jenis kelamin L,P level desa by dapil
+			$jk_all_kordes = $OrgModel->getJkAllKordesByDapil($dapil_id);
+			// hitung jenis kelamin laki2 kordes
+			$jk_kordes_L  = collect($jk_all_kordes)->where('jenis_kelamin','L')->sum(function($q){return $q->total_jk_all_kordes;});
+			$jk_kordes_P  = collect($jk_all_kordes)->where('jenis_kelamin','P')->sum(function($q){return $q->total_jk_all_kordes;});
+			
+			// get data jenis kelamin korte by dapil 
+			// $jk_all_korte = $OrgModel->getJkAllKorteByDapil($dapil_id);
+			// hitung jenis kelamin laki2 kordes
+			// $jk_korte_L  = collect($jk_all_korte)->where('jenis_kelamin','L')->sum(function($q){return $q->total_jk_all_korte;});
+			// $jk_korte_P  = collect($jk_all_korte)->where('jenis_kelamin','P')->sum(function($q){return $q->total_jk_all_korte;});
+			
+			// semua jenis kelamin laki2
+			// $jk_all_tim_L = $jk_korcam_L + $jk_kordes_L + $jk_korte_L; 
+			// $jk_all_tim_L = $jk_korcam_L + $jk_kordes_L + $jk_korte_L;
+			$jk_all_tim_P = $jk_korcam_P + $jk_kordes_P;
+			$jk_all_tim_L = $jk_korcam_L + $jk_kordes_L;
+			// gabungkan semua
+			$total_all_tims    = $jk_all_tim_L + $jk_all_tim_P;  
+			// hasil summary data jenis kelamin 
+			$resultDataJk = [
+				'dapil' => $dapil,
+				'jk_L' => $jk_all_tim_L, 
+				'jk_persentase_L' => round(($jk_all_tim_L/$total_all_tims)*100), 
+				'jk_P' => $jk_all_tim_P, 
+				'jk_persentase_P' => round(($jk_all_tim_P/$total_all_tims)*100), 
+				'sum_jk_persen' => round(($jk_all_tim_L/$total_all_tims)*100 + ($jk_all_tim_P/$total_all_tims)*100), 
+				'total_tim' => $total_all_tims 
+			];
+			
+			// get data kelompok usia korcam
+			$usia_korcam = $OrgModel->getDataUsiaKorcamByDapil($dapil_id);
+			$usia_kordes = $OrgModel->getDataUsiaKordesByDapil($dapil_id);
+			// $usia_korte  = $OrgModel->getDataUsiaKorteByDapil($dapil_id);
+			$all_usia    = array_merge($usia_korcam,$usia_kordes);
+			
+			$kelompok_usia_tim = [
+				'<20' => CountUsiaTim::usia($all_usia, 'usia','<=',20),
+				'persen20' => round((CountUsiaTim::usia($all_usia, 'usia','<=',20)/$total_all_tims)*100),
+				'21-26' => CountUsiaTim::MultiUsia($all_usia,'usia','>=',21,'<=',26),
+				'persen21' => round((CountUsiaTim::MultiUsia($all_usia,'usia','>=',21,'<=',26)/$total_all_tims)*100),
+				'27-32' => CountUsiaTim::MultiUsia($all_usia,'usia','>=',27,'<=',32),
+				'persen27' => round((CountUsiaTim::MultiUsia($all_usia,'usia','>=',27,'<=',32)/$total_all_tims)*100),
+				'33-38' => CountUsiaTim::MultiUsia($all_usia,'usia','>=',33,'<=',38),
+				'persen33' => round((CountUsiaTim::MultiUsia($all_usia,'usia','>=',33,'<=',38)/$total_all_tims)*100),
+				'39-44' => CountUsiaTim::MultiUsia($all_usia,'usia','>=',39,'<=',44),
+				'persen39' => round((CountUsiaTim::MultiUsia($all_usia,'usia','>=',39,'<=',44)/$total_all_tims)*100),
+				'45-50' => CountUsiaTim::MultiUsia($all_usia,'usia','>=',45,'<=',50),
+				'persen45' => round((CountUsiaTim::MultiUsia($all_usia,'usia','>=',45,'<=',50)/$total_all_tims)*100),
+				'>50' => CountUsiaTim::usia($all_usia, 'usia','>',50),
+				'persen50' => round((CountUsiaTim::usia($all_usia, 'usia','>',50)/$total_all_tims)*100)
+			];
+			
+			$total_persen = $kelompok_usia_tim['persen20']
+						   +$kelompok_usia_tim['persen21'] 
+						   +$kelompok_usia_tim['persen27'] 
+						   +$kelompok_usia_tim['persen33'] 
+						   +$kelompok_usia_tim['persen39'] 
+						   +$kelompok_usia_tim['persen45'] 
+						   +$kelompok_usia_tim['persen50']; 
+			$usia = [
+				'kelompok_usia' => $kelompok_usia_tim,
+				// 'total_persen' => $total_persen,
+				'total_persen' => round(($jk_all_tim_L/$total_all_tims)*100 + ($jk_all_tim_P/$total_all_tims)*100),
+				'total_tim' => $total_all_tims 
+			]; 
+			$resultData = [
+				'dapil' => $dapil,
+				'jk' => $resultDataJk,
+				'usia' => $usia
+			
+			]; 
+			 
+			$pdf = PDF::LoadView('pages.report.summarytimdapil', compact('resultData'))->setPaper('a4');
+			return $pdf->download('SUMMARY TIM '.strtoupper($dapil->name).'.pdf');
+		}
+		
+		else{
 			
 			return redirect()->back()->with(['error' => 'Pilih level laporan!']); 
 		}
@@ -803,6 +891,9 @@ class SettingController extends Controller
 		
 		return $request->all();
 	}
+	
+	
+	
 
 
 }

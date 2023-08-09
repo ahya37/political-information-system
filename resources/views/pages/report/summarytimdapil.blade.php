@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>SUMMARY TIM DAPIL</title>
+        <title>SUMMARY TIM TINGKAT {{strtoupper($resultData['jk']['dapil']->name)}}</title>
     </head>
     <style>
             /** Define the margins of your page **/
