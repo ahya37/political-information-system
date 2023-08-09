@@ -350,7 +350,6 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/listrightchoose/district/{regencyId}','SettingController@listRightChooseDistrict')->name('admin-listrightchoose-district');
         Route::get('/listrightchoose/village/{districtId}','SettingController@listRightChooseVillage')->name('admin-listrightchoose-village');
 		Route::get('/rightchoose/village/detail/{id}','SettingController@detailHakPilihByVillage')->name('admin-rightchoosevillage-details');
-		Route::post('/rightchoose/village/detail/store/{id}','SettingController@storeDetailSuaraByVillage')->name('admin-rightchoosevillage-details-store');
 		
 		
 
@@ -465,7 +464,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/report/district/excel','OrgDiagramController@reportOrgDistrictExcel')->name('admin-struktur-organisasi-district-report-excel');
             Route::post('/report/village/excel','OrgDiagramController@reportOrgVillagetExcel')->name('admin-struktur-organisasi-village-report-excel');
             Route::post('/report/rt/excel','OrgDiagramController@reportOrgRTExcel')->name('admin-struktur-organisasi-rt-report-excel');
-
+ 
             #update level org all
             Route::get('/village/update/level','OrgDiagramController@updateLelelOrgAll'); 
 			
