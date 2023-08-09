@@ -58,7 +58,9 @@
                                 href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
 
                             <button class="btn btn-sm btn-sc-primary text-white ml-2" type="submit">Download Excel</button>
-                            <a href="{{ route('export') }}" class="btn btn-sm btn-sc-primary text-white ml-2">Download Pdf</a>
+                            <a href="{{ route('exportPermohonan') }}" class="btn btn-sm btn-sc-primary text-white ml-2">Download Surat Permohonan</a>
+                            <a href="{{ route('exportSurat') }}" class="btn btn-sm btn-sc-primary text-white ml-2">Download Surat Pernyataan</a>
+                            <a href="{{ route('exportDaftar') }}" class="btn btn-sm btn-sc-primary text-white ml-2">Download Daftar Pemilih</a>
                         </div>
                     </div>
                 </form>
