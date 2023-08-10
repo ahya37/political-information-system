@@ -2442,9 +2442,152 @@ class OrgDiagramController extends Controller
 			return $pdf->download('ABSENSI TIM KORTE DESA '.$village->name.'.pdf');
 			
 			
-		}
-
-		else {
+		}elseif($request->report_type == 'Download Catatan Korte PDF'){
+			
+			// get data korte 
+			 $dataKorte    = DB::table('org_diagram_rt as a')
+                    ->select('a.name','a.title','a.rt','a.idx',
+						DB::raw("(select count(*) from org_diagram_rt where pidx = a.idx and base = 'ANGGOTA') as total_member"))
+                    ->join('users as b','a.nik','=','b.nik')
+                    ->join('villages as c','a.village_id','=','c.id')
+                    ->where('a.village_id', $village_id) 
+                    ->whereNotNull('a.nik')
+                    ->where('a.base','KORRT')
+                    ->orderBy('a.rt','asc')
+                    ->get();
+			
+				// rincian 
+				// get data korte by rt, jumlah orang / jumlah anggota , kelompokkan by korte 
+				$kortes = DB::table('org_diagram_rt as a')
+                                ->select('a.village_id','a.rt', DB::raw('count(a.id) as jml_korte'),
+									// joinkan dengan user by nik = nik untuk menghitung hanya data yang tersedia sebagai anggota
+                                    DB::raw("(
+												select count(tb1.id) from org_diagram_rt as tb1
+												join users as tb2 on tb1.nik = tb2.nik
+												where tb1.village_id = a.village_id and tb1.rt = a.rt and tb1.base = 'ANGGOTA' 
+												group by tb1.rt
+											 ) as jml_members"
+											)
+										)
+								->join('users as b','a.nik','=','b.nik')
+                                ->where('a.base','KORRT')
+                                ->where('a.village_id', $village_id)
+                                ->groupBy('a.village_id','a.rt')
+                                ->orderBy('a.rt','asc')
+                                ->get();
+				
+				// catatan 
+				// rt 1
+					// jumlah anggota
+					// jumlah korte
+					// keterangan = kekurangan korte 
+				// $catatanKortes = DB::table('org_diagram_rt as a')
+                                // ->select('a.rt','a.village_id')
+								// ->join('users as b','a.nik','=','b.nik')
+                                // ->where('a.base','KORRT')
+                                // ->where('a.village_id', $village_id)
+                                // ->groupBy('a.rt','a.village_id')
+                                // ->orderBy('a.rt','asc')
+                                // ->get();
+				$catatanKortes = DB::table('users as a')
+								->select('a.rt','a.village_id', 
+								DB::raw("(SELECT COUNT(*) from users where rt = a.rt and village_id = a.village_id) as total"))
+								->leftJoin('org_diagram_rt as b','b.nik','=','a.nik')
+								->where('a.village_id', $village_id)
+								->groupBy('a.rt','a.village_id')
+								->orderBy('a.rt','asc')
+								->get();
+								
+								
+				$resultCatatanKorte = [];
+				foreach($catatanKortes as $ckorte){
+					
+					$countKorte   = DB::table('org_diagram_rt as a')
+									->join('users as b','a.nik','=','b.nik')
+									->where('a.village_id',$village_id)
+									->where('a.rt', $ckorte->rt)
+									->where('a.base','KORRT')
+									->where('b.nik','!=',null)
+									->count();
+									
+					$max_anggota      = 25;
+					$kekurangan_korte = ceil($ckorte->total / $max_anggota);
+						
+					$resultCatatanKorte[] = [
+						'rt' => $ckorte->rt,
+						'jml_member' => $ckorte->total,
+						'jml_korte_per_village' => $countKorte,
+						'kekurangan_korte' => $kekurangan_korte - $countKorte
+					];
+				}
+				
+				// total kekurangan korte per rt 
+				$total_kekurangan_korte_per_rt = collect($resultCatatanKorte)->sum(function($q){
+					return $q['kekurangan_korte'];
+				});
+				
+				// belum ada korte
+				$korteIsNotYets = DB::table('users as a')
+								->select('a.rt', 
+									DB::raw("(SELECT COUNT(*) from org_diagram_rt where rt = a.rt and village_id = $village_id GROUP by rt) as total_korte"),
+									DB::raw("(SELECT COUNT(*) from users WHERE rt = a.rt and village_id = $village_id) as total_member")
+									)
+								->where('a.village_id', $village_id)
+								->where('a.rt', '!=',0)
+								->groupBy('a.rt')
+								->get();
+				
+				$resultKorteIsNotYets = [];
+				
+				foreach($korteIsNotYets as $korteIsNotYet){
+					
+					// hitung jumlah korte yang dibutuhkan
+					$korte_needed = ceil($korteIsNotYet->total_member / 25);
+					if($korteIsNotYet->total_korte == null){
+							$resultKorteIsNotYets[] = [
+							'rt' => $korteIsNotYet->rt,
+							'jml_member' => $korteIsNotYet->total_member,
+							'dibutuhkan_korte' => $korte_needed
+						]; 
+					}
+					
+				}
+				
+				// total kekurangan korte 
+				$total_kekurangan_korte_belum_ada = collect($korteIsNotYets)->sum(function($q){
+					if($q->total_korte == null) return ceil($q->total_member / 25);
+				});
+				
+				
+				// total kekurangan rt per desa
+				$total_kekurangan_korte_per_desa = $total_kekurangan_korte_per_rt + $total_kekurangan_korte_belum_ada; 
+				
+				$village = Village::with(['district'])->where('id', $village_id)->first();
+				
+				$kordes  = DB::table('org_diagram_village as a')
+							->select('a.title','b.name')
+							->join('users as b','a.nik','=','b.nik')
+							->where('a.village_id', $village_id)
+							->orderBy('a.level_org')->get();
+				
+				
+				$results = [
+					'dataKorte' => $dataKorte,
+					'rincian' => $kortes,
+					'catatan' => $resultCatatanKorte,
+					'belum_ada_korte' => $resultKorteIsNotYets,
+					'total_kekurangan_korte_per_desa' => $total_kekurangan_korte_per_desa
+				];
+				$no = 1; 
+					
+				// jumlah belum ada korte nya 
+				
+				// total kekurangan korte
+			$pdf = PDF::LoadView('pages.report.korteandrincian', compact('village','results','no','kordes'))->setPaper('a4');
+			return $pdf->download('TIM KORDES DAN KORTE DESA '.$village->name.'.pdf');
+			 
+ 
+		}else {
 
             #report by desa 
             
