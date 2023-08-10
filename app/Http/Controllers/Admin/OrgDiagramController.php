@@ -2512,14 +2512,16 @@ class OrgDiagramController extends Controller
 									
 					$max_anggota      = 25;
 					$kekurangan_korte = ceil($ckorte->total / $max_anggota);
+					$hasil_kekurangan_korte = $kekurangan_korte - $countKorte;
+					$hasil_kekurangan_korte = $hasil_kekurangan_korte < 0 ? 0 : $kekurangan_korte - $countKorte;
 						
 					$resultCatatanKorte[] = [
 						'rt' => $ckorte->rt,
 						'jml_member' => $ckorte->total,
 						'jml_korte_per_village' => $countKorte,
-						'kekurangan_korte' => $kekurangan_korte - $countKorte
+						'kekurangan_korte' => $hasil_kekurangan_korte
 					];
-				}
+				} 
 				
 				// total kekurangan korte per rt 
 				$total_kekurangan_korte_per_rt = collect($resultCatatanKorte)->sum(function($q){
@@ -2578,6 +2580,7 @@ class OrgDiagramController extends Controller
 					'belum_ada_korte' => $resultKorteIsNotYets,
 					'total_kekurangan_korte_per_desa' => $total_kekurangan_korte_per_desa
 				];
+				 
 				$no = 1; 
 					
 				// jumlah belum ada korte nya 
