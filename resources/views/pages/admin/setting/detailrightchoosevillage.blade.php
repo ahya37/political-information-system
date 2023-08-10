@@ -69,16 +69,16 @@
                                         <input type="number" name="tidak_memnenuhi_syarat_7" class="form-control col-sm-6"
                                             value="{{ $data->tidak_memnenuhi_syarat_7 }}">
                                     </div>
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <label>Pemilih Aktif Laki-laki</label>
                                         <input type="number" name="pemilih_aktif_l" class="form-control col-sm-6"
                                             value="{{ $data->pemilih_aktif_l }}">
-                                    </div>
-                                    <div class="form-group">
+                                    </div> --}}
+                                    {{-- <div class="form-group">
                                         <label>Pemilih Aktif Perempuan</label>
                                         <input type="number" name="pemilih_aktif_p" class="form-control col-sm-6"
                                             value="{{ $data->pemilih_aktif_p }}">
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group">
                                         <label>Pemilih Baru</label>
                                         <input type="number" name="pemilih_baru" class="form-control col-sm-6"

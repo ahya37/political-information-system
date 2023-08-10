@@ -350,6 +350,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/listrightchoose/district/{regencyId}','SettingController@listRightChooseDistrict')->name('admin-listrightchoose-district');
         Route::get('/listrightchoose/village/{districtId}','SettingController@listRightChooseVillage')->name('admin-listrightchoose-village');
 		Route::get('/rightchoose/village/detail/{id}','SettingController@detailHakPilihByVillage')->name('admin-rightchoosevillage-details');
+		Route::post('/rightchoose/village/dpt/store/{id}','SettingController@storeDetailSuaraByVillage')->name('admin-rightchoosevillage-details-store');
 		
 		
 
