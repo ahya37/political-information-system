@@ -1448,6 +1448,30 @@ class OrgDiagramController extends Controller
 		
 		
     }
+	
+	public function downloadTpsTimPemenanganSuara($id){
+		
+		// get data korte, rt, no hp, desa, kecamatan
+		$korte = DB::table('org_diagram_rt as a')
+				 ->select('b.name','a.rt','a.telp','c.name as village','d.name as district') 
+				 ->join('users as b','a.nik','=','b.nik')
+				 ->join('villages as c','a.village_id','=','c.id')
+				 ->join('districts as d','a.district_id','=','d.id')
+				 ->where('a.idx', $id)
+				 ->first();
+				 
+		$anggota = DB::table('org_diagram_rt as a')
+				 ->select('b.name','a.rt','b.address') 
+				 ->join('users as b','a.nik','=','b.nik')
+				 ->where('a.pidx', $id)
+				 ->where('a.base','ANGGOTA')
+				 ->get();
+		$no     = 1;
+				 
+		$pdf = PDF::LoadView('pages.report.daftarpemilih', compact('no','korte','anggota'))->setPaper('a4');
+		return $pdf->download('TPS TIM PEMENANGAN SUARA KORTE RT.'.$korte->rt.'('.$korte->name.') DS.'.$korte->village.'.pdf');
+		
+	}
 
     public function getListDataAnggotaByKorRt(Request $request)
     {
@@ -2617,12 +2641,21 @@ class OrgDiagramController extends Controller
 
     public function reportOrgDistrictExcel(Request $request)
     {
+		
+		if($request->report_type == 'Download Excel'){
+			
+			$district_id = $request->district_id;
 
-        $district_id = $request->district_id;
-
-        // dd([$dapil_id, $district_id, $village_id, $rt]);
-        $district = DB::table('districts')->select('name')->where('id', $district_id)->first();
-        return $this->excel->download(new KorCamExport($district_id), 'TIM KOORDINATOR KECAMATAN ' . $district->name . '.xls');
+			// dd([$dapil_id, $district_id, $village_id, $rt]);
+			$district = DB::table('districts')->select('name')->where('id', $district_id)->first();
+			return $this->excel->download(new KorCamExport($district_id), 'TIM KOORDINATOR KECAMATAN ' . $district->name . '.xls');
+		}else{
+			
+			// create surat pernyataan tim per kecamatan
+			$pdf = PDF::LoadView('pages.report.suratpernyataantim')->setPaper('a4');
+			return $pdf->stream('SURAT PERNYATAAN.pdf'); 
+			
+		}
     }
 
     public function reportOrgVillagetExcel(Request $request)

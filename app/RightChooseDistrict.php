@@ -49,7 +49,13 @@ class RightChooseDistrict extends Model
                 SUM(jml_dpshp_online) as jml_dpshp_online
         from right_to_choose_districts where regency_id =  $regency_id";
 
-return collect(DB::select($sql))->first();
+		return collect(DB::select($sql))->first();
     }
+	
+	public function getDataDptDistrict($district_id){
+		
+		$sql = DB::table("right_to_choose_districts")->where('district_id', $district_id)->first();
+		return $sql;
+	}
 
 }

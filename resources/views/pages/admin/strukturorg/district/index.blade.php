@@ -41,7 +41,8 @@
                     <div class="row col-md-12">
                         <a class="btn btn-sm btn-sc-primary text-white"
                             href="{{ route('admin-struktur-organisasi-district-create') }}">+ Tambah</a>
-                            <button class="btn btn-sm btn-sc-primary text-white ml-2" type="submit">Download Excel</button>
+                            <input class="btn btn-sm btn-success text-white ml-2" type="submit" name="report_type" value="Download Excel">
+                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" name="report_type" value="Download Surat Pernyataan">
                     </div>
                 </div>
                 </form>

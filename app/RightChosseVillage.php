@@ -59,4 +59,17 @@ class RightChosseVillage extends Model
 
         return collect(DB::select($sql))->first();
     }
+	
+	public function getDataDptVillageByDistrict($district_id){
+		
+		$sql = DB::table('right_to_choose_village as a')
+				->select('a.*','b.name as village')
+				->join('villages as b','a.village_id','=','b.id')
+				->where('a.district_id', $district_id)
+				->orderBy('b.name','asc') 
+				->get();
+				
+		return $sql;
+				
+	}
 }

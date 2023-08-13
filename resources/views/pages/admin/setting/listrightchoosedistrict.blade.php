@@ -20,13 +20,13 @@
 
                 <div class="row">
                   <div class="col-7">
-                    @include('layouts.message')
+                    @include('layouts.message') 
                     <div class="card">
                       <div class="card-body">
                        <div class="table-responsive">
                                   <table id="data" class="table table-sm table-striped" width="100%">
-                                    <thead>
-                                      <tr>
+                                    <thead> 
+                                      <tr> 
                                         <th class="col-1">NO</th>
                                         <th>KECAMATAN</th>
                                         <th class="text-right">JUMLAH TPS</th>
@@ -44,7 +44,7 @@
                                                 <td class="text-right">{{ $gF->decimalFormat($item->count_tps) }}</td>
                                                 <td class="text-right">{{ $gF->decimalFormat($item->count_vooter) }}</td>
                                                 <td>
-                                                  <a class="btn btn-sm btn-info text-white">Download</a>
+                                                  <a href="{{route('admin-listrightchoose-district-dptdownload', $item->district_id)}}" class="btn btn-sm btn-info text-white">Download</a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -59,7 +59,7 @@
             </div>
           </div>
 @endsection
-
+ 
 @push('addon-script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}" type="text/javascript"></script>

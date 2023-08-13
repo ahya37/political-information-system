@@ -293,6 +293,24 @@ class SettingController extends Controller
         
         return view('pages.admin.setting.listrightchoosedistrict', compact('no','rightChoose','gF','regency'));
     }
+	
+	public function downloadDptDistrict($district_id){
+		
+		// get data dpt desa by kecamatan
+		$district = District::with(['regency.province'])->where('id', $district_id)->first();
+		$righChooseVillageModel  = new RightChosseVillage();
+		$dpt_desa	 			 = $righChooseVillageModel->getDataDptVillageByDistrict($district_id);
+		
+		// get kalkulasi dpt kecamatan
+		$RightChooseDistrictModel = new RightChooseDistrict();
+		$dpt_kec 			      = $RightChooseDistrictModel->getDataDptDistrict($district_id);
+		$no 					  = 1; 
+		
+		$pdf = PDF::LoadView('pages.report.dptdistrict', compact('dpt_desa','dpt_kec','district','no'))->setPaper('a4','landscape');
+		return $pdf->download('DPT KECAMATAN '.strtoupper($district->name).'.pdf');
+		
+		
+	}
 
     public function listRightChooseVillage($districtId)
     {
@@ -641,8 +659,8 @@ class SettingController extends Controller
 				// get data kelompok usia korcam
 				$usia_korcam = $OrgModel->getDataUsiaKorcamByDapil($dapil_id);
 				$usia_kordes = $OrgModel->getDataUsiaKordesByDapil($dapil_id);
-				$usia_korte  = $OrgModel->getDataUsiaKorteByDapil($dapil_id);
-				$all_usia    = array_merge($usia_korcam,$usia_kordes,$usia_korte);
+				// $usia_korte  = $OrgModel->getDataUsiaKorteByDapil($dapil_id);
+				$all_usia    = array_merge($usia_korcam,$usia_kordes);
 				
 				$kelompok_usia_tim = [
 					'<20' => CountUsiaTim::usia($all_usia, 'usia','<=',20),
@@ -673,6 +691,7 @@ class SettingController extends Controller
 					'total_persen' => $total_persen,
 					'total_tim' => $total_all_tims 
 				];
+				
 				$resultData = [
 					'dapil' => $dapil,
 					'jk' => $resultDataJk,
@@ -797,8 +816,8 @@ class SettingController extends Controller
 				
 				// get data kelompok usia korcam
 				$usia_kordes = $OrgModel->getDataUsiaKordesByKecamatan($district_id);
-				$usia_korte  = $OrgModel->getDataUsiaKorteByKecamtan($district_id);
-				$all_usia    = array_merge($usia_kordes,$usia_korte);
+				// $usia_korte  = $OrgModel->getDataUsiaKorteByKecamtan($district_id);
+				$all_usia    = $usia_kordes; 
 							
 				$kelompok_usia_tim = [
 					'<20' => CountUsiaTim::usia($all_usia, 'usia','<=',20),
@@ -826,15 +845,15 @@ class SettingController extends Controller
 							   +$kelompok_usia_tim['persen50']; 
 				$usia = [
 					'kelompok_usia' => $kelompok_usia_tim,
-					'total_persen' => $total_persen,
-					'total_tim' => $total_all_tims 
+					'total_persen' => round(($jk_all_tim_L/$total_all_tims)*100 + ($jk_all_tim_P/$total_all_tims)*100),
+					'total_tim' => $total_all_tims
 				];
 				$resultData = [
 					'kecamatan' => $kecamatan,
 					'jk' => $resultDataJk,
 					'usia' => $usia
 				
-				]; 
+				];
 				
 				$pdf = PDF::LoadView('pages.report.summarytimkorcam', compact('resultData'))->setPaper('a4');
 				return $pdf->download('SUMMARY TIM KECAMATAN '.strtoupper($kecamatan->name).'.pdf');

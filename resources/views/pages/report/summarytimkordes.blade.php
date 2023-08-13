@@ -157,7 +157,7 @@
 					<td align="right">{{$resultData['usia']['kelompok_usia']['persen50']}}</td>
 				</tr>
 				<tr>
-					<td><b>Total</b></td><td align="right"><b>{{$resultData['usia']['total_tim']}}</b></td><td align="right">{{$resultData['usia']['total_persen']}}</td>
+					<td><b>Total</b></td><td align="right"><b>{{$resultData['usia']['total_tim']}}</b></td><td align="right"><b>{{$resultData['usia']['total_persen']}}</b></td>
 				</tr>
 				
 				</tbody>

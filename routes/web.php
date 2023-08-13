@@ -350,7 +350,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/listrightchoose/district/{regencyId}','SettingController@listRightChooseDistrict')->name('admin-listrightchoose-district');
         Route::get('/listrightchoose/village/{districtId}','SettingController@listRightChooseVillage')->name('admin-listrightchoose-village');
 		Route::get('/rightchoose/village/detail/{id}','SettingController@detailHakPilihByVillage')->name('admin-rightchoosevillage-details');
-		Route::post('/rightchoose/village/dpt/store/{id}','SettingController@storeDetailSuaraByVillage')->name('admin-rightchoosevillage-details-store');
+		Route::get('/rightchoose/district/downloaddpt/{id}','SettingController@downloadDptDistrict')->name('admin-listrightchoose-district-dptdownload');
 		
 		
 
@@ -452,6 +452,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/rt/detail/anggota/{idx}','OrgDiagramController@detailAnggotaByKorRT')->name('admin-struktur-organisasi-rt-detail-anggota');
             Route::get('/rt/detail/anggota/download/excel/{idx}','OrgDiagramController@downloadMembersRt')->name('admin-struktur-organisasi-rt-detail-anggota-download');
             Route::get('/rt/detail/anggota/download/pdf/{idx}','OrgDiagramController@downloadMembersRtPDF')->name('admin-struktur-organisasi-rt-detail-anggota-download');
+            Route::get('/rt/detail/anggota/tpsttimpemenangan/download/pdf/{idx}','OrgDiagramController@downloadTpsTimPemenanganSuara')->name('admin-struktur-organisasi-rt-detail-anggota-download');
             Route::get('/district','OrgDiagramController@indexOrgDistrict')->name('admin-struktur-organisasi-district-index');
             Route::get('/district/create','OrgDiagramController@createOrgDistrict')->name('admin-struktur-organisasi-district-create');
             Route::post('/district/save','OrgDiagramController@saveOrgDistrict')->name('admin-struktur-organisasi-district-save');
