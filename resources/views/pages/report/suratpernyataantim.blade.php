@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Surat Pemilihan</title>
+        <title>Surat Pernyataan</title>
     </head>
     <style>
             /** Define the margins of your page **/
@@ -103,7 +103,7 @@
                 <tr>
                     <td style="padding-right: 10px;">Nama</td>
                     <td>:</td>
-                    <td></td>
+                    <td>{{ucwords(strtolower($korte->name))}}</td> 
                 </tr>
                 <tr>
                     <td>TPS</td>
@@ -113,26 +113,28 @@
                 <tr>
                     <td>Alamat</td>
                     <td>:</td>
+					<td>{{ucwords(strtolower($korte->address))}}</td>
                 </tr>
 				<tr>
 					<td></td>
-					<td>Kp</td>
-					<td>:</td>
-				</tr>
-				<tr>
 					<td></td>
 					<td>RT / RW</td>
 					<td>:</td>
+					<td>{{$korte->rt}} / {{$korte->rw}}</td>
 				</tr>
 				<tr>
+					<td></td>
 					<td></td>
 					<td>Desa</td>
 					<td>:</td>
+					<td>{{ucwords(strtolower($korte->village))}}</td>
 				</tr>
 				<tr>
 					<td></td>
+					<td></td>
 					<td>Kecamatan</td>
 					<td>:</td>
+					<td>{{ucwords(strtolower($korte->district))}}</td>
 				</tr>
             </table>
 
@@ -142,11 +144,11 @@
             <p class="fonts">     Demikian surat ini saya buat dengan sebenarnya dan tidak ada paksaan dari pihak manapun.</p>
 
             <div class="footer">
-                <p>Banten, ... 20...</p>
+                <p>Banten, {{date('d/m/Y')}}</p>
 
                 <p style="margin-left: 0; font-size: 15px;">Yang membuat pernyataan</p>
 
-                <p class="fonts" style="margin-top:60px">Arya</p>
+                <p class="fonts" style="margin-top: 70px;"><b>{{ucwords(strtolower($korte->name))}}</b></p>
             </div>
             <div class="end">
                 <p>Catatan:</p>

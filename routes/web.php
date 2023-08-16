@@ -33,8 +33,13 @@ Route::get('/formintelegence','Admin\InformationController@shareFormIntelegencyP
 Route::get('/formintelegences','Admin\InformationController@shareFormIntelegencyPoliticMaintenance')->name('formintelegence');
 Route::post('/saveformintelegence','Admin\InformationController@saveFormIntelegencyPolitic')->name('saveformintelegence');
 
+// link surat undangan 
+Route::get('/undangan/{referal}','Admin\InformationController@suratUndangan'); 
+
 
 Route::get('/testgetfigure','TestController@testGretFigure');
+
+
 
 Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
     Route::get('/home', 'HomeController@index')->name('home');
@@ -168,6 +173,8 @@ Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
 });
 		
 Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
+	Route::get('/surat/undangan/korcam/download/{id}', 'OrgDiagramController@suratUndanganKorte');
+	
     Route::get('/auth','LoginController@loginForm')->name('admin-login');
     Route::post('/login','LoginController@login')->name('post-admin-login');
     Route::post('/accadmindistrict','AdminController@accAdminDistrict');
@@ -351,9 +358,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/listrightchoose/village/{districtId}','SettingController@listRightChooseVillage')->name('admin-listrightchoose-village');
 		Route::get('/rightchoose/village/detail/{id}','SettingController@detailHakPilihByVillage')->name('admin-rightchoosevillage-details');
 		Route::get('/rightchoose/district/downloaddpt/{id}','SettingController@downloadDptDistrict')->name('admin-listrightchoose-district-dptdownload');
+		Route::post('/rightchoose/village/dpt/{id}','SettingController@storeDetailSuaraByVillage')->name('admin-rightchoosevillage-details-store');
 		
-		
-
         // anggota potensial download
         Route::post('/by_referal/downloadpdfall/{user_id}','MemberController@memberByReferalAllDownloadPDF')->name('by-referal-downloadpdfall');
         Route::post('/by_referal/downloadexcelall/{user_id}','MemberController@memberByReferalDownloadExcelAll')->name('by-referal-downloadexcelall');
@@ -466,7 +472,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/report/district/excel','OrgDiagramController@reportOrgDistrictExcel')->name('admin-struktur-organisasi-district-report-excel');
             Route::post('/report/village/excel','OrgDiagramController@reportOrgVillagetExcel')->name('admin-struktur-organisasi-village-report-excel');
             Route::post('/report/rt/excel','OrgDiagramController@reportOrgRTExcel')->name('admin-struktur-organisasi-rt-report-excel');
- 
+			
+			Route::get('/rt/detail/anggota/suratpernyatan/{idx}','OrgDiagramController@storeSuratPernyatanKorte');
+			
             #update level org all
             Route::get('/village/update/level','OrgDiagramController@updateLelelOrgAll');  
 			
@@ -596,6 +604,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         });
            
     });
+	
+	 
     
 });
 

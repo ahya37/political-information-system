@@ -65,7 +65,7 @@
       /* position: absolute; */
       width: 60px;
       height: 70px;
-      margin-top: 40px;
+      margin-top: 23px;
       margin-left: 10px;
       border-radius: 8px;
     }

@@ -192,6 +192,15 @@ class OrgDiagram extends Model
 		
 		return DB::select($sql);
 	}
+	public function getJkAllKorcamAll(){ 
+	
+		$sql = "SELECT  CASE when b.gender = '0' then 'L' else 'P' end as jenis_kelamin, 
+				count(a.id) as total_jk_all_korcam from org_diagram_district as a
+				join users as b on a.nik = b.nik 
+				group by b.gender";
+		
+		return DB::select($sql);
+	}
 	
 	public function getJkAllKordesByDapil($dapil_id){ 
 	
@@ -204,6 +213,16 @@ class OrgDiagram extends Model
 		return DB::select($sql);
 	}
 	
+	public function getJkAllKordesAll(){ 
+	
+		$sql = "SELECT  CASE when b.gender = '0' then 'L' else 'P' end as jenis_kelamin, 
+				count(a.id) as total_jk_all_kordes from org_diagram_village as a
+				join users as b on a.nik = b.nik 
+				group by b.gender";
+		
+		return DB::select($sql);
+	}
+	
 	public function getJkAllKorteByDapil($dapil_id){ 
 	
 		$sql = "SELECT CASE when b.gender = '0' then 'L' else 'P' end as jenis_kelamin, 
@@ -211,6 +230,16 @@ class OrgDiagram extends Model
 				join users as b on a.nik = b.nik 
 				join dapil_areas as c on a.district_id = c.district_id
 				where c.dapil_id = $dapil_id and a.base ='KORRT' group by b.gender";
+		
+		return DB::select($sql);
+	}
+	
+	public function getJkAllKorteAll(){ 
+	
+		$sql = "SELECT CASE when b.gender = '0' then 'L' else 'P' end as jenis_kelamin, 
+				count(a.id) as total_jk_all_korte from org_diagram_rt as a
+				join users as b on a.nik = b.nik where a.base = 'KORRT' 
+				group by b.gender";
 		
 		return DB::select($sql);
 	}
@@ -261,6 +290,14 @@ class OrgDiagram extends Model
 		return DB::select($sql);
 	}
 	
+	public function getDataUsiaKorcamAll(){
+		
+		$sql = "SELECT DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), b.date_berth)), '%Y') + 0 as usia
+				from org_diagram_district as a
+				join users as b on a.nik = b.nik";
+		return DB::select($sql);
+	}
+	
 	public function getDataUsiaKordesByKecamatan($district_id){
 		
 		$sql = "SELECT DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), b.date_berth)), '%Y') + 0 as usia
@@ -282,6 +319,14 @@ class OrgDiagram extends Model
 		return DB::select($sql);
 	}
 	
+	public function getDataUsiaKordesAll(){
+		
+		$sql = "SELECT DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), b.date_berth)), '%Y') + 0 as usia
+				from org_diagram_village as a
+				join users as b on a.nik = b.nik";
+		return DB::select($sql);
+	}
+	
 	public function getDataUsiaKorteByDapil($dapil_id){
 		 
 		$sql = "SELECT DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), b.date_berth)), '%Y') + 0 as usia
@@ -291,6 +336,15 @@ class OrgDiagram extends Model
 				join districts as d on c.district_id = d.id
 				join dapil_areas as e on e.district_id = d.id
 				where e.dapil_id = $dapil_id and a.base = 'KORRT'";
+		return DB::select($sql);
+	}
+	
+	public function getDataUsiaKorteAll(){
+		 
+		$sql = "SELECT DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), b.date_berth)), '%Y') + 0 as usia
+				from org_diagram_rt as a
+				join users as b on a.nik = b.nik
+				where  a.base = 'KORRT'";
 		return DB::select($sql);
 	}
 	

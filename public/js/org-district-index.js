@@ -298,6 +298,7 @@ let table = $("#data").DataTable({
                 return `
                         <button type="button" class="btn btn-sm btn-info" onclick="onEdit(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>
+                        <a href="/admin/surat/undangan/korcam/download/${row.id}"  class="btn btn-sm btn-info mt-4" >Download Surat Undangan</a>
                         `
             },
         },

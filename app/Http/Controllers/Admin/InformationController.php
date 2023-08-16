@@ -934,5 +934,10 @@ class InformationController extends Controller
             echo $html;
             exit;
     }
+	
+	public function suratUndangan($referal){
+		
+		return view('pages.report.undangan');
+	}
 
 }

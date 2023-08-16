@@ -323,8 +323,9 @@ class DashboardController extends Controller
         $total_village_filled      = count($village_filled);
         $presentage_village_filled = $gF->persen(($total_village_filled / $total_village) * 100); // persentasi jumlah desa terisi
 
-        #total dpt nasioanal, sum count_vooter level provinsi
-        $rightChooseProvince = RightChooseProvince::sum('count_vooter');
+        #total dpt nasioanal, sum count_vooter level provinsi 
+		$RightChooseProvinceModel = new RightChooseProvince(); 
+        $rightChooseProvince      = $RightChooseProvinceModel->getTotalDptNasional()->total_dpt;
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
@@ -359,7 +360,9 @@ class DashboardController extends Controller
         $village_filled = $villageModel->getVillageFilledRegency($regency_id); //fungsi total desa yang terisi 
         $total_village_filled      = count($village_filled); // total desa yang terisi
         $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
-        $rightChooseRegency        = RightChooseDistrict::where('regency_id', $regency_id)->sum('count_vooter');
+        
+		$RightChooseDistrictModel  = new RightChooseDistrict();
+		$rightChooseRegency        = $RightChooseDistrictModel->getTotalDptRegency($regency_id)->total_dpt;
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
@@ -394,7 +397,9 @@ class DashboardController extends Controller
         $village_filled = $villageModel->getVillageFilledDistrict($district_id); //fungsi total desa yang terisi 
         $total_village_filled      = count($village_filled); // total desa yang terisi
         $presentage_village_filled = $gF->persen(($total_village_filled / $total_village) * 100); // persentasi jumlah desa terisi
-        $rightChooseDistrict       = RightChosseVillage::where('district_id', $district_id)->sum('count_vooter');
+        
+		$RightChosseVillageModel   = new RightChosseVillage();
+		$rightChooseDistrict       = $RightChosseVillageModel->getTotalDptDistrict($district_id)->total_dpt;
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
@@ -464,8 +469,9 @@ class DashboardController extends Controller
         
         // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillageFirst($village_id);
-
-        $rightChooseVillage = RightChosseVillage::where('village_id', $village_id)->sum('count_vooter');
+		
+		$RightChosseVillageModel = new RightChosseVillage();
+        $rightChooseVillage = $RightChosseVillageModel->getTotalDptVillage($village_id)->total_dpt;
         $tpsVillag          = Tps::select('id')->where('village_id', $village_id)->count();
 
         $data = [
@@ -1673,7 +1679,9 @@ class DashboardController extends Controller
         $village_filled = $villageModel->getVillageFillProvince($province_id); // fungsi total desa di provinsi banten
         $total_village_filled      = count($village_filled);
         $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
-        $rightChooseProvince       = RightChooseRegency::where('province_id', $province_id)->sum('count_vooter');
+		
+		$RightChooseRegencyModel   = new RightChooseRegency();
+        $rightChooseProvince       = $RightChooseRegencyModel->getTotalDptProvince($province_id)->total_dpt;
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),

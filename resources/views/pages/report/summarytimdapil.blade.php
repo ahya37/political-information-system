@@ -8,19 +8,18 @@
                 margin: 100px 50px;
 				height: 100%;
             }
-
+			
             header {
                 position: fixed;
                 top: -100px;
                 left: 0px;
-                right: 0px; 
-
+                right: 0px;
+				
                 /** Extra personal styles **/
                 color: rgb(8, 7, 7);
                 text-align: center;
                 line-height: 35px;
             }
-
             footer {
                 position: fixed; 
                 bottom: -100px; 

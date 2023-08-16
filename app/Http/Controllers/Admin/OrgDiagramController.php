@@ -23,7 +23,7 @@ use App\Models\Village;
 use PDF;
 use Zipper;
 use File;
-use Storage;
+use Storage; 
 
 class OrgDiagramController extends Controller
 {
@@ -1418,6 +1418,22 @@ class OrgDiagramController extends Controller
         return $this->excel->download(new KorteMembersExport($idx), $title);
     }
 	
+	public function storeSuratPernyatanKorte($idx){
+		
+		// get data korte by idx 
+		 $korte = DB::table('org_diagram_rt as a')
+            ->select('a.rt', 'a.name','b.address','c.name as village', 'd.name as district','a.rt','b.rw','a.telp','b.code')
+            ->join('users as b', 'b.nik', '=', 'a.nik')
+            ->join('villages as c', 'c.id', '=', 'a.village_id')
+            ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->where('idx', $idx)
+            ->first(); 
+			
+		$pdf  = PDF::LoadView('pages.report.suratpernyataantim', compact('korte'))->setPaper('a4');
+		return $pdf->download('SURAT PERNYATAAN KETERSEDIAAN '.$korte->rt.'( '.$korte->name.').pdf');
+		
+	}
+	
 	public function downloadMembersRtPDF($idx)
     {
 
@@ -2614,8 +2630,70 @@ class OrgDiagramController extends Controller
 			return $pdf->download('TIM KORDES DAN KORTE DESA '.$village->name.'.pdf');
 			 
  
+		}elseif($request->report_type == 'Download Surat Undangan Korte Per Desa PDF'){
+			
+			$village = DB::table('villages')->select('name')->where('id', $village_id)->first();
+			
+			if($request->rt != ''){
+				
+				$korte = DB::table('org_diagram_rt as a')
+						->select('a.nik')
+						->join('users as b','a.nik','=','b.nik')
+						->where('a.base','KORRT')
+						->where('a.village_id', $village_id)
+						->where('a.rt', $request->rt) 
+						->get();
+			}else{ 
+				
+				$korte = DB::table('org_diagram_rt as a')
+						->select('a.nik')
+						->join('users as b','a.nik','=','b.nik')
+						->where('a.base','KORRT')
+						->where('a.village_id', $village_id)
+						->get();
+			}
+			
+			
+			
+				// get dat korcam by nik
+			$directory = public_path('/docs/suratundangan/korte/pdf/SURAT UNDANGAN TIM KORTE DS.'.$village->name);
+			
+			if(File::exists($directory)) {
+				File::deleteDirectory($directory); // hapus dir nya juga
+			}
+						
+			File::makeDirectory(public_path('/docs/suratundangan/korte/pdf/SURAT UNDANGAN TIM KORTE DS.'.$village->name));
+			
+			foreach($korte as $val){
+					
+					$path = '/docs/suratundangan/korte/pdf/SURAT UNDANGAN TIM KORTE DS.'.$village->name.'/'; 
+					 
+					// get nama tim by nik 
+					$kordesItem = DB::table('org_diagram_rt as a')
+						->select('b.name')
+						->join('users as b', 'b.nik', '=', 'a.nik')
+						->where('a.village_id', $village_id)
+						->where('a.nik', $val->nik) 
+						->first();
+						 
+					$tim = $kordesItem;
+									
+					$fileName = 'SURAT UNDANGAN TIM KORTE DS. '.$kordesItem->name.'.pdf';
+					
+					$pdf  = PDF::LoadView('pages.report.surat-undangan', compact('tim'))->setPaper('a4');
+					$pdfFilePath = public_path('/docs/suratundangan/korte/pdf/SURAT UNDANGAN TIM KORTE DS.'.$village->name.'/'.$fileName);
+					
+					file_put_contents($pdfFilePath, $pdf->output());
+					
+				}
+			
+				$files = glob(public_path('/docs/suratundangan/korte/pdf/SURAT UNDANGAN TIM KORTE DS.'.$village->name.'/*'));
+				$createZip = public_path('/docs/suratundangan/korte/pdf/SURAT UNDANGAN TIM KORTE DS.'.$village->name.'.zip');
+				Zipper::make(public_path($createZip))->add($files)->close(); 
+					
+				return response()->download(public_path($createZip)); 
+				
 		}else {
-
             #report by desa 
             
             return $this->excel->download(new KorteExport($village_id), 'TIM KOORDINATOR RT ' . $village->name . '.xls');
@@ -2636,24 +2714,120 @@ class OrgDiagramController extends Controller
 			if($row->JABATAN == $field)
 				return $row->JABATAN; 
 		}
-	}
+	} 
 	
 
     public function reportOrgDistrictExcel(Request $request)
     {
+		$district_id = $request->district_id;
 		
 		if($request->report_type == 'Download Excel'){
-			
-			$district_id = $request->district_id;
-
 			// dd([$dapil_id, $district_id, $village_id, $rt]);
 			$district = DB::table('districts')->select('name')->where('id', $district_id)->first();
 			return $this->excel->download(new KorCamExport($district_id), 'TIM KOORDINATOR KECAMATAN ' . $district->name . '.xls');
+			
+		}elseif($request->report_type == 'Download Surat Undangan Per Kecamatan'){
+			
+			$district = DB::table('districts')->select('name')->where('id', $district_id)->first();
+			// get data korcam by kecamatan
+			$korcam = DB::table('org_diagram_district as a')
+						->select('a.nik')
+						->join('users as b','a.nik','=','b.nik')
+						->where('a.district_id', $district_id)
+						->get();
+				
+				// get dat korcam by nik
+			$directory = public_path('/docs/suratundangan/korcam/pdf/SURAT UNDANGAN TIM KORCAM KEC.'.$district->name);
+			
+			if(File::exists($directory)) {
+				File::deleteDirectory($directory); // hapus dir nya juga
+			}
+						
+			File::makeDirectory(public_path('/docs/suratundangan/korcam/pdf/SURAT UNDANGAN TIM KORCAM KEC.'.$district->name));
+			
+			foreach($korcam as $val){
+					
+					$path = '/docs/suratundangan/korcam/pdf/SURAT UNDANGAN TIM KORCAM KEC.'.$district->name.'/'; 
+					 
+					// get nama tim by nik 
+					$korcamItem = DB::table('org_diagram_district as a')
+						->select('b.rt', 'b.name','b.address','c.name as village', 'd.name as district','b.rw','a.telp','b.code')
+						->join('users as b', 'b.nik', '=', 'a.nik')
+						->join('villages as c', 'c.id', '=', 'b.village_id')
+						->join('districts as d', 'd.id', '=', 'a.district_id')
+						->where('a.district_id', $district_id)
+						->where('a.nik', $val->nik) 
+						->first();
+						 
+					$tim = $korcamItem;
+									
+					$fileName = 'SURAT UNDANGAN TIM KORCAM KEC. '.$korcamItem->name.'.pdf';
+					
+					$pdf  = PDF::LoadView('pages.report.surat-undangan', compact('tim'))->setPaper('a4');
+					$pdfFilePath = public_path('/docs/suratundangan/korcam/pdf/SURAT UNDANGAN TIM KORCAM KEC.'.$district->name.'/'.$fileName);
+					
+					file_put_contents($pdfFilePath, $pdf->output());
+					
+				}
+			
+				$files = glob(public_path('/docs/suratundangan/korcam/pdf/SURAT UNDANGAN TIM KORCAM KEC.'.$district->name.'/*'));
+				$createZip = public_path('/docs/suratundangan/korcam/pdf/SURAT UNDANGAN TIM KORCAM KEC.'.$district->name.'.zip');
+				Zipper::make(public_path($createZip))->add($files)->close(); 
+					
+				return response()->download(public_path($createZip)); 
+			
+			 
+			
 		}else{
 			
-			// create surat pernyataan tim per kecamatan
-			$pdf = PDF::LoadView('pages.report.suratpernyataantim')->setPaper('a4');
-			return $pdf->stream('SURAT PERNYATAAN.pdf'); 
+			$district = DB::table('districts')->select('name')->where('id', $district_id)->first();
+			// get data korcam by kecamatan
+			$korcam = DB::table('org_diagram_district as a')
+						->select('a.nik')
+						->join('users as b','a.nik','=','b.nik')
+						->where('a.district_id', $district_id)
+						->get();
+				
+				// get dat korcam by nik
+			$directory = public_path('/docs/suratpernyataan/korcam/pdf/SURAT PERNYATAAN TIM KORCAM KEC.'.$district->name);
+			
+			if(File::exists($directory)) {
+				File::deleteDirectory($directory); // hapus dir nya juga
+			}
+						
+			File::makeDirectory(public_path('/docs/suratpernyataan/korcam/pdf/SURAT PERNYATAAN TIM KORCAM KEC.'.$district->name));
+			
+			foreach($korcam as $val){
+					
+					$path = '/docs/suratpernyataan/korcam/pdf/SURAT PERNYATAAN TIM KORCAM KEC.'.$district->name.'/'; 
+					 
+					// get nama tim by nik 
+					$korcamItem = DB::table('org_diagram_district as a')
+						->select('b.rt', 'b.name','b.address','c.name as village', 'd.name as district','b.rw','a.telp','b.code')
+						->join('users as b', 'b.nik', '=', 'a.nik')
+						->join('villages as c', 'c.id', '=', 'b.village_id')
+						->join('districts as d', 'd.id', '=', 'a.district_id')
+						->where('a.district_id', $district_id)
+						->where('a.nik', $val->nik) 
+						->first();
+						 
+					$korte = $korcamItem;
+									
+					$fileName = 'SURAT PERNYATAAN TIM KORCAM KEC. '.$korcamItem->name.'.pdf';
+					
+					$pdf  = PDF::LoadView('pages.report.suratpernyataantim', compact('korte'))->setPaper('a4');
+					$pdfFilePath = public_path('/docs/suratpernyataan/korcam/pdf/SURAT PERNYATAAN TIM KORCAM KEC.'.$district->name.'/'.$fileName);
+					
+					file_put_contents($pdfFilePath, $pdf->output());
+					
+				}
+			
+				$files = glob(public_path('/docs/suratpernyataan/korcam/pdf/SURAT PERNYATAAN TIM KORCAM KEC.'.$district->name.'/*'));
+				$createZip = public_path('/docs/suratpernyataan/korcam/pdf/SURAT PERNYATAAN TIM KORCAM KEC.'.$district->name.'.zip');
+				Zipper::make(public_path($createZip))->add($files)->close(); 
+				
+				return response()->download(public_path($createZip));
+			
 			
 		}
     }
@@ -2671,7 +2845,114 @@ class OrgDiagramController extends Controller
 			$village = DB::table('villages')->select('name')->where('id', $village_id)->first();
 			return $this->excel->download(new KorDesExport($village_id), 'TIM KOORDINATOR DESA ' . $village->name . '.xls');
 		
+		}elseif($report_type =='Download Surat Pernyataan Kordes Per Desa PDF'){
+			
+			
+			
+			$village = DB::table('villages')->select('name')->where('id', $village_id)->first();
+			
+			// get korde per kecamatan
+			
+			// get data korte by idx 
+			$kordes = DB::table('org_diagram_village as a')
+				->select('a.nik', 'a.name')
+				->join('users as b','a.nik','=','b.nik')
+				->where('a.village_id', $village_id)
+				->get();
+				
+			// buat direktori memberkorte sebanyak data korte
+			
+			$directory = public_path('/docs/suratpernyataan/kordes/pdf/SURAT PERNYATAAN TIM KORDES DS.'.$village->name);
+			
+			if(File::exists($directory)) {
+				
+				File::deleteDirectory($directory); // hapus dir nya juga
+				File::delete($directory.'.zip'); // hapus zip nya juga 
+			}
+						
+			File::makeDirectory(public_path('/docs/suratpernyataan/kordes/pdf/SURAT PERNYATAAN TIM KORDES DS.'.$village->name));
+				
+			foreach($kordes as $val){
+				
+				$path = '/docs/suratpernyataan/kordes/pdf/SURAT PERNYATAAN TIM KORDES DS.'.$village->name.'/'; 
+				 
+				// get nama tim by nik 
+				$kordesItem = DB::table('org_diagram_village as a')
+					->select('b.rt', 'b.name','b.address','c.name as village', 'd.name as district','b.rw','a.telp','b.code')
+					->join('users as b', 'b.nik', '=', 'a.nik')
+					->join('villages as c', 'c.id', '=', 'a.village_id')
+					->join('districts as d', 'd.id', '=', 'a.district_id')
+					->where('a.village_id', $village_id)
+					->where('a.nik', $val->nik) 
+					->first();
+					 
+				$korte = $kordesItem;
+								
+				$fileName = 'SURAT PERNYATAAN TIM KORDES . '.$kordesItem->name.'.pdf';
+				
+				$pdf  = PDF::LoadView('pages.report.suratpernyataantim', compact('korte'))->setPaper('a4');
+				$pdfFilePath = public_path('/docs/suratpernyataan/kordes/pdf/SURAT PERNYATAAN TIM KORDES DS.'.$village->name.'/'.$fileName);
+				
+				file_put_contents($pdfFilePath, $pdf->output());
+				
+			}
+			
+			$files = glob(public_path('/docs/suratpernyataan/kordes/pdf/SURAT PERNYATAAN TIM KORDES DS.'.$village->name.'/*'));
+			$createZip = public_path('/docs/suratpernyataan/kordes/pdf/SURAT PERNYATAAN TIM KORDES DS.'.$village->name.'.zip');
+			Zipper::make(public_path($createZip))->add($files)->close(); 
+			
+			return response()->download(public_path($createZip)); 
+			
+		}elseif($report_type == 'Download Surat Undangan Per Desa'){
+				
+			$village = DB::table('villages')->select('name')->where('id', $village_id)->first();
+				// get data korcam by kecamatan
+			$kordes = DB::table('org_diagram_village as a')
+						->select('a.nik')
+						->join('users as b','a.nik','=','b.nik')
+						->where('a.village_id', $village_id)
+						->get();
+				
+				// get dat korcam by nik
+			$directory = public_path('/docs/suratundangan/kordes/pdf/SURAT UNDANGAN TIM KORDES DS.'.$village->name);
+			
+			if(File::exists($directory)) {
+				File::deleteDirectory($directory); // hapus dir nya juga
+			}
+						
+			File::makeDirectory(public_path('/docs/suratundangan/kordes/pdf/SURAT UNDANGAN TIM KORDES DS.'.$village->name));
+			
+			foreach($kordes as $val){
+					
+					$path = '/docs/suratundangan/kordes/pdf/SURAT UNDANGAN TIM KORDES DS.'.$village->name.'/'; 
+					 
+					// get nama tim by nik 
+					$kordesItem = DB::table('org_diagram_village as a')
+						->select('b.name')
+						->join('users as b', 'b.nik', '=', 'a.nik')
+						->where('a.village_id', $village_id)
+						->where('a.nik', $val->nik) 
+						->first();
+						 
+					$tim = $kordesItem;
+									
+					$fileName = 'SURAT UNDANGAN TIM KORDES DS. '.$kordesItem->name.'.pdf';
+					
+					$pdf  = PDF::LoadView('pages.report.surat-undangan', compact('tim'))->setPaper('a4');
+					$pdfFilePath = public_path('/docs/suratundangan/kordes/pdf/SURAT UNDANGAN TIM KORDES DS.'.$village->name.'/'.$fileName);
+					
+					file_put_contents($pdfFilePath, $pdf->output());
+					
+				}
+			
+				$files = glob(public_path('/docs/suratundangan/kordes/pdf/SURAT UNDANGAN TIM KORDES DS.'.$village->name.'/*'));
+				$createZip = public_path('/docs/suratundangan/kordes/pdf/SURAT UNDANGAN TIM KORDES DS.'.$village->name.'.zip');
+				Zipper::make(public_path($createZip))->add($files)->close(); 
+					
+				return response()->download(public_path($createZip)); 
+				
 		}else{
+			
 			
 			$district = DB::table('districts')->select('name')->where('id', $district_id)->first();
 			$OrgModel = new OrgDiagram();
@@ -2750,5 +3031,18 @@ class OrgDiagramController extends Controller
 		$pdf = PDF::LoadView('pages.report.pdf-test')->setPaper('a4');
 		return $pdf->stream('ABSENSI TIM KORTE DESA.pdf');
 	} 
+	
+	public function suratUndanganKorte($id){
+		
+		// get nik by id 
+		$tim = DB::table('org_diagram_district as a')
+				->select('b.id','b.name')
+				->join('users as b','a.nik','=','b.nik')
+				->where('a.id', $id)
+				->first(); 
+				
+		$pdf = PDF::LoadView('pages.report.surat-undangan',compact('tim'))->setPaper('a4'); 
+		return $pdf->download('SURAT UNDANGAN '.$tim->name.'.pdf'); 
+	}
 	
 }

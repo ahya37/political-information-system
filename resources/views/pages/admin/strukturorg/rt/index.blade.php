@@ -61,6 +61,7 @@
                             <input class="btn btn-sm btn-success text-white mt-2" type="submit" value="Download Korte + Anggota" name="report_type">
 							<input class="btn btn-sm btn-sc-primary text-white  mt-2" type="submit" value="Download Korte + Anggota PDF" name="report_type"> 
 							<input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit" value="Download Absensi Korte Per Desa PDF" name="report_type"> 
+							<input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit" value="Download Surat Undangan Korte Per Desa PDF" name="report_type"> 
                         </div>
                     </div>
                 </form>

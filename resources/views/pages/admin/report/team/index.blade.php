@@ -31,7 +31,7 @@
 									<input value="{{ $regency->id }}" type="hidden" id="regencyId" class="form-control">
 								<div class="col-sm-3 form-group">
 								<label>Dapil</label>
-								    <select name="dapil_id" id="selectListArea" class="form-control filter" required></select>
+								    <select name="dapil_id" id="selectListArea" class="form-control filter"></select>
 								</div>
 								<div class="col-sm-3 form-group">
 								<label>Kecamatan</label>

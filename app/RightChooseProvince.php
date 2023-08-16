@@ -20,4 +20,10 @@ class RightChooseProvince extends Model
         return $sql;
 
     }
+	
+	public function getTotalDptNasional(){
+		
+		$sql = "select SUM(jml_dpshp_online) as total_dpt from right_to_choose_regencies";
+		return collect(DB::select($sql))->first();
+	}
 }

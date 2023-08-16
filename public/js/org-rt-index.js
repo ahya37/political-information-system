@@ -388,11 +388,18 @@ let table = $("#data").DataTable({
                                 </a>
                                 <a href='/admin/struktur/rt/detail/anggota/download/excel/${row.idx}' class="dropdown-item ">
                                 Download Anggota Excel
-                                </a><a href='/admin/struktur/rt/detail/anggota/download/pdf/${row.idx}' class="dropdown-item ">
+                                </a>
+								<a href='/admin/struktur/rt/detail/anggota/download/pdf/${row.idx}' class="dropdown-item ">
                                 Download Anggota PDF
                                 </a>
-								</a><a href='/admin/struktur/rt/detail/anggota/tpsttimpemenangan/download/pdf/${row.idx}' class="dropdown-item ">
-                                Download TPS TIM PEMENANGAN SUARA
+								<a href='/admin/struktur/rt/detail/anggota/suratpernyatan/${row.idx}' class="dropdown-item ">
+                                Download Surat Pernyataan
+                                </a>
+								<a href='/admin/struktur/rt/detail/anggota/tpsttimpemenangan/download/pdf/${row.idx}' class="dropdown-item ">
+                                Download TPS Tim Pemenangan Suara
+                                </a>
+								<a href='/admin/struktur/rt/detail/anggota/tpsttimpemenangan/download/pdf/${row.idx}' class="dropdown-item ">
+                                Download Surat Undangan
                                 </a>
                                 <a href='/admin/struktur/rt/edittps/${row.id}' class="dropdown-item ">
                                 Edit TPS
