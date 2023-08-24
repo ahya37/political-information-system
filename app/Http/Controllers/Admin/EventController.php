@@ -20,6 +20,8 @@ use App\Helpers\ResponseFormatter;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\Regency;
+use PDF;
 
 class EventController extends Controller
 {
@@ -93,9 +95,44 @@ class EventController extends Controller
                     ->rawColumns(['action','dates','delete','address'])
                     ->make();
         }
+		
+		$regency = Regency::select('id', 'name')->where('id', 3602)->first();
+		$event_cat = DB::table('event_categories')->select('id','name')->get();
 
-        return view('pages.admin.event.index');
+        return view('pages.admin.event.index', compact('regency','event_cat'));
     }
+	
+	public function downloadGaleryByEvent(Request $request){
+		
+		// get data galery event by event kategori event dan desa
+		$events = DB::table('event_galleries as a')
+				->select('a.descr','a.file')
+				->join('events as b','a.event_id','=','b.id')
+				->join('event_categories as c','b.event_category_id','=','c.id')
+				->where('b.event_category_id', $request->eventcatid)
+				->where('b.district_id', $request->district_id)
+				->get();
+		
+		if(count($events) < 1){
+			
+			return redirect()->back()->with(['error' => 'Tidak ada data']);
+			
+		}else{
+			
+			$event_cat = DB::table('event_categories')->select('id','name')->where('id',$request->eventcatid)->first();
+			// $village   = DB::table('villages as a')
+					// ->select('a.name as village','b.name as district')
+					// ->join('districts as b','a.district_id','=','b.id')
+					// ->where('a.id', $request->village_id)
+					// ->first();
+			$districts = DB::table('districts')->select('name')->where('id', $request->district_id)->first(); 
+			$village = $districts;
+			$pdf  = PDF::LoadView('pages.report.fotoevent', compact('events','event_cat','village'))->setPaper('a4','landscape');
+			return $pdf->download('LAPORAN DOKUMENTASI '.strtoupper($event_cat->name).'KECAMATAN '.$village->name.'.pdf');
+		}
+		
+				
+	}
 
     public function createCost($id)
     {

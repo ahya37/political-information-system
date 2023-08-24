@@ -6,6 +6,7 @@ use App\Exports\KorteExportWithSheet;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\OrgDiagram;
+use App\KoordinatorTpsKorte;
 use App\Models\Province;
 use App\Models\Regency;
 use App\Helpers\ResponseFormatter;
@@ -205,15 +206,17 @@ class OrgDiagramController extends Controller
     {
 
         $village_id = request('village');
-        $orgs = DB::table('org_diagram_village')
-            ->select('idx', 'pidx', 'color', 'title', 'nik', 'name', 'photo')
-            ->whereNotNull('pidx')
-            ->where('village_id', $village_id)
+        $orgs = DB::table('org_diagram_village as a')
+            ->select('a.idx', 'a.pidx', 'a.color', 'a.title', 'a.nik', 'a.name', 'a.photo')
+			->join('users as b','a.nik','=','b.nik')
+            ->whereNotNull('a.pidx')
+            ->where('a.village_id', $village_id)
+			->orderBy('a.level_org','asc')
             ->get();
 
         $data = [];
         foreach ($orgs as $value) {
-            $data[] = [$value->pidx, $value->idx];
+            $data[] = [$value->pidx, $value->idx]; 
         }
 
         $nodes = [];
@@ -361,10 +364,12 @@ class OrgDiagramController extends Controller
     {
 
         $district_id = request('district');
-        $orgs = DB::table('org_diagram_district')
-            ->select('idx', 'pidx', 'color', 'title', 'nik', 'name', 'photo', 'id')
-            ->whereNotNull('pidx')
-            ->where('district_id', $district_id)
+        $orgs = DB::table('org_diagram_district as a')
+            ->select('a.idx', 'a.pidx', 'a.color', 'a.title', 'a.nik', 'b.name', 'b.photo', 'a.id')
+			->join('users as b','a.nik','=','b.nik')
+            ->whereNotNull('a.pidx')
+            ->where('a.district_id', $district_id)
+			->orderBy('a.level_org','asc')
             ->get();
 
         $data = [];
@@ -2720,6 +2725,7 @@ class OrgDiagramController extends Controller
     public function reportOrgDistrictExcel(Request $request)
     {
 		$district_id = $request->district_id;
+		$dapil_id    = $request->dapil_id;
 		
 		if($request->report_type == 'Download Excel'){
 			// dd([$dapil_id, $district_id, $village_id, $rt]);
@@ -2727,6 +2733,27 @@ class OrgDiagramController extends Controller
 			return $this->excel->download(new KorCamExport($district_id), 'TIM KOORDINATOR KECAMATAN ' . $district->name . '.xls');
 			
 		}elseif($request->report_type == 'Download Surat Undangan Per Kecamatan'){
+			
+			$jam = '08:30 WIB s/d selesai';
+			
+			
+			if($dapil_id == 12 || $dapil_id == 13){ // dapil 5 dan 6
+		
+				$jam = '08:30 WIB s/d selesai';
+				$lokasi = "SEKERTARIAT JARINGAN DULUR AAW - BINUANGEN";
+				$hari = 'Minggu,20 Agustus 2023';
+				$lok_surat = 'Binuangeun';
+				
+			}else{ // dapil 4
+				$lokasi = "KP. BAYAH TUGU, RT 02 / RW 09 - DESA BAYAH BARAT. KECAMATAN BAYAH. LEBAK - BANTEN (KANTOR SEKRETARIAT JALUR AAW BAYAH)";
+				$lok_surat = 'Bayah';
+				$hari = 'Selasa,22 Agustus 2023';
+				if($district_id == 3602031 || $district_id == 3602030){
+					$jam = '08:30 WIB s/d 12.00 WIB'; // sesi 1
+				}else{
+					$jam = '12:30 WIB s/d 16.00 WIB';
+				}
+			}
 			
 			$district = DB::table('districts')->select('name')->where('id', $district_id)->first();
 			// get data korcam by kecamatan
@@ -2763,7 +2790,7 @@ class OrgDiagramController extends Controller
 									
 					$fileName = 'SURAT UNDANGAN TIM KORCAM KEC. '.$korcamItem->name.'.pdf';
 					
-					$pdf  = PDF::LoadView('pages.report.surat-undangan', compact('tim'))->setPaper('a4');
+					$pdf  = PDF::LoadView('pages.report.surat-undangan', compact('tim','jam','lokasi','hari','lok_surat'))->setPaper('a4');
 					$pdfFilePath = public_path('/docs/suratundangan/korcam/pdf/SURAT UNDANGAN TIM KORCAM KEC.'.$district->name.'/'.$fileName);
 					
 					file_put_contents($pdfFilePath, $pdf->output());
@@ -2837,6 +2864,7 @@ class OrgDiagramController extends Controller
 
         $village_id  = $request->village_id;
         $district_id  = $request->district_id;
+		$dapil_id     = $request->dapil_id;
         $report_type  = $request->report_type;
 		
 		if($report_type == 'Download Excel'){
@@ -2904,6 +2932,29 @@ class OrgDiagramController extends Controller
 			return response()->download(public_path($createZip)); 
 			
 		}elseif($report_type == 'Download Surat Undangan Per Desa'){
+			
+			$jam = '08:30 WIB s/d selesai';
+			
+			if($dapil_id == 12 || $dapil_id == 13){ // dapil 5 dan 6
+		
+				$jam = '08:30 WIB s/d selesai';
+				$lokasi = "SEKERTARIAT JARINGAN DULUR AAW - BINUANGEN";
+				$hari = 'Minggu,20 Agustus 2023';
+				$lok_surat = 'Binuangeun'; 
+				
+			}else{ // dapil 4
+				$lokasi = "KP. BAYAH TUGU, RT 02 / RW 09 - DESA BAYAH BARAT. KECAMATAN BAYAH. LEBAK - BANTEN (KANTOR SEKRETARIAT JARINGAN DULUR AAW BAYAH)";
+				$lok_surat = 'Bayah';
+				$hari = 'Selasa,22 Agustus 2023';
+				
+				if($district_id == 3602031 || $district_id == 3602030){
+					$jam = '08:30 WIB s/d 12.00 WIB'; // sesi 1
+				}else{
+					$jam = '12:30 WIB s/d 16.00 WIB';
+				}
+			}
+			
+			
 				
 			$village = DB::table('villages')->select('name')->where('id', $village_id)->first();
 				// get data korcam by kecamatan
@@ -2923,7 +2974,6 @@ class OrgDiagramController extends Controller
 			File::makeDirectory(public_path('/docs/suratundangan/kordes/pdf/SURAT UNDANGAN TIM KORDES DS.'.$village->name));
 			
 			foreach($kordes as $val){
-					
 					$path = '/docs/suratundangan/kordes/pdf/SURAT UNDANGAN TIM KORDES DS.'.$village->name.'/'; 
 					 
 					// get nama tim by nik 
@@ -2933,17 +2983,17 @@ class OrgDiagramController extends Controller
 						->where('a.village_id', $village_id)
 						->where('a.nik', $val->nik) 
 						->first();
-						 
+						  
 					$tim = $kordesItem;
 									
-					$fileName = 'SURAT UNDANGAN TIM KORDES DS. '.$kordesItem->name.'.pdf';
+					$fileName = 'SURAT UNDANGAN TIM KORDES ('.$kordesItem->name.').pdf';
 					
-					$pdf  = PDF::LoadView('pages.report.surat-undangan', compact('tim'))->setPaper('a4');
+					$pdf  = PDF::LoadView('pages.report.surat-undangan', compact('tim','jam','lokasi','lok_surat','hari'))->setPaper('a4');
 					$pdfFilePath = public_path('/docs/suratundangan/kordes/pdf/SURAT UNDANGAN TIM KORDES DS.'.$village->name.'/'.$fileName);
 					
 					file_put_contents($pdfFilePath, $pdf->output());
 					
-				}
+				} 
 			
 				$files = glob(public_path('/docs/suratundangan/kordes/pdf/SURAT UNDANGAN TIM KORDES DS.'.$village->name.'/*'));
 				$createZip = public_path('/docs/suratundangan/kordes/pdf/SURAT UNDANGAN TIM KORDES DS.'.$village->name.'.zip');
@@ -3045,4 +3095,22 @@ class OrgDiagramController extends Controller
 		return $pdf->download('SURAT UNDANGAN '.$tim->name.'.pdf'); 
 	}
 	
+	public function formKoordinatorTpsKorte($idx){
+		
+		return view('pages.admin.strukturorg.rt.formkoordinatortpskorte', compact('idx')); 
+	}
+	
+	public function storeFormKoordinatorTps(Request $request, $idx){
+		
+		
+		$request->validate([
+            'name' => 'required',
+            'nik' => 'required'
+        ]);
+		
+		$koorModel = new KoordinatorTpsKorte();
+		$koorModel->store($idx, $request);
+		
+		return redirect()->back()->with(['success' => 'Anggota berhasil disimpan!']); 
+	}
 }

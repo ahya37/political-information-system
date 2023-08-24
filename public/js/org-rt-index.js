@@ -401,6 +401,9 @@ let table = $("#data").DataTable({
 								<a href='/admin/struktur/rt/detail/anggota/tpsttimpemenangan/download/pdf/${row.idx}' class="dropdown-item ">
                                 Download Surat Undangan
                                 </a>
+								<a href='/admin/struktur/rt/detail/anggota/formkoordinator/${row.idx}' class="dropdown-item ">
+                                Form Koordinator TPS / Korte
+                                </a>
                                 <a href='/admin/struktur/rt/edittps/${row.id}' class="dropdown-item ">
                                 Edit TPS
                                 </a>

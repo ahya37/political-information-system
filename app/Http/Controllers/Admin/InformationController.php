@@ -31,13 +31,37 @@ use DB;
 class InformationController extends Controller
 {
     public function index(){
-
-        return view('pages.admin.intelegensipolitik.index');
+		
+		$situasi_politik = DB::select("SELECT d.name as village, c.photo, c.name as pengisi, a.name as pesaing, a.asal_partai , a.description as persentase
+							from intelegensi_politik_political_situation as a
+							join intelegensi_politik as b on a.intelegensi_politik_id = b.id
+							join users as c on c.code = b.code_member 
+							join villages as d on c.village_id = d.id 
+							where a.name is not null 
+							and a.description is not null group by a.name , a.asal_partai , a.description , c.name, c.photo, d.name");
+		$no = 1;
+        return view('pages.admin.intelegensipolitik.index', compact('situasi_politik','no'));
+		
     }
+	
+	public function downloadPengisi(){
+		
+		// get data pengisi intelegensi
+		$intel = DB::table('users as a')
+				->select('a.name','a.photo', DB::raw("count(b.id) as jml_info"))
+				->join('intelegensi_politik as b','a.code','=','b.code_member')
+				->groupBy('a.name','a.photo')
+				->orderByDesc('jml_info')
+				->get();
+		$no = 1;
+		$pdf  = PDF::LoadView('pages.report.pengisiintelegensi', compact('intel','no'))->setPaper('a4');
+		return $pdf->download('PENGISI INTELEGENSI POLITIK.pdf');
+		
+	}
 
     public function getDataIntelegensiPolitik(Request $request){
 
-        $orderBy = 'a.name';
+        $orderBy = 'a.created_at';
         switch ($request->input('order.0.column')) {
             case '1':
                 $orderBy = 'a.name';
@@ -48,16 +72,23 @@ class InformationController extends Controller
             case '5':
                 $orderBy = 'a.politic_potential';
                 break;
+			case '7':
+                $orderBy = 'a.created_at';
+                break;
+				
         }
 
         $data = DB::table('intelegensi_politik as a')
-                    ->select('a.id','a.name','a.address','a.descr','a.politic_potential','b.name as village','c.name as district','a.ismember','a.profession')
+                    ->select('a.id','d.name as pengisi','d.photo','a.name','a.address','a.descr','a.politic_potential','b.name as village','c.name as district','a.ismember','a.profession','a.created_at')
                     ->join('villages as b','b.id','=','a.village_id')
-                    ->join('districts as c','c.id','=','b.district_id');
+                    ->join('districts as c','c.id','=','b.district_id')
+					->leftJoin('users as d','a.code_member','=','d.code')
+					->orderBy('a.created_at','desc');
             
         if($request->input('search.value')!=null){
             $data = $data->where(function($q)use($request){
                 $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                $q->whereRaw('LOWER(d.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
                 $q->whereRaw('LOWER(a.profession) like ? ',['%'.strtolower($request->input('search.value')).'%']);
                 $q->whereRaw('LOWER(a.politic_potential) like ? ',['%'.strtolower($request->input('search.value')).'%']);
             });
@@ -71,10 +102,10 @@ class InformationController extends Controller
         //                 $data->where('villages.id', $request->village);
         //     }
 
-
+		  
           $recordsFiltered = $data->get()->count();
           if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
-          $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+		  $data = $data->orderBy($orderBy,'desc')->get();
           
           $recordsTotal = $data->count();
 
@@ -84,6 +115,8 @@ class InformationController extends Controller
             #get profesi where id
             $results[] = [
                 'no' => $no++,
+                'pengisi' => $value->pengisi ?? '',
+                'photo' => $value->photo ?? '',
                 'name' => $value->name,
                 'descr' => $value->descr,
                 'address' => $value->address,
@@ -91,7 +124,8 @@ class InformationController extends Controller
                 'politic_potential' => $value->politic_potential,
                 'village' => $value->village,
                 'district' => $value->district,
-                'ismember' => $value->ismember,
+                'ismember' => $value->ismember, 
+				'created_at' => date('d-m-Y', strtotime($value->created_at))
             ];
           }
 
@@ -744,10 +778,10 @@ class InformationController extends Controller
 					
 			
 			// cek apakah anggota dengan kta tersebut ada
-			// $checkKta = User::where('code', $request->kta)->count();
-			// if($checkKta == 0) return redirect()->back()->with(['error' => 'Referal tidak terdaftar!']);
+			$checkKta = User::where('code',  str_replace(' ',' ',$request->kta))->count();
+			if($checkKta == 0) return redirect()->back()->with(['error' => 'Referal tidak terdaftar!']);
 
-            $profession['professi']     = $request->profession;
+            $profession['professi']     = $request->profession; 
             $onceserved['onceserved']   = $request->onceserved;
             $politicname['politicname'] = $request->politicname;
 

@@ -108,10 +108,10 @@
 				<td>Lampiran</td><td>:</td><td>1 Lampiran</td> 
 			</tr>
 			<tr>
-				<td>Perihal</td><td>:</td><td>Surat Undangan Silaturahmi Dan Syukuran Kepulangan Haji</td>
+				<td>Perihal</td><td>:</td><td>Surat Undangan Silaturahmi Dan Konsolidasi Jaringan Dulur Kang Asep Awaludin</td>
 			</tr>
 		</table>
-		
+		 
          <table id="table2" width="100%">
 			<tr> 
 				<td>Kepada</td> 
@@ -138,13 +138,13 @@
 		
 		<table id="table2">
 			<tr> 
-				<td>Hari dan tanggal</td><td>:</td><td>Minggu,20 Agustus 2023</td>
+				<td>Hari dan tanggal</td><td>:</td><td>{{$hari}}</td>
 			</tr>
 			<tr> 
-				<td>Waktu</td><td>:</td><td>08:30 WIB s/d selesai</td>
+				<td>Waktu</td><td>:</td><td>{{$jam}}</td>
 			</tr>
 			<tr> 
-				<td>Lokasi</td><td>:</td><td>SEKERTARIAT JARINGAN DULUR AAW - BINUANGEN</td>
+				<td>Lokasi</td><td>:</td><td>{{$lokasi}}</td>
 			</tr>
 			<tr> 
 				<td>Wajib</td><td>:</td>
@@ -164,7 +164,7 @@
 		Wassalamu’alaikum Warahmatullahi Wabarakatuh</p>
 	 </section>
 	 <section class="fonts2" style="text-align: right; margin-bottom:172px;"> 
-		<p style="margin-top:35px;">Binuangeun, {{date('d/m/Y')}}<p>
+		<p style="margin-top:35px;">{{$lok_surat}}, {{date('d/m/Y')}}<p>
 		<p>Hormat Kami<p>
 		<br>
 		<b>(SEKERTARIAT JARINGAN DULUR AAW)</b> 

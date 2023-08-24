@@ -240,6 +240,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/event/add/addgiftreceipents/{id}','EventController@addGiftRecipient')->name('admin-event-addgiftreceipents');
         Route::post('/event/add/addgiftreceipents/store/{event_id}','EventController@storeAddRecipient')->name('admin-event-addgiftreceipents-store');
         Route::post('/event/add/addgiftreceipentsfamilygroup/store/{event_id}','EventController@storeAddRecipientFamilyGroup')->name('admin-event-addgiftreceipentsfamilygroup-store');
+        
+		
+		Route::post('/event/download/galery','EventController@downloadGaleryByEvent')->name('admin-event-galery'); 
 
         
         Route::post('/event/category/store','EventCategoryController@store')->name('admin-eventcategory-store');
@@ -382,6 +385,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         Route::group(['prefix' => 'intelegency'], function(){
             Route::get('/','InformationController@index')->name('admin-intelegency-index');
+            Route::post('/download/pengisi','InformationController@downloadPengisi')->name('admin-pengisi-download');
         });
 
         
@@ -435,7 +439,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         #struktur ogrganisasi
         // Route::get('/struktur','OrgDiagramController@index')->name('admin-struktur-organisasi');
         // Route::get('/strukturtest','OrgDiagramController@orgDiagramTest')->name('admin-struktur-organisasi-test');
-
+ 
         Route::group(['prefix' => 'struktur'], function(){
             Route::get('/dashboard','OrgDiagramController@orgDiagramTest')->name('admin-struktur-organisasi-test');
             Route::get('/village','OrgDiagramController@indexOrgVillage')->name('admin-struktur-organisasi-create');
@@ -474,6 +478,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/report/rt/excel','OrgDiagramController@reportOrgRTExcel')->name('admin-struktur-organisasi-rt-report-excel');
 			
 			Route::get('/rt/detail/anggota/suratpernyatan/{idx}','OrgDiagramController@storeSuratPernyatanKorte');
+			
+			
+			Route::get('/rt/detail/anggota/formkoordinator/{idx}','OrgDiagramController@formKoordinatorTpsKorte');
+			Route::post('/rt/detail/anggota/formkoordinator/store/{idx}','OrgDiagramController@storeFormKoordinatorTps')->name('admin-koordinatortpskorte-store');
 			
             #update level org all
             Route::get('/village/update/level','OrgDiagramController@updateLelelOrgAll');  

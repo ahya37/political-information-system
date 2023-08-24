@@ -8,7 +8,7 @@ const table = $("#data").DataTable({
     bInfo: true,
     processing: true,
     bServerSide: true,
-    order: [[0, "desc"]],
+    order: [[1, "desc"]],
     autoWidth: false,
     ajax: {
         url: "/api/getdataintelegensipolitik",
@@ -24,47 +24,58 @@ const table = $("#data").DataTable({
             sortable: true,
             render: function (data, type, row, meta) {
                 return `<p>${row.no}</p>`;
-            },
+			}
+        },
+		{
+            targets: 1,
+            sortable: true,
+            render: function (data, type, row, meta) {
+				return `<p>
+				 <img  class="rounded" width="40" src="/storage/${row.photo}">
+					${row.pengisi}
+				</p>` 
+			}
         },
         {
-            targets: 1,
+            targets: 2,
             sortable: true,
             render: function (data, type, row, meta) {
                 return `<p>${row.name}</p>`;
             },
         },
         {
-            targets: 2,
+            targets: 3,
             sortable: true,
             render: function (data, type, row, meta) {
                 return `<p>${row.address}, DS.${row.village}, KEC.${row.district}</p>`;
             },
         },
         {
-            targets: 3,
+            targets: 4,
             sortable: true,
             render: function (data, type, row, meta) {
                 return `<p>${row.profession ?? ''}</p>`;
             },
         },
         {
-            targets: 4,
+            targets: 5,
             sortable: true,
             render: function (data, type, row, meta) {
                 return `<p>${row.descr ?? ''}</p>`;
             },
         },
         {
-            targets: 5,
+            targets: 6,
             sortable: true,
             render: function (data, type, row, meta) {
                 return `<p class='text-center'>${row.politic_potential}</p>`;
             },
-        },
+        }, 
         {
-            targets: 6,
+            targets: 7,
+			sortable: true,
             render: function (data, type, row, meta) {
-                return `<p></p>`;
+                return `<p>${row.created_at}</p>`;
             },
         }
     ],
