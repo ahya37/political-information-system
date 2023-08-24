@@ -1396,7 +1396,6 @@ class OrgDiagramController extends Controller
 
     public function detailAnggotaByKorRT($idx)
     {
-
         $kor_rt = DB::table('org_diagram_rt as a')
             ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district')
             ->join('users as b', 'b.nik', '=', 'a.nik')
@@ -1404,8 +1403,16 @@ class OrgDiagramController extends Controller
             ->join('districts as d', 'd.id', '=', 'a.district_id')
             ->where('idx', $idx)
             ->first();
-
-        return view('pages.admin.strukturorg.rt.detailanggota', compact('kor_rt'));
+			
+		$anggotaKorTps = DB::table('anggota_koordinator_tps_korte as a')
+						->select('a.name', 'a.nik', 'b.photo', DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik) as is_cover'))
+						->leftJoin('users as b', 'b.nik', '=', 'a.nik')
+						->where('a.pidx_korte', $idx)
+						->orderBy(DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik)'),'desc')
+						->get();
+		 
+		$no = 1;
+        return view('pages.admin.strukturorg.rt.detailanggota', compact('kor_rt','anggotaKorTps','no'));
     }
 
     public function downloadMembersRt($idx)
@@ -3105,12 +3112,29 @@ class OrgDiagramController extends Controller
 		
 		$request->validate([
             'name' => 'required',
-            'nik' => 'required'
+            'nik' => 'required',
         ]);
 		
-		$koorModel = new KoordinatorTpsKorte();
-		$koorModel->store($idx, $request);
+		#hitung panjang nik, harus 16
+        $cekLengthNik = strlen($request->nik);
+        if($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
 		
-		return redirect()->back()->with(['success' => 'Anggota berhasil disimpan!']); 
+		// cek ke table users apakah ada anggota dengan nik tersebut
+		$member = User::select('name','nik')->where('nik', $request->nik)->first();
+		 // jika ada sesuaikan namanya by nik yg ada di table users
+		$name   = $member == null ? $request->name : $member->name;
+		 
+		$auth = auth()->guard('admin')->user()->id;
+		
+		$koorModel = new KoordinatorTpsKorte();
+		$koorModel->store($idx, $request,$name,$auth);
+		
+		return redirect()->back()->with(['success' => 'Anggota berhasil disimpan!']);  
 	}
+	
+	public function downloadAnggotaKorTpsPdf(Request $request){
+		
+		return 'ok';
+	}
+	
 }

@@ -32,10 +32,6 @@
                 </table>
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
-                        @include('layouts.message')
-                        <form action="{{ route('admin-event-store') }}" id="register" method="POST"
-                            enctype="multipart/form-data">
-                            @csrf
                             <div class="card">
                                 <div class="card-body">
                                     <table id="data" class="table table-sm table-striped" width="100%">
@@ -48,24 +44,43 @@
                                             <th scope="col">OPSI</th>
                                           </tr>
                                         </thead>
-                                        <tbody>
-                                            {{-- @foreach ($data as $row)
-                                                <tr>
-                                                    <td>{{ $no++ }}</td>
-                                                    <td>
-                                                        <img src="{{ asset('/storage/'.$row->photo) }}" width="40px" />
-                                                        {{ $row->name }}
-                                                    </td>
-                                                    <td>{{ $row->address }}</td>
-                                                    <td>{{ $row->title }}</td>
-                                                    <td>{{ $row->phone_number }}</td>
-                                                </tr>
-                                            @endforeach --}}
-                                        </tbody>
+                                        <tbody></tbody>
                                       </table>
                                 </div>
                             </div>
-                        </form>
+                      
+                    </div>
+                </div>
+				
+				<div class="row mt-4">
+                    <div class="col-md-12 col-sm-12">
+                            <div class="card">
+                                <div class="card-body">
+								<h5>Anggota Koordinator TPS / Korte</h5>
+								<form action="" class="mt-2 mb-2">
+									<button class="btn btn-sm btn-sc-primary text-white">Download PDF</button>
+								</form>
+                                    <table id="anggotakortps" class="table table-sm table-striped mt-3" width="100%">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">NO</th>
+											<th scope="col">NAMA</th>
+                                            <th scope="col">NIK</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+											@foreach($anggotaKorTps as $item)
+											<tr class="{{$item->is_cover == 1 ? 'bg-success text-white' : '' }}"> 
+												<td>{{$no++}}</td>
+												<td><p><img  class="rounded" width="40" src="{{ $item->photo != null ? asset('/storage/'.$item->photo) : asset('img/member-icon.svg')}}"> {{$item->name}}</p></td>
+												<td>{{$item->nik}}</td>
+											</tr>
+											@endforeach 
+										</tbody>
+                                      </table>
+                                </div>
+                            </div>
+                      
                     </div>
                 </div>
             </div>
@@ -81,6 +96,6 @@
     <script src="{{ asset('js/org-rt-detailanggota.js') }}"></script>
     <script>
         AOS.init();
-        // $('#data').DataTable();
+        $('#anggotakortps').DataTable();
     </script>
 @endpush

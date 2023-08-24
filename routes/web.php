@@ -483,6 +483,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 			Route::get('/rt/detail/anggota/formkoordinator/{idx}','OrgDiagramController@formKoordinatorTpsKorte');
 			Route::post('/rt/detail/anggota/formkoordinator/store/{idx}','OrgDiagramController@storeFormKoordinatorTps')->name('admin-koordinatortpskorte-store');
 			
+			Route::post('/rt/detail/anggota/formkoordinator/download/{idx}','OrgDiagramController@downloadAnggotaKorTpsPdf')->name('admin-koordinatortpskorte-store');
+			
             #update level org all
             Route::get('/village/update/level','OrgDiagramController@updateLelelOrgAll');  
 			

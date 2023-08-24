@@ -30,7 +30,7 @@
                             @csrf
 							<div class="form-group">
                                 <label>NIK</label>
-                                <input type="number" class="form-control" required>
+                                <input type="number" name="nik" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Nama</label>
