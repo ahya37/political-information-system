@@ -13,7 +13,7 @@ class RightChooseDistrict extends Model
     public function getDataRightChooseDistrict($regencyId){
 
         $sql = DB::table('right_to_choose_districts as a')
-               ->select('a.district_id','a.count_tps','a.count_vooter','a.choose','b.name')
+               ->select('a.district_id','a.count_tps','a.count_vooter','a.choose','b.name','jml_akhir_dps_tms_baru')
                ->join('districts as b','a.district_id','=','b.id')
                ->where('a.regency_id', $regencyId)
                ->orderBy('b.name','asc')

@@ -41,7 +41,7 @@
                                                     <a href="{{ route('admin-listrightchoose-district', $item->regency_id) }}">{{ $item->name }}</a>
                                                 </td>
                                                 <td class="text-right">{{ $gF->decimalFormat($item->count_tps) }}</td>
-                                                <td class="text-right">{{ $gF->decimalFormat($item->count_vooter) }}</td>
+                                                <td class="text-right">{{ $gF->decimalFormat($item->jml_akhir_dps_tms_baru) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

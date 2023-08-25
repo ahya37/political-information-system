@@ -42,7 +42,7 @@
                                                     <a href="{{ route('admin-listrightchoose-village', $item->district_id) }}">{{ $item->name }}</a>
                                                 </td>
                                                 <td class="text-right">{{ $gF->decimalFormat($item->count_tps) }}</td>
-                                                <td class="text-right">{{ $gF->decimalFormat($item->count_vooter) }}</td>
+                                                <td class="text-right">{{ $gF->decimalFormat($item->jml_akhir_dps_tms_baru) }}</td>
                                                 <td>
                                                   <a href="{{route('admin-listrightchoose-district-dptdownload', $item->district_id)}}" class="btn btn-sm btn-info text-white">Download</a>
                                                 </td>

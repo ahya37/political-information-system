@@ -320,6 +320,7 @@ class SettingController extends Controller
         $district = District::select('name')->where('id', $districtId)->first();
         $rightChooseModel = new RightChosseVillage();
         $rightChoose      = $rightChooseModel->getDataRightChooseVillage($districtId);
+        // dd($rightChoose);
 
         
         return view('pages.admin.setting.listrightchoosevillage', compact('no','rightChoose','gF','district'));
@@ -1126,7 +1127,7 @@ class SettingController extends Controller
                 // 'pemilih_aktif_l' => $request->pemilih_aktif_l,
                 'pemilih_aktif' =>  $request->jml_dpshp_online_l + $request->jml_dpshp_online_p,
                 'pemilih_baru' => $request->pemilih_baru,
-                'jml_akhir_dps_tms_baru' => ($request->jumlah_dps_l+$request->jumlah_dps_p)+$request->pemilih_baru - $jml_tms,
+                'jml_akhir_dps_tms_baru' => ($request->jumlah_dps_l+$request->jumlah_dps_p+$request->pemilih_baru+$request->pemilih_potensial_non_ktp) - $jml_tms,
                 'perbaikan_data_pemilih' => $request->perbaikan_data_pemilih,
                 'pemilih_potensial_non_ktp' => $request->pemilih_potensial_non_ktp,
                 'jml_dpshp_online_p' => $request->jml_dpshp_online_p,

@@ -38,7 +38,7 @@
                                                     <td>{{ $no++ }}</td>
                                                     <td>{{ $item->name }}</td>
                                                     <td class="text-right">{{ $gF->decimalFormat($item->count_tps) }}</td>
-                                                    <td class="text-right">{{ $gF->decimalFormat($item->count_vooter) }}
+                                                    <td class="text-right">{{ $gF->decimalFormat($item->jml_akhir_dps_tms_baru) }}
                                                     </td>
                                                     <td>
                                                         <a href="{{ route('admin-rightchoosevillage-details', $item->id) }}"
