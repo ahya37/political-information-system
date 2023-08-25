@@ -60,7 +60,7 @@ class RightChooseDistrict extends Model
 	
 	public function getTotalDptRegency($regency_id){
 		
-		$sql = "select SUM(jml_dpshp_online) as total_dpt from right_to_choose_districts where regency_id  = $regency_id";
+		$sql = "select SUM(jml_akhir_dps_tms_baru) as total_dpt from right_to_choose_districts where regency_id  = $regency_id";
 		return collect(DB::select($sql))->first();
 	}
 

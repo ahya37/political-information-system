@@ -25,7 +25,7 @@ class RightChooseRegency extends Model
 	
 	public function getTotalDptProvince($provinceId){
 		
-		$sql = "select SUM(jml_dpshp_online) as total_dpt from right_to_choose_regencies  where province_id = $provinceId";
+		$sql = "select SUM(jml_akhir_dps_tms_baru) as total_dpt from right_to_choose_regencies  where province_id = $provinceId";
 		return collect(DB::select($sql))->first();
 	}
 }

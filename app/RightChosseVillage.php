@@ -75,13 +75,13 @@ class RightChosseVillage extends Model
 	
 	public function getTotalDptDistrict($district_id){
 		
-		$sql = "select SUM(jml_dpshp_online) as total_dpt from right_to_choose_village where district_id  = $district_id";
+		$sql = "select SUM(jml_akhir_dps_tms_baru) as total_dpt from right_to_choose_village where district_id  = $district_id";
 		return collect(DB::select($sql))->first();
 	}
 	
 	public function getTotalDptVillage($village_id){
 		
-		$sql = "select SUM(jml_dpshp_online) as total_dpt from right_to_choose_village where village_id = $village_id";
+		$sql = "select jml_akhir_dps_tms_baru as total_dpt from right_to_choose_village where village_id = $village_id";
 		return collect(DB::select($sql))->first();
 	}
 }
