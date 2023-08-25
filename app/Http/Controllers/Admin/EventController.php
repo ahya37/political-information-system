@@ -101,7 +101,7 @@ class EventController extends Controller
 
         return view('pages.admin.event.index', compact('regency','event_cat'));
     }
-	
+	 
 	public function downloadGaleryByEvent(Request $request){
 		
 		// get data galery event by event kategori event dan desa
