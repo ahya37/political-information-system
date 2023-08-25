@@ -3112,7 +3112,7 @@ class OrgDiagramController extends Controller
 		
 		$request->validate([
             'name' => 'required',
-            'nik' => 'required',
+            'nik' => 'required', 
         ]);
 		
 		#hitung panjang nik, harus 16
