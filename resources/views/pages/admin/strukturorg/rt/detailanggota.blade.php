@@ -29,7 +29,7 @@
                     <tr>
                         <td>NAMA KOORDINATOR</td><td>&nbsp;:&nbsp;</td><td>{{ $kor_rt->name }}</td>
                     </tr>
-                </table>
+                </table> 
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                             <div class="card">

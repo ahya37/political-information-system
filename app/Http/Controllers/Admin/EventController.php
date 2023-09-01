@@ -62,7 +62,7 @@ class EventController extends Controller
                                 </div>
                                 </div>
                                 <div class="col-6">
-                                <a class="btn btn-sm btn-danger" href="'.route('admin-event-delete', $item->id).'">
+                                <a class="btn btn-sm btn-danger ml-3" href="'.route('admin-event-delete', $item->id).'">
                                     <i class="fa fa-trash"></i>
                                 </a>
                                 </div>
@@ -146,7 +146,7 @@ class EventController extends Controller
         return view('pages.admin.event.create',compact('eventCategories'));
     }
 
-    public function edit($id)
+    public function edit($id) 
     {
         $event = Event::where('id', $id)->first();
         $eventCategories = EventCategory::select('id','name')->orderBy('name','asc')->get();
@@ -155,8 +155,8 @@ class EventController extends Controller
     
     public function delete($id)
     {
-        $event = Event::where('id', $id)->first();
-        $event->delete();
+       Event::where('id', $id)->update(['isdelete' => 1]);
+        // $event->delete();
 
         return redirect()->back()->with(['success' => 'Event telah dihapus']);
     }

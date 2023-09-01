@@ -275,6 +275,7 @@ Route::post('/user/dtrewardinput', 'RewardController@dtVoucherHistoryAdmin');
 
 // target
 Route::get('/list/target', 'Admin\SettingController@getListTarget');
+Route::post('/update/dpt', 'Admin\SettingController@updateDptSinkronisasi');
 
 Route::post('/detailfigure', 'Admin\InformationController@detailFigure');
 

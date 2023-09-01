@@ -2644,6 +2644,12 @@ class OrgDiagramController extends Controller
  
 		}elseif($request->report_type == 'Download Surat Undangan Korte Per Desa PDF'){
 			
+				$jam = '07:30 WIB s/d 11:30 WIB';
+				$lokasi = "SEKERTARIAT JARINGAN DULUR AAW - BINUANGEN";
+				$hari = "Jum'at, 01 September 2023";
+				$lok_surat = 'Binuangeun';
+			
+			
 			$village = DB::table('villages')->select('name')->where('id', $village_id)->first();
 			
 			if($request->rt != ''){
@@ -2692,7 +2698,7 @@ class OrgDiagramController extends Controller
 									
 					$fileName = 'SURAT UNDANGAN TIM KORTE DS. '.$kordesItem->name.'.pdf';
 					
-					$pdf  = PDF::LoadView('pages.report.surat-undangan', compact('tim'))->setPaper('a4');
+					$pdf  = PDF::LoadView('pages.report.surat-undangan', compact('tim','hari','jam','lokasi','lok_surat'))->setPaper('a4');
 					$pdfFilePath = public_path('/docs/suratundangan/korte/pdf/SURAT UNDANGAN TIM KORTE DS.'.$village->name.'/'.$fileName);
 					
 					file_put_contents($pdfFilePath, $pdf->output());

@@ -1225,6 +1225,151 @@ class SettingController extends Controller
         return $update;
 
     }
+	
+	public function updateDptSinkronisasi(Request $request){
+		
+		DB::beginTransaction();
+		try{
+			
+			// get data dpt by kecamtan
+			$sql = "SELECT id, name,
+					(SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id and jk = 'L') as dpt_l,
+					(SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id and jk = 'P') as dpt_p,
+					(SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id) as dpt
+					from villages as a WHERE a.district_id = $request->district_id";
+			$dpt = DB::select($sql);
+			
+			$count_district = DB::table('right_to_choose_districts')->where('district_id', $request->district_id)->count();
+			
+			if($count_district > 0){
+				// get data hak pilih di tb right_to_choose_village by kecamatan
+				foreach($dpt as $item){
+					DB::table('right_to_choose_village')->where('village_id', $item->id)->update([
+						'jumlah_dps_l' => 0,
+						'jumlah_dps_p' => 0,
+						'jumlah_dps'=> 0,
+						'tidak_memnenuhi_syarat_1'  => 0,
+						'tidak_memnenuhi_syarat_2'  => 0,
+						'tidak_memnenuhi_syarat_3'  => 0,
+						'tidak_memnenuhi_syarat_4'  => 0,
+						'tidak_memnenuhi_syarat_5'  => 0,
+						'tidak_memnenuhi_syarat_6'  => 0,
+						'tidak_memnenuhi_syarat_7'  => 0,
+						'jml_tms'   => 0,
+						'count_vooter'   => 0,
+						'pemilih_aktif'   => $item->dpt,
+						'pemilih_aktif_p'   => $item->dpt_p,
+						'pemilih_aktif_l'   => $item->dpt_l,
+						'pemilih_baru'      => 0, 
+						'jml_akhir_dps_tms_baru' => $item->dpt, 
+						'jml_dpshp_online'    => 0,
+						'jml_dpshp_online_l'  => 0,
+						'jml_dpshp_online_p'  => 0,
+						'perbaikan_data_pemilih'   => 0,
+						'pemilih_potensial_non_ktp' => 0
+					]);
+				}
+				
+			}else{
+				
+				foreach($dpt as $item){
+					
+					
+					DB::table('right_to_choose_village')->insert([
+						'village_id' => $item->id,
+						'district_id' => $request->district_id,
+						'jumlah_dps_l' => 0,
+						'jumlah_dps_p' => 0,
+						'jumlah_dps'=> 0,
+						'tidak_memnenuhi_syarat_1'  => 0,
+						'tidak_memnenuhi_syarat_2'  => 0,
+						'tidak_memnenuhi_syarat_3'  => 0,
+						'tidak_memnenuhi_syarat_4'  => 0,
+						'tidak_memnenuhi_syarat_5'  => 0,
+						'tidak_memnenuhi_syarat_6'  => 0,
+						'tidak_memnenuhi_syarat_7'  => 0,
+						'jml_tms'   => 0,
+						'count_vooter'   => 0,
+						'pemilih_aktif'   => $item->dpt,
+						'pemilih_aktif_p'   => $item->dpt_p,
+						'pemilih_aktif_l'   => $item->dpt_l,
+						'pemilih_baru'      => 0, 
+						'jml_akhir_dps_tms_baru' => $item->dpt, 
+						'jml_dpshp_online'    => 0,
+						'jml_dpshp_online_l'  => 0,
+						'jml_dpshp_online_p'  => 0,
+						'perbaikan_data_pemilih'   => 0,
+						'pemilih_potensial_non_ktp' => 0
+					]);
+				}
+				
+			}
+			
+			
+			
+			// update kalkulasi level kecamatan 
+			
+			// get sum right_to_choose_village by district
+			$village = "SELECT 
+					SUM(jumlah_dps_l) as jumlah_dps_l,
+					SUM(jumlah_dps_p) as jumlah_dps_p,
+					SUM(jumlah_dps) as jumlah_dps,
+					SUM(tidak_memnenuhi_syarat_1) as tidak_memnenuhi_syarat_1,
+					SUM(tidak_memnenuhi_syarat_2) as tidak_memnenuhi_syarat_2,
+					SUM(tidak_memnenuhi_syarat_3) as tidak_memnenuhi_syarat_3,
+					SUM(tidak_memnenuhi_syarat_4) as tidak_memnenuhi_syarat_4,
+					SUM(tidak_memnenuhi_syarat_5) as tidak_memnenuhi_syarat_5,
+					SUM(tidak_memnenuhi_syarat_6) as tidak_memnenuhi_syarat_6,
+					SUM(tidak_memnenuhi_syarat_7) as tidak_memnenuhi_syarat_7,
+					SUM(jml_tms) as jml_tms,
+					sum(pemilih_aktif_p) as pemilih_aktif_p,
+					sum(pemilih_aktif_l) as pemilih_aktif_l,
+					SUM(pemilih_aktif) as pemilih_aktif,
+					SUM(pemilih_baru) as pemilih_baru,
+					SUM(jml_akhir_dps_tms_baru) as jml_akhir_dps_tms_baru,
+					SUM(perbaikan_data_pemilih) as perbaikan_data_pemilih,
+					SUM(pemilih_potensial_non_ktp) as pemilih_potensial_non_ktp,
+					SUM(jml_dpshp_online_p) as jml_dpshp_online_p,
+					sum(jml_dpshp_online_l) as jml_dpshp_online_l,
+					SUM(jml_dpshp_online) as jml_dpshp_online
+					from right_to_choose_village where district_id =  $request->district_id"; 
 
+			$sum_village = collect(DB::select($village))->first();
+			
+			DB::table('right_to_choose_districts')->where('district_id', $request->district_id)->update([
+					'jumlah_dps_l' => $sum_village->jumlah_dps_l,
+					'jumlah_dps_p' => $sum_village->jumlah_dps_p,
+					'jumlah_dps'=> $sum_village->jumlah_dps,
+					'tidak_memnenuhi_syarat_1'  => $sum_village->tidak_memnenuhi_syarat_1,
+					'tidak_memnenuhi_syarat_2'  => $sum_village->tidak_memnenuhi_syarat_2,
+					'tidak_memnenuhi_syarat_3'  => $sum_village->tidak_memnenuhi_syarat_3,
+					'tidak_memnenuhi_syarat_4'  => $sum_village->tidak_memnenuhi_syarat_4,
+					'tidak_memnenuhi_syarat_5'  => $sum_village->tidak_memnenuhi_syarat_5,
+					'tidak_memnenuhi_syarat_6'  => $sum_village->tidak_memnenuhi_syarat_6,
+					'tidak_memnenuhi_syarat_7'  => $sum_village->tidak_memnenuhi_syarat_7,
+					'jml_tms'   => $sum_village->jml_tms,
+					'count_vooter'   => 0,
+					'pemilih_aktif'   => $sum_village->pemilih_aktif,
+					'pemilih_aktif_p'   => $sum_village->pemilih_aktif_p,
+					'pemilih_aktif_l'   => $sum_village->pemilih_aktif_l,
+					'pemilih_baru'      => $sum_village->pemilih_baru, 
+					'jml_akhir_dps_tms_baru' => $sum_village->jml_akhir_dps_tms_baru, 
+					'jml_dpshp_online'    => $sum_village->jml_dpshp_online,
+					'jml_dpshp_online_l'  => $sum_village->jml_dpshp_online_l,
+					'jml_dpshp_online_p'  => $sum_village->jml_dpshp_online_p,
+					'perbaikan_data_pemilih'   => $sum_village->perbaikan_data_pemilih,
+					'pemilih_potensial_non_ktp' => $sum_village->pemilih_potensial_non_ktp
+				]);
+			 
+			DB::commit();
+			return 'OK'; 
+		
+		
+		}catch(\Exception $e){
+			DB::rollback();
+			return $e->getMessage();
+			5
+		}
+	}
 
 }

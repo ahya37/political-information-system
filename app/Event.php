@@ -27,6 +27,7 @@ class Event extends Model
 		 $sql = "SELECT a.id, a.date, a.created_at as date, a.time, a.description, d.name as village, e.name as title, a.title as old_title from events as a
                  join villages as d on a.village_id = d.id
                  left join event_categories as e on a.event_category_id = e.id
+				 where a.isdelete = 0
                  order by a.date desc";
 
         $result = DB::select($sql);
