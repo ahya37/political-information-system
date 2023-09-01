@@ -12,9 +12,14 @@
 @section('content')
     <!-- Section Content -->
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
+      
         <div class="container-fluid">
+           
             <div class="dashboard-heading">
                 <h2 class="dashboard-title">Daftar Anggota Koordinator RT</h2>
+            </div>
+            <div class="mt-4">
+                @include('layouts.message')
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
                 <table class="mb-3">
