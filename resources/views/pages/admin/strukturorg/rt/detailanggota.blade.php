@@ -26,22 +26,27 @@
                     <tr>
                         <td>RT</td>
                         <td>&nbsp;:&nbsp;</td>
-                        <td>{{ $kor_rt->rt }}</td>
+                        <td>{{ $kor_rt->rt ?? '' }}</td>
+                    </tr>
+                    <tr>
+                        <td>TPS</td>
+                        <td>&nbsp;:&nbsp;</td>
+                        <td>{{ $kor_rt->tps_number ?? ''}}</td>
                     </tr>
                     <tr>
                         <td>DESA</td>
                         <td>&nbsp;:&nbsp;</td>
-                        <td>{{ $kor_rt->village }}</td>
+                        <td>{{ $kor_rt->village ?? ''}}</td>
                     </tr>
                     <tr>
                         <td>KECAMATAN</td>
                         <td>&nbsp;:&nbsp;</td>
-                        <td>{{ $kor_rt->district }}</td>
+                        <td>{{ $kor_rt->district ?? '' }}</td>
                     </tr>
                     <tr>
                         <td>NAMA KOORDINATOR</td>
                         <td>&nbsp;:&nbsp;</td>
-                        <td>{{ $kor_rt->name }}</td>
+                        <td>{{ $kor_rt->name ?? '' }}</td>
                     </tr>
                 </table>
                 <div class="row">
@@ -54,6 +59,7 @@
                                             <th scope="col">NO</th>
                                             <th scope="col">NAMA</th>
                                             <th scope="col">ALAMAT</th>
+                                            <th scope="col">TPS</th>
                                             <th scope="col">NO HP / WA</th>
                                             <th scope="col">OPSI</th>
                                         </tr>

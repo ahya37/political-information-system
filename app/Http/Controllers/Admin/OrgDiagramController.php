@@ -926,10 +926,11 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_rt as a')
-            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district')
+            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district','e.tps_number')
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->leftJoin('tps as e','b.tps_id','=','e.id')
             ->where('base', 'KORRT');
 
 
@@ -967,6 +968,7 @@ class OrgDiagramController extends Controller
                 'idx' => $value->idx,
                 'village_id' => $value->village_id,
                 'rt' => $value->rt,
+                'tps_number' => $value->tps_number,
                 'rw' => $value->rw,
                 'address' => $value->address,
                 'village' => $value->village,
@@ -1398,10 +1400,11 @@ class OrgDiagramController extends Controller
     public function detailAnggotaByKorRT($idx)
     {
         $kor_rt = DB::table('org_diagram_rt as a')
-            ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district')
+            ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district','e.tps_number')
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->leftJoin('tps as e','b.tps_id','=','e.id')
             ->where('idx', $idx)
             ->first();
 
@@ -1513,10 +1516,11 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_rt as a')
-            ->select('a.id', 'a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district')
+            ->select('a.id', 'a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district','e.tps_number')
             ->leftJoin('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->leftJoin('tps as e','b.tps_id','=','e.id')
             ->where('pidx', $request->idx);
 
 
@@ -1550,6 +1554,7 @@ class OrgDiagramController extends Controller
                 'idx' => $value->idx,
                 'village_id' => $value->village_id,
                 'address' => $value->address,
+                'tps_number' => $value->tps_number,
                 'village' => $value->village,
                 'district' => $value->district,
                 'title' => $value->title,
@@ -3066,7 +3071,7 @@ class OrgDiagramController extends Controller
             ->first();
 
         #cek apakah koordinator nya sudah memiliki TPS
-        if (!$koor->tps_id) return redirect()->back()->with(['error' => "Koordinator Anggota $org->name belum memiliki data TPS!"]);
+        if (!$koor->tps_id) return redirect()->back()->with(['error' => "Kor TPS Anggota $org->name belum memiliki data TPS!"]);
 
         #cek apakah TPS koordinator sama dengan TPS anggota nya
         if ($koor->tps_id != $request->tpsid) return redirect()->back()->with(['error' => 'Gagal, TPS anggota tidak sama dengan TPS Koordinator!']);

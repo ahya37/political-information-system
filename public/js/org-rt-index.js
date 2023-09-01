@@ -357,24 +357,31 @@ let table = $("#data").DataTable({
         },
         {
             targets: 4,
+            orderable: true,
             render: function (data, type, row, meta) {
-                return `<p>${row.base}</p>`;
+                return row.tps_number
             },
         },
         {
             targets: 5,
             render: function (data, type, row, meta) {
-                return `<p class="text-center">${row.count_anggota}</p>`;
+                return `<p>${row.base}</p>`;
             },
         },
         {
             targets: 6,
             render: function (data, type, row, meta) {
-                return `<p>${row.phone_number ?? ''}</p>`;
+                return `<p class="text-center">${row.count_anggota}</p>`;
             },
         },
         {
             targets: 7,
+            render: function (data, type, row, meta) {
+                return `<p>${row.phone_number ?? ''}</p>`;
+            },
+        },
+        {
+            targets: 8,
             render: function (data, type, row, meta) {
                 return `<div class="btn-group">
                         <div class="dropdown">
@@ -423,6 +430,7 @@ let table = $("#data").DataTable({
         },
     ],
 });
+
 
 $('#exampleModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget)

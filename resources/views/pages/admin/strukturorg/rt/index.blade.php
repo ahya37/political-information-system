@@ -87,6 +87,7 @@
                                                 <th scope="col">NAMA</th>
                                                 <th scope="col">ALAMAT</th>
                                                 <th scope="col">RT</th>
+                                                <th scope="col">TPS</th>
                                                 <th scope="col">JABATAN</th>
                                                 <th scope="col">ANGGOTA</th>
                                                 <th scope="col">NO HP / WA</th>

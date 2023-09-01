@@ -43,11 +43,17 @@ let table = $("#data").DataTable({
         {
             targets: 3,
             render: function (data, type, row, meta) {
-                return `<p>${row.phone_number ?? ''}</p>`;
+                return row.tps_number;
             },
         },
         {
             targets: 4,
+            render: function (data, type, row, meta) {
+                return `<p>${row.phone_number ?? ''}</p>`;
+            },
+        },
+        {
+            targets: 5,
             render: function (data, type, row, meta) {
                 // return `<a href='/admin/struktur/rt/add/anggota/${row.idx}' class='btn btn-sm btn-sc-primary text-white'>Anggota</a>`;
                 return `
