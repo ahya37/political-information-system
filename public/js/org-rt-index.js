@@ -5,6 +5,10 @@ let selectRT = $("#selectRt").val();
 
 // KABKOT , langsung get dapil by kab lebak
 
+// function countMemberNotCover(){
+
+// }
+
 // DAPIL
 $("#selectListArea").change(async function () {
     selectListArea = $("#selectListArea").val();
@@ -27,6 +31,9 @@ $("#selectListArea").change(async function () {
 
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val("");
+
+        console.log('data belum tercover level dapil');
+
     } else {
         $("#selectDistrictId").empty();
         $("#selectVillageId").empty();
@@ -63,6 +70,9 @@ $("#selectDistrictId").change(async function () {
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
+
+        console.log('data belum tercover level kecamatan');
+
     } else {
         $("#selectVillageId").empty();
         province = $("#province").val();
@@ -99,7 +109,10 @@ $("#selectVillageId").change(async function () {
         $("#reqvillage").val(selectVillageId);
         $("#selectRt").val("");
         $('#keterangan').empty();
-        geLocationVillage(selectVillageId)
+        geLocationVillage(selectVillageId);
+
+        console.log('data belum tercover level desa');
+
 
     } else {
         // province = $("#province").val();
@@ -134,6 +147,9 @@ $("#selectRt").change(async function () {
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
+
+        console.log('data belum tercover level rt');
+
     } else {
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();

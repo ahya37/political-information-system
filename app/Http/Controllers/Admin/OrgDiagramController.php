@@ -926,12 +926,12 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_rt as a')
-            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district','e.tps_number')
+            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number')
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
-            ->leftJoin('tps as e','b.tps_id','=','e.id')
-            ->where('base', 'KORRT');
+            ->leftJoin('tps as e', 'b.tps_id', '=', 'e.id')
+            ->where('a.base', 'KORRT');
 
 
         if ($request->input('search.value') != null) {
@@ -1400,11 +1400,11 @@ class OrgDiagramController extends Controller
     public function detailAnggotaByKorRT($idx)
     {
         $kor_rt = DB::table('org_diagram_rt as a')
-            ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district','e.tps_number')
+            ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district', 'e.tps_number')
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
-            ->leftJoin('tps as e','b.tps_id','=','e.id')
+            ->leftJoin('tps as e', 'b.tps_id', '=', 'e.id')
             ->where('idx', $idx)
             ->first();
 
@@ -1417,7 +1417,7 @@ class OrgDiagramController extends Controller
 
         $no = 1;
         $korte_idx = $idx;
-        return view('pages.admin.strukturorg.rt.detailanggota', compact('kor_rt', 'anggotaKorTps', 'no','korte_idx'));
+        return view('pages.admin.strukturorg.rt.detailanggota', compact('kor_rt', 'anggotaKorTps', 'no', 'korte_idx'));
     }
 
     public function downloadMembersRt($idx)
@@ -1516,11 +1516,11 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_rt as a')
-            ->select('a.id', 'a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district','e.tps_number')
+            ->select('a.id', 'a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number')
             ->leftJoin('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
-            ->leftJoin('tps as e','b.tps_id','=','e.id')
+            ->leftJoin('tps as e', 'b.tps_id', '=', 'e.id')
             ->where('pidx', $request->idx);
 
 
@@ -3157,7 +3157,8 @@ class OrgDiagramController extends Controller
         return redirect()->back()->with(['success' => 'Stiker telah ditambahkan']);
     }
 
-    public function listStikerByKorte($idx){
+    public function listStikerByKorte($idx)
+    {
 
         $kor_rt = DB::table('org_diagram_rt as a')
             ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district')
@@ -3169,26 +3170,26 @@ class OrgDiagramController extends Controller
 
         // get daftar anggota by korte, join kan dengan table sticker
         $data = DB::table('org_diagram_rt as a')
-                ->select('b.name','a.rt','c.image','b.photo','c.id')
-                ->join('sticker as c','a.id','=','c.anggotaidx')
-                ->join('users as b','a.nik','=','b.nik')
-                ->where('a.pidx', $idx)
-                ->where('a.base','ANGGOTA')->get();
+            ->select('b.name', 'a.rt', 'c.image', 'b.photo', 'c.id')
+            ->join('sticker as c', 'a.id', '=', 'c.anggotaidx')
+            ->join('users as b', 'a.nik', '=', 'b.nik')
+            ->where('a.pidx', $idx)
+            ->where('a.base', 'ANGGOTA')->get();
 
         $no = 1;
-        return view('pages.admin.strukturorg.rt.liststickerbykorte', compact('data','kor_rt','no'));
-
+        return view('pages.admin.strukturorg.rt.liststickerbykorte', compact('data', 'kor_rt', 'no'));
     }
 
-    public function deleteStikerByAnggota($id){
+    public function deleteStikerByAnggota($id)
+    {
 
         // hapus foto
         $getdata = DB::table('sticker')->where('id', $id);
-		#hapus file lama
+        #hapus file lama
         $data = $getdata->first();
-		$dir_file = storage_path('app').'/public/'.$data->image;
+        $dir_file = storage_path('app') . '/public/' . $data->image;
         if (file_exists($dir_file)) {
-                File::delete($dir_file);
+            File::delete($dir_file);
         }
 
         // hapus data
@@ -3196,4 +3197,36 @@ class OrgDiagramController extends Controller
         return redirect()->back()->with(['success' => 'Stiker telah dihapus!']);
     }
 
+    public function countMemberNotCover(Request $request)
+    {
+
+        if (!isset($request->dapil_id)) {
+
+            $total_tim      = DB::table('org_diagram_rt as a')
+                ->join('users as b', 'a.nik', '=', 'b.nik')
+                ->where('a.base', 'ANGGOTA')->count();
+
+            $total_anggota  = DB::table('org_diagram_rt as a')
+                ->join('users as b', 'a.nik', '=', 'b.nik')
+                ->where('a.base', 'KORRT')->count();
+
+            $total_anggota_db = DB::table('users as a')
+                ->join('villages as b', 'a.village_id', '=', 'b.id')
+                ->count();
+
+            $tim          =  $total_tim + $total_anggota;
+
+            $data = [
+                'tim' => $tim,
+                'anggota_db' => $total_anggota_db,
+                'not_tercover' => $total_anggota_db - $tim
+            ];
+
+            return $data;
+
+        }else{
+
+            return 'per dapil';
+        }
+    }
 }

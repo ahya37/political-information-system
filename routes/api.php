@@ -442,3 +442,6 @@ Route::post('/respondentdetail/{id}', 'Admin\QuestionnaireRespondentController@d
 
 // untuk update jumlah2 yg ada di tabel excel DPT
 Route::post('/rightchoose/update/field/village','Admin\SettingController@updateFieldDPTLevelDesa')->name('admin-rightchoose-update-field-village');
+
+// get kalkulasi anggota tercover dan belum
+Route::post('/tim/calculate', 'Admin\OrgDiagramController@countMemberNotCover');

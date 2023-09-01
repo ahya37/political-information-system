@@ -1368,7 +1368,6 @@ class SettingController extends Controller
 		}catch(\Exception $e){
 			DB::rollback();
 			return $e->getMessage();
-			5
 		}
 	}
 
