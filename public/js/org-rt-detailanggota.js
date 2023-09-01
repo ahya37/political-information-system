@@ -54,8 +54,8 @@ let table = $("#data").DataTable({
                         <a href="/admin/struktur/rt/edittps/anggota/${row.id}" class="btn btn-sm btn-warning">Edit TPS</a>
                         <a href="/admin/struktur/rt/edit/anggota/${row.id}" class="btn btn-sm btn-info text-white">Edit</a>
                         <button class="btn btn-sm btn-sc-primary text-white" data-name="${row.name}" data-whatever="${row.id}" data-toggle="modal" data-target="#exampleModal">Stiker</button>
-                        <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>
-                        `
+                        <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>`
+                       
             },
         },
     ],

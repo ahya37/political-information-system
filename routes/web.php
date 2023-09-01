@@ -494,6 +494,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 			Route::get('/test/pdf','OrgDiagramController@testPdf');
 
 			Route::post('/anggota/sticker/save/{korte_idx}','OrgDiagramController@uploadSticker')->name('admin-sticker-save');
+			Route::get('/list/sticker/{idx}','OrgDiagramController@listStikerByKorte');
+			Route::get('/list/sticker/delete/{idx}','OrgDiagramController@deleteStikerByAnggota')->name('admin-sticker-delete');
 
         });
 		

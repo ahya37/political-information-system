@@ -3151,4 +3151,44 @@ class OrgDiagramController extends Controller
 
         return redirect()->back()->with(['success' => 'Stiker telah ditambahkan']);
     }
+
+    public function listStikerByKorte($idx){
+
+        $kor_rt = DB::table('org_diagram_rt as a')
+            ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district')
+            ->join('users as b', 'b.nik', '=', 'a.nik')
+            ->join('villages as c', 'c.id', '=', 'a.village_id')
+            ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->where('idx', $idx)
+            ->first();
+
+        // get daftar anggota by korte, join kan dengan table sticker
+        $data = DB::table('org_diagram_rt as a')
+                ->select('b.name','a.rt','c.image','b.photo','c.id')
+                ->join('sticker as c','a.id','=','c.anggotaidx')
+                ->join('users as b','a.nik','=','b.nik')
+                ->where('a.pidx', $idx)
+                ->where('a.base','ANGGOTA')->get();
+
+        $no = 1;
+        return view('pages.admin.strukturorg.rt.liststickerbykorte', compact('data','kor_rt','no'));
+
+    }
+
+    public function deleteStikerByAnggota($id){
+
+        // hapus foto
+        $getdata = DB::table('sticker')->where('id', $id);
+		#hapus file lama
+        $data = $getdata->first();
+		$dir_file = storage_path('app').'/public/'.$data->image;
+        if (file_exists($dir_file)) {
+                File::delete($dir_file);
+        }
+
+        // hapus data
+        $getdata->delete();
+        return redirect()->back()->with(['success' => 'Stiker telah dihapus!']);
+    }
+
 }
