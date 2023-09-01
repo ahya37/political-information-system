@@ -53,13 +53,22 @@ let table = $("#data").DataTable({
                 return `
                         <a href="/admin/struktur/rt/edittps/anggota/${row.id}" class="btn btn-sm btn-warning">Edit TPS</a>
                         <a href="/admin/struktur/rt/edit/anggota/${row.id}" class="btn btn-sm btn-info text-white">Edit</a>
-                        <a href="/admin/struktur/rt/edit/anggota/${row.id}" class="btn btn-sm btn-info text-white">Stiker</a>
+                        <button class="btn btn-sm btn-sc-primary text-white" data-name="${row.name}" data-whatever="${row.id}" data-toggle="modal" data-target="#exampleModal">Stiker</button>
                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>
                         `
             },
         },
     ],
 });
+
+$('#exampleModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var recipient = button.data('whatever')
+    var name = button.data('name')
+    var modal = $(this)
+    modal.find('.modal-title').text('Upload Stiker ' + name)
+    modal.find('#recipient-name').val(recipient)
+  })
 
 async function onDelete(data) {
     const id = data.id;

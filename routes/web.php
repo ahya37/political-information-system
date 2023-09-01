@@ -493,6 +493,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 			
 			Route::get('/test/pdf','OrgDiagramController@testPdf');
 
+			Route::post('/anggota/sticker/save/{korte_idx}','OrgDiagramController@uploadSticker')->name('admin-sticker-save');
+
         });
 		
 		Route::group(['prefix' => 'report'], function(){
