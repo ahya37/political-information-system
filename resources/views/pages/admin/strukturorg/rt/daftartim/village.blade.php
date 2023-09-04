@@ -34,11 +34,11 @@
                                         <th>BENDAHARA</th>
                                         <th>DPT</th>
                                         <th>ANGGOTA</th>
-                                        <th>TARGET KORTE</th>
-                                        <th>KORTE TERISI</th>
+                                        <th>TARGET KORTPS</th>
+                                        <th>KORTPS TERISI</th>
                                         <th>ANGGOTA TERCOVER</th>
-                                        <th>KURANG KORTE</th>
-                                        <th>BELUM ADA KORTE</th>
+                                        <th>KURANG KORTPS</th>
+                                        <th>BELUM ADA KORTPS</th>
                                         <th>(%)</th>
                                         <th>TARGET</th>
                                       </tr>
