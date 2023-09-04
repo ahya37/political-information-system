@@ -3125,7 +3125,7 @@ class OrgDiagramController extends Controller
 
         #cek jangan double data
         $cek = $koorModel->where('nik', $request->nik)->count();
-        dd($cek);
+       
         if ($cek > 0) return redirect()->back()->with(['error' => 'NIK sudah terdaftar di TPS / Korte!']);
 
         // cek ke table users apakah ada anggota dengan nik tersebut
