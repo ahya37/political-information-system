@@ -3265,24 +3265,10 @@ class OrgDiagramController extends Controller
 
         $district = DB::table('districts')->select('name','target_persentage')->where('id', $districtId)->first();
 
+        $orgDiagramModel = new OrgDiagram();
         #get data desa by kecamatan
-        $sql = "SELECT a.id, a.name, a.target_persentage ,
-                (select COUNT(id)  from org_diagram_village where title = 'KETUA' and village_id = a.id) as ketua,
-                (select COUNT(id)  from org_diagram_village where title = 'SEKRETARIS' and village_id = a.id) as sekretaris,
-                (select COUNT(id)  from org_diagram_village where title = 'BENDAHARA' and village_id = a.id) as bendahara,
-                (SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id ) as dpt,
-                (SELECT COUNT(id) from users WHERE village_id = a.id ) as anggota,
-                (CEIL ((SELECT COUNT(id) from users WHERE village_id = a.id )/25)) as target_korte,
-                (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi,
-                ((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )*25) anggota_tercover,
-                ((CEIL ((SELECT COUNT(id) from users WHERE village_id = a.id )/25))-(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )) as kurang_korte,
-                ((SELECT COUNT(id) from users WHERE village_id = a.id )-((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )*25)) as belum_ada_korte,
-                ((SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id )*(SELECT target_persentage from villages where id = a.id)/100) target
-                from villages as a
-                WHERE a.district_id = $districtId order by (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) desc";
+        $data = $orgDiagramModel->getDataDaftarTimByKecamatan($districtId);
         
-        $data = DB::select($sql);
-
         $jml_ketua = collect($data)->sum(function($q){
             return $q->ketua;
         });
@@ -3299,25 +3285,21 @@ class OrgDiagramController extends Controller
         $jml_anggota =  collect($data)->sum(function($q){
             return $q->anggota;
         });
+
         $jml_target_korte =  collect($data)->sum(function($q){
             return $q->target_korte;
         });
         $jml_korte_terisi =  collect($data)->sum(function($q){
             return $q->korte_terisi;
         });
-        $jml_anggota_tercover = collect($data)->sum(function($q){
-            return $q->anggota_tercover;
-        });
-        $jml_kurang_korte     =  collect($data)->sum(function($q){
-            return $q->kurang_korte;
-        });
+
+        $jml_anggota_tercover = $jml_korte_terisi * 25;
+        $jml_kurang_korte     = $jml_target_korte - $jml_korte_terisi;
         $jml_blm_ada_korte    = collect($data)->sum(function($q){
             return $q->belum_ada_korte;
         });
         $persentage_target    = ($jml_anggota/$jml_dpt)*100;
-        $jml_target           = collect($data)->sum(function($q){
-            return ceil($q->target);
-        });
+        $jml_target           = ($jml_dpt*$district->target_persentage)/100;
         $no = 1;
 
         return view('pages.admin.strukturorg.rt.daftartim.village', compact('data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district'));
