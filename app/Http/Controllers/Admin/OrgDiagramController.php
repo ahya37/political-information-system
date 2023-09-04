@@ -3117,9 +3117,16 @@ class OrgDiagramController extends Controller
             'nik' => 'required',
         ]);
 
+        $koorModel = new KoordinatorTpsKorte();
+
         #hitung panjang nik, harus 16
         $cekLengthNik = strlen($request->nik);
         if ($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
+
+        #cek jangan double data
+        $cek = $koorModel->where('nik', $request->nik)->count();
+        dd($cek);
+        if ($cek > 0) return redirect()->back()->with(['error' => 'NIK sudah terdaftar di TPS / Korte!']);
 
         // cek ke table users apakah ada anggota dengan nik tersebut
         $member = User::select('name', 'nik')->where('nik', $request->nik)->first();
@@ -3128,7 +3135,6 @@ class OrgDiagramController extends Controller
 
         $auth = auth()->guard('admin')->user()->id;
 
-        $koorModel = new KoordinatorTpsKorte();
         $koorModel->store($idx, $request, $name, $auth);
 
         return redirect()->back()->with(['success' => 'Anggota berhasil disimpan!']);
@@ -3138,6 +3144,7 @@ class OrgDiagramController extends Controller
     {
 
         return 'ok';
+        
     }
 
     public function uploadSticker(Request $request, $korte_idx)
@@ -3229,4 +3236,92 @@ class OrgDiagramController extends Controller
             return 'per dapil';
         }
     }
+
+    public function daftarTim(){
+
+        // tampilkan data dapil 
+        $regency = 3602;
+        $dapils  = DB::table('dapils')->select('id','name')->where('regency_id', $regency)->get();
+        $no      = 1;
+
+        return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('dapils','no'));
+
+    }
+
+    public function daftatTimDapil($dapilId){
+
+        // get data kecamatan by dapil
+        $districts = DB::table('dapil_areas as a')
+                     ->select('b.id','b.name')
+                     ->join('districts as b','a.district_id','=','b.id')
+                     ->where('a.dapil_id', $dapilId)
+                     ->get();
+        $no = 1;
+        return view('pages.admin.strukturorg.rt.daftartim.district', compact('districts','no'));
+
+    }
+
+    public function daftarTimDistrict($districtId){
+
+        $district = DB::table('districts')->select('name','target_persentage')->where('id', $districtId)->first();
+
+        #get data desa by kecamatan
+        $sql = "SELECT a.id, a.name, a.target_persentage ,
+                (select COUNT(id)  from org_diagram_village where title = 'KETUA' and village_id = a.id) as ketua,
+                (select COUNT(id)  from org_diagram_village where title = 'SEKRETARIS' and village_id = a.id) as sekretaris,
+                (select COUNT(id)  from org_diagram_village where title = 'BENDAHARA' and village_id = a.id) as bendahara,
+                (SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id ) as dpt,
+                (SELECT COUNT(id) from users WHERE village_id = a.id ) as anggota,
+                (CEIL ((SELECT COUNT(id) from users WHERE village_id = a.id )/25)) as target_korte,
+                (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi,
+                ((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )*25) anggota_tercover,
+                ((CEIL ((SELECT COUNT(id) from users WHERE village_id = a.id )/25))-(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )) as kurang_korte,
+                ((SELECT COUNT(id) from users WHERE village_id = a.id )-((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )*25)) as belum_ada_korte,
+                ((SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id )*(SELECT target_persentage from villages where id = a.id)/100) target
+                from villages as a
+                WHERE a.district_id = $districtId order by (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) desc";
+        
+        $data = DB::select($sql);
+
+        $jml_ketua = collect($data)->sum(function($q){
+            return $q->ketua;
+        });
+        $jml_sekretaris = collect($data)->sum(function($q){
+            return $q->sekretaris;
+        });
+        $jml_bendahara = collect($data)->sum(function($q){
+            return $q->bendahara;
+        });
+        $jml_dpt =  collect($data)->sum(function($q){
+            return $q->dpt;
+        });
+
+        $jml_anggota =  collect($data)->sum(function($q){
+            return $q->anggota;
+        });
+        $jml_target_korte =  collect($data)->sum(function($q){
+            return $q->target_korte;
+        });
+        $jml_korte_terisi =  collect($data)->sum(function($q){
+            return $q->korte_terisi;
+        });
+        $jml_anggota_tercover = collect($data)->sum(function($q){
+            return $q->anggota_tercover;
+        });
+        $jml_kurang_korte     =  collect($data)->sum(function($q){
+            return $q->kurang_korte;
+        });
+        $jml_blm_ada_korte    = collect($data)->sum(function($q){
+            return $q->belum_ada_korte;
+        });
+        $persentage_target    = ($jml_anggota/$jml_dpt)*100;
+        $jml_target           = collect($data)->sum(function($q){
+            return ceil($q->target);
+        });
+        $no = 1;
+
+        return view('pages.admin.strukturorg.rt.daftartim.village', compact('data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district'));
+    }
+
+
 }

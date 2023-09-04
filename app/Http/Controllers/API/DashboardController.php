@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Dpt;
 use App\Job;
 use App\User;
 use App\Referal;
@@ -324,8 +325,9 @@ class DashboardController extends Controller
         $presentage_village_filled = $gF->persen(($total_village_filled / $total_village) * 100); // persentasi jumlah desa terisi
 
         #total dpt nasioanal, sum count_vooter level provinsi 
-		$RightChooseProvinceModel = new RightChooseProvince(); 
-        $rightChooseProvince      = $RightChooseProvinceModel->getTotalDptNasional()->total_dpt;
+		// $RightChooseProvinceModel = new RightChooseProvince(); 
+        $dptModel                 = new Dpt();
+        $rightChooseProvince      = $dptModel->getDptLevelNational()->total_dpt;
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
@@ -361,8 +363,11 @@ class DashboardController extends Controller
         $total_village_filled      = count($village_filled); // total desa yang terisi
         $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
         
-		$RightChooseDistrictModel  = new RightChooseDistrict();
-		$rightChooseRegency        = $RightChooseDistrictModel->getTotalDptRegency($regency_id)->total_dpt;
+		// $RightChooseDistrictModel  = new RightChooseDistrict();
+		// $rightChooseRegency        = $RightChooseDistrictModel->getTotalDptRegency($regency_id)->total_dpt;
+
+        $dptModel = new Dpt();
+        $rightChooseRegency = $dptModel->getDptLevelRegency()->total_dpt;
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
@@ -1680,8 +1685,10 @@ class DashboardController extends Controller
         $total_village_filled      = count($village_filled);
         $presentage_village_filled = ($total_village_filled / $total_village) * 100; // persentasi jumlah desa terisi
 		
-		$RightChooseRegencyModel   = new RightChooseRegency();
-        $rightChooseProvince       = $RightChooseRegencyModel->getTotalDptProvince($province_id)->total_dpt;
+		// $RightChooseRegencyModel   = new RightChooseRegency();
+        // $rightChooseProvince       = $RightChooseRegencyModel->getTotalDptProvince($province_id)->total_dpt;
+        $dptModel = new Dpt();
+        $rightChooseProvince = $dptModel->getDptLevelProvince()->total_dpt;
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),

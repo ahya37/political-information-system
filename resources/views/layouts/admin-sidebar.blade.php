@@ -37,6 +37,10 @@
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
                         Kor. RT
                     </a>
+                    <a href="{{ route('admin-daftartim') }}"
+                        class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
+                        Daftar Tim
+                    </a>
 
                     <a href="{{ route('admin-struktur-organisasi-test') }}" target="_blank"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/struktur/dashboard') ? 'active custom-active-color' : '' }}">

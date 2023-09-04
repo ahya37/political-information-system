@@ -496,6 +496,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 			Route::post('/anggota/sticker/save/{korte_idx}','OrgDiagramController@uploadSticker')->name('admin-sticker-save');
 			Route::get('/list/sticker/{idx}','OrgDiagramController@listStikerByKorte');
 			Route::get('/list/sticker/delete/{idx}','OrgDiagramController@deleteStikerByAnggota')->name('admin-sticker-delete');
+			
+            #Daftar tim
+            Route::get('/daftartim','OrgDiagramController@daftarTim')->name('admin-daftartim');
+            Route::get('/daftartim/dapil/{dapilId}','OrgDiagramController@daftatTimDapil')->name('admin-daftartim-data-dapil');
+            Route::get('/daftartim/district/{districtId}','OrgDiagramController@daftarTimDistrict')->name('admin-daftartim-data-district');
 
         });
 		

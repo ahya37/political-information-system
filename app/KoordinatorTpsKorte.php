@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class KoordinatorTpsKorte extends Model
 {
+	protected $table    = 'anggota_koordinator_tps_korte';
+    protected  $guarded = [];
     public function store($idx, $request, $name, $auth){
 		
 		$sql = DB::table('anggota_koordinator_tps_korte')->insert([
@@ -23,4 +25,5 @@ class KoordinatorTpsKorte extends Model
 		
 		
 	}
+	
 }
