@@ -430,7 +430,6 @@ class OrgDiagram extends Model
 				(SELECT COUNT(id) from witnesses WHERE district_id  = a.district_id) as saksi
 				from dapil_areas as a
 				join districts as b on a.district_id = b.id
-				join right_to_choose_districts as c on b.id = c.district_id
 				where a.dapil_id = $dapilId order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";
         
         return DB::select($sql);

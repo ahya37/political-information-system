@@ -979,7 +979,7 @@ class OrgDiagramController extends Controller
                 'photo' => $value->photo,
                 'phone_number' => $value->phone_number,
                 'count_anggota' => $count_anggota,
-                'base' => "KOR RT"
+                'base' => "KORTPS"
 
             ];
         }
