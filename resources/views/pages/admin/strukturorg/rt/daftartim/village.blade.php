@@ -76,9 +76,9 @@
                                         <td align="center"><b>{{ number_format($jml_anggota) }}</b></td>
                                         <td align="center"><b>{{ number_format($jml_target_korte) }}</b></td>
                                         <td align="center"><b>{{ number_format($jml_korte_terisi) }}</b></td>
+                                        <td align="center"><b>{{ number_format($jml_kurang_korte) }}</b></td>
                                         <td align="center"><b>{{ number_format($jml_saksi) }}</b></td>
                                         <td align="center"><b>{{ number_format($jml_anggota_tercover) }}</b></td>
-                                        <td align="center"><b>{{ number_format($jml_kurang_korte) }}</b></td>
                                         <td align="center"><b>{{ number_format($jml_blm_ada_korte) }}</b></td>
                                         <td align="center"><b>{{ $gF->persenDpt($persentage_target) }}</b></td>
                                         <td align="center"><b>{{number_format ($jml_target) }}</b></td>
