@@ -36,8 +36,8 @@
                                         <th align="center">ANGGOTA</th>
                                         <th align="center">TARGET KORTPS</th>
                                         <th align="center">KORTPS TERISI</th>
+                                        <th align="center">KORTPS (-/+)</th>
                                         <th align="center">SAKSI</th>
-                                        <th align="center">KURANG KORTPS</th>
                                         <th align="center">ANGGOTA TERCOVER</th>
                                         <th align="center">BELUM ADA KORTPS</th>
                                         <th align="center">(%)</th>
@@ -58,8 +58,8 @@
                                                 <td align="center">{{ number_format($item->anggota) }}</td>
                                                 <td align="center">{{ number_format($item->target_korte) }}</td>
                                                 <td align="center">{{ number_format($item->korte_terisi) }}</td>
-                                                <td align="center">{{ number_format($item->saksi) }}</td>
                                                 <td align="center">{{ number_format($item->target_korte - $item->korte_terisi) }}</td>
+                                                <td align="center">{{ number_format($item->saksi) }}</td>
                                                 <td align="center">{{ number_format($item->korte_terisi * 25) }}</td>
                                                 <td align="center">{{ number_format($item->anggota - ($item->korte_terisi * 25)) }}</td>
                                                 <td align="center">{{ $gF->persenDpt(($item->anggota / $item->dpt)*100) }}</td>
