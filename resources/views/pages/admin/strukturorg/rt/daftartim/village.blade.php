@@ -27,21 +27,21 @@
                                   <table id="data" class="table table-sm table-striped" width="100%">
                                     <thead>
                                       <tr>
-                                        <th>NO</th>
+                                        <th align="center">NO</th>
                                         <th>DESA</th>
-                                        <th>K</th>
-                                        <th>S</th>
-                                        <th>B</th>
-                                        <th>DPT</th>
-                                        <th>ANGGOTA</th>
-                                        <th>TARGET KORTPS</th>
-                                        <th>KORTPS TERISI</th>
-                                        <th>SAKSI</th>
-                                        <th>KURANG KORTPS</th>
-                                        <th>ANGGOTA TERCOVER</th>
-                                        <th>BELUM ADA KORTPS</th>
-                                        <th>(%)</th>
-                                        <th>TARGET</th>
+                                        <th align="center">K</th>
+                                        <th align="center">S</th>
+                                        <th align="center">B</th>
+                                        <th align="center">DPT</th>
+                                        <th align="center">ANGGOTA</th>
+                                        <th align="center">TARGET KORTPS</th>
+                                        <th align="center">KORTPS TERISI</th>
+                                        <th align="center">SAKSI</th>
+                                        <th align="center">KURANG KORTPS</th>
+                                        <th align="center">ANGGOTA TERCOVER</th>
+                                        <th align="center">BELUM ADA KORTPS</th>
+                                        <th align="center">(%)</th>
+                                        <th align="center">TARGET</th>
                                       </tr>
                                     </thead>
                                     <tbody>
