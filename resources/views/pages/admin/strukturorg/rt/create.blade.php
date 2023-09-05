@@ -68,7 +68,7 @@
                             </div>
                             <div class="form-group">
                                 <label>RT</label>
-                                <input type="number" class="form-control" name="rts">
+                                <input type="number" class="form-control" name="rts" required>
                             </div>
                             <div class="form-group">
                                 <label>TPS</label>

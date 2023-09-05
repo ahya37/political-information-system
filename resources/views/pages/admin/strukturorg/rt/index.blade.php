@@ -12,7 +12,7 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Koordinator RT</h2>
+                <h2 class="dashboard-title">Daftar Koordinator TPS</h2>
             </div>
 
             <div class="mt-4">

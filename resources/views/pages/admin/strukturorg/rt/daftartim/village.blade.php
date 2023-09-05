@@ -27,17 +27,18 @@
                                   <table id="data" class="table table-sm table-striped" width="100%">
                                     <thead>
                                       <tr>
-                                        <th class="col-1">NO</th>
+                                        <th>NO</th>
                                         <th>DESA</th>
-                                        <th>KETUA</th>
-                                        <th>SEKRETARIS</th>
-                                        <th>BENDAHARA</th>
+                                        <th>K</th>
+                                        <th>S</th>
+                                        <th>B</th>
                                         <th>DPT</th>
                                         <th>ANGGOTA</th>
                                         <th>TARGET KORTPS</th>
                                         <th>KORTPS TERISI</th>
-                                        <th>ANGGOTA TERCOVER</th>
+                                        <th>SAKSI</th>
                                         <th>KURANG KORTPS</th>
+                                        <th>ANGGOTA TERCOVER</th>
                                         <th>BELUM ADA KORTPS</th>
                                         <th>(%)</th>
                                         <th>TARGET</th>
@@ -46,7 +47,7 @@
                                     <tbody>
                                         @foreach ($data as $item)
                                             <tr>
-                                                <td>{{ $no++ }}</td>
+                                                <td align="center">{{ $no++ }}</td>
                                                 <td>{{ $item->name }}</td>
                                                 <td align="center" style="{{ $item->ketua == 0 ? "background: #ed7d31" : '' }}">{{ $item->ketua }}</td>
                                                 <td align="center" style="{{ $item->sekretaris == 0 ? "background: #ed7d31" : '' }}">{{ $item->sekretaris }}</td>
@@ -55,10 +56,11 @@
                                                 <td align="center">{{ number_format($item->anggota) }}</td>
                                                 <td align="center">{{ number_format($item->target_korte) }}</td>
                                                 <td align="center">{{ number_format($item->korte_terisi) }}</td>
-                                                <td align="center">{{ number_format($item->korte_terisi * 25) }}</td>
+                                                <td align="center">{{ number_format($item->saksi) }}</td>
                                                 <td align="center">{{ number_format($item->target_korte - $item->korte_terisi) }}</td>
+                                                <td align="center">{{ number_format($item->korte_terisi * 25) }}</td>
                                                 <td align="center">{{ number_format($item->anggota - ($item->korte_terisi * 25)) }}</td>
-                                                <td align="center">{{ number_format((($item->anggota / $item->dpt)*100),2) }}</td>
+                                                <td align="center">{{ $gF->persenDpt(($item->anggota / $item->dpt)*100) }}</td>
                                                 <td align="center">{{ number_format(($item->dpt * $item->target_persentage) / 100 ) }}</td>
                                             </tr>
                                         @endforeach
@@ -74,10 +76,11 @@
                                         <td align="center"><b>{{ number_format($jml_anggota) }}</b></td>
                                         <td align="center"><b>{{ number_format($jml_target_korte) }}</b></td>
                                         <td align="center"><b>{{ number_format($jml_korte_terisi) }}</b></td>
+                                        <td align="center"><b>{{ number_format($jml_saksi) }}</b></td>
                                         <td align="center"><b>{{ number_format($jml_anggota_tercover) }}</b></td>
                                         <td align="center"><b>{{ number_format($jml_kurang_korte) }}</b></td>
                                         <td align="center"><b>{{ number_format($jml_blm_ada_korte) }}</b></td>
-                                        <td align="center"><b>{{ number_format(($persentage_target),2) }}</b></td>
+                                        <td align="center"><b>{{ $gF->persenDpt($persentage_target) }}</b></td>
                                         <td align="center"><b>{{number_format ($jml_target) }}</b></td>
                                       </tr>
                                     </tfoot>

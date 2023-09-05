@@ -46,6 +46,11 @@ class GlobalProvider extends ServiceProvider
         $show = number_format($data,1);
         return $show;
     }
+    public function persenDpt($data)
+    {
+        $show = number_format((float)$data,2,',','.');
+        return $show;
+    }
 
     public function persenIntel($data)
     {

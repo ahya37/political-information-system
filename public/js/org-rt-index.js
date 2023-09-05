@@ -368,7 +368,7 @@ let table = $("#data").DataTable({
             targets: 3,
             orderable: true,
             render: function (data, type, row, meta) {
-                return row.rt
+                return `<p class='text-center'>${row.rt ?? ''}</p>`;
             },
         },
         {

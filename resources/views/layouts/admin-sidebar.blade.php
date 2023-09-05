@@ -35,7 +35,7 @@
                     </a>
                     <a href="{{ route('admin-struktur-organisasi-rt') }}"
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
-                        Kor. RT
+                        Kor. TPS
                     </a>
                     <a href="{{ route('admin-daftartim') }}"
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">

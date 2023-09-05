@@ -3288,13 +3288,17 @@ class OrgDiagramController extends Controller
         $jml_blm_ada_korte    = collect($data)->sum(function($q){
             return $q->belum_ada_korte;
         });
+        $jml_saksi            = collect($data)->sum(function($q){
+            return $q->saksi;
+        });
         $persentage_target    = ($jml_anggota/$jml_dpt)*100;
         $jml_target           = collect($data)->sum(function($q){
             return ($q->dpt * $q->target_persentage)/100;
         });
 
+        $gF = new GlobalProvider();
 
-        return view('pages.admin.strukturorg.rt.daftartim.district', compact('dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target'));
+        return view('pages.admin.strukturorg.rt.daftartim.district', compact('dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','gF','jml_saksi'));
 
     }
 
@@ -3335,11 +3339,15 @@ class OrgDiagramController extends Controller
         $jml_blm_ada_korte    = collect($data)->sum(function($q){
             return $q->belum_ada_korte;
         });
+        $jml_saksi            = collect($data)->sum(function($q){
+            return $q->saksi;
+        });
         $persentage_target    = ($jml_anggota/$jml_dpt)*100;
         $jml_target           = ($jml_dpt*$district->target_persentage)/100;
         $no = 1;
+        $gF = new GlobalProvider();
 
-        return view('pages.admin.strukturorg.rt.daftartim.village', compact('data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district'));
+        return view('pages.admin.strukturorg.rt.daftartim.village', compact('gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi'));
     }
 
 
