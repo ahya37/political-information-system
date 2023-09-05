@@ -3250,14 +3250,51 @@ class OrgDiagramController extends Controller
 
     public function daftatTimDapil($dapilId){
 
-        // get data kecamatan by dapil
-        $districts = DB::table('dapil_areas as a')
-                     ->select('b.id','b.name')
-                     ->join('districts as b','a.district_id','=','b.id')
-                     ->where('a.dapil_id', $dapilId)
-                     ->get();
-        $no = 1;
-        return view('pages.admin.strukturorg.rt.daftartim.district', compact('districts','no'));
+        $dapil = DB::table('dapils')->select('name')->where('id', $dapilId)->first();
+        $no    = 1;
+
+        $orgDiagramModel = new OrgDiagram();
+        $data            = $orgDiagramModel->getDataDaftarTimByDapil($dapilId);
+        // dd($data);
+
+        $jml_ketua = collect($data)->sum(function($q){
+            return $q->ketua;
+        });
+        $jml_sekretaris = collect($data)->sum(function($q){
+            return $q->sekretaris;
+        });
+
+        $jml_bendahara = collect($data)->sum(function($q){
+            return $q->bendahara;
+        });
+        $jml_dpt =  collect($data)->sum(function($q){
+            return $q->dpt;
+        });
+
+        $jml_anggota =  collect($data)->sum(function($q){
+            return $q->anggota;
+        });
+
+        $jml_target_korte =  collect($data)->sum(function($q){
+            return $q->target_korte;
+        });
+
+        $jml_korte_terisi =  collect($data)->sum(function($q){
+            return $q->korte_terisi;
+        });
+
+        $jml_anggota_tercover = $jml_korte_terisi * 25;
+        $jml_kurang_korte     = $jml_target_korte - $jml_korte_terisi;
+        $jml_blm_ada_korte    = collect($data)->sum(function($q){
+            return $q->belum_ada_korte;
+        });
+        $persentage_target    = ($jml_anggota/$jml_dpt)*100;
+        $jml_target           = collect($data)->sum(function($q){
+            return ($q->dpt * $q->target_persentage)/100;
+        });
+
+
+        return view('pages.admin.strukturorg.rt.daftartim.district', compact('dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target'));
 
     }
 
