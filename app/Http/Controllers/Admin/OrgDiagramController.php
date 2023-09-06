@@ -3126,7 +3126,7 @@ class OrgDiagramController extends Controller
         #cek jangan double data
         $cek = $koorModel->where('nik', $request->nik)->count();
        
-        if ($cek > 0) return redirect()->back()->with(['error' => 'NIK sudah terdaftar di TPS / Korte!']);
+        if ($cek > 0) return redirect()->back()->with(['error' => 'NIK sudah terdaftar di Kor TPS!']);
 
         // cek ke table users apakah ada anggota dengan nik tersebut
         $member = User::select('name', 'nik')->where('nik', $request->nik)->first();
@@ -3284,7 +3284,7 @@ class OrgDiagramController extends Controller
         });
 
         $jml_anggota_tercover = $jml_korte_terisi * 25;
-        $jml_kurang_korte     = $jml_target_korte - $jml_korte_terisi;
+        $jml_kurang_korte     = $jml_korte_terisi - $jml_target_korte;
         $jml_blm_ada_korte    = collect($data)->sum(function($q){
             return $q->belum_ada_korte;
         });
@@ -3335,7 +3335,7 @@ class OrgDiagramController extends Controller
         });
 
         $jml_anggota_tercover = $jml_korte_terisi * 25;
-        $jml_kurang_korte     = $jml_target_korte - $jml_korte_terisi;
+        $jml_kurang_korte     = $jml_korte_terisi - $jml_target_korte;
         $jml_blm_ada_korte    = collect($data)->sum(function($q){
             return $q->belum_ada_korte;
         });

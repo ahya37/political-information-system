@@ -46,6 +46,15 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($data as $item)
+                                        @php
+                                            $kurang_korte = $item->korte_terisi - $item->target_korte;
+                                            $nilai_kurang_korte = round($kurang_korte);
+                                            if ($nilai_kurang_korte == -0) {
+                                                $nilai_kurang_korte = 0;
+                                            }elseif($nilai_kurang_korte > 0){
+                                                $nilai_kurang_korte = '+'.$nilai_kurang_korte;
+                                            }
+                                        @endphp
                                             <tr>
                                                 <td align="center">{{ $no++ }}</td>
                                                 <td>
@@ -58,7 +67,7 @@
                                                 <td align="center">{{ number_format($item->anggota) }}</td>
                                                 <td align="center">{{ number_format($item->target_korte) }}</td>
                                                 <td align="center">{{ number_format($item->korte_terisi) }}</td>
-                                                <td align="center">{{ number_format($item->target_korte - $item->korte_terisi) }}</td>
+                                                <td align="center">{{ number_format($nilai_kurang_korte) }}</td>
                                                 <td align="center">{{ number_format($item->saksi) }}</td>
                                                 <td align="center">{{ number_format($item->korte_terisi * 25) }}</td>
                                                 <td align="center">{{ number_format($item->anggota - ($item->korte_terisi * 25)) }}</td>
