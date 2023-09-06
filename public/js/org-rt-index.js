@@ -355,7 +355,7 @@ let table = $("#data").DataTable({
             targets: 1,
             sortable: true,
             render: function (data, type, row, meta) {
-                return `<p> <img  class="rounded" width="40" src="/storage/${row.photo}"> ${row.name}</p>`;
+                return `<a href="/admin/member/profile/${row.user_id}"> <img  class="rounded" width="40" src="/storage/${row.photo}"> ${row.name}</a>`;
             },
         },
         {
@@ -393,11 +393,17 @@ let table = $("#data").DataTable({
         {
             targets: 7,
             render: function (data, type, row, meta) {
-                return `<p>${row.phone_number ?? ''}</p>`;
+                return `<p class="text-center">${row.referal}</p>`;
             },
         },
         {
             targets: 8,
+            render: function (data, type, row, meta) {
+                return `<p>${row.phone_number ?? ''}</p>`;
+            },
+        },
+        {
+            targets: 9,
             render: function (data, type, row, meta) {
                 return `<div class="btn-group">
                         <div class="dropdown">

@@ -86,6 +86,7 @@
                                             <th scope="col">NO</th>
                                             <th scope="col">NAMA</th>
                                             <th scope="col">NIK</th>
+                                            <th scope="col">OPSI</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -98,6 +99,7 @@
                                                         {{ $item->name }}</p>
                                                 </td>
                                                 <td>{{ $item->nik }}</td>
+                                                <td><button class="btn btn-sm btn-danger" data-name="{{ $item->name }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-trash"></i></button></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -137,6 +139,36 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Hapus</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin-koordinatortpskorte-delete') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group">
+                            <input type="hidden" name="id" class="form-control" id="recipient-name2">
+                        </div>
+                        <div class="form-group">
+                           <label>Data yang dihapus tidak dapat dikembalikan</label>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Hapus</button>
                 </div>
                 </form>
 

@@ -31,7 +31,7 @@ let table = $("#data").DataTable({
             targets: 1,
             sortable: true,
             render: function (data, type, row, meta) {
-                return `<p> <img  class="rounded" width="40" src="/storage/${row.photo}"> ${row.name}</p>`;
+                return `<a href="/admin/member/profile/${row.user_id}"><img  class="rounded" width="40" src="/storage/${row.photo}"> ${row.name}</a>`;
             },
         },
         {
@@ -61,7 +61,7 @@ let table = $("#data").DataTable({
                         <a href="/admin/struktur/rt/edit/anggota/${row.id}" class="btn btn-sm btn-info text-white">Edit</a>
                         <button class="btn btn-sm btn-sc-primary text-white" data-name="${row.name}" data-whatever="${row.id}" data-toggle="modal" data-target="#exampleModal">Stiker</button>
                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>`
-                       
+
             },
         },
     ],
@@ -74,7 +74,16 @@ $('#exampleModal').on('show.bs.modal', function (event) {
     var modal = $(this)
     modal.find('.modal-title').text('Upload Stiker ' + name)
     modal.find('#recipient-name').val(recipient)
-  })
+})
+
+$('#exampleModal2').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var recipient = button.data('whatever')
+    var name = button.data('name')
+    var modal = $(this)
+    modal.find('.modal-title').text('Yakin Hapus ' + name + '?')
+    modal.find('#recipient-name2').val(recipient)
+})
 
 async function onDelete(data) {
     const id = data.id;
