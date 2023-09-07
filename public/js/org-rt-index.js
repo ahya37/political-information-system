@@ -100,7 +100,7 @@ $("#selectListArea").change(async function () {
 
         $("#anggota").empty();
         $("#tercover").empty();
-        $('#keterangan').empty();
+        $('#keterangan').text('Kor TPS');
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
@@ -154,6 +154,7 @@ $("#selectDistrictId").change(async function () {
         $("#reqdistrict").val("");
         $("#reqvillage").val("");
         $('#keterangan').empty();
+        geLocationDapil(selectListArea);
 
         $("#anggota").empty();
         $("#tercover").empty();
@@ -214,6 +215,7 @@ $("#selectVillageId").change(async function () {
         $("#reqvillage").val("");
         $("#selectRt").val("");
         $('#keterangan').empty();
+        geLocationDistrict(selectDistrictId);
 
         $("#anggota").empty();
         $("#tercover").empty();
@@ -263,7 +265,7 @@ $("#selectRt").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
         $('#keterangan').empty();
-        // geLocationVillageWithRt(selectVillageId,selectRT);
+        geLocationVillage(selectVillageId);
 
         $("#anggota").empty();
         $("#tercover").empty();
