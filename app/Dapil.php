@@ -33,7 +33,7 @@ class Dapil extends Model
         $sql = "SELECT b.id as regency_id , a.id as dapil_id, a.name as dapil_name , b.name as regency from dapils as a
                 join regencies as b on a.regency_id = b.id
                 where a.id = $id";
-        $result = collect(\DB::select($sql))->first();
+        $result = collect(DB::select($sql))->first();
         return $result;
     }
 

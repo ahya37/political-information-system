@@ -60,7 +60,8 @@ $("#selectListArea").change(async function () {
         const listDistricts = await getListDistrict(selectListArea);
         $("#selectDistrictId").empty();
         $("#selectVillageId").empty();
-
+        $('#keterangan').empty();
+        
         $("#selectDistrictId").show();
         $("#selectDistrictId").append(
             "<option value=''>-Pilih Kecamatan-</option>"
@@ -72,6 +73,7 @@ $("#selectListArea").change(async function () {
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
         selectRT = $("#selectRt").val();
+        geLocationDapil(selectListArea);
 
 
         $("#reqdapil").val(selectListArea);
@@ -81,6 +83,8 @@ $("#selectListArea").change(async function () {
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+
+        table.ajax.reload(null, false);
 
     } else {
         $("#selectDistrictId").empty();
@@ -96,9 +100,13 @@ $("#selectListArea").change(async function () {
 
         $("#anggota").empty();
         $("#tercover").empty();
+        $('#keterangan').empty();
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+
+        table.ajax.reload(null, false);
+
     }
 });
 
@@ -118,6 +126,8 @@ $("#selectDistrictId").change(async function () {
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
+        $('#keterangan').empty();
+        geLocationDistrict(selectDistrictId)
 
         $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
@@ -130,7 +140,8 @@ $("#selectDistrictId").change(async function () {
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
-       
+
+        table.ajax.reload(null, false);       
 
     } else {
         $("#selectVillageId").empty();
@@ -142,12 +153,16 @@ $("#selectDistrictId").change(async function () {
 
         $("#reqdistrict").val("");
         $("#reqvillage").val("");
+        $('#keterangan').empty();
 
         $("#anggota").empty();
         $("#tercover").empty();
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+
+        table.ajax.reload(null, false);
+
     }
 });
 
@@ -222,6 +237,8 @@ $("#selectRt").change(async function () {
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
+        $('#keterangan').empty();
+        geLocationVillageWithRt(selectVillageId,selectRT);
 
         $("#anggota").empty();
         $("#tercover").empty();
@@ -244,6 +261,8 @@ $("#selectRt").change(async function () {
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
+        $('#keterangan').empty();
+        geLocationVillageWithRt(selectVillageId,selectRT);
 
         $("#anggota").empty();
         $("#tercover").empty();

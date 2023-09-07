@@ -968,7 +968,7 @@ class OrgDiagramController extends Controller
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
             ->leftJoin('tps as e', 'b.tps_id', '=', 'e.id')
-            ->join('dapil_areas as f','f.district_id','=','d.id')
+            ->join('dapil_areas as f','a.district_id','=','f.district_id')
             ->where('a.base', 'KORRT');
 
 

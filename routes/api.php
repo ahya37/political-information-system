@@ -26,6 +26,7 @@ Route::post('addElement', 'API\LocationController@addElement');
 Route::post('searchprovincesById', 'API\LocationController@getSearchProvinceById');
 Route::post('searchregencyById', 'API\LocationController@getSearchRegencyById');
 Route::post('searchdistrictById', 'API\LocationController@getSearchDistrictById');
+Route::post('searchdapilById', 'API\LocationController@getSearchDapil');
 Route::post('searchVillageById', 'API\LocationController@getSearchVillageById');
 Route::post('getrtbyvillage', 'API\LocationController@getRTByVIllage');
 Route::post('getkampungbyvillage', 'API\LocationController@getKampungByVIllage');

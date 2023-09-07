@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Dapil;
 use App\Models\Regency;
 use App\Models\Village;
 use App\Models\District;
@@ -167,6 +168,15 @@ class LocationController extends Controller
         $data = request()->data;
         $village = Village::with(['district.regency.province'])->where('id',$data)->first();
         return response()->json($village);
+
+    }
+
+    public function getSearchDapil()
+    {
+        $data = request()->data;
+        $dapilModel = new Dapil;
+        $dapil = $dapilModel->getDapilDetailById($data);
+        return response()->json($dapil);
 
     }
 

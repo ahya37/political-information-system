@@ -87,7 +87,7 @@
                     <div class="col-md-12 mt-2 mb-2">
                         <div class="card">
                             <div class="card-body">
-                                <h5 id="keterangan"></h5>
+                                <h5 id="keterangan">Kor TPS</h5>
                             </div>
                         </div>
                     </div>
