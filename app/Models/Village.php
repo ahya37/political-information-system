@@ -172,6 +172,12 @@ class Village extends Model
         return DB::select($sql);
     }
 
+    public function getTargetPersentageVillage($village_id)
+    {
+        $sql = DB::table('villages')->select('target_persentage')->where('id', $village_id)->first();
+        return $sql;
+    }
+
     public function getMemberVillageCaleg($village_id, $userId)
     {
         $sql = "SELECT a.name

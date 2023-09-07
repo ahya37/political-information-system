@@ -248,6 +248,7 @@ function setAjaxInfoCard(){
 				$("#village_filled").text("loading...");
 				$("#dpt").text("loading...");
 				$("#tps").text("loading...");
+				$("#target_from_dpt").text("loading...");
 			},
 			success: function (data) {
 				setTimeout(() => {
@@ -268,6 +269,7 @@ setAjaxInfoCard().then((data) => {
 	$("#village_filled").text(data.achievments);
 	$("#dpt").text(data.rightChooseVillage);
 	$("#tps").text(data.tpsVillag);
+	$("#target_from_dpt").text(data.target_from_dpt);
 }).catch((error) => {
 });
 // SECTION 1 INFO CARD

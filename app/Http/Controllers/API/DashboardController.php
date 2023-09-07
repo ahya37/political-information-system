@@ -460,29 +460,34 @@ class DashboardController extends Controller
 
     public function getTotalMemberVillage($district_id, $village_id)
     {
-        $gF   = app('GlobalProvider'); // global function
+        $gF   = new GlobalProvider(); // global function
         $villageModel   = new Village();
 
         $member     = $villageModel->getMemberVillage($village_id);
         $total_member = count($member);
 
+        $RightChosseVillageModel = new RightChosseVillage();
+        $rightChooseVillage = $RightChosseVillageModel->getTotalDptVillage($village_id)->total_dpt;
+
+        $target_from_dpt  = $villageModel->getTargetPersentageVillage($village_id)->target_persentage;
+        $target_member  = ($rightChooseVillage* $target_from_dpt)/100;
+
          // total desa yg berada di kec, yg sama
-        $targetMmemberModel = $villageModel->select('target')->where('id', $village_id)->first();
-        $total_target_per_district = $targetMmemberModel->target;
-        $target_member  = $gF->decimalFormat($total_target_per_district);
-        $persentage_target_member = ($total_member/$total_target_per_district)*100;
+        // $targetMmemberModel = $villageModel->select('target')->where('id', $village_id)->first();
+        // $total_target_per_district = $targetMmemberModel->target;
+        // $target_member  = $gF->decimalFormat($total_target_per_district);
+        $persentage_target_member = ($total_member/$target_member)*100;
         
         // Daftar pencapaian lokasi / daerah
         $achievments   = $villageModel->achievementVillageFirst($village_id);
-		
-		$RightChosseVillageModel = new RightChosseVillage();
-        $rightChooseVillage = $RightChosseVillageModel->getTotalDptVillage($village_id)->total_dpt;
+       
         $tpsVillag          = Tps::select('id')->where('village_id', $village_id)->count();
 
         $data = [
             'achievments' => $gF->decimalFormat($achievments->todays_achievement ?? ''),
             'total_member' => $gF->decimalFormat($total_member),
-            'target_member' => $target_member,
+            'target_from_dpt' => $gF->decimalFormat($target_from_dpt),
+            'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $gF->persen($persentage_target_member),
             'rightChooseVillage' => $gF->decimalFormat($rightChooseVillage) ?? 0,
             'tpsVillag' => $gF->decimalFormat($tpsVillag)
