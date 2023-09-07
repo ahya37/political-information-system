@@ -18,7 +18,7 @@ function geLocationVillage(villageId) {
                 $('#keterangan').empty();
             },
             complete: function (data) {
-                $('#keterangan').text(`KOORDINATOR RT DS. ${data.responseJSON.name}, KEC. ${data.responseJSON.district.name}`)
+                $('#keterangan').text(`KOR TPS DS. ${data.responseJSON.name}, KEC. ${data.responseJSON.district.name}`)
             }
         }).done(resolve).fail(reject);
     })

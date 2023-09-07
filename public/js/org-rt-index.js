@@ -9,6 +9,49 @@ let selectRT = $("#selectRt").val();
 
 // }
 
+async function initialGetAnggotaCover(selectListAreaId, selectDistrictId, selectVillageId, selectRT) {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+
+    return new Promise((resolve, reject) => {
+        const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+        $.ajax({
+            url: "/api/datacoverkortps",
+            method: "POST",
+            cache: false,
+            data: {
+                _token: CSRF_TOKEN, dapil: selectListAreaId, district: selectDistrictId, village: selectVillageId, rt:selectRT
+            },
+            beforeSend: function () {
+                $('#anggota').append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>`)
+                $('#tercover').append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>`)
+            },
+            success: function () {
+                $("#anggota").empty();
+                $("#tercover").empty();
+            },
+            complete: function (data) {
+                return data;
+            }
+        }).done(resolve).fail(reject);
+    })
+}
+
+
+async function initialGetAnggotaCoverFirst(){
+    $("#anggota").empty();
+    $("#tercover").empty();
+    const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
+    $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
+    $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+}
+
+initialGetAnggotaCoverFirst();
+
+
 // DAPIL
 $("#selectListArea").change(async function () {
     selectListArea = $("#selectListArea").val();
@@ -24,27 +67,38 @@ $("#selectListArea").change(async function () {
         );
         getListDistrictUi(listDistricts);
         province = $("#province").val();
-        selectArea = $("#selectArea").val();
+        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
+        selectRT = $("#selectRt").val();
+
 
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val("");
-
-        console.log('data belum tercover level dapil');
+        $("#anggota").empty();
+        $("#tercover").empty();
+        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
+        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
 
     } else {
         $("#selectDistrictId").empty();
         $("#selectVillageId").empty();
         province = $("#province").val();
-        selectArea = $("#selectArea").val();
+        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
         $("#reqdapil").val("");
         $("#reqdistrict").val("");
         $("#reqvillage").val("");
+
+        $("#anggota").empty();
+        $("#tercover").empty();
+        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
+        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
     }
 });
 
@@ -60,29 +114,40 @@ $("#selectDistrictId").change(async function () {
         getListVillageUi(dataVillages);
 
         province = $("#province").val();
-        selectArea = $("#selectArea").val();
+        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
         $("#reqprovince").val(province);
-        $("#reqregency").val(selectArea);
+        // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
 
-        console.log('data belum tercover level kecamatan');
+        $("#anggota").empty();
+        $("#tercover").empty();
+        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
+        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+       
 
     } else {
         $("#selectVillageId").empty();
         province = $("#province").val();
-        selectArea = $("#selectArea").val();
+        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
         $("#reqdistrict").val("");
         $("#reqvillage").val("");
+
+        $("#anggota").empty();
+        $("#tercover").empty();
+        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
+        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
     }
 });
 
@@ -111,7 +176,11 @@ $("#selectVillageId").change(async function () {
         $('#keterangan').empty();
         geLocationVillage(selectVillageId);
 
-        console.log('data belum tercover level desa');
+        $("#anggota").empty();
+        $("#tercover").empty();
+        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
+        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
 
 
     } else {
@@ -129,6 +198,12 @@ $("#selectVillageId").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
         $("#selectRt").val("");
+
+        $("#anggota").empty();
+        $("#tercover").empty();
+        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
+        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
     }
 });
 
@@ -148,7 +223,12 @@ $("#selectRt").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
 
-        console.log('data belum tercover level rt');
+        $("#anggota").empty();
+        $("#tercover").empty();
+        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
+        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+
 
     } else {
         // province = $("#province").val();
@@ -164,6 +244,12 @@ $("#selectRt").change(async function () {
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
+
+        $("#anggota").empty();
+        $("#tercover").empty();
+        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
+        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
     }
 });
 
@@ -338,6 +424,8 @@ let table = $("#data").DataTable({
         url: "/api/org/list/rt",
         type: "POST",
         data: function (d) {
+            d.dapil = selectListArea;
+            d.district = selectDistrictId;
             d.village = selectVillageId;
             d.rt = selectRT;
             return d;
@@ -464,7 +552,7 @@ $('#exampleModal').on('show.bs.modal', function (event) {
 async function onEdit(data) {
     const id = data.id;
     const name = data.getAttribute("data-name");
-	
+
 
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
@@ -519,8 +607,8 @@ async function onEdit(data) {
 async function onDelete(data) {
     // const id = data.id;
     const name = data.getAttribute("data-name");
-    const id = data.getAttribute("data-id"); 
-	
+    const id = data.getAttribute("data-id");
+
 
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     Swal.fire({
@@ -570,4 +658,8 @@ async function onDelete(data) {
     })
 
 
+}
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

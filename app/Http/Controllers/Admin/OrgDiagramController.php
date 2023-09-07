@@ -60,6 +60,43 @@ class OrgDiagramController extends Controller
         ]);
     }
 
+    public function getDataCoverKorTps()
+    {
+
+        $dapil_id   = request()->dapil;
+        $district_id = request()->district;
+        $village_id = request()->village;
+        $rt         = request()->rt;
+
+        $orgDiagram = new OrgDiagram();
+
+        $results = '';
+        if(isset($dapil_id) && !isset($district_id) && !isset($village_id) && !isset($rt)){
+
+            $results = $orgDiagram->getKalkulasiTercoverDapil($dapil_id);
+
+        }elseif(isset($dapil_id) && isset($district_id) && !isset($village_id) && !isset($rt)){
+
+            $results = $orgDiagram->getKalkulasiTercoverDistrict($district_id);
+
+        }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && !isset($rt)){
+
+            $results = $orgDiagram->getKalkulasiTercoverVillage($village_id);
+
+        }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && isset($rt)){
+
+            $results = $orgDiagram->getKalkulasiTercoverRt($village_id, $rt);
+            
+        }else{
+
+            $results = $orgDiagram->getKalkulasiTercoverAll();
+        }
+
+        return response()->json([
+            'data' => $results
+        ]);
+    }
+
     public function storeOrg(Request $request)
     {
 
@@ -931,6 +968,7 @@ class OrgDiagramController extends Controller
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
             ->leftJoin('tps as e', 'b.tps_id', '=', 'e.id')
+            ->join('dapil_areas as f','f.district_id','=','d.id')
             ->where('a.base', 'KORRT');
 
 
@@ -938,6 +976,14 @@ class OrgDiagramController extends Controller
             $data = $data->where(function ($q) use ($request) {
                 $q->whereRaw('LOWER(a.name) like ? ', ['%' . strtolower($request->input('search.value')) . '%']);
             });
+        }
+
+        if ($request->input('dapil') != null) {
+            $data->where('f.dapil_id', $request->dapil);
+        }
+
+        if ($request->input('district') != null) {
+            $data->where('a.district_id', $request->district);
         }
 
         if ($request->input('village') != null) {
