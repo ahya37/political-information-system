@@ -213,6 +213,7 @@ $("#selectVillageId").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
         $("#selectRt").val("");
+        $('#keterangan').empty();
 
         $("#anggota").empty();
         $("#tercover").empty();
@@ -262,7 +263,7 @@ $("#selectRt").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
         $('#keterangan').empty();
-        geLocationVillageWithRt(selectVillageId,selectRT);
+        // geLocationVillageWithRt(selectVillageId,selectRT);
 
         $("#anggota").empty();
         $("#tercover").empty();
