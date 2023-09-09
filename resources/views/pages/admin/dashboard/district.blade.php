@@ -95,17 +95,18 @@
                     </div>
                   </div>
                   <div class="col-md-4">
-                    <div class="card mb-2 text-white cs-card-danger">
+                    <div class="card mb-2 text-white cd-card-primary">
                       <div class="card-body">
                         <div class="dashboard-card-title text-white">
-                          Target Anggota
+                          Jumlah TPS
                         </div>
                         <div class="dashboard-card-subtitle">
-                          <h4 class="text-white" id="target_anggota"></h4>
+                          <h4 class="text-white" id="tps"><small><i>on progres</i></small></h4>
                         </div>
                       </div>
                     </div>
                   </div>
+                 
                 </div>
 
                 <div class="row">
@@ -136,7 +137,7 @@
                     </div>
                   </div>
                   <div class="col-md-4">
-                    <div class="card mb-2 text-white cs-card-danger">
+                    <div class="card mb-2 text-white cd-card-primary">
                       <div class="card-body">
                         <div class="dashboard-card-title text-white">
                           Total Desa
@@ -162,6 +163,33 @@
                         </div>
                     </div>
                   </div>
+
+                  <div class="col-md-4">
+                    <div class="card mb-2 text-white cd-card-primary">
+                        <div class="card-body">
+                          <div class="dashboard-card-title text-white">
+                            % Target
+                          </div>
+                          <div class="dashboard-card-subtitle">
+                            <h4 class="text-white" id="target_from_dpt"></h4>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="card mb-2 text-white cs-card-danger">
+                      <div class="card-body">
+                        <div class="dashboard-card-title text-white">
+                          Target Anggota
+                        </div>
+                        <div class="dashboard-card-subtitle">
+                          <h4 class="text-white" id="target_anggota"></h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
 
 

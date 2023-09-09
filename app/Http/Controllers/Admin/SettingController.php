@@ -1371,4 +1371,16 @@ class SettingController extends Controller
 		}
 	}
 
+	public function updateDistrictTps(Request $request){
+
+
+		// get data dpt kpu
+		$dpt = DB::table('dpt_kpu as a')
+				->select('a.village_id','b.district_id')
+				->join('villages as b','a.village_id','=','b.id')
+				->groupBy('a.village_id','b.district_id')
+				->get();
+		return $dpt;
+	}
+
 }

@@ -28,10 +28,14 @@ async function initialGetAnggotaCover(selectListAreaId, selectDistrictId, select
                 $('#tercover').append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>`)
+                $('#blmtercover').append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>`)
             },
             success: function () {
                 $("#anggota").empty();
                 $("#tercover").empty();
+                $("#blmtercover").empty();
             },
             complete: function (data) {
                 return data;
@@ -40,13 +44,19 @@ async function initialGetAnggotaCover(selectListAreaId, selectDistrictId, select
     })
 }
 
-
+let blmTerCover = '';
 async function initialGetAnggotaCoverFirst(){
+
+
     $("#anggota").empty();
     $("#tercover").empty();
     const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
     $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
     $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+
+    $("#blmtercover").empty();
+    blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+    $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
 }
 
 initialGetAnggotaCoverFirst();
@@ -80,9 +90,14 @@ $("#selectListArea").change(async function () {
         $("#reqdistrict").val("");
         $("#anggota").empty();
         $("#tercover").empty();
+        $("#blmtercover").empty();
+
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        
+        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
 
         table.ajax.reload(null, false);
 
@@ -101,9 +116,14 @@ $("#selectListArea").change(async function () {
         $("#anggota").empty();
         $("#tercover").empty();
         $('#keterangan').text('Kor TPS');
+        $("#blmtercover").empty();
+
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+
+        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
 
         table.ajax.reload(null, false);
 
@@ -137,9 +157,14 @@ $("#selectDistrictId").change(async function () {
 
         $("#anggota").empty();
         $("#tercover").empty();
+        $("#blmtercover").empty();
+
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+
+        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
 
         table.ajax.reload(null, false);       
 
@@ -158,9 +183,14 @@ $("#selectDistrictId").change(async function () {
 
         $("#anggota").empty();
         $("#tercover").empty();
+        $("#blmtercover").empty();
+
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+
+        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
 
         table.ajax.reload(null, false);
 
@@ -194,9 +224,14 @@ $("#selectVillageId").change(async function () {
 
         $("#anggota").empty();
         $("#tercover").empty();
+        $("#blmtercover").empty();
+
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+
+        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
 
 
     } else {
@@ -219,9 +254,14 @@ $("#selectVillageId").change(async function () {
 
         $("#anggota").empty();
         $("#tercover").empty();
+        $("#blmtercover").empty();
+
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+
+        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
     }
 });
 
@@ -245,9 +285,14 @@ $("#selectRt").change(async function () {
 
         $("#anggota").empty();
         $("#tercover").empty();
+        $("#blmtercover").empty();
+
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+
+        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
 
 
     } else {
@@ -269,9 +314,14 @@ $("#selectRt").change(async function () {
 
         $("#anggota").empty();
         $("#tercover").empty();
+        $("#blmtercover").empty();
+
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        
+        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
     }
 });
 

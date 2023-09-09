@@ -384,7 +384,7 @@ class DashboardController extends Controller
 
     public function getTotalMemberDistrict($district_id)
     {
-        $gF   = app('GlobalProvider'); // global function
+        $gF   = new GlobalProvider(); // global function
         
         $userModel        = new User();
         $member     = $userModel->getMemberDistrict($district_id);
@@ -392,25 +392,33 @@ class DashboardController extends Controller
         
         // perentasi anggot  di kecamatan
         $districtModel    = District::select('target')->where('id', $district_id)->first();
-        $target_member    = $districtModel->target; // target anggota tercapai, per kecamatan 1000 target
-        $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
+        // $target_member    = $districtModel->target; // target anggota tercapai, per kecamatan 1000 target
 
         $villageModel   = new Village();
         $villages       = $villageModel->getVillagesDistrct($district_id); // fungsi total desa di kab
         $total_village  = count($villages);
 
+        $RightChosseVillageModel   = new RightChosseVillage();
+		$rightChooseDistrict       = $RightChosseVillageModel->getTotalDptDistrict($district_id)->total_dpt;
+
+
+        $target_from_dpt  = $districtModel->getTargetPersentageDistrict($district_id)->target_persentage;
+        $target_member  = ($rightChooseDistrict * $target_from_dpt)/100;
+        
+        $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
+
         $village_filled = $villageModel->getVillageFilledDistrict($district_id); //fungsi total desa yang terisi 
         $total_village_filled      = count($village_filled); // total desa yang terisi
         $presentage_village_filled = $gF->persen(($total_village_filled / $total_village) * 100); // persentasi jumlah desa terisi
         
-		$RightChosseVillageModel   = new RightChosseVillage();
-		$rightChooseDistrict       = $RightChosseVillageModel->getTotalDptDistrict($district_id)->total_dpt;
+		
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
             'presentage_village_filled' => $presentage_village_filled,
             'total_member' => $gF->decimalFormat($total_member),
+            'target_from_dpt' => $gF->decimalFormat($target_from_dpt),
             'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $persentage_target_member,
             'rightChooseDistrict' => $gF->decimalFormat($rightChooseDistrict) ?? 0

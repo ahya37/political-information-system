@@ -71,6 +71,12 @@ class District extends Model
         return DB::select($sql);
     }
 
+    public function getTargetPersentageDistrict($district_id){
+
+        $sql = DB::table('districts')->select('target_persentage')->where('id', $district_id)->first();
+        return $sql;
+    }
+
     public function getGrafikTotalMemberAdminMember($user_id)
     {
         $sql = "SELECT a.id as distric_id, a.name as district, COUNT(DISTINCT(e.id)) as total_member

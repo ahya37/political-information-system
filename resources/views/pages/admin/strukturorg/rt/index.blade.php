@@ -66,7 +66,7 @@
                     </div>
                 </form>
                 <div class="row">
-                    <div class="col-md-6 mt-2 mb-2">
+                    <div class="col-md-4 mt-2 mb-2">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Anggota</h5>
@@ -74,11 +74,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 mt-2 mb-2">
+                    <div class="col-md-4 mt-2 mb-2">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Tercover Kor TPS</h5>
                                 <h5 id="tercover"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2 mb-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Belum Tercover Kor TPS</h5>
+                                <h5 id="blmtercover"></h5>
                             </div>
                         </div>
                     </div>
