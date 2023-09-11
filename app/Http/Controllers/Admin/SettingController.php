@@ -1372,10 +1372,7 @@ class SettingController extends Controller
 	}
 
 	public function updateDistrictTps(Request $request){
-
-		return 'ok';
-
-
+		
 		// get data dpt kpu
 		$dpt = DB::table('dpt_kpu as a')
 				->select('a.village_id','b.district_id')
