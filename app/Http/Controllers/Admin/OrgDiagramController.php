@@ -3195,19 +3195,21 @@ class OrgDiagramController extends Controller
             'id' => 'required',
         ]);
 
-        $anggota = DB::table('anggota_koordinator_tps_korte')->where('id', $request->id);
-        $cek     = $anggota->first();
+        DB::table('anggota_koordinator_tps_korte')->where('id', $request->id)->delete();
+        return redirect()->back()->with(['success' => 'Data berhasil dihapus!']);
 
-        if($cek->created_by == auth()->guard('admin')->user()->id){
-            $anggota->delete();
+        // $cek     = $anggota->first();
 
-            return redirect()->back()->with(['success' => 'Data berhasil dihapus!']);
+        // if($cek->created_by == auth()->guard('admin')->user()->id){
+        //     $anggota->delete();
 
-        }else{
+        //     return redirect()->back()->with(['success' => 'Data berhasil dihapus!']);
 
-            return redirect()->back()->with(['warning' => 'Gagal, Anda tidak punya akses!']);
+        // }else{
 
-        }
+        //     return redirect()->back()->with(['warning' => 'Gagal, Anda tidak punya akses!']);
+
+        // }
 
 
     }
