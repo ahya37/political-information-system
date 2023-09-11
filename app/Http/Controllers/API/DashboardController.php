@@ -372,10 +372,10 @@ class DashboardController extends Controller
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
-            'presentage_village_filled' => $gF->persen($presentage_village_filled),
+            'presentage_village_filled' => $gF->persenDpt($presentage_village_filled),
             'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $gF->decimalFormat($target_member),
-            'persentage_target_member' => $gF->persen($persentage_target_member),
+            'persentage_target_member' => $gF->persenDpt($persentage_target_member),
             'rightChooseRegency' => $gF->decimalFormat($rightChooseRegency) ?? 0
         ];
         return response()->json($data);
@@ -405,18 +405,18 @@ class DashboardController extends Controller
         $target_from_dpt  = $districtModel->getTargetPersentageDistrict($district_id)->target_persentage;
         $target_member  = ($rightChooseDistrict * $target_from_dpt)/100;
         
-        $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
+        $persentage_target_member = $gF->persenDpt(($total_member / $target_member) * 100); // persentasi terdata
 
         $village_filled = $villageModel->getVillageFilledDistrict($district_id); //fungsi total desa yang terisi 
         $total_village_filled      = count($village_filled); // total desa yang terisi
-        $presentage_village_filled = $gF->persen(($total_village_filled / $total_village) * 100); // persentasi jumlah desa terisi
+        $presentage_village_filled = $gF->persenDpt(($total_village_filled / $total_village) * 100); // persentasi jumlah desa terisi
         
 		
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
-            'presentage_village_filled' => $presentage_village_filled,
+            'presentage_village_filled' =>  $presentage_village_filled,
             'total_member' => $gF->decimalFormat($total_member),
             'target_from_dpt' => $gF->decimalFormat($target_from_dpt),
             'target_member' => $gF->decimalFormat($target_member),
@@ -496,7 +496,7 @@ class DashboardController extends Controller
             'total_member' => $gF->decimalFormat($total_member),
             'target_from_dpt' => $gF->decimalFormat($target_from_dpt),
             'target_member' => $gF->decimalFormat($target_member),
-            'persentage_target_member' => $gF->persen($persentage_target_member),
+            'persentage_target_member' => $gF->persenDpt($persentage_target_member),
             'rightChooseVillage' => $gF->decimalFormat($rightChooseVillage) ?? 0,
             'tpsVillag' => $gF->decimalFormat($tpsVillag)
         ];
@@ -1706,10 +1706,10 @@ class DashboardController extends Controller
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
-            'presentage_village_filled' => $gF->persen($presentage_village_filled),
+            'presentage_village_filled' => $gF->persenDpt($presentage_village_filled),
             'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $gF->decimalFormat($target_member),
-            'persentage_target_member' => $gF->persen($persentage_target_member),
+            'persentage_target_member' => $gF->persenDpt($persentage_target_member),
             'rightChooseProvince' => $gF->decimalFormat($rightChooseProvince) ?? 0
         ];
         return response()->json($data);
