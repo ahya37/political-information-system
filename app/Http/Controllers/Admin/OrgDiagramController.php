@@ -3175,18 +3175,31 @@ class OrgDiagramController extends Controller
         #cek jangan double data
         $cek = $koorModel->where('nik', $request->nik)->count();
        
-        if ($cek > 0) return redirect()->back()->with(['error' => 'NIK sudah terdaftar di Kor TPS!']);
+        if ($cek > 0) {
 
-        // cek ke table users apakah ada anggota dengan nik tersebut
-        $member = User::select('name', 'nik')->where('nik', $request->nik)->first();
-        // jika ada sesuaikan namanya by nik yg ada di table users
-        $name   = $member == null ? $request->name : $member->name;
+            // get keterangan kortpsnya
+            $getAnggotaKortps = $koorModel->where('nik', $request->nik)->select('pidx_korte')->first();
+            $orgDiagramModel  = new OrgDiagram();
+            $kortps           = $orgDiagramModel->getKorTpsByPidxKorte($getAnggotaKortps->pidx_korte);
+            $desc             = ucfirst(strtolower($kortps->name)).', RT.'.$kortps->rt.', Ds.'.ucfirst(strtolower($kortps->village)).', Kec.'.ucfirst(strtolower($kortps->district));
 
-        $auth = auth()->guard('admin')->user()->id;
+            return redirect()->back()->with(['error' => 'NIK sudah terdaftar di Kor TPS '.$desc.' !']);
 
-        $koorModel->store($idx, $request, $name, $auth);
+        }else{
 
-        return redirect()->back()->with(['success' => 'Anggota berhasil disimpan!']);
+            // cek ke table users apakah ada anggota dengan nik tersebut
+            $member = User::select('name', 'nik')->where('nik', $request->nik)->first();
+            // jika ada sesuaikan namanya by nik yg ada di table users
+            $name   = $member == null ? $request->name : $member->name;
+    
+            $auth = auth()->guard('admin')->user()->id;
+    
+            $koorModel->store($idx, $request, $name, $auth);
+    
+            return redirect()->back()->with(['success' => 'Anggota berhasil disimpan!']);
+        } 
+        
+
     }
 
     public function deleteDataFormKoordinatorTps(Request $request){

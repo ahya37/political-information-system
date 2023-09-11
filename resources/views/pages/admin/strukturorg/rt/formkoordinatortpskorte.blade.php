@@ -20,7 +20,7 @@
             </div>
 
             <div class="row mt-4">
-                <div class="col-6 mt-2">
+                <div class="col-10 mt-2">
                     <div class="card card-body">
                         <div class="mt-1 mb-1">
                             @include('layouts.message')

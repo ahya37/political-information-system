@@ -502,7 +502,7 @@ class OrgDiagram extends Model
 		$sql = "SELECT a.name , a.rt , b.name as village, c.name as district from org_diagram_rt as a
 				join villages as b on a.village_id = b.id
 				join districts as c on a.district_id = c.id
-				where a.idx = $pidx";
+				where a.idx = '$pidx'";
 		return collect(DB::select($sql))->first();
 	}
 
