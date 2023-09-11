@@ -418,7 +418,7 @@ class DashboardController extends Controller
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
             'presentage_village_filled' =>  $presentage_village_filled,
             'total_member' => $gF->decimalFormat($total_member),
-            'target_from_dpt' => $gF->decimalFormat($target_from_dpt),
+            'target_from_dpt' => $gF->persenDpt($target_from_dpt),
             'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $persentage_target_member,
             'rightChooseDistrict' => $gF->decimalFormat($rightChooseDistrict) ?? 0
@@ -494,7 +494,7 @@ class DashboardController extends Controller
         $data = [
             'achievments' => $gF->decimalFormat($achievments->todays_achievement ?? ''),
             'total_member' => $gF->decimalFormat($total_member),
-            'target_from_dpt' => $gF->decimalFormat($target_from_dpt),
+            'target_from_dpt' => $gF->persenDpt($target_from_dpt),
             'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $gF->persenDpt($persentage_target_member),
             'rightChooseVillage' => $gF->decimalFormat($rightChooseVillage) ?? 0,
