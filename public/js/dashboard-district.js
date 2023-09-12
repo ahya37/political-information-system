@@ -209,6 +209,7 @@ $(document).ready(function () {
             $("#village_filled_persen").text("loading...");
             $("#total_village").text("loading...");
             $("#dpt").text("loading...");
+            $("#tps").text("loading...");
             $("#target_from_dpt").text("loading...");
         },
         success: function (data) {
@@ -219,6 +220,7 @@ $(document).ready(function () {
             $("#village_filled_persen").text(data.presentage_village_filled);
             $("#total_village").text(data.total_village);
             $("#dpt").text(data.rightChooseDistrict);
+            $("#tps").text(data.tpsDistrict);
             $("#target_from_dpt").text(data.target_from_dpt);
         },
     });

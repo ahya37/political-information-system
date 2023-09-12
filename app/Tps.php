@@ -27,4 +27,14 @@ class Tps extends Model
 
         return $sql;
     }
+
+    public function getTotalTpsByDistrictId($id){
+
+        $sql = DB::table('villages as a')
+                   ->select(DB::raw('count(b.id) as tps'))
+                   ->join('tps as b','a.id','=','b.village_id')
+                   ->where('a.district_id', $id)
+                   ->first();
+        return $sql;
+    }
 }

@@ -86,7 +86,7 @@
               </div>
                <div class="dashboard-content">
                 <div class="row">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="card mb-2 bg-info">
                       <a href="{{ route('members-regency', $regency->id) }}">
                         <div class="card-body">
@@ -100,19 +100,8 @@
                       </a>
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    <div class="card mb-2 text-white cd-card-primary">
-                      <div class="card-body">
-                        <div class="dashboard-card-title text-white">
-                          % Jumlah Anggota
-                        </div>
-                        <div class="dashboard-card-subtitle">
-                          <h4 class="text-white" id="total_member_persen"></h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
+
+                  <div class="col-md-3">
                     <div class="card mb-2 text-white cs-card-danger">
                       <div class="card-body">
                         <div class="dashboard-card-title text-white">
@@ -124,10 +113,50 @@
                       </div>
                     </div>
                   </div>
+
+                  <div class="col-md-3">
+                    <div class="card mb-2 text-white cd-card-primary">
+                      <div class="card-body">
+                        <div class="dashboard-card-title text-white">
+                          <span style="font-size: 14px">% Pencapaian Target Anggota</span>
+                        </div>
+                        <div class="dashboard-card-subtitle">
+                          <h4 class="text-white" id="total_member_persen"></h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="card mb-2 text-white cd-card-primary">
+                      <div class="card-body">
+                        <div class="dashboard-card-title text-white">
+                          TPS
+                        </div>
+                        <div class="dashboard-card-subtitle">
+                          <h4 class="text-white" id="tps"></h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                 
                 </div>
 
                 <div class="row">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
+                    <div class="card mb-2 bg-info">
+                        <div class="card-body">
+                          <div class="dashboard-card-title text-white">
+                            Jumlah Hak Pilih (DPT)
+                          </div>
+                          <div class="dashboard-card-subtitle">
+                            <h4 class="text-white" id="dpt"></h4>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
                     <div class="card mb-2 bg-info">
                       <a href="{{ route('villagefilled-regency', $regency->id) }}">
                         <div class="card-body">
@@ -141,7 +170,7 @@
                       </a>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="card mb-2 text-white cd-card-primary">
                       <div class="card-body">
                         <div class="dashboard-card-title text-white">
@@ -153,7 +182,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="card mb-2 text-white cs-card-danger">
                       <div class="card-body">
                         <div class="dashboard-card-title text-white">
@@ -163,21 +192,6 @@
                           <h4 class="text-white" id="total_village"></h4>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="card mb-2 bg-info">
-                        <div class="card-body">
-                          <div class="dashboard-card-title text-white">
-                            Jumlah Hak Pilih (DPT)
-                          </div>
-                          <div class="dashboard-card-subtitle">
-                            <h4 class="text-white" id="dpt"></h4>
-                          </div>
-                        </div>
                     </div>
                   </div>
                 </div>

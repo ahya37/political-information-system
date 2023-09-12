@@ -68,7 +68,7 @@
               </div>
               <div class="dashboard-content">
                 <div class="row">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="card mb-2 bg-info">
                       <a href="{{ route('members-district', $district->id) }}">
                         <div class="card-body">
@@ -82,11 +82,25 @@
                       </a>
                     </div>
                   </div>
-                  <div class="col-md-4">
+
+                  <div class="col-md-3">
+                    <div class="card mb-2 text-white cs-card-danger">
+                      <div class="card-body">
+                        <div class="dashboard-card-title text-white">
+                          Target Anggota
+                        </div>
+                        <div class="dashboard-card-subtitle">
+                          <h4 class="text-white" id="target_anggota"></h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
                     <div class="card mb-2 text-white cd-card-primary">
                       <div class="card-body">
                         <div class="dashboard-card-title text-white">
-                          % Jumlah Anggota
+                          <span style="font-size: 14px">% Pencapaian Target Anggota</span>
                         </div>
                         <div class="dashboard-card-subtitle">
                           <h4 class="text-white" id="total_member_persen"></h4>
@@ -94,11 +108,13 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4">
+
+                 
+                  <div class="col-md-3">
                     <div class="card mb-2 text-white cd-card-primary">
                       <div class="card-body">
                         <div class="dashboard-card-title text-white">
-                          Jumlah TPS
+                          TPS
                         </div>
                         <div class="dashboard-card-subtitle">
                           <h4 class="text-white" id="tps"><small><i>on progres</i></small></h4>
@@ -110,7 +126,45 @@
                 </div>
 
                 <div class="row">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
+                    <div class="card mb-2 bg-info">
+                        <div class="card-body">
+                          <div class="dashboard-card-title text-white">
+                            DPT Hak Pilih
+                          </div>
+                          <div class="dashboard-card-subtitle">
+                            <h4 class="text-white" id="dpt"></h4>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="card mb-2 text-white cd-card-primary">
+                        <div class="card-body">
+                          <div class="dashboard-card-title text-white">
+                            % Target
+                          </div>
+                          <div class="dashboard-card-subtitle">
+                            <h4 class="text-white" id="target_from_dpt"></h4>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="card mb-2 text-white cd-card-primary">
+                      <div class="card-body">
+                        <div class="dashboard-card-title text-white">
+                          Total Desa
+                        </div>
+                        <div class="dashboard-card-subtitle">
+                          <h4 class="text-white" id="total_village"></h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
                     <div class="card mb-2 bg-info">
                       <a href="{{ route('villagefilled-district',$district->id) }}">
                         <div class="card-body">
@@ -124,7 +178,11 @@
                       </a>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                </div>
+
+                <div class="row">
+
+                  <div class="col-md-3">
                     <div class="card mb-2 text-white cd-card-primary">
                       <div class="card-body">
                         <div class="dashboard-card-title text-white">
@@ -132,59 +190,6 @@
                         </div>
                         <div class="dashboard-card-subtitle">
                           <h4 class="text-white" id="village_filled_persen"></h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card mb-2 text-white cd-card-primary">
-                      <div class="card-body">
-                        <div class="dashboard-card-title text-white">
-                          Total Desa
-                        </div>
-                        <div class="dashboard-card-subtitle">
-                          <h4 class="text-white" id="total_village"></h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="card mb-2 bg-info">
-                        <div class="card-body">
-                          <div class="dashboard-card-title text-white">
-                            Jumlah Hak Pilih (DPT)
-                          </div>
-                          <div class="dashboard-card-subtitle">
-                            <h4 class="text-white" id="dpt"></h4>
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-4">
-                    <div class="card mb-2 text-white cd-card-primary">
-                        <div class="card-body">
-                          <div class="dashboard-card-title text-white">
-                            % Target
-                          </div>
-                          <div class="dashboard-card-subtitle">
-                            <h4 class="text-white" id="target_from_dpt"></h4>
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-4">
-                    <div class="card mb-2 text-white cs-card-danger">
-                      <div class="card-body">
-                        <div class="dashboard-card-title text-white">
-                          Target Anggota
-                        </div>
-                        <div class="dashboard-card-subtitle">
-                          <h4 class="text-white" id="target_anggota"></h4>
                         </div>
                       </div>
                     </div>

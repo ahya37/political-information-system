@@ -329,6 +329,8 @@ class DashboardController extends Controller
         $dptModel                 = new Dpt();
         $rightChooseProvince      = $dptModel->getDptLevelNational()->total_dpt;
 
+        $tpsNational      = Tps::select('id')->count();
+
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
@@ -336,10 +338,10 @@ class DashboardController extends Controller
             'total_member' => $total_member,
             'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $persentage_target_member,
-            'rightChooseProvince' => $gF->decimalFormat($rightChooseProvince) ?? 0
+            'rightChooseProvince' => $gF->decimalFormat($rightChooseProvince) ?? 0,
+            'tpsNational' => $gF->decimalFormat($tpsNational)
         ];
         return response()->json($data);
-
     }
 
     public function getTotalMemberRegency($regency_id)
@@ -369,6 +371,9 @@ class DashboardController extends Controller
         $dptModel = new Dpt();
         $rightChooseRegency = $dptModel->getDptLevelRegency()->total_dpt;
 
+        $tpsRegency       = Tps::select('id')->where('regency_id', $regency_id)->count();
+
+
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
@@ -376,7 +381,8 @@ class DashboardController extends Controller
             'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $gF->persenDpt($persentage_target_member),
-            'rightChooseRegency' => $gF->decimalFormat($rightChooseRegency) ?? 0
+            'rightChooseRegency' => $gF->decimalFormat($rightChooseRegency) ?? 0,
+            'tpsRegency' => $gF->decimalFormat($tpsRegency)
         ];
         return response()->json($data);
 
@@ -410,7 +416,8 @@ class DashboardController extends Controller
         $village_filled = $villageModel->getVillageFilledDistrict($district_id); //fungsi total desa yang terisi 
         $total_village_filled      = count($village_filled); // total desa yang terisi
         $presentage_village_filled = $gF->persenDpt(($total_village_filled / $total_village) * 100); // persentasi jumlah desa terisi
-        
+
+        $tpsDistrict       = Tps::select('id')->where('district_id', $district_id)->count();
 		
 
         $data = [
@@ -421,7 +428,8 @@ class DashboardController extends Controller
             'target_from_dpt' => $gF->persenDpt($target_from_dpt),
             'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $persentage_target_member,
-            'rightChooseDistrict' => $gF->decimalFormat($rightChooseDistrict) ?? 0
+            'rightChooseDistrict' => $gF->decimalFormat($rightChooseDistrict) ?? 0,
+            'tpsDistrict' => $gF->decimalFormat($tpsDistrict)
         ];
         return response()->json($data);
 
@@ -1703,6 +1711,8 @@ class DashboardController extends Controller
         $dptModel = new Dpt();
         $rightChooseProvince = $dptModel->getDptLevelProvince()->total_dpt;
 
+        $tpsProvince      = Tps::select('id')->where('province_id', $province_id)->count();
+
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
@@ -1710,7 +1720,8 @@ class DashboardController extends Controller
             'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $gF->persenDpt($persentage_target_member),
-            'rightChooseProvince' => $gF->decimalFormat($rightChooseProvince) ?? 0
+            'rightChooseProvince' => $gF->decimalFormat($rightChooseProvince) ?? 0,
+            'tpsProvince' => $gF->decimalFormat($tpsProvince),
         ];
         return response()->json($data);
     }
