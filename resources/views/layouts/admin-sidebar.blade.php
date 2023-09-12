@@ -60,35 +60,35 @@
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/member') ? 'active custom-active-color ' : '' }}">
                         Anggota Terdaftar
                     </a>
-                    <a href="{{ route('admin-member-potensial') }}"
+                    {{-- <a href="{{ route('admin-member-potensial') }}"
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/member/potensial') ? 'active custom-active-color ' : '' }}">
                         Anggota Potensial
-                    </a>
+                    </a> --}}
                     </a>
                     <a href="{{ route('admin-member-create') }}"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/member/create') ? 'active custom-active-color' : '' }}">
                         Buat Anggota Baru
                     </a>
-                    <a href="{{ route('admin-reward') }}"
+                    {{-- <a href="{{ route('admin-reward') }}"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/reward') ? 'active custom-active-color' : '' }}">
                         Reward
                     </a>
                     <a href="{{ route('admin-reward-special-referal') }}"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/listrewardreferal') ? 'active custom-active-color' : '' }}">
                         Reward Khusus
-                    </a>
-                    <a href="{{ route('admin-listrewardreferal') }}"
+                    </a> --}}
+                    {{-- <a href="{{ route('admin-listrewardreferal') }}"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/listrewardreferal') ? 'active custom-active-color' : '' }}">
                         Daftar Reward
-                    </a>
+                    </a> --}}
 
                 </li>
             </ul>
         </div>
 
-        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/admincontrol/district*') ? 'active custom-active-color' : '' }}"
+        {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/admincontrol/district*') ? 'active custom-active-color' : '' }}"
             href="#admin" data-toggle="collapse" data-target="#admin">
-            <span class="d-none d-sm-inline"></span>Admin</a>
+            <span class="d-none d-sm-inline"></span>Admin</a> --}}
         <div class="collapse" id="admin" aria-expanded="false">
             <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
@@ -100,12 +100,7 @@
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/admincontrol/district/createadmin') ? 'active custom-active-color' : '' }}">
                         Tambah Admin
                     </a>
-                    {{-- <a
-                      href="{{ route('admin-showadminsubmission') }}"
-                      class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ (request()->is('admin/admincontrol/showadminsubmission')) ? 'active custom-active-color' : '' }}"
-                    >
-                      Pengajuan Admin
-                    </a> --}}
+                    
                     <a href="{{ route('admin-rewardadmin') }}"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/rewardadmin') ? 'active custom-active-color' : '' }}">
                         Reward
@@ -164,7 +159,7 @@
             </ul>
         </div>
 
-        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/setting*') ? 'active custom-active-color' : '' }}"
+        {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/setting*') ? 'active custom-active-color' : '' }}"
             href="#target" data-toggle="collapse" data-target="#target">
             <span class="d-none d-sm-inline"></span>Target</a>
         <div class="collapse" id="target" aria-expanded="false">
@@ -191,11 +186,11 @@
                 </li>
 
             </ul>
-        </div>
+        </div> --}}
 
-        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/info/*') ? 'active custom-active-color' : '' }}"
+        {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/info/*') ? 'active custom-active-color' : '' }}"
             href="#info" data-toggle="collapse" data-target="#info">
-            <span class="d-none d-sm-inline"></span>Informasi</a>
+            <span class="d-none d-sm-inline"></span>Informasi</a> --}}
         <div class="collapse" id="info" aria-expanded="false">
             <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
@@ -216,9 +211,9 @@
             </ul>
         </div>
 
-        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/cost/*') ? 'active custom-active-color' : '' }}"
+        {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/cost/*') ? 'active custom-active-color' : '' }}"
             href="#cas" data-toggle="collapse" data-target="#cas">
-            <span class="d-none d-sm-inline"></span>Cost Politik</a>
+            <span class="d-none d-sm-inline"></span>Cost Politik</a> --}}
         <div class="collapse" id="cas" aria-expanded="false">
             <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
@@ -232,9 +227,9 @@
             </ul>
         </div>
 
-        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
+        {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
             href="#catatan" data-toggle="collapse" data-target="#catatan">
-            <span class="d-none d-sm-inline"></span>Catatan</a>
+            <span class="d-none d-sm-inline"></span>Catatan</a> --}}
         <div class="collapse" id="catatan" aria-expanded="false">
             <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
@@ -295,9 +290,9 @@
             </ul>
         </div>
 
-        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/questionnaire/*') ? 'active custom-active-color' : '' }}"
+        {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/questionnaire/*') ? 'active custom-active-color' : '' }}"
             href="#questionnaire" data-toggle="collapse" data-target="#questionnaire">
-            <span class="d-none d-sm-inline"></span>Kuisioner</a>
+            <span class="d-none d-sm-inline"></span>Kuisioner</a> --}}
         <div class="collapse" id="questionnaire" aria-expanded="false">
             <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
@@ -338,9 +333,9 @@
             </ul>
         </div>
 		
-		 <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/report/*') ? 'active custom-active-color' : '' }}"
+		 {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/report/*') ? 'active custom-active-color' : '' }}"
             href="#report" data-toggle="collapse" data-target="#report">
-            <span class="d-none d-sm-inline"></span>Laporan</a>
+            <span class="d-none d-sm-inline"></span>Laporan</a> --}}
         <div class="collapse" id="report" aria-expanded="false">
             <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
