@@ -12,7 +12,7 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Koordinator TPS</h2>
+                <h2 class="dashboard-title">Daftar Koordinator TPS Kecamatan {{ ucfirst(strtolower($district->name)) }}</h2>
             </div>
 
             <div class="mt-4">
@@ -25,24 +25,16 @@
                     @csrf
                     <div class="card card-body mb-4">
                         <div class="row">
-                            {{-- <div class="col-md-3"> --}}
-                            <div class="form-group">
-                                <input value="{{ $regency->id }}" type="hidden" id="regencyId" class="form-control">
-                            </div>
-                            {{-- </div> --}}
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <select name="dapil_id" id="selectListArea" class="form-control filter" required></select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select name="district_id" id="selectDistrictId" class="form-control filter"></select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select name="village_id" id="selectVillageId" class="form-control filter"></select>
+                                    <input value="{{ $district->dapil_id }}" type="hidden" id="selectListArea" class="form-control">
+                                    <input value="{{ $district->id }}" type="hidden" id="selectDistrictId" class="form-control">
+                                    <select name="village_id" id="selectVillageId" class="form-control filter">
+                                        <option value="">-Pilih Desa-</option>
+                                        @foreach ($villages as $item )
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -52,17 +44,19 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="col-md-12">
-                            <a class="btn btn-sm btn-sc-primary text-white mt-2"
-                                href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
-                            <input class="btn btn-sm btn-success text-white  mt-2" type="submit" value="Download Korte Excel" name="report_type">
-                            <input class="btn btn-sm btn-sc-primary text-white  mt-2" type="submit" value="Download Catatan Korte PDF" name="report_type">
-                            <input class="btn btn-sm btn-success text-white mt-2" type="submit" value="Download Korte + Anggota" name="report_type">
-							<input class="btn btn-sm btn-sc-primary text-white  mt-2" type="submit" value="Download Korte + Anggota PDF" name="report_type"> 
-							<input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit" value="Download Absensi Korte Per Desa PDF" name="report_type"> 
-							<input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit" value="Download Surat Undangan Korte Per Desa PDF" name="report_type"> 
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="btn btn-sm btn-sc-primary text-white mt-2"
+                                    href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
+                                {{-- <input class="btn btn-sm btn-success text-white  mt-2" type="submit" value="Download Korte Excel" name="report_type">
+                                <input class="btn btn-sm btn-sc-primary text-white  mt-2" type="submit" value="Download Catatan Korte PDF" name="report_type">
+                                <input class="btn btn-sm btn-success text-white mt-2" type="submit" value="Download Korte + Anggota" name="report_type">
+                                <input class="btn btn-sm btn-sc-primary text-white  mt-2" type="submit" value="Download Korte + Anggota PDF" name="report_type"> 
+                                <input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit" value="Download Absensi Korte Per Desa PDF" name="report_type"> 
+                                <input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit" value="Download Surat Undangan Korte Per Desa PDF" name="report_type">  --}}
+                            </div>
                         </div>
+                        
                     </div>
                 </form>
                 <div class="row">

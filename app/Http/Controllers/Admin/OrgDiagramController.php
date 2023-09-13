@@ -953,9 +953,14 @@ class OrgDiagramController extends Controller
 
         $regency = Regency::select('id', 'name')->where('id', 3602)->first();
 
-        $rt      = 30;
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $districtModel  = new District();
+        $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
+        $villages  = Village::select('id','name')->where('district_id', $authAdminDistrict)->get();
 
-        return view('pages.admin.strukturorg.rt.index', compact('regency', 'rt'));
+        // $rt      = 30;
+
+        return view('pages.admin.strukturorg.rt.index', compact('regency','district','villages'));
     }
 
     public function getDataOrgRT(Request $request)
