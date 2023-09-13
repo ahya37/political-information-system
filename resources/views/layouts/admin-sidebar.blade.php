@@ -3,7 +3,7 @@
         <img src="{{ asset('assets/images/logo2-3.png') }}" width="170" />
     </div>
     <div class="list-group list-group-flush">
-        <a href="{{ route('admin-dashboard') }}"
+        <a href="{{ route('admin-dashboard-indexDistrictKor') }}"
             class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/dashboard*') ? 'active custom-active-color' : '' }}">
             Dashboard
         </a>

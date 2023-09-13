@@ -39,6 +39,15 @@ class DashboardController extends Controller
         return view('pages.admin.dashboard.index');
     }
 
+    public function indexDistrictKor()
+    {
+      $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+      $districtModel  = new District();
+      $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
+
+      return view('pages.admin.dashboard.index-district', compact('district'));
+    }
+
     public function province($province_id)
     {
         $province    = Province::select('id','name')->where('id', $province_id)->first();
