@@ -142,9 +142,9 @@
                 </li>
             </ul>
         </div>
-        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/event*') ? 'active custom-active-color' : '' }}"
+        {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/event*') ? 'active custom-active-color' : '' }}"
             href="#event" data-toggle="collapse" data-target="#event">
-            <span class="d-none d-sm-inline"></span>Event</a>
+            <span class="d-none d-sm-inline"></span>Event</a> --}}
         <div class="collapse" id="event" aria-expanded="false">
             <ul class="flex-column pl-2 nav">
                 <li class="nav-item">

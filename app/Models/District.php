@@ -250,8 +250,9 @@ class District extends Model
     public function getAreaAdminKoordinator($district_id){
 
         $sql = DB::table('districts as a')
-                ->select('a.name','b.dapil_id','a.id')
+                ->select('a.name','b.dapil_id','a.id','a.regency_id','c.province_id')
                 ->join('dapil_areas as b','a.id','=','b.district_id')
+                ->join('regencies as c','a.regency_id','=','c.id')
                 ->where('a.id', $district_id)
                 ->first();
         return $sql;

@@ -45,12 +45,12 @@ class MemberDatatableController extends Controller
 
         $data = DB::table('users as a')
                         ->select('a.id','a.nik','a.user_id','a.name','a.photo','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email')
-                        ->join('villages','villages.id','a.village_id')
-                        ->join('districts','districts.id','villages.district_id')
-                        ->join('regencies','regencies.id','districts.regency_id')
-                        ->join('users as b','b.id','a.user_id')
-                        ->join('users as c','c.id','a.cby')
-                        ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
+                        ->join('villages','villages.id','=','a.village_id')
+                        ->join('districts','districts.id','=','villages.district_id')
+                        ->join('regencies','regencies.id','=','districts.regency_id')
+                        ->leftJoin('users as b','b.id','=','a.user_id')
+                        ->leftJoin('users as c','c.id','=','a.cby')
+                        ->leftJoin('dapil_areas','districts.id','=','dapil_areas.district_id')
                         ->whereNotNull('a.village_id');
 
             
@@ -76,9 +76,9 @@ class MemberDatatableController extends Controller
                      $data->where('regencies.id', $request->regency);
         }
 
-     if ($request->input('dapil') != null) {
-                     $data ->where('dapil_areas.dapil_id', $request->dapil);
-        }
+    //  if ($request->input('dapil') != null) {
+    //                  $data ->where('dapil_areas.dapil_id', $request->dapil);
+    //     }
      if ($request->input('district') != null) {
                      $data->where('districts.id', $request->district);
         }

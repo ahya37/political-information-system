@@ -52,9 +52,17 @@ class MemberController extends Controller
     }
     public function index(Request $request)
     {
-        $provinceModel = new Province();
-        $province = $provinceModel->getDataProvince();
-        return view('pages.admin.member.index', compact('province'));
+        // $provinceModel = new Province();
+        // $province = $provinceModel->getDataProvince();
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $districtModel  = new District();
+        $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
+        // dd($district);
+        $villages       = Village::select('id','name')->where('district_id', $authAdminDistrict)->get();
+
+
+        // dd($authAdminDistrict);
+        return view('pages.admin.member.index', compact('villages','district'));
     }
 
     public function create()
