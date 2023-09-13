@@ -2,6 +2,7 @@ let selectListArea = $("#selectListArea").val();
 let selectDistrictId = $("#selectDistrictId").val();
 let selectVillageId = $("#selectVillageId").val();
 let selectRT = $("#selectRt").val();
+const admindistrict = $("#admindistrict").val();
 
 // KABKOT , langsung get dapil by kab lebak
 
@@ -253,7 +254,7 @@ let table = $("#data").DataTable({
         url: "/api/org/getdataorgdistict",
         type: "POST",
         data: function (d) {
-            d.district = selectDistrictId;
+            d.district = admindistrict;
             return d;
         },
     },

@@ -21,6 +21,7 @@ use App\Exports\KorDesExport;
 use App\Exports\KorCamExport;
 use App\Exports\KorteExport;
 use App\Exports\KorteMembersExport;
+use App\Models\District;
 use App\Models\Village;
 use PDF;
 use Zipper;
@@ -1682,7 +1683,11 @@ class OrgDiagramController extends Controller
 
         $rt      = 30;
 
-        return view('pages.admin.strukturorg.district.index', compact('regency', 'rt'));
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $district  = District::select('name','id')->where('id', $authAdminDistrict)->first();
+
+       
+        return view('pages.admin.strukturorg.district.index', compact('regency', 'rt','district'));
     }
 
     public function indexOrgDapil()

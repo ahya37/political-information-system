@@ -17,14 +17,14 @@
         <div class="collapse" id="org" aria-expanded="false">
             <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
-                    <a href="{{ route('admin-struktur-organisasi-pusat') }}"
+                    {{-- <a href="{{ route('admin-struktur-organisasi-pusat') }}"
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
                         Kor. Pusat
                     </a>
                     <a href="{{ route('admin-struktur-organisasi-dapil-index') }}"
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
                         Kor. Dapil
-                    </a>
+                    </a> --}}
                     <a href="{{ route('admin-struktur-organisasi-district-index') }}"
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
                         Kor. Kecamatan
@@ -42,10 +42,10 @@
                         Daftar Tim
                     </a>
 
-                    <a href="{{ route('admin-struktur-organisasi-test') }}" target="_blank"
+                    {{-- <a href="{{ route('admin-struktur-organisasi-test') }}" target="_blank"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/struktur/dashboard') ? 'active custom-active-color' : '' }}">
                         Bagan Struktur
-                    </a>
+                    </a> --}}
                 </li>
             </ul>
         </div>
@@ -243,7 +243,7 @@
             </ul>
         </div>
 
-        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
+        {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
             href="#inventory" data-toggle="collapse" data-target="#inventory">
             <span class="d-none d-sm-inline"></span>Inventory</a>
         <div class="collapse" id="inventory" aria-expanded="false">
@@ -257,7 +257,7 @@
                             Buat Inventory Baru</span></a>
                 </li>
             </ul>
-        </div>
+        </div> --}}
 
         <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/hisrotymonitoring/*') ? 'active custom-active-color' : '' }}"
             href="#hisrotymonitoring" data-toggle="collapse" data-target="#hisrotymonitoring">

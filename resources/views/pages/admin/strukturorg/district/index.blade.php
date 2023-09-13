@@ -14,18 +14,19 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Koordinator Kecamatan</h2>
+                <h2 class="dashboard-title">Daftar Koordinator Kecamatan {{ $district->name }}</h2>
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
-                <form action="{{ route('admin-struktur-organisasi-district-report-excel') }}" method="POST">
+                <a class="btn btn-sm btn-sc-primary text-white mb-2" href="{{ route('admin-struktur-organisasi-district-create') }}">+ Tambah</a>
+                <input type="hidden" value="{{ $district->id }}" id="admindistrict" />
+                {{-- <form action="{{ route('admin-struktur-organisasi-district-report-excel') }}" method="POST">
                     @csrf
-                <div class="card card-body mb-4">
+                <div class="card card-body mb-3">
                     <div class="row">
-                        {{-- <div class="col-md-3"> --}}
                         <div class="form-group">
+                            
                             <input value="{{ $regency->id }}" type="hidden" id="regencyId" class="form-control">
                         </div>
-                        {{-- </div> --}}
                         <div class="col-md-3">
                             <div class="form-group">
                                 <select name="dapil_id" id="selectListArea" class="form-control filter" required></select>
@@ -39,24 +40,13 @@
                     </div>
 
                     <div class="row col-md-12">
-                        <a class="btn btn-sm btn-sc-primary text-white"
-                            href="{{ route('admin-struktur-organisasi-district-create') }}">+ Tambah</a>
+                        
                             <input class="btn btn-sm btn-success text-white ml-2" type="submit" name="report_type" value="Download Excel">
                             <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" name="report_type" value="Download Surat Pernyataan Per Kecamatan">
-                            <input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit" name="report_type" value="Download Surat Undangan Per Kecamatan">
+                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" name="report_type" value="Download Surat Undangan Per Kecamatan">
                     </div>
                 </div>
-                </form>
-                <div class="row">
-                    <div class="col-md-12 mt-2 mb-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 id="keterangan"></h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                </form> --}}
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         @include('layouts.message')
@@ -74,7 +64,18 @@
                                             <th scope="col">OPSI</th>
                                         </tr>
                                     </thead>
-                                    <tbody></tbody>
+                                    <tbody>
+                                        {{-- @foreach ($data as $item)
+                                            <tr>
+                                                <td>{{ $no++ }}</td>
+                                                <td><p><img  class="rounded" width="40" src="{{ asset('/storage/'.$item->photo) }}}}"> {{ $item->name }}</p></td>
+                                                <td>{{ $item->address.', DS.'.$item->village.', KEC.'.$item->district }}</td>
+                                                <td>{{ $item->title }}</td>
+                                                <td>{{ $item->phone_number }}</td>
+                                                <td></td>
+                                            </tr>
+                                        @endforeach --}}
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -93,6 +94,7 @@
     <script src="{{ asset('js/getlocation.js') }}"></script>
     <script src="{{ asset('js/org-district-index.js') }}"></script>
     <script>
+        $("#datas").DataTable()
         AOS.init();
     </script>
 @endpush
