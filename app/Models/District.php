@@ -247,5 +247,16 @@ class District extends Model
         return collect(\ DB::select($sql))->first();
     }
 
+    public function getAreaAdminKoordinator($district_id){
+
+        $sql = DB::table('districts as a')
+                ->select('a.name','b.dapil_id','a.id')
+                ->join('dapil_areas as b','a.id','=','b.district_id')
+                ->where('a.id', $district_id)
+                ->first();
+        return $sql;
+                
+    }
+
 
 }

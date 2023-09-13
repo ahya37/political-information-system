@@ -14,7 +14,7 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Koordinator Desa</h2>
+                <h2 class="dashboard-title">Daftar Koordinator Desa Kecamatan {{ ucfirst(strtolower($district->name)) }}</h2>
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
                 <form action="{{ route('admin-struktur-organisasi-village-report-excel') }}" method="POST">
@@ -23,47 +23,34 @@
                     <div class="row">
                         {{-- <div class="col-md-3"> --}}
                         <div class="form-group">
-                            <input value="{{ $regency->id }}" type="hidden" id="regencyId" class="form-control">
+                            <input value="{{ $district->id }}" type="hidden" id="selectDistrictId" class="form-control">
                         </div>
                         {{-- </div> --}}
                         <div class="col-md-4">
                             <div class="form-group">
-                                <select name="dapil_id" id="selectListArea" class="form-control filter" required></select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <select name="district_id" id="selectDistrictId" class="form-control filter"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <select name="village_id" id="selectVillageId" class="form-control filter"></select>
+                                <select name="village_id" id="selectVillageId" class="form-control filter">
+                                    <option value="">-Pilih Desa-</option>
+                                    @foreach ($villages as $item )
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                                {{-- <select name="village_id" id="selectVillageId" class="form-control filter"></select> --}}
                             </div>
                         </div>
                     </div>
 
-                    <div class="row col-md-12">
+                    {{-- <div class="row col-md-12">
                         <a class="btn btn-sm btn-sc-primary text-white"
                             href="{{ route('admin-struktur-organisasi-village-create') }}">+ Tambah</a>
                             <input class="btn btn-sm btn-success text-white ml-2" name="report_type" type="submit" value="Download Excel"></button>
                             <input class="btn btn-sm btn-sc-primary text-white ml-2" name="report_type" type="submit" value="Download Kordes Per Kecamatan PDF"></button>
-                            <input class="btn btn-sm btn-sc-primary text-white mt-2" name="report_type" type="submit" value="Download Surat Pernyataan Kordes Per Desa PDF"></button>
-                            <input class="btn btn-sm btn-sc-primary text-white mt-2 ml-2" name="report_type" type="submit" value="Download Surat Undangan Per Desa"></button>
-                    </div>
+                            <input class="btn btn-sm btn-sc-primary text-white ml-2" name="report_type" type="submit" value="Download Surat Pernyataan Kordes Per Desa PDF"></button>
+                            <input class="btn btn-sm btn-sc-primary text-white mt-2" name="report_type" type="submit" value="Download Surat Undangan Per Desa"></button>
+                    </div> --}}
 
                     
                 </div>
                 </form>
-                <div class="row">
-                    <div class="col-md-12 mt-2 mb-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 id="keterangan"></h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
@@ -98,7 +85,6 @@
     <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('js/getlocation.js') }}"></script>
     <script src="{{ asset('js/org-village-index.js') }}"></script>
     <script>
         AOS.init();

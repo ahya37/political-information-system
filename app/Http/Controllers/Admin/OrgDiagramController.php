@@ -537,9 +537,14 @@ class OrgDiagramController extends Controller
 
         $regency = Regency::select('id', 'name')->where('id', 3602)->first();
 
-        $rt      = 30;
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $district  = District::select('name','id')->where('id', $authAdminDistrict)->first();
+        $villages  = Village::select('id','name')->where('district_id', $district->id)->get();
+        
+        // get dapil berdasarkan kecamatan admin
+        // $rt        = 30;
 
-        return view('pages.admin.strukturorg.village.index', compact('regency', 'rt'));
+        return view('pages.admin.strukturorg.village.index', compact('regency','district','villages'));
     }
 
     public function getDataOrgVillage(Request $request)
@@ -575,7 +580,8 @@ class OrgDiagramController extends Controller
             ->select('a.id', 'a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'c.name as village', 'd.name as district')
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
-            ->join('districts as d', 'd.id', '=', 'a.district_id');
+            ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->where('a.district_id', $request->district);
 
 
         if ($request->input('search.value') != null) {
