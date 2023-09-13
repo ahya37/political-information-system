@@ -14,11 +14,11 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Koordinator Kecamatan {{ $district->name }}</h2>
+                <h2 class="dashboard-title">Daftar Koordinator Kecamatan {{ $district->name ??'' }}</h2>
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
                 <a class="btn btn-sm btn-sc-primary text-white mb-2" href="{{ route('admin-struktur-organisasi-district-create') }}">+ Tambah</a>
-                <input type="hidden" value="{{ $district->id }}" id="admindistrict" />
+                <input type="hidden" value="{{ $district->id ?? ''}}" id="admindistrict" />
                 {{-- <form action="{{ route('admin-struktur-organisasi-district-report-excel') }}" method="POST">
                     @csrf
                 <div class="card card-body mb-3">
