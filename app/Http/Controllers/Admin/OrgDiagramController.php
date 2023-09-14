@@ -3197,7 +3197,8 @@ class OrgDiagramController extends Controller
             $getAnggotaKortps = $koorModel->where('nik', $request->nik)->select('pidx_korte')->first();
             $orgDiagramModel  = new OrgDiagram();
             $kortps           = $orgDiagramModel->getKorTpsByPidxKorte($getAnggotaKortps->pidx_korte);
-            $desc             = ucfirst(strtolower($kortps->name)).', RT.'.$kortps->rt.', Ds.'.ucfirst(strtolower($kortps->village)).', Kec.'.ucfirst(strtolower($kortps->district));
+            $rt               = $kortps->rt ?? '';
+            $desc             = ucfirst(strtolower($kortps->name ?? '')).', RT.'.$rt.', Ds.'.ucfirst(strtolower($kortps->village ?? '')).', Kec.'.ucfirst(strtolower($kortps->district ?? ''));
 
             return redirect()->back()->with(['error' => 'NIK sudah terdaftar di Kor TPS '.$desc.' !']);
 
