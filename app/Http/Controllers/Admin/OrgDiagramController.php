@@ -3328,10 +3328,49 @@ class OrgDiagramController extends Controller
 
         // tampilkan data dapil 
         $regency = 3602;
-        $dapils  = DB::table('dapils')->select('id','name')->where('regency_id', $regency)->get();
+        // $dapils  = DB::table('dapils')->select('id','name')->where('regency_id', $regency)->get();
         $no      = 1;
 
-        return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('dapils','no'));
+        $orgDiagramModel = new OrgDiagram();
+        $data            = $orgDiagramModel->getDataDaftarTimByRegency($regency);
+        $dapils          = $data;
+
+        $jml_ketua = collect($data)->sum(function($q){
+            return $q->k;
+        });
+        $jml_sekretaris = collect($data)->sum(function($q){
+            return $q->s;
+        });
+
+        $jml_bendahara = collect($data)->sum(function($q){
+            return $q->b;
+        });
+        $jml_dpt =  collect($data)->sum(function($q){
+            return $q->dpt;
+        });
+
+        $jml_anggota =  collect($data)->sum(function($q){
+            return $q->anggota;
+        });
+
+        $jml_target_korte =  collect($data)->sum(function($q){
+            return $q->target_korte;
+        });
+
+        $jml_korte_terisi =  collect($data)->sum(function($q){
+            return $q->korte_terisi;
+        });
+
+        $jml_anggota_tercover = 0;
+        $jml_kurang_korte     = 0;
+        $jml_blm_ada_korte    = 0;
+        $jml_saksi            = 0;
+        $persentage_target    = 0;
+        $jml_target           = 0;
+
+        $gF = new GlobalProvider();
+
+        return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('dapils','no','gF'));
 
     }
 

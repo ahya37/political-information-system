@@ -19,7 +19,7 @@
               <div class="dashboard-content mt-4" id="transactionDetails">
 
                 <div class="row">
-                  <div class="col-10">
+                  <div class="col-12">
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
@@ -29,15 +29,51 @@
                                       <tr>
                                         <th class="col-1">NO</th>
                                         <th>DAPIL</th>
+                                        <th align="center">K</th>
+                                        <th align="center">S</th>
+                                        <th align="center">B</th>
+                                        <th align="center">DPT</th>
+                                        <th align="center">ANGGOTA</th>
+                                        <th align="center">TARGET KORTPS</th>
+                                        <th align="center">KORTPS TERISI</th>
+                                        <th align="center">KORTPS (-/+)</th>
+                                        <th align="center">SAKSI</th>
+                                        <th align="center">ANGGOTA TERCOVER</th>
+                                        <th align="center">BELUM ADA KORTPS</th>
+                                        <th align="center">(%)</th>
+                                        <th align="center">TARGET</th>
+
                                       </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($dapils as $item)
+                                        @php
+                                        $kurang_korte = $item->korte_terisi - $item->target_korte;
+                                            $nilai_kurang_korte = round($kurang_korte);
+                                            if ($nilai_kurang_korte == -0) {
+                                                $nilai_kurang_korte = 0;
+                                            }elseif($nilai_kurang_korte > 0){
+                                                $nilai_kurang_korte = '+'.$nilai_kurang_korte;
+                                            }
+                                        @endphp
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>
                                                     <a href="{{ route('admin-daftartim-data-dapil', $item->id) }}">{{ $item->name }}</a>
                                                 </td>
+                                                <td align="center" style="{{ $item->k == 0 ? "background: #ed7d31" : '' }}">{{ $item->k }}</td>
+                                                <td align="center" style="{{ $item->s == 0 ? "background: #ed7d31" : '' }}">{{ $item->s }}</td>
+                                                <td align="center" style="{{ $item->b == 0 ? "background: #ed7d31" : '' }}">{{ $item->b }}</td>
+                                                <td align="center">{{ number_format($item->dpt) }}</td>
+                                                <td align="center">{{ number_format($item->anggota) }}</td>
+                                                <td align="center">{{ number_format($item->target_korte) }}</td>
+                                                <td align="center">{{ number_format($item->korte_terisi) }}</td>
+                                                <td align="center">{{ number_format($nilai_kurang_korte) }}</td>
+                                                <td align="center">{{ number_format($item->saksi) }}</td>
+                                                <td align="center">{{ number_format($item->korte_terisi * 25) }}</td>
+                                                <td align="center">{{ number_format($item->anggota - ($item->korte_terisi * 25)) }}</td>
+                                                <td align="center">{{ $gF->persenDpt(($item->anggota / $item->dpt)*100) }}</td>
+                                                <td align="center">0</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

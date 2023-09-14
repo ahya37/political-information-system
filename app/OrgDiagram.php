@@ -414,6 +414,47 @@ class OrgDiagram extends Model
         return DB::select($sql); 
 	}
 
+	public function getDataDaftarTimByRegency($regencyId){
+
+		$sql = "SELECT a.id, a.name,
+					(SELECT COUNT(odd.id) from org_diagram_district as odd join dapil_areas as da on odd.district_id = da.district_id 
+						where da.dapil_id = a.id and odd.title = 'KETUA') as k,
+					(SELECT COUNT(odd.id) from org_diagram_district as odd join dapil_areas as da on odd.district_id = da.district_id 
+						where da.dapil_id = a.id and odd.title = 'SEKRETARIS') as s,
+					(SELECT COUNT(odd.id) from org_diagram_district as odd join dapil_areas as da on odd.district_id = da.district_id 
+						where da.dapil_id = a.id and odd.title = 'BENDAHARA') as b,
+					(
+						SELECT COUNT(adpt.id) from dpt_kpu as adpt
+						join districts as bdpt on adpt.district_id = bdpt.id 
+						join dapil_areas as cdpt on bdpt.id = cdpt.district_id 
+						WHERE cdpt.dapil_id = a.id
+					) as dpt,
+					(
+						SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id
+						join dapil_areas as a4 on a2.district_id = a4.district_id where a4.dapil_id = a.id
+					) as anggota,
+					(
+						ceil(
+							(
+							SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on a2.district_id = a3.id
+							join dapil_areas as a4 on a3.id = a4.district_id where a4.dapil_id = a.id
+							)/25
+						)
+					) target_korte,
+					(SELECT COUNT(odr.id)
+						from org_diagram_rt as odr
+						join dapil_areas da2 on odr.district_id = da2.district_id
+						WHERE odr.base = 'KORRT' and odr.nik is not null and da2.dapil_id = a.id
+					) as korte_terisi,
+
+					(SELECT DISTINCT  COUNT(w.id) from witnesses as w join dapil_areas da3 on w.district_id = da3.district_id where da3.dapil_id = a.id ) as saksi
+					from dapils as a
+					where a.regency_id = $regencyId";
+
+		return DB::select($sql);
+
+	}
+
 	public function getDataDaftarTimByDapil($dapilId){
 
 		#get data desa by dapil
@@ -425,7 +466,7 @@ class OrgDiagram extends Model
 				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) as anggota,
 				((SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id)/25) as target_korte,
 				(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and district_id  = a.district_id and nik is not null ) as korte_terisi,
-				((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and district_id  = a.district_id and nik is not null )*25) anggota_tercover,
+				-- ((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and district_id  = a.district_id and nik is not null )*25) anggota_tercover,
 				((SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id)-((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and district_id  = a.district_id and nik is not null )*25)) as belum_ada_korte,
 				(SELECT COUNT(id) from witnesses WHERE district_id  = a.district_id) as saksi
 				from dapil_areas as a

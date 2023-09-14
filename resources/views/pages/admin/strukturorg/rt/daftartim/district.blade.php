@@ -61,8 +61,8 @@
                                                   <a href="{{ route('admin-daftartim-data-district', $item->district_id) }}">{{ $item->name }}</a>
                                                 </td>
                                                 <td align="center" style="{{ $item->ketua == 0 ? "background: #ed7d31" : '' }}">{{ $item->ketua }}</td>
-                                                <td align="center" style="{{ $item->bendahara == 0 ? "background: #ed7d31" : '' }}">{{ $item->bendahara }}</td>
                                                 <td align="center" style="{{ $item->sekretaris == 0 ? "background: #ed7d31" : '' }}">{{ $item->sekretaris }}</td>
+                                                <td align="center" style="{{ $item->bendahara == 0 ? "background: #ed7d31" : '' }}">{{ $item->bendahara }}</td>
                                                 <td align="center">{{ number_format($item->dpt) }}</td>
                                                 <td align="center">{{ number_format($item->anggota) }}</td>
                                                 <td align="center">{{ number_format($item->target_korte) }}</td>
