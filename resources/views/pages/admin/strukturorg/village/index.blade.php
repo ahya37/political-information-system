@@ -39,14 +39,14 @@
                         </div>
                     </div>
 
-                    {{-- <div class="row col-md-12">
+                    <div class="row col-md-12">
                         <a class="btn btn-sm btn-sc-primary text-white"
                             href="{{ route('admin-struktur-organisasi-village-create') }}">+ Tambah</a>
-                            <input class="btn btn-sm btn-success text-white ml-2" name="report_type" type="submit" value="Download Excel"></button>
+                            {{-- <input class="btn btn-sm btn-success text-white ml-2" name="report_type" type="submit" value="Download Excel"></button>
                             <input class="btn btn-sm btn-sc-primary text-white ml-2" name="report_type" type="submit" value="Download Kordes Per Kecamatan PDF"></button>
                             <input class="btn btn-sm btn-sc-primary text-white ml-2" name="report_type" type="submit" value="Download Surat Pernyataan Kordes Per Desa PDF"></button>
-                            <input class="btn btn-sm btn-sc-primary text-white mt-2" name="report_type" type="submit" value="Download Surat Undangan Per Desa"></button>
-                    </div> --}}
+                            <input class="btn btn-sm btn-sc-primary text-white mt-2" name="report_type" type="submit" value="Download Surat Undangan Per Desa"></button> --}}
+                    </div>
 
                     
                 </div>
