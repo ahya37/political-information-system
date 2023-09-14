@@ -3350,7 +3350,7 @@ class OrgDiagramController extends Controller
         $authAdminDistrict = auth()->guard('admin')->user()->district_id;
         return $this->daftarTimDistrict($authAdminDistrict);
 
-        return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('dapils','no'));
+        // return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('dapils','no'));
 
     }
 
