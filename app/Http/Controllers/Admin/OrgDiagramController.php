@@ -3343,11 +3343,13 @@ class OrgDiagramController extends Controller
     public function daftarTim(){
 
         // tampilkan data dapil 
-        $regency = 3602;
-        $dapils  = DB::table('dapils')->select('id','name')->where('regency_id', $regency)->get();
-        $no      = 1;
+        // $regency = 3602;
+        // $dapils  = DB::table('dapils')->select('id','name')->where('regency_id', $regency)->get();
+        // $no      = 1;
 
         $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+
+        // redirect ke daftar tim level kecamatan sesuai admin koordinator
         return $this->daftarTimDistrict($authAdminDistrict);
 
         // return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('dapils','no'));
