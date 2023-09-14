@@ -3347,6 +3347,9 @@ class OrgDiagramController extends Controller
         $dapils  = DB::table('dapils')->select('id','name')->where('regency_id', $regency)->get();
         $no      = 1;
 
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        return $this->daftarTimDistrict($authAdminDistrict);
+
         return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('dapils','no'));
 
     }
