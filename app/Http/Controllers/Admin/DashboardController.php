@@ -42,10 +42,34 @@ class DashboardController extends Controller
     public function indexDistrictKor()
     {
       $authAdminDistrict = auth()->guard('admin')->user()->district_id;
-      $districtModel  = new District();
-      $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
 
-      return view('pages.admin.dashboard.index-district', compact('district'));
+      $districtModel  = new District();
+      $district       = $districtModel->with(['regency'])->where('id', $authAdminDistrict)->first();
+      $villageModel   = new Village();
+         // Daftar pencapaian lokasi / daerah
+        $achievments   = $villageModel->achievementVillage($authAdminDistrict);
+        if (request()->ajax()) {
+            return DataTables::of($achievments)
+                         ->addColumn('persentage', function($item){
+                            $gF   = app('GlobalProvider'); // global function
+                            $persentage = ($item->realisasi_member / $item->target_member)*100;
+                            $persentage = $gF->persen($persentage);
+                            $persentageWidth = $persentage + 30;
+                            return '
+                            <div class="mt-3 progress" style="width:100%;">
+                                <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
+                            </div>
+                            ';
+                        })
+                        ->addColumn('target', function($item){
+                            return $item->target_member;
+                        })
+                        ->rawColumns(['persentage','target'])
+                        ->make();
+        }
+
+        return view('pages.admin.dashboard.adminkor.district', compact('district'));
+        // return view('pages.admin.dashboard.index-district', compact('district'));
     }
 
     public function province($province_id)
