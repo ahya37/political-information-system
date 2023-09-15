@@ -36,15 +36,15 @@
                                         <th align="center">TARGET DPT (%)</th>
                                         <th align="center">TARGET</th>
                                         <th align="center">ANGGOTA</th>
-                                        <th align="center">TERCAPAI DARI DPT(%)</th>
-                                        <th align="center">TERCAPAI DARI TARGET(%)</th>
+                                        <th align="center">TERCAPAI DPT(%)</th>
+                                        <th align="center">TERCAPAI TARGET(%)</th>
                                         <th align="center">TPS</th>
-                                        <th align="center">SAKSI</th>
                                         <th align="center">TARGET KORTPS</th>
                                         <th align="center">KORTPS TERISI</th>
                                         <th align="center">KORTPS (-/+)</th>
                                         <th align="center">ANGGOTA TERCOVER</th>
                                         <th align="center">BELUM ADA KORTPS</th>
+                                        <th align="center">SAKSI</th>
                                         
                                       </tr>
                                     </thead>
@@ -84,12 +84,12 @@
                                                 <td align="center">{{ $gF->persenDpt(($item->anggota / $item->dpt)*100) }}</td>
                                                 <td align="center">{{ $gF->persenDpt($persen_dari_target) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->tps) }}</td>
-                                                <td align="center">{{ $gF->decimalFormat($item->saksi) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->target_korte) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->korte_terisi) }}</td>
                                                 <td align="center">{{ $nilai_kurang_korte }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->korte_terisi * 25) }}</td>
                                                 <td align="center">{{ $nilai_blm_ada_kortps }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->saksi) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
