@@ -3378,6 +3378,7 @@ class OrgDiagramController extends Controller
 
         $dapil = DB::table('dapils')->select('name')->where('id', $dapilId)->first();
         $no    = 1;
+        $gF = new GlobalProvider();
 
         $orgDiagramModel = new OrgDiagram();
         $data            = $orgDiagramModel->getDataDaftarTimByDapil($dapilId);
@@ -3411,9 +3412,18 @@ class OrgDiagramController extends Controller
 
         $jml_anggota_tercover = $jml_korte_terisi * 25;
         $jml_kurang_korte     = $jml_korte_terisi - $jml_target_korte;
-        $jml_blm_ada_korte    = collect($data)->sum(function($q){
-            return $q->belum_ada_korte;
-        });
+        // $jml_blm_ada_korte    = collect($data)->sum(function($q){
+        //     return $q->belum_ada_korte;
+        // });
+
+        $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
+        $jml_blm_ada_korte = $tmp_blm_ada_korte;
+        if ($jml_blm_ada_korte == - 0) {
+            $jml_blm_ada_korte = 0;
+        }elseif ($jml_blm_ada_korte > 0) {
+            $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
+        }
+
         $jml_saksi            = collect($data)->sum(function($q){
             return $q->saksi;
         });
@@ -3421,10 +3431,13 @@ class OrgDiagramController extends Controller
         $jml_target           = collect($data)->sum(function($q){
             return ($q->dpt * $q->target_persentage)/100;
         });
+        $persen_dari_target_kab = ($jml_anggota/$jml_target)*100;
+        $jml_tps  = collect($data)->sum(function($q){
+            return $q->tps;
+        });
 
-        $gF = new GlobalProvider();
 
-        return view('pages.admin.strukturorg.rt.daftartim.district', compact('dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','gF','jml_saksi'));
+        return view('pages.admin.strukturorg.rt.daftartim.district', compact('jml_tps','persen_dari_target_kab','dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','gF','jml_saksi'));
 
     }
 
