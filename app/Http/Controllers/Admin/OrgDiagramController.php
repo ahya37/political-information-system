@@ -3436,7 +3436,6 @@ class OrgDiagramController extends Controller
             return $q->tps;
         });
 
-
         return view('pages.admin.strukturorg.rt.daftartim.district', compact('jml_tps','persen_dari_target_kab','dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','gF','jml_saksi'));
 
     }

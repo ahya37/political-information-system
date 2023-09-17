@@ -59,6 +59,7 @@
                                             }
                                             $target = ($item->dpt * $item->target_persentage) / 100;
                                             $persen_dari_target = ($item->anggota/$target)*100;
+                                            
 
                                         @endphp
                                             <tr>
