@@ -448,7 +448,8 @@ class OrgDiagram extends Model
 						WHERE odr.base = 'KORRT' and odr.nik is not null and da2.dapil_id = a.id
 					) as korte_terisi,
 
-					(SELECT DISTINCT  COUNT(w.id) from witnesses as w join dapil_areas da3 on w.district_id = da3.district_id where da3.dapil_id = a.id ) as saksi
+					(SELECT DISTINCT  COUNT(w.id) from witnesses as w join dapil_areas da3 on w.district_id = da3.district_id where da3.dapil_id = a.id ) as saksi,
+					(SELECT COUNT(*) from tps join dapil_areas on tps.district_id = dapil_areas.district_id WHERE dapil_areas.dapil_id = a.id) tps
 					from dapils as a
 					where a.regency_id = $regencyId";
 
@@ -476,6 +477,24 @@ class OrgDiagram extends Model
 				where a.dapil_id = $dapilId order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";
         
         return DB::select($sql);
+
+	}
+
+	public function getDataDaftarTimByDapilForRegency($dapilId){
+
+		#get data desa by dapil
+        $sql = "SELECT b.name, b.target_persentage,
+				((SELECT COUNT(b1.id) from dpt_kpu as b1 join villages b2 on b1.village_id = b2.id WHERE b2.district_id = a.district_id)*b.target_persentage)/100 as target
+				from dapil_areas as a
+				join districts as b on a.district_id = b.id
+				where a.dapil_id = $dapilId order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";
+		
+		$result = DB::select($sql);
+		$jml_target = collect($result)->sum(function($q){
+			return $q->target;
+		});
+        $jml_target = round($jml_target);
+        return $jml_target;
 
 	}
 

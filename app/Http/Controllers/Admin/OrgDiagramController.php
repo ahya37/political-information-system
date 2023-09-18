@@ -3326,6 +3326,8 @@ class OrgDiagramController extends Controller
 
     public function daftarTim(){
 
+        $gF = new GlobalProvider();
+
         // tampilkan data dapil 
         $regency = 3602;
         // $dapils  = DB::table('dapils')->select('id','name')->where('regency_id', $regency)->get();
@@ -3333,44 +3335,96 @@ class OrgDiagramController extends Controller
 
         $orgDiagramModel = new OrgDiagram();
         $data            = $orgDiagramModel->getDataDaftarTimByRegency($regency);
-        $dapils          = $data;
 
-        $jml_ketua = collect($data)->sum(function($q){
-            return $q->k;
+        // mendapatkan jumlah target masing2 kecamatan per dapilnya
+        // $arr_jml_target  = [];
+        // foreach ($data as $value) {
+        //     // merubahnya menjadi collection, agar mudah menjumlahkannya
+        //     $arr_jml_target[] = collect([
+        //         (object)[
+        //             'target' => $orgDiagramModel->getDataDaftarTimByDapilForRegency($value->id)
+        //         ]
+        //     ]);
+        // }
+        // // jumlakan hasil all target kecamatan by dapil
+        // $jml_target = collect($arr_jml_target)->sum(function($q){
+        //     return $q[0]->target;
+        // });
+
+        $results = [];
+        foreach ($data as $val) {
+            $target = $orgDiagramModel->getDataDaftarTimByDapilForRegency($val->id);
+
+            $results[] = [
+                'id' => $val->id,
+                'name' => $val->name,
+                'k' => $val->k,
+                's' => $val->s,
+                'b' => $val->b,
+                'dpt' => $val->dpt,
+                'anggota' => $val->anggota,
+                'target_korte' => $val->target_korte,
+                'korte_terisi' => $val->korte_terisi,
+                'saksi' => $val->saksi,
+                'target' => $target,
+                'tps'    => $val->tps,
+                'saksi'    => $val->saksi,
+            ];
+        }
+
+        $dapils          = $results;
+
+        $jml_ketua = collect($dapils)->sum(function($q){
+            return $q['k'];
         });
-        $jml_sekretaris = collect($data)->sum(function($q){
-            return $q->s;
+        $jml_sekretaris = collect($dapils)->sum(function($q){
+            return $q['s'];
         });
 
-        $jml_bendahara = collect($data)->sum(function($q){
-            return $q->b;
+        $jml_bendahara = collect($dapils)->sum(function($q){
+            return $q['b'];
         });
-        $jml_dpt =  collect($data)->sum(function($q){
-            return $q->dpt;
-        });
-
-        $jml_anggota =  collect($data)->sum(function($q){
-            return $q->anggota;
+        $jml_dpt =  collect($dapils)->sum(function($q){
+            return $q['dpt'];
         });
 
-        $jml_target_korte =  collect($data)->sum(function($q){
-            return $q->target_korte;
+        $jml_anggota =  collect($dapils)->sum(function($q){
+            return $q['anggota'];
         });
 
-        $jml_korte_terisi =  collect($data)->sum(function($q){
-            return $q->korte_terisi;
+        $jml_target_korte =  collect($dapils)->sum(function($q){
+            return $q['target_korte'];
         });
 
-        $jml_anggota_tercover = 0;
-        $jml_kurang_korte     = 0;
-        $jml_blm_ada_korte    = 0;
-        $jml_saksi            = 0;
-        $persentage_target    = 0;
-        $jml_target           = 0;
+        $jml_korte_terisi =  collect($dapils)->sum(function($q){
+            return $q['korte_terisi'];
+        });
 
-        $gF = new GlobalProvider();
+        $jml_anggota_tercover = $jml_korte_terisi * 25;
+        $jml_kurang_korte     = $jml_korte_terisi - $jml_target_korte;
+        // $jml_blm_ada_korte    = 0;
+        $jml_saksi            = collect($dapils)->sum(function($q){
+            return $q['saksi'];
+        });
+        $persentage_target    = ($jml_anggota/$jml_dpt)*100;
 
-        return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('dapils','no','gF'));
+        $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
+        $jml_blm_ada_korte = $tmp_blm_ada_korte;
+        if ($jml_blm_ada_korte == - 0) {
+            $jml_blm_ada_korte = 0;
+        }elseif ($jml_blm_ada_korte > 0) {
+            $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
+        }
+
+         // // jumlakan hasil all target kecamatan by dapil
+        $jml_target = collect($results)->sum(function($q){
+            return $q['target'];
+        });
+        $jml_tps  = collect($data)->sum(function($q){
+            return $q->tps;
+        });
+
+        return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('jml_saksi','jml_kurang_korte','jml_tps','persentage_target','jml_blm_ada_korte','jml_anggota_tercover','jml_korte_terisi','jml_target_korte','jml_dpt','jml_ketua','jml_sekretaris','jml_bendahara','dapils','no','gF','jml_target','jml_anggota'));
 
     }
 
