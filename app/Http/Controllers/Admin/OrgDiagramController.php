@@ -3485,7 +3485,7 @@ class OrgDiagramController extends Controller
         $jml_target           = collect($data)->sum(function($q){
             return ($q->dpt * $q->target_persentage)/100;
         });
-        $persen_dari_target_kab = ($jml_anggota/$jml_target)*100;
+        $persen_dari_target_kab = $jml_target > 0 ? ($jml_anggota/$jml_target)*100 : 0;
         $jml_tps  = collect($data)->sum(function($q){
             return $q->tps;
         });
@@ -3547,8 +3547,8 @@ class OrgDiagramController extends Controller
             return $q->tps;
         });
         $persentage_target    = ($jml_anggota/$jml_dpt)*100;
-        $jml_target           = ($jml_dpt*$district->target_persentage)/100;
-        $persen_dari_target_kec = ($jml_anggota/$jml_target)*100;
+        $jml_target           = $district->target_persentage > 0 ? ($jml_dpt*$district->target_persentage)/100 : 0;
+        $persen_dari_target_kec = $jml_target > 0 ? ($jml_anggota/$jml_target)*100 : 0;
         $no = 1;
 
         return view('pages.admin.strukturorg.rt.daftartim.village', compact('jml_tps','persen_dari_target_kec','gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi'));

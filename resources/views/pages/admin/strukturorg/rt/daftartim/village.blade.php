@@ -67,8 +67,8 @@
                                               $nilai_blm_ada_kortps = '+'.$gF->decimalFormat($nilai_blm_ada_kortps);
                                             }
 
-                                            $target = ($item->dpt * $item->target_persentage) / 100;
-                                            $persen_dari_target = ($item->anggota/$target)*100;
+                                            $target = $item->target_persentage > 0 ? ($item->dpt * $item->target_persentage) / 100 : 0;
+                                            $persen_dari_target = $target > 0 ? ($item->anggota/$target)*100 : 0;
 
                                         @endphp
                                             <tr>

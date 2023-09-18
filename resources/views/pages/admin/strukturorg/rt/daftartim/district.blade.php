@@ -57,8 +57,8 @@
                                             }elseif($nilai_kurang_korte > 0){
                                                 $nilai_kurang_korte = '+'.$nilai_kurang_korte;
                                             }
-                                            $target = ($item->dpt * $item->target_persentage) / 100;
-                                            $persen_dari_target = ($item->anggota/$target)*100;
+                                            $target = $item->target_persentage > 0 ? ($item->dpt * $item->target_persentage) / 100 : 0;
+                                            $persen_dari_target = $target > 0 ? ($item->anggota/$target)*100 : 0;
                                             
 
                                         @endphp
@@ -72,7 +72,7 @@
                                                 <td align="center" style="{{ $item->bendahara == 0 ? "background: #ed7d31" : '' }}">{{ $item->bendahara }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->dpt) }}</td>
                                                 <td align="center">{{ $item->target_persentage }}</td>
-                                                <td align="center">{{ $gF->decimalFormat(($item->dpt * $item->target_persentage) / 100 ) }}</td>
+                                                <td align="center">{{ $item->target_persentage > 0 ? $gF->decimalFormat(($item->dpt * $item->target_persentage) / 100 ) : 0 }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->anggota) }}</td>
                                                 <td align="center">{{ $gF->persenDpt(($item->anggota / $item->dpt)*100) }}</td>
                                                 <td align="center">{{ $gF->persenDpt($persen_dari_target) }}</td>
