@@ -457,6 +457,67 @@ class OrgDiagram extends Model
 
 	}
 
+	public function getCalculateDataDaftarTimKorTps($regencyId){
+
+		$sql = "SELECT a.id, a.name,
+				(
+					SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id
+					join dapil_areas as a4 on a2.district_id = a4.district_id where a4.dapil_id = a.id
+				) as anggota,
+				(
+					ceil(
+						(
+						SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on a2.district_id = a3.id
+						join dapil_areas as a4 on a3.id = a4.district_id where a4.dapil_id = a.id
+						)/25
+					)
+				) target_korte,
+				(SELECT COUNT(odr.id)
+					from org_diagram_rt as odr
+					join dapil_areas da2 on odr.district_id = da2.district_id
+					WHERE odr.base = 'KORRT' and odr.nik is not null and da2.dapil_id = a.id
+				) as korte_terisi
+				from dapils as a where a.regency_id = $regencyId";	
+
+		return DB::select($sql);
+	}
+
+	public function getCalculateDataDaftarTimKorTpsDapil($regencyId, $dapilId){
+
+		$sql = "SELECT a.id, a.name,
+				(
+					SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id
+					join dapil_areas as a4 on a2.district_id = a4.district_id where a4.dapil_id = a.id
+				) as anggota,
+				(
+					ceil(
+						(
+						SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on a2.district_id = a3.id
+						join dapil_areas as a4 on a3.id = a4.district_id where a4.dapil_id = a.id
+						)/25
+					)
+				) target_korte,
+				(SELECT COUNT(odr.id)
+					from org_diagram_rt as odr
+					join dapil_areas da2 on odr.district_id = da2.district_id
+					WHERE odr.base = 'KORRT' and odr.nik is not null and da2.dapil_id = a.id
+				) as korte_terisi
+				from dapils as a where a.regency_id = $regencyId and a.id = $dapilId";	
+
+		return DB::select($sql);
+	}
+
+	public function getCalculateDataDaftarTimKorTpsDistrict($districtId){
+
+		$sql = "SELECT a.name,
+						((SELECT COUNT(id) from users WHERE village_id = a.id )/25)as target_korte,
+						(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi
+						from villages as a
+						WHERE a.district_id = $districtId";	
+
+		return DB::select($sql);
+	}
+
 	public function getDataDaftarTimByDapil($dapilId){
 
 		#get data desa by dapil
@@ -550,7 +611,7 @@ class OrgDiagram extends Model
 
 		$sql = "SELECT COUNT(a.id) as tercover,
 				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on 
-				a2.district_id = a3.id join dapil_areas as a4 on a4.district_id = a3.id) as anggota
+				a2.district_id = a3.id join dapil_areas as a4 on a4.district_id = a3.id where a3.regency_id = 3602) as anggota
 				from org_diagram_rt as a
 				join users as b on a.nik = b.nik
 				join dapil_areas as c on a.district_id = c.district_id

@@ -9,7 +9,12 @@ let selectRT = $("#selectRt").val();
 
 // }
 
-async function initialGetAnggotaCover(selectListAreaId, selectDistrictId, selectVillageId, selectRT) {
+async function initialGetAnggotaCover(
+    selectListAreaId,
+    selectDistrictId,
+    selectVillageId,
+    selectRT
+) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
     return new Promise((resolve, reject) => {
@@ -19,18 +24,25 @@ async function initialGetAnggotaCover(selectListAreaId, selectDistrictId, select
             method: "POST",
             cache: false,
             data: {
-                _token: CSRF_TOKEN, dapil: selectListAreaId, district: selectDistrictId, village: selectVillageId, rt:selectRT
+                _token: CSRF_TOKEN,
+                dapil: selectListAreaId,
+                district: selectDistrictId,
+                village: selectVillageId,
+                rt: selectRT,
             },
             beforeSend: function () {
-                $('#anggota').append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                $("#anggota")
+                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
-            </div>`)
-                $('#tercover').append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+            </div>`);
+                $("#tercover")
+                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
-            </div>`)
-                $('#blmtercover').append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+            </div>`);
+                $("#blmtercover")
+                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
-            </div>`)
+            </div>`);
             },
             success: function () {
                 $("#anggota").empty();
@@ -39,28 +51,92 @@ async function initialGetAnggotaCover(selectListAreaId, selectDistrictId, select
             },
             complete: function (data) {
                 return data;
-            }
-        }).done(resolve).fail(reject);
-    })
+            },
+        })
+            .done(resolve)
+            .fail(reject);
+    });
 }
 
-let blmTerCover = '';
-async function initialGetAnggotaCoverFirst(){
-
-
+let blmTerCover = "";
+async function initialGetAnggotaCoverFirst() {
     $("#anggota").empty();
     $("#tercover").empty();
-    const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-    $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-    $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+    $("#kortpsterisi").empty();
+    $("#kurangtpsterisi").empty();
+    const dataCover = await initialGetAnggotaCover(
+        selectListArea,
+        selectDistrictId,
+        selectVillageId,
+        selectRT
+    );
+    $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+    $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
     $("#blmtercover").empty();
-    blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-    $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+    blmTerCover =
+        parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+    $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
+
+    // jumlah kortps dan kurangnya
+    const dataKortps = await initialGetKortps(
+        selectListArea,
+        selectDistrictId,
+        selectVillageId,
+        selectRT
+    );
+    console.log("data :", dataKortps);
+    $("#kortpsterisi").text(
+        `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+    );
+    $("#kurangtpsterisi").text(
+        `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+    );
 }
 
 initialGetAnggotaCoverFirst();
 
+async function initialGetKortps(
+    selectListAreaId,
+    selectDistrictId,
+    selectVillageId,
+    selectRT
+) {
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    return new Promise((resolve, reject) => {
+        const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+        $.ajax({
+            url: "/api/datatimkortps",
+            method: "POST",
+            cache: false,
+            data: {
+                _token: CSRF_TOKEN,
+                dapil: selectListAreaId,
+                district: selectDistrictId,
+                village: selectVillageId,
+                rt: selectRT,
+            },
+            beforeSend: function () {
+                $("#kortpsterisi")
+                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>`);
+                $("#kurangtpsterisi")
+                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>`);
+            },
+            success: function () {
+                console.log("success");
+            },
+            complete: function (data) {
+                return data;
+            },
+        })
+            .done(resolve)
+            .fail(reject);
+    });
+}
 
 // DAPIL
 $("#selectListArea").change(async function () {
@@ -70,8 +146,10 @@ $("#selectListArea").change(async function () {
         const listDistricts = await getListDistrict(selectListArea);
         $("#selectDistrictId").empty();
         $("#selectVillageId").empty();
-        $('#keterangan').empty();
-        
+        $("#keterangan").empty();
+        $("#kortpsterisi").empty();
+        $("#kurangtpsterisi").empty();
+
         $("#selectDistrictId").show();
         $("#selectDistrictId").append(
             "<option value=''>-Pilih Kecamatan-</option>"
@@ -85,22 +163,42 @@ $("#selectListArea").change(async function () {
         selectRT = $("#selectRt").val();
         geLocationDapil(selectListArea);
 
-
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val("");
         $("#anggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
 
-        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
-        
-        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        const dataCover = await initialGetAnggotaCover(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
+
+        blmTerCover =
+            parseInt(dataCover.data.anggota) -
+            parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
+
+        // jumlah kortps dan kurangnya
+        const dataKortps = await initialGetKortps(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        console.log("data :", dataKortps);
+        $("#kortpsterisi").text(
+            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+        );
+        $("#kurangtpsterisi").text(
+            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+        );
 
         table.ajax.reload(null, false);
-
     } else {
         $("#selectDistrictId").empty();
         $("#selectVillageId").empty();
@@ -115,18 +213,41 @@ $("#selectListArea").change(async function () {
 
         $("#anggota").empty();
         $("#tercover").empty();
-        $('#keterangan').text('Kor TPS');
+        $("#keterangan").text("Kor TPS");
         $("#blmtercover").empty();
+        $("#kortpsterisi").empty();
+        $("#kurangtpsterisi").empty();
 
-        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        const dataCover = await initialGetAnggotaCover(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        blmTerCover =
+            parseInt(dataCover.data.anggota) -
+            parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
+
+        // jumlah kortps dan kurangnya
+        const dataKortps = await initialGetKortps(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        console.log("data :", dataKortps);
+        $("#kortpsterisi").text(
+            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+        );
+        $("#kurangtpsterisi").text(
+            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+        );
 
         table.ajax.reload(null, false);
-
     }
 });
 
@@ -146,8 +267,8 @@ $("#selectDistrictId").change(async function () {
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
-        $('#keterangan').empty();
-        geLocationDistrict(selectDistrictId)
+        $("#keterangan").empty();
+        geLocationDistrict(selectDistrictId);
 
         $("#reqprovince").val(province);
         // $("#reqregency").val(selectArea);
@@ -158,16 +279,39 @@ $("#selectDistrictId").change(async function () {
         $("#anggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
+        $("#kortpsterisi").empty();
+        $("#kurangtpsterisi").empty();
 
-        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        const dataCover = await initialGetAnggotaCover(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        blmTerCover =
+            parseInt(dataCover.data.anggota) -
+            parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
-        table.ajax.reload(null, false);       
+         // jumlah kortps dan kurangnya
+         const dataKortps = await initialGetKortps(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        console.log("data :", dataKortps);
+        $("#kortpsterisi").text(
+            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+        );
+        $("#kurangtpsterisi").text(
+            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+        );
 
+        table.ajax.reload(null, false);
     } else {
         $("#selectVillageId").empty();
         province = $("#province").val();
@@ -178,22 +322,45 @@ $("#selectDistrictId").change(async function () {
 
         $("#reqdistrict").val("");
         $("#reqvillage").val("");
-        $('#keterangan').empty();
+        $("#keterangan").empty();
         geLocationDapil(selectListArea);
 
         $("#anggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
+        $("#kortpsterisi").empty();
+        $("#kurangtpsterisi").empty();
 
-        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        const dataCover = await initialGetAnggotaCover(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        blmTerCover =
+            parseInt(dataCover.data.anggota) -
+            parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
+
+         // jumlah kortps dan kurangnya
+         const dataKortps = await initialGetKortps(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        console.log("data :", dataKortps);
+        $("#kortpsterisi").text(
+            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+        );
+        $("#kurangtpsterisi").text(
+            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+        );
 
         table.ajax.reload(null, false);
-
     }
 });
 
@@ -219,21 +386,28 @@ $("#selectVillageId").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
         $("#selectRt").val("");
-        $('#keterangan').empty();
+        $("#keterangan").empty();
         geLocationVillage(selectVillageId);
 
         $("#anggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
+        $("#kortpsterisi").empty();
+        $("#kurangtpsterisi").empty();
 
-        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        const dataCover = await initialGetAnggotaCover(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
-
-
+        blmTerCover =
+            parseInt(dataCover.data.anggota) -
+            parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     } else {
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
@@ -249,19 +423,28 @@ $("#selectVillageId").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
         $("#selectRt").val("");
-        $('#keterangan').empty();
+        $("#keterangan").empty();
         geLocationDistrict(selectDistrictId);
 
         $("#anggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
+        $("#kortpsterisi").empty();
+        $("#kurangtpsterisi").empty();
 
-        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        const dataCover = await initialGetAnggotaCover(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        blmTerCover =
+            parseInt(dataCover.data.anggota) -
+            parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     }
 });
 
@@ -280,21 +463,26 @@ $("#selectRt").change(async function () {
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
-        $('#keterangan').empty();
-        geLocationVillageWithRt(selectVillageId,selectRT);
+        $("#keterangan").empty();
+        geLocationVillageWithRt(selectVillageId, selectRT);
 
         $("#anggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
 
-        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        const dataCover = await initialGetAnggotaCover(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
-
-
+        blmTerCover =
+            parseInt(dataCover.data.anggota) -
+            parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     } else {
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
@@ -309,23 +497,28 @@ $("#selectRt").change(async function () {
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
-        $('#keterangan').empty();
+        $("#keterangan").empty();
         geLocationVillage(selectVillageId);
 
         $("#anggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
 
-        const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
-        
-        blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        const dataCover = await initialGetAnggotaCover(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
+
+        blmTerCover =
+            parseInt(dataCover.data.anggota) -
+            parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     }
 });
-
-
 
 async function getDapilRegency(province) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
@@ -347,9 +540,7 @@ function showDivHtmlDapil(m) {
 }
 
 async function getDapilNames(regencyId) {
-    $("#selectListArea").append(
-        "<option value=''>Loading..</option>"
-    );
+    $("#selectListArea").append("<option value=''>Loading..</option>");
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     return await fetch(`/api/getlistdapil`, {
         method: "POST",
@@ -358,15 +549,15 @@ async function getDapilNames(regencyId) {
             "Content-Type": "appliacation/json",
         },
         body: JSON.stringify({ token: CSRF_TOKEN, regencyId: regencyId }),
-    }).then((response) => {
-        $("#selectListArea").empty();
-        $("#selectListArea").append(
-            "<option value=''>-Pilih Dapil-</option>"
-        );
-        return response.json();
-    }).catch(error => {
-    });
-
+    })
+        .then((response) => {
+            $("#selectListArea").empty();
+            $("#selectListArea").append(
+                "<option value=''>-Pilih Dapil-</option>"
+            );
+            return response.json();
+        })
+        .catch((error) => {});
 }
 function getDapilNamesUi(listDapils) {
     let divListDapil = "";
@@ -382,16 +573,14 @@ function showDivHtmlListDapil(m) {
 
 async function getDapil(regencyId) {
     const results = await getDapilNames(regencyId);
-    getDapilNamesUi(results)
+    getDapilNamesUi(results);
 }
 
-let regencyId = $('#regencyId').val();
-getDapil(regencyId)
+let regencyId = $("#regencyId").val();
+getDapil(regencyId);
 
 async function getListDistrict(selectListAreaValue) {
-    $("#selectDistrictId").append(
-        "<option value=''>Loading..</option>"
-    );
+    $("#selectDistrictId").append("<option value=''>Loading..</option>");
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     const response = await fetch(`/api/getlistdistrictdapil`, {
         method: "POST",
@@ -420,9 +609,7 @@ function showDivHtmlListDistrict(m) {
     return `<option value="${m.district_id}">${m.name}</option>`;
 }
 async function getListVillage(selectDistrictId) {
-    $("#selectVillageId").append(
-        "<option value=''>Loading..</option>"
-    );
+    $("#selectVillageId").append("<option value=''>Loading..</option>");
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     const response = await fetch(`/api/getlistvillagetdapil`, {
         method: "POST",
@@ -452,9 +639,7 @@ function showDivHtmlVillage(m) {
 
 // GET data RT
 async function getListRT(villageId) {
-    $("#selectRt").append(
-        "<option value=''>Loading..</option>"
-    );
+    $("#selectRt").append("<option value=''>Loading..</option>");
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     const response = await fetch(`/api/getrtbyvillage`, {
         method: "POST",
@@ -490,7 +675,7 @@ let table = $("#data").DataTable({
     bInfo: true,
     processing: true,
     bServerSide: true,
-    order: [[6, 'desc']],
+    order: [[6, "desc"]],
     autoWidth: false,
     ajax: {
         url: "/api/org/list/rt",
@@ -508,7 +693,7 @@ let table = $("#data").DataTable({
             targets: 0,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.no
+                return row.no;
             },
         },
         {
@@ -528,14 +713,14 @@ let table = $("#data").DataTable({
             targets: 3,
             orderable: true,
             render: function (data, type, row, meta) {
-                return `<p class='text-center'>${row.rt ?? ''}</p>`;
+                return `<p class='text-center'>${row.rt ?? ""}</p>`;
             },
         },
         {
             targets: 4,
             orderable: true,
             render: function (data, type, row, meta) {
-                return row.tps_number
+                return row.tps_number;
             },
         },
         {
@@ -559,7 +744,7 @@ let table = $("#data").DataTable({
         {
             targets: 8,
             render: function (data, type, row, meta) {
-                return `<p>${row.phone_number ?? ''}</p>`;
+                return `<p>${row.phone_number ?? ""}</p>`;
             },
         },
         {
@@ -613,31 +798,29 @@ let table = $("#data").DataTable({
     ],
 });
 
-
-$('#exampleModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget)
-    var recipient = button.data('whatever')
-    var modal = $(this)
-    modal.find('.modal-body input[name="pidx"]').val(recipient)
+$("#exampleModal").on("show.bs.modal", function (event) {
+    var button = $(event.relatedTarget);
+    var recipient = button.data("whatever");
+    var modal = $(this);
+    modal.find('.modal-body input[name="pidx"]').val(recipient);
 });
 
 async function onEdit(data) {
     const id = data.id;
     const name = data.getAttribute("data-name");
 
-
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
     const { value: nik } = await Swal.fire({
         title: `Edit ${name}`,
-        input: 'number',
-        inputPlaceholder: 'NIK',
+        input: "number",
+        inputPlaceholder: "NIK",
         focusConfirm: false,
         showCancelButton: true,
         cancelButtonText: "Batal",
         confirmButtonText: "Simpan",
         timerProgressBar: true,
-    })
+    });
 
     if (nik) {
         $.ajax({
@@ -657,8 +840,7 @@ async function onEdit(data) {
                     showConfirmButton: false,
                     width: 500,
                     timer: 900,
-                },
-                );
+                });
                 const table = $("#data").DataTable();
                 table.ajax.reload();
             },
@@ -681,17 +863,16 @@ async function onDelete(data) {
     const name = data.getAttribute("data-name");
     const id = data.getAttribute("data-id");
 
-
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     Swal.fire({
         title: `Yakin hapus ${name}`,
         text: "Menghapus KOR RT, dapat menghapus beserta anggotanya!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Hapus',
-        cancelButtonText: 'Batal',
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
@@ -710,8 +891,7 @@ async function onDelete(data) {
                         showConfirmButton: false,
                         width: 500,
                         timer: 900,
-                    },
-                    );
+                    });
                     const table = $("#data").DataTable();
                     table.ajax.reload();
                 },
@@ -727,11 +907,12 @@ async function onDelete(data) {
                 },
             });
         }
-    })
-
-
+    });
 }
 
-function numberWithCommas(x) {
+function numberWithDot(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function numberWithDot(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }

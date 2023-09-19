@@ -97,6 +97,53 @@ class OrgDiagramController extends Controller
         ]);
     }
 
+    public function getDataTimKorTps()
+    {
+        $regencyId  = 3602;
+        $dapil_id   = request()->dapil;
+        $district_id = request()->district;
+        $village_id = request()->village;
+        $rt         = request()->rt;
+
+        $orgDiagram = new OrgDiagram();
+        $gF = new GlobalProvider();
+
+        $results = '';
+        if(isset($dapil_id) && !isset($district_id) && !isset($village_id) && !isset($rt)){
+
+            $results = $orgDiagram->getCalculateDataDaftarTimKorTpsDapil($regencyId, $dapil_id);
+
+        }elseif(isset($dapil_id) && isset($district_id) && !isset($village_id) && !isset($rt)){
+
+            $results = $orgDiagram->getCalculateDataDaftarTimKorTpsDistrict($district_id);
+
+        }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && !isset($rt)){
+            $results = 'OK';
+        }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && isset($rt)){
+            $results = 'OK';
+        }else{
+            $results = $results = $orgDiagram->getCalculateDataDaftarTimKorTps($regencyId);
+        }
+
+        $target_kortps      = collect($results)->sum(function($q){
+            return $q->target_korte;
+        });
+
+        $kortps_terisi      = collect($results)->sum(function($q){
+            return $q->korte_terisi;
+        });
+        
+
+        $data_results = [
+            'kortps_terisi' => $gF->decimalFormat($kortps_terisi),
+            'kurang_kortps' =>  $gF->decimalFormat($kortps_terisi - $target_kortps)
+        ];
+
+        return response()->json([
+            'data' => $data_results
+        ]);
+    }
+
     public function storeOrg(Request $request)
     {
 

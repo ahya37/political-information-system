@@ -96,6 +96,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 id="keterangan">Kor TPS</h5>
+                                <span id="kortpsterisi"></span>
+                                <br>
+                                <span id="kurangtpsterisi"></span>
                             </div>
                         </div>
                     </div>
@@ -168,7 +171,7 @@
     <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('js/getlocation.js') }}"></script>
+    <script src="{{ asset('js/getlocation-kortps.js') }}"></script>
     <script src="{{ asset('js/org-rt-index.js') }}"></script>
     <script>
         AOS.init();
