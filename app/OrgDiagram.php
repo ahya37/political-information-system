@@ -518,6 +518,17 @@ class OrgDiagram extends Model
 		return DB::select($sql);
 	}
 
+	public function getCalculateDataDaftarTimKorTpsVillage($villageId){
+
+		$sql = "SELECT a.name,
+						((SELECT COUNT(id) from users WHERE village_id = a.id )/25)as target_korte,
+						(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi
+						from villages as a
+						WHERE a.id = $villageId";	
+
+		return DB::select($sql);
+	}
+
 	public function getDataDaftarTimByDapil($dapilId){
 
 		#get data desa by dapil
