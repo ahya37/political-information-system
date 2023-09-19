@@ -546,6 +546,20 @@ $("#selectRt").change(async function () {
             parseInt(dataCover.data.anggota) -
             parseInt(dataCover.data.tercover);
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
+
+        // jumlah kortps dan kurangnya
+        const dataKortps = await initialGetKortps(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        $("#kortpsterisi").text(
+            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+        );
+        $("#kurangtpsterisi").text(
+            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+        );
     }
 });
 
