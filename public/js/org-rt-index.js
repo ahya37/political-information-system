@@ -85,7 +85,6 @@ async function initialGetAnggotaCoverFirst() {
         selectVillageId,
         selectRT
     );
-    console.log("data :", dataKortps);
     $("#kortpsterisi").text(
         `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
     );
@@ -127,7 +126,6 @@ async function initialGetKortps(
             </div>`);
             },
             success: function () {
-                console.log("success");
             },
             complete: function (data) {
                 return data;
@@ -190,7 +188,6 @@ $("#selectListArea").change(async function () {
             selectVillageId,
             selectRT
         );
-        console.log("data :", dataKortps);
         $("#kortpsterisi").text(
             `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
@@ -239,7 +236,6 @@ $("#selectListArea").change(async function () {
             selectVillageId,
             selectRT
         );
-        console.log("data :", dataKortps);
         $("#kortpsterisi").text(
             `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
@@ -303,7 +299,6 @@ $("#selectDistrictId").change(async function () {
             selectVillageId,
             selectRT
         );
-        console.log("data :", dataKortps);
         $("#kortpsterisi").text(
             `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
@@ -352,7 +347,6 @@ $("#selectDistrictId").change(async function () {
             selectVillageId,
             selectRT
         );
-        console.log("data :", dataKortps);
         $("#kortpsterisi").text(
             `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
@@ -418,7 +412,6 @@ $("#selectVillageId").change(async function () {
             selectVillageId,
             selectRT
         );
-        console.log("data :", dataKortps);
         $("#kortpsterisi").text(
             `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
@@ -471,7 +464,6 @@ $("#selectVillageId").change(async function () {
             selectVillageId,
             selectRT
         );
-        console.log("data :", dataKortps);
         $("#kortpsterisi").text(
             `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
@@ -484,6 +476,8 @@ $("#selectVillageId").change(async function () {
 // RT
 $("#selectRt").change(async function () {
     selectRT = $("#selectRt").val();
+    $("#kortpsterisi").empty();
+        $("#kurangtpsterisi").empty();
 
     if (selectRT !== "") {
         selectListArea = $("#selectListArea").val();
@@ -536,6 +530,8 @@ $("#selectRt").change(async function () {
         $("#anggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
+        $("#kortpsterisi").empty();
+        $("#kurangtpsterisi").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,

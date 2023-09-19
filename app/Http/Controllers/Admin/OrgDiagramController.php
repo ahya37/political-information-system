@@ -122,7 +122,7 @@ class OrgDiagramController extends Controller
             $results = $orgDiagram->getCalculateDataDaftarTimKorTpsVillage($village_id);
 
         }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && isset($rt)){
-            $results = 'OK';
+            $results = '';
         }else{
             $results = $results = $orgDiagram->getCalculateDataDaftarTimKorTps($regencyId);
         }
