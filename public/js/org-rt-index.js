@@ -519,8 +519,6 @@ $("#selectVillageId").change(async function () {
 // RT
 $("#selectRt").change(async function () {
     selectRT = $("#selectRt").val();
-    $("#kortpsterisi").empty();
-        $("#kurangtpsterisi").empty();
 
     if (selectRT !== "") {
         selectListArea = $("#selectListArea").val();
