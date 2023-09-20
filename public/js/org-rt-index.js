@@ -64,6 +64,7 @@ async function initialGetAnggotaCoverFirst() {
     $("#tercover").empty();
     $("#kortpsterisi").empty();
     $("#kurangtpsterisi").empty();
+    $("#targetkortps").empty();
     const dataCover = await initialGetAnggotaCover(
         selectListArea,
         selectDistrictId,
@@ -85,11 +86,14 @@ async function initialGetAnggotaCoverFirst() {
         selectVillageId,
         selectRT
     );
+    $("#targetkortps").text(
+        ` ${numberWithDot(dataKortps.data.target_kortps)}`
+    );
     $("#kortpsterisi").text(
-        `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+        ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
     );
     $("#kurangtpsterisi").text(
-        `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+        ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
     );
 }
 
@@ -124,6 +128,10 @@ async function initialGetKortps(
                     .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>`);
+                $("#targetkortps")
+                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>`);
             },
             success: function () {
             },
@@ -147,6 +155,7 @@ $("#selectListArea").change(async function () {
         $("#keterangan").empty();
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
+        $("#targetkortps").empty();
 
         $("#selectDistrictId").show();
         $("#selectDistrictId").append(
@@ -189,12 +198,14 @@ $("#selectListArea").change(async function () {
             null
         );
         
-
+        $("#targetkortps").text(
+            ` ${numberWithDot(dataKortps.data.target_kortps)}`
+        );
         $("#kortpsterisi").text(
-            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+            ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
         $("#kurangtpsterisi").text(
-            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
         );
 
         table.ajax.reload(null, false);
@@ -216,6 +227,7 @@ $("#selectListArea").change(async function () {
         $("#blmtercover").empty();
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
+        $("#targetkortps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -238,12 +250,16 @@ $("#selectListArea").change(async function () {
             null,
             null
         );
+
+        $("#targetkortps").text(
+            ` ${numberWithDot(dataKortps.data.target_kortps)}`
+        );
         
         $("#kortpsterisi").text(
-            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+            ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
         $("#kurangtpsterisi").text(
-            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
         );
 
         table.ajax.reload(null, false);
@@ -280,6 +296,7 @@ $("#selectDistrictId").change(async function () {
         $("#blmtercover").empty();
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
+        $("#targetkortps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -303,12 +320,14 @@ $("#selectDistrictId").change(async function () {
             null
         );
         
-
+        $("#targetkortps").text(
+            ` ${numberWithDot(dataKortps.data.target_kortps)}`
+        );
         $("#kortpsterisi").text(
-            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+            `${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
         $("#kurangtpsterisi").text(
-            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            `${numberWithDot(dataKortps.data.kurang_kortps)}`
         );
 
         table.ajax.reload(null, false);
@@ -330,6 +349,7 @@ $("#selectDistrictId").change(async function () {
         $("#blmtercover").empty();
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
+        $("#targetkortps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -353,12 +373,15 @@ $("#selectDistrictId").change(async function () {
             null
         );
         
+        $("#targetkortps").text(
+            ` ${numberWithDot(dataKortps.data.target_kortps)}`
+        );
 
         $("#kortpsterisi").text(
-            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+            ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
         $("#kurangtpsterisi").text(
-            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
         );
 
         table.ajax.reload(null, false);
@@ -397,6 +420,7 @@ $("#selectVillageId").change(async function () {
         $("#kurangtpsterisi").empty();
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
+        $("#targetkortps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -420,12 +444,15 @@ $("#selectVillageId").change(async function () {
             null
         );
         
+        $("#targetkortps").text(
+            ` ${numberWithDot(dataKortps.data.target_kortps)}`
+        );
 
         $("#kortpsterisi").text(
-            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+            ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
         $("#kurangtpsterisi").text(
-            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
         );
 
     } else {
@@ -452,6 +479,7 @@ $("#selectVillageId").change(async function () {
         $("#blmtercover").empty();
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
+        $("#targetkortps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -475,12 +503,15 @@ $("#selectVillageId").change(async function () {
             null
         );
         
+        $("#targetkortps").text(
+            ` ${numberWithDot(dataKortps.data.target_kortps)}`
+        );
 
         $("#kortpsterisi").text(
-            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+            ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
         $("#kurangtpsterisi").text(
-            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
         );
     }
 });
@@ -545,6 +576,7 @@ $("#selectRt").change(async function () {
         $("#blmtercover").empty();
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
+        $("#targetkortps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -567,12 +599,16 @@ $("#selectRt").change(async function () {
             selectVillageId,
             selectRT
         );
+
+        $("#targetkortps").text(
+            ` ${numberWithDot(dataKortps.data.target_kortps)}`
+        );
         
         $("#kortpsterisi").text(
-            `Kor TPS Terisi : ${numberWithDot(dataKortps.data.kortps_terisi)}`
+            ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
         );
         $("#kurangtpsterisi").text(
-            `Kurang Kor TPS : ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
         );
     }
 });

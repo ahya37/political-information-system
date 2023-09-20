@@ -91,14 +91,39 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-4 mt-2 mb-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Target Kor TPS</h5>
+                                <h5 id="targetkortps"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2 mb-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Kor TPS Terisi</h5>
+                                <h5 id="kortpsterisi"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2 mb-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Kurang Kor TPS</h5>
+                                <h5 id="kurangtpsterisi"></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-12 mt-2 mb-2">
                         <div class="card">
                             <div class="card-body">
                                 <h5 id="keterangan">Kor TPS</h5>
-                                <span id="kortpsterisi"></span>
-                                <br>
-                                <span id="kurangtpsterisi"></span>
                             </div>
                         </div>
                     </div>

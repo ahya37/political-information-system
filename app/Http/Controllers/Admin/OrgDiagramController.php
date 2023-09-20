@@ -109,25 +109,20 @@ class OrgDiagramController extends Controller
         $gF = new GlobalProvider();
 
         $results = '';
-        $cek     = '';
         if(isset($dapil_id) && !isset($district_id) && !isset($village_id) && !isset($rt)){
 
             $results = $orgDiagram->getCalculateDataDaftarTimKorTpsDapil($regencyId, $dapil_id);
-            $cek     = 'dapil';
 
         }elseif(isset($dapil_id) && isset($district_id) && !isset($village_id) && !isset($rt)){
 
             $results = $orgDiagram->getCalculateDataDaftarTimKorTpsDistrict($district_id);
-            $cek     = 'kecamatan';
 
         }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && !isset($rt)){
 
             $results = $orgDiagram->getCalculateDataDaftarTimKorTpsVillage($village_id);
-            $cek     = 'desa';
 
         }else{
             $results = $orgDiagram->getCalculateDataDaftarTimKorTps($regencyId);
-            $cek     = 'all';
         }
 
         $target_kortps      = collect($results)->sum(function($q){
@@ -140,15 +135,9 @@ class OrgDiagramController extends Controller
         
 
         $data_results = [
+            'target_kortps' => $gF->decimalFormat($target_kortps),
             'kortps_terisi' => $gF->decimalFormat($kortps_terisi),
             'kurang_kortps' =>  $gF->decimalFormat($kortps_terisi - $target_kortps),
-            'cek' => $cek,
-            'request' => [
-                $dapil_id,
-                $district_id,
-                $village_id,
-                $rt
-            ]
         ];
 
         return response()->json([
