@@ -18,6 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/absensi/store', 'webController@storeAbsen');
+
 Route::post('searchprovinces', 'API\LocationController@getSearchProvince');
 Route::post('searchregencies', 'API\LocationController@getSearchRegency');
 Route::post('searchdistricts', 'API\LocationController@getSearchDistrict');
