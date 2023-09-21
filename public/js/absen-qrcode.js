@@ -41,7 +41,7 @@ docReady(function () {
                 title: 'Masukan',
                 html:
                   '<div class="form-group"><label class="col-sm-12 col-form-label">Nama</label><input id="swal-input1" class="form-control"></div>' +
-                  '<div class="form-group"><label class="col-sm-12 col-form-label">Desa</label><input id="swal-input2" class="form-control"></div>',
+                  '<div class="form-group"><label class="col-sm-12 col-form-label">Desa - Kec.</label><input id="swal-input2" class="form-control"></div>',
                 focusConfirm: false,
                 showCancelButton: true,
                 confirmButtonText: "Simpan",
