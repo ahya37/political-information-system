@@ -71,8 +71,8 @@ docReady(function () {
             }
         }
       };
-      const config = { fps: 20, qrbox: { width: 500, height: 500 } };
+      const config = { fps: 10, qrbox: { width: 300, height: 300 } };
       
-      // If you want to prefer front camera
+      // If you want to prefer back camera
       html5QrCode.start({ ideal: 'environment' }, config, qrCodeSuccessCallback);
 });
