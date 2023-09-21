@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\AnggotaBelumTercoverKortps;
 use App\Exports\KorteExportWithSheet;
 use App\Sticker;
 use Illuminate\Http\Request;
@@ -2783,7 +2784,29 @@ class OrgDiagramController extends Controller
             Zipper::make(public_path($createZip))->add($files)->close();
 
             return response()->download(public_path($createZip));
-        } else {
+        }elseif ($request->report_type == 'Download Anggota Belum Tercover Kortps'){
+
+            $orgDiagramModel = new OrgDiagram();
+
+            if(isset($village_id) AND !isset($request->rt)){
+
+                $village = Village::select('name')->where('id', $village_id)->first();
+                $anggota         = $orgDiagramModel->getDataAnggotaBelumterCoverKortpsByVillage($village_id);
+                return $this->excel->download(new AnggotaBelumTercoverKortps($anggota), 'ANGGOTA BELUM TERCOVER DS.' . $village->name . '.xls');
+
+            }elseif(isset($village_id) AND isset($request->rt)){
+
+                 $anggota         = $orgDiagramModel->getDataAnggotaBelumterCoverKortpsByVillageAndRt($village_id, $request->rt);
+                 return $this->excel->download(new AnggotaBelumTercoverKortps($anggota), 'ANGGOTA BELUM TERCOVER DS.' . $village->name .', RT. '.$request->rt.'.xls');
+
+            }else{
+
+                $district = District::select('name')->where('id', $request->districtid)->first();
+                $anggota         = $orgDiagramModel->getDataAnggotaBelumterCoverKortpsByDistrictId($request->districtid);
+                return $this->excel->download(new AnggotaBelumTercoverKortps($anggota), 'ANGGOTA BELUM TERCOVER KEC.' . $district->name .'.xls');
+            }
+
+        }else {
             #report by desa 
 
             return $this->excel->download(new KorteExport($village_id), 'TIM KOORDINATOR RT ' . $village->name . '.xls');

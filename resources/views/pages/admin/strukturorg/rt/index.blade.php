@@ -28,7 +28,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <input value="{{ $district->dapil_id }}" type="hidden" id="selectListArea" class="form-control">
-                                    <input value="{{ $district->id }}" type="hidden" id="selectDistrictId" class="form-control">
+                                    <input value="{{ $district->id }}" type="hidden" name="districtid" id="selectDistrictId" class="form-control">
                                     <select name="village_id" id="selectVillageId" class="form-control filter">
                                         <option value="">-Pilih Desa-</option>
                                         @foreach ($villages as $item )
@@ -54,6 +54,7 @@
                                 <input class="btn btn-sm btn-sc-primary text-white  mt-2" type="submit" value="Download Korte + Anggota PDF" name="report_type"> 
                                 <input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit" value="Download Absensi Korte Per Desa PDF" name="report_type"> 
                                 <input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit" value="Download Surat Undangan Korte Per Desa PDF" name="report_type"> 
+                                <input class="btn btn-sm btn-success text-white mt-2" type="submit" value="Download Anggota Belum Tercover Kortps" name="report_type"> 
                             </div>
                         </div>
                         
