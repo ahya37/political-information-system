@@ -50,7 +50,7 @@ docReady(function () {
                   return [
                     document.getElementById('swal-input1').value,
                     document.getElementById('swal-input2').value
-                  ]``
+                  ]
                 }
               });
 
@@ -72,9 +72,10 @@ docReady(function () {
                             icon: 'success',
                             title: `${data.data.message}`,
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 2500
                           });
-                          window.location.reload();
+                        //   window.location.reload();
+                        window.location.href = '/absen/sukses'
                     },
 
                 });

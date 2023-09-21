@@ -24,6 +24,9 @@ Route::get('/email', function () {
 });
 
 Route::get('/absen', 'webController@qrcodeLink');
+Route::get('/absen/sukses', function(){
+    return view('form-absensi-success');
+});
 
 
 Route::post('/by_referal/downloadexcel/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadExcel')->name('by-referal-downloadexcel');
