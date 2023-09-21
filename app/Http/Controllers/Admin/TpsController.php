@@ -49,7 +49,7 @@ class TpsController extends Controller
             }
 
             if ($request->input('village') != null) {
-                            $data->where('a.village_id', $request->village);
+                            $data->where('b.id', $request->village);
             }
 
             if ($request->input('rt') != null) {
@@ -60,7 +60,7 @@ class TpsController extends Controller
           $recordsFiltered = $data->get()->count();
           if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
 
-          $data = $data->orderBy('a.village_id','asc');
+          $data = $data->orderBy('b.id','asc');
           $data = $data->orderBy('a.tps_number','asc');
           $data = $data->orderBy($orderBy,$request->input('order.0.dir'));
           $data = $data->get();
