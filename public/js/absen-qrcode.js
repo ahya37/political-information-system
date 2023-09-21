@@ -40,8 +40,8 @@ docReady(function () {
             const { value: formValues } = await Swal.fire({
                 title: 'Masukan',
                 html:
-                  '<label>Nama</label><input id="swal-input1" class="swal2-input">' +
-                  '<label>Desa - Kecamatan</label><input id="swal-input2" class="swal2-input">',
+                  '<div class="form-group"><label class="col-sm-12 col-form-label">Nama</label><input id="swal-input1" class="form-control"></div>' +
+                  '<div class="form-group"><label class="col-sm-12 col-form-label">Desa</label><input id="swal-input2" class="form-control"></div>',
                 focusConfirm: false,
                 showCancelButton: true,
                 confirmButtonText: "Simpan",
