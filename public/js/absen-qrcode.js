@@ -50,7 +50,7 @@ docReady(function () {
                   return [
                     document.getElementById('swal-input1').value,
                     document.getElementById('swal-input2').value
-                  ]
+                  ]``
                 }
               });
 
@@ -89,7 +89,7 @@ docReady(function () {
             }
         }
       };
-      const config = { fps: 10, qrbox: { width: 300, height: 300 } };
+      const config = { fps: 10, qrbox: { width: 500, height: 500 } };
       
       // If you want to prefer back camera
     //   html5QrCode.start({ ideal: 'environment' }, config, qrCodeSuccessCallback);
