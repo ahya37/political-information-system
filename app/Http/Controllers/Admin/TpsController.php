@@ -17,14 +17,19 @@ use App\Helpers\ResponseFormatter;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\UserMenu;
-
+use App\Models\District;
 class TpsController extends Controller
 {
     public function index(){
 
-        $regency = Regency::select('id','name')->where('id', 3602)->first();
+        $regency = Regency::select('id', 'name')->where('id', 3602)->first();
 
-        return view('pages.admin.tps.index', compact('regency'));
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $districtModel  = new District();
+        $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
+        $villages  = Village::select('id','name')->where('district_id', $authAdminDistrict)->get();
+
+        return view('pages.admin.tps.index', compact('regency','district','villages'));
 
     }
 
@@ -40,7 +45,8 @@ class TpsController extends Controller
 
         $data = DB::table('tps as a')
                 ->select('a.tps_number','a.rt', 'a.rw', 'b.name as village','a.id')
-                ->join('villages as b','a.village_id','=','b.id');
+                ->join('villages as b','a.village_id','=','b.id')
+                ->where('b.district_id', $request->district);
 
         if($request->input('search.value')!=null){
                 $data = $data->where(function($q)use($request){
@@ -234,6 +240,11 @@ class TpsController extends Controller
 
        $regency      = Regency::select('id')->where('id', 3602)->first();
 
+       $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $districtModel  = new District();
+        $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
+        $villages  = Village::select('id','name')->where('district_id', $authAdminDistrict)->get();
+
        $tpsModel     = new Tps();
        $tps          = $tpsModel->getDataTpsByTpsId($tpsId);
         
@@ -242,7 +253,7 @@ class TpsController extends Controller
        
        $no           = 1;
 
-       return view('pages.admin.tps.witness', compact('regency','tpsId','witnesses','no','tps'));
+       return view('pages.admin.tps.witness', compact('regency','tpsId','witnesses','no','tps','district','villages'));
 
     }
 

@@ -323,6 +323,7 @@ let table = $("#data").DataTable({
         type: "POST",
         data: function (d) {
             d.village = selectVillageId;
+            d.district = selectDistrictId;
             d.rt = selectRT;
             return d;
         },

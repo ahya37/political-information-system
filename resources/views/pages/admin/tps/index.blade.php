@@ -19,25 +19,15 @@
                     @csrf
                     <div class="card card-body mb-4">
                         <div class="row">
-                            {{-- <div class="col-md-3"> --}}
                             <div class="form-group">
-                                <input value="{{ $regency->id }}" type="hidden" id="regencyId" class="form-control">
-                            </div>
-                            {{-- </div> --}}
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select name="dapil_id" id="selectListArea" class="form-control filter" required></select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select name="district_id" id="selectDistrictId" class="form-control filter"></select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select name="village_id" id="selectVillageId" class="form-control filter"></select>
-                                </div>
+                                <input value="{{ $district->dapil_id }}" type="hidden" id="selectListArea" class="form-control">
+                                <input value="{{ $district->id }}" type="hidden" name="selectDistrictId" id="selectDistrictId" class="form-control">
+                                <select name="village_id" id="selectVillageId" class="form-control filter">
+                                    <option value="">-Pilih Desa-</option>
+                                    @foreach ($villages as $item )
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -47,7 +37,7 @@
                             </div>
                         </div>
                         
-                        <div class="row col-md-12">
+                        <div class="row">
                             <a class="btn btn-sm btn-sc-primary text-white"
                                 href="{{ route('admin-tps-create') }}">+ Tambah TPS</a>
                         </div>
