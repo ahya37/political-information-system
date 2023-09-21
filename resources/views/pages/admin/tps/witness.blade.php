@@ -114,10 +114,10 @@
                                 <label>Anggota</label>
                                 <select class="multiple-select nik" name="member" id="nik"></select>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label>Email (jika tidak ada, contoh : aaw.nomorhp@aaw.com)</label>
-                                <input type="email" id="email" class="form-control" name="telp" required>
-                            </div>
+                                <input type="email" id="email" class="form-control" name="telp">
+                            </div> --}}
                             <div class="form-group">
                                 <label>No.Hp / WA</label>
                                 <input type="text" class="form-control" name="telp" required>
