@@ -30,14 +30,31 @@ docReady(function () {
           if (decodedText !== lastResult) {
             ++countResults;
             lastResult = decodedText;
-            const { value: text } = await Swal.fire({
-                input: "text",
-                inputLabel: "Masukan Nama Lengkap",
+            // const { value: text } = await Swal.fire({
+            //     input: "text",
+            //     inputLabel: "Masukan Nama Lengkap",
+            //     showCancelButton: true,
+            //     confirmButtonText: "Simpan",
+            //     cancelButtonText: "Batal",
+            // });
+            const { value: formValues } = await Swal.fire({
+                title: 'Masukan',
+                html:
+                  '<label>Nama</label><input id="swal-input1" class="swal2-input">' +
+                  '<label>Desa - Kecamatan</label><input id="swal-input2" class="swal2-input">',
+                focusConfirm: false,
                 showCancelButton: true,
                 confirmButtonText: "Simpan",
                 cancelButtonText: "Batal",
-            });
-            if (text) {
+                preConfirm: () => {
+                  return [
+                    document.getElementById('swal-input1').value,
+                    document.getElementById('swal-input2').value
+                  ]
+                }
+              });
+
+            if (formValues) {
                 // ajax absensi
                 $.ajax({
                     url: "/api/absensi/store",
@@ -45,7 +62,8 @@ docReady(function () {
                     cache: false,
                     data: {
                         eventid: lastResult,
-                        name: text,
+                        name: formValues[0],
+                        address: formValues[1],
                         _token: CSRF_TOKEN,
                     },
                     success: function (data) {
@@ -74,5 +92,6 @@ docReady(function () {
       const config = { fps: 10, qrbox: { width: 300, height: 300 } };
       
       // If you want to prefer back camera
-      html5QrCode.start({ ideal: 'environment' }, config, qrCodeSuccessCallback);
+    //   html5QrCode.start({ ideal: 'environment' }, config, qrCodeSuccessCallback);
+      html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
 });

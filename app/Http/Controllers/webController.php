@@ -25,12 +25,14 @@ class webController extends Controller
         try {
 
             $eventid = $request->eventid;
-            $name     = $request->name;
+            $name    = $request->name;
+            $address = $request->address;
 
             // save data to tabel
             DB::table('absensi_event')->insert([
                 'event_id' => $eventid,
                 'name' => $name,
+                'address' => $address,
                 'created_at' => date('Y-m-d H:i:s')
             ]);
 
