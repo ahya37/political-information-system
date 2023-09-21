@@ -15,8 +15,19 @@ docReady(function () {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     var lastResult,
         countResults = 0;
-    async function onScanSuccess(decodedText, decodedResult) {
-        if (decodedText !== lastResult) {
+
+    // var html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
+    //     fps: 10,
+    //     qrbox: 500,
+    // });
+    // html5QrcodeScanner.start({ facingMode: "user" });
+    // html5QrcodeScanner.render(onScanSuccess);
+
+    const html5QrCode = new Html5Qrcode(
+        "qr-reader", { formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ] });
+      const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
+          /* handle success */
+          if (decodedText !== lastResult) {
             ++countResults;
             lastResult = decodedText;
             const { value: text } = await Swal.fire({
@@ -59,21 +70,8 @@ docReady(function () {
                   });
             }
         }
-    }
-
-    // var html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
-    //     fps: 10,
-    //     qrbox: 500,
-    // });
-    // html5QrcodeScanner.start({ facingMode: "user" });
-    // html5QrcodeScanner.render(onScanSuccess);
-
-    const html5QrCode = new Html5Qrcode(
-        "qr-reader", { formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ] });
-      const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-          /* handle success */
       };
-      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+      const config = { fps: 20, qrbox: { width: 500, height: 500 } };
       
       // If you want to prefer front camera
       html5QrCode.start({ ideal: 'environment' }, config, qrCodeSuccessCallback);
