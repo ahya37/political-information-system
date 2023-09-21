@@ -61,9 +61,20 @@ docReady(function () {
         }
     }
 
-    var html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
-        fps: 10,
-        qrbox: 500,
-    });
-    html5QrcodeScanner.render(onScanSuccess);
+    // var html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
+    //     fps: 10,
+    //     qrbox: 500,
+    // });
+    // html5QrcodeScanner.start({ facingMode: "user" });
+    // html5QrcodeScanner.render(onScanSuccess);
+
+    const html5QrCode = new Html5Qrcode(
+        "qr-reader", { formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ] });
+      const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+          /* handle success */
+      };
+      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+      
+      // If you want to prefer front camera
+      html5QrCode.start({ ideal: 'environment' }, config, qrCodeSuccessCallback);
 });
