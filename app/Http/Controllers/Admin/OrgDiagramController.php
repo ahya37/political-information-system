@@ -70,18 +70,24 @@ class OrgDiagramController extends Controller
 
         $orgDiagram = new OrgDiagram();
 
-        $results = '';
+        $results  = '';
+        $data_pengurus = [];
+        
         if(isset($dapil_id) && !isset($district_id) && !isset($village_id) && !isset($rt)){
 
             $results = $orgDiagram->getKalkulasiTercoverDapil($dapil_id);
 
         }elseif(isset($dapil_id) && isset($district_id) && !isset($village_id) && !isset($rt)){
 
-            $results = $orgDiagram->getKalkulasiTercoverDistrict($district_id);
+            $results  = $orgDiagram->getKalkulasiTercoverDistrict($district_id);
+
+            // get data pengurus
+            $data_pengurus = $orgDiagram->getDataPengurusKecamatan($district_id);
 
         }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && !isset($rt)){
 
             $results = $orgDiagram->getKalkulasiTercoverVillage($village_id);
+            $data_pengurus = $orgDiagram->getDataPengurusDesa($village_id);
 
         }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && isset($rt)){
 
@@ -92,8 +98,18 @@ class OrgDiagramController extends Controller
             $results = $orgDiagram->getKalkulasiTercoverAll();
         }
 
+        $ketua         = $this->searchArrayValueName($data_pengurus, 'KETUA');
+        $sekretaris    = $this->searchArrayValueName($data_pengurus, 'SEKRETARIS');
+        $bendahara     = $this->searchArrayValueName($data_pengurus, 'BENDAHARA');
+        $pengurus = [
+            'ketua' => ucwords(strtolower($ketua)) ?? '',
+            'sekretaris' => ucwords(strtolower($sekretaris)) ?? '',
+            'bendahara' => ucwords(strtolower($bendahara)) ?? ''
+        ];
+
         return response()->json([
-            'data' => $results
+            'data' => $results,
+            'pengurus' => $pengurus
         ]);
     }
 
@@ -2828,6 +2844,15 @@ class OrgDiagramController extends Controller
         foreach ($data as $row) {
             if ($row->title == $field)
                 return $row->title;
+        }
+    }
+
+    public function searchArrayValueName($data, $field)
+    {
+
+        foreach ($data as $row) {
+            if ($row->title == $field)
+                return $row->name;
         }
     }
 

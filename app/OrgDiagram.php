@@ -640,5 +640,27 @@ class OrgDiagram extends Model
 		return collect(DB::select($sql))->first();
 	}
 
+	public function getDataPengurusKecamatan($districtId){
+
+		$sql = DB::table('org_diagram_district as a')
+				->select('b.name','a.title')
+				->join('users as b','a.nik','=','b.nik')
+				->where('a.district_id', $districtId)
+				->orderBy('a.level_org','asc')
+				->get();
+		return $sql;
+	}
+
+	public function getDataPengurusDesa($villageId){
+
+		$sql = DB::table('org_diagram_village as a')
+				->select('b.name','a.title')
+				->join('users as b','a.nik','=','b.nik')
+				->where('a.village_id', $villageId)
+				->orderBy('a.level_org','asc')
+				->get();
+		return $sql;
+	}
+
 
 }

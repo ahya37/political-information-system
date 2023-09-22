@@ -124,6 +124,27 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 id="keterangan">Kor TPS</h5>
+
+                              {{-- pengurus --}}
+                              <div id="pengurusId">
+                                <h5 class="pengurus">Pengurus</h5>
+                                <div class="row">
+                                    <div class="col-md-2 pengurus">Ketua</div>
+                                    <div class="col-md-6 " id="pengKetua"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2 pengurus">Sekretaris</div>
+                                    <div class="col-md-6" id="pengSekre"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2 pengurus">Bendahara</div>
+                                    <div class="col-md-6" id="pengBendahara"></div>
+                                </div>
+                                {{-- <div class="row">
+                                    <div class="col-md-2">Bendahara</div>
+                                    <div class="col-md-6" id="pengBendahara"></div>
+                                </div> --}}
+                              </div>
                             </div>
                         </div>
                     </div>
