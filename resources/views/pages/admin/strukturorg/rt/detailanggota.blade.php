@@ -49,6 +49,11 @@
                         <td>{{ $kor_rt->name ?? '' }}</td>
                     </tr>
                 </table>
+                {{-- <div class="row mb-2">
+                    <div class="col-md-12 col-sm-12">
+                        <button class="btn btn-sm btn-sc-primary text-white"><i class="fa fa-plus"></i>Buat Keluarga Serumah</button>
+                    </div>
+                </div> --}}
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         <div class="card">

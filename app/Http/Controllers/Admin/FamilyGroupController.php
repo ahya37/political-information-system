@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-
+use App\Models\District;
 class FamilyGroupController extends Controller
 {
     protected $FamilyGroupModel;
@@ -37,7 +37,12 @@ class FamilyGroupController extends Controller
 
         $regency = Regency::select('id')->where('id', 3602)->first();
 
-        return view('pages.admin.familygroup.create', compact('regency'));
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $districtModel  = new District();
+        $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
+        $villages       = Village::select('id','name')->where('district_id', $authAdminDistrict)->get();
+
+        return view('pages.admin.familygroup.create', compact('regency','district','villages'));
 
     }
 
