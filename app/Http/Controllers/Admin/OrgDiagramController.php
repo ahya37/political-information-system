@@ -3458,6 +3458,7 @@ class OrgDiagramController extends Controller
     public function daftarTimDistrict($districtId){
 
         $district = DB::table('districts')->select('name','target_persentage')->where('id', $districtId)->first();
+        $gF = new GlobalProvider();
 
         $orgDiagramModel = new OrgDiagram();
         #get data desa by kecamatan
@@ -3489,18 +3490,29 @@ class OrgDiagramController extends Controller
 
         $jml_anggota_tercover = $jml_korte_terisi * 25;
         $jml_kurang_korte     = $jml_korte_terisi - $jml_target_korte;
-        $jml_blm_ada_korte    = collect($data)->sum(function($q){
-            return $q->belum_ada_korte;
-        });
+        // $jml_blm_ada_korte    = collect($data)->sum(function($q){
+        //     return $q->belum_ada_korte;
+        // });
+        $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
+        $jml_blm_ada_korte = $tmp_blm_ada_korte;
+        if ($jml_blm_ada_korte == - 0) {
+            $jml_blm_ada_korte = 0;
+        }elseif ($jml_blm_ada_korte > 0) {
+            $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
+        }
+
         $jml_saksi            = collect($data)->sum(function($q){
             return $q->saksi;
         });
+        $jml_tps  = collect($data)->sum(function($q){
+            return $q->tps;
+        });
         $persentage_target    = ($jml_anggota/$jml_dpt)*100;
-        $jml_target           = ($jml_dpt*$district->target_persentage)/100;
+        $jml_target           = $district->target_persentage > 0 ? ($jml_dpt*$district->target_persentage)/100 : 0;
+        $persen_dari_target_kec = $jml_target > 0 ? ($jml_anggota/$jml_target)*100 : 0;
         $no = 1;
-        $gF = new GlobalProvider();
 
-        return view('pages.admin.strukturorg.rt.daftartim.village', compact('gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi'));
+        return view('pages.admin.strukturorg.rt.daftartim.village', compact('jml_tps','persen_dari_target_kec','gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi'));
     }
 
 

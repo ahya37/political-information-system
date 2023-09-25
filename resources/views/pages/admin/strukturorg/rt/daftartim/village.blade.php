@@ -24,39 +24,55 @@
                     <div class="card">
                       <div class="card-body">
                        <div class="table-responsive">
-                                  <table id="data" class="table table-sm table-striped" width="100%">
+                                  <table id="data" style="font-size: 12px" class="table table-sm table-striped" width="100%">
                                     <thead>
                                       <tr>
                                         <th align="center">NO</th>
-                                        <th>DESA</th>
+                                        <th align="center">DESA</th>
                                         <th align="center">K</th>
                                         <th align="center">S</th>
                                         <th align="center">B</th>
                                         <th align="center">DPT</th>
+                                        <th align="center">TARGET DPT (%)</th>
+                                        <th align="center">TARGET</th>
                                         <th align="center">ANGGOTA</th>
+                                        <th align="center">TERCAPAI DPT(%)</th>
+                                        <th align="center">TERCAPAI TARGET(%)</th>
+                                        <th align="center">TPS</th>
                                         <th align="center">TARGET KORTPS</th>
                                         <th align="center">KORTPS TERISI</th>
                                         <th align="center">KORTPS (-/+)</th>
-                                        <th align="center">SAKSI</th>
                                         <th align="center">ANGGOTA TERCOVER</th>
                                         <th align="center">BELUM ADA KORTPS</th>
-                                        <th align="center">(%)</th>
-                                        <th align="center">TARGET</th>
+                                        <th align="center">SAKSI</th>
+                                        
                                       </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($data as $item)
                                         @php
-                                            $kurang_korte = $item->korte_terisi - $item->target_korte;
+                                           
+
+                                            $blm_ada_kortps = ($item->korte_terisi * 25) - $item->anggota;
+                                            $nilai_blm_ada_kortps = $blm_ada_kortps;
+                                            if ($nilai_blm_ada_kortps == -0) {
+                                                $nilai_blm_ada_kortps = 0;
+                                            }elseif ($nilai_blm_ada_kortps > 0) {
+                                              $nilai_blm_ada_kortps = '+'.$gF->decimalFormat($nilai_blm_ada_kortps);
+                                            }
+
+                                            $target = $item->target_persentage > 0 ? ($item->dpt * $item->target_persentage) / 100 : 0;
+                                            $persen_dari_target = $target > 0 ? ($item->anggota/$target)*100 : 0;
+
+                                            // $kurang_korte = $item->korte_terisi - $item->target_korte;
+                                            $kurang_korte = $item->korte_terisi - ($target / 25);
                                             $nilai_kurang_korte = round($kurang_korte);
                                             if ($nilai_kurang_korte == -0) {
                                                 $nilai_kurang_korte = 0;
                                             }elseif($nilai_kurang_korte > 0){
-                                                $nilai_kurang_korte = '+'.$nilai_kurang_korte;
+                                                $nilai_kurang_korte = '+'.$gF->decimalFormat($nilai_kurang_korte);
                                             }
 
-                                            // $blm_ada_kortps = ($item->korte_terisi * 25) - 
-                                            // $nilai_kurang_korte = $nilai_kurang_korte >= 0 ? 0 : $nilai_kurang_korte;
                                         @endphp
                                             <tr>
                                                 <td align="center">{{ $no++ }}</td>
@@ -64,16 +80,19 @@
                                                 <td align="center" style="{{ $item->ketua == 0 ? "background: #ed7d31" : '' }}">{{ $item->ketua }}</td>
                                                 <td align="center" style="{{ $item->sekretaris == 0 ? "background: #ed7d31" : '' }}">{{ $item->sekretaris }}</td>
                                                 <td align="center" style="{{ $item->bendahara == 0 ? "background: #ed7d31" : '' }}">{{ $item->bendahara }}</td>
-                                                <td align="center">{{ number_format($item->dpt) }}</td>
-                                                <td align="center">{{ number_format($item->anggota) }}</td>
-                                                <td align="center">{{ number_format($item->target_korte) }}</td>
-                                                <td align="center">{{ number_format($item->korte_terisi) }}</td>
-                                                <td align="center">{{ $nilai_kurang_korte }}</td>
-                                                <td align="center">{{ number_format($item->saksi) }}</td>
-                                                <td align="center">{{ number_format($item->korte_terisi * 25) }}</td>
-                                                <td align="center">{{ number_format($item->anggota - ($item->korte_terisi * 25)) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->dpt) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->target_persentage) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat(($target)) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->anggota) }}</td>
                                                 <td align="center">{{ $gF->persenDpt(($item->anggota / $item->dpt)*100) }}</td>
-                                                <td align="center">{{ number_format(($item->dpt * $item->target_persentage) / 100 ) }}</td>
+                                                <td align="center">{{ $gF->persenDpt($persen_dari_target) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->tps) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($target / 25) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->korte_terisi) }}</td>
+                                                <td align="center">{{ $nilai_kurang_korte }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->korte_terisi * 25) }}</td>
+                                                <td align="center">{{ $nilai_blm_ada_kortps }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->saksi) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -84,16 +103,19 @@
                                         <td align="center"><b>{{ $jml_ketua }}</b></td>
                                         <td align="center"><b>{{ $jml_sekretaris }}</b></td>
                                         <td align="center"><b>{{ $jml_bendahara }}</b></td>
-                                        <td align="center"><b>{{ number_format($jml_dpt) }}</b></td>
-                                        <td align="center"><b>{{ number_format($jml_anggota) }}</b></td>
-                                        <td align="center"><b>{{ number_format($jml_target_korte) }}</b></td>
-                                        <td align="center"><b>{{ number_format($jml_korte_terisi) }}</b></td>
-                                        <td align="center"><b>{{ number_format($jml_kurang_korte) }}</b></td>
-                                        <td align="center"><b>{{ number_format($jml_saksi) }}</b></td>
-                                        <td align="center"><b>{{ number_format($jml_anggota_tercover) }}</b></td>
-                                        <td align="center"><b>{{ number_format($jml_blm_ada_korte) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_dpt) }}</b></td>
+                                        <td align="center"><b></b></td>
+                                        <td align="center"><b>{{$gF->decimalFormat($jml_target) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_anggota) }}</b></td>
                                         <td align="center"><b>{{ $gF->persenDpt($persentage_target) }}</b></td>
-                                        <td align="center"><b>{{number_format ($jml_target) }}</b></td>
+                                        <td align="center"><b>{{ $gF->persenDpt($persen_dari_target_kec) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_tps) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_target_korte) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_korte_terisi) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_kurang_korte) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_anggota_tercover) }}</b></td>
+                                        <td align="center"><b>{{ $jml_blm_ada_korte }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_saksi) }}</b></td>
                                       </tr>
                                     </tfoot>
                                   </table>

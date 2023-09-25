@@ -394,8 +394,7 @@ class OrgDiagram extends Model
 
 	public function getDataDaftarTimByKecamatan($districtId){
 
-		#get data desa by kecamatan
-        $sql = "SELECT a.id, a.name, a.target_persentage ,
+		$sql = "SELECT a.id, a.name, a.target_persentage ,
                 (select COUNT(id)  from org_diagram_village where title = 'KETUA' and village_id = a.id) as ketua,
                 (select COUNT(id)  from org_diagram_village where title = 'SEKRETARIS' and village_id = a.id) as sekretaris,
                 (select COUNT(id)  from org_diagram_village where title = 'BENDAHARA' and village_id = a.id) as bendahara,
@@ -407,7 +406,8 @@ class OrgDiagram extends Model
                 -- ((CEIL ((SELECT COUNT(id) from users WHERE village_id = a.id )/25))-(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )) as kurang_korte,
                 ((SELECT COUNT(id) from users WHERE village_id = a.id )-((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )*25)) as belum_ada_korte,
                 -- ((SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id )*(SELECT target_persentage from villages where id = a.id)/100) as target,
-				(SELECT COUNT(id) from witnesses WHERE village_id = a.id ) as saksi
+				(SELECT COUNT(id) from witnesses WHERE village_id = a.id ) as saksi,
+				(SELECT COUNT(*) from tps WHERE tps.village_id = a.id) tps
                 from villages as a
                 WHERE a.district_id = $districtId order by (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) desc";
         
