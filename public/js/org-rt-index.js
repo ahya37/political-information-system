@@ -608,6 +608,10 @@ $("#selectRt").change(async function () {
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
+        $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
+        $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
+        $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
+
         blmTerCover =
             parseInt(dataCover.data.anggota) -
             parseInt(dataCover.data.tercover);
@@ -646,6 +650,10 @@ $("#selectRt").change(async function () {
         );
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
+
+        $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
+        $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
+        $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
 
         blmTerCover =
             parseInt(dataCover.data.anggota) -
