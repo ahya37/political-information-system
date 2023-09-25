@@ -479,6 +479,7 @@ $("#selectVillageId").change(async function () {
         );
 
         $('.pengurus').show();
+       
 
         $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
         $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
@@ -655,6 +656,10 @@ $("#selectRt").change(async function () {
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
         
         $('.pengurus').show();
+        $("#pengKetua").show();
+        $("#pengSekre").show();
+        $("#pengBendahara").show();
+
         $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
         $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
         $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
