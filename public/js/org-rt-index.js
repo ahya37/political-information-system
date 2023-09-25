@@ -478,6 +478,8 @@ $("#selectVillageId").change(async function () {
             selectRT
         );
 
+        $('.pengurus').show();
+
         $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
         $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
         $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
@@ -608,9 +610,10 @@ $("#selectRt").change(async function () {
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
-        $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
-        $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
+        // $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
+        // $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
+        // $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
+        $('.pengurus').hide();
 
         blmTerCover =
             parseInt(dataCover.data.anggota) -
@@ -650,7 +653,8 @@ $("#selectRt").change(async function () {
         );
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
-
+        
+        $('.pengurus').show();
         $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
         $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
         $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
