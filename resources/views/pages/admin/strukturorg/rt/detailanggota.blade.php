@@ -2,7 +2,8 @@
 @section('title', 'Daftar Anggota Koordinator RT')
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/plugins/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/datatable/datatables.min.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
@@ -49,11 +50,11 @@
                         <td>{{ $kor_rt->name ?? '' }}</td>
                     </tr>
                 </table>
-                {{-- <div class="row mb-2">
+                <div class="row mb-2">
                     <div class="col-md-12 col-sm-12">
-                        <button class="btn btn-sm btn-sc-primary text-white"><i class="fa fa-plus"></i>Buat Keluarga Serumah</button>
+                        <button class="btn btn-sm btn-sc-primary text-white" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-plus"></i>Buat Keluarga Serumah</button>
                     </div>
-                </div> --}}
+                </div>
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
@@ -180,6 +181,26 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Buat Keluarga Serumah</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group" id="divKepalaKel">
+                            <label>Kepala Keluarga Serumah</label>
+                            <select name="kepalakel" id="selectKepalaKel" class="form-control filter kepalakel"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+      
 @endpush
 
 @push('addon-script')

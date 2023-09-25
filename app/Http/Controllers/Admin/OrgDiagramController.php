@@ -1566,6 +1566,27 @@ class OrgDiagramController extends Controller
         return $pdf->download('TPS TIM PEMENANGAN SUARA KORTE RT.' . $korte->rt . '(' . $korte->name . ') DS.' . $korte->village . '.pdf');
     }
 
+    public function getDataAnggotaByKortps(Request $request, $idx){
+
+        $data = DB::table('org_diagram_rt as a')
+            ->select('a.idx', 'a.name')
+            ->join('users as b', 'b.nik', '=', 'a.nik')
+            ->where('a.pidx', $idx);
+
+        if($request->has('q')){
+                $search = $request->q;
+                $data = DB::table('org_diagram_rt as a')
+                ->select('a.idx', 'a.name')
+                ->join('users as b', 'b.nik', '=', 'a.nik')
+                ->where('a.pidx', $idx)
+                ->Where('a.name', 'LIKE',"%$search%");
+        }
+
+        $data = $data->get();
+
+        return response()->json($data);
+    }
+
     public function getListDataAnggotaByKorRt(Request $request)
     {
 
@@ -1583,7 +1604,7 @@ class OrgDiagramController extends Controller
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
             ->leftJoin('tps as e', 'b.tps_id', '=', 'e.id')
-            ->where('pidx', $request->idx);
+            ->where('a.pidx', $request->idx);
 
 
         if ($request->input('search.value') != null) {

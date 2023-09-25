@@ -1,6 +1,42 @@
 const url = window.location.pathname;
 const idx = url.substring(url.lastIndexOf('/') + 1);
 
+function getDataAnggota(idx){
+
+    // GET ANGGOTA BERDASARKAN SORTIR
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+
+    $(".kepalakel").select2({
+        theme: "bootstrap4",
+        width: $(this).data("width")
+            ? $(this).data("width")
+            : $(this).hasClass("w-100")
+                ? "100%"
+                : "style",
+        placeholder: "Pilih",
+        allowClear: Boolean($(this).data("allow-clear")),
+        ajax: {
+            dataType: "json",
+            url: `/api/org/getdataanggotabykortpsforkeluargaserumah/${idx}`,
+            method: 'GET',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            text: item.name,
+                            id: item.idx,
+                        };
+                    }),
+                };
+            },
+        },
+    });
+    
+}
+
+getDataAnggota(idx);
+
 let table = $("#data").DataTable({
     pageLength: 100,
 
