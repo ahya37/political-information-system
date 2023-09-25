@@ -476,7 +476,8 @@ class OrgDiagram extends Model
 					from org_diagram_rt as odr
 					join dapil_areas da2 on odr.district_id = da2.district_id
 					WHERE odr.base = 'KORRT' and odr.nik is not null and da2.dapil_id = a.id
-				) as korte_terisi
+				) as korte_terisi,
+				(SELECT COUNT(tps.id) from tps join dapil_areas on tps.district_id = dapil_areas.district_id where dapil_areas.dapil_id = a.id ) tps
 				from dapils as a where a.regency_id = $regencyId";	
 
 		return DB::select($sql);
@@ -501,7 +502,8 @@ class OrgDiagram extends Model
 					from org_diagram_rt as odr
 					join dapil_areas da2 on odr.district_id = da2.district_id
 					WHERE odr.base = 'KORRT' and odr.nik is not null and da2.dapil_id = a.id
-				) as korte_terisi
+				) as korte_terisi,
+				(SELECT COUNT(tps.id) from tps join dapil_areas on tps.district_id = dapil_areas.district_id where dapil_areas.dapil_id = a.id ) tps
 				from dapils as a where a.regency_id = $regencyId and a.id = $dapilId";	
 
 		return DB::select($sql);
@@ -511,7 +513,8 @@ class OrgDiagram extends Model
 
 		$sql = "SELECT a.name,
 						((SELECT COUNT(id) from users WHERE village_id = a.id )/25)as target_korte,
-						(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi
+						(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi,
+						(SELECT COUNT(tps.id) from tps WHERE tps.village_id = a.id ) as tps
 						from villages as a
 						WHERE a.district_id = $districtId";	
 
@@ -522,7 +525,8 @@ class OrgDiagram extends Model
 
 		$sql = "SELECT a.name,
 						((SELECT COUNT(id) from users WHERE village_id = a.id )/25)as target_korte,
-						(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi
+						(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi,
+						(SELECT COUNT(tps.id) from tps WHERE tps.village_id = a.id ) as tps
 						from villages as a
 						WHERE a.id = $villageId";	
 

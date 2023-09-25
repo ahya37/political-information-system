@@ -93,7 +93,15 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 mt-2 mb-2">
+                    <div class="col-md-3 mt-2 mb-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">TPS</h5>
+                                <h5 id="jmltps"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-2 mb-2">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Target Kor TPS</h5>
@@ -101,7 +109,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mt-2 mb-2">
+                    <div class="col-md-3 mt-2 mb-2">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Kor TPS Terisi</h5>
@@ -109,7 +117,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mt-2 mb-2">
+                    <div class="col-md-3 mt-2 mb-2">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Kurang Kor TPS</h5>

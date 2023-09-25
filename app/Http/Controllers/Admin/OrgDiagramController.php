@@ -148,12 +148,17 @@ class OrgDiagramController extends Controller
         $kortps_terisi      = collect($results)->sum(function($q){
             return $q->korte_terisi ?? 0;
         });
+
+        $tps = collect($results)->sum(function($q){
+            return $q->tps ?? 0;
+        });
         
 
         $data_results = [
             'target_kortps' => $gF->decimalFormat($target_kortps),
             'kortps_terisi' => $gF->decimalFormat($kortps_terisi),
             'kurang_kortps' =>  $gF->decimalFormat($kortps_terisi - $target_kortps),
+            'tps' => $gF->decimalFormat($tps)
         ];
 
         return response()->json([

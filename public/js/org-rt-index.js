@@ -105,6 +105,7 @@ async function initialGetAnggotaCoverFirst() {
         selectVillageId,
         selectRT
     );
+    $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
     $("#targetkortps").text(` ${numberWithDot(dataKortps.data.target_kortps)}`);
     $("#kortpsterisi").text(` ${numberWithDot(dataKortps.data.kortps_terisi)}`);
     $("#kurangtpsterisi").text(
@@ -147,6 +148,10 @@ async function initialGetKortps(
                     .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>`);
+                $("#jmltps")
+                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>`);
             },
             success: function () {},
             complete: function (data) {
@@ -170,6 +175,7 @@ $("#selectListArea").change(async function () {
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
         $("#targetkortps").empty();
+        $("#jmltps").empty();
 
         $("#selectDistrictId").show();
         $("#selectDistrictId").append(
@@ -211,7 +217,7 @@ $("#selectListArea").change(async function () {
             null,
             null
         );
-
+        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
         $("#targetkortps").text(
             ` ${numberWithDot(dataKortps.data.target_kortps)}`
         );
@@ -242,6 +248,7 @@ $("#selectListArea").change(async function () {
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
         $("#targetkortps").empty();
+        $("#jmltps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -264,6 +271,7 @@ $("#selectListArea").change(async function () {
             null,
             null
         );
+        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
 
         $("#targetkortps").text(
             ` ${numberWithDot(dataKortps.data.target_kortps)}`
@@ -275,6 +283,7 @@ $("#selectListArea").change(async function () {
         $("#kurangtpsterisi").text(
             ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
         );
+        
 
         table.ajax.reload(null, false);
     }
@@ -317,6 +326,7 @@ $("#selectDistrictId").change(async function () {
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
         $("#targetkortps").empty();
+        $("#jmltps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -344,6 +354,7 @@ $("#selectDistrictId").change(async function () {
             null,
             null
         );
+        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
 
         $("#targetkortps").text(
             ` ${numberWithDot(dataKortps.data.target_kortps)}`
@@ -376,6 +387,7 @@ $("#selectDistrictId").change(async function () {
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
         $("#targetkortps").empty();
+        $("#jmltps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -398,6 +410,7 @@ $("#selectDistrictId").change(async function () {
             null,
             null
         );
+        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
 
         $("#targetkortps").text(
             ` ${numberWithDot(dataKortps.data.target_kortps)}`
@@ -409,6 +422,12 @@ $("#selectDistrictId").change(async function () {
         $("#kurangtpsterisi").text(
             ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
         );
+
+        $(".pengurus").hide();
+    
+        $("#pengKetua").empty();
+        $("#pengSekre").empty();
+        $("#pengBendahara").empty();
 
         table.ajax.reload(null, false);
     }
@@ -450,6 +469,7 @@ $("#selectVillageId").change(async function () {
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
         $("#targetkortps").empty();
+        $("#jmltps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -478,6 +498,7 @@ $("#selectVillageId").change(async function () {
             null
         );
 
+        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
         $("#targetkortps").text(
             ` ${numberWithDot(dataKortps.data.target_kortps)}`
         );
@@ -513,6 +534,7 @@ $("#selectVillageId").change(async function () {
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
         $("#targetkortps").empty();
+        $("#jmltps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -541,6 +563,7 @@ $("#selectVillageId").change(async function () {
             null
         );
 
+        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
         $("#targetkortps").text(
             ` ${numberWithDot(dataKortps.data.target_kortps)}`
         );
@@ -613,6 +636,7 @@ $("#selectRt").change(async function () {
         $("#kortpsterisi").empty();
         $("#kurangtpsterisi").empty();
         $("#targetkortps").empty();
+        $("#jmltps").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
