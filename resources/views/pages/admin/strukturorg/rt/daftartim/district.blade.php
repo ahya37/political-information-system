@@ -72,12 +72,12 @@
                                                 <td align="center" style="{{ $item->bendahara == 0 ? "background: #ed7d31" : '' }}">{{ $item->bendahara }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->dpt) }}</td>
                                                 <td align="center">{{ $item->target_persentage }}</td>
-                                                <td align="center">{{ $item->target_persentage > 0 ? $gF->decimalFormat(($item->dpt * $item->target_persentage) / 100 ) : 0 }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($target)}}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->anggota) }}</td>
                                                 <td align="center">{{ $gF->persenDpt(($item->anggota / $item->dpt)*100) }}</td>
                                                 <td align="center">{{ $gF->persenDpt($persen_dari_target) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->tps) }}</td>
-                                                <td align="center">{{ $gF->decimalFormat($item->target_korte) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($target / 25) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->korte_terisi) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($nilai_kurang_korte) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->korte_terisi * 25) }}</td>
