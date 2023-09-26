@@ -1,8 +1,7 @@
 const url = window.location.pathname;
-const idx = url.substring(url.lastIndexOf('/') + 1);
+const idx = url.substring(url.lastIndexOf("/") + 1);
 
-function getDataAnggota(idx){
-
+function getDataAnggota(idx) {
     // GET ANGGOTA BERDASARKAN SORTIR
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
@@ -11,14 +10,14 @@ function getDataAnggota(idx){
         width: $(this).data("width")
             ? $(this).data("width")
             : $(this).hasClass("w-100")
-                ? "100%"
-                : "style",
+            ? "100%"
+            : "style",
         placeholder: "Pilih",
         allowClear: Boolean($(this).data("allow-clear")),
         ajax: {
             dataType: "json",
             url: `/api/org/getdataanggotabykortpsforkeluargaserumah/${idx}`,
-            method: 'GET',
+            method: "GET",
             delay: 250,
             processResults: function (data) {
                 return {
@@ -32,10 +31,39 @@ function getDataAnggota(idx){
             },
         },
     });
-    
 }
 
 getDataAnggota(idx);
+initialGetDataAnggotaForMemberfamilly(idx);
+
+async function initialGetDataAnggotaForMemberfamilly(idx){
+    const results = await getDataAnggotaForMemberfamilly(idx);
+    getDataAnggotaForMemberfamillyUi(results);
+}
+
+async function getDataAnggotaForMemberfamilly(idx) {
+    
+    return fetch(
+        `/api/org/getdataanggotabykortpsforkeluargaserumah/${idx}`
+    ).then((response) => {
+        return response.json();
+    });
+}
+
+function getDataAnggotaForMemberfamillyUi(responseData) {
+    let divHtmlMember = "";
+    responseData.forEach((m) => {
+        divHtmlMember += shoWdivHtmlMember(m);
+    });
+    const divHtmlMemberContainer = $("#divHtmlMemberContainer");
+    divHtmlMemberContainer.append(divHtmlMember);
+}
+
+function shoWdivHtmlMember(m) {
+    return `
+        <br><input type="checkbox" name="members[]" value="${m.idx}"> ${m.name}
+    `;
+}
 
 let table = $("#data").DataTable({
     pageLength: 100,
@@ -60,7 +88,7 @@ let table = $("#data").DataTable({
             targets: 0,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.no
+                return row.no;
             },
         },
         {
@@ -85,7 +113,7 @@ let table = $("#data").DataTable({
         {
             targets: 4,
             render: function (data, type, row, meta) {
-                return `<p>${row.phone_number ?? ''}</p>`;
+                return `<p>${row.phone_number ?? ""}</p>`;
             },
         },
         {
@@ -96,30 +124,29 @@ let table = $("#data").DataTable({
                         <a href="/admin/struktur/rt/edittps/anggota/${row.id}" class="btn btn-sm btn-warning">Edit TPS</a>
                         <a href="/admin/struktur/rt/edit/anggota/${row.id}" class="btn btn-sm btn-info text-white">Edit</a>
                         <button class="btn btn-sm btn-sc-primary text-white" data-name="${row.name}" data-whatever="${row.id}" data-toggle="modal" data-target="#exampleModal">Stiker</button>
-                        <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>`
-
+                        <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>`;
             },
         },
     ],
 });
 
-$('#exampleModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget)
-    var recipient = button.data('whatever')
-    var name = button.data('name')
-    var modal = $(this)
-    modal.find('.modal-title').text('Upload Stiker ' + name)
-    modal.find('#recipient-name').val(recipient)
-})
+$("#exampleModal").on("show.bs.modal", function (event) {
+    var button = $(event.relatedTarget);
+    var recipient = button.data("whatever");
+    var name = button.data("name");
+    var modal = $(this);
+    modal.find(".modal-title").text("Upload Stiker " + name);
+    modal.find("#recipient-name").val(recipient);
+});
 
-$('#exampleModal2').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget)
-    var recipient = button.data('whatever')
-    var name = button.data('name')
-    var modal = $(this)
-    modal.find('.modal-title').text('Yakin Hapus ' + name + '?')
-    modal.find('#recipient-name2').val(recipient)
-})
+$("#exampleModal2").on("show.bs.modal", function (event) {
+    var button = $(event.relatedTarget);
+    var recipient = button.data("whatever");
+    var name = button.data("name");
+    var modal = $(this);
+    modal.find(".modal-title").text("Yakin Hapus " + name + "?");
+    modal.find("#recipient-name2").val(recipient);
+});
 
 async function onDelete(data) {
     const id = data.id;
@@ -128,12 +155,12 @@ async function onDelete(data) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     Swal.fire({
         title: `Yakin hapus ${name}`,
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Hapus',
-        cancelButtonText: 'Batal',
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
@@ -152,8 +179,7 @@ async function onDelete(data) {
                         showConfirmButton: false,
                         width: 500,
                         timer: 900,
-                    },
-                    );
+                    });
                     const table = $("#data").DataTable();
                     table.ajax.reload();
                 },
@@ -169,7 +195,5 @@ async function onDelete(data) {
                 },
             });
         }
-    })
-
-
+    });
 }

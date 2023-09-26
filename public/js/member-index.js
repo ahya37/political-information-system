@@ -383,7 +383,7 @@ function downloadExcel() {
 }
 // GET DATA BY PROVINCE
 
-function getDapilRegency(province) {
+async function getDapilRegency(province) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     return fetch(`/api/dapilbyprovinceid/${province}`).then((response) => {
         return response.json();

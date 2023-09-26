@@ -196,6 +196,13 @@
                             <select name="kepalakel" id="selectKepalaKel" class="form-control filter kepalakel"></select>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group" id="divHtmlMemberContainer">
+                            <label>Pilih Anggota Keluarga</label>
+                            <br>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
