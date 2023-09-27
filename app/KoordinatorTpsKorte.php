@@ -9,12 +9,13 @@ class KoordinatorTpsKorte extends Model
 {
 	protected $table    = 'anggota_koordinator_tps_korte';
     protected  $guarded = [];
-    public function store($idx, $request, $name, $auth){
+
+    public function stores($idx, $request, $name, $auth){
 		
 		$sql = DB::table('anggota_koordinator_tps_korte')->insert([
 			'nik' => $request->nik,
 			'pidx_korte' => $idx,
-			'name' => strtoupper($name),
+			'name' => $name,
 			'created_by' => $auth
 		]);
 		

@@ -190,19 +190,26 @@
                     <h5 class="modal-title" id="exampleModalLabel">Buat Keluarga Serumah</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12">
-                        <div class="form-group" id="divKepalaKel">
-                            <label>Kepala Keluarga Serumah</label>
-                            <select name="kepalakel" id="selectKepalaKel" class="form-control filter kepalakel"></select>
+                    <form action="{{ route('admin-keluargaserumah-store',$korte_idx) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="col-md-12">
+                            <div class="form-group" id="divKepalaKel">
+                                <label>Pilih Kepala Keluarga Serumah</label>
+                                <select name="kepalakel" id="selectKepalaKel" class="form-control filter kepalakel"></select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group" id="divHtmlMemberContainer">
-                            <label>Pilih Anggota Keluarga</label>
-                            <br>
+                        <div class="col-md-12">
+                            <div class="form-group" id="divHtmlMemberContainer">
+                                <label>Pilih Anggota Keluarga</label>
+                                <br>
+                            </div>
                         </div>
-                    </div>
-
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button class="btn btn-sm btn-sc-primary text-white">Simpan</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DetailFamilyGroup;
 use App\Exports\AnggotaBelumTercoverKortps;
 use App\Exports\KorteExportWithSheet;
 use App\Sticker;
@@ -22,12 +23,12 @@ use App\Exports\KorDesExport;
 use App\Exports\KorCamExport;
 use App\Exports\KorteExport;
 use App\Exports\KorteMembersExport;
+use App\FamilyGroup;
 use App\Models\District;
 use App\Models\Village;
 use PDF;
 use Zipper;
 use File;
-use Storage;
 
 class OrgDiagramController extends Controller
 {
@@ -1566,25 +1567,41 @@ class OrgDiagramController extends Controller
         return $pdf->download('TPS TIM PEMENANGAN SUARA KORTE RT.' . $korte->rt . '(' . $korte->name . ') DS.' . $korte->village . '.pdf');
     }
 
-    public function getDataAnggotaByKortps(Request $request, $idx){
+    public function getDataAnggotaByKortpsForFamillyGroup(Request $request, $idx){
 
         $data = DB::table('org_diagram_rt as a')
-            ->select('a.idx', 'a.name')
+            ->select('a.idx', 'a.name', 
+                        DB::raw('(select count(id) from family_group where nik = a.nik) as cek_kepkeluarga'),
+                        DB::raw('(select count(id) from detail_family_group where nik = a.nik) as cek_member')
+                   )
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->where('a.pidx', $idx);
 
         if($request->has('q')){
                 $search = $request->q;
                 $data = DB::table('org_diagram_rt as a')
-                ->select('a.idx', 'a.name')
+                ->select('a.idx', 'a.name',
+                            DB::raw('(select count(id) from family_group where nik = a.nik) as cek_kepkeluarga'),
+                            DB::raw('(select count(id) from detail_family_group where nik = a.nik) as cek_member')
+                        )
                 ->join('users as b', 'b.nik', '=', 'a.nik')
                 ->where('a.pidx', $idx)
                 ->Where('a.name', 'LIKE',"%$search%");
         }
 
-        $data = $data->get();
+        $data    = $data->get();
+        $results = [];
+        // kirim data yang hanya belum terdaftar sebagai keluarga serumah
+        foreach ($data as  $value) {
+            if ($value->cek_kepkeluarga == 0 AND $value->cek_member == 0) {
+                $results[] = [
+                    'idx' => $value->idx,
+                    'name' => $value->name
+                ];
+            }
+        }
 
-        return response()->json($data);
+        return response()->json($results);
     }
 
     public function getListDataAnggotaByKorRt(Request $request)
@@ -3249,13 +3266,14 @@ class OrgDiagramController extends Controller
         }else{
 
             // cek ke table users apakah ada anggota dengan nik tersebut
-            $member = User::select('name', 'nik')->where('nik', $request->nik)->first();
+            // $member = User::select('name', 'nik')->where('nik', $request->nik)->first();
             // jika ada sesuaikan namanya by nik yg ada di table users
-            $name   = $member == null ? $request->name : $member->name;
+            // $name   = $member == null ? strtoupper($request->name) : strtoupper($member->name);
+            $name   = strtoupper($request->name);
     
             $auth = auth()->guard('admin')->user()->id;
     
-            $koorModel->store($idx, $request, $name, $auth);
+            $koorModel->stores($idx, $request, $name, $auth);
     
             return redirect()->back()->with(['success' => 'Anggota berhasil disimpan!']);
         } 
@@ -3513,6 +3531,61 @@ class OrgDiagramController extends Controller
         $no = 1;
 
         return view('pages.admin.strukturorg.rt.daftartim.village', compact('jml_tps','persen_dari_target_kec','gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi'));
+    }
+
+    public function storeKeluargaSerumahByKorTps(Request $request, $idx){
+
+        DB::beginTransaction();
+
+        try {
+            $this->validate($request, [
+                'kepalakel' => 'required',
+            ]);
+    
+            // get and nik by idx korte
+            $data_org = DB::table('org_diagram_rt as a')
+                        ->select('a.nik','b.id')
+                        ->join('users as b','a.nik','=','b.nik')
+                        ->where('a.idx', $request->kepalakel)
+                        ->first();
+    
+            // insert ke tbl familly group
+            $famillyGroup = FamilyGroup::create([
+                'user_id' => $data_org->id,
+                'nik' => $data_org->nik,
+                'pidx_korte' => $idx,
+                'cby' => auth()->guard('admin')->user()->id 
+            ]);
+    
+            // insert ke detail familly group
+            $member['members'] = $request->members;
+            foreach ($member['members'] as $key => $value) {
+
+                // jangan simpan jika member nya terpilih sebagai kepala keluarga
+                if ($request->kepalakel != $value) {
+                    $data_org = DB::table('org_diagram_rt as a')
+                            ->select('a.nik','b.id')
+                            ->join('users as b','a.nik','=','b.nik')
+                            ->where('a.idx', $value)
+                            ->first();
+    
+                    $members = new DetailFamilyGroup();
+                    $members->family_group_id = $famillyGroup->id;
+                    $members->user_id = $data_org->id;
+                    $members->nik = $data_org->nik;
+                    $members->pidx_korte = $idx;
+                    $members->save();
+                }
+            }
+
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Data berhasil tersimpan!']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['error' => 'Data gagal tersimpan!']);
+        }
+
+
     }
 
 
