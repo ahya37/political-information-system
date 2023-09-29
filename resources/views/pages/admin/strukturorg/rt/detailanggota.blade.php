@@ -55,23 +55,84 @@
                         <button class="btn btn-sm btn-sc-primary text-white" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-plus"></i>Buat Keluarga Serumah</button>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-body">
-                                <table id="data" class="table table-sm table-striped" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">NO</th>
-                                            <th scope="col">NAMA</th>
-                                            <th scope="col">ALAMAT</th>
-                                            <th scope="col">TPS</th>
-                                            <th scope="col">NO HP / WA</th>
-                                            <th scope="col">OPSI</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
+                                <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                      <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Per Kor TPS</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                      <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Keluarga Serumah</button>
+                                    </li>
+                                  </ul>
+                                  <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        <table id="data" class="table table-sm table-striped" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">NO</th>
+                                                    <th scope="col">NAMA</th>
+                                                    <th scope="col">ALAMAT</th>
+                                                    <th scope="col">TPS</th>
+                                                    <th scope="col">NO HP / WA</th>
+                                                    <th scope="col">OPSI</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                        @foreach ($resultsFamilyGroup as $item)
+                                        <div class="card mb-2">
+                                            <div class="card-body">
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-11">
+                                                            <h5 class="card-title">{{ $no_head_familly++ }}. {{ $item['head_famlly_name'] }}</h5>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <button class="btn btn-sm fa fa-trash text-danger" onclick="onDeleteHeadFamilyGroup(this)" data-name="{{ $item['head_famlly_name'] }}" id="{{ $item['id'] }}"></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <table id="familyGroup" class="table table-sm table-striped familyGroup" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="col-sm-1">NO</th>
+                                                            <th>NAMA</th>
+                                                            <th>ALAMAT</th>
+                                                            <th>TPS</th>
+                                                            <th>NO HP / WA</th>
+                                                            <th>OPSI</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @php
+                                                            $no_members_familly = 1;
+                                                        @endphp
+                                                        @foreach ($item['members'] as $row)
+                                                            <tr>
+                                                                <td>{{ $no_members_familly++ }}</td>
+                                                                <td>{{ $row->name }}</td>
+                                                                <td>{{ $row->address, 'DS.'.$row->village.', KEC.'.$row->district }}</td>
+                                                                <td>{{ $row->tps_number }}</td>
+                                                                <td>{{ $row->telp }}</td>
+                                                                <td>
+                                                                    <button type="button" class="btn btn-sm btn-danger" onclick="onDeleteMemberFamilyGroup(this)" data-name="{{ $row->name }}" id="{{ $row->id }}"><i class="fa fa-trash"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                  </div>
+
                             </div>
                         </div>
 
@@ -194,13 +255,13 @@
                         @csrf
                         <div class="col-md-12">
                             <div class="form-group" id="divKepalaKel">
-                                <label>Pilih Kepala Keluarga Serumah</label>
+                                <label>Pilih Kepala Keluarga Serumah :</label>
                                 <select name="kepalakel" id="selectKepalaKel" class="form-control filter kepalakel"></select>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group" id="divHtmlMemberContainer">
-                                <label>Pilih Anggota Keluarga</label>
+                                <label>Pilih Anggota Keluarga :</label>
                                 <br>
                             </div>
                         </div>
@@ -226,5 +287,6 @@
     <script>
         AOS.init();
         $('#anggotakortps').DataTable();
+        $('.familyGroup').DataTable();
     </script>
 @endpush

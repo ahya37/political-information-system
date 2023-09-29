@@ -93,7 +93,8 @@ Route::post('org/pusat/delete', 'Admin\OrgDiagramController@deleteKorPusat');
 Route::post('org/pusat/update', 'Admin\OrgDiagramController@updateOrgPusat');
 
 Route::get('org/getdataanggotabykortpsforkeluargaserumah/{idx}', 'Admin\OrgDiagramController@getDataAnggotaByKortpsForFamillyGroup');
-
+Route::post('org/rt/anggotakeluargaserumah/delete', 'Admin\OrgDiagramController@deleteDataAnggotaByKortpsForFamillyGroup');
+Route::post('org/rt/headkeluargaserumah/delete', 'Admin\OrgDiagramController@deleteDataHeadByKortpsForFamillyGroup');
 
 #TPS
 Route::post('/list/tps', 'Admin\TpsController@getDataTps');
