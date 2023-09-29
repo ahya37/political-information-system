@@ -123,14 +123,14 @@
         <div class="collapse" id="dapil" aria-expanded="false">
             <ul class="flex-column pl-2 nav">
                 <li class="nav-item">
-                    <a href="{{ route('admin-dapil') }}"
+                    {{-- <a href="{{ route('admin-dapil') }}"
                         class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/admincontrol/district') ? 'active custom-active-color' : '' }}">
                         Daftar Dapil
                     </a>
                     <a href="{{ route('admin-dapil-create') }}"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/dapil/create') ? 'active custom-active-color' : '' }}">
                         Tambah Dapil
-                    </a>
+                    </a> --}}
                     <a href="{{ route('admin-tps') }}"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/tps') ? 'active custom-active-color' : '' }}">
                         TPS
