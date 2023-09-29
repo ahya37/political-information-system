@@ -32,6 +32,8 @@ Route::post('getrtbyvillage', 'API\LocationController@getRTByVIllage');
 Route::post('getkampungbyvillage', 'API\LocationController@getKampungByVIllage');
 Route::post('getrtbyvillageNew', 'API\LocationController@getRTByVIllageNew');
 
+Route::post('gettpsbyvillage', 'API\LocationController@getTpsVIllage');
+
 Route::post('intelegency/addElement', 'Admin\InformationController@addElementFormIntelegence');
 
 

@@ -51,6 +51,12 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select name="tps" id="selectTps" class="form-control filter">
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="col-md-12">

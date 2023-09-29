@@ -2,6 +2,7 @@ let selectListArea = $("#selectListArea").val();
 let selectDistrictId = $("#selectDistrictId").val();
 let selectVillageId = $("#selectVillageId").val();
 let selectRT = $("#selectRt").val();
+let selectTps = $("#selectTps").val();
 $(".pengurus").hide();
 // KABKOT , langsung get dapil by kab lebak
 
@@ -15,7 +16,6 @@ async function initialGetAnggotaCover(
     selectVillageId,
     selectRT
 ) {
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
 
     return new Promise((resolve, reject) => {
         const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
@@ -442,6 +442,7 @@ $("#selectVillageId").change(async function () {
 
     if (selectVillageId !== "") {
         const dataRT = await getListRT(selectVillageId);
+
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
@@ -449,6 +450,10 @@ $("#selectVillageId").change(async function () {
         selectVillageId = $("#selectVillageId").val();
         $("#selectRt").append("<option value=''>-Pilih RT-</option>");
         getListRTUi(dataRT);
+        
+        const dataTps = await getListTps(selectVillageId);
+        $("#selectTps").append("<option value=''>-Pilih TPS-</option>");
+        getListTpsUi(dataTps);
 
         table.ajax.reload(null, false);
 
@@ -671,6 +676,99 @@ $("#selectRt").change(async function () {
     }
 });
 
+// TPS
+$("#selectTps").change(async function () {
+    selectTps = $("#selectTps").val();
+
+    if (selectTps !== "") {
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+        selectTps = $("#selectTps").val();
+        table.ajax.reload(null, false);
+
+        // $("#reqprovince").val(province);
+        // $("#reqregency").val(selectArea);
+        $("#reqdapil").val(selectListArea);
+        $("#reqdistrict").val(selectDistrictId);
+        $("#reqvillage").val(selectVillageId);
+        $("#keterangan").empty();
+        geLocationVillageWithRt(selectVillageId, selectRT);
+
+        $("#anggota").empty();
+        $("#tercover").empty();
+        $("#blmtercover").empty();
+
+        const dataCover = await initialGetAnggotaCover(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
+
+        // $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
+        // $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
+        // $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
+        $('.pengurus').hide();
+
+        blmTerCover =
+            parseInt(dataCover.data.anggota) -
+            parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
+    } else {
+        // province = $("#province").val();
+        // selectArea = $("#selectArea").val();
+        selectListArea = $("#selectListArea").val();
+        selectDistrictId = $("#selectDistrictId").val();
+        selectVillageId = $("#selectVillageId").val();
+        selectRT = $("#selectRt").val();
+        selectTps = $("#selectTps").val();
+
+        table.ajax.reload(null, false);
+
+        // $("#reqprovince").val(province);
+        // $("#reqregency").val(selectArea);
+        $("#reqdapil").val(selectListArea);
+        $("#reqdistrict").val(selectDistrictId);
+        $("#reqvillage").val("");
+        $("#keterangan").empty();
+        geLocationVillage(selectVillageId);
+
+        $("#anggota").empty();
+        $("#tercover").empty();
+        $("#blmtercover").empty();
+        $("#kortpsterisi").empty();
+        $("#kurangtpsterisi").empty();
+        $("#targetkortps").empty();
+        $("#jmltps").empty();
+
+        const dataCover = await initialGetAnggotaCover(
+            selectListArea,
+            selectDistrictId,
+            selectVillageId,
+            selectRT
+        );
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
+        
+        $('.pengurus').show();
+        $("#pengKetua").show();
+        $("#pengSekre").show();
+        $("#pengBendahara").show();
+
+        $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
+        $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
+        $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
+
+        blmTerCover =
+            parseInt(dataCover.data.anggota) -
+            parseInt(dataCover.data.tercover);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
+    }
+});
+
 async function getDapilRegency(province) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     const response = await fetch(`/api/dapilbyprovinceid/${province}`);
@@ -788,6 +886,38 @@ function showDivHtmlVillage(m) {
     return `<option value="${m.id}">${m.name}</option>`;
 }
 
+// GET data TPS
+async function getListTps(villageId){
+    $("#selectTps").append("<option value=''>Loading..</option>");
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    const response = await fetch(`/api/gettpsbyvillage`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "appliacation/json",
+        },
+        body: JSON.stringify({
+            token: CSRF_TOKEN,
+            village_id: villageId,
+        }),
+    });
+    $("#selectTps").empty();
+    return await response.json();
+}
+
+function getListTpsUi(dataTps) {
+    let divTps = "";
+    dataTps.forEach((m) => {
+        divTps += showDivHtmlTps(m);
+    });
+    const divTpsContainer = $("#selectTps");
+    divTpsContainer.append(divTps);
+}
+function showDivHtmlTps(m) {
+    return `<option value="${m.id}">${m.tps_number}</option>`;
+}
+
+
 // GET data RT
 async function getListRT(villageId) {
     $("#selectRt").append("<option value=''>Loading..</option>");
@@ -836,6 +966,7 @@ let table = $("#data").DataTable({
             d.district = selectDistrictId;
             d.village = selectVillageId;
             d.rt = selectRT;
+            d.tps = selectTps;
             return d;
         },
     },

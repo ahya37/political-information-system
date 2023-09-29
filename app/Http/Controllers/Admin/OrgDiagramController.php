@@ -1063,6 +1063,10 @@ class OrgDiagramController extends Controller
             $data->where('a.rt', $request->rt);
         }
 
+        if ($request->input('tps') != null) {
+            $data->where('b.tps_id', $request->tps);
+        }
+
 
         $recordsFiltered = $data->get()->count();
         if ($request->input('length') != -1) $data = $data->skip($request->input('start'))->take($request->input('length'));

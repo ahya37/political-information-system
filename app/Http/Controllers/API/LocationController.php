@@ -224,6 +224,16 @@ class LocationController extends Controller
         return response()->json($rt);
     }
 
+    public function getTpsVIllage(){
+
+        $rt = DB::table('tps')->select('id','tps_number')
+                ->groupBy('id')
+                ->groupBy('tps_number')
+                ->where('village_id',request()->village_id)->get();
+                
+        return response()->json($rt);
+    }
+
     public function getRTByVIllageNew(){
 
         $address = request()->address;
