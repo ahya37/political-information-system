@@ -1535,7 +1535,37 @@ class OrgDiagramController extends Controller
 
         $no = 1;
         $korte_idx = $idx;
-        return view('pages.admin.strukturorg.rt.detailanggota', compact('kor_rt', 'anggotaKorTps', 'no', 'korte_idx'));
+
+        // keluarga serumah
+        $famillyGroup = DB::table('family_group as a')
+                        ->select('a.id','b.name','b.photo')
+                        ->leftJoin('users as b','a.nik','=','b.nik')
+                        ->where('a.pidx_korte', $idx)
+                        ->get();
+        // anggota keluarga serumah
+        $resultsFamilyGroup = [];
+        foreach ($famillyGroup as $key => $value) {
+            $members = DB::table('detail_family_group as a')
+                    ->select('a.id','b.name','b.photo','b.address','c.name as village','d.name as district','e.tps_number','f.telp')
+                    ->join('users as b','a.nik','=','b.nik')
+                    ->join('villages as c','b.village_id','=','c.id')
+                    ->join('districts as d','c.district_id','=','d.id')
+                    ->leftJoin('tps as e','b.tps_id','=','e.id')
+                    ->join('org_diagram_rt as f','a.nik','=','f.nik')
+                    ->where('a.family_group_id', $value->id)
+                    ->get();
+
+            $resultsFamilyGroup[] = [
+                'id' => $value->id,
+                'head_famlly_name' => $value->name,
+                'head_famlly_photo' => $value->photo,
+                'members' => $members
+            ];
+        }
+
+        $no_head_familly    = 1;
+
+        return view('pages.admin.strukturorg.rt.detailanggota', compact('kor_rt', 'anggotaKorTps', 'no', 'korte_idx','no_head_familly','resultsFamilyGroup'));
     }
 
     public function downloadMembersRt($idx)
@@ -3631,6 +3661,53 @@ class OrgDiagramController extends Controller
         $no = 1;
 
         return view('pages.admin.strukturorg.rt.daftartim.village', compact('jml_tps','persen_dari_target_kec','gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi'));
+    }
+
+    public function deleteDataAnggotaByKortpsForFamillyGroup(){
+
+        DB::beginTransaction();
+        try {
+
+            $id   = request()->id;
+
+            DB::table('detail_family_group')->where('id', $id)->delete();
+
+            #mekanisme sortir idx jika ada yang terhapus
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil hapus anggota!'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error'   => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function deleteDataHeadByKortpsForFamillyGroup(){
+
+        DB::beginTransaction();
+        try {
+
+            $id   = request()->id;
+
+            DB::table('detail_family_group')->where('family_group_id', $id)->delete();
+            DB::table('family_group')->where('id', $id)->delete();
+
+            #mekanisme sortir idx jika ada yang terhapus
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil hapus anggota!'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error'   => $e->getMessage()
+            ]);
+        }
     }
 
 
