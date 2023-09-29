@@ -272,7 +272,7 @@
             </ul>
         </div>
 
-        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
+        {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
             href="#familygroup" data-toggle="collapse" data-target="#familygroup">
             <span class="d-none d-sm-inline"></span>Keluarga Serumah</a>
         <div class="collapse" id="familygroup" aria-expanded="false">
@@ -288,7 +288,7 @@
                             Buat Daftar Keluarga</span></a>
                 </li>
             </ul>
-        </div>
+        </div> --}}
 
         {{-- <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/questionnaire/*') ? 'active custom-active-color' : '' }}"
             href="#questionnaire" data-toggle="collapse" data-target="#questionnaire">
