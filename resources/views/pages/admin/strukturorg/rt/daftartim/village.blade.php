@@ -73,6 +73,8 @@
                                                 $nilai_kurang_korte = '+'.$gF->decimalFormat($nilai_kurang_korte);
                                             }
 
+                                            $tercapai_dpt = $item->anggota > 0 ? ($item->anggota / $item->dpt)*100 : 0;
+
                                         @endphp
                                             <tr>
                                                 <td align="center">{{ $no++ }}</td>
@@ -84,7 +86,7 @@
                                                 <td align="center">{{ $gF->decimalFormat($item->target_persentage) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat(($target)) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->anggota) }}</td>
-                                                <td align="center">{{ $gF->persenDpt(($item->anggota / $item->dpt)*100) }}</td>
+                                                <td align="center">{{ $gF->persenDpt(($tercapai_dpt)) }}</td>
                                                 <td align="center">{{ $gF->persenDpt($persen_dari_target) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->tps) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($target / 25) }}</td>
