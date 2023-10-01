@@ -69,14 +69,14 @@ class RewardAdminExport implements FromCollection,WithHeadings, WithEvents
                     ]
                 ]);
 
-                $data = $this->collection();
-                $total = collect($data)->sum(function($q){
-                    return $q['nominal'];
-                });
+                // $data = $this->collection();
+                // $total = collect($data)->sum(function($q){
+                //     return $q['nominal'];
+                // });
 
-                $event->sheet->appendRows(array(
-                    array('Total','','','','',$total),
-                ), $event);
+                // $event->sheet->appendRows(array(
+                //     array('Total','','','','',$total),
+                // ), $event);
             }
         ];
     }

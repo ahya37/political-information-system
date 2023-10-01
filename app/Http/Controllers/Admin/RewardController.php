@@ -1408,6 +1408,7 @@ class RewardController extends Controller
 
         $excel = $this->excel->download(new RewardExport($referal),'REWARD-REFERAL.xls');
 
+
         return $excel;
 
     }

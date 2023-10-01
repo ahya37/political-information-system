@@ -622,6 +622,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
            
             Route::post('/surat/pemenangan', 'SettingController@suratPermohonan')->name('admin-suratpemenangan-store');
         });
+
+        Route::post('/reward/referal/download/excel', 'RewardController@getPoinByMonthDefaultExcel')->name('admin-rewardreferaldownload-excel');
+        Route::post('/reward/admin/download/excel', 'RewardController@getPoinAdminByMonthDefaultExcel')->name('admin-rewardadmindownload-excel');
            
     });
 	
