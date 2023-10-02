@@ -65,10 +65,10 @@
                         Anggota Potensial
                     </a> --}}
                     </a>
-                    {{-- <a href="{{ route('admin-member-create') }}"
+                    <a href="{{ route('admin-member-create') }}"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/member/create') ? 'active custom-active-color' : '' }}">
                         Buat Anggota Baru
-                    </a> --}}
+                    </a>
                     {{-- <a href="{{ route('admin-reward') }}"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/reward') ? 'active custom-active-color' : '' }}">
                         Reward
