@@ -666,5 +666,25 @@ class OrgDiagram extends Model
 		return $sql;
 	}
 
+	public function getDataDaftarTimByRegencyForDashboard($regencyId){
+
+		$sql = "SELECT a.id, a.name,
+					(
+						SELECT COUNT(adpt.id) from dpt_kpu as adpt
+						join districts as bdpt on adpt.district_id = bdpt.id 
+						join dapil_areas as cdpt on bdpt.id = cdpt.district_id 
+						WHERE cdpt.dapil_id = a.id
+					) as dpt,
+					(
+						SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id
+						join dapil_areas as a4 on a2.district_id = a4.district_id where a4.dapil_id = a.id
+					) as anggota
+					from dapils as a
+					where a.regency_id = $regencyId";
+
+		return DB::select($sql);
+
+	}
+
 
 }

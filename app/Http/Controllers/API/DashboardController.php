@@ -4,24 +4,25 @@ namespace App\Http\Controllers\API;
 
 use App\Dpt;
 use App\Job;
+use App\Tps;
 use App\User;
 use App\Referal;
 use Carbon\Carbon;
+use App\OrgDiagram;
 use App\TargetNumber;
 use App\Models\Regency;
 use App\Models\Village;
 use App\Models\District;
 use App\Models\Province;
+use App\RightChooseRegency;
+use App\RightChosseVillage;
+use App\RightChooseDistrict;
+use App\RightChooseProvince;
+use Illuminate\Http\Request;
 use App\Providers\GlobalProvider;
 use App\Providers\GrafikProvider;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\RightChooseDistrict;
-use App\RightChooseProvince;
-use App\RightChooseRegency;
-use App\RightChosseVillage;
-use App\Tps;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -346,6 +347,7 @@ class DashboardController extends Controller
 
     public function getTotalMemberRegency($regency_id)
     {
+       
         $gF   = app('GlobalProvider'); // global function
 
         $userModel        = new User();
@@ -353,10 +355,10 @@ class DashboardController extends Controller
         $total_member     = count($member); // total anggota terdaftar
 
         $regencyModel     = Regency::select('target')->where('id', $regency_id)->first();
-        $targetMember    = $regencyModel->target; // target anggota tercapai, per kecamatan 1000 target
+        // $targetMember    = $regencyModel->target; // target anggota tercapai, per kecamatan 1000 target
 
-        $target_member    = (string) $targetMember;
-        $persentage_target_member = ($total_member / $target_member) * 100;
+        // $target_member    = (string) $targetMember;
+        // $persentage_target_member = ($total_member / $target_member) * 100;
 
         $villageModel   = new Village();
         $villages       = $villageModel->getVillagesRegency($regency_id); // fungsi total desa di kab
@@ -373,16 +375,32 @@ class DashboardController extends Controller
 
         $tpsRegency       = Tps::select('id')->where('regency_id', $regency_id)->count();
 
+        $orgDiagramModel = new OrgDiagram();
+        $daftarTeam       = $orgDiagramModel->getDataDaftarTimByRegencyForDashboard($regency_id);
+        $resultsDaftarTeam = [];
+        foreach ($daftarTeam as $val) {
+            $target = $orgDiagramModel->getDataDaftarTimByDapilForRegency($val->id);
+
+            $resultsDaftarTeam[] = [
+                'target' => $target,
+            ];
+        }
+        // jumlakan hasil all target kecamatan by dapil
+        $target_member = collect($resultsDaftarTeam)->sum(function($q){
+            return $q['target'];
+        });
+        $persentage_target_member = ($total_member / $target_member) * 100;
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
             'presentage_village_filled' => $gF->persenDpt($presentage_village_filled),
             'total_member' => $gF->decimalFormat($total_member),
-            'target_member' => $gF->decimalFormat($target_member),
+            // 'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $gF->persenDpt($persentage_target_member),
             'rightChooseRegency' => $gF->decimalFormat($rightChooseRegency) ?? 0,
-            'tpsRegency' => $gF->decimalFormat($tpsRegency)
+            'tpsRegency' => $gF->decimalFormat($tpsRegency),
+            'target_member' => $gF->decimalFormat($target_member),
         ];
         return response()->json($data);
 
