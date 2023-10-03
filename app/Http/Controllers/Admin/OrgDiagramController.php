@@ -977,7 +977,7 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_rt as a')
-            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id')
+            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'b.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id')
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
@@ -1023,6 +1023,7 @@ class OrgDiagramController extends Controller
         foreach ($data as $value) {
             $count_anggota = DB::table('org_diagram_rt')->where('pidx', $value->idx)->count();
             $referal = DB::table('users as a')->join('villages as b','a.village_id','=','b.id')->where('a.user_id', $value->user_id)->count();
+            $formkortps = DB::table('anggota_koordinator_tps_korte')->where('pidx_korte', $value->idx)->count();
             $results[] = [
                 'no' => $no++,
                 'id' => $value->id,
@@ -1040,6 +1041,7 @@ class OrgDiagramController extends Controller
                 'photo' => $value->photo,
                 'phone_number' => $value->phone_number,
                 'count_anggota' => $count_anggota,
+                'formkortps' => $formkortps,
                 'referal' => $referal,
                 'user_id' => $value->user_id,
                 'base' => "KORTPS"

@@ -112,6 +112,7 @@
                                                 <th scope="col">JABATAN</th>
                                                 <th scope="col">ANGGOTA</th>
                                                 <th scope="col">REFERAL</th>
+                                                <th scope="col">FORM KORTPS</th>
                                                 <th scope="col">NO HP / WA</th>
                                                 <th scope="col">OPSI</th>
                                             </tr>
