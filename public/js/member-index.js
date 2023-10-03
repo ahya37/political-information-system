@@ -110,6 +110,9 @@ const table = $("#data").DataTable({
                             <div class="dropdown">
                                 <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown">...</button>
                                 <div class="dropdown-menu">
+                                <a href='/admin/member/edit/referal/${row.id}' class="dropdown-item">
+                                        Edit Referal
+                                </a>
                                     <a href='/admin/member/create/account/${row.id}' class="dropdown-item">
                                             Buat Akun
                                     </a>

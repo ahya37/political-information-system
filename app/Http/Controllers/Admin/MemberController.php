@@ -7,8 +7,9 @@ use App\Crop;
 use App\Menu;
 use App\User;
 use App\Admin;
-use App\CategoryInactiveMember;
 use App\UserMenu;
+use App\LogEditUser;
+use App\TmpSpamUser;
 use App\Models\Regency;
 use App\Models\Village;
 use App\Models\District;
@@ -19,6 +20,9 @@ use App\Providers\StrRandom;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
 use App\Exports\MemberExport;
+use App\Helpers\DeleteNikOrg;
+use App\Helpers\UpdateNikOrg;
+use App\CategoryInactiveMember;
 use App\Providers\GlobalProvider;
 use App\Providers\QrCodeProvider;
 use App\Exports\MemberMostReferal;
@@ -39,9 +43,6 @@ use App\Exports\MemberByInputerInDistrict;
 use App\Exports\MemberByReferalInDistrict;
 use App\Exports\MemberPotensialReferalByDistrict;
 use App\Exports\MemberPotensialUpperByDistrictUpper;
-use App\Helpers\DeleteNikOrg;
-use App\Helpers\UpdateNikOrg;
-use App\TmpSpamUser;
 
 class MemberController extends Controller
 {
@@ -58,11 +59,11 @@ class MemberController extends Controller
         $districtModel  = new District();
         $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
         // dd($district);
-        $villages       = Village::select('id','name')->where('district_id', $authAdminDistrict)->get();
+        $villages       = Village::select('id', 'name')->where('district_id', $authAdminDistrict)->get();
 
 
         // dd($authAdminDistrict);
-        return view('pages.admin.member.index', compact('villages','district'));
+        return view('pages.admin.member.index', compact('villages', 'district'));
     }
 
     public function create()
@@ -70,77 +71,117 @@ class MemberController extends Controller
         return view('pages.admin.member.create');
     }
 
+    public function editReferal($id)
+    {
+        $profile = app('UserModel')->getProfile($id);
+        return view('pages.admin.member.edit-referal', compact('profile'));
+    }
+
+    public function updateReferal(Request $request, $id)
+    {
+        $this->validate($request, [
+            'code' => 'required',
+        ]);
+
+        $userModel = new User();
+        $user = $userModel->where('id', $id)->first();
+
+
+
+        // cek referal jika tidak  terdaftar
+        $user_referal     = $userModel->select('code', 'id')->where('code', $request->code)->first();
+        if ($user_referal == null) {
+            return redirect()->back()->with(['error' => 'Kode Reveral yang anda gunakan tidak terdaftar']);
+        } else {
+
+            // jika referal itu milik user yang di edit, maka tolak
+            if ($user->id == $user_referal->id) {
+                return redirect()->back()->with(['error' => 'Anda tidak bisa mengubah referal dengan dirinya sendiri']);
+            } else {
+                // save log edit user beserta alasannya
+                LogEditUser::create([
+                    'user_id' => $user->id,
+                    'reason' => $request->reason
+                ]);
+
+                $user->update([
+                    'user_id' => $user_referal->id
+                ]);
+            }
+            return redirect()->route('admin-member')->with('success', 'Referal telah diperbarui');
+        }
+    }
+
     public function store(Request $request)
     {
 
-           $this->validate($request, [
-               'phone_number' => 'numeric',
-           ]);
+        $this->validate($request, [
+            'phone_number' => 'numeric',
+        ]);
 
-           #hitung panjang nik, harus 16
-           $cekLengthNik = strlen($request->nik);
-           if($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
+        #hitung panjang nik, harus 16
+        $cekLengthNik = strlen($request->nik);
+        if ($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
 
-           $cby = Admin::select('id')->first();
+        $cby = Admin::select('id')->first();
         //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
-           
-           $cek_nik = User::select('nik')->where('nik', $request->nik)->count();
-           #cek nik jika sudah terpakai
-           if ($cek_nik > 0) {
-               return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
-           }else{
-              
-             //  cek jika reveral tidak tersedia
-              $cek_code = User::select('code','id')->where('code', $request->code)->first();
-               
-              if ($cek_code == null) {
-                 return redirect()->back()->with(['error' => 'Kode Reveral yang anda gunakan tidak terdaftar']);
-              }else{
-                  
-                  $request_ktp = $request->ktp;
-                  $request_photo = $request->photo;
-                  $gF = new GlobalProvider();
-                  $ktp = $gF->cropImageKtp($request_ktp);
-                  $photo = $gF->cropImagePhoto($request_photo);
-       
-                  $strRandomProvider = new StrRandom();
-                  $string            = $strRandomProvider->generateStrRandom();
-       
-                  $user = User::create([
-                      'user_id' => $cek_code->id,
-                      'code' => $string,
-                      'nik'  => $request->nik,
-                      'name' => strtoupper($request->name),
-                      'gender' => $request->gender,
-                      'place_berth' => strtoupper($request->place_berth),
-                      'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
-                      'blood_group' => $request->blood_group,
-                      'marital_status' => $request->marital_status,
-                      'job_id' => $request->job_id,
-                      'religion' => $request->religion,
-                      'education_id'  => $request->education_id,
-                      'email' => $request->email,
-                      'phone_number' => $request->phone_number,
-                      'whatsapp' => $request->whatsapp,
-                      'village_id'   => $request->village_id,
-                      'rt'           => $request->rt,
-                      'rw'           => $request->rw,
-                      'address'      => strtoupper($request->address),
-                      'photo'        => $photo,
-                      'ktp'          => $ktp,
-                      'cby'          => $cby->id,
-                  ]);
-   
-                  #generate qrcode
-                   $qrCode       = new QrCodeProvider();
-                   $qrCodeValue  = $user->code.'-'.$user->name;
-                   $qrCodeNameFile= $user->code;
-                   $qrCode->create($qrCodeValue, $qrCodeNameFile);
 
-              }
-           }
+        $cek_nik = User::select('nik')->where('nik', $request->nik)->count();
+        #cek nik jika sudah terpakai
+        if ($cek_nik > 0) {
+            return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
+        } else {
 
-        return redirect()->route('admin-member')->with('success','Anggota baru telah dibuat');
+            //  cek jika reveral tidak tersedia
+            $cek_code = User::select('code', 'id')->where('code', $request->code)->first();
+
+            if ($cek_code == null) {
+                return redirect()->back()->with(['error' => 'Kode Reveral yang anda gunakan tidak terdaftar']);
+            } else {
+
+                $request_ktp = $request->ktp;
+                $request_photo = $request->photo;
+                $gF = new GlobalProvider();
+                $ktp = $gF->cropImageKtp($request_ktp);
+                $photo = $gF->cropImagePhoto($request_photo);
+
+                $strRandomProvider = new StrRandom();
+                $string            = $strRandomProvider->generateStrRandom();
+
+                $user = User::create([
+                    'user_id' => $cek_code->id,
+                    'code' => $string,
+                    'nik'  => $request->nik,
+                    'name' => strtoupper($request->name),
+                    'gender' => $request->gender,
+                    'place_berth' => strtoupper($request->place_berth),
+                    'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
+                    'blood_group' => $request->blood_group,
+                    'marital_status' => $request->marital_status,
+                    'job_id' => $request->job_id,
+                    'religion' => $request->religion,
+                    'education_id'  => $request->education_id,
+                    'email' => $request->email,
+                    'phone_number' => $request->phone_number,
+                    'whatsapp' => $request->whatsapp,
+                    'village_id'   => $request->village_id,
+                    'rt'           => $request->rt,
+                    'rw'           => $request->rw,
+                    'address'      => strtoupper($request->address),
+                    'photo'        => $photo,
+                    'ktp'          => $ktp,
+                    'cby'          => $cby->id,
+                ]);
+
+                #generate qrcode
+                $qrCode       = new QrCodeProvider();
+                $qrCodeValue  = $user->code . '-' . $user->name;
+                $qrCodeNameFile = $user->code;
+                $qrCode->create($qrCodeValue, $qrCodeNameFile);
+            }
+        }
+
+        return redirect()->route('admin-member')->with('success', 'Anggota baru telah dibuat');
     }
 
     public function profileMember($id)
@@ -148,10 +189,10 @@ class MemberController extends Controller
         $id_user = $id;
         $userModel = new User();
         $profile = $userModel->with(['village'])->where('id', $id_user)->first();
-        $member  = $userModel->with(['village','reveral'])->where('user_id', $id_user)
-                             ->whereNotIn('id', [$id_user])
-                             ->whereNotNull('village_id')
-                             ->get();
+        $member  = $userModel->with(['village', 'reveral'])->where('user_id', $id_user)
+            ->whereNotIn('id', [$id_user])
+            ->whereNotNull('village_id')
+            ->get();
         $referal_direct = $userModel->getReferalDirect($id_user);
 
         $referal_direct = $referal_direct->total == NULL ? 0 : $referal_direct->total; // referal langsung
@@ -160,7 +201,7 @@ class MemberController extends Controller
         $total_member = count($member);
 
         $gF = new GlobalProvider();
-        return view('pages.admin.member.profile', compact('gF','profile','member','total_member','referal_direct','referal_undirect'));
+        return view('pages.admin.member.profile', compact('gF', 'profile', 'member', 'total_member', 'referal_direct', 'referal_undirect'));
     }
 
     public function editMember($id)
@@ -179,29 +220,29 @@ class MemberController extends Controller
                 'nik' => 'required'
             ]);
 
-           #hitung panjang nik, harus 16
-           $cekLengthNik = strlen($request->nik);
-           if($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
-    
+            #hitung panjang nik, harus 16
+            $cekLengthNik = strlen($request->nik);
+            if ($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
+
             $user = User::where('id', $id)->first();
             $oldNik = $user->nik;
-            
+
             if ($request->photo != null || $request->ktp != null) {
                 // delete foto lama
                 $path = public_path();
                 if ($request->photo != null) {
-                    File::delete($path.'/storage/'.$user->photo);
+                    File::delete($path . '/storage/' . $user->photo);
                 }
                 if ($request->ktp != null) {
-                    File::delete($path.'/storage/'.$user->ktp);
+                    File::delete($path . '/storage/' . $user->ktp);
                 }
-    
+
                 $request_ktp = $request->ktp;
                 $request_photo = $request->photo;
                 $gF = new GlobalProvider();
                 $ktp = $request->ktp != null ?  $gF->cropImageKtp($request_ktp) : $user->ktp;
                 $photo = $request->photo != null ? $gF->cropImagePhoto($request_photo) : $user->photo;
-    
+
                 $user->update([
                     'nik'  => $request->nik,
                     'name' => strtoupper($request->name),
@@ -220,10 +261,10 @@ class MemberController extends Controller
                     'rw'           => $request->rw,
                     'address'      => strtoupper($request->address),
                     'photo'        => $photo,
-                    'ktp'          => $ktp
+                    'ktp'          => $ktp,
+                    'code' => $request->code
                 ]);
-    
-            }else{
+            } else {
                 $user->update([
                     'nik'  => $request->nik,
                     'name' => strtoupper($request->name),
@@ -241,20 +282,18 @@ class MemberController extends Controller
                     'rt'           => $request->rt,
                     'rw'           => $request->rw,
                     'address'      => strtoupper($request->address),
+                    'code' => $request->code
                 ]);
             }
-    
+
             // update nik di tb org_diagram
             UpdateNikOrg::update($oldNik, $request->nik);
-           DB::commit();
-          return redirect()->route('admin-profile-member', ['id' => $id]);
-
+            DB::commit();
+            return redirect()->route('admin-profile-member', ['id' => $id]);
         } catch (\Exception $e) {
-           DB::rollBack();
-           return redirect()->route('admin-profile-member', ['id' => $id])->with(['error' => $e->getMessage()]);
+            DB::rollBack();
+            return redirect()->route('admin-profile-member', ['id' => $id])->with(['error' => $e->getMessage()]);
         }
-
-        
     }
 
     public function downloadCard($id)
@@ -262,34 +301,34 @@ class MemberController extends Controller
         $gF = new GlobalProvider();
 
         $profile = User::with('village')->where('id', $id)->first();
-        $pdf = PDF::LoadView('pages.card', compact('profile','gF'))->setPaper('a4');
-        return $pdf->download('e-kta-'.$profile->name.'.pdf');
+        $pdf = PDF::LoadView('pages.card', compact('profile', 'gF'))->setPaper('a4');
+        return $pdf->download('e-kta-' . $profile->name . '.pdf');
     }
 
     public function createAccount($id)
     {
 
-        $user = User::select('id','name')->where('id', $id)->first();
+        $user = User::select('id', 'name')->where('id', $id)->first();
         return view('pages.admin.member.create-account', compact('user'));
     }
 
     public function nonActiveAccount($id)
     {
 
-        $user = User::select('id','name')->where('id', $id)->first();
-        $categoryInactiveMember = CategoryInactiveMember::select('id','name')->where('name','!=','Duplikat')->orderBy('name','asc')->get();
+        $user = User::select('id', 'name')->where('id', $id)->first();
+        $categoryInactiveMember = CategoryInactiveMember::select('id', 'name')->where('name', '!=', 'Duplikat')->orderBy('name', 'asc')->get();
 
-        return view('pages.admin.member.create-nonactiveaccount', compact('user','categoryInactiveMember'));
+        return view('pages.admin.member.create-nonactiveaccount', compact('user', 'categoryInactiveMember'));
     }
-    
+
     public function storeAccount(Request $request, $id)
     {
-        $user = User::select('id','name')->where('id', $id)->first();
-        
+        $user = User::select('id', 'name')->where('id', $id)->first();
+
         $this->validate($request, [
             'email' => 'required|email'
         ]);
-    
+
         $user->update([
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -298,22 +337,21 @@ class MemberController extends Controller
         ]);
 
         // set secara defualt menunya ketika mendaftar
-        $menu_default = Menu::select('id','name')->get();
+        $menu_default = Menu::select('id', 'name')->get();
         // karena menu dashboard itu ada di array pertama maka kita hapus,
         // karena saat mendaftar user tidak bisa mengakses menu dashboard jika bukan di jadikan admin oleh administrator
         unset($menu_default[0]);
-        foreach($menu_default as $val){
+        foreach ($menu_default as $val) {
             UserMenu::create([
                 'user_id' => $user->id,
                 'menu_id' => $val->id
             ]);
         }
-        
+
         // send link verifikasi ke email terkait
         // Mail::to($request->email)->send(new RegisterMail($user)); // send email untuk verifikasi akun
 
-        return redirect()->route('admin-member')->with(['success' => 'Akun untuk '.$user->name.' telah dibuat']);
-        
+        return redirect()->route('admin-member')->with(['success' => 'Akun untuk ' . $user->name . ' telah dibuat']);
     }
 
     public function storeAccountNonActive(Request $request, $id)
@@ -323,7 +361,7 @@ class MemberController extends Controller
 
             $user = User::where('id', $id)->first();
             $oldNik = $user->nik;
-    
+
             #save ke tb tmp_spam_user
             TmpSpamUser::create([
                 'user_id' => $user->user_id,
@@ -369,52 +407,46 @@ class MemberController extends Controller
             DeleteNikOrg::delete($oldNik);
 
             DB::commit();
-    
-            return redirect()->route('admin-member')->with(['success' => 'Anggota telah dinonaktifkan!']);
 
+            return redirect()->route('admin-member')->with(['success' => 'Anggota telah dinonaktifkan!']);
         } catch (\Exception $e) {
 
             // return $e->getMessage();
             return redirect()->back()->with(['warning' => 'Anggota gagal dinonaktifkan!']);
-
         }
-
-
-        
     }
 
     public function memberProvince($province_id)
     {
         $province = Province::select('name')->where('id', $province_id)->first();
 
-        $member = User::with(['village.district.regency.province','reveral','create_by'])
-                    ->whereHas('village', function($village) use ($province_id){
-                        $village->whereHas('district', function($district) use ($province_id){
-                            $district->whereHas('regency', function($regency) use ($province_id) {
-                                $regency->where('province_id', $province_id);
-                            });
-                        });
-                    })
-                    ->whereNotNull('nik')
-                    ->get();
+        $member = User::with(['village.district.regency.province', 'reveral', 'create_by'])
+            ->whereHas('village', function ($village) use ($province_id) {
+                $village->whereHas('district', function ($district) use ($province_id) {
+                    $district->whereHas('regency', function ($regency) use ($province_id) {
+                        $regency->where('province_id', $province_id);
+                    });
+                });
+            })
+            ->whereNotNull('nik')
+            ->get();
 
-        if (request()->ajax()) 
-        {
+        if (request()->ajax()) {
             return DataTables::of($member)
-                    ->addIndexColumn()
-                    ->addColumn('photo', function($item){
-                        return '
-                        <a href="'.route('admin-profile-member', $item->id).'">
-                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
-                            '.$item->name.'
+                ->addIndexColumn()
+                ->addColumn('photo', function ($item) {
+                    return '
+                        <a href="' . route('admin-profile-member', $item->id) . '">
+                            <img  class="rounded" width="40" src="' . asset('storage/' . $item->photo) . '">
+                            ' . $item->name . '
                         </a>
                         ';
-                    })
-                    ->addColumn('referal', function($item){
-                        return $item->referal;
-                    })
-                    ->rawColumns(['action','photo','referal'])
-                    ->make(true);
+                })
+                ->addColumn('referal', function ($item) {
+                    return $item->referal;
+                })
+                ->rawColumns(['action', 'photo', 'referal'])
+                ->make(true);
         }
         return view('pages.admin.member.member-province', compact('province'));
     }
@@ -422,32 +454,31 @@ class MemberController extends Controller
     public function memberRegency($regency_id)
     {
         $regency = Regency::select('name')->where('id', $regency_id)->first();
-        $member = User::with(['village.district.regency.province','reveral','create_by'])
-                    ->whereHas('village', function($village) use ($regency_id){
-                        $village->whereHas('district', function($district) use ($regency_id){
-                            $district->where('regency_id', $regency_id);
-                        });
-                    })
-                    ->whereNotNull('nik')
-                    ->get();
+        $member = User::with(['village.district.regency.province', 'reveral', 'create_by'])
+            ->whereHas('village', function ($village) use ($regency_id) {
+                $village->whereHas('district', function ($district) use ($regency_id) {
+                    $district->where('regency_id', $regency_id);
+                });
+            })
+            ->whereNotNull('nik')
+            ->get();
 
-        if (request()->ajax()) 
-        {
+        if (request()->ajax()) {
             return DataTables::of($member)
-                    ->addIndexColumn()
-                    ->addColumn('photo', function($item){
-                        return '
-                        <a href="'.route('admin-profile-member', $item->id).'">
-                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
-                            '.$item->name.'
+                ->addIndexColumn()
+                ->addColumn('photo', function ($item) {
+                    return '
+                        <a href="' . route('admin-profile-member', $item->id) . '">
+                            <img  class="rounded" width="40" src="' . asset('storage/' . $item->photo) . '">
+                            ' . $item->name . '
                         </a>
                         ';
-                    })
-                    ->addColumn('referal', function($item){
-                        return $item->referal;
-                    })
-                    ->rawColumns(['action','photo','referal'])
-                    ->make(true);
+                })
+                ->addColumn('referal', function ($item) {
+                    return $item->referal;
+                })
+                ->rawColumns(['action', 'photo', 'referal'])
+                ->make(true);
         }
         return view('pages.admin.member.member-regency', compact('regency'));
     }
@@ -455,30 +486,29 @@ class MemberController extends Controller
     public function memberDistrict($district_id)
     {
         $district = District::select('name')->where('id', $district_id)->first();
-        $member = User::with(['village.district.regency.province','reveral','create_by'])
-                    ->whereHas('village', function($village) use ($district_id){
-                        $village->where('district_id', $district_id);
-                    })
-                    ->whereNotNull('nik')
-                    ->get();
+        $member = User::with(['village.district.regency.province', 'reveral', 'create_by'])
+            ->whereHas('village', function ($village) use ($district_id) {
+                $village->where('district_id', $district_id);
+            })
+            ->whereNotNull('nik')
+            ->get();
 
-        if (request()->ajax()) 
-        {
+        if (request()->ajax()) {
             return DataTables::of($member)
-                    ->addIndexColumn()
-                    ->addColumn('photo', function($item){
-                        return '
-                        <a href="'.route('admin-profile-member', $item->id).'">
-                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
-                            '.$item->name.'
+                ->addIndexColumn()
+                ->addColumn('photo', function ($item) {
+                    return '
+                        <a href="' . route('admin-profile-member', $item->id) . '">
+                            <img  class="rounded" width="40" src="' . asset('storage/' . $item->photo) . '">
+                            ' . $item->name . '
                         </a>
                         ';
-                    })
-                    ->addColumn('referal', function($item){
-                        return $item->referal;
-                    })
-                    ->rawColumns(['action','photo','referal'])
-                    ->make(true);
+                })
+                ->addColumn('referal', function ($item) {
+                    return $item->referal;
+                })
+                ->rawColumns(['action', 'photo', 'referal'])
+                ->make(true);
         }
         return view('pages.admin.member.member-district', compact('district'));
     }
@@ -486,28 +516,27 @@ class MemberController extends Controller
     public function memberVillage($village_id)
     {
         $village = Village::select('name')->where('id', $village_id)->first();
-        $member = User::with(['village.district.regency.province','reveral','create_by'])
-                    ->where('village_id', $village_id)
-                    ->whereNotNull('nik')
-                    ->get();
+        $member = User::with(['village.district.regency.province', 'reveral', 'create_by'])
+            ->where('village_id', $village_id)
+            ->whereNotNull('nik')
+            ->get();
 
-        if (request()->ajax()) 
-        {
+        if (request()->ajax()) {
             return DataTables::of($member)
-                    ->addIndexColumn()
-                    ->addColumn('photo', function($item){
-                        return '
-                        <a href="'.route('admin-profile-member', $item->id).'">
-                            <img  class="rounded" width="40" src="'.asset('storage/'.$item->photo).'">
-                            '.$item->name.'
+                ->addIndexColumn()
+                ->addColumn('photo', function ($item) {
+                    return '
+                        <a href="' . route('admin-profile-member', $item->id) . '">
+                            <img  class="rounded" width="40" src="' . asset('storage/' . $item->photo) . '">
+                            ' . $item->name . '
                         </a>
                         ';
-                    })
-                    ->addColumn('referal', function($item){
-                        return $item->referal;
-                    })
-                    ->rawColumns(['action','photo','referal'])
-                    ->make(true);
+                })
+                ->addColumn('referal', function ($item) {
+                    return $item->referal;
+                })
+                ->rawColumns(['action', 'photo', 'referal'])
+                ->make(true);
         }
         return view('pages.admin.member.member-village', compact('village'));
     }
@@ -515,157 +544,157 @@ class MemberController extends Controller
     public function reportMemberPdf()
     {
         $member = User::with(['village'])
-                    ->whereNotNull('nik')
-                    ->orderBy('name',)
-                    ->get();
-        $title = 'Anggota-Nasional'; 
+            ->whereNotNull('nik')
+            ->orderBy('name',)
+            ->get();
+        $title = 'Anggota-Nasional';
         $no = 1;
-        $pdf   = PDF::loadView('pages.admin.report.member-national-pdf', compact('member','title','no'))->setPaper('landscape');
-        return $pdf->download($title.'.pdf');
+        $pdf   = PDF::loadView('pages.admin.report.member-national-pdf', compact('member', 'title', 'no'))->setPaper('landscape');
+        return $pdf->download($title . '.pdf');
     }
 
     public function reportMemberProvincePdf($province_id)
     {
         $province = Province::select('name')->where('id', $province_id)->first();
         $member = User::with(['village'])
-                    ->whereHas('village', function($village) use ($province_id){
-                        $village->whereHas('district', function($district) use ($province_id){
-                            $district->whereHas('regency', function($regency) use ($province_id){
-                                $regency->where('province_id', $province_id);
-                            });
-                        });
-                    })
-                    ->whereNotNull('nik')
-                    ->orderBy('name',)
-                    ->get();
-        $title = 'Anggota-Province-'. $province->name; 
+            ->whereHas('village', function ($village) use ($province_id) {
+                $village->whereHas('district', function ($district) use ($province_id) {
+                    $district->whereHas('regency', function ($regency) use ($province_id) {
+                        $regency->where('province_id', $province_id);
+                    });
+                });
+            })
+            ->whereNotNull('nik')
+            ->orderBy('name',)
+            ->get();
+        $title = 'Anggota-Province-' . $province->name;
         $no = 1;
-        $pdf   = PDF::loadView('pages.admin.report.member-province-pdf', compact('member','title','no','province'));
-        return $pdf->download($title.'.pdf');
+        $pdf   = PDF::loadView('pages.admin.report.member-province-pdf', compact('member', 'title', 'no', 'province'));
+        return $pdf->download($title . '.pdf');
     }
 
     public function reportMemberRegencyPdf($regency_id)
     {
         $regency = Regency::select('name')->where('id', $regency_id)->first();
         $member = User::with(['village'])
-                    ->whereHas('village', function($village) use ($regency_id){
-                        $village->whereHas('district', function($district) use ($regency_id){
-                            $district->where('regency_id', $regency_id);
-                        });
-                    })
-                    ->whereNotNull('nik')
-                    ->orderBy('name',)
-                    ->get();
-        $title = 'Anggota-'. $regency->name; 
+            ->whereHas('village', function ($village) use ($regency_id) {
+                $village->whereHas('district', function ($district) use ($regency_id) {
+                    $district->where('regency_id', $regency_id);
+                });
+            })
+            ->whereNotNull('nik')
+            ->orderBy('name',)
+            ->get();
+        $title = 'Anggota-' . $regency->name;
         $no = 1;
-        $pdf   = PDF::loadView('pages.admin.report.member-regency-pdf', compact('member','title','no','regency'));
-        return $pdf->download($title.'.pdf');
+        $pdf   = PDF::loadView('pages.admin.report.member-regency-pdf', compact('member', 'title', 'no', 'regency'));
+        return $pdf->download($title . '.pdf');
     }
 
     public function reportMemberDistrictPdf($district_id)
     {
         $district = District::select('name')->where('id', $district_id)->first();
         $member = DB::table('users as a')
-                        ->select('a.id','a.cby','a.user_id','a.user_id','a.name','a.photo','a.rt','a.rw','a.phone_number','a.whatsapp','a.address','regencies.name as regency','districts.name as district','villages.name as village','provinces.name as province','a.created_at','a.status','a.email')
-                        ->join('villages','villages.id','a.village_id')
-                        ->join('districts','districts.id','villages.district_id')
-                        ->join('regencies','regencies.id','districts.regency_id')
-                        ->join('provinces','provinces.id','regencies.province_id')
-                        ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
-                        ->whereNotNull('a.village_id')
-                        ->orderBy('villages.name','asc')
-                        ->orderBy('a.name','asc')
-                        ->where('districts.id', $district_id)->get();
+            ->select('a.id', 'a.cby', 'a.user_id', 'a.user_id', 'a.name', 'a.photo', 'a.rt', 'a.rw', 'a.phone_number', 'a.whatsapp', 'a.address', 'regencies.name as regency', 'districts.name as district', 'villages.name as village', 'provinces.name as province', 'a.created_at', 'a.status', 'a.email')
+            ->join('villages', 'villages.id', 'a.village_id')
+            ->join('districts', 'districts.id', 'villages.district_id')
+            ->join('regencies', 'regencies.id', 'districts.regency_id')
+            ->join('provinces', 'provinces.id', 'regencies.province_id')
+            ->leftJoin('dapil_areas', 'districts.id', 'dapil_areas.district_id')
+            ->whereNotNull('a.village_id')
+            ->orderBy('villages.name', 'asc')
+            ->orderBy('a.name', 'asc')
+            ->where('districts.id', $district_id)->get();
 
-            $result = [];
-            $no = 1;
-            $gF = new GlobalProvider();
-            foreach($member as $val){
-                $userModel = new User();
-                $total_referal = $userModel->where('user_id', $val->id)->whereNotNull('village_id')->count();
-                $inputer = $userModel->select('name')->where('id', $val->cby)->first();
-                $referal = $userModel->select('name')->where('id', $val->user_id)->first();
-                $by_inputer = $inputer->name;
-                $by_referal = $referal->name;      
-                $result[] = [
-                    'no' => $no++,
-                    'name' => $val->name,
-                    'address' => $val->address,
-                    'rt' => $val->rt,
-                    'rw' => $val->rw,
-                    'village' => $val->village,
-                    'district' => $val->district,
-                    'regency' => $val->regency,
-                    'province' => $val->province,
-                    'phone_number'    => $val->phone_number,
-                    'whatsapp' => $val->whatsapp,
-                    'created_at' => date('d-m-Y', strtotime($val->created_at)),
-                    'by_inputer' => $by_inputer,
-                    'by_referal' => $by_referal,
-                    'total_referal' => $gF->decimalFormat($total_referal),
-                ];
-            }
-
-        $title = 'Anggota-'. $district->name; 
+        $result = [];
         $no = 1;
-        $pdf   = PDF::loadView('pages.admin.report.member-district-pdf', compact('result','title','no','district'))->setPaper('a4','landscape');
-        return $pdf->download($title.'.pdf');
+        $gF = new GlobalProvider();
+        foreach ($member as $val) {
+            $userModel = new User();
+            $total_referal = $userModel->where('user_id', $val->id)->whereNotNull('village_id')->count();
+            $inputer = $userModel->select('name')->where('id', $val->cby)->first();
+            $referal = $userModel->select('name')->where('id', $val->user_id)->first();
+            $by_inputer = $inputer->name;
+            $by_referal = $referal->name;
+            $result[] = [
+                'no' => $no++,
+                'name' => $val->name,
+                'address' => $val->address,
+                'rt' => $val->rt,
+                'rw' => $val->rw,
+                'village' => $val->village,
+                'district' => $val->district,
+                'regency' => $val->regency,
+                'province' => $val->province,
+                'phone_number'    => $val->phone_number,
+                'whatsapp' => $val->whatsapp,
+                'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                'by_inputer' => $by_inputer,
+                'by_referal' => $by_referal,
+                'total_referal' => $gF->decimalFormat($total_referal),
+            ];
+        }
+
+        $title = 'Anggota-' . $district->name;
+        $no = 1;
+        $pdf   = PDF::loadView('pages.admin.report.member-district-pdf', compact('result', 'title', 'no', 'district'))->setPaper('a4', 'landscape');
+        return $pdf->download($title . '.pdf');
     }
 
     public function reportMemberVillagePdf($village_id)
     {
         $village = Village::select('name')->where('id', $village_id)->first();
         $member = DB::table('users as a')
-                        ->select('a.id','a.cby','a.user_id','a.user_id','a.name','a.photo','a.rt','a.rw','a.phone_number','a.whatsapp','a.address','regencies.name as regency','districts.name as district','villages.name as village','provinces.name as province','a.created_at','a.status','a.email')
-                        ->join('villages','villages.id','a.village_id')
-                        ->join('districts','districts.id','villages.district_id')
-                        ->join('regencies','regencies.id','districts.regency_id')
-                        ->join('provinces','provinces.id','regencies.province_id')
-                        ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
-                        ->whereNotNull('a.village_id')
-                        ->orderBy('villages.name','asc')
-                        ->orderBy('a.name','asc')
-                        ->where('villages.id', $village_id)->get();
+            ->select('a.id', 'a.cby', 'a.user_id', 'a.user_id', 'a.name', 'a.photo', 'a.rt', 'a.rw', 'a.phone_number', 'a.whatsapp', 'a.address', 'regencies.name as regency', 'districts.name as district', 'villages.name as village', 'provinces.name as province', 'a.created_at', 'a.status', 'a.email')
+            ->join('villages', 'villages.id', 'a.village_id')
+            ->join('districts', 'districts.id', 'villages.district_id')
+            ->join('regencies', 'regencies.id', 'districts.regency_id')
+            ->join('provinces', 'provinces.id', 'regencies.province_id')
+            ->leftJoin('dapil_areas', 'districts.id', 'dapil_areas.district_id')
+            ->whereNotNull('a.village_id')
+            ->orderBy('villages.name', 'asc')
+            ->orderBy('a.name', 'asc')
+            ->where('villages.id', $village_id)->get();
 
-            $result = [];
-            $no = 1;
-            $gF = new GlobalProvider();
-            foreach($member as $val){
-                $userModel = new User();
-                $total_referal = $userModel->where('user_id', $val->id)->whereNotNull('village_id')->count();
-                $inputer = $userModel->select('name')->where('id', $val->cby)->first();
-                $referal = $userModel->select('name')->where('id', $val->user_id)->first();
-                $by_inputer = $inputer->name;
-                $by_referal = $referal->name;      
-                $result[] = [
-                    'no' => $no++,
-                    'name' => $val->name,
-                    'address' => $val->address,
-                    'rt' => $val->rt,
-                    'rw' => $val->rw,
-                    'village' => $val->village,
-                    'district' => $val->district,
-                    'regency' => $val->regency,
-                    'province' => $val->province,
-                    'phone_number'    => $val->phone_number,
-                    'whatsapp' => $val->whatsapp,
-                    'created_at' => date('d-m-Y', strtotime($val->created_at)),
-                    'by_inputer' => $by_inputer,
-                    'by_referal' => $by_referal,
-                    'total_referal' => $gF->decimalFormat($total_referal),
-                ];
-            }
-
-        
-        $title = 'Anggota-Desa-'. $village->name; 
+        $result = [];
         $no = 1;
-        $pdf   = PDF::loadView('pages.admin.report.member-village-pdf', compact('result','title','no','village'))->setPaper('a4','landscape');
-        return $pdf->download($title.'.pdf');
+        $gF = new GlobalProvider();
+        foreach ($member as $val) {
+            $userModel = new User();
+            $total_referal = $userModel->where('user_id', $val->id)->whereNotNull('village_id')->count();
+            $inputer = $userModel->select('name')->where('id', $val->cby)->first();
+            $referal = $userModel->select('name')->where('id', $val->user_id)->first();
+            $by_inputer = $inputer->name;
+            $by_referal = $referal->name;
+            $result[] = [
+                'no' => $no++,
+                'name' => $val->name,
+                'address' => $val->address,
+                'rt' => $val->rt,
+                'rw' => $val->rw,
+                'village' => $val->village,
+                'district' => $val->district,
+                'regency' => $val->regency,
+                'province' => $val->province,
+                'phone_number'    => $val->phone_number,
+                'whatsapp' => $val->whatsapp,
+                'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                'by_inputer' => $by_inputer,
+                'by_referal' => $by_referal,
+                'total_referal' => $gF->decimalFormat($total_referal),
+            ];
+        }
+
+
+        $title = 'Anggota-Desa-' . $village->name;
+        $no = 1;
+        $pdf   = PDF::loadView('pages.admin.report.member-village-pdf', compact('result', 'title', 'no', 'village'))->setPaper('a4', 'landscape');
+        return $pdf->download($title . '.pdf');
     }
 
     public function cropImage()
     {
-        
+
         return view('pages.admin.member.crop');
     }
 
@@ -680,14 +709,11 @@ class MemberController extends Controller
         $crop_photo = $gF->cropImagePhoto($photo);
 
         $data = [
-            'ktp' => $crop_ktp, 
-            'photo' => $crop_photo, 
+            'ktp' => $crop_ktp,
+            'photo' => $crop_photo,
         ];
 
         return $data;
-
-        
-
     }
 
     public function memberPotensial()
@@ -697,22 +723,22 @@ class MemberController extends Controller
 
     public function memberByReferal($user_id)
     {
-        $userModel = new User(); 
-        $user = $userModel->select('id','name')->where('id', $user_id)->first();
+        $userModel = new User();
+        $user = $userModel->select('id', 'name')->where('id', $user_id)->first();
         $districtModel = new District();
         $districts = $districtModel->getDistrictByReferalMember($user_id);
         $totalMember = $districtModel->getTotalMemberByReferal($user_id);
-        return view('pages.admin.member.member-by-refeal', compact('user','districts','userModel','totalMember'));
+        return view('pages.admin.member.member-by-refeal', compact('user', 'districts', 'userModel', 'totalMember'));
     }
 
     public function memberByInput($user_id)
     {
-        $userModel = new User(); 
-        $user = $userModel->select('id','name')->where('id', $user_id)->first();
+        $userModel = new User();
+        $user = $userModel->select('id', 'name')->where('id', $user_id)->first();
         $districtModel = new District();
         $districts = $districtModel->getDistrictByInputMember($user_id);
         $totalMember = $districtModel->getTotalMemberByInput($user_id);
-        return view('pages.admin.member.member-by-input', compact('user','districts','userModel','totalMember'));
+        return view('pages.admin.member.member-by-input', compact('user', 'districts', 'userModel', 'totalMember'));
     }
 
     public function memberByReferalNationalPDF()
@@ -720,7 +746,7 @@ class MemberController extends Controller
         $userModel = new User();
         $members = $userModel->getMemberReferal();
         $no = 1;
-        $pdf = PDF::LoadView('pages.report.member-referal', compact('members','no','userModel'))->setPaper('a4');
+        $pdf = PDF::LoadView('pages.report.member-referal', compact('members', 'no', 'userModel'))->setPaper('a4');
         return  $pdf->download('ANGGOTA REFERAL TERBANYAK.pdf');
     }
 
@@ -732,9 +758,9 @@ class MemberController extends Controller
         $type = request()->input('type');
 
         if ($type == 'input') {
-            return $this->excel->download(new MemberByInputerInDistrict($district_id, $user_id), 'ANGGOTA-INPUT-DARI '.$member->name.' DI KECAMATAN '.$district->name.'.xls');
-        }else{
-            return $this->excel->download(new MemberByReferalInDistrict($district_id, $user_id), 'ANGGOTA-REFERAL-DARI '.$member->name.' DI KECAMATAN '.$district->name.'.xls');
+            return $this->excel->download(new MemberByInputerInDistrict($district_id, $user_id), 'ANGGOTA-INPUT-DARI ' . $member->name . ' DI KECAMATAN ' . $district->name . '.xls');
+        } else {
+            return $this->excel->download(new MemberByReferalInDistrict($district_id, $user_id), 'ANGGOTA-REFERAL-DARI ' . $member->name . ' DI KECAMATAN ' . $district->name . '.xls');
         }
     }
 
@@ -743,12 +769,11 @@ class MemberController extends Controller
         $member = User::select('name')->where('id', $user_id)->first();
         $type = request()->input('type');
 
-         if ($type == 'input') {
-            return $this->excel->download(new MemberByInputerAll($user_id),'ANGGOTA-INPUT-DARI-'.$member->name.'.xls');
-        }else{
-            return $this->excel->download(new MemberByReferalAll($user_id),'ANGGOTA-REFERAL-DARI-'.$member->name.'.xls');
+        if ($type == 'input') {
+            return $this->excel->download(new MemberByInputerAll($user_id), 'ANGGOTA-INPUT-DARI-' . $member->name . '.xls');
+        } else {
+            return $this->excel->download(new MemberByReferalAll($user_id), 'ANGGOTA-REFERAL-DARI-' . $member->name . '.xls');
         }
-
     }
 
     public function memberByReferalDownloadPDF($user_id, $district_id)
@@ -758,23 +783,23 @@ class MemberController extends Controller
         $district = District::select('name')->where('id', $district_id)->first();
         $no = 1;
 
-        $type = request()->input('type'); 
+        $type = request()->input('type');
 
-       if ($type == 'input') {
+        if ($type == 'input') {
             $members  = $userModel->getListMemberByInputerDistrictId($district_id, $user_id);
-            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL INPUT '.$user->name.' DI KECAMATAN '.$district->name.'.pdf';
+            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL INPUT ' . $user->name . ' DI KECAMATAN ' . $district->name . '.pdf';
             $title_header  = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL INPUT';
-            $title_page    = 'INPUT DARI : '.$user->name.', KECAMATAN : '.$district->name;
-        }else{
+            $title_page    = 'INPUT DARI : ' . $user->name . ', KECAMATAN : ' . $district->name;
+        } else {
             $members  = $userModel->getListMemberByDistrictId($district_id, $user_id);
-            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL REFERAL '.$user->name.' DI KECAMATAN '.$district->name.'.pdf';
+            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL REFERAL ' . $user->name . ' DI KECAMATAN ' . $district->name . '.pdf';
             $title_header  = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL REFERAL';
-            $title_page    = 'REFERAL : '.$user->name.', KECAMATAN :'.$district->name;
+            $title_page    = 'REFERAL : ' . $user->name . ', KECAMATAN :' . $district->name;
         }
 
 
         $gF = new GlobalProvider();
-        $pdf = PDF::LoadView('pages.report.member-referal-in-district', compact('members','no','gF','title_page','title_header'))->setPaper('a4','landscape');
+        $pdf = PDF::LoadView('pages.report.member-referal-in-district', compact('members', 'no', 'gF', 'title_page', 'title_header'))->setPaper('a4', 'landscape');
         return  $pdf->download($title_file);
     }
 
@@ -784,21 +809,21 @@ class MemberController extends Controller
         $user = $userModel->select('name')->where('id', $user_id)->first();
         $no = 1;
 
-        $type = request()->input('type'); 
+        $type = request()->input('type');
 
         if ($type == 'input') {
             $members  = $userModel->getListMemberByUserInputerAll($user_id);
-            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL INPUT '.$user->name.'.pdf';
+            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL INPUT ' . $user->name . '.pdf';
             $title_header  = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL INPUT';
-            $title_page    = 'INPUT DARI : '. $user->name;
-        }else{
+            $title_page    = 'INPUT DARI : ' . $user->name;
+        } else {
             $members  = $userModel->getListMemberByUserAll($user_id);
-            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL REFERAL '.$user->name.'.pdf';
+            $title_file    = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL REFERAL ' . $user->name . '.pdf';
             $title_header  = 'LAPORAN ANGGOTA DARI ANGGOTA POTENSIAL REFERAL';
-            $title_page    = 'REFERAL : '. $user->name;
+            $title_page    = 'REFERAL : ' . $user->name;
         }
         $gF = new GlobalProvider();
-        $pdf = PDF::LoadView('pages.report.member-referal-all', compact('members','no','gF','title_page','title_header'))->setPaper('a4','landscape');
+        $pdf = PDF::LoadView('pages.report.member-referal-all', compact('members', 'no', 'gF', 'title_page', 'title_header'))->setPaper('a4', 'landscape');
         return  $pdf->download($title_file);
     }
 
@@ -824,21 +849,18 @@ class MemberController extends Controller
                                     group by d.id, d.name
                                     order by COUNT(a.user_id) desc");
             return $kecamatan;
-
-        }else{
+        } else {
             #get kecamatan yang ada referalnya
             $district = $request->district;
             $kecamatan = DB::table('districts')->select('name')->where('id', $district)->first();
-            return  $this->excel->download(new MemberPotensialReferalByDistrict($district), 'ANGGOTA POTENSIAL REFERAL '.$kecamatan->name.'.xls');
-
+            return  $this->excel->download(new MemberPotensialReferalByDistrict($district), 'ANGGOTA POTENSIAL REFERAL ' . $kecamatan->name . '.xls');
         }
-
     }
 
-    public function getKecamatanReferalUpper(Request $request){
-        
-        return  $this->excel->download(new MemberPotensialUpperByDistrictUpper($request->upper), 'JUMLAH ANGGOTA POTENSIAL REFERAL KECAMATAN DI ATAS '.$request->upper.'.xls');
-        
+    public function getKecamatanReferalUpper(Request $request)
+    {
+
+        return  $this->excel->download(new MemberPotensialUpperByDistrictUpper($request->upper), 'JUMLAH ANGGOTA POTENSIAL REFERAL KECAMATAN DI ATAS ' . $request->upper . '.xls');
     }
 
     public function memberPotentialReferalDownloadPDF()
@@ -856,7 +878,7 @@ class MemberController extends Controller
             $referal = $userModel->select('name')->where('id', $val->user_id)->first();
             $by_inputer = $inputer->name;
             $by_referal = $referal->name;
-            
+
             $data[] = [
                 'name' => $val->name,
                 'referal' => $val->total,
@@ -876,8 +898,8 @@ class MemberController extends Controller
             ];
         }
         $gF = new GlobalProvider();
-        $no  =1;
-        $pdf = PDF::LoadView('pages.report.member-potential-referal',compact('data','no','gF'))->setPaper('a4','landscape');
+        $no  = 1;
+        $pdf = PDF::LoadView('pages.report.member-potential-referal', compact('data', 'no', 'gF'))->setPaper('a4', 'landscape');
         return  $pdf->download('ANGGOTA POTENSIAL REFERAL.pdf');
     }
 
@@ -895,7 +917,7 @@ class MemberController extends Controller
             $referal = $userModel->select('name')->where('id', $val->user_id)->first();
             $by_inputer = $inputer->name;
             $by_referal = $referal->name;
-            
+
             $data[] = [
                 'name' => $val->name,
                 'total' => $gF->decimalFormat($val->total),
@@ -913,7 +935,7 @@ class MemberController extends Controller
                 'whatsapp' => $val->whatsapp,
             ];
         }
-        $pdf = PDF::LoadView('pages.report.member-potential-input',compact('data','no','gF'))->setPaper('a4','landscape');
+        $pdf = PDF::LoadView('pages.report.member-potential-input', compact('data', 'no', 'gF'))->setPaper('a4', 'landscape');
         return  $pdf->download('ANGGOTA POTENSIAL INPUT.pdf');
     }
 
@@ -929,56 +951,55 @@ class MemberController extends Controller
 
         // query
         $data = DB::table('users as a')
-                        ->select('a.nik','a.id','a.user_id','a.name','a.photo','a.rt','a.rw','a.phone_number','a.whatsapp','a.address','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email')
-                        ->join('villages','villages.id','a.village_id')
-                        ->join('districts','districts.id','villages.district_id')
-                        ->join('regencies','regencies.id','districts.regency_id')
-                        ->join('users as b','b.id','a.user_id')
-                        ->join('users as c','c.id','a.cby')
-                        ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
-                        ->whereNotNull('a.village_id')
-                        ->orderBy('villages.name','asc')
-                        ->orderBy('a.name','asc');
-                        
-            $title = 'LAPORAN ANGGOTA';
-            if ($province != null) {
-                        $data->where('regencies.province_id', $province);
-                        $provinces = Province::select('name')->where('id', $province)->first();
-                        $title = "PROVINSI $provinces->name";
-            }
+            ->select('a.nik', 'a.id', 'a.user_id', 'a.name', 'a.photo', 'a.rt', 'a.rw', 'a.phone_number', 'a.whatsapp', 'a.address', 'regencies.name as regency', 'districts.name as district', 'villages.name as village', 'b.name as referal', 'c.name as cby', 'a.created_at', 'a.status', 'a.email')
+            ->join('villages', 'villages.id', 'a.village_id')
+            ->join('districts', 'districts.id', 'villages.district_id')
+            ->join('regencies', 'regencies.id', 'districts.regency_id')
+            ->join('users as b', 'b.id', 'a.user_id')
+            ->join('users as c', 'c.id', 'a.cby')
+            ->leftJoin('dapil_areas', 'districts.id', 'dapil_areas.district_id')
+            ->whereNotNull('a.village_id')
+            ->orderBy('villages.name', 'asc')
+            ->orderBy('a.name', 'asc');
 
-            if ($regency != null) {
-                            $data->where('regencies.id',  $regency);
-                            $regencies = Regency::select('name')->where('id', $regency)->first();
-                            $title = $regencies->name;
+        $title = 'LAPORAN ANGGOTA';
+        if ($province != null) {
+            $data->where('regencies.province_id', $province);
+            $provinces = Province::select('name')->where('id', $province)->first();
+            $title = "PROVINSI $provinces->name";
+        }
 
-                }
+        if ($regency != null) {
+            $data->where('regencies.id',  $regency);
+            $regencies = Regency::select('name')->where('id', $regency)->first();
+            $title = $regencies->name;
+        }
 
-            if ($dapil != null) {
-                            $data ->where('dapil_areas.dapil_id', $dapil);
-                            $title = 'Dapil';
-                }
-            if ($district != null) {
-                            $data->where('districts.id', $district);
-                            $districts = District::select('name')->where('id', $district)->first();
-                            $title = "KECAMATAN $districts->name";
-                }
-            if ($village != null) {
-                            $data->where('villages.id', $village);
-                            $villages = Village::select('name')->where('id', $village)->first();
-                            $title = "DESA  $villages->name";
-            }
+        if ($dapil != null) {
+            $data->where('dapil_areas.dapil_id', $dapil);
+            $title = 'Dapil';
+        }
+        if ($district != null) {
+            $data->where('districts.id', $district);
+            $districts = District::select('name')->where('id', $district)->first();
+            $title = "KECAMATAN $districts->name";
+        }
+        if ($village != null) {
+            $data->where('villages.id', $village);
+            $villages = Village::select('name')->where('id', $village)->first();
+            $title = "DESA  $villages->name";
+        }
 
-            $data = $data->get();
+        $data = $data->get();
 
         // EXPORT EXCEL
         if ($type == 'excel') {
-            return $this->excel->download(new MemberExport($data), 'LAPORAN ANGGOTA '.$title.'.xls');
-        }else{
+            return $this->excel->download(new MemberExport($data), 'LAPORAN ANGGOTA ' . $title . '.xls');
+        } else {
             $gF = new GlobalProvider();
             $result = [];
             $no = 1;
-            foreach($data as $val){
+            foreach ($data as $val) {
                 $total_referal = User::where('user_id', $val->id)->whereNotNull('village_id')->count();
                 $result[] = [
                     'no' => $no++,
@@ -998,20 +1019,19 @@ class MemberController extends Controller
                     'total_referal' => $gF->decimalFormat($total_referal),
                 ];
             }
-            $pdf = PDF::LoadView('pages.admin.report.member-byregional',compact('result','no','gF','title'))->setPaper('f4','landscape');
-            return  $pdf->download('LAPORAN ANGGOTA '.$title.'.pdf');
+            $pdf = PDF::LoadView('pages.admin.report.member-byregional', compact('result', 'no', 'gF', 'title'))->setPaper('f4', 'landscape');
+            return  $pdf->download('LAPORAN ANGGOTA ' . $title . '.pdf');
         }
-
     }
 
     public function spesialBonusReferal()
     {
-      return view('pages.admin.reward.special');
+        return view('pages.admin.reward.special');
     }
 
     public function spesialBonusAdmin()
     {
-      return view('pages.admin.reward.special-admin');
+        return view('pages.admin.reward.special-admin');
     }
 
     public function dataSpesialBonusReferal()
@@ -1026,7 +1046,7 @@ class MemberController extends Controller
 
             $bonus = $gf->calculateSpecialBonusReferal($value->total);
 
-            if ($bonus > 0 AND $value->id != 35) {
+            if ($bonus > 0 and $value->id != 35) {
                 $referals[] = [
                     'id' => $value->id,
                     'name' => $value->name,
@@ -1039,33 +1059,30 @@ class MemberController extends Controller
                     'bonus' => $gf->decimalFormat($bonus)
                 ];
             }
-
         }
 
-        if (request()->ajax()) 
-        {
+        if (request()->ajax()) {
             return DataTables::of($referals)
-                    ->addIndexColumn()
-                    ->addColumn('photo', function($item){
-                        return '
-                        <a href="'.route('admin-profile-member', $item['id']).'">
-                            <img  class="rounded" width="40" src="'.asset('storage/'.$item['photo']).'">
-                            '.$item['name'].'
+                ->addIndexColumn()
+                ->addColumn('photo', function ($item) {
+                    return '
+                        <a href="' . route('admin-profile-member', $item['id']) . '">
+                            <img  class="rounded" width="40" src="' . asset('storage/' . $item['photo']) . '">
+                            ' . $item['name'] . '
                         </a>
                         ';
-                    })
-                    ->addColumn('fullAdress', function($item){
-                        return ''.$item['address'].', DS.'.$item['village'].', KEC.'.$item['district'];
-                    })
-                    ->addColumn('totalReferal', function($item){
-                        return '<span class="badge bg-success text-light">'.$item['total_referal'].'</span>';
-                    })
-                    ->addColumn('nominalBonus', function($item){
-                        return '<span class="badge bg-success text-light">Rp '.$item['bonus'].'</span>';
-
-                    })
-                    ->rawColumns(['photo','fullAdress','totalReferal','nominalBonus'])
-                    ->make(true);
+                })
+                ->addColumn('fullAdress', function ($item) {
+                    return '' . $item['address'] . ', DS.' . $item['village'] . ', KEC.' . $item['district'];
+                })
+                ->addColumn('totalReferal', function ($item) {
+                    return '<span class="badge bg-success text-light">' . $item['total_referal'] . '</span>';
+                })
+                ->addColumn('nominalBonus', function ($item) {
+                    return '<span class="badge bg-success text-light">Rp ' . $item['bonus'] . '</span>';
+                })
+                ->rawColumns(['photo', 'fullAdress', 'totalReferal', 'nominalBonus'])
+                ->make(true);
         }
     }
 
@@ -1079,7 +1096,7 @@ class MemberController extends Controller
         $admins   = [];
         foreach ($admin  as $value) {
             $bonus    = $gf->calculateSpecialBonusAdmin($value->total_data);
-            if ($bonus> 0 && $value->set_admin == 'Y') {
+            if ($bonus > 0 && $value->set_admin == 'Y') {
                 $village  = Village::with('district')->where('id', $value->village_id)->first();
                 $admins[] = [
                     'id' => $value->user_id,
@@ -1091,36 +1108,34 @@ class MemberController extends Controller
                     'total_data' => $gf->decimalFormat($value->total_data),
                     'total' => $value->total_data,
                     'bonus' => $gf->decimalFormat($bonus),
-                    
+
                 ];
             }
         }
 
 
-        if (request()->ajax()) 
-        {
+        if (request()->ajax()) {
             return DataTables::of($admins)
-                    ->addIndexColumn()
-                    ->addColumn('photo', function($item){
-                        return '
-                        <a href="'.route('admin-profile-member', $item['id']).'">
-                            <img  class="rounded" width="40" src="'.asset('storage/'.$item['photo']).'">
-                            '.$item['name'].'
+                ->addIndexColumn()
+                ->addColumn('photo', function ($item) {
+                    return '
+                        <a href="' . route('admin-profile-member', $item['id']) . '">
+                            <img  class="rounded" width="40" src="' . asset('storage/' . $item['photo']) . '">
+                            ' . $item['name'] . '
                         </a>
                         ';
-                    })
-                    ->addColumn('fullAdress', function($item){
-                        return ''.$item['address'].', DS.'.$item['village'].', KEC.'.$item['district'];
-                    })
-                    ->addColumn('totalReferal', function($item){
-                        return '<span class="badge bg-success text-light">'.$item['total_data'].'</span>';
-                    })
-                    ->addColumn('nominalBonus', function($item){
-                        return '<span class="badge bg-success text-light">Rp '.$item['bonus'].'</span>';
-
-                    })
-                    ->rawColumns(['photo','fullAdress','totalReferal','nominalBonus'])
-                    ->make(true);
+                })
+                ->addColumn('fullAdress', function ($item) {
+                    return '' . $item['address'] . ', DS.' . $item['village'] . ', KEC.' . $item['district'];
+                })
+                ->addColumn('totalReferal', function ($item) {
+                    return '<span class="badge bg-success text-light">' . $item['total_data'] . '</span>';
+                })
+                ->addColumn('nominalBonus', function ($item) {
+                    return '<span class="badge bg-success text-light">Rp ' . $item['bonus'] . '</span>';
+                })
+                ->rawColumns(['photo', 'fullAdress', 'totalReferal', 'nominalBonus'])
+                ->make(true);
         }
     }
 
@@ -1136,7 +1151,7 @@ class MemberController extends Controller
 
             $bonus = $gf->calculateSpecialBonusReferal($value->total);
 
-            if ($bonus > 0 AND $value->id != 35) {
+            if ($bonus > 0 and $value->id != 35) {
                 $referals[] = [
                     'name' => $value->name,
                     'photo' => $value->photo,
@@ -1148,20 +1163,18 @@ class MemberController extends Controller
                     'total_bonus' => $bonus
                 ];
             }
-
         }
 
-        $count_total_bonus = collect($referals)->sum(function($q){
+        $count_total_bonus = collect($referals)->sum(function ($q) {
             return $q['total_bonus'];
         });
 
         $count_total_bonus = $gf->decimalFormat($count_total_bonus);
 
         $no = 1;
-        $title = 'LAPORAN PENERIMA BONUS KHUSUS REFERAL'; 
-        $pdf   = PDF::loadView('pages.admin.report.member-bonus-khusus-pdf', compact('referals','title','no','count_total_bonus'))->setPaper('landscape');
-        return $pdf->download($title.'.pdf');
-
+        $title = 'LAPORAN PENERIMA BONUS KHUSUS REFERAL';
+        $pdf   = PDF::loadView('pages.admin.report.member-bonus-khusus-pdf', compact('referals', 'title', 'no', 'count_total_bonus'))->setPaper('landscape');
+        return $pdf->download($title . '.pdf');
     }
 
     public function spesialBonusReportAdmin()
@@ -1175,7 +1188,7 @@ class MemberController extends Controller
         $admins   = [];
         foreach ($admin  as $value) {
             $bonus    = $gf->calculateSpecialBonusAdmin($value->total_data);
-            if ($bonus> 0 && $value->set_admin == 'Y') {
+            if ($bonus > 0 && $value->set_admin == 'Y') {
                 $village  = Village::with('district')->where('id', $value->village_id)->first();
                 $admins[] = [
                     'name' => $value->name,
@@ -1190,66 +1203,62 @@ class MemberController extends Controller
             }
         }
 
-        $count_total_bonus = collect($admins)->sum(function($q){
+        $count_total_bonus = collect($admins)->sum(function ($q) {
             return $q['total_bonus'];
         });
 
         $count_total_bonus = $gf->decimalFormat($count_total_bonus);
 
         $no = 1;
-        $title = 'LAPORAN PENERIMA BONUS KHUSUS ADMIN'; 
-        $pdf   = PDF::loadView('pages.admin.report.member-bonus-khusus-admin-pdf', compact('admins','title','no','count_total_bonus'))->setPaper('landscape');
-        return $pdf->download($title.'.pdf');
-
+        $title = 'LAPORAN PENERIMA BONUS KHUSUS ADMIN';
+        $pdf   = PDF::loadView('pages.admin.report.member-bonus-khusus-admin-pdf', compact('admins', 'title', 'no', 'count_total_bonus'))->setPaper('landscape');
+        return $pdf->download($title . '.pdf');
     }
 
-    public function spamMember(Request $request){
+    public function spamMember(Request $request)
+    {
 
         DB::beginTransaction();
         try {
-            
+
             #jika duplikat
             #get user origiall by nik di tb users
-                if ($request->niks != null) {
+            if ($request->niks != null) {
 
                 $originaluser = User::select('nik')->where('nik', $request->niks)->first();
 
-                if(!$originaluser) return redirect()->back()->with(['warning' => 'NIk tidak ditemukan!']);
-                
+                if (!$originaluser) return redirect()->back()->with(['warning' => 'NIk tidak ditemukan!']);
+
                 $category_inactive_member = 5;
                 #save ke tmp  users beserta alasan
                 $user = User::where('id', $request->id)->first();
-                $this->setStoreSpamMember($user,$originaluser,$request, $category_inactive_member);
-                
+                $this->setStoreSpamMember($user, $originaluser, $request, $category_inactive_member);
+
                 #delete di tb users sebagai anggota
                 DeleteNikOrg::delete($user->nik);
                 $user->delete();
+            } else {
 
+                #save ke tmp  users beserta alasan
+                $user = User::where('id', $request->id)->first();
+                $this->setStoreSpamMember($user, null, $request, null);
 
-            }else{
-
-                 #save ke tmp  users beserta alasan
-                 $user = User::where('id', $request->id)->first();
-                 $this->setStoreSpamMember($user,null,$request,null);
-                 
-                 #delete di tb users sebagai anggota
-                 DeleteNikOrg::delete($user->nik);
-                 $user->delete();
+                #delete di tb users sebagai anggota
+                DeleteNikOrg::delete($user->nik);
+                $user->delete();
             }
 
 
             DB::commit();
             return redirect()->back()->with(['success' => 'Anggota disimpan sebagai spam!']);
-
-
         } catch (\Exception $e) {
             DB::rollBack();
             return $e->getMessage();
         }
-
     }
 
-    public function setStoreSpamMember($user,$originaluser,$request, $category_inactive_member){
+    public function setStoreSpamMember($user, $originaluser, $request, $category_inactive_member)
+    {
 
         #save ke tb tmp_spam_user
         return TmpSpamUser::create([
@@ -1290,7 +1299,5 @@ class MemberController extends Controller
             'created_at' => $user->created_at,
             'updated_at' => date('Y-m-d H:i:s')
         ]);
-
     }
-
 }

@@ -265,6 +265,20 @@
                                                 value="{{ $profile->email }}"
                                                 />
                                             </div>
+                                            <div class="form-group">
+                                                <span class="required">*</span>
+                                                <label>Kode Reveral</label>
+                                                <input id="code" 
+                                                    v-model="code"
+                                                    @change="checkForReveralAvailability()"
+                                                    type="text" 
+                                                    class="form-control @error('code') @enderror"
+                                                    :class="{'is_invalid' : this.code_unavailable}" 
+                                                    name="code" 
+                                                    value="{{ old('code') }}" 
+                                                    required
+                                                    >
+                                            </div>
                                         <hr class="mb-4 mt-4">
                                     <div class="form-group">
                                                 <span class="required">*</span>

@@ -213,6 +213,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::post('/member/create/account/store/{id}','MemberController@storeAccount')->name('admin-member-create-account-store');
         Route::post('/member/store','MemberController@store')->name('admin-member-store');
         Route::post('/member/spam','MemberController@spamMember')->name('admin-member-spam');
+
+        Route::get('/member/edit/referal/{id}','MemberController@editReferal');
+        Route::post('/member/edit/referal/update{id}','MemberController@updateReferal')->name('admin-update-referal');
         
         Route::get('/member/nonactive/account/{id}','MemberController@nonActiveAccount')->name('admin-member-nonactive-account');
         Route::post('/member/nonactive/account/store/{id}','MemberController@storeAccountNonActive')->name('admin-member-nonactive-account-store');
