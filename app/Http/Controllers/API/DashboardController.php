@@ -314,10 +314,10 @@ class DashboardController extends Controller
         //     return $q->total;
         // });
         $userModel        = new User();
-        $targetMember     = $gF->calculateTargetNational();
-        $total_member     = $gF->decimalFormat($userModel->where('village_id', '!=', NULL)->count());
-        $target_member    = (string) $targetMember;
-        $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
+        // $targetMember     = $gF->calculateTargetNational();
+        $total_member     = $userModel->where('village_id', '!=', NULL)->count();
+        // $target_member    = (string) $targetMember;
+        // $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
 
         $villageModel   = new Village();
         $total_village  = $villageModel->getVillages()->total_village; // fungsi total desa di provinsi banten
@@ -332,11 +332,16 @@ class DashboardController extends Controller
 
         $tpsNational      = Tps::select('id')->count();
 
+        $orgDiagramModel = new OrgDiagram();
+        $target_member       = $orgDiagramModel->getDataDaftarTimByDapilForNational();
+        // jumlakan hasil all target kecamatan by dapil
+        $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
+
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
             'total_village_filled' => $gF->decimalFormat($total_village_filled),
             'presentage_village_filled' => $presentage_village_filled,
-            'total_member' => $total_member,
+            'total_member' => $gF->decimalFormat($total_member),
             'target_member' => $gF->decimalFormat($target_member),
             'persentage_target_member' => $persentage_target_member,
             'rightChooseProvince' => $gF->decimalFormat($rightChooseProvince) ?? 0,
@@ -354,7 +359,7 @@ class DashboardController extends Controller
         $member           = $userModel->getMemberRegency($regency_id);   
         $total_member     = count($member); // total anggota terdaftar
 
-        $regencyModel     = Regency::select('target')->where('id', $regency_id)->first();
+        // $regencyModel     = Regency::select('target')->where('id', $regency_id)->first();
         // $targetMember    = $regencyModel->target; // target anggota tercapai, per kecamatan 1000 target
 
         // $target_member    = (string) $targetMember;
@@ -1714,9 +1719,9 @@ class DashboardController extends Controller
         $member           = $userModel->getMemberProvince($province_id);
         $total_member     = count($member); // total anggota terdaftar
 
-        $provinceModel    = Province::select('target')->where('id', $province_id)->first();
-        $target_member    = $provinceModel->target;
-        $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
+        // $provinceModel    = Province::select('target')->where('id', $province_id)->first();
+        // $target_member    = $provinceModel->target;
+        // $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
         
         $villageModel   = new Village();
         $total_village  = $villageModel->getVillagesProvince($province_id)->total_village; // fungsi total desa di provinsi banten
@@ -1730,6 +1735,22 @@ class DashboardController extends Controller
         $rightChooseProvince = $dptModel->getDptLevelProvince()->total_dpt;
 
         $tpsProvince      = Tps::select('id')->where('province_id', $province_id)->count();
+
+        $orgDiagramModel = new OrgDiagram();
+        $daftarTeam       = $orgDiagramModel->getDataDaftarTimByProvinceForDashboard($province_id);
+        $resultsDaftarTeam = [];
+        foreach ($daftarTeam as $val) {
+            $target = $orgDiagramModel->getDataDaftarTimByDapilForProvince($val->id);
+
+            $resultsDaftarTeam[] = [
+                'target' => $target,
+            ];
+        }
+        // jumlakan hasil all target kecamatan by dapil
+        $target_member = collect($resultsDaftarTeam)->sum(function($q){
+            return $q['target'];
+        });
+        $persentage_target_member = ($total_member / $target_member) * 100; // persentai terdata
 
         $data = [
             'total_village' => $gF->decimalFormat($total_village),
