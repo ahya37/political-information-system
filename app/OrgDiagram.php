@@ -692,17 +692,16 @@ class OrgDiagram extends Model
 				(
 					SELECT COUNT(adpt.id) from dpt_kpu as adpt
 					join districts as bdpt on adpt.district_id = bdpt.id 
-					join dapil_areas as cdpt on bdpt.id = cdpt.district_id
-					join dapils as cdapil on cdpt.dapil_id = cdapil.id
-					join regencies as cregency on cdapil.regency_id = cregency.id 
-					WHERE cregency.province_id  = a.id
+					join dapil_areas as cdpt on bdpt.id = cdpt.district_id 
+					WHERE cdpt.dapil_id = a.id
 				) as dpt,
 				(
 					SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id
 					join dapil_areas as a4 on a2.district_id = a4.district_id where a4.dapil_id = a.id
 				) as anggota
-				from provinces  as a
-				where a.id = $proivnceId";
+				from dapils as a
+				join regencies as c on a.regency_id = c.id 
+				where c.province_id  = $proivnceId";
 
 		return DB::select($sql);
 
@@ -730,11 +729,11 @@ class OrgDiagram extends Model
 	public function getDataDaftarTimByDapilForNational(){
 
 		#get data desa by dapil
-        $sql = "SELECT b.name, b.target_persentage,
-					((SELECT COUNT(b1.id) from dpt_kpu as b1 join villages b2 on b1.village_id = b2.id WHERE b2.district_id = a.district_id)*b.target_persentage)/100 as target
-					from dapil_areas as a
-					join districts as b on a.district_id = b.id
-					join regencies as c on b.regency_id = c.id";
+        $sql = "SELECT a.target_persentage,
+			((SELECT COUNT(b1.id) from dpt_kpu as b1 
+			join districts as b3 on b1.district_id = b3.id
+			WHERE b3.id = a.id)*a.target_persentage)/100 as target
+			from districts as a";
 		
 		$result = DB::select($sql);
 		$jml_target = collect($result)->sum(function($q){
@@ -742,6 +741,25 @@ class OrgDiagram extends Model
 		});
         $jml_target = round($jml_target);
         return $jml_target;
+
+	}
+
+	public function getDataDaftarTimByNationalForDashboard(){
+
+		$sql = "SELECT a.id, a.name,
+					(
+						SELECT COUNT(adpt.id) from dpt_kpu as adpt
+						join districts as bdpt on adpt.district_id = bdpt.id 
+						join dapil_areas as cdpt on bdpt.id = cdpt.district_id 
+						WHERE cdpt.dapil_id = a.id
+					) as dpt,
+					(
+						SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id
+						join dapil_areas as a4 on a2.district_id = a4.district_id where a4.dapil_id = a.id
+					) as anggota
+					from dapils as a";
+
+		return DB::select($sql);
 
 	}
 

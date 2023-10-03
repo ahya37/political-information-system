@@ -331,10 +331,20 @@ class DashboardController extends Controller
         $rightChooseProvince      = $dptModel->getDptLevelNational()->total_dpt;
 
         $tpsNational      = Tps::select('id')->count();
-
         $orgDiagramModel = new OrgDiagram();
-        $target_member       = $orgDiagramModel->getDataDaftarTimByDapilForNational();
+        $daftarTeam       = $orgDiagramModel->getDataDaftarTimByNationalForDashboard();
+        $resultsDaftarTeam = [];
+        foreach ($daftarTeam as $val) {
+            $target = $orgDiagramModel->getDataDaftarTimByDapilForRegency($val->id);
+
+            $resultsDaftarTeam[] = [
+                'target' => $target,
+            ];
+        }
         // jumlakan hasil all target kecamatan by dapil
+        $target_member = collect($resultsDaftarTeam)->sum(function($q){
+            return $q['target'];
+        });
         $persentage_target_member = $gF->persen(($total_member / $target_member) * 100); // persentai terdata
 
         $data = [
@@ -1740,7 +1750,7 @@ class DashboardController extends Controller
         $daftarTeam       = $orgDiagramModel->getDataDaftarTimByProvinceForDashboard($province_id);
         $resultsDaftarTeam = [];
         foreach ($daftarTeam as $val) {
-            $target = $orgDiagramModel->getDataDaftarTimByDapilForProvince($val->id);
+            $target = $orgDiagramModel->getDataDaftarTimByDapilForRegency($val->id);
 
             $resultsDaftarTeam[] = [
                 'target' => $target,
