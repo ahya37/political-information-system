@@ -41,6 +41,7 @@ class MemberByReferalInDistrict implements FromCollection,  WithHeadings, WithEv
             unset($val->photo);
             $data[] = [
                 'no' => $no++,
+                'nik' => "'$val->nik",
                 'name' => $val->name,
                 'address' => $val->address,
                 'rt' => $val->rt,
@@ -52,6 +53,7 @@ class MemberByReferalInDistrict implements FromCollection,  WithHeadings, WithEv
                 'phone_number' => $val->phone_number,
                 'whatsapp' => $val->whatsapp,
                 'created_at' => date('d-m-Y', strtotime($val->created_at)),
+                'bulan' => date('m', strtotime($val->created_at)),
                 'inputer' => $val->inputer,
                 'referal' => $val->referal,
                 'total_referal' => $val->total_referal == 0 ? '0' : $val->total_referal,
@@ -65,6 +67,7 @@ class MemberByReferalInDistrict implements FromCollection,  WithHeadings, WithEv
     {
         return [
             'NO',
+            'NIK',
             'NAMA',
             'ALAMAT',
             'RT',
@@ -76,6 +79,7 @@ class MemberByReferalInDistrict implements FromCollection,  WithHeadings, WithEv
             'TELEPON',
             'WHATSAPP',
             'TERDAFTAR',
+            'BULAN',
             'INPUT DARI',
             'REFERAL',
             'JUMLAH REFERAL',
@@ -86,7 +90,7 @@ class MemberByReferalInDistrict implements FromCollection,  WithHeadings, WithEv
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:O1')->applyFromArray([
+                $event->sheet->getStyle('A1:Q1')->applyFromArray([
                     'font' => [
                         'bold' => true
                     ]

@@ -1134,7 +1134,7 @@ class User extends Authenticatable
     public function getListMemberByDistrictId($district_id, $user_id)
     {
         $sql = "SELECT  
-                    a.id, a.name,c.name as village, d.name as district, e.name as regency, f.name as province, a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo,a.created_at,
+                    a.nik, a.id, a.name,c.name as village, d.name as district, e.name as regency, f.name as province, a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo,a.created_at,
                     g.name as inputer, i.name as referal, COUNT(h.id) as total_referal
                     FROM users as a
                 join 
@@ -1154,7 +1154,7 @@ class User extends Authenticatable
                 where 
                     d.id = $district_id and a.user_id = $user_id
                 group by 
-                 	a.id, a.name,c.name, d.name, e.name, f.name , a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo, a.created_at, 
+                 	a.nik,a.id, a.name,c.name, d.name, e.name, f.name , a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo, a.created_at, 
                     g.name, i.name
                 order by c.name,a.name ASC ";
         return DB::select($sql);
@@ -1192,7 +1192,7 @@ class User extends Authenticatable
     public function getListMemberByDistrictAll($user_id)
     {
         $sql = "SELECT  
-                    a.id, a.name,c.name as village, d.name as district, e.name as regency, f.name as province, a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo, a.created_at, 
+                    a.nik, a.id, a.name,c.name as village, d.name as district, e.name as regency, f.name as province, a.address, a.rt, a.rw, a.phone_number, a.whatsapp, a.photo, a.created_at, 
                     g.name as inputer, i.name as referal, COUNT(h.id) as total_referal
                 FROM 
                     users as a

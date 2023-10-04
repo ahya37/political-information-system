@@ -36,6 +36,7 @@ class MemberByReferalAll implements FromCollection,WithHeadings, WithEvents
             unset($val->photo);
             $data[] = [
                 'no' => $no++,
+                'nik' => $val->nik,
                 'name' => $val->name,
                 'address' => $val->address,
                 'rt' => $val->rt,
@@ -60,6 +61,7 @@ class MemberByReferalAll implements FromCollection,WithHeadings, WithEvents
     {
         return [
             'NO',
+            'NIK',
             'NAMA',
             'ALAMAT',
             'RT',
@@ -81,7 +83,7 @@ class MemberByReferalAll implements FromCollection,WithHeadings, WithEvents
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:O1')->applyFromArray([
+                $event->sheet->getStyle('A1:P1')->applyFromArray([
                     'font' => [
                         'bold' => true
                     ]
