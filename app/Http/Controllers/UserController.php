@@ -132,10 +132,11 @@ class UserController extends Controller
        
                   $strRandomProvider = new StrRandom();
                   $string            = $strRandomProvider->generateStrRandom();
+                  $potong_nik        = substr($request->nik, -5); // get angka nik 5 angka dari belakang
        
                   $user = User::create([
                       'user_id' => $cek_code->id,
-                      'code' => $string,
+                      'code' => $potong_nik.$string,
                       'nik'  => $request->nik,
                       'name' => strtoupper($request->name),
                       'gender' => $request->gender,
