@@ -514,6 +514,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/daftartim/dapil/{dapilId}','OrgDiagramController@daftatTimDapil')->name('admin-daftartim-data-dapil');
             Route::get('/daftartim/district/{districtId}','OrgDiagramController@daftarTimDistrict')->name('admin-daftartim-data-district');
 
+            Route::post('/report/rt/formkortps/{idx}','OrgDiagramController@downloadAnggotaKorTpsFormKosongByKortps')->name('admin-formkortps-rt-report-excel');
+
         });
 		
 		Route::group(['prefix' => 'report'], function(){

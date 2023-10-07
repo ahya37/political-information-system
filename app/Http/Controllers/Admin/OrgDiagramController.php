@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\DetailFamilyGroup;
 use App\Exports\AnggotaBelumTercoverKortps;
+use App\Exports\AnggotaFormKortpsExport;
 use App\Exports\KorteExportWithSheet;
 use App\Sticker;
 use Illuminate\Http\Request;
@@ -3663,6 +3664,22 @@ class OrgDiagramController extends Controller
             return redirect()->back()->with(['error' => 'Data gagal tersimpan!']);
         }
 
+
+    }
+
+    public function downloadAnggotaKorTpsFormKosongByKortps(Request $request, $idx){
+
+
+        $kor_rt = DB::table('org_diagram_rt as a')
+                ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district')
+                ->join('users as b', 'b.nik', '=', 'a.nik')
+                ->join('villages as c', 'c.id', '=', 'a.village_id')
+                ->join('districts as d', 'd.id', '=', 'a.district_id')
+                ->where('idx', $idx)
+                ->first();
+
+        $title = 'ANGGOTA KORTPS : ' . $kor_rt->name . ' RT (' . $kor_rt->rt . '), DS.' . $kor_rt->village . ', KEC.' . $kor_rt->district . '.xls';
+        return $this->excel->download(new AnggotaFormKortpsExport($idx), $title);
 
     }
 

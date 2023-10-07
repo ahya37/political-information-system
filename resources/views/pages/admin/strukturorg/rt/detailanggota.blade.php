@@ -144,8 +144,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5>Anggota Koordinator TPS / Korte</h5>
-                                <form action="" class="mt-2 mb-2">
-                                    <button class="btn btn-sm btn-sc-primary text-white">Download PDF</button>
+                                <form action="{{ route('admin-formkortps-rt-report-excel', $korte_idx) }}" method="POST" enctype="multipart/form-data" class="mt-2 mb-2">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-sc-primary text-white">Download PDF</button>
                                 </form>
                                 <table id="anggotakortps" class="table table-sm table-striped mt-3" width="100%">
                                     <thead>
