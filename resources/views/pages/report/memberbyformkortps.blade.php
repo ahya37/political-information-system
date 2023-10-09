@@ -71,7 +71,7 @@
 				cellspacing:0;
 				margin-bottom: 10px;
 				cellspacing:0;
-				margin-top:72px;
+				margin-top:90px;
 				font-size: 12px;
                 width: 100%;
                 /* margin-left: 35px; */
@@ -90,37 +90,22 @@
     </header>
 		<table id="table1">
             <tr>
-                <td>NAMA</td><td>:</td><td>{{$kor_rt->name}}</td>
+                <td><b>NAMA</b></td><td>:</td><td><b>{{$kor_rt->name}}</b></td>
                 <td></td>
-                <td>RT/RW</td><td>:</td><td>{{$kor_rt->rt}} / {{$kor_rt->rw}}</td>
+                <td><b>RT/RW</b></td><td>:</td><td><b>{{$kor_rt->rt}} / {{$kor_rt->rw}}</b></td>
             </tr>
             <tr>
-                <td>TPS</td><td>:</td><td>{{$kor_rt->tps_number}}</td>
+                <td><b>TPS</b></td><td>:</td><td><b>{{$kor_rt->tps_number}}</b></td>
                 <td></td>
 
-				<td>DESA</td><td>:</td><td>{{$kor_rt->village}}</td>
+				<td><b>DESA</b></td><td>:</td><td><b>{{$kor_rt->village}}</b></td>
             </tr>
             <tr>
-                <td>NO. TELP</td><td>:</td><td>{{$kor_rt->telp}}</td>
+                <td><b>NO.TELP</b></td><td>:</td><td><b>{{$kor_rt->telp}}</b></td>
                 <td></td>
 
-                <td>KECAMATAN</td><td>:</td><td>{{$kor_rt->district}}</td>
+                <td><b>KECAMATAN</b></td><td>:</td><td><b>{{$kor_rt->district}}</b></td>
             </tr>
-			{{-- <tr>
-				<td>DESA</td><td>:</td><td>{{$kor_rt->village}}</td>
-				
-			</tr><tr>
-				
-				<td>KECAMATAN</td><td>:</td><td>{{$kor_rt->district}}</td>
-				
-			</tr><tr>
-				
-				<td>KORTE</td><td>:</td><td>{{$kor_rt->name}}</td>
-				
-			</tr><tr>
-				
-				<td>RT</td><td>:</td><td>{{$kor_rt->rt}}</td>
-			</tr> --}}
 		</table>
 		
           <section >
@@ -143,14 +128,15 @@
 				</tbody>
             </table>
         </section>
-        <section style="text-align: right;margin-top:1px">
+        <section style="text-align: right;margin-top:1px;font-size:12px" class="fonts">
             <span>Yang bertanda tangan dibawah ini</span>
             <br>
             <span>Koordinator TPS / KORTE</span>
             <br>
             <br>
             <br>
-            <span>({{$kor_rt->name}})</span>
+            <br>
+            <span><b>({{$kor_rt->name}})</b></span>
         </section>
      <footer></footer>
 </body>

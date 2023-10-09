@@ -3689,7 +3689,7 @@ class OrgDiagramController extends Controller
 
 
     $pdf = PDF::LoadView('pages.report.memberbyformkortps', compact('kor_rt', 'members', 'no'))->setPaper('a4');
-    return $pdf->stream('ANGGOTA KORTE RT ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
+    return $pdf->download('ANGGOTA KORTE RT ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
 
     //     $kor_rt = DB::table('org_diagram_rt as a')
     //             ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district')
