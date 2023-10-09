@@ -123,7 +123,7 @@ class MemberController extends Controller
         $cekLengthNik = strlen($request->nik);
         if ($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
 
-        $cby = Admin::select('id')->first();
+        $cby = auth()->guard('admin')->user()->id;
         //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
 
         $cek_nik = User::select('nik')->where('nik', $request->nik)->count();
@@ -171,7 +171,7 @@ class MemberController extends Controller
                     'address'      => strtoupper($request->address),
                     'photo'        => $photo,
                     'ktp'          => $ktp,
-                    'cby'          => $cby->id,
+                    'cby'          => $cby,
                 ]);
 
                 #generate qrcode
