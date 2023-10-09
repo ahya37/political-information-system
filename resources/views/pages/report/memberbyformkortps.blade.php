@@ -85,7 +85,7 @@
     
 <body>
     <header>
-	{{-- <img src="{{asset('assets/images/kopsurataaw.png')}}" width="800" style="margin-top:-2px"> --}}
+	<img src="{{asset('assets/images/kopsurataaw.png')}}" width="800" style="margin-top:-2px">
 	<h4 style="margin-top:-4px;" class="fonts">TIM KOORDINATOR TPS / RT</h4> 
     </header>
 		<table id="table1">
