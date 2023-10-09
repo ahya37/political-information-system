@@ -10,7 +10,7 @@
             }
 
             header {
-                position: fixed;
+                position: absolute;
                 top: -100px;
                 left: 0px;
                 right: 0px; 
@@ -42,7 +42,7 @@
             text-shadow: 1px 1px 0px #fff;
             background: #eaebec;
             border: #ccc 1px solid;
-            width: 90%;
+            width: 100%;
             margin-left: auto;
             margin-right: auto;
             }
@@ -73,8 +73,8 @@
 				cellspacing:0;
 				margin-top:72px;
 				font-size: 12px;
-                width: 90%;
-                margin-left: 35px;
+                width: 100%;
+                /* margin-left: 35px; */
                 /* margin-right: auto; */
             }
             
@@ -85,8 +85,8 @@
     
 <body>
     <header>
-	<img src="{{asset('assets/images/kopsurataaw.png')}}" width="800" style="margin-top:-2px">
-	<h4 style="margin-top:-4px;" class="fonts">TIM KOORDINATOR TPS / RT</h4> 
+	{{-- <img src="{{asset('assets/images/kopsurataaw.png')}}" width="800" style="margin-top:-2px"> --}}
+	<h4 style="margin-top:-4px;margin-bottom: 4px;" class="fonts">TIM KOORDINATOR TPS / RT</h4> 
     </header>
 		<table id="table1">
             <tr>
@@ -143,7 +143,15 @@
 				</tbody>
             </table>
         </section>
-         
-         <footer></footer>
+        <section style="text-align: right;margin-top:1px">
+            <span>Yang bertanda tangan dibawah ini</span>
+            <br>
+            <span>Koordinator TPS / KORTE</span>
+            <br>
+            <br>
+            <br>
+            <span>({{$kor_rt->name}})</span>
+        </section>
+     <footer></footer>
 </body>
 </html>
