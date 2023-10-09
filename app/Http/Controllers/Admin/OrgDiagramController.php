@@ -3671,15 +3671,36 @@ class OrgDiagramController extends Controller
 
 
         $kor_rt = DB::table('org_diagram_rt as a')
-                ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district')
-                ->join('users as b', 'b.nik', '=', 'a.nik')
-                ->join('villages as c', 'c.id', '=', 'a.village_id')
-                ->join('districts as d', 'd.id', '=', 'a.district_id')
-                ->where('idx', $idx)
-                ->first();
+            ->select('a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district','b.rw','e.tps_number','a.telp')
+            ->join('users as b', 'b.nik', '=', 'a.nik')
+            ->join('villages as c', 'c.id', '=', 'a.village_id')
+            ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->join('tps as e','b.tps_id','=','e.id')
+            ->where('a.idx', $idx)
+            ->where('a.base', 'KORRT')
+            ->first();
+            // get data anggota by korte
+            $members = DB::table('anggota_koordinator_tps_korte')
+                ->select('name','nik')
+                ->where('pidx_korte', $idx)
+                ->get();
 
-        $title = 'ANGGOTA KORTPS : ' . $kor_rt->name . ' RT (' . $kor_rt->rt . '), DS.' . $kor_rt->village . ', KEC.' . $kor_rt->district . '.xls';
-        return $this->excel->download(new AnggotaFormKortpsExport($idx), $title);
+            $no = 1;
+
+
+    $pdf = PDF::LoadView('pages.report.memberbyformkortps', compact('kor_rt', 'members', 'no'))->setPaper('a4');
+    return $pdf->stream('ANGGOTA KORTE RT ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
+
+    //     $kor_rt = DB::table('org_diagram_rt as a')
+    //             ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district')
+    //             ->join('users as b', 'b.nik', '=', 'a.nik')
+    //             ->join('villages as c', 'c.id', '=', 'a.village_id')
+    //             ->join('districts as d', 'd.id', '=', 'a.district_id')
+    //             ->where('idx', $idx)
+    //             ->first();
+
+        // $title = 'ANGGOTA KORTPS : ' . $kor_rt->name . ' RT (' . $kor_rt->rt . '), DS.' . $kor_rt->village . ', KEC.' . $kor_rt->district . '.xls';
+        // return $this->excel->download(new AnggotaFormKortpsExport($idx), $title);
 
     }
 

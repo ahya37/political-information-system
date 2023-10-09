@@ -108,7 +108,7 @@ class MemberController extends Controller
                     'user_id' => $user_referal->id
                 ]);
             }
-            return redirect()->route('admin-member')->with('success', 'Referal telah diperbarui');
+            return redirect()->back()->with('success', 'Referal telah diperbarui');
         }
     }
 
