@@ -105,6 +105,7 @@ async function initialGetAnggotaCoverFirst() {
         selectVillageId,
         selectRT
     );
+
     $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
     $("#targetkortps").text(` ${numberWithDot(dataKortps.data.target_kortps)}`);
     $("#kortpsterisi").text(` ${numberWithDot(dataKortps.data.kortps_terisi)}`);
@@ -121,7 +122,6 @@ async function initialGetKortps(
     selectVillageId,
     selectRT
 ) {
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     return new Promise((resolve, reject) => {
         const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
         $.ajax({
@@ -994,8 +994,9 @@ let table = $("#data").DataTable({
             searchable: false,
             orderable: false,
             targets: 0,
-            render: function(){
+            render: function(data, type, row, meta){
                 return i++;
+                // return row.no;
             }
            
         },
@@ -1098,8 +1099,9 @@ let table = $("#data").DataTable({
                     </div>`;
             },
         },
-    ],
+    ]
 });
+
 
 $("#exampleModal").on("show.bs.modal", function (event) {
     var button = $(event.relatedTarget);

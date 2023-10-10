@@ -430,7 +430,7 @@ class DashboardController extends Controller
         $total_member = count($member);
         
         // perentasi anggot  di kecamatan
-        $districtModel    = District::select('target')->where('id', $district_id)->first();
+        $districtModel    = new District();
         // $target_member    = $districtModel->target; // target anggota tercapai, per kecamatan 1000 target
 
         $villageModel   = new Village();

@@ -2,31 +2,33 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\KorteExportWithSheet;
+use PDF;
+use File;
+use Zipper;
+use Storage;
+use App\User;
+use DataTables;
 use App\Sticker;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\OrgDiagram;
-use App\KoordinatorTpsKorte;
-use App\Models\Province;
 use App\Models\Regency;
+use App\Models\Village;
+use App\Models\District;
+use App\Models\Province;
+use App\RightChosseVillage;
+use App\Exports\KorteExport;
+use App\KoordinatorTpsKorte;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Excel;
+use App\Exports\KorCamExport;
+use App\Exports\KorDesExport;
+use App\Providers\GlobalProvider;
 use App\Helpers\ResponseFormatter;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Auth\RegisterController;
-use App\User;
-use Illuminate\Support\Facades\Validator;
-use App\Providers\GlobalProvider;
-use Maatwebsite\Excel\Excel;
-use App\Exports\KorDesExport;
-use App\Exports\KorCamExport;
-use App\Exports\KorteExport;
 use App\Exports\KorteMembersExport;
-use App\Models\Village;
-use PDF;
-use Zipper;
-use File;
-use Storage;
-use DataTables;
+use App\Http\Controllers\Controller;
+use App\Exports\KorteExportWithSheet;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Auth\RegisterController;
 
 class OrgDiagramController extends Controller
 {
@@ -122,29 +124,53 @@ class OrgDiagramController extends Controller
         $village_id = request()->village;
         $rt         = request()->rt;
 
-        $orgDiagram = new OrgDiagram();
+        $orgDiagram         = new OrgDiagram();
+        $districtModel      = new District();
+        $RightChosseVillageModel   = new RightChosseVillage();
+        $villageModel              = new Village();
         $gF = new GlobalProvider();
 
+        $const_kortps = 25;
+
         $results = '';
+        $target_kortps = '';
         if(isset($dapil_id) && !isset($district_id) && !isset($village_id) && !isset($rt)){
 
             $results = $orgDiagram->getCalculateDataDaftarTimKorTpsDapil($regencyId, $dapil_id);
+            $getTargetKortps = $orgDiagram->getDataDaftarTimByDapilForRegency($dapil_id);
+
+            $target_kortps      = $getTargetKortps / $const_kortps;
 
         }elseif(isset($dapil_id) && isset($district_id) && !isset($village_id) && !isset($rt)){
 
             $results = $orgDiagram->getCalculateDataDaftarTimKorTpsDistrict($district_id);
+		    $rightChooseDistrict       = $RightChosseVillageModel->getTotalDptDistrict($district_id)->total_dpt;
+
+            $target_from_dpt  = $districtModel->getTargetPersentageDistrict($district_id)->target_persentage;
+            $target_member  = ($rightChooseDistrict * $target_from_dpt)/100;
+
+            $target_kortps = $target_member / $const_kortps;
 
         }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && !isset($rt)){
 
             $results = $orgDiagram->getCalculateDataDaftarTimKorTpsVillage($village_id);
+            $rightChooseVillage = $RightChosseVillageModel->getTotalDptVillage($village_id)->total_dpt;
+
+            $target_from_dpt  = $villageModel->getTargetPersentageVillage($village_id)->target_persentage;
+            $target_member  = ($rightChooseVillage* $target_from_dpt)/100;
+
+            $target_kortps = $target_member / $const_kortps;
 
         }else{
             $results = $orgDiagram->getCalculateDataDaftarTimKorTps($regencyId);
+            $get_target_kortps = $orgDiagram->getDataDaftarTimByDapilForRegencyAll();
+            // deaultnya , jumlahkah semua target kortps all level
+            $target_kortps = $get_target_kortps / 25;
         }
 
-        $target_kortps      = collect($results)->sum(function($q){
-            return $q->target_korte ?? 0;
-        });
+        // $target_kortps      = collect($results)->sum(function($q){
+        //     return $q->target_korte ?? 0;
+        // });
 
         $kortps_terisi      = collect($results)->sum(function($q){
             return $q->korte_terisi ?? 0;
@@ -1244,6 +1270,7 @@ class OrgDiagramController extends Controller
 
                 $result_new_idx  = time() . "KORRT." . $result_exp;
             }
+            
         } else {
 
             $result_new_idx = "KORRT";
