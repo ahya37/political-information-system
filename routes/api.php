@@ -92,6 +92,8 @@ Route::post('org/getdataorgpusat', 'Admin\OrgDiagramController@getDataOrgPusat')
 Route::post('org/pusat/delete', 'Admin\OrgDiagramController@deleteKorPusat');
 Route::post('org/pusat/update', 'Admin\OrgDiagramController@updateOrgPusat');
 
+
+
 Route::post('org/rt/anggotakeluargaserumah/delete', 'Admin\OrgDiagramController@deleteDataAnggotaByKortpsForFamillyGroup');
 Route::post('org/rt/headkeluargaserumah/delete', 'Admin\OrgDiagramController@deleteDataHeadByKortpsForFamillyGroup');
 

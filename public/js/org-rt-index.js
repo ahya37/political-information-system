@@ -948,6 +948,25 @@ function showDivHtmlRT(m) {
     return `<option value="${m.rt}">${m.rt}</option>`;
 }
 
+// let table = $("#data").DataTable({
+//     processing: true,
+//     serverSide: true,
+//     ajax: {
+//       url: "/api/org/list/rt",
+//       type: "POST",
+//       data: function (d) {},
+//     },
+//     columns: [
+//         {data: 'id', name: 'id'},
+//         {data: 'name', name: 'name'},
+//         {data: 'address', name: 'address'},
+//         {data: 'rt', name: 'rt'},
+//         {data: 'tps_number', name: 'tps_number'},
+//     ]
+// });
+// table.draw();
+
+let i = 1;
 let table = $("#data").DataTable({
     pageLength: 10,
 
@@ -972,11 +991,13 @@ let table = $("#data").DataTable({
     },
     columnDefs: [
         {
+            searchable: false,
+            orderable: false,
             targets: 0,
-            sortable: true,
-            render: function (data, type, row, meta) {
-                return row.no;
-            },
+            render: function(){
+                return i++;
+            }
+           
         },
         {
             targets: 1,
@@ -1008,7 +1029,7 @@ let table = $("#data").DataTable({
         {
             targets: 5,
             render: function (data, type, row, meta) {
-                return `<p>${row.base}</p>`;
+                return `<p>KORTPS</p>`;
             },
         },
         {

@@ -26,6 +26,7 @@ use PDF;
 use Zipper;
 use File;
 use Storage;
+use DataTables;
 
 class OrgDiagramController extends Controller
 {
@@ -1017,12 +1018,113 @@ class OrgDiagramController extends Controller
 
         $rt      = 30;
 
+        
+
         return view('pages.admin.strukturorg.rt.index', compact('regency', 'rt'));
+    }
+
+    public function newGetDataOrgRT(Request $request){
+
+        ## Read value
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $rowperpage = $request->get("length"); // Rows display per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = $columnIndex_arr[0]['column']; // Column index
+        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        $searchValue = $search_arr['value']; // Search value
+
+         // Total records
+         $totalRecords = DB::table('org_diagram_rt')->select('count(*) as allcount')->count();
+         $totalRecordswithFilter = DB::table('org_diagram_rt')->select('count(*) as allcount')->where('name', 'like', '%' .$searchValue . '%')->count();
+
+          // Fetch records
+        $records = DB::table('org_diagram_rt')
+                ->orderBy($columnName,$columnSortOrder)
+                ->where('base','KORRT')
+                ->where('org_diagram_rt.name', 'like', '%' .$searchValue . '%')
+                ->select('org_diagram_rt.*')
+                ->skip($start)
+                ->take($rowperpage)
+                ->get();
+
+        $data_arr = array();
+        $no = 1;
+
+        foreach($records as $record){
+            $id = $no ++;
+            $name = $record->name;
+ 
+            $data_arr[] = array(
+                "id" => $id,
+                "name" => $name,
+            );
+        }
+
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordswithFilter,
+            "aaData" => $data_arr
+         );
+ 
+         return response()->json($response); 
     }
 
     public function getDataOrgRT(Request $request)
     {
 
+            // if($request->ajax()){
+            //     $data = DB::table('org_diagram_rt as a')
+            //         ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id',
+            //                 DB::raw("(select count(*) from org_diagram_rt where pidx = a.idx and base ='ANGGOTA') as count_anggota"),
+            //                 DB::raw("(select count(*) from users where user_id = b.id and village_id is not null) as referal")
+            //         )
+            //         ->join('users as b', 'b.nik', '=', 'a.nik')
+            //         ->join('villages as c', 'c.id', '=', 'a.village_id')
+            //         ->join('districts as d', 'd.id', '=', 'a.district_id')
+            //         ->leftJoin('tps as e', 'b.tps_id', '=', 'e.id')
+            //         ->join('dapil_areas as f','a.district_id','=','f.district_id')
+            //         ->where('a.base', 'KORRT')->get();
+
+            //         $data =  collect($data);
+
+            //     return DataTables::of($data)
+            //             ->addIndexColumn()
+            //             ->filter(function ($instance) use ($request) {
+            //                 // if ($request->get('status') == '0' || $request->get('status') == '1') {
+    
+            //                 //$instance->where('status', $request->get('status'));
+    
+            //                 // }
+    
+            //                 if (!empty($request->get('search'))) {
+    
+            //                      $instance->where(function($w) use($request){
+    
+            //                         $search = $request->get('search');
+    
+            //                         $w->orWhere('a.name', 'LIKE', "%$search%")
+    
+            //                         ->orWhere('a.title', 'LIKE', "%$search%");
+    
+            //                     });
+    
+            //                 }
+    
+            //             })
+            //             ->make(true);
+            // }
+
+            // return view('pages.admin.strukturorg.rt.index');
+
+        // OLD
         // DATATABLE
         $orderBy = 'a.name';
         switch ($request->input('order.0.column')) {
@@ -1032,7 +1134,10 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_rt as a')
-            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id')
+            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id',
+                    DB::raw("(select count(*) from org_diagram_rt where pidx = a.idx and base ='ANGGOTA') as count_anggota"),
+                    DB::raw("(select count(*) from users where user_id = b.id and village_id is not null) as referal")
+            )
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
@@ -1070,47 +1175,45 @@ class OrgDiagramController extends Controller
 
         $recordsFiltered = $data->get()->count();
         if ($request->input('length') != -1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+        $data = $data->orderBy($orderBy, $request->input('order.0.dir'))->get();
 
-        $data = $data->orderBy('a.rt', 'asc');
-        $data = $data->orderBy($orderBy, $request->input('order.0.dir'));
-        $data = $data->get();
+        // $data = $data->orderBy('a.rt', 'asc');
+        // $data = $data->get();
 
         $recordsTotal = $data->count();
 
-        $results = [];
-        $no = 1;
-        foreach ($data as $value) {
-            $count_anggota = DB::table('org_diagram_rt')->where('pidx', $value->idx)->count();
-            $referal = DB::table('users as a')->join('villages as b','a.village_id','=','b.id')->where('a.user_id', $value->user_id)->count();
-            $results[] = [
-                'no' => $no++,
-                'id' => $value->id,
-                'idx' => $value->idx,
-                'village_id' => $value->village_id,
-                'rt' => $value->rt,
-                'tps_number' => $value->tps_number,
-                'rw' => $value->rw,
-                'address' => $value->address,
-                'village' => $value->village,
-                'district' => $value->district,
-                'title' => $value->title,
-                'nik' => $value->nik,
-                'name' => $value->name,
-                'photo' => $value->photo,
-                'phone_number' => $value->phone_number,
-                'count_anggota' => $count_anggota,
-                'referal' => $referal,
-                'user_id' => $value->user_id,
-                'base' => "KORTPS"
+        // $results = [];
+        // $no = 1;
+        // foreach ($data as $value) {
+        //     $results[] = [
+        //         'no' => $no++,
+        //         'id' => $value->id,
+        //         'idx' => $value->idx,
+        //         'village_id' => $value->village_id,
+        //         'rt' => $value->rt,
+        //         'tps_number' => $value->tps_number,
+        //         'rw' => $value->rw,
+        //         'address' => $value->address,
+        //         'village' => $value->village,
+        //         'district' => $value->district,
+        //         'title' => $value->title,
+        //         'nik' => $value->nik,
+        //         'name' => $value->name,
+        //         'photo' => $value->photo,
+        //         'phone_number' => $value->phone_number,
+        //         'count_anggota' => $value->count_anggota,
+        //         'referal' => $value->referal,
+        //         'user_id' => $value->user_id,
+        //         'base' => "KORTPS"
 
-            ];
-        }
+        //     ];
+        // }
 
         return response()->json([
             'draw' => $request->input('draw'),
             'recordsTotal' => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,
-            'data' => $results
+            'data' => $data
         ]);
     }
 
