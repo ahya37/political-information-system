@@ -166,9 +166,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <h5>TPS Belum Terisi</h5>
-                                    <ul id="listtpsnotexists"></ul>
+                                <div class="col-md-4 ">
+                                    <h5 class="tpsexist">TPS Belum Terisi</h5>
+                                    <span class="tpsexist" id="loadlisttpsnotexists"></span>
+                                    <ul class="tpsexist" id="listtpsnotexists"></ul>
                                 </div>
                             </div>
                         </div>

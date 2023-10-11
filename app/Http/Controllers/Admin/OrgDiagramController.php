@@ -87,6 +87,7 @@ class OrgDiagramController extends Controller
 
             // get data pengurus
             $data_pengurus = $orgDiagram->getDataPengurusKecamatan($district_id);
+            
 
         }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && !isset($rt)){
 
@@ -99,6 +100,9 @@ class OrgDiagramController extends Controller
         }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && isset($rt)){
 
             $results = $orgDiagram->getKalkulasiTercoverRt($village_id, $rt);
+            
+            #get list data tps yg belum terisi oleh kortps
+            // $tpsNotExists = $orgDiagram->getTpsNotExistByVillage($village_id);
             
         }else{
 

@@ -4,6 +4,7 @@ let selectVillageId = $("#selectVillageId").val();
 let selectRT = $("#selectRt").val();
 let selectTps = $("#selectTps").val();
 $(".pengurus").hide();
+$(".tpsexist").hide();
 // KABKOT , langsung get dapil by kab lebak
 
 // function countMemberNotCover(){
@@ -171,6 +172,8 @@ async function initialGetKortps(
 // DAPIL
 $("#selectListArea").change(async function () {
     selectListArea = $("#selectListArea").val();
+    $(".tpsexist").hide();
+
 
     if (selectListArea !== "") {
         const listDistricts = await getListDistrict(selectListArea);
@@ -298,6 +301,8 @@ $("#selectListArea").change(async function () {
 $("#selectDistrictId").change(async function () {
     selectDistrictId = $("#selectDistrictId").val();
     $(".pengurus").show();
+    $(".tpsexist").hide();
+
     
     $("#pengKetua").empty();
     $("#pengSekre").empty();
@@ -481,6 +486,7 @@ $("#selectVillageId").change(async function () {
         $("#targetkortps").empty();
         $("#jmltps").empty();
         $("#listtpsnotexists").empty();
+        $('.tpsexist').show();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -525,6 +531,8 @@ $("#selectVillageId").change(async function () {
             ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
         );
     } else {
+       $(".tpsexist").hide();
+
         // province = $("#province").val();
         // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
