@@ -75,6 +75,7 @@ class OrgDiagramController extends Controller
 
         $results  = '';
         $data_pengurus = [];
+        $tpsNotExists  = [];
         
         if(isset($dapil_id) && !isset($district_id) && !isset($village_id) && !isset($rt)){
 
@@ -91,6 +92,9 @@ class OrgDiagramController extends Controller
 
             $results = $orgDiagram->getKalkulasiTercoverVillage($village_id);
             $data_pengurus = $orgDiagram->getDataPengurusDesa($village_id);
+
+            #get list data tps yg belum terisi oleh kortps
+            $tpsNotExists = $orgDiagram->getTpsNotExistByVillage($village_id);
 
         }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && isset($rt)){
 
@@ -112,7 +116,8 @@ class OrgDiagramController extends Controller
 
         return response()->json([
             'data' => $results,
-            'pengurus' => $pengurus
+            'pengurus' => $pengurus,
+            'tpsnotexists' => $tpsNotExists
         ]);
     }
 

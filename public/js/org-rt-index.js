@@ -58,6 +58,10 @@ async function initialGetAnggotaCover(
                     .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>`);
+            $("#loadlisttpsnotexists")
+                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>`);
 
             },
             success: function () {
@@ -67,6 +71,7 @@ async function initialGetAnggotaCover(
                 $("#pengKetua").empty();
                 $("#pengSekre").empty();
                 $("#pengBendahara").empty();
+                $("#loadlisttpsnotexists").empty();
             },
             complete: function (data) {
                 return data;
@@ -475,6 +480,7 @@ $("#selectVillageId").change(async function () {
         $("#kurangtpsterisi").empty();
         $("#targetkortps").empty();
         $("#jmltps").empty();
+        $("#listtpsnotexists").empty();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -483,9 +489,10 @@ $("#selectVillageId").change(async function () {
             selectRT
         );
 
-        $('.pengurus').show();
-       
+        getLitTpsExistUi(dataCover.tpsnotexists);
 
+
+        $('.pengurus').show();
         $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
         $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
         $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
@@ -884,6 +891,30 @@ function getListVillageUi(dataVillages) {
 }
 function showDivHtmlVillage(m) {
     return `<option value="${m.id}">${m.name}</option>`;
+}
+
+function getLitTpsExistUi(dataTps){
+    let divTpsExists = "";
+    const countItem = dataTps.length;
+    if (countItem > 0) {
+        dataTps.forEach((m) => {
+            divTpsExists += showDivHtmlTpsExists(m);
+        });
+        const divTpsExistsContainer = $("#listtpsnotexists");
+        divTpsExistsContainer.append(divTpsExists);
+
+    }else{
+
+        const divTpsExistsContainer = $("#listtpsnotexists");
+        divTpsExistsContainer.append(`<li class='text-success'>Terpenuhi</>`);
+
+    }
+}
+
+function showDivHtmlTpsExists(m){
+    return `
+            <li class='text-danger'>TPS ${m.tps}</li>
+    `;
 }
 
 // GET data TPS

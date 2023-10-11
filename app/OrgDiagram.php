@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\FuncCall;
 
 class OrgDiagram extends Model
 {
@@ -778,6 +779,16 @@ class OrgDiagram extends Model
 
 		return DB::select($sql);
 
+	}
+
+	public function getTpsNotExistByVillage($village_id){
+
+		$sql = "SELECT tps_number as tps,
+				(SELECT COUNT(org_diagram_rt.nik) from org_diagram_rt join users on org_diagram_rt.nik = users.nik where org_diagram_rt.base = 'KORRT' and users.tps_id = tps.id) as kortps
+				from tps
+				WHERE village_id = $village_id 
+				Having (SELECT COUNT(org_diagram_rt.nik) from org_diagram_rt join users on org_diagram_rt.nik = users.nik where org_diagram_rt.base = 'KORRT' and users.tps_id = tps.id) < 1";
+		return DB::select($sql);
 	}
 
 }
