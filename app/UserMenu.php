@@ -30,7 +30,7 @@ class UserMenu extends Model
     {
         $user_id = Auth::user()->id;
         // buat akses create anggota baru (masih hard code)
-        if ($user_id == 359) {
+        if ($user_id == 359 || $user_id == 37161) {
             $result = "SELECT a.id, a.name , a.url, a.route from submenus as a
                     where a.menu_id = $menu_id  order by a.name ASC";
         }else{
