@@ -61,23 +61,29 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <a class="btn btn-sm btn-sc-primary text-white mt-2"
-                            href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
-                        <input class="btn btn-sm btn-success text-white  mt-2" type="submit"
-                            value="Download Korte Excel" name="report_type">
-                        <input class="btn btn-sm btn-sc-primary text-white  mt-2" type="submit"
-                            value="Download Catatan Korte PDF" name="report_type">
-                        <input class="btn btn-sm btn-success text-white mt-2" type="submit"
-                            value="Download Korte + Anggota" name="report_type">
-                        <input class="btn btn-sm btn-sc-primary text-white  mt-2" type="submit"
-                            value="Download Korte + Anggota PDF" name="report_type">
-                        <input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit"
-                            value="Download Absensi Korte Per Desa PDF" name="report_type">
-                        <input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit"
-                            value="Download Surat Undangan Korte Per Desa PDF" name="report_type">
+                        <div class="col-md-3">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  Opsi Download
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="btn btn-sm dropdown-item text-primary"
+                                    href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah Kor TPS</a>
+                                <input class="btn btn-sm  mt-2 dropdown-item" type="submit"
+                                    value="Download Korte Excel" name="report_type">
+                                <input class="btn btn-sm mt-2 dropdown-item" type="submit"
+                                    value="Download Catatan Korte PDF" name="report_type">
+                                <input class="btn btn-sm mt-2 dropdown-item" type="submit"
+                                    value="Download Korte + Anggota" name="report_type">
+                                <input class="btn btn-sm   mt-2 dropdown-item" type="submit"
+                                    value="Download Korte + Anggota PDF" name="report_type">
+                                <input class="btn btn-sm  mt-2 dropdown-item" type="submit"
+                                    value="Download Absensi Korte Per Desa PDF" name="report_type">
+                                <input class="btn btn-sm  mt-2 dropdown-item" type="submit"
+                                    value="Download Surat Undangan Korte Per Desa PDF" name="report_type">
+                                </div>
+                              </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -144,11 +150,45 @@
             </div>
 
             <div class="row">
+                <div class="col-md-8 mt-2 mb-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="tpsexist text-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">TPS Sudah Terisi  <span class="tpsexist" id="loadlisttpsexists"></span></h5>  
+                           
+                            <div class="col-md-12">
+                                <div class="collapse" id="collapseExample">
+                                    {{-- <ul class="tpsexist" id="listtpsexists"></ul> --}}
+                                    <table class="table table-sm table-striped tpsexist" id="listtpsexists">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">TPS</th>
+                                                <th class="text-center">Kor TPS</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-2 mb-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="tpsnotexist  text-primary" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="true" aria-controls="collapseExample2">TPS Belum Terisi <span class="tpsnotexist" id="loadlisttpsnotexists"></span></h5>
+                            <div class="col-md-6">
+                                <div class="collapse" id="collapseExample2">
+                                    <ul class="tpsnotexist" id="listtpsnotexists"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-12 mt-2 mb-2">
                     <div class="card">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-8">
                                     <h5 id="keterangan">Kor TPS</h5>
                                     <div id="pengurusId">
                                         <h5 class="pengurus">Pengurus</h5>
@@ -165,13 +205,7 @@
                                             <div class="col-md-6" id="pengBendahara"></div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4 ">
-                                    <h5 class="tpsexist">TPS Belum Terisi</h5>
-                                    <span class="tpsexist" id="loadlisttpsnotexists"></span>
-                                    <ul class="tpsexist" id="listtpsnotexists"></ul>
-                                </div>
-                            </div>
+                               
                         </div>
                     </div>
                 </div>

@@ -791,4 +791,14 @@ class OrgDiagram extends Model
 		return DB::select($sql);
 	}
 
+	public function getTpsExistByVillage($villageId){
+
+		$sql = "SELECT tps_number as tps,
+				(SELECT COUNT(org_diagram_rt.nik) from org_diagram_rt join users on org_diagram_rt.nik = users.nik where org_diagram_rt.base = 'KORRT' and users.tps_id = tps.id) as kortps
+				from tps
+				WHERE village_id = $villageId 
+				Having (SELECT COUNT(org_diagram_rt.nik) from org_diagram_rt join users on org_diagram_rt.nik = users.nik where org_diagram_rt.base = 'KORRT' and users.tps_id = tps.id) > 0";
+		return DB::select($sql);
+	}
+
 }

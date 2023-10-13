@@ -4,6 +4,7 @@ let selectVillageId = $("#selectVillageId").val();
 let selectRT = $("#selectRt").val();
 let selectTps = $("#selectTps").val();
 $(".pengurus").hide();
+$(".tpsnotexist").hide();
 $(".tpsexist").hide();
 // KABKOT , langsung get dapil by kab lebak
 
@@ -63,6 +64,10 @@ async function initialGetAnggotaCover(
                     .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>`);
+            $("#loadlisttpsexists")
+                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>`);
 
             },
             success: function () {
@@ -73,6 +78,7 @@ async function initialGetAnggotaCover(
                 $("#pengSekre").empty();
                 $("#pengBendahara").empty();
                 $("#loadlisttpsnotexists").empty();
+                $("#loadlisttpsexists").empty();
             },
             complete: function (data) {
                 return data;
@@ -172,7 +178,7 @@ async function initialGetKortps(
 // DAPIL
 $("#selectListArea").change(async function () {
     selectListArea = $("#selectListArea").val();
-    $(".tpsexist").hide();
+    $(".tpsnotexist").hide();
 
 
     if (selectListArea !== "") {
@@ -301,7 +307,7 @@ $("#selectListArea").change(async function () {
 $("#selectDistrictId").change(async function () {
     selectDistrictId = $("#selectDistrictId").val();
     $(".pengurus").show();
-    $(".tpsexist").hide();
+    $(".tpsnotexist").hide();
 
     
     $("#pengKetua").empty();
@@ -486,7 +492,9 @@ $("#selectVillageId").change(async function () {
         $("#targetkortps").empty();
         $("#jmltps").empty();
         $("#listtpsnotexists").empty();
+        $().show();
         $('.tpsexist').show();
+        $('.tpsnotexist').show();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -495,8 +503,8 @@ $("#selectVillageId").change(async function () {
             selectRT
         );
 
-        getLitTpsExistUi(dataCover.tpsnotexists);
-
+        getLitTpsNotExistUi(dataCover.tpsnotexists);
+        getLitTpsExistUi(dataCover.tpsExists);
 
         $('.pengurus').show();
         $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
@@ -531,6 +539,7 @@ $("#selectVillageId").change(async function () {
             ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
         );
     } else {
+       $(".tpsnotexist").hide();
        $(".tpsexist").hide();
 
         // province = $("#province").val();
@@ -901,6 +910,30 @@ function showDivHtmlVillage(m) {
     return `<option value="${m.id}">${m.name}</option>`;
 }
 
+function getLitTpsNotExistUi(dataTps){
+    let divTpsNotExists = "";
+    const countItem = dataTps.length;
+    if (countItem > 0) {
+        dataTps.forEach((m) => {
+            divTpsNotExists += showDivHtmlTpsNotExists(m);
+        });
+        const divTpsNotExistsContainer = $("#listtpsnotexists");
+        divTpsNotExistsContainer.append(divTpsNotExists);
+
+    }else{
+
+        const divTpsNotExistsContainer = $("#listtpsnotexists");
+        divTpsNotExistsContainer.append(`<li class='text-success'>Terpenuhi</>`);
+
+    }
+}
+
+function showDivHtmlTpsNotExists(m){
+    return `
+            <li class='text-danger'>TPS ${m.tps}</li>
+    `;
+}
+
 function getLitTpsExistUi(dataTps){
     let divTpsExists = "";
     const countItem = dataTps.length;
@@ -908,20 +941,25 @@ function getLitTpsExistUi(dataTps){
         dataTps.forEach((m) => {
             divTpsExists += showDivHtmlTpsExists(m);
         });
-        const divTpsExistsContainer = $("#listtpsnotexists");
+        const divTpsExistsContainer = $("#listtpsexists");
         divTpsExistsContainer.append(divTpsExists);
 
     }else{
 
-        const divTpsExistsContainer = $("#listtpsnotexists");
-        divTpsExistsContainer.append(`<li class='text-success'>Terpenuhi</>`);
+        const divTpsExistsContainer = $("#listtpsexists");
+        divTpsExistsContainer.append(`<li class='text-danger'>Belum ada</>`);
 
     }
 }
 
 function showDivHtmlTpsExists(m){
     return `
-            <li class='text-danger'>TPS ${m.tps}</li>
+            <tbody>
+                <tr>
+                    <td class='text-center'>${m.tps}</td>
+                    <td class='text-center'>${m.kortps} Orang</td>
+                </tr>
+            </tbody>
     `;
 }
 
@@ -1008,14 +1046,14 @@ function showDivHtmlRT(m) {
 let i = 1;
 let table = $("#data").DataTable({
     pageLength: 10,
-
+    paging: true,
     bLengthChange: true,
     bFilter: true,
     bInfo: true,
     processing: true,
     bServerSide: true,
     order: [[6, "desc"]],
-    autoWidth: false,
+    autoWidth: true,
     ajax: {
         url: "/api/org/list/rt",
         type: "POST",
@@ -1139,8 +1177,22 @@ let table = $("#data").DataTable({
             },
         },
     ]
+    // footerCallback: function(row, data, start, end, display){
+    //     let api = this.api();
+    //     let nb_cols = api.columns().nodes().length;
+    //     let j   = 7;
+    //     while (j < nb_cols) {
+    //         let pageTotal = api
+    //                         .column(j, { page:'current' })
+    //                         .data()
+    //                         .reduce(function(a, b){
+    //                             return a+b;
+    //                         },0);
+    //         $(api.column(j).footer()).html(pageTotal);
+    //         j++;
+    //     }
+    // },
 });
-
 
 $("#exampleModal").on("show.bs.modal", function (event) {
     var button = $(event.relatedTarget);
