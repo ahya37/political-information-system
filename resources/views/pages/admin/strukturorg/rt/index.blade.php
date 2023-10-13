@@ -8,6 +8,17 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
     integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    .acr:after {
+    font-family: 'FontAwesome';  
+    content: "\f062";
+    float: right; 
+}
+.acr.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\f063"; 
+}
+</style>
 @endpush
 @section('content')
 <!-- Section Content -->
@@ -153,7 +164,7 @@
                 <div class="col-md-8 mt-2 mb-2">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="tpsexist text-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">TPS Sudah Terisi  <span class="tpsexist" id="loadlisttpsexists"></span></h5>  
+                            <h5 class="acr tpsexist text-primary " data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">TPS Sudah Terisi  <span class="tpsexist" id="loadlisttpsexists"></span></h5>  
                            
                             <div class="col-md-12">
                                 <div class="collapse" id="collapseExample">
@@ -174,7 +185,7 @@
                 <div class="col-md-4 mt-2 mb-2">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="tpsnotexist  text-primary" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="true" aria-controls="collapseExample2">TPS Belum Terisi <span class="tpsnotexist" id="loadlisttpsnotexists"></span></h5>
+                            <h5 class="acr tpsnotexist  text-primary" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="true" aria-controls="collapseExample2">TPS Belum Terisi <span class="tpsnotexist" id="loadlisttpsnotexists"></span></h5>
                             <div class="col-md-6">
                                 <div class="collapse" id="collapseExample2">
                                     <ul class="tpsnotexist" id="listtpsnotexists"></ul>
