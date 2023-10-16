@@ -1186,30 +1186,11 @@ let table = $("#data").DataTable({
              totalCountReferal += parseFloat(element._aData.referal);
 
         });
-        // row.aoData.forEach(element => {
-        //      totalCountReferal += parseFloat(element._aData.referal);
-        // });
         $('#totalCountAnggota').empty();
         $('#totalCountReferal').empty();
-      
         $('#totalCountAnggota').append(`<p class="text-center"><b>${totalCountAnggota}</b></p>`);
         $('#totalCountReferal').append(`<p class="text-center"><b>${totalCountReferal}</b></p>`);
     }
-    // footerCallback: function(row, data, start, end, display){
-    //     let api = this.api();
-    //     let nb_cols = api.columns().nodes().length;
-    //     let j   = 7;
-    //     while (j < nb_cols) {
-    //         let pageTotal = api
-    //                         .column(j, { page:'current' })
-    //                         .data()
-    //                         .reduce(function(a, b){
-    //                             return a+b;
-    //                         },0);
-    //         $(api.column(j).footer()).html(pageTotal);
-    //         j++;
-    //     }
-    // },
 });
 
 

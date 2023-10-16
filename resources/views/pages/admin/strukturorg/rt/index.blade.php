@@ -153,7 +153,7 @@
                 <div class="col-md-3 mt-2 mb-2">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Kurang Kor TPS</h5>
+                            <h5 class="card-title">Kor TPS (-)/(+)</h5>
                             <h5 id="kurangtpsterisi"></h5>
                         </div>
                     </div>

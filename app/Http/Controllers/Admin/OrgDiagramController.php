@@ -191,12 +191,19 @@ class OrgDiagramController extends Controller
         $tps = collect($results)->sum(function($q){
             return $q->tps ?? 0;
         });
+
+        $count_kurang_kortps = $kortps_terisi - $target_kortps;
+        if ($count_kurang_kortps > 0) {
+            $count_kurang_kortps = '+'. $gF->decimalFormat($count_kurang_kortps);
+        }else{
+            $count_kurang_kortps = $gF->decimalFormat($count_kurang_kortps);
+        }
         
 
         $data_results = [
             'target_kortps' => $gF->decimalFormat($target_kortps),
             'kortps_terisi' => $gF->decimalFormat($kortps_terisi),
-            'kurang_kortps' =>  $gF->decimalFormat($kortps_terisi - $target_kortps),
+            'kurang_kortps' =>  $count_kurang_kortps,
             'tps' => $gF->decimalFormat($tps)
         ];
 
