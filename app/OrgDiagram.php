@@ -665,7 +665,7 @@ class OrgDiagram extends Model
 	public function getDataPengurusKecamatan($districtId){
 
 		$sql = DB::table('org_diagram_district as a')
-				->select('b.name','a.title','b.photo')
+				->select('b.name','a.title','b.photo', DB::raw('(SELECT COUNT(a1.id) from users a1 join villages a2 on a1.village_id = a2.id  WHERE a1.user_id = b.id) as referal'))
 				->join('users as b','a.nik','=','b.nik')
 				->where('a.district_id', $districtId)
 				->orderBy('a.level_org','asc')
@@ -676,7 +676,7 @@ class OrgDiagram extends Model
 	public function getDataPengurusDesa($villageId){
 
 		$sql = DB::table('org_diagram_village as a')
-				->select('b.name','a.title','b.photo')
+				->select('b.name','a.title','b.photo', DB::raw('(SELECT COUNT(a1.id) from users a1 join villages a2 on a1.village_id = a2.id  WHERE a1.user_id = b.id) as referal'))
 				->join('users as b','a.nik','=','b.nik')
 				->where('a.village_id', $villageId)
 				->orderBy('a.level_org','asc')

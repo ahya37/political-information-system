@@ -350,9 +350,9 @@ $("#selectDistrictId").change(async function () {
             selectRT
         );
 
-        const ketuaExists = `<p><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.ketua}</p>`;
-        const sekretarisExists = `<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris}</p>`;
-        const bendaharaExists  =  `<p><img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'> ${dataCover.pengurus.bendahara}</p>`;
+        const ketuaExists = `<p><a href='/storage/${dataCover.pengurus.ketua_photo}'><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'></a> ${dataCover.pengurus.ketua} (Referal : ${dataCover.pengurus.referal_ketua})</p>`;
+        const sekretarisExists = `<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris} (Referal : ${dataCover.pengurus.referal_sekretaris})</p>`;
+        const bendaharaExists  =  `<p><img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'> ${dataCover.pengurus.bendahara} (Referal : ${dataCover.pengurus.referal_bendahara})</p>`;
 
         $("#pengKetua").append(dataCover.pengurus.ketua === '' ? '' : ketuaExists);
         $("#pengSekre").append(dataCover.pengurus.sekretaris === '' ? '' : sekretarisExists);
@@ -510,9 +510,9 @@ $("#selectVillageId").change(async function () {
         getLitTpsExistUi(dataCover.tpsExists);
 
         $('.pengurus').show();
-        const ketuaExists = `<p><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.ketua}</p>`;
-        const sekretarisExists = `<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris}</p>`;
-        const bendaharaExists  =  `<p><img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'> ${dataCover.pengurus.bendahara}</p>`;
+        const ketuaExists = `<p><a href='/storage/${dataCover.pengurus.ketua_photo}'><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'></a> ${dataCover.pengurus.ketua} (Referal : ${dataCover.pengurus.referal_ketua})</p>`;
+        const sekretarisExists = `<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris} (Referal : ${dataCover.pengurus.referal_sekretaris})</p>`;
+        const bendaharaExists  =  `<p><img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'> ${dataCover.pengurus.bendahara} (Referal : ${dataCover.pengurus.referal_bendahara})</p>`;
 
         $("#pengKetua").append(dataCover.pengurus.ketua === '' ? '' : ketuaExists);
         $("#pengSekre").append(dataCover.pengurus.sekretaris === '' ? '' : sekretarisExists);
