@@ -314,10 +314,6 @@ $("#selectDistrictId").change(async function () {
     $("#pengSekre").empty();
     $("#pengBendahara").empty();
 
-    $("#fotoKetua").empty();
-    $("#fotoSekret").empty();
-    $("#fotoBendahara").empty();
-
     if (selectDistrictId !== "") {
         const dataVillages = await getListVillage(selectDistrictId);
         $("#selectVillageId").empty();
@@ -354,13 +350,11 @@ $("#selectDistrictId").change(async function () {
             selectRT
         );
 
-        $("#fotoKetua").append(`<img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'>`);
-        $("#fotoSekret").append(`<img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'>`);
-        $("#fotoBendahara").append(`<img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'>`);
+        $("#fotoBendahara");
 
-        $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
-        $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
-        $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
+        $("#pengKetua").append(`<p><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.ketua}</p>`);
+        $("#pengSekre").append(`<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris}</p>`);
+        $("#pengBendahara").append(`<p><img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'> ${dataCover.pengurus.bendahara}</p>`);
 
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);

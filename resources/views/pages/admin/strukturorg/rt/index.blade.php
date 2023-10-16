@@ -204,18 +204,15 @@
                                     <div id="pengurusId">
                                         <h5 class="pengurus">Pengurus</h5>
                                         <div class="row">
-                                            <div class="col-md-3 pengurus">Ketua</div>
-                                            <div class="col-md-1 pengurus" id="fotoKetua"></div>
+                                            <div class="col-md-2 pengurus">Ketua</div>
                                             <div class="col-md-6 " id="pengKetua"></div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-3 pengurus">Sekretaris</div>
-                                            <div class="col-md-1 pengurus" id="fotoSekret"></div>
+                                            <div class="col-md-2 pengurus">Sekretaris</div>
                                             <div class="col-md-6" id="pengSekre"></div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-3 pengurus">Bendahara</div>
-                                            <div class="col-md-1 pengurus" id="fotoBendahara"></div>
+                                            <div class="col-md-2 pengurus">Bendahara</div>
                                             <div class="col-md-6" id="pengBendahara"></div>
                                         </div>
                                     </div>
