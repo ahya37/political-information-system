@@ -350,11 +350,13 @@ $("#selectDistrictId").change(async function () {
             selectRT
         );
 
-        $("#fotoBendahara");
+        const ketuaExists = `<p><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.ketua}</p>`;
+        const sekretarisExists = `<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris}</p>`;
+        const bendaharaExists  =  `<p><img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'> ${dataCover.pengurus.bendahara}</p>`;
 
-        $("#pengKetua").append(`<p><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.ketua}</p>`);
-        $("#pengSekre").append(`<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris}</p>`);
-        $("#pengBendahara").append(`<p><img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'> ${dataCover.pengurus.bendahara}</p>`);
+        $("#pengKetua").append(dataCover.pengurus.ketua === '' ? '' : ketuaExists);
+        $("#pengSekre").append(dataCover.pengurus.sekretaris === '' ? '' : sekretarisExists);
+        $("#pengBendahara").append(dataCover.pengurus.bendahara === '' ? '' : bendaharaExists);
 
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
@@ -508,10 +510,14 @@ $("#selectVillageId").change(async function () {
         getLitTpsExistUi(dataCover.tpsExists);
 
         $('.pengurus').show();
-        $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
-        $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
-        $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
+        const ketuaExists = `<p><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.ketua}</p>`;
+        const sekretarisExists = `<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris}</p>`;
+        const bendaharaExists  =  `<p><img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'> ${dataCover.pengurus.bendahara}</p>`;
 
+        $("#pengKetua").append(dataCover.pengurus.ketua === '' ? '' : ketuaExists);
+        $("#pengSekre").append(dataCover.pengurus.sekretaris === '' ? '' : sekretarisExists);
+        $("#pengBendahara").append(dataCover.pengurus.bendahara === '' ? '' : bendaharaExists);
+        
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 

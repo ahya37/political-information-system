@@ -120,11 +120,11 @@ class OrgDiagramController extends Controller
 
         $pengurus = [
             'ketua' => ucwords(strtolower($ketua)) ?? '',
-            'ketua_photo' => $ketua_photo,
+            'ketua_photo' => $ketua_photo ?? '',
             'sekretaris' => ucwords(strtolower($sekretaris)) ?? '',
-            'sekretaris_photo' => $sekretaris_photo,
+            'sekretaris_photo' => $sekretaris_photo ?? '',
             'bendahara' => ucwords(strtolower($bendahara)) ?? '',
-            'bendahara_photo' => $bendahara_photo
+            'bendahara_photo' => $bendahara_photo ?? ''
         ];
 
         return response()->json([
