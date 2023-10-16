@@ -114,7 +114,7 @@ class OrgDiagramController extends Controller
         $ketua         = $this->searchArrayValueName($data_pengurus, 'KETUA');
         $ketua_photo   = $this->searchArrayValuePhoto($data_pengurus, 'KETUA');
         $sekretaris    = $this->searchArrayValueName($data_pengurus, 'SEKRETARIS');
-        $ekretaris_photo   = $this->searchArrayValuePhoto($data_pengurus, 'SEKRETARIS');
+        $sekretaris_photo   = $this->searchArrayValuePhoto($data_pengurus, 'SEKRETARIS');
         $bendahara     = $this->searchArrayValueName($data_pengurus, 'BENDAHARA');
         $bendahara_photo   = $this->searchArrayValuePhoto($data_pengurus, 'BENDAHARA');
 
@@ -122,7 +122,7 @@ class OrgDiagramController extends Controller
             'ketua' => ucwords(strtolower($ketua)) ?? '',
             'ketua_photo' => $ketua_photo,
             'sekretaris' => ucwords(strtolower($sekretaris)) ?? '',
-            'ekretaris_photo' => $ekretaris_photo,
+            'sekretaris_photo' => $sekretaris_photo,
             'bendahara' => ucwords(strtolower($bendahara)) ?? '',
             'bendahara_photo' => $bendahara_photo
         ];
