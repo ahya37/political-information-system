@@ -313,7 +313,10 @@ $("#selectDistrictId").change(async function () {
     $("#pengKetua").empty();
     $("#pengSekre").empty();
     $("#pengBendahara").empty();
-    
+
+    $("#fotoKetua").empty();
+    $("#fotoSekret").empty();
+    $("#fotoBendahara").empty();
 
     if (selectDistrictId !== "") {
         const dataVillages = await getListVillage(selectDistrictId);
@@ -350,6 +353,10 @@ $("#selectDistrictId").change(async function () {
             selectVillageId,
             selectRT
         );
+
+        $("#fotoKetua").append(`<img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'>`);
+        $("#fotoSekret").append(`<img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'>`);
+        $("#fotoBendahara").append(`<img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'>`);
 
         $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
         $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);

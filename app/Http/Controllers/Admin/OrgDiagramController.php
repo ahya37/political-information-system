@@ -112,12 +112,19 @@ class OrgDiagramController extends Controller
         }
 
         $ketua         = $this->searchArrayValueName($data_pengurus, 'KETUA');
+        $ketua_photo   = $this->searchArrayValuePhoto($data_pengurus, 'KETUA');
         $sekretaris    = $this->searchArrayValueName($data_pengurus, 'SEKRETARIS');
+        $ekretaris_photo   = $this->searchArrayValuePhoto($data_pengurus, 'SEKRETARIS');
         $bendahara     = $this->searchArrayValueName($data_pengurus, 'BENDAHARA');
+        $bendahara_photo   = $this->searchArrayValuePhoto($data_pengurus, 'BENDAHARA');
+
         $pengurus = [
             'ketua' => ucwords(strtolower($ketua)) ?? '',
+            'ketua_photo' => $ketua_photo,
             'sekretaris' => ucwords(strtolower($sekretaris)) ?? '',
-            'bendahara' => ucwords(strtolower($bendahara)) ?? ''
+            'ekretaris_photo' => $ekretaris_photo,
+            'bendahara' => ucwords(strtolower($bendahara)) ?? '',
+            'bendahara_photo' => $bendahara_photo
         ];
 
         return response()->json([
@@ -151,27 +158,27 @@ class OrgDiagramController extends Controller
             $results = $orgDiagram->getCalculateDataDaftarTimKorTpsDapil($regencyId, $dapil_id);
             $getTargetKortps = $orgDiagram->getDataDaftarTimByDapilForRegency($dapil_id);
 
-            $target_kortps      = $getTargetKortps / $const_kortps;
+            $target_kortps   = $getTargetKortps / $const_kortps;
 
         }elseif(isset($dapil_id) && isset($district_id) && !isset($village_id) && !isset($rt)){
 
-            $results = $orgDiagram->getCalculateDataDaftarTimKorTpsDistrict($district_id);
-		    $rightChooseDistrict       = $RightChosseVillageModel->getTotalDptDistrict($district_id)->total_dpt;
+            $results                = $orgDiagram->getCalculateDataDaftarTimKorTpsDistrict($district_id);
+		    $rightChooseDistrict    = $RightChosseVillageModel->getTotalDptDistrict($district_id)->total_dpt;
 
             $target_from_dpt  = $districtModel->getTargetPersentageDistrict($district_id)->target_persentage;
-            $target_member  = ($rightChooseDistrict * $target_from_dpt)/100;
+            $target_member    = ($rightChooseDistrict * $target_from_dpt)/100;
 
             $target_kortps = $target_member / $const_kortps;
 
         }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && !isset($rt)){
 
-            $results = $orgDiagram->getCalculateDataDaftarTimKorTpsVillage($village_id);
+            $results            = $orgDiagram->getCalculateDataDaftarTimKorTpsVillage($village_id);
             $rightChooseVillage = $RightChosseVillageModel->getTotalDptVillage($village_id)->total_dpt;
 
-            $target_from_dpt  = $villageModel->getTargetPersentageVillage($village_id)->target_persentage;
-            $target_member  = ($rightChooseVillage* $target_from_dpt)/100;
+            $target_from_dpt    = $villageModel->getTargetPersentageVillage($village_id)->target_persentage;
+            $target_member      = ($rightChooseVillage* $target_from_dpt)/100;
 
-            $target_kortps = $target_member / $const_kortps;
+            $target_kortps      = $target_member / $const_kortps;
 
         }else{
             $results = $orgDiagram->getCalculateDataDaftarTimKorTps($regencyId);
@@ -3041,6 +3048,15 @@ class OrgDiagramController extends Controller
         foreach ($data as $row) {
             if ($row->title == $field)
                 return $row->name;
+        }
+    }
+
+    public function searchArrayValuePhoto($data, $field)
+    {
+
+        foreach ($data as $row) {
+            if ($row->title == $field)
+                return $row->photo;
         }
     }
 
