@@ -1196,7 +1196,8 @@ class OrgDiagramController extends Controller
         $data = DB::table('org_diagram_rt as a')
             ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id',
                     DB::raw("(select count(*) from org_diagram_rt where pidx = a.idx and base ='ANGGOTA') as count_anggota"),
-                    DB::raw("(select count(*) from users where user_id = b.id and village_id is not null) as referal")
+                    DB::raw("(select count(*) from users where user_id = b.id and village_id is not null) as referal"),
+                    DB::raw("(select count(*) from anggota_koordinator_tps_korte where pidx_korte = a.idx) as form_kosong")
             )
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')

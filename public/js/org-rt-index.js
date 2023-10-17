@@ -1132,11 +1132,17 @@ let table = $("#data").DataTable({
         {
             targets: 8,
             render: function (data, type, row, meta) {
-                return `<p>${row.phone_number ?? ""}</p>`;
+                return `<p class="text-center">${row.form_kosong}</p>`;
             },
         },
         {
             targets: 9,
+            render: function (data, type, row, meta) {
+                return `<p>${row.phone_number ?? ""}</p>`;
+            },
+        },
+        {
+            targets: 10,
             render: function (data, type, row, meta) {
                 return `<div class="btn-group">
                         <div class="dropdown">

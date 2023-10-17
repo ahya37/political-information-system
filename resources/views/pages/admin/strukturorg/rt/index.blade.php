@@ -238,6 +238,7 @@
                                         <th scope="col">JABATAN</th>
                                         <th scope="col">ANGGOTA</th>
                                         <th scope="col">REFERAL</th>
+                                        <th scope="col">FORM KORTPS</th>
                                         <th scope="col">NO HP / WA</th>
                                         <th scope="col">OPSI</th>
                                     </tr>
@@ -252,6 +253,7 @@
                                     <td><b>JUMLAH</b></td>
                                     <td id="totalCountAnggota"></td>
                                     <td id="totalCountReferal"></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tfoot>
