@@ -265,7 +265,7 @@
                                                 value="{{ $profile->email }}"
                                                 />
                                             </div>
-                                            <div class="form-group">
+                                            {{-- <div class="form-group">
                                                 <span class="required">*</span>
                                                 <label>Kode Reveral</label>
                                                 <input id="code" 
@@ -278,7 +278,7 @@
                                                     value="{{ old('code') }}" 
                                                     required
                                                     >
-                                            </div>
+                                            </div> --}}
                                         <hr class="mb-4 mt-4">
                                     <div class="form-group">
                                                 <span class="required">*</span>

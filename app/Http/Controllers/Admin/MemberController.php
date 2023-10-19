@@ -263,7 +263,7 @@ class MemberController extends Controller
                     'address'      => strtoupper($request->address),
                     'photo'        => $photo,
                     'ktp'          => $ktp,
-                    'code' => $request->code
+                    // 'code' => $request->code
                 ]);
             } else {
                 $user->update([
@@ -283,7 +283,7 @@ class MemberController extends Controller
                     'rt'           => $request->rt,
                     'rw'           => $request->rw,
                     'address'      => strtoupper($request->address),
-                    'code' => $request->code
+                    // 'code' => $request->code
                 ]);
             }
 
