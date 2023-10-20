@@ -33,6 +33,14 @@ class AnggotaBelumTercoverKortps implements FromCollection,  WithHeadings, WithE
                 'name' => $value->name ?? '',
                 'desa' => $value->desa ?? '',
                 'rt' => $value->rt ?? '',
+                'rw' => $value->rw,
+                'village' => $value->desa,
+                'district' => $value->district,
+                'telp'    => $value->phone_number,
+                'wa' => $value->whatsapp,
+                'referal' => $value->referal,
+                'created_at' => date('d-m-Y', strtotime($value->created_at)),
+                'cby' => $value->cby,
             ];
         }
         return collect($results);
@@ -44,7 +52,15 @@ class AnggotaBelumTercoverKortps implements FromCollection,  WithHeadings, WithE
             'NIK',
             'NAMA',
             'DESA',
-            'RT'
+            'RT',
+            'RW',
+            'DESA',
+            'KECAMATAN',
+            'NO.TELP',
+            'WHATSAPP',
+            'REFERAL',
+            'INPUT TANGGAL',
+            'INPUT OLEH'
         ];
     }
 

@@ -508,10 +508,14 @@ class OrgDiagram extends Model
 
 	public function getDataAnggotaBelumterCoverKortpsByVillage($village_id){
 
-		$sql = "SELECT a.nik, a.name , b.name as desa, a.rt,
+		$sql = "SELECT a.nik, a.name , b.name as desa, a.rt, c.name as referal, a.rw, d.name as district,
+				a.phone_number, a.whatsapp, a.created_at, e.name as cby,
 				(SELECT COUNT(id) from org_diagram_rt WHERE nik = a.nik and base = 'ANGGOTA' ) as anggota 
 				from users as a 
 				join villages as b on a.village_id = b.id
+				join users as c on a.user_id = c.id
+				join districts as d on b.district_id = d.id
+				join users as e on a.cby = c.id
 				WHERE b.id = $village_id and (SELECT COUNT(id) from org_diagram_rt WHERE nik = a.nik ) = 0
 				order by a.rt asc";
 
