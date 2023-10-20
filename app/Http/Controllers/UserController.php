@@ -136,7 +136,7 @@ class UserController extends Controller
        
                   $user = User::create([
                       'user_id' => $cek_code->id,
-                      'code' => $potong_nik.$string,
+                      'code' => $string.$potong_nik,
                       'nik'  => $request->nik,
                       'name' => strtoupper($request->name),
                       'gender' => $request->gender,

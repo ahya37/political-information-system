@@ -114,75 +114,84 @@ class MemberController extends Controller
 
     public function store(Request $request)
     {
-
-        $this->validate($request, [
-            'phone_number' => 'numeric',
-        ]);
-
-        #hitung panjang nik, harus 16
-        $cekLengthNik = strlen($request->nik);
-        if ($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
-
-        $cby = auth()->guard('admin')->user()->id;
-        //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
-
-        $cek_nik = User::select('nik')->where('nik', $request->nik)->count();
-        #cek nik jika sudah terpakai
-        if ($cek_nik > 0) {
-            return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
-        } else {
-
-            //  cek jika reveral tidak tersedia
-            $cek_code = User::select('code', 'id')->where('code', $request->code)->first();
-
-            if ($cek_code == null) {
-                return redirect()->back()->with(['error' => 'Kode Reveral yang anda gunakan tidak terdaftar']);
+        DB::beginTransaction();
+        try {
+            # code...
+            $this->validate($request, [
+                'phone_number' => 'numeric',
+            ]);
+    
+            #hitung panjang nik, harus 16
+            $cekLengthNik = strlen($request->nik);
+            if ($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
+    
+            $cby = auth()->guard('admin')->user()->id;
+            //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
+    
+            $cek_nik = User::select('nik')->where('nik', $request->nik)->count();
+            #cek nik jika sudah terpakai
+            if ($cek_nik > 0) {
+                return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
             } else {
-
-                $request_ktp = $request->ktp;
-                $request_photo = $request->photo;
-                $gF = new GlobalProvider();
-                $ktp = $gF->cropImageKtp($request_ktp);
-                $photo = $gF->cropImagePhoto($request_photo);
-
-                $strRandomProvider = new StrRandom();
-                $string            = $strRandomProvider->generateStrRandom();
-                $potong_nik        = substr($request->nik, -5); // get angka nik 5 angka dari belakang
-
-                $user = User::create([
-                    'user_id' => $cek_code->id,
-                    'code' => $potong_nik.$string,
-                    'nik'  => $request->nik,
-                    'name' => strtoupper($request->name),
-                    'gender' => $request->gender,
-                    'place_berth' => strtoupper($request->place_berth),
-                    'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
-                    'blood_group' => $request->blood_group,
-                    'marital_status' => $request->marital_status,
-                    'job_id' => $request->job_id,
-                    'religion' => $request->religion,
-                    'education_id'  => $request->education_id,
-                    'email' => $request->email,
-                    'phone_number' => $request->phone_number,
-                    'whatsapp' => $request->whatsapp,
-                    'village_id'   => $request->village_id,
-                    'rt'           => $request->rt,
-                    'rw'           => $request->rw,
-                    'address'      => strtoupper($request->address),
-                    'photo'        => $photo,
-                    'ktp'          => $ktp,
-                    'cby'          => $cby,
-                ]);
-
-                #generate qrcode
-                $qrCode       = new QrCodeProvider();
-                $qrCodeValue  = $user->code . '-' . $user->name;
-                $qrCodeNameFile = $user->code;
-                $qrCode->create($qrCodeValue, $qrCodeNameFile);
+    
+                //  cek jika reveral tidak tersedia
+                $cek_code = User::select('code', 'id')->where('code', $request->code)->first();
+    
+                if ($cek_code == null) {
+                    return redirect()->back()->with(['error' => 'Kode Reveral yang anda gunakan tidak terdaftar']);
+                } else {
+    
+                    $request_ktp = $request->ktp;
+                    $request_photo = $request->photo;
+                    $gF = new GlobalProvider();
+                    $ktp = $gF->cropImageKtp($request_ktp);
+                    $photo = $gF->cropImagePhoto($request_photo);
+    
+                    $strRandomProvider = new StrRandom();
+                    $string            = $strRandomProvider->generateStrRandom();
+                    $potong_nik        = substr($request->nik, -5); // get angka nik 5 angka dari belakang
+    
+                    $user = User::create([
+                        'user_id' => $cek_code->id,
+                        'code' => $string.$potong_nik,
+                        'nik'  => $request->nik,
+                        'name' => strtoupper($request->name),
+                        'gender' => $request->gender,
+                        'place_berth' => strtoupper($request->place_berth),
+                        'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
+                        'blood_group' => $request->blood_group,
+                        'marital_status' => $request->marital_status,
+                        'job_id' => $request->job_id,
+                        'religion' => $request->religion,
+                        'education_id'  => $request->education_id,
+                        'email' => $request->email,
+                        'phone_number' => $request->phone_number,
+                        'whatsapp' => $request->whatsapp,
+                        'village_id'   => $request->village_id,
+                        'rt'           => $request->rt,
+                        'rw'           => $request->rw,
+                        'address'      => strtoupper($request->address),
+                        'photo'        => $photo,
+                        'ktp'          => $ktp,
+                        'cby'          => $cby,
+                    ]);
+    
+                    #generate qrcode
+                    $qrCode       = new QrCodeProvider();
+                    $qrCodeValue  = $user->code . '-' . $user->name;
+                    $qrCodeNameFile = $user->code;
+                    $qrCode->create($qrCodeValue, $qrCodeNameFile);
+                }
             }
+    
+            DB::commit();
+            return redirect()->route('admin-member')->with('success', 'Anggota baru telah dibuat');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Anggota baru gagal dibuat', $e->getMessage());
+
         }
 
-        return redirect()->route('admin-member')->with('success', 'Anggota baru telah dibuat');
     }
 
     public function profileMember($id)
