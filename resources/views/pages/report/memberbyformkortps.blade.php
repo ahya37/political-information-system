@@ -134,8 +134,7 @@
             <span>Koordinator TPS / KORTE</span>
             <br>
             <br>
-            <br>
-            <br>
+             <br>
             <span><b>({{$kor_rt->name}})</b></span>
         </section>
      <footer></footer>
