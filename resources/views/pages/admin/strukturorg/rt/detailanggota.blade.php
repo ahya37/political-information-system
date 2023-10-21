@@ -159,7 +159,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($anggotaKorTps as $item)
-                                            <tr class="{{ $item->is_cover == 1 ? 'bg-success text-white' : '' }}">
+                                            {{-- <tr class="{{ $item->is_cover == 1 ? 'bg-success text-white' : '' }}">
                                                 <td>{{ $no++ }}</td>
                                                 <td>
                                                     <p><img class="rounded" width="40"
@@ -168,7 +168,23 @@
                                                 </td>
                                                 <td>{{ $item->nik }}</td>
                                                 <td><button class="btn btn-sm btn-danger" data-name="{{ $item->name }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-trash"></i></button></td>
+                                            </tr> --}}
+                                            <tr>
+                                                <td>{{ $no++ }}</td>
+                                                <td>
+                                                    <p><img class="rounded" width="40"
+                                                            src="{{ $item->photo != null ? asset('/storage/' . $item->photo) : asset('img/member-icon.svg') }}">
+                                                        {{ $item->name }}</p>
+                                                </td>
+                                                <td>{{ $item->nik }}</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-danger" data-name="{{ $item->name }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-trash"></i></button>
+                                                        @if($item->photo == null)
+                                                            <a href="{{ route('admin-kortps-create-new-anggota', $item->id) }}" class="btn btn-sm btn-info">Jadikan Anggota</a> 
+                                                    @endif
+                                                </td>
                                             </tr>
+                                            
                                         @endforeach
                                     </tbody>
                                 </table>

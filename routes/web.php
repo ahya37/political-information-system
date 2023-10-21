@@ -487,6 +487,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/report/rt/excel','OrgDiagramController@reportOrgRTExcel')->name('admin-struktur-organisasi-rt-report-excel');
 			
 			Route::get('/rt/detail/anggota/suratpernyatan/{idx}','OrgDiagramController@storeSuratPernyatanKorte');
+
+			Route::get('/rt/detail/anggota/createnewanggota/{idx}','OrgDiagramController@createNewAnggota')->name('admin-kortps-create-new-anggota');
+			Route::post('/rt/detail/anggota/createnewanggota/save/{id}','OrgDiagramController@storeNewAnggotaByKorTps')->name('admin-kortps-create-new-anggota-store');
 			
             // new store keluarga serumah
 			Route::post('/rt/keluargaserumah/store/{idx}','OrgDiagramController@storeKeluargaSerumahByKorTps')->name('admin-keluargaserumah-store');

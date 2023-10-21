@@ -28,13 +28,38 @@
                         <form action="{{ route('admin-koordinatortpskorte-store', $idx) }}" id="register"
                             enctype="multipart/form-data" method="POST">
                             @csrf
+                            <div class="form-group">
+                                <label>Pilih Lokasi</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input value="{{ $regency->id }}" type="hidden" id="regencyId">
+                                        <input value="{{ $district->dapil_id }}" type="hidden" id="selectListArea" class="form-control">
+                                        <input value="{{ $district->id }}" type="hidden" name="districtid" id="selectDistrictId" class="form-control">
+                                        <div class="form-group">
+                                            <select name="village_id" id="selectVillageId" class="form-control filter"
+                                                required></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group" id="divSelectRt">
+                                            <select name="rt" id="selectRt" class="form-control filter">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 							<div class="form-group">
                                 <label>NIK</label>
                                 <input type="number" name="nik" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Nama</label>
+                                <input class="form-control" type="hidden" name="newidx" value="{{$result_new_idx}}">
                                 <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>TPS</label>
+                                <select name="tpsid" id="tps" class="form-control filter tps"></select>
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-sm btn-sc-primary text-white" type="submit">Simpan</button>
@@ -52,4 +77,5 @@
     <script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
     <script src="{{ asset('assets/vendor/vuetoasted/vue-toasted.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
+    <script src="{{ asset('js/create-anggota-form-kosong.js') }}"></script>
 @endpush

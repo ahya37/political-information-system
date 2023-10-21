@@ -27,6 +27,8 @@ use App\Exports\KorteMembersExport;
 use App\FamilyGroup;
 use App\Models\District;
 use App\Models\Village;
+use App\Providers\QrCodeProvider;
+use App\Providers\StrRandom;
 use PDF;
 use Zipper;
 use File;
@@ -1142,14 +1144,6 @@ class OrgDiagramController extends Controller
 
         $regency = Regency::select('id', 'name')->where('id', 3602)->first();
 
-        // get village id where idx
-        // $cek_kor = DB::table('org_diagram_rt as a')->select('b.village_id')
-        //             ->join('users as b','b.nik','=','a.nik')
-        //             ->where('a.idx', $idx)->first();
-
-        // $village_id = $cek_kor->village_id;
-
-        #creeate idx
         $cek_count_org = DB::table('org_diagram_rt')->where('pidx', $idx)->count();
 
         $result_new_idx = "";
@@ -1168,10 +1162,8 @@ class OrgDiagramController extends Controller
 
                 $result_exp = (int) $exp[2] + 1;
                 $result_new_idx  = $exp[0] . "." . $exp[1] . "." . $result_exp;
-                // dd($result_exp);
-                // dd($result_new_idx);
-
             }
+            
         } else {
 
             $result_new_idx = $idx . '.1';
@@ -1239,7 +1231,6 @@ class OrgDiagramController extends Controller
         DB::beginTransaction();
         try {
 
-
             #cek ketersediaan nik di tb users
             $userTable     = DB::table('users');
             // $cek_nik_user  = $userTable->where('id', $request->member)->count();
@@ -1254,38 +1245,6 @@ class OrgDiagramController extends Controller
             #get villlage, regency, district, rt where idx
             $domisili = DB::table('org_diagram_rt')->select('regency_id', 'district_id', 'village_id', 'rt')->where('idx', $request->pidx)->first();
 
-            // #create idx
-            // $cek_count_org = DB::table('org_diagram_rt')->where('idx', $request->pidx)->count();
-
-            // $result_new_idx = "";
-
-            // if ($cek_count_org > 0) {
-
-            //     $count_org     = DB::table('org_diagram_rt')->where('pidx', $request->pidx)->max('idx'); 
-
-            //     $exp        = explode(".", $count_org);
-            //     $count_exp  = count($exp);
-
-
-            //     if($count_exp == 1) {
-
-            //         $result_new_idx  = $request->pidx.$exp[0].".1";
-
-            //     }else{
-
-            //         // get nilai terakhir dari idx where pidx
-            //         $end_number = end($exp); 
-            //         $result_exp = (int) $end_number + 1;
-
-            //         $result_new_idx  = $request->pidx.".".$result_exp;
-
-            //     }         
-
-            // }else{
-
-            //     $result_new_idx = "KORRT";
-
-            // }
 
             #cek jika tps koordinator tidak sama dengan tps calon anggotanya
             $koor = DB::table('org_diagram_rt as a')->select('b.tps_id')
@@ -1297,6 +1256,7 @@ class OrgDiagramController extends Controller
             if ($tpsKoor != $request->tpsid) {
 
                 return redirect()->back()->with(['error' => 'Gagal, TPS anggota tidak sama dengan TPS Koordinator!']);
+
             } else {
 
                 #save to tb org_diagram_rt
@@ -3309,55 +3269,293 @@ class OrgDiagramController extends Controller
 
     public function formKoordinatorTpsKorte($idx)
     {
+        $regency = Regency::select('id', 'name')->where('id', 3602)->first();
+        $cek_count_org = DB::table('org_diagram_rt')->where('pidx', $idx)->count();
 
-        return view('pages.admin.strukturorg.rt.formkoordinatortpskorte', compact('idx'));
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $districtModel  = new District();
+        $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
+        $villages       = Village::select('id', 'name')->where('district_id', $authAdminDistrict)->get();
+
+        $result_new_idx = "";
+
+        if ($cek_count_org > 0) {
+
+            $count_org     = DB::table('org_diagram_rt')->select('idx')->where('pidx', $idx)->orderBy('id', 'desc')->first();
+            $count_org   = $count_org->idx;
+            $exp        = explode(".", $count_org);
+            $count_exp  = count($exp);
+
+            if ($count_exp == 1) {
+
+                $result_new_idx = $exp[0] . ".1";
+            } else {
+
+                $result_exp = (int) $exp[2] + 1;
+                $result_new_idx  = $exp[0] . "." . $exp[1] . "." . $result_exp;
+            }
+            
+        } else {
+
+            $result_new_idx = $idx . '.1';
+        }        
+
+        return view('pages.admin.strukturorg.rt.formkoordinatortpskorte', compact('idx','regency','result_new_idx','villages', 'district'));
     }
 
     public function storeFormKoordinatorTps(Request $request, $idx)
     {
+        DB::beginTransaction();
+        try {
 
-
-        $request->validate([
-            'name' => 'required',
-            'nik' => 'required',
-        ]);
-
-        $koorModel = new KoordinatorTpsKorte();
-
-        #hitung panjang nik, harus 16
-        $cekLengthNik = strlen($request->nik);
-        if ($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
-
-        #cek jangan double data
-        $cek = $koorModel->where('nik', $request->nik)->count();
-       
-        if ($cek > 0) {
-
-            // get keterangan kortpsnya
-            $getAnggotaKortps = $koorModel->where('nik', $request->nik)->select('pidx_korte')->first();
-            $orgDiagramModel  = new OrgDiagram();
-            $kortps           = $orgDiagramModel->getKorTpsByPidxKorte($getAnggotaKortps->pidx_korte);
-            $rt               = $kortps->rt ?? '';
-            $desc             = ucfirst(strtolower($kortps->name ?? '')).', RT.'.$rt.', Ds.'.ucfirst(strtolower($kortps->village ?? '')).', Kec.'.ucfirst(strtolower($kortps->district ?? ''));
-
-            return redirect()->back()->with(['error' => 'NIK sudah terdaftar di Kor TPS '.$desc.' !']);
-
-        }else{
-
-            // cek ke table users apakah ada anggota dengan nik tersebut
-            // $member = User::select('name', 'nik')->where('nik', $request->nik)->first();
-            // jika ada sesuaikan namanya by nik yg ada di table users
-            // $name   = $member == null ? strtoupper($request->name) : strtoupper($member->name);
-            $name   = strtoupper($request->name);
+            $request->validate([
+                'name' => 'required',
+                'nik' => 'required',
+            ]);
     
-            $auth = auth()->guard('admin')->user()->id;
+            $koorModel = new KoordinatorTpsKorte();
     
-            $koorModel->stores($idx, $request, $name, $auth);
+            #hitung panjang nik, harus 16
+            $cekLengthNik = strlen($request->nik);
+            if ($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
     
+            #cek jangan double data
+            $cek = $koorModel->where('nik', $request->nik)->count();
+           
+            if ($cek > 0) {
+    
+                // get keterangan kortpsnya
+                $getAnggotaKortps = $koorModel->where('nik', $request->nik)->select('pidx_korte')->first();
+                $orgDiagramModel  = new OrgDiagram();
+                $kortps           = $orgDiagramModel->getKorTpsByPidxKorte($getAnggotaKortps->pidx_korte);
+                $rt               = $kortps->rt ?? '';
+                $desc             = ucfirst(strtolower($kortps->name ?? '')).', RT.'.$rt.', Ds.'.ucfirst(strtolower($kortps->village ?? '')).', Kec.'.ucfirst(strtolower($kortps->district ?? ''));
+    
+                return redirect()->back()->with(['error' => 'NIK sudah terdaftar di Kor TPS '.$desc.' !']);
+    
+            }else{
+    
+                # cek apakah sudah terdaftar sebagai anggota / memiliki KTA
+                $cek_member = User::where('nik', $request->nik)->count();
+                    # jika sudah simpan ke anggota korTPS 25, 
+                    if ($cek_member > 0) {
+                        
+                    #cek ketersediaan nik di tb users
+                    $userTable     = DB::table('users');
+                    // $cek_nik_user  = $userTable->where('id', $request->member)->count();
+                    $user         = $userTable->select('name', 'photo', 'phone_number', 'nik')->where('nik', $request->nik)->first();
+        
+                    // #cek jika nik sudah terdaftar di tb org_diagram_village
+                    $cek_nik_org  = DB::table('org_diagram_rt')->where('nik', $user->nik)->count();
+                    if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
+    
+                    #get villlage, regency, district, rt where idx
+                    $domisili = DB::table('org_diagram_rt')->select('regency_id', 'district_id', 'village_id', 'rt')->where('idx', $idx)->first();
+    
+                    #cek jika tps koordinator tidak sama dengan tps calon anggotanya
+                    $koor = DB::table('org_diagram_rt as a')->select('b.tps_id')
+                        ->join('users as b', 'a.nik', '=', 'b.nik')
+                        ->where('a.idx', $idx)
+                        ->first();
+                    $tpsKoor = $koor->tps_id;
+    
+                    if ($tpsKoor != $request->tpsid) {
+    
+                            return redirect()->back()->with(['error' => 'Gagal, TPS anggota tidak sama dengan TPS Koordinator!']);
+    
+                        }else{
+    
+                             #save to tb org_diagram_rt
+                            DB::table('org_diagram_rt')->insert([
+                                'idx'    => $request->newidx,
+                                'pidx'   => $idx,
+                                'title'  => 'ANGGOTA',
+                                'nik'    => $user->nik,
+                                'name'   => $user->name,
+                                'base'   => 'ANGGOTA',
+                                'photo'  => $user->photo ?? '',
+                                'telp'  => $request->telp,
+                                'regency_id'  => $domisili->regency_id,
+                                'district_id' => $domisili->district_id,
+                                'village_id'  => $domisili->village_id,
+                                'rt'  => $domisili->rt,
+                                'cby' => auth()->guard('admin')->user()->id,
+                                'created_at' => date('Y-m-d H:i:s')
+                            ]);
+    
+                            DB::table('users')->where('nik', $user->nik)->update(['tps_id' => $request->tpsid]);
+    
+                        }
+    
+                }else{
+    
+                    # jika belum tampung di data anggota form kosong kor tps
+                    // cek ke table users apakah ada anggota dengan nik tersebut
+                    $member = User::select('name', 'nik')->where('nik', $request->nik)->first();
+                    // jika ada sesuaikan namanya by nik yg ada di table users
+                    $name   = $member == null ? strtoupper($request->name) : strtoupper($member->name);
+                    $name   = strtoupper($request->name);
+            
+                    $auth = auth()->guard('admin')->user()->id;
+            
+                    $koorModel->stores($idx, $request, $name, $auth);
+            
+    
+                }
+            } 
+             
+            DB::commit();
             return redirect()->back()->with(['success' => 'Anggota berhasil disimpan!']);
-        } 
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            // return $e->getMessage();
+            return redirect()->back()->with(['error' => 'Data gagal tersimpan!' . $e->getMessage()]);
+
+        }
         
 
+    }
+
+    public function createNewAnggota($id){
+
+        $anggotaKorTps = DB::table('anggota_koordinator_tps_korte')->where('id', $id)->first();
+
+        $cek_count_org = DB::table('org_diagram_rt')->where('pidx', $anggotaKorTps->pidx_korte)->count();
+
+        $result_new_idx = "";
+
+        if ($cek_count_org > 0) {
+
+            $count_org     = DB::table('org_diagram_rt')->select('idx')->where('pidx', $anggotaKorTps->pidx_korte)->orderBy('id', 'desc')->first();
+            $count_org   = $count_org->idx;
+            $exp        = explode(".", $count_org);
+            $count_exp  = count($exp);
+
+            if ($count_exp == 1) {
+
+                $result_new_idx = $exp[0] . ".1";
+            } else {
+
+                $result_exp = (int) $exp[2] + 1;
+                $result_new_idx  = $exp[0] . "." . $exp[1] . "." . $result_exp;
+            }
+            
+        } else {
+
+            $result_new_idx = $anggotaKorTps->pidx_korte . '.1';
+        }
+
+
+        return view('pages.admin.strukturorg.rt.create-new-anggota', compact('id','anggotaKorTps','result_new_idx'));
+
+    }
+
+    public function storeNewAnggotaByKorTps(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            
+            $this->validate($request, [
+                'phone_number' => 'numeric',
+            ]);
+    
+            #hitung panjang nik, harus 16
+            $cekLengthNik = strlen($request->nik);
+            if ($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
+    
+            $cby = auth()->guard('admin')->user()->id;
+            //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
+    
+            $cek_nik = User::select('nik')->where('nik', $request->nik)->count();
+            #cek nik jika sudah terpakai
+            if ($cek_nik > 0) {
+                return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
+            } else {
+    
+                //  cek jika reveral tidak tersedia
+                $cek_code = User::select('code', 'id')->where('code', $request->code)->first();
+    
+                if ($cek_code == null) {
+                    return redirect()->back()->with(['error' => 'Kode Reveral yang anda gunakan tidak terdaftar']);
+                } else {
+    
+                    $request_ktp = $request->ktp;
+                    $request_photo = $request->photo;
+                    $gF = new GlobalProvider();
+                    $ktp = $gF->cropImageKtp($request_ktp);
+                    $photo = $gF->cropImagePhoto($request_photo);
+    
+                    $strRandomProvider = new StrRandom();
+                    $string            = $strRandomProvider->generateStrRandom();
+                    $potong_nik        = substr($request->nik, -5); // get angka nik 5 angka dari belakang
+    
+                    $user = User::create([
+                        'user_id' => $cek_code->id,
+                        'code' => $string.$potong_nik,
+                        'nik'  => $request->nik,
+                        'name' => strtoupper($request->name),
+                        'gender' => $request->gender,
+                        'place_berth' => strtoupper($request->place_berth),
+                        'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
+                        'blood_group' => $request->blood_group,
+                        'marital_status' => $request->marital_status,
+                        'job_id' => $request->job_id,
+                        'religion' => $request->religion,
+                        'education_id'  => $request->education_id,
+                        'email' => $request->email,
+                        'phone_number' => $request->phone_number,
+                        'whatsapp' => $request->whatsapp,
+                        'village_id'   => $request->village_id,
+                        'rt'           => $request->rt,
+                        'rw'           => $request->rw,
+                        'address'      => strtoupper($request->address),
+                        'photo'        => $photo,
+                        'ktp'          => $ktp,
+                        'cby'          => $cby,
+                    ]);
+    
+                    #generate qrcode
+                    $qrCode       = new QrCodeProvider();
+                    $qrCodeValue  = $user->code . '-' . $user->name;
+                    $qrCodeNameFile = $user->code;
+                    $qrCode->create($qrCodeValue, $qrCodeNameFile);
+                }
+            }
+
+            #input ke table org_diagram_rt sebagai anggota
+            $anggotaKorTps = DB::table('anggota_koordinator_tps_korte')->where('id', $id)->first();
+            $domisili = DB::table('org_diagram_rt')->select('regency_id', 'district_id', 'village_id', 'rt')->where('idx', $anggotaKorTps->pidx_korte)->first();
+            #save to tb org_diagram_rt
+            DB::table('org_diagram_rt')->insert([
+                'idx'    => $request->new_idx,
+                'pidx'   =>  $anggotaKorTps->pidx_korte,
+                'title'  => 'ANGGOTA',
+                'nik'    => $user->nik,
+                'name'   => $user->name,
+                'base'   => 'ANGGOTA',
+                'photo'  => $user->photo ?? '',
+                'telp'  => $request->telp,
+                'regency_id'  => $domisili->regency_id,
+                'district_id' => $domisili->district_id,
+                'village_id'  => $domisili->village_id,
+                'rt'  => $domisili->rt,
+                'cby' => auth()->guard('admin')->user()->id,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+
+            # hapus dari table anggota_koordinator_tps_korte by id;
+            DB::table('anggota_koordinator_tps_korte')->where('id', $id)->delete();
+            
+
+            DB::commit();
+            return redirect()->route('admin-struktur-organisasi-rt-detail-anggota', $anggotaKorTps->pidx_korte)->with('success', 'Anggota baru telah disimpan!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
+            return redirect()->back()->with('error', 'Anggota baru gagal disimpan!', $e->getMessage());
+        }
     }
 
     public function deleteDataFormKoordinatorTps(Request $request){
