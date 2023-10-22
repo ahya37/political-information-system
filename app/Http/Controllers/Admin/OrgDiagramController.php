@@ -3553,7 +3553,7 @@ class OrgDiagramController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return $e->getMessage();
+            // return $e->getMessage();
             return redirect()->back()->with('error', 'Anggota baru gagal disimpan!', $e->getMessage());
         }
     }
@@ -3901,6 +3901,98 @@ class OrgDiagramController extends Controller
         // return $this->excel->download(new AnggotaFormKortpsExport($idx), $title);
 
     }
+
+    public function migrasiDataFormKorTpsToOrgDiagramKorRt(Request $request){
+        
+
+        // -- get data kortps
+        $korTps = DB::table('org_diagram_rt as a')
+                ->select('a.idx', 'b.tps_id', 
+                // DB::raw('(select count(id) from anggota_koordinator_tps_korte where pidx_korte = a.idx) as jml_anggota')
+                )
+                ->join('users as b','a.nik','b.nik')
+                ->where('a.base','KORRT')
+                ->where('a.district_id', $request->district_id)
+                ->groupBy('a.idx','b.tps_id')
+                ->havingRaw('(select count(id) from anggota_koordinator_tps_korte where pidx_korte = a.idx) != 0')
+                ->get();
+        // -- get data dari anggota_koordinator_tps_korte per kortps nya
+        $results = [];
+        foreach ($korTps as  $value) {
+            #query hanya nik yg memiliki KTA saja
+            $getAnggotaKorTps = DB::table('anggota_koordinator_tps_korte as a')
+                                ->join('users as b','a.nik','=','b.nik')
+                                ->select('a.nik','a.pidx_korte', 
+                                    DB::raw('(select count(id) from org_diagram_rt where nik = a.nik) as anggota_kortps'))
+                                ->where('a.pidx_korte', $value->idx)
+                                ->get();
+            $results[] = [
+                // 'kortps_idx' => $value->idx,
+                // 'tps_id' => $value->tps_id,
+                // 'jml_anggota' => $value->jml_anggota,
+                'anggota' => $getAnggotaKorTps
+            ];
+        }
+
+
+        $idxExists = [];
+
+        foreach ($results as $item) {
+            foreach ($item['anggota'] as $value) {
+                #buat anggota baru
+                if ($value->anggota_kortps == 0) {
+                    
+                    // $result_new_idx = $this->generateNewIdx($item->pidx_korte);
+                    $idxExists[] = [
+                        'idx_tersedia' => $value->nik
+                    ];
+                }
+            }
+
+    
+                // else {
+                //     // -- jika sudah jadi anggota, migrasikan ke tb org_diagram_rt sebagai anggota, replace
+                //     #replace kortps sesuai form kosong bawaan korte nya
+                // }
+            }
+
+        return $idxExists;
+
+        #mencetak idx yg tersedia, chil dari pidx kortps
+        // -- cek apakah sudah jadi anggota
+        
+        // -- atur algoritma untuk idx nya yg memiliki parent kortps di atasnya
+    }
+
+    public function generateNewIdx($idx_korte){
+
+        $cek_count_org = DB::table('org_diagram_rt')->where('pidx', $idx_korte)->count();
+        $result_new_idx = "";
+                        if ($cek_count_org > 0) {
+        
+                            $count_org     = DB::table('org_diagram_rt')->select('idx')->where('pidx', $idx_korte)->orderBy('id', 'desc')->first();
+                            $count_org   = $count_org->idx;
+                            $exp        = explode(".", $count_org);
+                            $count_exp  = count($exp);
+                
+                            if ($count_exp == 1) {
+                
+                                $result_new_idx == $exp[0] . ".1";
+                            } else {
+                
+                                $result_exp = (int) $exp[2] + 1;
+                                $result_new_idx  == $exp[0] . "." . $exp[1] . "." . $result_exp;
+                            }
+                            
+                        } else {
+                
+                            $result_new_idx == $idx_korte . '.1';
+                        }
+
+        return $result_new_idx;
+
+    }
+
 
 
 }

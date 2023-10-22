@@ -453,3 +453,8 @@ Route::post('/rightchoose/update/field/village','Admin\SettingController@updateF
 
 // get kalkulasi anggota tercover dan belum
 Route::post('/tim/calculate', 'Admin\OrgDiagramController@countMemberNotCover');
+
+// algoritma 1, replace anggota ke kortps yg di bawa
+Route::post('/migrasi/kortps', 'Admin\OrgDiagramController@migrasiDataFormKorTpsToOrgDiagramKorRt');
+
+// algoritma 2, tidak melakukan replace, hanya migrasikan data yg belum mempunyai kortps saja
