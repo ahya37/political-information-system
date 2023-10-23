@@ -79,6 +79,7 @@ class OrgDiagramController extends Controller
         $tpsNotExists  = [];
         $tpsExists     = [];
         $target_anggota  = '';
+        $jml_dpt         = '';
         
         if(isset($dapil_id) && !isset($district_id) && !isset($village_id) && !isset($rt)){
 
@@ -86,6 +87,10 @@ class OrgDiagramController extends Controller
 
             #proses hitung target
             $dataTim        = $orgDiagram->getDataDaftarTimByDapil($dapil_id);
+            $jml_dpt =  collect($dataTim)->sum(function($q){
+                return $q->dpt;
+            });
+
             $target_anggota = collect($dataTim)->sum(function($q){
                 return ($q->dpt * $q->target_persentage)/100;
             });
@@ -116,7 +121,8 @@ class OrgDiagramController extends Controller
             $tpsExists    = $orgDiagram->getTpsExistByVillage($village_id);
 
             #proses hitung target
-            $dataTim        = $orgDiagram->getDataDaftarTimByVillage($village_id);
+            $dataTim      = $orgDiagram->getDataDaftarTimByVillage($village_id);
+            $jml_dpt      =  $dataTim->dpt;
 
             $target_anggota =  $dataTim->target ?? 0;
 
@@ -125,7 +131,7 @@ class OrgDiagramController extends Controller
             $results = $orgDiagram->getKalkulasiTercoverRt($village_id, $rt);
             #proses hitung target
             $dataTim        = $orgDiagram->getDataDaftarTimByVillage($village_id);
-
+            $jml_dpt      =  $dataTim->dpt;
             $target_anggota =  $dataTim->target ?? 0;
             
             #get list data tps yg belum terisi oleh kortps
@@ -144,6 +150,10 @@ class OrgDiagramController extends Controller
                     'target' => $getTarget
                 ];
             }
+
+            $jml_dpt =  collect($dataTim)->sum(function($q){
+                return $q->dpt;
+            });
 
             $target_anggota = collect($targets)->sum(function($q){
                 return $q['target'];
@@ -177,6 +187,7 @@ class OrgDiagramController extends Controller
         return response()->json([
             'data' => $results,
             'target_anggota' => $gF->decimalFormat($target_anggota),
+            'jml_dpt' => $gF->decimalFormat($jml_dpt),
             'pengurus' => $pengurus,
             'tpsnotexists' => $tpsNotExists,
             'tpsExists' => $tpsExists

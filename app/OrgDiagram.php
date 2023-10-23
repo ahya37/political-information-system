@@ -423,7 +423,7 @@ class OrgDiagram extends Model
                 -- (select COUNT(id)  from org_diagram_village where title = 'KETUA' and village_id = a.id) as ketua,
                 -- (select COUNT(id)  from org_diagram_village where title = 'SEKRETARIS' and village_id = a.id) as sekretaris,
                 -- (select COUNT(id)  from org_diagram_village where title = 'BENDAHARA' and village_id = a.id) as bendahara,
-                -- (SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id ) as dpt,
+                (SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id ) as dpt,
                 -- (SELECT COUNT(id) from users WHERE village_id = a.id ) as anggota,
                 -- ((SELECT COUNT(id) from users WHERE village_id = a.id )/25)as target_korte,
                 -- (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi,

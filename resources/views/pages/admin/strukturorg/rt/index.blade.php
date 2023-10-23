@@ -98,40 +98,49 @@
                     </div>
                 </div>
             </form>
+            
             <div class="row">
-                <div class="col-md-3 mt-2 mb-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Target</h5>
-                            <h5 id="targetanggota"></h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mt-2 mb-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Anggota</h5>
-                            <h5 id="anggota"></h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mt-2 mb-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Tercover Kor TPS</h5>
-                            <h5 id="tercover"></h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mt-2 mb-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Belum Tercover Kor TPS</h5>
-                            <h5 id="blmtercover"></h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <div class="col-md-2 mt-2 mb-2">
+                   <div class="card">
+                       <div class="card-body">
+                           <h5 class="card-title">DPT</h5>
+                           <h5 id="jmldpt"></h5>
+                       </div>
+                   </div> 
+               </div>
+               <div class="col-md-2 mt-2 mb-2">
+                   <div class="card">
+                       <div class="card-body">
+                           <h5 class="card-title">Target</h5>
+                           <h5 id="targetanggota"></h5>
+                       </div>
+                   </div>
+               </div>
+               <div class="col-md-2 mt-2 mb-2">
+                   <div class="card">
+                       <div class="card-body">
+                           <h5 class="card-title">Anggota</h5>
+                           <h5 id="anggota"></h5>
+                       </div>
+                   </div>
+               </div>
+               <div class="col-md-3 mt-2 mb-2">
+                   <div class="card">
+                       <div class="card-body">
+                           <h5 class="card-title">Tercover Kor TPS</h5>
+                           <h5 id="tercover"></h5>
+                       </div>
+                   </div>
+               </div>
+               <div class="col-md-3 mt-2 mb-2">
+                   <div class="card">
+                       <div class="card-body">
+                           <h5 class="card-title">Belum Tercover Kor TPS</h5>
+                           <h5 id="blmtercover"></h5>
+                       </div>
+                   </div>
+               </div>
+           </div>
 
             <div class="row">
                 <div class="col-md-3 mt-2 mb-2">
