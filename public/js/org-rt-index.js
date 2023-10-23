@@ -282,6 +282,7 @@ $("#selectListArea").change(async function () {
             selectVillageId,
             selectRT
         );
+        $("#targetanggota").text(`${dataCover.target_anggota}`); 
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
@@ -430,6 +431,7 @@ $("#selectDistrictId").change(async function () {
             selectVillageId,
             selectRT
         );
+        $("#targetanggota").text(`${dataCover.target_anggota}`);
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
@@ -606,6 +608,7 @@ $("#selectVillageId").change(async function () {
         $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
         $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
 
+        $("#targetanggota").text(`${dataCover.target_anggota}`);
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
@@ -665,6 +668,7 @@ $("#selectRt").change(async function () {
             selectVillageId,
             selectRT
         );
+        $("#targetanggota").text(`${dataCover.target_anggota}`);
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
@@ -710,6 +714,7 @@ $("#selectRt").change(async function () {
             selectVillageId,
             selectRT
         );
+        $("#targetanggota").text(`${dataCover.target_anggota}`);
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
         
