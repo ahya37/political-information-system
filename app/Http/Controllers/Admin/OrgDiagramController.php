@@ -65,22 +65,30 @@ class OrgDiagramController extends Controller
 
     public function getDataCoverKorTps()
     {
-
+        $regency    = 3602;
         $dapil_id   = request()->dapil;
         $district_id = request()->district;
         $village_id = request()->village;
         $rt         = request()->rt;
 
         $orgDiagram = new OrgDiagram();
+        $gF         = new GlobalProvider();
 
         $results  = '';
         $data_pengurus = [];
         $tpsNotExists  = [];
         $tpsExists     = [];
+        $target_anggota  = '';
         
         if(isset($dapil_id) && !isset($district_id) && !isset($village_id) && !isset($rt)){
 
             $results = $orgDiagram->getKalkulasiTercoverDapil($dapil_id);
+
+            #proses hitung target
+            $dataTim        = $orgDiagram->getDataDaftarTimByDapil($dapil_id);
+            $target_anggota = collect($dataTim)->sum(function($q){
+                return ($q->dpt * $q->target_persentage)/100;
+            });
 
         }elseif(isset($dapil_id) && isset($district_id) && !isset($village_id) && !isset($rt)){
 
@@ -88,7 +96,15 @@ class OrgDiagramController extends Controller
 
             // get data pengurus
             $data_pengurus = $orgDiagram->getDataPengurusKecamatan($district_id);
-            
+
+            #proses hitung target
+            $dataTim        = $orgDiagram->getDataDaftarTimByKecamatan($district_id);
+            $district = DB::table('districts')->select('target_persentage')->where('id', $district_id)->first();
+
+            $jml_dpt =  collect($dataTim)->sum(function($q){
+                return $q->dpt;
+            });
+            $target_anggota = $district->target_persentage > 0 ? ($jml_dpt*$district->target_persentage)/100 : 0;
 
         }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && !isset($rt)){
 
@@ -98,6 +114,11 @@ class OrgDiagramController extends Controller
             #get list data tps yg belum terisi oleh kortps
             $tpsNotExists = $orgDiagram->getTpsNotExistByVillage($village_id);
             $tpsExists    = $orgDiagram->getTpsExistByVillage($village_id);
+
+            #proses hitung target
+            $dataTim        = $orgDiagram->getDataDaftarTimByVillage($village_id);
+
+            $target_anggota =  $dataTim->target ?? 0;
 
         }elseif(isset($dapil_id) && isset($district_id) && isset($village_id) && isset($rt)){
 
@@ -109,6 +130,20 @@ class OrgDiagramController extends Controller
         }else{
 
             $results = $orgDiagram->getKalkulasiTercoverAll();
+
+            #proses hitung target
+            $dataTim      = $orgDiagram->getDataDaftarTimByRegency($regency);
+            $targets      = [];
+            foreach ($dataTim as  $value) {
+                $getTarget = $orgDiagram->getDataDaftarTimByDapilForRegency($value->id);
+                $targets[] = [
+                    'target' => $getTarget
+                ];
+            }
+
+            $target_anggota = collect($targets)->sum(function($q){
+                return $q['target'];
+            });
         }
 
         $ketua         = $this->searchArrayValueName($data_pengurus, 'KETUA');
@@ -137,6 +172,7 @@ class OrgDiagramController extends Controller
 
         return response()->json([
             'data' => $results,
+            'target_anggota' => $gF->decimalFormat($target_anggota),
             'pengurus' => $pengurus,
             'tpsnotexists' => $tpsNotExists,
             'tpsExists' => $tpsExists

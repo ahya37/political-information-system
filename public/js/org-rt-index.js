@@ -68,10 +68,15 @@ async function initialGetAnggotaCover(
                     .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>`);
+            $("#targetanggota")
+                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>`);
 
             },
             success: function () {
                 $("#anggota").empty();
+                $("#targetanggota").empty();
                 $("#tercover").empty();
                 $("#blmtercover").empty();
                 $("#pengKetua").empty();
@@ -91,6 +96,7 @@ async function initialGetAnggotaCover(
 
 let blmTerCover = "";
 async function initialGetAnggotaCoverFirst() {
+    $("#targetanggota").empty();
     $("#anggota").empty();
     $("#tercover").empty();
     $("#kortpsterisi").empty();
@@ -102,6 +108,8 @@ async function initialGetAnggotaCoverFirst() {
         selectVillageId,
         selectRT
     );
+
+    $("#targetanggota").text(`${dataCover.target_anggota}`);
     $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
     $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
@@ -207,6 +215,7 @@ $("#selectListArea").change(async function () {
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val("");
         $("#anggota").empty();
+        $("#targetanggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
 
@@ -216,6 +225,8 @@ $("#selectListArea").change(async function () {
             selectVillageId,
             selectRT
         );
+
+        $("#targetanggota").text(`${dataCover.target_anggota}`); 
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
@@ -256,6 +267,7 @@ $("#selectListArea").change(async function () {
         $("#reqvillage").val("");
 
         $("#anggota").empty();
+        $("#targetanggota").empty();
         $("#tercover").empty();
         $("#keterangan").text("Kor TPS");
         $("#blmtercover").empty();
@@ -336,6 +348,7 @@ $("#selectDistrictId").change(async function () {
         $("#reqvillage").val("");
 
         $("#anggota").empty();
+        $("#targetanggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
         $("#kortpsterisi").empty();
@@ -350,6 +363,7 @@ $("#selectDistrictId").change(async function () {
             selectRT
         );
 
+
         const ketuaExists = `<p><a href='/storage/${dataCover.pengurus.ketua_photo}'><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'></a> ${dataCover.pengurus.ketua} (Referal : ${dataCover.pengurus.referal_ketua})</p>`;
         const sekretarisExists = `<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris} (Referal : ${dataCover.pengurus.referal_sekretaris})</p>`;
         const bendaharaExists  =  `<p><img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'> ${dataCover.pengurus.bendahara} (Referal : ${dataCover.pengurus.referal_bendahara})</p>`;
@@ -357,7 +371,8 @@ $("#selectDistrictId").change(async function () {
         $("#pengKetua").append(dataCover.pengurus.ketua === '' ? '' : ketuaExists);
         $("#pengSekre").append(dataCover.pengurus.sekretaris === '' ? '' : sekretarisExists);
         $("#pengBendahara").append(dataCover.pengurus.bendahara === '' ? '' : bendaharaExists);
-
+        
+        $("#targetanggota").text(`${dataCover.target_anggota}`);
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
@@ -401,6 +416,7 @@ $("#selectDistrictId").change(async function () {
         geLocationDapil(selectListArea);
 
         $("#anggota").empty();
+        $("#targetanggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
         $("#kortpsterisi").empty();
@@ -486,6 +502,7 @@ $("#selectVillageId").change(async function () {
         geLocationVillage(selectVillageId);
 
         $("#anggota").empty();
+        $("#targetanggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
         $("#kortpsterisi").empty();
@@ -518,6 +535,7 @@ $("#selectVillageId").change(async function () {
         $("#pengSekre").append(dataCover.pengurus.sekretaris === '' ? '' : sekretarisExists);
         $("#pengBendahara").append(dataCover.pengurus.bendahara === '' ? '' : bendaharaExists);
         
+        $("#targetanggota").text(`${dataCover.target_anggota}`);
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
@@ -568,6 +586,7 @@ $("#selectVillageId").change(async function () {
         geLocationDistrict(selectDistrictId);
 
         $("#anggota").empty();
+        $("#targetanggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
         $("#kortpsterisi").empty();
@@ -581,6 +600,7 @@ $("#selectVillageId").change(async function () {
             selectVillageId,
             selectRT
         );
+
 
         $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
         $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
@@ -635,6 +655,7 @@ $("#selectRt").change(async function () {
         geLocationVillageWithRt(selectVillageId, selectRT);
 
         $("#anggota").empty();
+        $("#targetanggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
 
@@ -675,6 +696,7 @@ $("#selectRt").change(async function () {
         geLocationVillage(selectVillageId);
 
         $("#anggota").empty();
+        $("#targetanggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
         $("#kortpsterisi").empty();
@@ -727,6 +749,7 @@ $("#selectTps").change(async function () {
         geLocationVillageWithRt(selectVillageId, selectRT);
 
         $("#anggota").empty();
+        $("#targetanggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
 
@@ -768,6 +791,7 @@ $("#selectTps").change(async function () {
         geLocationVillage(selectVillageId);
 
         $("#anggota").empty();
+        $("#targetanggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
         $("#kortpsterisi").empty();
