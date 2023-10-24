@@ -181,7 +181,8 @@ class OrgDiagramController extends Controller
             'referal_sekretaris' => $referal_sekretaris ?? 0,
             'bendahara' => ucwords(strtolower($bendahara)) ?? '',
             'bendahara_photo' => $bendahara_photo ?? '',
-            'referal_bendahara' => $referal_bendahara ?? 0
+            'referal_bendahara' => $referal_bendahara ?? 0,
+            'data_pengurus' => $data_pengurus
         ];
 
         return response()->json([

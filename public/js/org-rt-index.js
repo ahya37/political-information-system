@@ -332,7 +332,7 @@ $("#selectDistrictId").change(async function () {
     selectDistrictId = $("#selectDistrictId").val();
     $(".pengurus").show();
     $(".tpsnotexist").hide();
-
+    $("#dataPengurusTable").empty();
     
     $("#pengKetua").empty();
     $("#pengSekre").empty();
@@ -368,6 +368,7 @@ $("#selectDistrictId").change(async function () {
         $("#kurangtpsterisi").empty();
         $("#targetkortps").empty();
         $("#jmltps").empty();
+        $("#dataPengurusTable").show();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -375,6 +376,8 @@ $("#selectDistrictId").change(async function () {
             selectVillageId,
             selectRT
         );
+
+        getPengurusUi(dataCover.pengurus.data_pengurus);
 
         const ketuaExists = `<p><a href='/storage/${dataCover.pengurus.ketua_photo}'><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'></a> ${dataCover.pengurus.ketua} (Referal : ${dataCover.pengurus.referal_ketua})</p>`;
         const sekretarisExists = `<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris} (Referal : ${dataCover.pengurus.referal_sekretaris})</p>`;
@@ -484,10 +487,33 @@ $("#selectDistrictId").change(async function () {
     }
 });
 
+function getPengurusUi(responseData) {
+    let divHtmlPengurus = "";
+    responseData.forEach((m) => {
+        divHtmlPengurus += showDivHtmlPengurus(m);
+    });
+    const divHtmlPengurusContainer = $("#dataPengurusTable");
+    divHtmlPengurusContainer.append(divHtmlPengurus);
+}
+
+function showDivHtmlPengurus(m) {
+    return `
+            <tr>
+                <td>
+                    <img src='/storage/${m.photo}' width='40px' class='rounded mb-2'>
+                    ${m.name}
+                </td>
+                <td>${m.title}</td>
+                <td align="right">${m.referal}</td>
+                <td>${m.address},DS.${m.village}, KEC.${m.district}</td>
+    `;
+}
+
 // DESA
 $("#selectVillageId").change(async function () {
     selectVillageId = $("#selectVillageId").val();
     $("#pengKetua").empty();
+    $("#dataPengurusTable").empty();
     $("#pengSekre").empty();
     $("#pengBendahara").empty();
 
@@ -532,6 +558,7 @@ $("#selectVillageId").change(async function () {
         $().show();
         $('.tpsexist').show();
         $('.tpsnotexist').show();
+        $("#dataPengurusTable").show();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -539,8 +566,8 @@ $("#selectVillageId").change(async function () {
             selectVillageId,
             selectRT
         );
-
-
+        
+        getPengurusUi(dataCover.pengurus.data_pengurus)
         getLitTpsNotExistUi(dataCover.tpsnotexists);
         getLitTpsExistUi(dataCover.tpsExists);
 
@@ -620,6 +647,7 @@ $("#selectVillageId").change(async function () {
             selectRT
         );
 
+        getPengurusUi(dataCover.pengurus.data_pengurus);
 
         $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
         $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);

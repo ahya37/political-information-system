@@ -220,7 +220,20 @@
                                     <h5 id="keterangan">Kor TPS</h5>
                                     <div id="pengurusId">
                                         <h5 class="pengurus">Pengurus</h5>
-                                        <div class="row">
+                                        <div class="table pengurus col-sm-12">
+                                            <table class="table-sm table-striped pengurus" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nama</th>
+                                                        <th>Jabatan</th>
+                                                        <th>Referal</th>
+                                                        <th>Alamat</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="dataPengurusTable"></tbody>
+                                            </table>
+                                        </div>
+                                        {{-- <div class="row">
                                             <div class="col-md-2 pengurus">Ketua</div>
                                             <div class="col-md-6 " id="pengKetua"></div>
                                         </div>
@@ -231,7 +244,7 @@
                                         <div class="row">
                                             <div class="col-md-2 pengurus">Bendahara</div>
                                             <div class="col-md-6" id="pengBendahara"></div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                
                         </div>
