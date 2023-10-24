@@ -314,11 +314,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div class="form-group">
+                                <div class="form-group">
                                     <label>TPS</label>
-                                    <select name="tpsNewAnggotaBaru" id="tpsNewAnggotaBaru"
-                                        class="form-control filter tps"></select>
-                                </div> --}}
+                                    <select name="tps_new_id" id="tps_new_id" required class="form-control"
+                                    v-model="tps_new_id" v-if="tps_new">
+                                    <option v-for="tpss in tps_new" :value="tpss.id">@{{ tpss.tps_number
+                                        }}</option>
+                                </select>
+                                </div>
                                 <div class="form-group">
                                     <span class="required">*</span>
                                     <label>Alamat Lengkap</label>
@@ -352,7 +355,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-sc-primary text-white mt-4">
+                                    <button type="submit" class="btn btn-sc-primary text-white  btn-block w-00 mt-4">
                                         Simpan
                                     </button>
                                 </div>

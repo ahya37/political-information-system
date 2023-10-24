@@ -3,95 +3,20 @@ let selectDistrictId = $("#selectDistrictId").val();
 let selectVillageId = $("#selectVillageId").val();
 let selectRT = $("#selectRt").val();
 
-// KABKOT , langsung get dapil by kab lebak
-
-// DAPIL
-// $("#selectListArea").change(async function () {
-//     selectListArea = $("#selectListArea").val();
-
-//     if (selectListArea !== "") {
-//         const listDistricts = await getListDistrict(selectListArea);
-//         $("#selectDistrictId").empty();
-//         $("#selectVillageId").empty();
-
-//         $("#selectDistrictId").show();
-//         $("#selectDistrictId").append(
-//             "<option value=''>-Pilih Kecamatan-</option>"
-//         );
-//         getListDistrictUi(listDistricts);
-//         province = $("#province").val();
-//         selectArea = $("#selectArea").val();
-//         selectListArea = $("#selectListArea").val();
-//         selectDistrictId = $("#selectDistrictId").val();
-//         selectVillageId = $("#selectVillageId").val();
-
-//         $("#reqdapil").val(selectListArea);
-//         $("#reqdistrict").val("");
-//     } else {
-//         $("#selectDistrictId").empty();
-//         $("#selectVillageId").empty();
-//         province = $("#province").val();
-//         selectArea = $("#selectArea").val();
-//         selectListArea = $("#selectListArea").val();
-//         selectDistrictId = $("#selectDistrictId").val();
-//         selectVillageId = $("#selectVillageId").val();
-//         $("#reqdapil").val("");
-//         $("#reqdistrict").val("");
-//         $("#reqvillage").val("");
-//     }
-// });
-
-// // KECAMATAN
-// $("#selectDistrictId").change(async function () {
-//     selectDistrictId = $("#selectDistrictId").val();
-
-//     if (selectDistrictId !== "") {
-//         const dataVillages = await getListVillage(selectDistrictId);
-//         $("#selectVillageId").empty();
-//         $("#selectVillageId").show();
-//         $("#selectVillageId").append("<option value=''>-Pilih Desa-</option>");
-//         getListVillageUi(dataVillages);
-
-//         province = $("#province").val();
-//         selectArea = $("#selectArea").val();
-//         selectListArea = $("#selectListArea").val();
-//         selectDistrictId = $("#selectDistrictId").val();
-//         selectVillageId = $("#selectVillageId").val();
-
-//         $("#reqprovince").val(province);
-//         $("#reqregency").val(selectArea);
-//         $("#reqdapil").val(selectListArea);
-//         $("#reqdistrict").val(selectDistrictId);
-//         $("#reqvillage").val("");
-//     } else {
-//         $("#selectVillageId").empty();
-//         province = $("#province").val();
-//         selectArea = $("#selectArea").val();
-//         selectListArea = $("#selectListArea").val();
-//         selectDistrictId = $("#selectDistrictId").val();
-//         selectVillageId = $("#selectVillageId").val();
-
-//         $("#reqdistrict").val("");
-//         $("#reqvillage").val("");
-//     }
-// });
-
 // DESA
 $("#selectVillageId").change(async function () {
     selectVillageId = $("#selectVillageId").val();
 
     if (selectVillageId !== "") {
         const dataRT = await getListRT(selectVillageId);
-        // province = $("#province").val();
-        // selectArea = $("#selectArea").val();
+       
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
         $("#selectRt").append("<option value=''>-Pilih RT-</option>");
         getListRTUi(dataRT);
 
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
+        
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
@@ -101,15 +26,10 @@ $("#selectVillageId").change(async function () {
         getDataTps(selectVillageId);
 
     } else {
-        // province = $("#province").val();
-        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
-
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
@@ -126,8 +46,6 @@ $("#selectRt").change(async function () {
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
@@ -136,22 +54,13 @@ $("#selectRt").change(async function () {
         initialSelect2Member(selectVillageId, selectRT)
 
     } else {
-        // province = $("#province").val();
-        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
-
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
-
-
-        // initialSelect2Member(selectVillageId, selectRT)
-
     }
 });
 
@@ -172,9 +81,6 @@ $('#nik').on('keyup',function (e) {
     console.log(e)
 
 })
-// $('#nik').on(function (e) {
-//     //    initialSelect2Member(selectVillageId, selectRT, q)
-// });
 
 function initialSelect2Member(selectVillageId, selectRT) {
     // GET ANGGOTA BERDASARKAN SORTIR
@@ -210,11 +116,6 @@ function initialSelect2Member(selectVillageId, selectRT) {
     });
 
 }
-
-
-// initialSelect2Member(selectVillageId, selectRT);
-
-
 
 async function getDapilRegency(province) {
     const response = await fetch(`/api/dapilbyprovinceid/${province}`);

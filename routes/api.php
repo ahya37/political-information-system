@@ -405,6 +405,7 @@ Route::get('member/gender/village/caleg/{village_id}/{user_id}', 'API\DashboardC
 Route::get('member/totalvillage/caleg/{district_id}/{village_id}/{user_id}', 'API\DashboardController@getTotalMemberVillageCaleg');
 
 #TPS
+Route::post('/getdatatpstwo', 'Admin\TpsController@getDataTpsAPITwo');
 Route::post('/getdatatps', 'Admin\TpsController@getDataTpsAPI');
 Route::post('/tps/witness/delete', 'Admin\TpsController@deleteWitness');
 

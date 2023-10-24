@@ -236,6 +236,14 @@ class TpsController extends Controller
 
     }
 
+    public function getDataTpsAPITwo(Request $request){
+
+        $data = Tps::select('id','tps_number','village_id')->where('village_id', request()->villageId)->orderBy('tps_number','asc')->get();
+
+        return $data;
+
+    }
+
     public function witnesses($tpsId){
 
        $regency      = Regency::select('id')->where('id', 3602)->first();

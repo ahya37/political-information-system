@@ -111,6 +111,7 @@ var register = new Vue({
         this.getVillagesData();
         this.getJobsData();
         this.getEducationsData();
+        this.getDataTps();
     },
     data() {
         return {
@@ -130,9 +131,24 @@ var register = new Vue({
             nik: null,
             code: "",
             code_unavailable: true,
+            tps_new: null,
+            tps_new_id:null,
         };
     },
     methods: {
+        getDataTps(){
+          let self = this;
+          axios.post('/api/getdatatpstwo',{
+            villageId: self.villages_id
+          },{
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "appliacation/json",
+            },
+          }).then(function(response){
+            self.tps_new = response.data;
+          });
+        },
         getEducationsData() {
             var self = this;
             axios.get("/api/educations").then(function (response) {
@@ -259,6 +275,10 @@ var register = new Vue({
             this.villages_id = null;
             this.getVillagesData();
         },
+        villages_id: function(val, oldval){
+            this.tps_id = null;
+            this.getDataTps();
+        }
     },
 });
 
