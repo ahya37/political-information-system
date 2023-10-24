@@ -504,7 +504,7 @@ function showDivHtmlPengurus(m) {
                     ${m.name}
                 </td>
                 <td>${m.title}</td>
-                <td align="right">${m.referal}</td>
+                <td align="center">${m.referal}</td>
                 <td>${m.address},DS.${m.village}, KEC.${m.district}</td>
     `;
 }
