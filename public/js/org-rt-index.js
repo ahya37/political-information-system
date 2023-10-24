@@ -571,6 +571,9 @@ let table = $("#data").DataTable({
         {
             targets: 10,
             render: function (data, type, row, meta) {
+                // <a href='/admin/struktur/rt/detail/anggota/formkoordinator/${row.idx}' class="dropdown-item ">
+                //                 Form Koordinator TPS / Korte
+                //                 </a>
                 return `<div class="btn-group">
                         <div class="dropdown">
                             <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown" aria-haspopup="true">...</button>
@@ -598,9 +601,6 @@ let table = $("#data").DataTable({
                                 </a>
 								<a href='/admin/struktur/rt/detail/anggota/tpsttimpemenangan/download/pdf/${row.idx}' class="dropdown-item ">
                                 Download Surat Undangan
-                                </a>
-								<a href='/admin/struktur/rt/detail/anggota/formkoordinator/${row.idx}' class="dropdown-item ">
-                                Form Koordinator TPS / Korte
                                 </a>
                                 <a href='/admin/struktur/rt/edittps/${row.id}' class="dropdown-item ">
                                 Edit TPS
