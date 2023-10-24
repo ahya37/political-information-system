@@ -1250,15 +1250,19 @@ let table = $("#data").DataTable({
 
         let totalCountAnggota = 0;
         let totalCountReferal = 0;
+        let totalFormKosong   = 0;
         row.aoData.forEach(element => {
              totalCountAnggota += parseFloat(element._aData.count_anggota);
              totalCountReferal += parseFloat(element._aData.referal);
+             totalFormKosong += parseFloat(element._aData.form_kosong);
 
         });
         $('#totalCountAnggota').empty();
         $('#totalCountReferal').empty();
+        $('#totalFormKosong').empty();
         $('#totalCountAnggota').append(`<p class="text-center"><b>${totalCountAnggota}</b></p>`);
         $('#totalCountReferal').append(`<p class="text-center"><b>${totalCountReferal}</b></p>`);
+        $('#totalFormKosong').append(`<p class="text-center"><b>${totalFormKosong}</b></p>`);
     }
 });
 

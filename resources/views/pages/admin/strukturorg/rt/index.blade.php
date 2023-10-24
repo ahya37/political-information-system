@@ -270,7 +270,7 @@
                                     <td><b>JUMLAH</b></td>
                                     <td id="totalCountAnggota"></td>
                                     <td id="totalCountReferal"></td>
-                                    <td></td>
+                                    <td id="totalFormKosong"></td>
                                     <td></td>
                                     <td></td>
                                 </tfoot>
