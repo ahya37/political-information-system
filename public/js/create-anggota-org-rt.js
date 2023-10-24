@@ -6,75 +6,75 @@ let selectRT = $("#selectRt").val();
 // KABKOT , langsung get dapil by kab lebak
 
 // DAPIL
-$("#selectListArea").change(async function () {
-    selectListArea = $("#selectListArea").val();
+// $("#selectListArea").change(async function () {
+//     selectListArea = $("#selectListArea").val();
 
-    if (selectListArea !== "") {
-        const listDistricts = await getListDistrict(selectListArea);
-        $("#selectDistrictId").empty();
-        $("#selectVillageId").empty();
+//     if (selectListArea !== "") {
+//         const listDistricts = await getListDistrict(selectListArea);
+//         $("#selectDistrictId").empty();
+//         $("#selectVillageId").empty();
 
-        $("#selectDistrictId").show();
-        $("#selectDistrictId").append(
-            "<option value=''>-Pilih Kecamatan-</option>"
-        );
-        getListDistrictUi(listDistricts);
-        province = $("#province").val();
-        selectArea = $("#selectArea").val();
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
+//         $("#selectDistrictId").show();
+//         $("#selectDistrictId").append(
+//             "<option value=''>-Pilih Kecamatan-</option>"
+//         );
+//         getListDistrictUi(listDistricts);
+//         province = $("#province").val();
+//         selectArea = $("#selectArea").val();
+//         selectListArea = $("#selectListArea").val();
+//         selectDistrictId = $("#selectDistrictId").val();
+//         selectVillageId = $("#selectVillageId").val();
 
-        $("#reqdapil").val(selectListArea);
-        $("#reqdistrict").val("");
-    } else {
-        $("#selectDistrictId").empty();
-        $("#selectVillageId").empty();
-        province = $("#province").val();
-        selectArea = $("#selectArea").val();
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-        $("#reqdapil").val("");
-        $("#reqdistrict").val("");
-        $("#reqvillage").val("");
-    }
-});
+//         $("#reqdapil").val(selectListArea);
+//         $("#reqdistrict").val("");
+//     } else {
+//         $("#selectDistrictId").empty();
+//         $("#selectVillageId").empty();
+//         province = $("#province").val();
+//         selectArea = $("#selectArea").val();
+//         selectListArea = $("#selectListArea").val();
+//         selectDistrictId = $("#selectDistrictId").val();
+//         selectVillageId = $("#selectVillageId").val();
+//         $("#reqdapil").val("");
+//         $("#reqdistrict").val("");
+//         $("#reqvillage").val("");
+//     }
+// });
 
-// KECAMATAN
-$("#selectDistrictId").change(async function () {
-    selectDistrictId = $("#selectDistrictId").val();
+// // KECAMATAN
+// $("#selectDistrictId").change(async function () {
+//     selectDistrictId = $("#selectDistrictId").val();
 
-    if (selectDistrictId !== "") {
-        const dataVillages = await getListVillage(selectDistrictId);
-        $("#selectVillageId").empty();
-        $("#selectVillageId").show();
-        $("#selectVillageId").append("<option value=''>-Pilih Desa-</option>");
-        getListVillageUi(dataVillages);
+//     if (selectDistrictId !== "") {
+//         const dataVillages = await getListVillage(selectDistrictId);
+//         $("#selectVillageId").empty();
+//         $("#selectVillageId").show();
+//         $("#selectVillageId").append("<option value=''>-Pilih Desa-</option>");
+//         getListVillageUi(dataVillages);
 
-        province = $("#province").val();
-        selectArea = $("#selectArea").val();
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
+//         province = $("#province").val();
+//         selectArea = $("#selectArea").val();
+//         selectListArea = $("#selectListArea").val();
+//         selectDistrictId = $("#selectDistrictId").val();
+//         selectVillageId = $("#selectVillageId").val();
 
-        $("#reqprovince").val(province);
-        $("#reqregency").val(selectArea);
-        $("#reqdapil").val(selectListArea);
-        $("#reqdistrict").val(selectDistrictId);
-        $("#reqvillage").val("");
-    } else {
-        $("#selectVillageId").empty();
-        province = $("#province").val();
-        selectArea = $("#selectArea").val();
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
+//         $("#reqprovince").val(province);
+//         $("#reqregency").val(selectArea);
+//         $("#reqdapil").val(selectListArea);
+//         $("#reqdistrict").val(selectDistrictId);
+//         $("#reqvillage").val("");
+//     } else {
+//         $("#selectVillageId").empty();
+//         province = $("#province").val();
+//         selectArea = $("#selectArea").val();
+//         selectListArea = $("#selectListArea").val();
+//         selectDistrictId = $("#selectDistrictId").val();
+//         selectVillageId = $("#selectVillageId").val();
 
-        $("#reqdistrict").val("");
-        $("#reqvillage").val("");
-    }
-});
+//         $("#reqdistrict").val("");
+//         $("#reqvillage").val("");
+//     }
+// });
 
 // DESA
 $("#selectVillageId").change(async function () {
@@ -217,7 +217,6 @@ function initialSelect2Member(selectVillageId, selectRT) {
 
 
 async function getDapilRegency(province) {
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     const response = await fetch(`/api/dapilbyprovinceid/${province}`);
     return await response.json();
 }

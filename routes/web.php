@@ -519,6 +519,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
             Route::post('/report/rt/formkortps/{idx}','OrgDiagramController@downloadAnggotaKorTpsFormKosongByKortps')->name('admin-formkortps-rt-report-excel');
 
+            Route::post('/rt/member/newanggota','OrgDiagramController@saveAnggotaByKorRTAndNewAnggotaKTA')->name('admin-struktur-organisasi-rt-newanggota-save');
+            
+
         });
 		
 		Route::group(['prefix' => 'report'], function(){

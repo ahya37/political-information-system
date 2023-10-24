@@ -1141,6 +1141,20 @@ class OrgDiagramController extends Controller
 
     public function createOrgRTAnggota($idx)
     {
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $districtModel  = new District();
+        $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
+        // dd($district);
+        $villages       = Village::select('id', 'name')->where('district_id', $authAdminDistrict)->get();
+
+        $kor_rt = DB::table('org_diagram_rt as a')
+                ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district', 'e.tps_number')
+                ->join('users as b', 'b.nik', '=', 'a.nik')
+                ->join('villages as c', 'c.id', '=', 'a.village_id')
+                ->join('districts as d', 'd.id', '=', 'a.district_id')
+                ->leftJoin('tps as e', 'b.tps_id', '=', 'e.id')
+                ->where('idx', $idx)
+                ->first();
 
         $regency = Regency::select('id', 'name')->where('id', 3602)->first();
 
@@ -1170,7 +1184,7 @@ class OrgDiagramController extends Controller
         }
 
 
-        return view('pages.admin.strukturorg.rt.create-anggota', compact('regency', 'result_new_idx', 'idx'));
+        return view('pages.admin.strukturorg.rt.create-anggota', compact('regency', 'result_new_idx', 'idx','villages', 'district','kor_rt'));
     }
 
     public function saveOrgRT(Request $request)
@@ -1226,6 +1240,118 @@ class OrgDiagramController extends Controller
         }
     }
 
+    public function saveAnggotaByKorRTAndNewAnggotaKTA(Request $request){
+
+        // menyimpan anggota by kortps dan membuat KTA
+        DB::beginTransaction();
+        try {
+            # code...
+            $this->validate($request, [
+                'phone_number' => 'numeric',
+            ]);
+    
+            #hitung panjang nik, harus 16
+            $cekLengthNik = strlen($request->nik);
+            if ($cekLengthNik < 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
+    
+            $cby = auth()->guard('admin')->user()->id;
+            //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
+    
+            $cek_nik = User::select('nik')->where('nik', $request->nik)->count();
+            #cek nik jika sudah terpakai
+            if ($cek_nik > 0) {
+                return redirect()->back()->with(['error' => 'NIK yang anda gunakan telah terdaftar']);
+            } else {
+
+    
+                //  get referal by kortps
+                $refeal_code = DB::table('users as a')
+                                ->select('a.id')
+                                ->join('org_diagram_rt as b','a.nik','=','b.nik')
+                                ->where('b.idx', $request->pidx)
+                                ->first();
+
+                $request_ktp = $request->ktp;
+                $request_photo = $request->photo;
+                $gF = new GlobalProvider();
+                $ktp = $gF->cropImageKtp($request_ktp);
+                $photo = $gF->cropImagePhoto($request_photo);
+
+                $strRandomProvider = new StrRandom();
+                $string            = $strRandomProvider->generateStrRandom();
+                $potong_nik        = substr($request->nik, -5); // get angka nik 5 angka dari belakang
+
+                $user = User::create([
+                    'user_id' => $refeal_code->id,
+                    'code' => $string.$potong_nik,
+                    'nik'  => $request->nik,
+                    'name' => strtoupper($request->name),
+                    'gender' => $request->gender,
+                    'place_berth' => strtoupper($request->place_berth),
+                    'date_berth' => date('Y-m-d', strtotime($request->date_berth)),
+                    'blood_group' => $request->blood_group,
+                    'marital_status' => $request->marital_status,
+                    'job_id' => $request->job_id,
+                    'religion' => $request->religion,
+                    'education_id'  => $request->education_id,
+                    'email' => $request->email,
+                    'phone_number' => $request->phone_number,
+                    'whatsapp' => $request->whatsapp,
+                    'village_id'   => $request->village_id,
+                    'rt'           => $request->newrt,
+                    'rw'           => $request->newrw,
+                    'address'      => strtoupper($request->address),
+                    'photo'        => $photo,
+                    'ktp'          => $ktp,
+                    'cby'          => $cby,
+                ]);
+
+                #generate qrcode
+                $qrCode       = new QrCodeProvider();
+                $qrCodeValue  = $user->code . '-' . $user->name;
+                $qrCodeNameFile = $user->code;
+                $qrCode->create($qrCodeValue, $qrCodeNameFile);
+
+                #save to table org_diagram_rt;
+                #get villlage, regency, district, rt where idx
+                $domisili_by_kortps = DB::table('org_diagram_rt')->select('regency_id', 'district_id', 'village_id', 'rt')->where('idx', $request->pidx)->first();
+                DB::table('org_diagram_rt')->insert([
+                    'idx'    => $request->idx,
+                    'pidx'   => $request->pidx,
+                    'title'  => 'ANGGOTA',
+                    'nik'    => $user->nik,
+                    'name'   => $user->name,
+                    'base'   => 'ANGGOTA',
+                    'photo'  => $user->photo ?? '',
+                    'telp'  => $request->phone_number,
+                    'regency_id'  => $domisili_by_kortps->regency_id,
+                    'district_id' => $domisili_by_kortps->district_id,
+                    'village_id'  => $domisili_by_kortps->village_id,
+                    'rt'  => $domisili_by_kortps->rt,
+                    'cby' => auth()->guard('admin')->user()->id,
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+
+                // DB::table('users')->where('id', $user->id)->update(['tps_id' => $request->tpsNewAnggotaBaru]);
+                #save to table form kosong sebagai history
+                DB::table('anggota_koordinator_tps_korte')->insert([
+                    'nik' => $request->nik,
+                    'pidx_korte' => $request->pidx,
+                    'name' => strtoupper($request->name),
+                    'created_by' => auth()->guard('admin')->user()->id,
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+            }
+    
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Anggota baru gagal dibuat', $e->getMessage());
+
+        }
+    }
+
     public function saveAnggotaByKorRT(Request $request)
     {
         DB::beginTransaction();
@@ -1240,7 +1366,7 @@ class OrgDiagramController extends Controller
 
             // #cek jika nik sudah terdaftar di tb org_diagram_village
             $cek_nik_org  = DB::table('org_diagram_rt')->where('nik', $user->nik)->count();
-            if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur!']);
+            if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur anggota!']);
 
             #get villlage, regency, district, rt where idx
             $domisili = DB::table('org_diagram_rt')->select('regency_id', 'district_id', 'village_id', 'rt')->where('idx', $request->pidx)->first();
@@ -3545,7 +3671,7 @@ class OrgDiagramController extends Controller
             ]);
 
             # hapus dari table anggota_koordinator_tps_korte by id;
-            DB::table('anggota_koordinator_tps_korte')->where('id', $id)->delete();
+            // DB::table('anggota_koordinator_tps_korte')->where('id', $id)->delete();
             
 
             DB::commit();

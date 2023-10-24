@@ -123,7 +123,7 @@ class MemberController extends Controller
     
             #hitung panjang nik, harus 16
             $cekLengthNik = strlen($request->nik);
-            if ($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
+            if ($cekLengthNik < 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
     
             $cby = auth()->guard('admin')->user()->id;
             //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
