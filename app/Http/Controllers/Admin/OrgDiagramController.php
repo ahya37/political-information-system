@@ -1141,6 +1141,8 @@ class OrgDiagramController extends Controller
 
     public function createOrgRTAnggota($idx)
     {
+        return 'SEDANG DALAM PEMELIHARAAN';
+        
         $authAdminDistrict = auth()->guard('admin')->user()->district_id;
         $districtModel  = new District();
         $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
