@@ -29,7 +29,7 @@ async function initialGetAnggotaCover(
                 rt: selectRT,
             },
             beforeSend: function () {
-               $("#pengurusId").show();
+            //    $("#pengurusId").show();
 
                 $("#anggota")
                     .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
@@ -44,6 +44,10 @@ async function initialGetAnggotaCover(
                 <span class="sr-only">Loading...</span>
             </div>`);
 
+            $("#loaddataPengurusTable")
+                    .append(`<td><div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div></td>`);
             $("#loadlisttpsnotexists")
                     .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
@@ -72,6 +76,7 @@ async function initialGetAnggotaCover(
                 $("#pengBendahara").empty();
                 $("#loadlisttpsnotexists").empty();
                 $("#loadlisttpsexists").empty();
+                $("#loaddataPengurusTable").empty();
             },
             complete: function (data) {
                 return data;

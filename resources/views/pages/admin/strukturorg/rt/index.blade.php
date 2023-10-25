@@ -218,7 +218,7 @@
                     <div class="card">
                         <div class="card-body">
                                     <h5 id="keterangan">KOR TPS</h5>
-                                    <div id="pengurusId">
+                                    {{-- <div id="pengurusId"> --}}
                                         <h5 class="pengurus">PENGURUS</h5>
                                         <div class="table pengurus col-sm-12">
                                             <table class="table-sm table-striped pengurus" width="100%">
@@ -230,7 +230,11 @@
                                                         <th>ALAMAT</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="dataPengurusTable"></tbody>
+                                                <tbody id="dataPengurusTable">
+                                                    <tr id="loaddataPengurusTable">
+
+                                                    </tr>
+                                                </tbody>
                                             </table>
                                         </div>
                                         {{-- <div class="row">
@@ -245,7 +249,7 @@
                                             <div class="col-md-2 pengurus">Bendahara</div>
                                             <div class="col-md-6" id="pengBendahara"></div>
                                         </div> --}}
-                                    </div>
+                                    {{-- </div> --}}
                                
                         </div>
                     </div>
