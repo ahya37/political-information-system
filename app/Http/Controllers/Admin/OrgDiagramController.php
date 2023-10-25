@@ -265,12 +265,15 @@ class OrgDiagramController extends Controller
         }else{
             $count_kurang_kortps = $gF->decimalFormat($count_kurang_kortps);
         }
+
+        $tercover_kortps = $kortps_terisi / 25;
         
 
         $data_results = [
             'target_kortps' => $gF->decimalFormat($target_kortps),
             'kortps_terisi' => $gF->decimalFormat($kortps_terisi),
             'kurang_kortps' =>  $count_kurang_kortps,
+            'tercover_kortps' => $tercover_kortps,
             'tps' => $gF->decimalFormat($tps)
         ];
 
@@ -732,9 +735,9 @@ class OrgDiagramController extends Controller
             case '1':
                 $orderBy = 'a.name';
                 break;
-                case '3':
-                    $orderBy = 'a.title';
-                    break;
+                // case '3':
+                //     $orderBy = 'a.title';
+                //     break;
                 // case '3':
                 //     $orderBy = 'districts.name';
                 //     break;
@@ -794,6 +797,13 @@ class OrgDiagramController extends Controller
         $data = $data->orderBy($orderBy, $request->input('order.0.dir'))->get();
 
         $recordsTotal = $data->count();
+
+        return response()->json([
+            'draw' => $request->input('draw'),
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data' => $data
+        ]);
 
        
     }
