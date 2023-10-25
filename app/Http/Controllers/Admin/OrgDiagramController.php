@@ -762,16 +762,16 @@ class OrgDiagramController extends Controller
 
         if ($request->input('search.value') != null) {
             $data = $data->where(function ($q) use ($request) {
-                $q->whereRaw('LOWER(a.name) like ? ', ['%' . strtolower($request->input('search.value')) . '%']);
-                $q->whereRaw('LOWER(a.title) like ? ',['%'.strtolower($request->input('search.value')).'%']);
-                // ->orWhereRaw('LOWER(regencies.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                // ->orWhereRaw('LOWER(districts.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                // ->orWhereRaw('LOWER(villages.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                // ->orWhereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                // ->orWhereRaw('LOWER(c.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                // ->orWhereRaw('LOWER(a.created_at) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                $q->whereRaw("LOWER(a.name) like ? ", ["%" . strtolower($request->input("search.value")) . "%"]);
+                $q->whereRaw("LOWER(a.title) like ? ",["%".strtolower($request->input("search.value"))."%"]);
+                // ->orWhereRaw("LOWER(regencies.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(districts.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(villages.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(b.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(c.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(a.created_at) like ? ",["%".strtolower($request->input("search.value"))."%"])
 
-            });
+            }); 
         }
 
         if ($request->input('dapil') != null) {
@@ -795,12 +795,7 @@ class OrgDiagramController extends Controller
 
         $recordsTotal = $data->count();
 
-        return response()->json([
-            'draw' => $request->input('draw'),
-            'recordsTotal' => $recordsTotal,
-            'recordsFiltered' => $recordsFiltered,
-            'data' => $data
-        ]);
+       
     }
 
     public function setSaveOrgVillage()
@@ -3094,6 +3089,58 @@ class OrgDiagramController extends Controller
             Zipper::make(public_path($createZip))->add($files)->close();
 
             return response()->download(public_path($createZip));
+
+        }elseif ($request->report_type == 'Download Pengurus + Tim Kor TPS PDF'){
+
+            // get data kordes by village
+            $abs_kordes = DB::table('org_diagram_village')
+                ->select('name', 'title')
+                ->where('village_id', $village->id)
+                ->whereNotNull('nik')
+                ->orderBy('level_org', 'asc')
+                ->get();
+
+            // jika title ketua tidak ada maka tambahkan value array yang memiliki title kordes 
+            $kordes = [];
+            $cek_kordes = $this->searchArrayValue($abs_kordes, 'KETUA');
+            if ($cek_kordes == null) {
+
+                // membuat object baru dengan collection 
+                $array_value = collect([
+                    (object)[
+                        'name' => '',
+                        'title' => 'KETUA'
+                    ]
+                ]);
+
+                $sorted = $array_value->sortBy('name');
+                $sorted->values()->all();
+                $kordes = $sorted->merge($abs_kordes); // gabungkan object baru dengan collectiono yg ada 
+
+            } else {
+
+                $kordes = $abs_kordes;
+            }
+
+
+            $abs_kortes    = DB::table('org_diagram_rt as a')
+                ->select('a.idx','a.name', 'a.title', 'a.rt', 'b.gender', 'a.telp', 'b.address','c.tps_number',
+                    DB::raw('(select count(a2.id) from org_diagram_rt as a2 where a2.base = "ANGGOTA" and pidx =  a.idx) as jml_anggota')
+                )
+                ->join('users as b', 'a.nik', '=', 'b.nik')
+                ->join('tps as c','b.tps_id','=','c.id')
+                ->where('a.village_id', $village_id)
+                ->whereNotNull('a.nik')
+                ->where('a.base', 'KORRT')
+                ->groupBy('a.idx','a.name', 'a.title', 'a.rt', 'b.gender', 'a.telp', 'b.address','c.tps_number')
+                ->orderBy('c.tps_number', 'asc')
+                ->get();
+
+            $no = 1;
+
+            $pdf = PDF::LoadView('pages.report.pengurusdantimkortps', compact('village', 'kordes', 'abs_kortes', 'no'))->setPaper('a4');
+            return $pdf->stream('DAFTAR PENGURUS DAN TIM KORTPS DESA ' . $village->name . '.pdf'); 
+
         } else {
             #report by desa 
 
