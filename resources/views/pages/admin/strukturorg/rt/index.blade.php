@@ -221,7 +221,7 @@
                                     {{-- <div id="pengurusId"> --}}
                                         <h5 class="pengurus">PENGURUS 
 
-                                            <div id="loaddataPengurusTable"></div>
+                                            <span id="loaddataPengurusTable"></span>
                                         </h5>
                                         <div class="table pengurus col-sm-12">
                                             <table class="table-sm table-striped pengurus" width="100%">
