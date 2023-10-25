@@ -3838,7 +3838,7 @@ class OrgDiagramController extends Controller
 
         $orgDiagramModel = new OrgDiagram();
         $data            = $orgDiagramModel->getDataDaftarTimByDapil($dapilId);
-        // dd($data);
+        // dd($data);   
 
         $jml_ketua = collect($data)->sum(function($q){
             return $q->ketua;
@@ -3862,6 +3862,15 @@ class OrgDiagramController extends Controller
             return $q->target_korte;
         });
 
+        $jml_target_persentage = collect($data)->sum(function($q){
+            return $q->target_persentage;
+        });
+
+        // $target = $jml_dpt > 0 ?  ($jml_dpt * $jml_target_persentage) / 100 : 0;
+        // $jml_target_kortps = $target / 25;
+
+        // dd($jml_target_kortps);
+
         $jml_korte_terisi =  collect($data)->sum(function($q){
             return $q->korte_terisi;
         });
@@ -3874,11 +3883,11 @@ class OrgDiagramController extends Controller
 
         $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
         $jml_blm_ada_korte = $tmp_blm_ada_korte;
-        if ($jml_blm_ada_korte == - 0) {
-            $jml_blm_ada_korte = 0;
-        }elseif ($jml_blm_ada_korte > 0) {
-            $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
-        }
+        // if ($jml_blm_ada_korte == - 0) {
+        //     $jml_blm_ada_korte = 0;
+        // }elseif ($jml_blm_ada_korte > 0) {
+        //     $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
+        // }
 
         $jml_saksi            = collect($data)->sum(function($q){
             return $q->saksi;
@@ -3887,12 +3896,18 @@ class OrgDiagramController extends Controller
         $jml_target           = collect($data)->sum(function($q){
             return ($q->dpt * $q->target_persentage)/100;
         });
+
+        // NEW
+        $jml_target_kortps = $jml_target / 25;
+        $kortps_plus_minus = $jml_korte_terisi - $jml_target_kortps;
+       
+
         $persen_dari_target_kab = $jml_target > 0 ? ($jml_anggota/$jml_target)*100 : 0;
         $jml_tps  = collect($data)->sum(function($q){
             return $q->tps;
         });
 
-        return view('pages.admin.strukturorg.rt.daftartim.district', compact('jml_tps','persen_dari_target_kab','dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','gF','jml_saksi'));
+        return view('pages.admin.strukturorg.rt.daftartim.district', compact('jml_tps','persen_dari_target_kab','dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','gF','jml_saksi','jml_target_kortps','kortps_plus_minus'));
 
     }
 

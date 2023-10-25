@@ -50,6 +50,7 @@
                                     <tbody>
                                         @foreach ($data as $item)
                                         @php
+
                                             $kurang_korte = $item->korte_terisi - $item->target_korte;
                                             $nilai_kurang_korte = round($kurang_korte);
                                             if ($nilai_kurang_korte == -0) {
@@ -59,6 +60,8 @@
                                             }
                                             $target = $item->target_persentage > 0 ? ($item->dpt * $item->target_persentage) / 100 : 0;
                                             $persen_dari_target = $target > 0 ? ($item->anggota/$target)*100 : 0;
+                                            $target_kortps = $target / 25;
+                                            $target_kortps_plus_minus = $item->korte_terisi - $target_kortps
                                             
 
                                         @endphp
@@ -77,11 +80,11 @@
                                                 <td align="center">{{ $gF->persenDpt(($item->anggota / $item->dpt)*100) }}</td>
                                                 <td align="center">{{ $gF->persenDpt($persen_dari_target) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->tps) }}</td>
-                                                <td align="center">{{ $gF->decimalFormat($target / 25) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($target_kortps) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->korte_terisi) }}</td>
-                                                <td align="center">{{ $gF->decimalFormat($nilai_kurang_korte) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($target_kortps_plus_minus) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->korte_terisi * 25) }}</td>
-                                                <td align="center">{{ $gF->decimalFormat($item->anggota - ($item->korte_terisi * 25)) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat(($item->korte_terisi * 25) - $item->anggota) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->saksi) }}</td>
                                             </tr>
                                         @endforeach
@@ -100,9 +103,9 @@
                                         <td align="center"><b>{{ $gF->persenDpt($persentage_target) }}</b></td>
                                         <td align="center"><b>{{ $gF->persenDpt($persen_dari_target_kab) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_tps) }}</b></td>
-                                        <td align="center"><b>{{ $gF->decimalFormat($jml_target_korte) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_target_kortps) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_korte_terisi) }}</b></td>
-                                        <td align="center"><b>{{ $gF->decimalFormat($jml_kurang_korte) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($kortps_plus_minus) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_anggota_tercover) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_blm_ada_korte) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_saksi) }}</b></td>
