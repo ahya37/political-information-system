@@ -219,7 +219,10 @@
                         <div class="card-body">
                                     <h5 id="keterangan">KOR TPS</h5>
                                     {{-- <div id="pengurusId"> --}}
-                                        <h5 class="pengurus">PENGURUS</h5>
+                                        <h5 class="pengurus">PENGURUS 
+
+                                            <div id="loaddataPengurusTable"></div>
+                                        </h5>
                                         <div class="table pengurus col-sm-12">
                                             <table class="table-sm table-striped pengurus" width="100%">
                                                 <thead>
@@ -231,9 +234,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="dataPengurusTable">
-                                                    <tr id="loaddataPengurusTable">
-
-                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
