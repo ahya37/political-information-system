@@ -160,28 +160,28 @@ class OrgDiagramController extends Controller
             });
         }
 
-        $ketua         = $this->searchArrayValueName($data_pengurus, 'KETUA');
-        $ketua_photo   = $this->searchArrayValuePhoto($data_pengurus, 'KETUA');
-        $referal_ketua = $this->searchArrayValueCountReferal($data_pengurus,'KETUA');
+        // $ketua         = $this->searchArrayValueName($data_pengurus, 'KETUA');
+        // $ketua_photo   = $this->searchArrayValuePhoto($data_pengurus, 'KETUA');
+        // $referal_ketua = $this->searchArrayValueCountReferal($data_pengurus,'KETUA');
 
-        $sekretaris    = $this->searchArrayValueName($data_pengurus, 'SEKRETARIS');
-        $sekretaris_photo   = $this->searchArrayValuePhoto($data_pengurus, 'SEKRETARIS');
-        $referal_sekretaris = $this->searchArrayValueCountReferal($data_pengurus,'SEKRETARIS');
+        // $sekretaris    = $this->searchArrayValueName($data_pengurus, 'SEKRETARIS');
+        // $sekretaris_photo   = $this->searchArrayValuePhoto($data_pengurus, 'SEKRETARIS');
+        // $referal_sekretaris = $this->searchArrayValueCountReferal($data_pengurus,'SEKRETARIS');
 
-        $bendahara     = $this->searchArrayValueName($data_pengurus, 'BENDAHARA');
-        $bendahara_photo   = $this->searchArrayValuePhoto($data_pengurus, 'BENDAHARA');
-        $referal_bendahara = $this->searchArrayValueCountReferal($data_pengurus,'BENDAHARA');
+        // $bendahara     = $this->searchArrayValueName($data_pengurus, 'BENDAHARA');
+        // $bendahara_photo   = $this->searchArrayValuePhoto($data_pengurus, 'BENDAHARA');
+        // $referal_bendahara = $this->searchArrayValueCountReferal($data_pengurus,'BENDAHARA');
 
         $pengurus = [
-            'ketua' => ucwords(strtolower($ketua)) ?? '',
-            'ketua_photo' => $ketua_photo ?? '',
-            'referal_ketua' => $referal_ketua ?? 0,
-            'sekretaris' => ucwords(strtolower($sekretaris)) ?? '',
-            'sekretaris_photo' => $sekretaris_photo ?? '',
-            'referal_sekretaris' => $referal_sekretaris ?? 0,
-            'bendahara' => ucwords(strtolower($bendahara)) ?? '',
-            'bendahara_photo' => $bendahara_photo ?? '',
-            'referal_bendahara' => $referal_bendahara ?? 0,
+            // 'ketua' => ucwords(strtolower($ketua)) ?? '',
+            // 'ketua_photo' => $ketua_photo ?? '',
+            // 'referal_ketua' => $referal_ketua ?? 0,
+            // 'sekretaris' => ucwords(strtolower($sekretaris)) ?? '',
+            // 'sekretaris_photo' => $sekretaris_photo ?? '',
+            // 'referal_sekretaris' => $referal_sekretaris ?? 0,
+            // 'bendahara' => ucwords(strtolower($bendahara)) ?? '',
+            // 'bendahara_photo' => $bendahara_photo ?? '',
+            // 'referal_bendahara' => $referal_bendahara ?? 0,
             'data_pengurus' => $data_pengurus
         ];
 

@@ -8,10 +8,6 @@ $(".tpsnotexist").hide();
 $(".tpsexist").hide();
 // KABKOT , langsung get dapil by kab lebak
 
-// function countMemberNotCover(){
-
-// }
-
 async function initialGetAnggotaCover(
     selectListAreaId,
     selectDistrictId,
@@ -48,18 +44,6 @@ async function initialGetAnggotaCover(
                 <span class="sr-only">Loading...</span>
             </div>`);
 
-            $("#pengKetua")
-                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>`);
-            $("#pengSekre")
-                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>`);
-            $("#pengBendahara")
-                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>`);
             $("#loadlisttpsnotexists")
                     .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
@@ -85,7 +69,6 @@ async function initialGetAnggotaCover(
                 $("#tercover").empty();
                 $("#blmtercover").empty();
                 $("#pengKetua").empty();
-                $("#pengSekre").empty();
                 $("#pengBendahara").empty();
                 $("#loadlisttpsnotexists").empty();
                 $("#loadlisttpsexists").empty();
@@ -213,7 +196,6 @@ $("#selectListArea").change(async function () {
         );
         getListDistrictUi(listDistricts);
         province = $("#province").val();
-        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
@@ -267,7 +249,6 @@ $("#selectListArea").change(async function () {
         $("#selectDistrictId").empty();
         $("#selectVillageId").empty();
         province = $("#province").val();
-        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
@@ -334,10 +315,6 @@ $("#selectDistrictId").change(async function () {
     $(".tpsnotexist").hide();
     $("#dataPengurusTable").empty();
     
-    $("#pengKetua").empty();
-    $("#pengSekre").empty();
-    $("#pengBendahara").empty();
-
     if (selectDistrictId !== "") {
         const dataVillages = await getListVillage(selectDistrictId);
         $("#selectVillageId").empty();
@@ -346,7 +323,6 @@ $("#selectDistrictId").change(async function () {
         getListVillageUi(dataVillages);
 
         province = $("#province").val();
-        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
@@ -354,7 +330,6 @@ $("#selectDistrictId").change(async function () {
         geLocationDistrict(selectDistrictId);
 
         $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
@@ -368,7 +343,6 @@ $("#selectDistrictId").change(async function () {
         $("#kurangtpsterisi").empty();
         $("#targetkortps").empty();
         $("#jmltps").empty();
-        $("#dataPengurusTable").show();
 
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
@@ -376,16 +350,9 @@ $("#selectDistrictId").change(async function () {
             selectVillageId,
             selectRT
         );
-
+        $("#dataPengurusTable").show();
         getPengurusUi(dataCover.pengurus.data_pengurus);
 
-        const ketuaExists = `<p><a href='/storage/${dataCover.pengurus.ketua_photo}'><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'></a> ${dataCover.pengurus.ketua} (Referal : ${dataCover.pengurus.referal_ketua})</p>`;
-        const sekretarisExists = `<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris} (Referal : ${dataCover.pengurus.referal_sekretaris})</p>`;
-        const bendaharaExists  =  `<p><img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'> ${dataCover.pengurus.bendahara} (Referal : ${dataCover.pengurus.referal_bendahara})</p>`;
-
-        $("#pengKetua").append(dataCover.pengurus.ketua === '' ? '' : ketuaExists);
-        $("#pengSekre").append(dataCover.pengurus.sekretaris === '' ? '' : sekretarisExists);
-        $("#pengBendahara").append(dataCover.pengurus.bendahara === '' ? '' : bendaharaExists);
         
         $("#jmldpt").text(`${dataCover.jml_dpt}`);
         $("#targetanggota").text(`${dataCover.target_anggota}`);
@@ -421,7 +388,6 @@ $("#selectDistrictId").change(async function () {
     $(".pengurus").hide();
         $("#selectVillageId").empty();
         province = $("#province").val();
-        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
@@ -479,9 +445,7 @@ $("#selectDistrictId").change(async function () {
 
         $(".pengurus").hide();
     
-        $("#pengKetua").empty();
-        $("#pengSekre").empty();
-        $("#pengBendahara").empty();
+       
 
         table.ajax.reload(null, false);
     }
@@ -512,16 +476,11 @@ function showDivHtmlPengurus(m) {
 // DESA
 $("#selectVillageId").change(async function () {
     selectVillageId = $("#selectVillageId").val();
-    $("#pengKetua").empty();
     $("#dataPengurusTable").empty();
-    $("#pengSekre").empty();
-    $("#pengBendahara").empty();
 
     if (selectVillageId !== "") {
         const dataRT = await getListRT(selectVillageId);
 
-        // province = $("#province").val();
-        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
@@ -534,8 +493,7 @@ $("#selectVillageId").change(async function () {
 
         table.ajax.reload(null, false);
 
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
+       
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
@@ -572,13 +530,7 @@ $("#selectVillageId").change(async function () {
         getLitTpsExistUi(dataCover.tpsExists);
 
         $('.pengurus').show();
-        const ketuaExists = `<p><a href='/storage/${dataCover.pengurus.ketua_photo}'><img src='/storage/${dataCover.pengurus.ketua_photo}' width='40px' class='rounded mb-2'></a> ${dataCover.pengurus.ketua} (Referal : ${dataCover.pengurus.referal_ketua})</p>`;
-        const sekretarisExists = `<p><img src='/storage/${dataCover.pengurus.sekretaris_photo}' width='40px' class='rounded mb-2'> ${dataCover.pengurus.sekretaris} (Referal : ${dataCover.pengurus.referal_sekretaris})</p>`;
-        const bendaharaExists  =  `<p><img src='/storage/${dataCover.pengurus.bendahara_photo}' width='40px' class='rounded'> ${dataCover.pengurus.bendahara} (Referal : ${dataCover.pengurus.referal_bendahara})</p>`;
-
-        $("#pengKetua").append(dataCover.pengurus.ketua === '' ? '' : ketuaExists);
-        $("#pengSekre").append(dataCover.pengurus.sekretaris === '' ? '' : sekretarisExists);
-        $("#pengBendahara").append(dataCover.pengurus.bendahara === '' ? '' : bendaharaExists);
+        
         $("#jmldpt").text(`${dataCover.jml_dpt}`);
         $("#targetanggota").text(`${dataCover.target_anggota}`);
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
@@ -612,8 +564,6 @@ $("#selectVillageId").change(async function () {
        $(".tpsnotexist").hide();
        $(".tpsexist").hide();
 
-        // province = $("#province").val();
-        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
@@ -621,8 +571,6 @@ $("#selectVillageId").change(async function () {
 
         table.ajax.reload(null, false);
 
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
@@ -648,10 +596,6 @@ $("#selectVillageId").change(async function () {
         );
 
         getPengurusUi(dataCover.pengurus.data_pengurus);
-
-        $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
-        $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
-        $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
 
         $("#jmldpt").text(`${dataCover.jml_dpt}`);
         $("#targetanggota").text(`${dataCover.target_anggota}`);
@@ -695,8 +639,6 @@ $("#selectRt").change(async function () {
         selectVillageId = $("#selectVillageId").val();
         table.ajax.reload(null, false);
 
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
@@ -720,9 +662,7 @@ $("#selectRt").change(async function () {
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        // $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
-        // $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
-        // $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
+       
         $('.pengurus').hide();
 
         blmTerCover =
@@ -730,8 +670,6 @@ $("#selectRt").change(async function () {
             parseInt(dataCover.data.tercover);
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     } else {
-        // province = $("#province").val();
-        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
@@ -739,8 +677,6 @@ $("#selectRt").change(async function () {
 
         table.ajax.reload(null, false);
 
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
@@ -770,13 +706,6 @@ $("#selectRt").change(async function () {
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
         
         $('.pengurus').show();
-        $("#pengKetua").show();
-        $("#pengSekre").show();
-        $("#pengBendahara").show();
-
-        $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
-        $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
-        $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
 
         blmTerCover =
             parseInt(dataCover.data.anggota) -
@@ -796,8 +725,6 @@ $("#selectTps").change(async function () {
         selectTps = $("#selectTps").val();
         table.ajax.reload(null, false);
 
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val(selectVillageId);
@@ -820,9 +747,6 @@ $("#selectTps").change(async function () {
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        // $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
-        // $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
-        // $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
         $('.pengurus').hide();
 
         blmTerCover =
@@ -830,8 +754,6 @@ $("#selectTps").change(async function () {
             parseInt(dataCover.data.tercover);
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     } else {
-        // province = $("#province").val();
-        // selectArea = $("#selectArea").val();
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
@@ -840,8 +762,6 @@ $("#selectTps").change(async function () {
 
         table.ajax.reload(null, false);
 
-        // $("#reqprovince").val(province);
-        // $("#reqregency").val(selectArea);
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
@@ -869,13 +789,6 @@ $("#selectTps").change(async function () {
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
         
         $('.pengurus').show();
-        $("#pengKetua").show();
-        $("#pengSekre").show();
-        $("#pengBendahara").show();
-
-        $("#pengKetua").text(`${dataCover.pengurus.ketua}`);
-        $("#pengSekre").text(`${dataCover.pengurus.sekretaris}`);
-        $("#pengBendahara").text(`${dataCover.pengurus.bendahara}`);
 
         blmTerCover =
             parseInt(dataCover.data.anggota) -

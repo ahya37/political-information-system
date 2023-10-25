@@ -217,17 +217,17 @@
                 <div class="col-md-12 mt-2 mb-2">
                     <div class="card">
                         <div class="card-body">
-                                    <h5 id="keterangan">Kor TPS</h5>
+                                    <h5 id="keterangan">KOR TPS</h5>
                                     <div id="pengurusId">
-                                        <h5 class="pengurus">Pengurus</h5>
+                                        <h5 class="pengurus">PENGURUS</h5>
                                         <div class="table pengurus col-sm-12">
                                             <table class="table-sm table-striped pengurus" width="100%">
                                                 <thead>
                                                     <tr>
-                                                        <th>Nama</th>
-                                                        <th>Jabatan</th>
-                                                        <th>Referal</th>
-                                                        <th>Alamat</th>
+                                                        <th>NAMA</th>
+                                                        <th>JABATAN</th>
+                                                        <th>REFERAL</th>
+                                                        <th>ALAMAT</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="dataPengurusTable"></tbody>
