@@ -2,6 +2,7 @@ let selectListArea = $("#selectListArea").val();
 let selectDistrictId = $("#selectDistrictId").val();
 let selectVillageId = $("#selectVillageId").val();
 let selectRT = $("#selectRt").val();
+$(".pengurus").hide();
 
 // KABKOT , langsung get dapil by kab lebak
 
@@ -105,6 +106,7 @@ function showDivHtmlPengurus(m) {
 $("#selectDistrictId").change(async function () {
     selectDistrictId = $("#selectDistrictId").val();
     $("#dataPengurusTable").empty();
+    $(".pengurus").show();
 
     if (selectDistrictId !== "") {
         const dataVillages = await getListVillage(selectDistrictId);
@@ -145,6 +147,7 @@ $("#selectDistrictId").change(async function () {
 
         $("#reqdistrict").val("");
         $("#reqvillage").val("");
+        $(".pengurus").hide();
     }
 });
 
@@ -189,6 +192,7 @@ $("#selectVillageId").change(async function () {
         $("#reqdistrict").val(selectDistrictId);
         $("#reqvillage").val("");
         $("#selectRt").val("");
+        $('#keterangan').empty();
     }
 });
 
