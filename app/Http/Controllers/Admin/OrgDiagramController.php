@@ -732,9 +732,9 @@ class OrgDiagramController extends Controller
             case '1':
                 $orderBy = 'a.name';
                 break;
-                // case '3':
-                //     $orderBy = 'a.rt';
-                //     break;
+                case '3':
+                    $orderBy = 'a.title';
+                    break;
                 // case '3':
                 //     $orderBy = 'districts.name';
                 //     break;
@@ -755,14 +755,15 @@ class OrgDiagramController extends Controller
         $data = DB::table('org_diagram_village as a')
             ->select('a.id', 'a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'c.name as village', 'd.name as district')
             ->join('users as b', 'b.nik', '=', 'a.nik')
-            ->join('villages as c', 'c.id', '=', 'a.village_id')
-            ->join('districts as d', 'd.id', '=', 'a.district_id');
+            ->join('villages as c', 'c.id', '=', 'b.village_id')
+            ->join('districts as d', 'd.id', '=', 'c.district_id')
+            ->join('dapil_areas as e','d.id','=','e.district_id');
 
 
         if ($request->input('search.value') != null) {
             $data = $data->where(function ($q) use ($request) {
                 $q->whereRaw('LOWER(a.name) like ? ', ['%' . strtolower($request->input('search.value')) . '%']);
-                // $q->whereRaw('LOWER(a.rt) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                $q->whereRaw('LOWER(a.title) like ? ',['%'.strtolower($request->input('search.value')).'%']);
                 // ->orWhereRaw('LOWER(regencies.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
                 // ->orWhereRaw('LOWER(districts.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
                 // ->orWhereRaw('LOWER(villages.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
@@ -773,6 +774,12 @@ class OrgDiagramController extends Controller
             });
         }
 
+        if ($request->input('dapil') != null) {
+            $data->where('e.dapil_id', $request->dapil);
+        }
+        if ($request->input('district') != null) {
+            $data->where('a.district_id', $request->district);
+        }
         if ($request->input('village') != null) {
             $data->where('a.village_id', $request->village);
         }

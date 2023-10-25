@@ -44,12 +44,20 @@
                     </div>
 
                     <div class="row col-md-12">
-                        <a class="btn btn-sm btn-sc-primary text-white"
-                            href="{{ route('admin-struktur-organisasi-village-create') }}">+ Tambah</a>
-                            <input class="btn btn-sm btn-success text-white ml-2" name="report_type" type="submit" value="Download Excel"></button>
-                            <input class="btn btn-sm btn-sc-primary text-white ml-2" name="report_type" type="submit" value="Download Kordes Per Kecamatan PDF"></button>
-                            <input class="btn btn-sm btn-sc-primary text-white mt-2" name="report_type" type="submit" value="Download Surat Pernyataan Kordes Per Desa PDF"></button>
-                            <input class="btn btn-sm btn-sc-primary text-white mt-2 ml-2" name="report_type" type="submit" value="Download Surat Undangan Per Desa"></button>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Opsi Download
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="btn btn-sm  dropdown-item text-primary"href="{{ route('admin-struktur-organisasi-village-create') }}">+ Tambah Kordes</a>
+                                <input class="btn btn-sm dropdown-item text-primary" name="report_type" type="submit" value="Download Excel"></button>
+                                <input class="btn btn-sm  dropdown-item text-primary" name="report_type" type="submit" value="Download Kordes Per Kecamatan PDF"></button>
+                                <input class="btn btn-sm  dropdown-item text-primary" name="report_type" type="submit" value="Download Surat Pernyataan Kordes Per Desa PDF"></button>
+                                <input class="btn btn-sm  dropdown-item text-primary" name="report_type" type="submit" value="Download Surat Undangan Per Desa"></button>
+                            </div>
+                        </div>
+
                     </div>
 
                     
@@ -60,6 +68,23 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 id="keterangan"></h5>
+                                <h5 class="pengurus">PENGURUS
+                                    <span id="loaddataPengurusTable"></span>
+                                </h5>
+                                <div class="table pengurus col-sm-12">
+                                    <table class="table-sm table-striped pengurus" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-3">NAMA</th>
+                                                <th>JABATAN</th>
+                                                <th>REFERAL</th>
+                                                <th>ALAMAT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dataPengurusTable">
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
