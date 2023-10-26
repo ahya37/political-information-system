@@ -75,8 +75,8 @@
                                                 <td align="center">{{ $gF->decimalFormat($item['target_korte']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item['korte_terisi']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($nilai_kurang_korte) }}</td>
-                                                <td align="center">{{ $gF->decimalFormat($item['korte_terisi'] * 25) }}</td>
-                                                <td align="center">{{ $gF->decimalFormat($item['anggota'] - ($item['korte_terisi'] * 25)) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item['anggota_tercover_kortps']) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item['belum_tercover_kortps']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item['saksi']) }}</td>
                                             </tr>
                                         @endforeach

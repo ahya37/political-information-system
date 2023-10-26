@@ -3746,6 +3746,7 @@ class OrgDiagramController extends Controller
 
         $orgDiagramModel = new OrgDiagram();
         $data            = $orgDiagramModel->getDataDaftarTimByRegency($regency);
+        // dd($data);
 
         // mendapatkan jumlah target masing2 kecamatan per dapilnya
         // $arr_jml_target  = [];
@@ -3774,6 +3775,8 @@ class OrgDiagramController extends Controller
                 'b' => $val->b,
                 'dpt' => $val->dpt,
                 'anggota' => $val->anggota,
+                'anggota_tercover_kortps' => $val->anggota_tercover_kortps,
+                'belum_tercover_kortps' => $val->anggota - $val->anggota_tercover_kortps,
                 // 'target_korte' => $val->target_korte,
                 'target_korte' => $target / 25,
                 'korte_terisi' => $val->korte_terisi,
@@ -3812,7 +3815,10 @@ class OrgDiagramController extends Controller
             return $q['korte_terisi'];
         });
 
-        $jml_anggota_tercover = $jml_korte_terisi * 25;
+        $jml_anggota_tercover = collect($dapils)->sum(function($q){
+            return $q['anggota_tercover_kortps'];
+        });
+
         $jml_kurang_korte     = $jml_korte_terisi - $jml_target_korte;
         // $jml_blm_ada_korte    = 0;
         $jml_saksi            = collect($dapils)->sum(function($q){

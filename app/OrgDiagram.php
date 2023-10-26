@@ -473,7 +473,11 @@ class OrgDiagram extends Model
 					) as korte_terisi,
 
 					(SELECT DISTINCT  COUNT(w.id) from witnesses as w join dapil_areas da3 on w.district_id = da3.district_id where da3.dapil_id = a.id ) as saksi,
-					(SELECT COUNT(*) from tps join dapil_areas on tps.district_id = dapil_areas.district_id WHERE dapil_areas.dapil_id = a.id) tps
+					(SELECT COUNT(*) from tps join dapil_areas on tps.district_id = dapil_areas.district_id WHERE dapil_areas.dapil_id = a.id) tps,
+					(
+						SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik join dapil_areas as da6 on da4.district_id = da6.district_id
+						where da4.base = 'ANGGOTA' and da6.dapil_id = a.id
+					) as anggota_tercover_kortps
 					from dapils as a
 					where a.regency_id = $regencyId";
 

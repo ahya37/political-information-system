@@ -107,7 +107,7 @@ async function initialGetAnggotaCoverFirst() {
     $("#jmldpt").text(`${dataCover.jml_dpt}`);
     $("#targetanggota").text(`${dataCover.target_anggota}`);
     $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
-    // $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
+   $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
     $("#blmtercover").empty();
     blmTerCover =
@@ -130,9 +130,7 @@ async function initialGetAnggotaCoverFirst() {
     $("#kurangtpsterisi").text(
         ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
     );
-    $("#tercover").text(
-        ` ${numberWithDot(dataKortps.data.tercover_kortps)}`
-    );
+    
 }
 
 initialGetAnggotaCoverFirst();
