@@ -1853,7 +1853,7 @@ class OrgDiagramController extends Controller
         $no = 1; 
 
         $pdf = PDF::LoadView('pages.report.memberbykorte', compact('kor_rt', 'members', 'no'))->setPaper('a4');
-        return $pdf->stream('ANGGOTA KORTE RT ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
+        return $pdf->download('ANGGOTA KOR TPS/RT '. $kor_rt->tps_number.'/'. $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
     }
 
     public function downloadTpsTimPemenanganSuara($id)
@@ -2752,9 +2752,12 @@ class OrgDiagramController extends Controller
                     'a.rt',
                     'b.gender',
                     'a.idx',
-                    DB::raw('(select count(*) from org_diagram_rt where pidx = a.idx and base = "ANGGOTA") as total_members ')
-                )
+                    'c.tps_number',
+                        DB::raw('(select count(*) from org_diagram_rt where pidx = a.idx and base = "ANGGOTA") as total_members'),
+                        DB::raw('(select count(b2.id) from users as b2 where b2.user_id = b.id and b2.village_id is not null ) as referal')
+                    )
                 ->join('users as b', 'a.nik', '=', 'b.nik')
+                ->join('tps as c','b.tps_id','=','c.id')
                 ->where('a.village_id', $village_id)
                 ->whereNotNull('a.nik')
                 ->where('a.base', 'KORRT')
@@ -2781,10 +2784,13 @@ class OrgDiagramController extends Controller
                 //get members by korte
                 // get data anggota by korte
                 $members = DB::table('org_diagram_rt as a')
-                    ->select('a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district', 'b.address', 'a.telp')
+                    ->select('a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district', 'b.address', 'a.telp','e.tps_number',
+                        DB::raw('TIMESTAMPDIFF(YEAR, b.date_berth, NOW()) as usia')
+                    )
                     ->join('users as b', 'b.nik', '=', 'a.nik')
                     ->join('villages as c', 'c.id', '=', 'a.village_id')
                     ->join('districts as d', 'd.id', '=', 'a.district_id')
+                    ->join('tps as e','b.tps_id','=','e.id')
                     ->where('a.pidx', $korte->idx)
                     ->where('a.base', 'ANGGOTA')
                     ->get();
@@ -2792,7 +2798,7 @@ class OrgDiagramController extends Controller
 
                 $no = 1;
 
-                $fileName = 'ANGGOTA KORTE RT. ' . $korte->rt . ' (' . $korte->name . ') DS.' . $village->name . '.pdf';
+                $fileName = 'ANGGOTA KOR TPS_RT. ' .$korte->tps_number .'_'. $korte->rt . ' (' . $korte->name . ') DS.' . $village->name . '.pdf';
 
                 $pdf = PDF::LoadView('pages.report.memberbykorte-all', compact('village', 'members', 'korte', 'no'))->setPaper('a4');
 

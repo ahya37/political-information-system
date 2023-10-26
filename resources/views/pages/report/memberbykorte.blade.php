@@ -1,12 +1,12 @@
 <html>
     <head>
-        <title>ANGGOTA KORTE RT. {{$kor_rt->rt}} ({{$kor_rt->name}}) DS. {{$kor_rt->village}}</title>
+        <title>ANGGOTA KOR TPS / RT {{$kor_rt->tps_number}} / {{$kor_rt->rt}} ({{$kor_rt->name}}) DS. {{$kor_rt->village}}</title>
     </head>
     <style>
             /** Define the margins of your page **/
             @page {
                 margin: 100px 50px;
-				height: 100%;
+				height: 100%; 
             }
 
             header {
@@ -91,7 +91,7 @@
 				
 			</tr><tr>
 				
-				<td>KORTPS</td><td>:</td><td>{{$kor_rt->name}}</td><td>(REFERAL : {{$kor_rt->referal}})</td>
+				<td>KORTPS</td><td>:</td><td>{{$kor_rt->name}} (REFERAL : {{$kor_rt->referal}})</td> 
 				
 			</tr>
             <tr>
