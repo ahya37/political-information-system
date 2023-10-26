@@ -3154,7 +3154,7 @@ class OrgDiagramController extends Controller
             $no = 1;
 
             $pdf = PDF::LoadView('pages.report.pengurusdantimkortps', compact('village', 'kordes', 'abs_kortes', 'no','jml_anggota','jml_referal','gF'))->setPaper('a4');
-            return $pdf->stream('DAFTAR PENGURUS DAN TIM KORTPS DESA ' . $village->name . '.pdf'); 
+            return $pdf->download('DAFTAR PENGURUS DAN TIM KORTPS DESA ' . $village->name . '.pdf'); 
 
         } else {
             #report by desa 
