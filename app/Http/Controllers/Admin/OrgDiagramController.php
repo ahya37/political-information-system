@@ -3133,7 +3133,7 @@ class OrgDiagramController extends Controller
                 $sorted->values()->all();
                 $kordes = $sorted->merge($abs_kordes); // gabungkan object baru dengan collectiono yg ada 
 
-            } else {
+            }else{
 
                 $kordes = $abs_kordes;
             }
@@ -3167,7 +3167,76 @@ class OrgDiagramController extends Controller
             $pdf = PDF::LoadView('pages.report.pengurusdantimkortps', compact('village', 'kordes', 'abs_kortes', 'no','jml_anggota','jml_referal','gF'))->setPaper('a4');
             return $pdf->download('DAFTAR PENGURUS DAN TIM KORTPS DESA ' . $village->name . '.pdf'); 
 
-        } else {
+        }elseif ($request->report_type == 'Download Tim Kor TPS Belum Ada Data Form Kosong'){
+
+             $abs_kordes = DB::table('org_diagram_village as a')
+                ->select('a.name', 'a.title','b.id', 
+                        DB::raw('(select count(a2.id) from users as a2 where a2.user_id = b.id and a2.village_id is not null) as referal')
+                    )
+                ->join('users as b','a.nik','=','b.nik')
+                ->where('a.village_id', $village->id)
+                ->whereNotNull('a.nik')
+                ->orderBy('a.level_org', 'asc')
+                ->get();
+
+            // jika title ketua tidak ada maka tambahkan value array yang memiliki title kordes 
+            $kordes = [];
+            $cek_kordes = $this->searchArrayValue($abs_kordes, 'KETUA');
+            if ($cek_kordes == null) {
+
+                // membuat object baru dengan collection 
+                $array_value = collect([
+                    (object)[
+                        'name' => '',
+                        'title' => 'KETUA'
+                    ]
+                ]);
+
+                $sorted = $array_value->sortBy('name');
+                $sorted->values()->all();
+                $kordes = $sorted->merge($abs_kordes); // gabungkan object baru dengan collectiono yg ada 
+
+            }else{
+
+                $kordes = $abs_kordes;
+            }
+
+            $abs_kortes    = DB::table('org_diagram_rt as a')
+                ->select('b.id','a.idx','a.name', 'a.title', 'a.rt', 'b.gender', 'a.telp', 'b.address','c.tps_number',
+                    DB::raw('(select count(a2.id) from org_diagram_rt as a2 where a2.base = "ANGGOTA" and pidx =  a.idx) as jml_anggota'),
+                    DB::raw('(select count(b1.id) from users as b1 where b1.user_id = b.id and b1.village_id is not null) as referal'),
+                    DB::raw('(select count(nik) from anggota_koordinator_tps_korte where pidx_korte = a.idx) as jml_formkosong')
+                ) 
+                ->join('users as b', 'a.nik', '=', 'b.nik')
+                ->join('tps as c','b.tps_id','=','c.id')
+                ->where('a.village_id', $village_id)
+                ->whereNotNull('a.nik')
+                ->where('a.base', 'KORRT')
+                ->groupBy('a.idx','a.name', 'a.title', 'a.rt', 'b.gender', 'a.telp', 'b.address','c.tps_number','b.id')
+                ->havingRaw('(select count(nik) from anggota_koordinator_tps_korte where pidx_korte = a.idx) = 0')
+                ->orderBy('c.tps_number', 'asc')
+                ->get();
+
+            //total jml anggota 
+            $jml_anggota = collect($abs_kortes)->sum(function($q){
+                return $q->jml_anggota;
+             });
+             //total jml referal
+            $jml_referal =  collect($abs_kortes)->sum(function($q){
+                return $q->referal;
+             });
+
+            $jml_formkosong =  collect($abs_kortes)->sum(function($q){
+                return $q->jml_formkosong;
+             });
+
+
+            $no = 1;
+
+            $pdf = PDF::LoadView('pages.report.kortpsbelumsetordataformkosong', compact('village', 'kordes', 'abs_kortes', 'no','jml_anggota','jml_referal','gF','jml_formkosong'))->setPaper('a4');
+            return $pdf->stream('DAFTAR PENGURUS DAN TIM KORTPS (BELUM SETOR DATA FORM KOR TPS) DESA ' . $village->name . '.pdf'); 
+
+        }else {
             #report by desa 
 
             return $this->excel->download(new KorteExport($village_id), 'TIM KOORDINATOR RT ' . $village->name . '.xls');

@@ -96,6 +96,8 @@
                                         value="Download Surat Undangan Korte Per Desa PDF" name="report_type">
                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit"
                                         value="Download Pengurus + Tim Kor TPS PDF" name="report_type">
+                                    <input class="btn btn-sm  mt-2 dropdown-item" type="submit"
+                                        value="Download Tim Kor TPS Belum Ada Data Form Kosong" name="report_type">
                                 </div>
                             </div>
                         </div>
