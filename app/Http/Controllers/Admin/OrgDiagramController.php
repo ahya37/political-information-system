@@ -3230,11 +3230,10 @@ class OrgDiagramController extends Controller
                 return $q->jml_formkosong;
              });
 
-
             $no = 1;
 
             $pdf = PDF::LoadView('pages.report.kortpsbelumsetordataformkosong', compact('village', 'kordes', 'abs_kortes', 'no','jml_anggota','jml_referal','gF','jml_formkosong'))->setPaper('a4');
-            return $pdf->stream('DAFTAR PENGURUS DAN TIM KORTPS (BELUM SETOR DATA FORM KOR TPS) DESA ' . $village->name . '.pdf'); 
+            return $pdf->download('DAFTAR PENGURUS DAN TIM KORTPS (BELUM SETOR DATA FORM KOR TPS) DESA ' . $village->name . '.pdf'); 
 
         }else {
             #report by desa 
