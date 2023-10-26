@@ -129,7 +129,7 @@
 		<table id="table2">
 			@foreach($kordes as $korde)
 				<tr class="fonts">
-					<td>{{$korde->title}}</td><td> : </td><td>{{$korde->name}}</td>
+					<td>{{$korde->title}}</td><td> : </td><td>{{$korde->name}}</td><td> </td><td>(REFERAL</td><td>:</td><td>{{$korde->referal}})</td>
 				</tr>
 			@endforeach 
 		</table>
@@ -142,20 +142,34 @@
                         <th>NAMA</th>
                         <th>TPS / RT</th>
                         <th>ALAMAT</th>
+                        <th>NO.TELP</th>
                         <th>ANGGOTA</th>
+                        <th>REFERAL</th>
+                        <th>KETERANGAN</th>
                     </tr>
                 </thead>
                 <tbody> 
 				@foreach($abs_kortes as $korte)
 					<tr>
-						<td>{{$no++}}</td>
-						<td>{{$korte->name}}</td> 
+						<td align="center">{{$no++}}</td>
+						<td>{{$korte->name}}</td>
 						<td align="center">{{$korte->tps_number}} / {{$korte->rt}}</td> 
 						<td>{{$korte->address}}</td>
+                        <td>{{$korte->telp}}</td>
                         <td align="center">{{$korte->jml_anggota}}</td>
+                        <td align="center">{{$korte->referal}}</td>
+                        <td></td>
 					</tr>
 				@endforeach
 				</tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" align="right"><b>JUMLAH</b></td>
+                        <td align="center"><b>{{$gF->decimalFormat($jml_anggota)}}</b></td>
+                        <td align="center"><b>{{$gF->decimalFormat($jml_referal)}}</b></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
         </section>
         
