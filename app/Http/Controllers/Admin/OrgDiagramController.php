@@ -3891,13 +3891,15 @@ class OrgDiagramController extends Controller
             return $q->korte_terisi;
         });
 
-        $jml_anggota_tercover = $jml_korte_terisi * 25;
+        $jml_anggota_tercover = collect($data)->sum(function($q){
+            return $q->anggota_tercover_kortps;
+        });
         $jml_kurang_korte     = $jml_korte_terisi - $jml_target_korte;
         // $jml_blm_ada_korte    = collect($data)->sum(function($q){
         //     return $q->belum_ada_korte;
         // });
 
-        $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
+        $tmp_blm_ada_korte = $jml_anggota - $jml_anggota_tercover;
         $jml_blm_ada_korte = $tmp_blm_ada_korte;
         // if ($jml_blm_ada_korte == - 0) {
         //     $jml_blm_ada_korte = 0;
