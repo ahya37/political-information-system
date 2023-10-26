@@ -662,7 +662,7 @@ class OrgDiagram extends Model
 				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId) as anggota
 				from org_diagram_rt as a
 				join users as b on a.nik = b.nik
-				where a.base ='ANGGOTA'  and b.village_id = $villageId";
+				where a.base ='ANGGOTA'  and a.village_id = $villageId";
         
         return collect(DB::select($sql))->first();
 	}

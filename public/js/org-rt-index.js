@@ -122,7 +122,6 @@ async function initialGetAnggotaCoverFirst() {
         selectRT
     );
 
-    console.log('data kortps :', dataKortps);
 
     $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
     $("#targetkortps").text(` ${numberWithDot(dataKortps.data.target_kortps)}`);
