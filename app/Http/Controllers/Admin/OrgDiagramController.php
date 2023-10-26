@@ -3826,13 +3826,13 @@ class OrgDiagramController extends Controller
         });
         $persentage_target    = ($jml_anggota/$jml_dpt)*100;
 
-        $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
-        $jml_blm_ada_korte = $tmp_blm_ada_korte;
-        if ($jml_blm_ada_korte == - 0) {
-            $jml_blm_ada_korte = 0;
-        }elseif ($jml_blm_ada_korte > 0) {
-            $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
-        }
+        // $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
+        $jml_blm_ada_korte = $jml_anggota - $jml_anggota_tercover;
+        // if ($jml_blm_ada_korte == - 0) {
+        //     $jml_blm_ada_korte = 0;
+        // }elseif ($jml_blm_ada_korte > 0) {
+        //     $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
+        // }
 
          // // jumlakan hasil all target kecamatan by dapil
         $jml_target = collect($results)->sum(function($q){
@@ -3899,8 +3899,8 @@ class OrgDiagramController extends Controller
         //     return $q->belum_ada_korte;
         // });
 
-        $tmp_blm_ada_korte = $jml_anggota - $jml_anggota_tercover;
-        $jml_blm_ada_korte = $tmp_blm_ada_korte;
+        // $tmp_blm_ada_korte = $jml_anggota - $jml_anggota_tercover;
+        $jml_blm_ada_korte = $jml_anggota - $jml_anggota_tercover;
         // if ($jml_blm_ada_korte == - 0) {
         //     $jml_blm_ada_korte = 0;
         // }elseif ($jml_blm_ada_korte > 0) {
@@ -3937,6 +3937,7 @@ class OrgDiagramController extends Controller
         $orgDiagramModel = new OrgDiagram();
         #get data desa by kecamatan
         $data = $orgDiagramModel->getDataDaftarTimByKecamatan($districtId);
+        // dd($data);
         
         $jml_ketua = collect($data)->sum(function($q){
             return $q->ketua;
@@ -3955,25 +3956,33 @@ class OrgDiagramController extends Controller
             return $q->anggota;
         });
 
-        $jml_target_korte =  collect($data)->sum(function($q){
-            return $q->target_korte;
-        });
+        $jml_target           = $district->target_persentage > 0 ? ($jml_dpt*$district->target_persentage)/100 : 0;
+
+        // $jml_target_korte =  collect($data)->sum(function($q){
+        //     return $q->target_korte;
+        // });
+        $jml_target_korte = $jml_target / 25;
         $jml_korte_terisi =  collect($data)->sum(function($q){
             return $q->korte_terisi;
         });
 
-        $jml_anggota_tercover = $jml_korte_terisi * 25;
+        $jml_anggota_tercover = collect($data)->sum(function($q){
+            return $q->anggota_tercover_kortps;
+        });
         $jml_kurang_korte     = $jml_korte_terisi - $jml_target_korte;
+        // dd( $jml_kurang_korte);
         // $jml_blm_ada_korte    = collect($data)->sum(function($q){
         //     return $q->belum_ada_korte;
         // });
-        $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
-        $jml_blm_ada_korte = $tmp_blm_ada_korte;
-        if ($jml_blm_ada_korte == - 0) {
-            $jml_blm_ada_korte = 0;
-        }elseif ($jml_blm_ada_korte > 0) {
-            $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
-        }
+        // $tmp_blm_ada_korte = $jml_anggota - $jml_anggota_tercover;
+        $jml_blm_ada_korte = $jml_anggota - $jml_anggota_tercover;
+        // if ($jml_blm_ada_korte == - 0) {
+        //     $jml_blm_ada_korte = 0;
+        // }elseif ($jml_blm_ada_korte > 0) {
+        //     $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
+        // }
+        // $jml_blm_ada_korte = $tmp_blm_ada_korte;
+
 
         $jml_saksi            = collect($data)->sum(function($q){
             return $q->saksi;

@@ -409,7 +409,11 @@ class OrgDiagram extends Model
                 ((SELECT COUNT(id) from users WHERE village_id = a.id )-((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )*25)) as belum_ada_korte,
                 -- ((SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id )*(SELECT target_persentage from villages where id = a.id)/100) as target,
 				(SELECT COUNT(id) from witnesses WHERE village_id = a.id ) as saksi,
-				(SELECT COUNT(*) from tps WHERE tps.village_id = a.id) tps
+				(SELECT COUNT(*) from tps WHERE tps.village_id = a.id) tps,
+				(
+					SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik
+					where da4.base = 'ANGGOTA' and da4.village_id = a.id
+				) as anggota_tercover_kortps
                 from villages as a
                 WHERE a.district_id = $districtId order by (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) desc";
         

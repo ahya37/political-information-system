@@ -92,8 +92,8 @@
                                                 <td align="center">{{ $gF->decimalFormat($target / 25) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->korte_terisi) }}</td>
                                                 <td align="center">{{ $nilai_kurang_korte }}</td>
-                                                <td align="center">{{ $gF->decimalFormat($item->korte_terisi * 25) }}</td>
-                                                <td align="center">{{ $nilai_blm_ada_kortps }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->anggota_tercover_kortps) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->anggota - $item->anggota_tercover_kortps) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->saksi) }}</td>
                                             </tr>
                                         @endforeach
@@ -116,7 +116,7 @@
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_korte_terisi) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_kurang_korte) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_anggota_tercover) }}</b></td>
-                                        <td align="center"><b>{{ $jml_blm_ada_korte }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_blm_ada_korte) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_saksi) }}</b></td>
                                       </tr>
                                     </tfoot>
