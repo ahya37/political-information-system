@@ -10,7 +10,7 @@
             }
 
             header {
-                position: fixed;
+                position: absolute;
                 top: -100px;
                 left: 0px;
                 right: 0px; 
@@ -79,7 +79,7 @@
 <body>
     <header>
 	<img src="{{asset('assets/images/kopsurataaw.png')}}" width="800" style="margin-top:-2px">
-	<h4 style="margin-top:-4px;" class="fonts">ANGGOTA KORTE</h4> 
+	<h4 style="margin-top:-4px;" class="fonts">ANGGOTA KORTPS</h4> 
     </header> 
 		<table id="table1">
 			<tr>
@@ -91,11 +91,12 @@
 				
 			</tr><tr>
 				
-				<td>KORTE</td><td>:</td><td>{{$kor_rt->name}}</td>
+				<td>KORTPS</td><td>:</td><td>{{$kor_rt->name}}</td><td>(REFERAL : {{$kor_rt->referal}})</td>
 				
-			</tr><tr>
+			</tr>
+            <tr>
 				
-				<td>RT</td><td>:</td><td>{{$kor_rt->rt}}</td>
+				<td>TPS / RT</td><td>:</td><td>{{$kor_rt->tps_number}} / {{$kor_rt->rt}}</td>
 			</tr>
 		</table>
 		
@@ -105,7 +106,9 @@
                     <tr>
                         <th>NO</th>
                         <th>NAMA</th>
+                        <th>USIA</th>
                         <th>ALAMAT</th>
+                        <th>TPS / RT</th>
                         <th>NO.TELP</th>
                         <th>KETERANGAN</th>
                     </tr>
@@ -115,7 +118,9 @@
 					<tr>
 						<td align="center">{{$no++}}</td>
 						<td>{{$member->name}}</td> 
+                        <td align="center">{{$member->usia}}</td> 
 						<td>{{$member->address}}</td> 
+                        <td align="center">{{$member->tps_number}}/{{$member->rt}}</td> 
 						<td>{{$member->telp}}</td> 
 						<td></td>
 					</tr>
