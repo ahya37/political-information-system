@@ -103,6 +103,8 @@ async function initialGetAnggotaCoverFirst() {
         selectRT
     );
 
+    console.log('data cover ', dataCover.data.tercover);
+
 
     $("#jmldpt").text(`${dataCover.jml_dpt}`);
     $("#targetanggota").text(`${dataCover.target_anggota}`);

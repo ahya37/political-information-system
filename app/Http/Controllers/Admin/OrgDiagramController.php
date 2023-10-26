@@ -139,7 +139,7 @@ class OrgDiagramController extends Controller
             
         }else{
 
-            $results = $orgDiagram->getKalkulasiTercoverAll();
+            $results = $orgDiagram->getKalkulasiTercoverAll($regency);
 
             #proses hitung target
             $dataTim      = $orgDiagram->getDataDaftarTimByRegency($regency);
