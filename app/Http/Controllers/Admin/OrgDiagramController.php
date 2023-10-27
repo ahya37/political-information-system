@@ -3297,7 +3297,106 @@ class OrgDiagramController extends Controller
             // dd([$dapil_id, $district_id, $village_id, $rt]);
             $district = DB::table('districts')->select('name')->where('id', $district_id)->first();
             return $this->excel->download(new KorCamExport($district_id), 'TIM KOORDINATOR KECAMATAN ' . $district->name . '.xls');
-        } elseif ($request->report_type == 'Download Surat Undangan Per Kecamatan') {
+        
+        }elseif($request->report_type == 'Surat Undangan Rapat Konsolidasi Kordapil, Korcam & Admin'){
+
+            //id dapil 1 = 8
+            //id dapil 4 = 11
+            //id dapil 5 = 12
+            if($dapil_id == 8){
+
+                return 'Dapil 1 gak perlu pakai Undangan, sudah di info';
+
+            }elseif($dapil_id == 12){ // dapil 5
+
+                // sessi 1
+                if ($district_id == 3602011) {  // wanasalam
+                     $jam = '09:00 s/d 12:00 WIB';
+                     $lokasi = "SEKERTARIAT JARINGAN DULUR AAW - BINUANGEN";
+                     $hari = 'Selasa,31 Oktober 2023';
+                     $lok_surat = 'Binuangeun';
+                }else{
+                     $jam = '13:00 s/d 16:00 WIB';
+                     $lokasi = "SEKERTARIAT JARINGAN DULUR AAW - BINUANGEN";
+                     $hari = 'Selasa,31 Oktober 2023';
+                     $lok_surat = 'Binuangeun';
+                }
+
+                // get data korcam kec.wanasalam
+                $district = DB::table('districts')->select('name')->where('id', $district_id)->first();
+                // get data korcam by kecamatan
+                $korcam = DB::table('org_diagram_district as a')
+                        ->select('b.nik','b.name','a.title','c.name as village','a.telp','b.address')
+                        ->join('users as b', 'a.nik', '=', 'b.nik')
+                        ->join('villages as c','b.village_id','=','c.id')
+                        ->where('a.district_id', $district_id)
+                        ->orderBy('a.district_id','asc')
+                        ->orderBy('a.level_org','asc')
+                        ->get();
+
+                // get kordes by kecamatan
+                $kordes = DB::table('org_diagram_village as a')
+                    ->select('a.nik', 'a.name','b.address','c.name as village','a.telp','a.title')
+                    ->join('users as b', 'a.nik', '=', 'b.nik')
+                    ->join('villages as c','b.village_id','=','c.id')
+                    ->where('a.district_id', $district_id)
+                    ->orderBy('a.village_id','asc')
+                    ->orderBy('a.level_org','asc')
+                    ->get();
+
+
+                $fileName = 'SURAT UNDANGAN TIM KORCAM KORDES KEC. ' . $district->name . '.pdf';
+
+                $pdf  = PDF::LoadView('pages.report.suratundanganoktobernovember', compact('jam', 'lokasi', 'hari', 'lok_surat','korcam','kordes'))->setPaper('a4');
+                // $pdfFilePath = public_path('/docs/suratundanganoktobernovember/SURAT UNDANGAN TIM KORCAM KORDES KEC.' . $district->name . '/' . $fileName);
+                return $pdf->download('SURAT UNDANGAN TIM KORCAM KORDES KEC. ' . $district->name . '.pdf');
+
+            }elseif($dapil_id == 11){ // dapil 4 
+                // sessi 1
+                if ($district_id == 3602021 || $district_id == 3602020) {  // cihara dan panggarangan 
+                     $jam = '09:00 s/d 12:00 WIB';
+                     $lokasi = "SEKERTARIAT JARINGAN DULUR AAW - BINUANGEN";
+                     $hari = 'Rabu,01 November 2023';
+                     $lok_surat = 'Binuangeun';
+                }else{
+                     $jam = '13:00 s/d 16:00 WIB';
+                     $lokasi = "SEKERTARIAT JARINGAN DULUR AAW - BINUANGEN";
+                     $hari = 'Rabu,01 November 2023';
+                     $lok_surat = 'Binuangeun';
+                }
+
+                // get data korcam kec.wanasalam
+                $district = DB::table('districts')->select('name')->where('id', $district_id)->first();
+                // get data korcam by kecamatan
+                $korcam = DB::table('org_diagram_district as a')
+                        ->select('b.nik','b.name','a.title','c.name as village','a.telp','b.address')
+                        ->join('users as b', 'a.nik', '=', 'b.nik')
+                        ->join('villages as c','b.village_id','=','c.id')
+                        ->where('a.district_id', $district_id)
+                        ->orderBy('a.district_id','asc')
+                        ->orderBy('a.level_org','asc')
+                        ->get();
+
+                // get kordes by kecamatan
+                $kordes = DB::table('org_diagram_village as a')
+                    ->select('a.nik', 'a.name','b.address','c.name as village','a.telp','a.title')
+                    ->join('users as b', 'a.nik', '=', 'b.nik')
+                    ->join('villages as c','b.village_id','=','c.id')
+                    ->where('a.district_id', $district_id)
+                    ->orderBy('a.village_id','asc')
+                    ->orderBy('a.level_org','asc')
+                    ->get();
+
+
+                $fileName = 'SURAT UNDANGAN TIM KORCAM KORDES KEC. ' . $district->name . '.pdf';
+
+                $pdf  = PDF::LoadView('pages.report.suratundanganoktobernovember', compact('jam', 'lokasi', 'hari', 'lok_surat','korcam','kordes'))->setPaper('a4');
+                // $pdfFilePath = public_path('/docs/suratundanganoktobernovember/SURAT UNDANGAN TIM KORCAM KORDES KEC.' . $district->name . '/' . $fileName);
+                return $pdf->download('SURAT UNDANGAN TIM KORCAM KORDES KEC. ' . $district->name . '.pdf');
+            }
+
+        }
+        elseif ($request->report_type == 'Download Surat Undangan Per Kecamatan') {
 
             $jam = '08:30 WIB s/d selesai';
 
