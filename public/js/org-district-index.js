@@ -9,6 +9,8 @@ let selectRT = $("#selectRt").val();
 $("#selectListArea").change(async function () {
     selectListArea = $("#selectListArea").val();
 
+    console.log('selectListArea: ', selectListArea)
+
     if (selectListArea !== "") {
         const listDistricts = await getListDistrict(selectListArea);
         $("#selectDistrictId").empty();
@@ -25,8 +27,13 @@ $("#selectListArea").change(async function () {
         selectDistrictId = $("#selectDistrictId").val();
         selectVillageId = $("#selectVillageId").val();
 
+
+
         $("#reqdapil").val(selectListArea);
         $("#reqdistrict").val("");
+
+        table.ajax.reload(null, false);
+
     } else {
         $("#selectDistrictId").empty();
         $("#selectVillageId").empty();
@@ -38,6 +45,8 @@ $("#selectListArea").change(async function () {
         $("#reqdapil").val("");
         $("#reqdistrict").val("");
         $("#reqvillage").val("");
+        table.ajax.reload(null, false);
+
     }
 });
 
@@ -253,6 +262,7 @@ let table = $("#data").DataTable({
         url: "/api/org/getdataorgdistict",
         type: "POST",
         data: function (d) {
+            d.dapil = selectListArea;
             d.district = selectDistrictId;
             return d;
         },

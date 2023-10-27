@@ -795,6 +795,13 @@ class OrgDiagramController extends Controller
 
         $recordsTotal = $data->count();
 
+        return response()->json([
+            'draw' => $request->input('draw'),
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data' => $data
+        ]);
+
        
     }
 
@@ -2126,7 +2133,8 @@ class OrgDiagramController extends Controller
             ->select('a.id', 'a.idx', 'a.district_id', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'c.name as village', 'd.name as district')
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'b.village_id')
-            ->join('districts as d', 'd.id', '=', 'c.district_id');
+            ->join('districts as d', 'd.id', '=', 'c.district_id')
+            ->join('dapil_areas as e','d.id','=','e.district_id');
 
 
         if ($request->input('search.value') != null) {
@@ -2141,6 +2149,10 @@ class OrgDiagramController extends Controller
                 // ->orWhereRaw('LOWER(a.created_at) like ? ',['%'.strtolower($request->input('search.value')).'%'])
 
             });
+        }
+
+        if ($request->input('dapil') != null) {
+            $data->where('e.dapil_id', $request->dapil);
         }
 
         if ($request->input('district') != null) {

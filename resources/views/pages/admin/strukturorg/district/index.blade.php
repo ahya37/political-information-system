@@ -39,14 +39,26 @@
                     </div>
 
                     <div class="row col-md-12">
-                        <a class="btn btn-sm btn-sc-primary text-white"
-                            href="{{ route('admin-struktur-organisasi-district-create') }}">+ Tambah</a>
-                            <input class="btn btn-sm btn-success text-white ml-2" type="submit" name="report_type" value="Download Excel">
-                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" name="report_type" value="Download Surat Pernyataan Per Kecamatan">
-                            <input class="btn btn-sm btn-sc-primary text-white ml-2" type="submit" name="report_type" value="Download Surat Undangan Per Kecamatan">
+                         <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Opsi Download
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    
+                                    <a class="btn btn-sm text-primary dropdown-item"
+                                            href="{{ route('admin-struktur-organisasi-district-create') }}">+ Tambah Korcam</a>
+                                    <input class="btn btn-sm  text-primary dropdown-item" type="submit" name="report_type" value="Download Excel">
+                                    <input class="btn btn-sm text-primary dropdown-item" type="submit" name="report_type" value="Download Surat Pernyataan Per Kecamatan">
+                                    <input class="btn btn-sm text-primary dropdown-item" type="submit" name="report_type" value="Download Surat Undangan Per Kecamatan">
+                                     <input class="btn btn-sm text-primary dropdown-item" type="submit" name="report_type" value="Surat Undangan Rapat Konsolidasi Kordapil, Korcam & Admin">
+                                </div>
+                            </div>
+
+                       
                     </div>
                     <div class="row col-md-12">
-                         <input class="btn btn-sm btn-sc-primary text-white mt-2" type="submit" name="report_type" value="Surat Undangan Rapat Konsolidasi Kordapil, Korcam & Admin">
+                        
                     </div>
                 </div>
                 </form>
