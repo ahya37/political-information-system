@@ -3657,7 +3657,15 @@ class OrgDiagramController extends Controller
             $district = DB::table('districts')->select('name')->where('id', $district_id)->first();
             $OrgModel = new OrgDiagram();
             // get data korcam by kecamatan
-            $korcam          = $OrgModel->getKorcamByKecamatanForTitle($district_id);
+            // $korcam          = $OrgModel->getKorcamByKecamatanForTitle($district_id); 'DOT'
+            $korcam = DB::table('org_diagram_district as a')
+                        ->select('b.nik','b.name','a.title','c.name as village','a.telp','b.address')
+                        ->join('users as b', 'a.nik', '=', 'b.nik')
+                        ->join('villages as c','b.village_id','=','c.id')
+                        ->where('a.district_id', $district_id)
+                        ->orderBy('a.district_id','asc')
+                        ->orderBy('a.level_org','asc')
+                        ->get();
             $kordes = $OrgModel->getKordesByKecamatan($district_id);
             $no = 1;
 

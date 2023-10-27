@@ -42,7 +42,9 @@
             text-shadow: 1px 1px 0px #fff;
             background: #eaebec;
             border: #ccc 1px solid;
-            width: 100%
+            width: 100%;
+            margin-top: 30px;
+
             }
             #table th {
             font-size: 12px;
@@ -117,16 +119,39 @@
 	<img src="{{asset('assets/images/kopsurataaw.png')}}" width="800" style="margin-top:-2px">
 	<h4 style="margin-top:-4px;" class="fonts">TIM KORDES KECAMATAN {{$district->name}}</h4> 
     </header> 
-		
-		<table id="table2">
-			@foreach($korcam as $kor)
-				<tr class="fonts">
-					<td>{{$kor->JABATAN}}</td><td> : </td><td>{{$kor->NAMA}}</td>
-				</tr>
-			@endforeach 
-		</table>
-		
-          <section >
+		<section>
+            <h4 class="fonts" style="margin-top:100px;">KORCAM</h4> 
+            <table cellspacing='0' id="table">
+                <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>NAMA</th>
+                    <th>JABATAN</th>
+                    <th>ALAMAT</th>
+                    <th>DESA</th>
+                    <th>NO.TELP</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $no_korcam = 1;
+                @endphp
+                @foreach($korcam as $item)
+                <tr>
+                    <td>{{$no_korcam++}}</td>
+                    <td>{{$item->name}}</td>
+                    <td>{{$item->title}}</td>
+                    <td>{{$item->address}}</td>
+                    <td>{{$item->village}}</td>
+                    <td>{{$item->telp}}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        </section>
+
+         <section >
+            <h4 class="fonts" style="margin-top:55px;">KORDES</h4> 
             <table cellspacing='0' id="tables">
                 <thead>
                     <tr>
@@ -135,21 +160,21 @@
                         <th>JABATAN</th>
                         <th>ALAMAT</th>
                         <th>DESA</th>
-                        <th>NO.HP</th>
+                        <th>NO.TELP</th>
                     </tr>
                 </thead>
                 <tbody> 
-				@foreach($kordes as $kor) 
-					<tr>
-						<td>{{$no++}}</td>
-						<td>{{$kor->NAMA}}</td> 
-						<td>{{$kor->JABATAN}}</td> 
-						<td>{{$kor->address}}</td>
-						<td>{{$kor->DESA}}</td>
-						<td></td> 
-					</tr> 
-				@endforeach
-				</tbody>
+                @foreach($kordes as $kor) 
+                    <tr>
+                        <td>{{$no++}}</td>
+                        <td>{{$kor->NAMA}}</td> 
+                        <td>{{$kor->JABATAN}}</td> 
+                        <td>{{$kor->address}}</td>
+                        <td>{{$kor->DESA}}</td>
+                        <td>{{$kor->telp}}</td> 
+                    </tr> 
+                @endforeach
+                </tbody>
             </table>
         </section>
         

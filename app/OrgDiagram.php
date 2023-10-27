@@ -35,7 +35,7 @@ class OrgDiagram extends Model
 							CASE when b.gender = '0' then 'L' else 'P' end as JENIS_KELAMIN, 
 							DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), b.date_berth)), '%Y') + 0 as 'USIA', a.title as 'JABATAN',
 							c.name as DESA, c.id as village_id, b.address,
-							a.base
+							a.base, a.telp
 							from org_diagram_village as a
 							join users as b on a.nik = b.nik
 							join villages as c on b.village_id = c.id
