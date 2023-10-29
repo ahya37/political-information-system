@@ -3949,11 +3949,10 @@ class OrgDiagramController extends Controller
 
         $orgDiagramModel = new OrgDiagram();
         $data            = $orgDiagramModel->getDataDaftarTimByRegency($regency);
-
-        dd($data); 
+        // dd($data);
 
         // mendapatkan jumlah target masing2 kecamatan per dapilnya
-        // $arr_jml_target  = []; 
+        // $arr_jml_target  = [];
         // foreach ($data as $value) {
         //     // merubahnya menjadi collection, agar mudah menjumlahkannya
         //     $arr_jml_target[] = collect([
@@ -3979,6 +3978,8 @@ class OrgDiagramController extends Controller
                 'b' => $val->b,
                 'dpt' => $val->dpt,
                 'anggota' => $val->anggota,
+                'anggota_tercover_kortps' => $val->anggota_tercover_kortps,
+                'belum_tercover_kortps' => $val->anggota - $val->anggota_tercover_kortps,
                 // 'target_korte' => $val->target_korte,
                 'target_korte' => $target / 25,
                 'korte_terisi' => $val->korte_terisi,
@@ -4017,7 +4018,10 @@ class OrgDiagramController extends Controller
             return $q['korte_terisi'];
         });
 
-        $jml_anggota_tercover = $jml_korte_terisi * 25;
+        $jml_anggota_tercover = collect($dapils)->sum(function($q){
+            return $q['anggota_tercover_kortps'];
+        });
+
         $jml_kurang_korte     = $jml_korte_terisi - $jml_target_korte;
         // $jml_blm_ada_korte    = 0;
         $jml_saksi            = collect($dapils)->sum(function($q){
@@ -4025,13 +4029,13 @@ class OrgDiagramController extends Controller
         });
         $persentage_target    = ($jml_anggota/$jml_dpt)*100;
 
-        $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
-        $jml_blm_ada_korte = $tmp_blm_ada_korte;
-        if ($jml_blm_ada_korte == - 0) {
-            $jml_blm_ada_korte = 0;
-        }elseif ($jml_blm_ada_korte > 0) {
-            $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
-        }
+        // $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
+        $jml_blm_ada_korte = $jml_anggota - $jml_anggota_tercover;
+        // if ($jml_blm_ada_korte == - 0) {
+        //     $jml_blm_ada_korte = 0;
+        // }elseif ($jml_blm_ada_korte > 0) {
+        //     $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
+        // }
 
          // // jumlakan hasil all target kecamatan by dapil
         $jml_target = collect($results)->sum(function($q){
