@@ -145,6 +145,7 @@
                         <th>NO.TELP</th>
                         <th>ANGGOTA</th>
                         <th>REFERAL</th>
+                        <th>FORM KORTPS</th>
                         <th>KETERANGAN</th>
                     </tr>
                 </thead>
@@ -158,6 +159,7 @@
                         <td>{{$korte->telp}}</td>
                         <td align="center">{{$korte->jml_anggota}}</td>
                         <td align="center">{{$korte->referal}}</td>
+                        <td align="center">{{$korte->jml_formkortps}}</td>
                         <td></td>
 					</tr>
 				@endforeach
