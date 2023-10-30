@@ -3119,7 +3119,7 @@ class OrgDiagramController extends Controller
 
             // get data kordes by village
             $abs_kordes = DB::table('org_diagram_village as a')
-                ->select('a.name', 'a.title','b.id', 
+                ->select('b.name', 'a.title','b.id', 
                         DB::raw('(select count(a2.id) from users as a2 where a2.user_id = b.id and a2.village_id is not null) as referal')
                     )
                 ->join('users as b','a.nik','=','b.nik')
