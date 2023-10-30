@@ -3161,7 +3161,7 @@ class OrgDiagramController extends Controller
                 ->where('a.village_id', $village_id)
                 ->whereNotNull('a.nik')
                 ->where('a.base', 'KORRT')
-                ->groupBy('a.idx','a.name', 'a.title', 'a.rt', 'b.gender', 'a.telp', 'b.address','c.tps_number','b.id')
+                ->groupBy('a.idx','b.name', 'a.title', 'a.rt', 'b.gender', 'a.telp', 'b.address','c.tps_number','b.id')
                 ->orderBy('c.tps_number', 'asc')
                 ->get();
 
