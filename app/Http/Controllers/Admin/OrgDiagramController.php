@@ -427,7 +427,7 @@ class OrgDiagramController extends Controller
 
         $village_id = request('village');
         $orgs = DB::table('org_diagram_village as a')
-            ->select('a.idx', 'a.pidx', 'a.color', 'a.title', 'a.nik', 'a.name', 'a.photo')
+            ->select('a.idx', 'a.pidx', 'a.color', 'a.title', 'a.nik', 'b.name', 'a.photo')
             ->join('users as b', 'a.nik', '=', 'b.nik')
             ->whereNotNull('a.pidx')
             ->where('a.village_id', $village_id)
@@ -753,7 +753,7 @@ class OrgDiagramController extends Controller
         }
 
         $data = DB::table('org_diagram_village as a')
-            ->select('a.id', 'a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'c.name as village', 'd.name as district')
+            ->select('a.id', 'a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'b.name', 'b.photo', 'a.telp as phone_number', 'c.name as village', 'd.name as district')
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'b.village_id')
             ->join('districts as d', 'd.id', '=', 'c.district_id')
@@ -1247,15 +1247,15 @@ class OrgDiagramController extends Controller
 
         // OLD
         // DATATABLE
-        $orderBy = 'a.name';
+        $orderBy = 'b.name';
         switch ($request->input('order.0.column')) {
             case '1':
-                $orderBy = 'a.name';
+                $orderBy = 'b.name';
                 break;
         }
 
         $data = DB::table('org_diagram_rt as a')
-            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id',
+            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'b.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id',
                     DB::raw("(select count(*) from org_diagram_rt where pidx = a.idx and base ='ANGGOTA') as count_anggota"),
                     DB::raw("(select count(*) from users where user_id = b.id and village_id is not null) as referal"),
                     DB::raw("(select count(*) from anggota_koordinator_tps_korte where pidx_korte = a.idx) as form_kosong")
@@ -1270,7 +1270,7 @@ class OrgDiagramController extends Controller
 
         if ($request->input('search.value') != null) {
             $data = $data->where(function ($q) use ($request) {
-                $q->whereRaw('LOWER(a.name) like ? ', ['%' . strtolower($request->input('search.value')) . '%']);
+                $q->whereRaw('LOWER(b.name) like ? ', ['%' . strtolower($request->input('search.value')) . '%']);
             });
         }
 
@@ -1748,7 +1748,7 @@ class OrgDiagramController extends Controller
     public function detailAnggotaByKorRT($idx)
     {
         $kor_rt = DB::table('org_diagram_rt as a')
-            ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district', 'e.tps_number')
+            ->select('a.rt', 'b.name', 'c.name as village', 'd.name as district', 'e.tps_number')
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
@@ -1757,7 +1757,7 @@ class OrgDiagramController extends Controller
             ->first();
 
         $anggotaKorTps = DB::table('anggota_koordinator_tps_korte as a')
-            ->select('a.id','a.name', 'a.nik', 'b.photo', DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik) as is_cover'))
+            ->select('a.id','b.name', 'a.nik', 'b.photo', DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik) as is_cover'))
             ->leftJoin('users as b', 'b.nik', '=', 'a.nik')
             ->where('a.pidx_korte', $idx)
             ->orderBy(DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik)'), 'desc')
@@ -1802,7 +1802,7 @@ class OrgDiagramController extends Controller
     {
 
         $kor_rt = DB::table('org_diagram_rt as a')
-            ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district')
+            ->select('a.rt', 'b.name', 'c.name as village', 'd.name as district')
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
@@ -1818,7 +1818,7 @@ class OrgDiagramController extends Controller
 
         // get data korte by idx 
         $korte = DB::table('org_diagram_rt as a')
-            ->select('a.rt', 'a.name', 'b.address', 'c.name as village', 'd.name as district', 'a.rt', 'b.rw', 'a.telp', 'b.code')
+            ->select('a.rt', 'b.name', 'b.address', 'c.name as village', 'd.name as district', 'a.rt', 'b.rw', 'a.telp', 'b.code')
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
@@ -1891,15 +1891,15 @@ class OrgDiagramController extends Controller
     {
 
         // DATATABLE
-        $orderBy = 'a.name';
+        $orderBy = 'b.name';
         switch ($request->input('order.0.column')) {
             case '1':
-                $orderBy = 'a.name';
+                $orderBy = 'b.name';
                 break;
         }
 
         $data = DB::table('org_diagram_rt as a')
-            ->select('a.id', 'a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id')
+            ->select('a.id', 'a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'b.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id')
             ->leftJoin('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
@@ -1909,7 +1909,7 @@ class OrgDiagramController extends Controller
 
         if ($request->input('search.value') != null) {
             $data = $data->where(function ($q) use ($request) {
-                $q->whereRaw('LOWER(a.name) like ? ', ['%' . strtolower($request->input('search.value')) . '%']);
+                $q->whereRaw('LOWER(b.name) like ? ', ['%' . strtolower($request->input('search.value')) . '%']);
             });
         }
 
