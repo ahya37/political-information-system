@@ -3152,7 +3152,7 @@ class OrgDiagramController extends Controller
 
 
             $abs_kortes    = DB::table('org_diagram_rt as a')
-                ->select('b.id','a.idx','a.name', 'a.title', 'a.rt', 'b.gender', 'a.telp', 'b.address','c.tps_number',
+                ->select('b.id','a.idx','b.name', 'a.title', 'a.rt', 'b.gender', 'a.telp', 'b.address','c.tps_number',
                     DB::raw('(select count(a2.id) from org_diagram_rt as a2 where a2.base = "ANGGOTA" and pidx =  a.idx) as jml_anggota'),
                     DB::raw('(select count(b1.id) from users as b1 where b1.user_id = b.id and b1.village_id is not null) as referal')
                 )
