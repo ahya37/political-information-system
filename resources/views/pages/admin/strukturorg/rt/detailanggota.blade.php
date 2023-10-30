@@ -169,7 +169,7 @@
                                                 <td>{{ $item->nik }}</td>
                                                 <td><button class="btn btn-sm btn-danger" data-name="{{ $item->name }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-trash"></i></button></td>
                                             </tr> --}}
-                                            <tr>
+                                            <tr class="{{ $item->is_cover == 1 ? 'bg-success text-white' : '' }}">
                                                 <td>{{ $no++ }}</td>
                                                 <td>
                                                     <p><img class="rounded" width="40"
@@ -179,9 +179,11 @@
                                                 <td>{{ $item->nik }}</td>
                                                 <td>
                                                     <button class="btn btn-sm btn-danger" data-name="{{ $item->name }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-trash"></i></button>
-                                                        @if($item->photo == null)
+                                                    
+                                                    @if($item->photo == null)
                                                             <a href="{{ route('admin-kortps-create-new-anggota', $item->id) }}" class="btn btn-sm btn-info">Jadikan Anggota</a> 
                                                     @endif
+                                                    
                                                 </td>
                                             </tr>
                                             

@@ -31,16 +31,16 @@ class AnggotaBelumTercoverKortps implements FromCollection,  WithHeadings, WithE
             $results[] = [
                 'nik'  => "'".$value->nik ?? '',
                 'name' => $value->name ?? '',
-                'desa' => $value->desa ?? '',
+                // 'desa' => $value->desa ?? '',
                 'rt' => $value->rt ?? '',
                 'rw' => $value->rw,
-                'village' => $value->desa,
-                'district' => $value->district,
-                'telp'    => $value->phone_number,
-                'wa' => $value->whatsapp,
-                'referal' => $value->referal,
-                'created_at' => date('d-m-Y', strtotime($value->created_at)),
-                'cby' => $value->cby,
+                // 'village' => $value->desa,
+                // 'district' => $value->district,
+                // 'telp'    => $value->phone_number,
+                // 'wa' => $value->whatsapp,
+                // 'referal' => $value->referal,
+                // 'created_at' => date('d-m-Y', strtotime($value->created_at)),
+                // 'cby' => $value->cby,
             ];
         }
         return collect($results);
@@ -51,16 +51,16 @@ class AnggotaBelumTercoverKortps implements FromCollection,  WithHeadings, WithE
         return [
             'NIK',
             'NAMA',
-            'DESA',
+            // 'DESA',
             'RT',
             'RW',
-            'DESA',
-            'KECAMATAN',
-            'NO.TELP',
-            'WHATSAPP',
-            'REFERAL',
-            'INPUT TANGGAL',
-            'INPUT OLEH'
+            // 'DESA',
+            // 'KECAMATAN',
+            // 'NO.TELP',
+            // 'WHATSAPP',
+            // 'REFERAL',
+            // 'INPUT TANGGAL',
+            // 'INPUT OLEH'
         ];
     }
 
@@ -69,7 +69,7 @@ class AnggotaBelumTercoverKortps implements FromCollection,  WithHeadings, WithE
         return [
             AfterSheet::class =>  function (AfterSheet $event){
 
-                $event->sheet->getStyle('A1:D1')->applyFromArray([
+                $event->sheet->getStyle('A1:C1')->applyFromArray([
                     'font' => [
                         'bold' => true,
                     ]

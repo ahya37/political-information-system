@@ -1388,10 +1388,14 @@ class OrgDiagramController extends Controller
 
 
             #cek jika tps koordinator tidak sama dengan tps calon anggotanya
-            $koor = DB::table('org_diagram_rt as a')->select('b.tps_id')
+            $koor = DB::table('org_diagram_rt as a')->select('b.tps_id','a.nik')
                 ->join('users as b', 'a.nik', '=', 'b.nik')
                 ->where('a.idx', $request->pidx)
                 ->first();
+
+                // dd($koor); 
+
+            // dd($request->tpsid);
             $tpsKoor = $koor->tps_id;
 
             if ($tpsKoor != $request->tpsid) {
@@ -3029,7 +3033,7 @@ class OrgDiagramController extends Controller
                  $anggota         = $orgDiagramModel->getDataAnggotaBelumterCoverKortpsByVillageAndRt($village_id, $request->rt);
                  return $this->excel->download(new AnggotaBelumTercoverKortps($anggota), 'ANGGOTA BELUM TERCOVER DS.' . $village->name .', RT. '.$request->rt.'.xls');
 
-            }else{
+            }else{ 
 
                 $district = District::select('name')->where('id', $request->districtid)->first();
                 $anggota         = $orgDiagramModel->getDataAnggotaBelumterCoverKortpsByDistrictId($request->districtid);
@@ -3615,7 +3619,10 @@ class OrgDiagramController extends Controller
     
             #hitung panjang nik, harus 16
             $cekLengthNik = strlen($request->nik);
-            if ($cekLengthNik <> 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
+            if ($cekLengthNik < 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
+
+             #input ke table org_diagram_rt sebagai anggota
+            $anggotaKorTps = DB::table('anggota_koordinator_tps_korte')->where('id', $id)->first();
     
             $cby = auth()->guard('admin')->user()->id;
             //    $cby    = User::select('id')->where('user_id', $cby_id->id)->first();
@@ -3627,7 +3634,11 @@ class OrgDiagramController extends Controller
             } else {
     
                 //  cek jika reveral tidak tersedia
-                $cek_code = User::select('code', 'id')->where('code', $request->code)->first();
+                $cek_code = DB::table('org_diagram_rt as a')
+                                ->select('b.id')
+                                ->join('users as b','a.nik','=','b.nik')
+                                ->where('a.idx', $anggotaKorTps->pidx_korte)->first();
+                // $cek_code = User::select('code', 'id')->where('code', $request->code)->first();
     
                 if ($cek_code == null) {
                     return redirect()->back()->with(['error' => 'Kode Reveral yang anda gunakan tidak terdaftar']);
@@ -3701,7 +3712,7 @@ class OrgDiagramController extends Controller
                     'name'   => $user->name,
                     'base'   => 'ANGGOTA',
                     'photo'  => $user->photo ?? '',
-                    'telp'  => $request->telp,
+                    'telp'  => $request->phone_number,
                     'regency_id'  => $domisili->regency_id,
                     'district_id' => $domisili->district_id,
                     'village_id'  => $domisili->village_id,

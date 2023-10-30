@@ -91,5 +91,6 @@
     <script src="{{ asset('assets/vendor/vue/vue.js') }}"></script>
     <script src="{{ asset('assets/vendor/vuetoasted/vue-toasted.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/axios/axios.min.js') }}"></script>
-    <script src="{{ asset('js/create-anggota-org-rt.js') }}"></script>
+    <!-- <script src="{{ asset('js/create-anggota-org-rt.js') }}"></script> -->
+    <script src="{{ asset('js/create-org-rt.js') }}"></script>
 @endpush

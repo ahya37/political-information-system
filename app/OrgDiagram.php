@@ -524,11 +524,12 @@ class OrgDiagram extends Model
 
 	public function getDataAnggotaBelumterCoverKortpsByVillageAndRt($village_id, $rt){
 
-		$sql = "SELECT a.nik, a.name , b.name as desa, a.rt,
+		$sql = "SELECT a.nik, a.name , b.name as desa, a.rt, a.rw,
 				(SELECT COUNT(id) from org_diagram_rt WHERE nik = a.nik and base = 'ANGGOTA' ) as anggota 
 				from users as a 
 				join villages as b on a.village_id = b.id
-				WHERE b.id = $village_id and a.rt = $rt and (SELECT COUNT(id) from org_diagram_rt WHERE nik = a.nik ) = 0
+				-- WHERE b.id = $village_id and a.rt = $rt and (SELECT COUNT(id) from org_diagram_rt WHERE nik = a.nik ) = 0
+				WHERE b.id = $village_id and a.rt = $rt and (SELECT COUNT(id) from org_diagram_rt WHERE nik = a.nik and base = 'ANGGOTA' ) = 0
 				order by a.rt asc";
 				
 		return DB::select($sql);

@@ -274,6 +274,7 @@
                                                 value="{{ old('email') }}"
                                                 />
                                             </div>
+                                           {{-- 
                                             <div class="form-group">
                                                 <span class="required">*</span>
                                                 <label>Kode Reveral</label>
@@ -288,6 +289,7 @@
                                                     required
                                                     >
                                             </div>
+                                           --}} 
                                         <hr class="mb-4 mt-4">
                                         <div class="form-group">
                                             <span class="required">*</span>
