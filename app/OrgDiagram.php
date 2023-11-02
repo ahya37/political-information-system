@@ -533,7 +533,8 @@ class OrgDiagram extends Model
 				(SELECT COUNT(odr.id)
 					from org_diagram_rt as odr
 					join dapil_areas da2 on odr.district_id = da2.district_id
-					WHERE odr.base = 'KORRT' and odr.nik is not null and da2.dapil_id = a.id
+					join users as odruser on odr.nik = odruser.nik
+					WHERE odr.base = 'KORRT' and da2.dapil_id = a.id
 				) as korte_terisi,
 				(SELECT COUNT(tps.id) from tps join dapil_areas on tps.district_id = dapil_areas.district_id where dapil_areas.dapil_id = a.id ) tps
 				from dapils as a where a.regency_id = $regencyId and a.id = $dapilId";	
@@ -545,7 +546,7 @@ class OrgDiagram extends Model
 
 		$sql = "SELECT a.name,
 						-- (((SELECT COUNT(id) from dpt_kpu  WHERE village_id = a.id )/a.target_persentage)/25) as target_korte,
-						(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi,
+						(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id) as korte_terisi,
 						(SELECT COUNT(tps.id) from tps WHERE tps.village_id = a.id ) as tps
 						from villages as a
 						WHERE a.district_id = $districtId";	
@@ -556,11 +557,10 @@ class OrgDiagram extends Model
 	public function getCalculateDataDaftarTimKorTpsVillage($villageId){
 
 		$sql = "SELECT a.name,
-						-- ((SELECT COUNT(id) from users WHERE village_id = a.id )/25)as target_korte,
-						(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi,
-						(SELECT COUNT(tps.id) from tps WHERE tps.village_id = a.id ) as tps
-						from villages as a
-						WHERE a.id = $villageId";	
+			(SELECT COUNT(org_diagram_rt.id) from org_diagram_rt join users on org_diagram_rt.nik = users.nik where org_diagram_rt.village_id = a.id and org_diagram_rt.base = 'KORRT') as korte_terisi,
+			(SELECT COUNT(tps.id) from tps WHERE tps.village_id = a.id ) as tps
+			from villages as a
+			WHERE a.id = $villageId";	
 
 		return DB::select($sql);
 	}
@@ -632,9 +632,23 @@ class OrgDiagram extends Model
 
 	public function getKalkulasiTercoverDapil($dapilId){
 
+		// $sql = "SELECT COUNT(a.id) as tercover,
+		// 	(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on 
+		// 	a2.district_id = a3.id join dapil_areas as a4 on a4.district_id = a3.id where a4.dapil_id = $dapilId) as anggota
+		// 	from org_diagram_rt as a
+		// 	join users as b on a.nik = b.nik
+		// 	join dapil_areas as c on a.district_id = c.district_id
+		// 	where a.base ='ANGGOTA'  and c.dapil_id = $dapilId";
+
 		$sql = "SELECT COUNT(a.id) as tercover,
-			(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on 
-			a2.district_id = a3.id join dapil_areas as a4 on a4.district_id = a3.id where a4.dapil_id = $dapilId) as anggota
+			(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on a2.district_id = a3.id join dapil_areas as a4 on a4.district_id = a3.id where a4.dapil_id = $dapilId) as anggota,
+			(
+				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on a2.district_id = a3.id join dapil_areas as a4 on a4.district_id = a3.id where a4.dapil_id =  $dapilId) -
+				COUNT(a.id) -
+				(SELECT COUNT(a5.nik) from org_diagram_village as a5 join users as a6 on a5.nik = a6.nik join dapil_areas as a7 on a5.district_id = a7.district_id where a7.dapil_id = $dapilId) -
+				(SELECT COUNT(a8.nik) from org_diagram_district as a8 join users as a9 on a8.nik = a9.nik join dapil_areas as a10 on a8.district_id = a10.district_id where a10.dapil_id = $dapilId) -
+				(SELECT COUNT(a11.nik) from org_diagram_rt as a11 join users as a12 on a11.nik = a12.nik join dapil_areas as a13 on a13.district_id  = a11.district_id WHERE a13.dapil_id = $dapilId and a11.base = 'KORRT')
+			)as fix_anggota_belum_tercover
 			from org_diagram_rt as a
 			join users as b on a.nik = b.nik
 			join dapil_areas as c on a.district_id = c.district_id
@@ -645,35 +659,73 @@ class OrgDiagram extends Model
 
 	public function getKalkulasiTercoverDistrict($districtId){
 
+		// $sql = "SELECT COUNT(a.id) as tercover,
+		// 		(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on 
+		// 		a2.district_id = a3.id where a3.id = $districtId) as anggota
+		// 		from org_diagram_rt as a
+		// 		join users as b on a.nik = b.nik
+		// 		join districts as c on a.district_id = c.id
+		// 		where a.base ='ANGGOTA'  and a.district_id = $districtId";
 		$sql = "SELECT COUNT(a.id) as tercover,
-				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on 
-				a2.district_id = a3.id where a3.id = $districtId) as anggota
-				from org_diagram_rt as a
-				join users as b on a.nik = b.nik
-				join districts as c on a.district_id = c.id
-				where a.base ='ANGGOTA'  and a.district_id = $districtId";
+			(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on a2.district_id = a3.id where a3.id = $districtId) as anggota,
+			(
+				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on a2.district_id = a3.id where a3.id = $districtId) - 
+				COUNT(a.id) -
+				(SELECT COUNT(a4.nik) from org_diagram_village as a4 join users as a5 on a4.nik = a5.nik where a4.district_id = $districtId) -
+				(SELECT COUNT(a6.nik) from org_diagram_district as a6 join users as a7 on a6.nik = a7.nik where a6.district_id = $districtId) -
+				(SELECT COUNT(a8.nik) from org_diagram_rt as a8 join users as a9 on a8.nik = a9.nik WHERE a8.district_id = $districtId and a8.base = 'KORRT')
+			) as fix_anggota_belum_tercover
+			from org_diagram_rt as a
+			join users as b on a.nik = b.nik
+			join districts as c on a.district_id = c.id
+			where a.base ='ANGGOTA'  and a.district_id = $districtId";
         
         return collect(DB::select($sql))->first();
 	}
 
 	public function getKalkulasiTercoverVillage($villageId){
 
+		// $sql = "SELECT COUNT(a.id) as tercover,
+		// 		(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId) as anggota
+		// 		from org_diagram_rt as a
+		// 		join users as b on a.nik = b.nik
+		// 		where a.base ='ANGGOTA'  and a.village_id = $villageId";
+
 		$sql = "SELECT COUNT(a.id) as tercover,
-				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId) as anggota
-				from org_diagram_rt as a
-				join users as b on a.nik = b.nik
-				where a.base ='ANGGOTA'  and a.village_id = $villageId";
-        
-        return collect(DB::select($sql))->first();
+			(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId) as anggota,
+			(
+				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId) - 
+				COUNT(a.id) - 
+				(SELECT COUNT(a3.nik) from org_diagram_village as a3 join users as a4 on a3.nik = a4.nik where a3.village_id = $villageId) - 
+				(SELECT COUNT(a5.nik) from org_diagram_rt as a5 join users as a6 on a5.nik = a6.nik where a5.village_id = $villageId and a5.base = 'KORRT') -
+				(SELECT COUNT(a7.nik) from org_diagram_district as a7 join users as a8 on a7.nik = a8.nik join villages as a9 on a8.village_id = a9.id WHERE a9.id = $villageId)
+			) as fix_anggota_belum_tercover
+			from org_diagram_rt as a
+			join users as b on a.nik = b.nik
+			where a.base ='ANGGOTA'  and a.village_id = $villageId";
+			        
+        	return collect(DB::select($sql))->first();
 	}
 
 	public function getKalkulasiTercoverRt($villageId, $rt){
 
+		// $sql = "SELECT COUNT(a.id) as tercover,
+		// 		(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId and a1.rt = $rt) as anggota
+		// 		from org_diagram_rt as a
+		// 		join users as b on a.nik = b.nik
+		// 		where a.base ='ANGGOTA'  and b.village_id = $villageId and a.rt = $rt";
+
 		$sql = "SELECT COUNT(a.id) as tercover,
-				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId and a1.rt = $rt) as anggota
-				from org_diagram_rt as a
-				join users as b on a.nik = b.nik
-				where a.base ='ANGGOTA'  and b.village_id = $villageId and a.rt = $rt";
+			(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId and a1.rt = $rt) as anggota,
+			(
+				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId and a1.rt = $rt) - 
+				COUNT(a.id) - 
+				(SELECT COUNT(a3.nik) from org_diagram_rt as a3 join users as a4 on a3.nik = a4.nik WHERE a3.village_id = $villageId and a3.rt = $rt and a3.base = 'KORRT') -
+				(SELECT COUNT(a5.nik) from org_diagram_village as a5 join users as a6 on a5.nik = a6.nik WHERE a5.village_id = $villageId)
+			) as fix_anggota_belum_tercover
+			from org_diagram_rt as a
+			join users as b on a.nik = b.nik
+			where a.base ='ANGGOTA' and b.village_id = $villageId and a.rt = $rt";
         
         return collect(DB::select($sql))->first();
 	}

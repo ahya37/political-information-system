@@ -103,9 +103,6 @@ async function initialGetAnggotaCoverFirst() {
         selectRT
     );
 
-    console.log('data cover ', dataCover.data.tercover);
-
-
     $("#jmldpt").text(`${dataCover.jml_dpt}`);
     $("#targetanggota").text(`${dataCover.target_anggota}`);
     $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
@@ -230,9 +227,7 @@ $("#selectListArea").change(async function () {
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover =
-            parseInt(dataCover.data.anggota) -
-            parseInt(dataCover.data.tercover);
+        blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         // jumlah kortps dan kurangnya
@@ -287,11 +282,9 @@ $("#selectListArea").change(async function () {
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover =
-            parseInt(dataCover.data.anggota) -
-            parseInt(dataCover.data.tercover);
+        blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
-
+ 
         // jumlah kortps dan kurangnya
         const dataKortps = await initialGetKortps(
             selectListArea,
@@ -368,9 +361,11 @@ $("#selectDistrictId").change(async function () {
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover =
-            parseInt(dataCover.data.anggota) -
-            parseInt(dataCover.data.tercover);
+        // blmTerCover =
+        //     parseInt(dataCover.data.anggota) -
+        //     parseInt(dataCover.data.tercover);
+        blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
+
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         // jumlah kortps dan kurangnya
@@ -427,9 +422,8 @@ $("#selectDistrictId").change(async function () {
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover =
-            parseInt(dataCover.data.anggota) -
-            parseInt(dataCover.data.tercover);
+        blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
+
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         // jumlah kortps dan kurangnya
@@ -545,9 +539,8 @@ $("#selectVillageId").change(async function () {
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover =
-            parseInt(dataCover.data.anggota) -
-            parseInt(dataCover.data.tercover);
+        // blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+        blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         // jumlah kortps dan kurangnya
@@ -611,9 +604,8 @@ $("#selectVillageId").change(async function () {
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
-        blmTerCover =
-            parseInt(dataCover.data.anggota) -
-            parseInt(dataCover.data.tercover);
+        blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
+
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         // jumlah kortps dan kurangnya
@@ -674,9 +666,7 @@ $("#selectRt").change(async function () {
        
         $('.pengurus').hide();
 
-        blmTerCover =
-            parseInt(dataCover.data.anggota) -
-            parseInt(dataCover.data.tercover);
+       blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     } else {
         selectListArea = $("#selectListArea").val();
@@ -716,9 +706,7 @@ $("#selectRt").change(async function () {
         
         $('.pengurus').show();
 
-        blmTerCover =
-            parseInt(dataCover.data.anggota) -
-            parseInt(dataCover.data.tercover);
+        blmTerCover   = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     }
 });
@@ -758,9 +746,8 @@ $("#selectTps").change(async function () {
 
         $('.pengurus').hide();
 
-        blmTerCover =
-            parseInt(dataCover.data.anggota) -
-            parseInt(dataCover.data.tercover);
+        blmTerCover   = dataCover.data.fix_anggota_belum_tercover;
+
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     } else {
         selectListArea = $("#selectListArea").val();
@@ -799,9 +786,7 @@ $("#selectTps").change(async function () {
         
         $('.pengurus').show();
 
-        blmTerCover =
-            parseInt(dataCover.data.anggota) -
-            parseInt(dataCover.data.tercover);
+        blmTerCover   = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     }
 });
