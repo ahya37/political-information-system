@@ -4174,6 +4174,39 @@ class OrgDiagramController extends Controller
 
     }
 
+    public function updateNoTelpKortps()
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+            $telp  = request()->telp;
+
+            #update org
+            $org = DB::table('org_diagram_rt')->where('id', $id)->first();
+
+            DB::table('users')->where('nik', $org->nik)->update([
+                'phone_number' => $telp
+            ]);
+
+            DB::table('org_diagram_rt')->where('id', $id)->update([
+                'telp' => $telp
+            ]);
+
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil ubah no.telp!'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
 
 
 }

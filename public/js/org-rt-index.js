@@ -587,6 +587,15 @@ let table = $("#data").DataTable({
                                 <a href='/admin/struktur/list/sticker/${row.idx}' class="dropdown-item ">
                                 Daftar Stiker
                                 </a>
+                                <a href='/admin/struktur/rt/edittps/${row.id}' class="dropdown-item ">
+                                Edit TPS
+                                </a>
+                                <button type="button" data-toggle="modal" onclick="updateNoTelpKorTps(this)" data-name="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm">
+                                Edit No.Telp
+                                </button>
+                                <a href='/admin/struktur/rt/edit/${row.id}' class="dropdown-item ">
+                                Edit
+                                </a>
                                 <a href='/admin/struktur/rt/detail/anggota/download/excel/${row.idx}' class="dropdown-item ">
                                 Download Anggota Excel
                                 </a>
@@ -602,13 +611,7 @@ let table = $("#data").DataTable({
 								<a href='/admin/struktur/rt/detail/anggota/tpsttimpemenangan/download/pdf/${row.idx}' class="dropdown-item ">
                                 Download Surat Undangan
                                 </a>
-                                <a href='/admin/struktur/rt/edittps/${row.id}' class="dropdown-item ">
-                                Edit TPS
-                                </a>
-                                <a href='/admin/struktur/rt/edit/${row.id}' class="dropdown-item ">
-                                Edit
-                                </a>
-                                <button type="button" data-toggle="modal" onclick="onDelete(this)" data-name="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm btn-danger text-danger">
+                                <button type="button" onclick="onDelete(this)" data-name="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm btn-danger text-danger">
                                 Hapus
                                 </button>
                             </div>
@@ -618,6 +621,61 @@ let table = $("#data").DataTable({
         },
     ],
 });
+
+async function updateNoTelpKorTps(data){
+    const name = data.getAttribute("data-name");
+    const id = data.getAttribute("data-id");
+
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    const { value: telp } = await Swal.fire({
+        title: `Edit No.Telp ${name}`,
+        input: 'number',
+        inputPlaceholder: 'No.Telp',
+        focusConfirm: false,
+        showCancelButton: true,
+        cancelButtonText: "Batal",
+        confirmButtonText: "Simpan",
+        timerProgressBar: true,
+    })
+
+    if (telp) {
+        $.ajax({
+            url: "/api/org/kortps/updatenotelp",
+            method: "POST",
+            cache: false,
+            data: {
+                id: id,
+                telp: telp,
+                _token: CSRF_TOKEN,
+            },
+            success: function (data) {
+                console.log('data :', data);
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: `${data.data.message}`,
+                    showConfirmButton: false,
+                    width: 500,
+                    timer: 900,
+                },
+                );
+                const table = $("#data").DataTable();
+                table.ajax.reload();
+            },
+            error: function (error) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: `${error.responseJSON.data.message}`,
+                    showConfirmButton: false,
+                    width: 500,
+                    timer: 1000,
+                });
+            },
+        });
+    }
+    
+}
 
 
 $('#exampleModal').on('show.bs.modal', function (event) {

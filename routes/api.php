@@ -459,3 +459,6 @@ Route::post('/tim/calculate', 'Admin\OrgDiagramController@countMemberNotCover');
 Route::post('/migrasi/kortps', 'Admin\OrgDiagramController@migrasiDataFormKorTpsToOrgDiagramKorRt');
 
 // algoritma 2, tidak melakukan replace, hanya migrasikan data yg belum mempunyai kortps saja
+
+// update no.telp kortps
+Route::post('org/kortps/updatenotelp', 'Admin\OrgDiagramController@updateNoTelpKortps');
