@@ -139,7 +139,7 @@ class OrgDiagramController extends Controller
             
         }else{
 
-            $results = $orgDiagram->getKalkulasiTercoverAll();
+            $results = $orgDiagram->getKalkulasiTercoverAll($regency);
 
             #proses hitung target
             $dataTim      = $orgDiagram->getDataDaftarTimByRegency($regency);
@@ -3047,7 +3047,65 @@ class OrgDiagramController extends Controller
             // total kekurangan korte
             $pdf = PDF::LoadView('pages.report.korteandrincian', compact('village', 'results', 'no', 'kordes'))->setPaper('a4');
             return $pdf->download('TIM KORDES DAN KORTE DESA ' . $village->name . '.pdf');
-        } elseif ($request->report_type == 'Download Surat Undangan Korte Per Desa PDF') {
+
+        }elseif($request->report_type == 'Download Surat Undangan Kor TPS Per Desa PDF'){
+
+            //id dapil 1 = 8
+            //id dapil 4 = 11
+            //id dapil 5 = 12
+            $district_id = $request->district_id;
+            $district = DB::table('districts')->select('name')->where('id', $district_id)->first();
+            if($district_id == 3602170){ // jika kec. cibadak
+                     $jam = '13:00 WIB s/d 16:00 WIB';
+                     $lokasi = "SEKERTARIAT JARINGAN DULUR AAW - RANGKASBITUNG";
+                     $hari = "Jum'at, 03 November 2023";
+                     $lok_surat = 'RANGKASBITUNG';
+                     $alamat    = 'Jl. Kapugeran No.22, RT 002 / RW 002, Kelurahan Rangkasbitung Barat, Kec.Rangkasbitung';
+
+                    $fileName = 'SURAT UNDANGAN TIM KORCAM KORDES KORTPS KEC. ' . $district->name . '.pdf';
+
+
+                }elseif($district_id == 3602181){ // kalanganyar
+                     $jam = '08:30 WIB s/d 12:00 WIB';
+                     $lokasi = "SEKERTARIAT JARINGAN DULUR AAW - RANGKASBITUNG";
+                     $hari = "Sabtu, 04 November 2023"; 
+                     $lok_surat = 'RANGKASBITUNG';
+                     $alamat    = 'Jl. Kapugeran No.22, RT 002 / RW 002, Kelurahan Rangkasbitung Barat, Kec.Rangkasbitung';
+
+                    $fileName = 'SURAT UNDANGAN TIM KORCAM KORDES KORTPS KEC. ' . $district->name . '.pdf'; 
+
+                }elseif($district_id == 3602160){ // warunggunung
+                     $jam = '08:30 WIB s/d 11:30 WIB';
+                     $lokasi = "SEKERTARIAT JARINGAN DULUR AAW - RANGKASBITUNG";
+                     $hari = "Sabtu, 04 November 2023";
+                     $lok_surat = 'RANGKASBITUNG';
+                     $alamat    = 'Jl. Kapugeran No.22, RT 002 / RW 002, Kelurahan Rangkasbitung Barat, Kec.Rangkasbitung';
+
+                    $fileName = 'SURAT UNDANGAN TIM KORCAM KORDES KORTPS KEC. ' . $district->name . '.pdf';
+                    
+                }
+                elseif($district_id == 3602180){ // rksbitung
+                     $jam = '13:00 WIB s/d 16:00 WIB';
+                     $lokasi = "SEKERTARIAT JARINGAN DULUR AAW - RANGKASBITUNG";
+                     $hari = "Sabtu, 04 November 2023";
+                     $lok_surat = 'RANGKASBITUNG';
+                     $alamat    = 'Jl. Kapugeran No.22, RT 002 / RW 002, Kelurahan Rangkasbitung Barat, Kec.Rangkasbitung';
+
+                    $fileName = 'SURAT UNDANGAN TIM KORCAM KORDES KORTPS KEC. ' . $district->name . '.pdf';
+                    
+                }else{
+
+                    return 'PILIH DESA';
+
+            }
+
+            $pdf  = PDF::LoadView('pages.report.suratundangankorcamkordeskortps', compact('jam', 'lokasi', 'hari', 'lok_surat','alamat'))->setPaper('a4');
+                    return $pdf->download('SURAT UNDANGAN TIM KORTPS KEC. ' . $district->name . '.pdf');
+            
+
+
+
+        }elseif ($request->report_type == 'Download Surat Undangan Korte Per Desa PDF') {
 
             $jam = '07:30 WIB s/d 11:30 WIB';
             $lokasi = "SEKERTARIAT JARINGAN DULUR AAW - BINUANGEN";
@@ -3476,7 +3534,7 @@ class OrgDiagramController extends Controller
             $createZip = public_path('/docs/suratundangan/korcam/pdf/SURAT UNDANGAN TIM KORCAM KEC.' . $district->name . '.zip');
             Zipper::make(public_path($createZip))->add($files)->close();
 
-            return response()->download(public_path($createZip));
+            return response()->download(public_path($createZip)); 
         } else {
 
             $district = DB::table('districts')->select('name')->where('id', $district_id)->first();
@@ -3581,7 +3639,7 @@ class OrgDiagramController extends Controller
                     ->where('a.village_id', $village_id)
                     ->where('a.nik', $val->nik)
                     ->first();
-
+  
                 $korte = $kordesItem;
 
                 $fileName = 'SURAT PERNYATAAN TIM KORDES . ' . $kordesItem->name . '.pdf';
