@@ -4187,7 +4187,8 @@ class OrgDiagramController extends Controller
             $org = DB::table('org_diagram_rt')->where('id', $id)->first();
 
             DB::table('users')->where('nik', $org->nik)->update([
-                'phone_number' => $telp
+                'phone_number' => $telp,
+                'whatsapp' => $telp
             ]);
 
             DB::table('org_diagram_rt')->where('id', $id)->update([

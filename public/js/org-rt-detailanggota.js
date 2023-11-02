@@ -122,6 +122,9 @@ let table = $("#data").DataTable({
                 // <a href="/admin/member/edit/referal/${row.id}" class="btn btn-sm btn-info text-white">Edit Referal</a>
                 return `
                         <a href="/admin/struktur/rt/edit/anggota/${row.id}" class="btn btn-sm btn-info text-white">Edit</a>
+                        <button type="button" onclick="updateNoTelpKorTps(this)" data-name="${row.name}" data-id="${row.id}" class="btn btn-sm btn-info">
+                        Edit No.Telp
+                        </button>
                         <a href="/admin/struktur/rt/edittps/anggota/${row.user_id}" class="btn btn-sm btn-warning">Edit TPS</a>
                         <button class="btn btn-sm btn-sc-primary text-white" data-name="${row.name}" data-whatever="${row.id}" data-toggle="modal" data-target="#exampleModal">Stiker</button>
                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>`;
@@ -129,6 +132,61 @@ let table = $("#data").DataTable({
         },
     ],
 });
+
+async function updateNoTelpKorTps(data){
+    const name = data.getAttribute("data-name");
+    const id = data.getAttribute("data-id");
+
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    const { value: telp } = await Swal.fire({
+        title: `Edit No.Telp ${name}`,
+        input: 'number',
+        inputPlaceholder: 'No.Telp',
+        focusConfirm: false,
+        showCancelButton: true,
+        cancelButtonText: "Batal",
+        confirmButtonText: "Simpan",
+        timerProgressBar: true,
+    })
+
+    if (telp) {
+        $.ajax({
+            url: "/api/org/kortps/updatenotelp",
+            method: "POST",
+            cache: false,
+            data: {
+                id: id,
+                telp: telp,
+                _token: CSRF_TOKEN,
+            },
+            success: function (data) {
+                console.log('data :', data);
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: `${data.data.message}`,
+                    showConfirmButton: false,
+                    width: 500,
+                    timer: 900,
+                },
+                );
+                const table = $("#data").DataTable();
+                table.ajax.reload();
+            },
+            error: function (error) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: `${error.responseJSON.data.message}`,
+                    showConfirmButton: false,
+                    width: 500,
+                    timer: 1000,
+                });
+            },
+        });
+    }
+    
+}
 
 $("#exampleModal").on("show.bs.modal", function (event) {
     var button = $(event.relatedTarget);

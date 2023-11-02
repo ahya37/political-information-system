@@ -590,7 +590,7 @@ let table = $("#data").DataTable({
                                 <a href='/admin/struktur/rt/edittps/${row.id}' class="dropdown-item ">
                                 Edit TPS
                                 </a>
-                                <button type="button" data-toggle="modal" onclick="updateNoTelpKorTps(this)" data-name="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm">
+                                <button type="button" onclick="updateNoTelpKorTps(this)" data-name="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm">
                                 Edit No.Telp
                                 </button>
                                 <a href='/admin/struktur/rt/edit/${row.id}' class="dropdown-item ">
