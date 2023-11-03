@@ -93,7 +93,7 @@
                                                 <td align="center">{{ $gF->decimalFormat($item->korte_terisi) }}</td>
                                                 <td align="center">{{ $nilai_kurang_korte }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->anggota_tercover_kortps) }}</td>
-                                                <td align="center">{{ $gF->decimalFormat($item->anggota - $item->anggota_tercover_kortps) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->belum_ada_korte) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->saksi) }}</td>
                                             </tr>
                                         @endforeach
@@ -112,9 +112,9 @@
                                         <td align="center"><b>{{ $gF->persenDpt($persentage_target) }}</b></td>
                                         <td align="center"><b>{{ $gF->persenDpt($persen_dari_target_kec) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_tps) }}</b></td>
-                                        <td align="center"><b>{{ $gF->decimalFormat($jml_target_korte) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_target /25) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_korte_terisi) }}</b></td>
-                                        <td align="center"><b>{{ $gF->decimalFormat($jml_kurang_korte) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($kortps_plus_minus) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_anggota_tercover) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_blm_ada_korte) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_saksi) }}</b></td>

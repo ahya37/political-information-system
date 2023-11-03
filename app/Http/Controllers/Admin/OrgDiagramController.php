@@ -3285,6 +3285,8 @@ class OrgDiagramController extends Controller
                 ->where('a.base', 'KORRT')
                 ->groupBy('a.idx','a.name', 'a.title', 'a.rt', 'b.gender', 'a.telp', 'b.address','c.tps_number','b.id')
                 ->havingRaw('(select count(nik) from anggota_koordinator_tps_korte where pidx_korte = a.idx) = 0')
+                ->havingRaw('(select count(nik) from org_diagram_rt where pidx = a.idx) = 0')
+                ->havingRaw('(select count(b1.id) from users as b1 where b1.user_id = b.id and b1.village_id is not null) = 0')
                 ->orderBy('c.tps_number', 'asc')
                 ->get();
 
@@ -4153,7 +4155,9 @@ class OrgDiagramController extends Controller
             return $q->korte_terisi;
         });
 
-        $jml_anggota_tercover = $jml_korte_terisi * 25;
+        $jml_anggota_tercover = collect($data)->sum(function($q){
+            return $q->anggota_tercover_kortps;
+        });
         $jml_kurang_korte     = $jml_korte_terisi - $jml_target_korte;
         // $jml_blm_ada_korte    = collect($data)->sum(function($q){
         //     return $q->belum_ada_korte;
@@ -4197,6 +4201,7 @@ class OrgDiagramController extends Controller
         $orgDiagramModel = new OrgDiagram();
         #get data desa by kecamatan
         $data = $orgDiagramModel->getDataDaftarTimByKecamatan($districtId);
+        // dd($data);
         
         $jml_ketua = collect($data)->sum(function($q){
             return $q->ketua;
@@ -4222,18 +4227,23 @@ class OrgDiagramController extends Controller
             return $q->korte_terisi;
         });
 
-        $jml_anggota_tercover = $jml_korte_terisi * 25;
+        $jml_anggota_tercover = collect($data)->sum(function($q){
+            return $q->anggota_tercover_kortps;
+        });
         $jml_kurang_korte     = $jml_korte_terisi - $jml_target_korte;
         // $jml_blm_ada_korte    = collect($data)->sum(function($q){
         //     return $q->belum_ada_korte;
         // });
-        $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
+        $tmp_blm_ada_korte = collect($data)->sum(function($q){
+            return $q->belum_ada_korte;
+        });
         $jml_blm_ada_korte = $tmp_blm_ada_korte;
-        if ($jml_blm_ada_korte == - 0) {
-            $jml_blm_ada_korte = 0;
-        }elseif ($jml_blm_ada_korte > 0) {
-            $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
-        }
+
+        // if ($jml_blm_ada_korte == - 0) {
+        //     $jml_blm_ada_korte = 0;
+        // }elseif ($jml_blm_ada_korte > 0) {
+        //     $jml_blm_ada_korte = '+'.$gF->decimalFormat($jml_blm_ada_korte);
+        // }
 
         $jml_saksi            = collect($data)->sum(function($q){
             return $q->saksi;
@@ -4246,7 +4256,10 @@ class OrgDiagramController extends Controller
         $persen_dari_target_kec = $jml_target > 0 ? ($jml_anggota/$jml_target)*100 : 0;
         $no = 1;
 
-        return view('pages.admin.strukturorg.rt.daftartim.village', compact('jml_tps','persen_dari_target_kec','gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi'));
+        $kortps_plus_minus = $jml_target_korte -  $jml_korte_terisi;
+        // dd($kortps_plus_minus);
+
+        return view('pages.admin.strukturorg.rt.daftartim.village', compact('jml_tps','persen_dari_target_kec','gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi','kortps_plus_minus'));
     }
 
     public function deleteDataAnggotaByKortpsForFamillyGroup(){

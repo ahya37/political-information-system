@@ -396,29 +396,50 @@ class OrgDiagram extends Model
 	public function getDataDaftarTimByKecamatan($districtId){
 
 		#get data desa by kecamatan
-        $sql = "SELECT a.id, a.name, a.target_persentage ,
-                (select COUNT(id)  from org_diagram_village where title = 'KETUA' and village_id = a.id) as ketua,
-                (select COUNT(id)  from org_diagram_village where title = 'SEKRETARIS' and village_id = a.id) as sekretaris,
-                (select COUNT(id)  from org_diagram_village where title = 'BENDAHARA' and village_id = a.id) as bendahara,
-                (SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id ) as dpt,
-                (SELECT COUNT(id) from users WHERE village_id = a.id ) as anggota,
-                ((SELECT COUNT(id) from users WHERE village_id = a.id )/25)as target_korte,
-                (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi,
-                -- ((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )*25) anggota_tercover,
-                -- ((CEIL ((SELECT COUNT(id) from users WHERE village_id = a.id )/25))-(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )) as kurang_korte,
-                ((SELECT COUNT(id) from users WHERE village_id = a.id )-((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )*25)) as belum_ada_korte,
-                -- ((SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id )*(SELECT target_persentage from villages where id = a.id)/100) as target,
-				(SELECT COUNT(id) from witnesses WHERE village_id = a.id ) as saksi,
-				(SELECT COUNT(*) from tps WHERE tps.village_id = a.id) tps,
-				(
-					SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik
-					where da4.base = 'ANGGOTA' and da4.village_id = a.id
-				) as anggota_tercover_kortps
-                from villages as a
-                WHERE a.district_id = $districtId order by (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) desc";
-        
-        return DB::select($sql); 
+        // $sql = "SELECT a.id, a.name, a.target_persentage ,
+        //         (select COUNT(id)  from org_diagram_village where title = 'KETUA' and village_id = a.id) as ketua,
+        //         (select COUNT(id)  from org_diagram_village where title = 'SEKRETARIS' and village_id = a.id) as sekretaris,
+        //         (select COUNT(id)  from org_diagram_village where title = 'BENDAHARA' and village_id = a.id) as bendahara,
+        //         (SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id ) as dpt,
+        //         (SELECT COUNT(id) from users WHERE village_id = a.id ) as anggota,
+        //         ((SELECT COUNT(id) from users WHERE village_id = a.id )/25)as target_korte,
+        //         (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi,
+        //         -- ((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )*25) anggota_tercover,
+        //         -- ((CEIL ((SELECT COUNT(id) from users WHERE village_id = a.id )/25))-(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )) as kurang_korte,
+        //         ((SELECT COUNT(id) from users WHERE village_id = a.id )-((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null )*25)) as belum_ada_korte,
+        //         -- ((SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id )*(SELECT target_persentage from villages where id = a.id)/100) as target,
+	// 			(SELECT COUNT(id) from witnesses WHERE village_id = a.id ) as saksi,
+	// 			(SELECT COUNT(*) from tps WHERE tps.village_id = a.id) tps,
+	// 			(
+	// 				SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik
+	// 				where da4.base = 'ANGGOTA' and da4.village_id = a.id
+	// 			) as anggota_tercover_kortps
+        //         from villages as a
+        //         WHERE a.district_id = $districtId order by (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) desc";
+	$sql = "SELECT a.id, a.name, a.target_persentage ,
+		(select COUNT(id)  from org_diagram_village where title = 'KETUA' and village_id = a.id) as ketua,
+		(select COUNT(id)  from org_diagram_village where title = 'SEKRETARIS' and village_id = a.id) as sekretaris,
+		(select COUNT(id)  from org_diagram_village where title = 'BENDAHARA' and village_id = a.id) as bendahara,
+		(SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id ) as dpt,
+		(SELECT COUNT(id) from users WHERE village_id = a.id) as anggota,
+		((SELECT COUNT(id) from users WHERE village_id = a.id )/25)as target_korte,
+		(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi,
+		(SELECT COUNT(id) from witnesses WHERE village_id = a.id ) as saksi,
+		(SELECT COUNT(*) from tps WHERE tps.village_id = a.id) tps,
+		(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'ANGGOTA' and da4.village_id = a.id) as anggota_tercover_kortps,
+		(
+			(SELECT COUNT(id) from users WHERE village_id = a.id) - 
+			(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'ANGGOTA' and da4.village_id = a.id) - 
+			(SELECT COUNT(a3.nik) from org_diagram_village as a2 join users as a3 on a2.nik = a3.nik WHERE a2.village_id = a.id) -
+			(SELECT COUNT(a4.nik) from org_diagram_district as a4 join users as a5 on a4.nik = a5.nik WHERE a5.village_id = a.id) -
+			(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'KORRT' and da4.village_id = a.id)
+		) as belum_ada_korte
+		from villages as a
+		WHERE a.district_id = $districtId";
+         
+        	return DB::select($sql); 
 	}
+
 
 	public function getDataDaftarTimByVillage($village_id){
 
