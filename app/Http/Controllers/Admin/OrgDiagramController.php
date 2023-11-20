@@ -3861,6 +3861,62 @@ class OrgDiagramController extends Controller
 
     }
 
+    public function updateOnlyNikDataFormKoordinatorTps(Request $request){
+
+        $request->validate([
+            'id' => 'required',
+            'nik' => 'required',
+        ]);
+
+        $anggota = DB::table('anggota_koordinator_tps_korte')->where('id', $request->id)->first();
+
+        $cekLengthNik = strlen($request->nik);
+        if ($cekLengthNik < 16) return redirect()->back()->with(['error' => 'NIK harus 16 angka, cek kembali NIK tersebut!']);
+
+        // cek data di tbl users
+        $user = DB::table('users')->select('nik','name')->where('nik', $request->nik)->first();
+        if ($user == null) {
+            // dd('tidak ada');
+             #hitung panjang nik, harus 16
+            
+            DB::table('anggota_koordinator_tps_korte')->where('id', $request->id)->update([
+                'nik' => $request->nik,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_by' => auth()->guard('admin')->user()->id
+
+            ]);
+
+        }else{
+
+            DB::table('anggota_koordinator_tps_korte')->where('id', $request->id)->update([
+                'nik' => $user->nik,
+                'name' => $user->name,
+                'tps_id' => $user->tps_id ?? null,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_by' => auth()->guard('admin')->user()->id
+
+            ]);
+        }
+
+        // DB::table('anggota_koordinator_tps_korte')->where('id', $request->id)->delete();
+        return redirect()->back()->with(['success' => 'Data berhasil diubah!']);
+
+        // $cek     = $anggota->first();
+
+        // if($cek->created_by == auth()->guard('admin')->user()->id){
+        //     $anggota->delete();
+
+        //     return redirect()->back()->with(['success' => 'Data berhasil dihapus!']);
+
+        // }else{
+
+        //     return redirect()->back()->with(['warning' => 'Gagal, Anda tidak punya akses!']);
+
+        // }
+
+
+    }
+
     public function downloadAnggotaKorTpsPdf(Request $request)
     {
 

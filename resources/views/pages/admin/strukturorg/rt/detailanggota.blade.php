@@ -178,11 +178,13 @@
                                                 </td>
                                                 <td>{{ $item->nik }}</td>
                                                 <td>
-                                                    <button class="btn btn-sm btn-danger" data-name="{{ $item->name }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-trash"></i></button>
                                                     
                                                     @if($item->photo == null)
-                                                            <a href="{{ route('admin-kortps-create-new-anggota', $item->id) }}" class="btn btn-sm btn-info">Jadikan Anggota</a> 
+                                                    <button class="btn btn-sm btn-info" data-name="{{ $item->name }}" data-nik="{{ $item->nik }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#editNik">Edit NIK</button>
+                                                            <a href="{{ route('admin-kortps-create-new-anggota', $item->id) }}" class="btn btn-sm btn-info">Jadikan Anggota</a>
                                                     @endif
+                                                    <button class="btn btn-sm btn-danger" data-name="{{ $item->name }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-trash"></i></button>
+
                                                     
                                                 </td>
                                             </tr>
@@ -291,6 +293,39 @@
                         </div>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editNik" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Edit NIK</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin-koordinatortpskorte-nik-update') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group">
+                           <label class="text-danger">Harap teliti saat mengetik NIK !</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="id" class="form-control" id="recipient-name2">
+                            <input type="number" name="nik" class="form-control" id="recipient-nik">
+                        </div>
+                       
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-sc-primary text-white">Ubah</button>
+                </div>
+                </form>
+
             </div>
         </div>
     </div>

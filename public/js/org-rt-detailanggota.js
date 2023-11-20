@@ -206,6 +206,18 @@ $("#exampleModal2").on("show.bs.modal", function (event) {
     modal.find("#recipient-name2").val(recipient);
 });
 
+$("#editNik").on("show.bs.modal", function (event) {
+    var button = $(event.relatedTarget);
+    var recipient = button.data("whatever");
+    var name = button.data("name");
+    var nik = button.data("nik");
+    var modal = $(this);
+    modal.find(".modal-title").text("Edit NIK " + name + "?");
+    modal.find("#recipient-name2").val(recipient);
+    modal.find("#recipient-nik").val(nik);
+
+});
+
 async function onDelete(data) {
     const id = data.id;
     const name = data.getAttribute("data-name");
