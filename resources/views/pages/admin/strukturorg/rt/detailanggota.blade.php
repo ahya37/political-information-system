@@ -159,6 +159,17 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($anggotaKorTps as $item)
+                                        @php
+                                        $class = '';
+                                        $btnDelete = 'btn btn-sm btn-danger';
+                                        if ($item->is_cover == 1 && $item->notmyanggota == 1) {
+                                            $class = 'bg-success text-white';
+                                        }else{
+                                            $class = 'bg-danger text-white';
+                                            $btnDelete = 'btn btn-sm btn-warning text-white';
+
+                                        }
+                                        @endphp
                                             {{-- <tr class="{{ $item->is_cover == 1 ? 'bg-success text-white' : '' }}">
                                                 <td>{{ $no++ }}</td>
                                                 <td>
@@ -169,7 +180,7 @@
                                                 <td>{{ $item->nik }}</td>
                                                 <td><button class="btn btn-sm btn-danger" data-name="{{ $item->name }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-trash"></i></button></td>
                                             </tr> --}}
-                                            <tr class="{{ $item->is_cover == 1 ? 'bg-success text-white' : '' }}">
+                                            <tr class="{{ $class }}">
                                                 <td>{{ $no++ }}</td>
                                                 <td>
                                                     <p><img class="rounded" width="40"
@@ -183,7 +194,7 @@
                                                     <button class="btn btn-sm btn-info" data-name="{{ $item->name }}" data-nik="{{ $item->nik }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#editNik">Edit NIK</button>
                                                             <a href="{{ route('admin-kortps-create-new-anggota', $item->id) }}" class="btn btn-sm btn-info">Jadikan Anggota</a>
                                                     @endif
-                                                    <button class="btn btn-sm btn-danger" data-name="{{ $item->name }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-trash"></i></button>
+                                                    <button class="{{$btnDelete}}" data-name="{{ $item->name }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-trash"></i></button>
 
                                                     
                                                 </td>
