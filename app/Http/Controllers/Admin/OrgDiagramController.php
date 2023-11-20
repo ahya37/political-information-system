@@ -1952,15 +1952,17 @@ class OrgDiagramController extends Controller
     {
 
         // DATATABLE
-        $orderBy = 'a.name';
+        $orderBy = 'b.name';
         switch ($request->input('order.0.column')) {
             case '1':
-                $orderBy = 'a.name';
+                $orderBy = 'b.name';
                 break;
         }
 
         $data = DB::table('org_diagram_rt as a')
-            ->select('a.id', 'a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'a.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id')
+            ->select('a.id', 'a.idx','a.pidx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'b.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id',
+                DB::raw('(select count(nik) from  anggota_koordinator_tps_korte where nik = a.nik and pidx_korte = a.pidx) as formkortps')
+            )
             ->leftJoin('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
@@ -1989,33 +1991,34 @@ class OrgDiagramController extends Controller
 
         $recordsTotal = $data->count();
 
-        $results = [];
-        $no = 1;
-        foreach ($data as $value) {
-            $results[] = [
-                'no' => $no++,
-                'id' => $value->id,
-                'idx' => $value->idx,
-                'village_id' => $value->village_id,
-                'address' => $value->address,
-                'tps_number' => $value->tps_number,
-                'village' => $value->village,
-                'district' => $value->district,
-                'title' => $value->title,
-                'nik' => $value->nik,
-                'name' => $value->name,
-                'photo' => $value->photo,
-                'phone_number' => $value->phone_number,
-                'user_id' => $value->user_id
+        // $results = [];
+        // $no = 1;
+        // foreach ($data as $value) {
+        //     $results[] = [
+        //         'no' => $no++,
+        //         'id' => $value->id,
+        //         'idx' => $value->idx,
+        //         'village_id' => $value->village_id,
+        //         'address' => $value->address,
+        //         'tps_number' => $value->tps_number,
+        //         'village' => $value->village,
+        //         'district' => $value->district,
+        //         'title' => $value->title,
+        //         'nik' => $value->nik,
+        //         'name' => $value->name,
+        //         'photo' => $value->photo,
+        //         'phone_number' => $value->phone_number,
+        //         'user_id' => $value->user_id,
+        //         'formkortps' => $value->formkortps
 
-            ];
-        }
+        //     ];
+        // }
 
         return response()->json([
             'draw' => $request->input('draw'),
             'recordsTotal' => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,
-            'data' => $results
+            'data' => $data
         ]);
     }
 

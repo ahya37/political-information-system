@@ -63,7 +63,7 @@ function shoWdivHtmlMember(m) {
         <br><input type="checkbox" name="members[]" value="${m.idx}"> ${m.name}
     `;
 }
-
+let i = 1;
 let table = $("#data").DataTable({
     pageLength: 100,
 
@@ -87,14 +87,20 @@ let table = $("#data").DataTable({
             targets: 0,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.no;
+                // return row.no;
+                return i++;
             },
         },
         {
             targets: 1,
             sortable: true,
             render: function (data, type, row, meta) {
-                return `<a href="/admin/member/profile/${row.user_id}"><img  class="rounded" width="40" src="/storage/${row.photo}"> ${row.name}</a>`;
+                let names =  `<a href="/admin/member/profile/${row.user_id}"><img  class="rounded" width="40" src="/storage/${row.photo}"> ${row.name}</a>`
+                if (row.formkortps === 0) {
+                    names =  `<a href="/admin/member/profile/${row.user_id}" class="text-danger"><img  class="rounded" width="40" src="/storage/${row.photo}"> ${row.name}</a>`
+                }
+
+                return names;
             },
         },
         {
