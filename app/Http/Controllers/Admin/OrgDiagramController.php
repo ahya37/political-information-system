@@ -1620,9 +1620,12 @@ class OrgDiagramController extends Controller
             )
             ->leftJoin('users as b', 'b.nik', '=', 'a.nik')
             ->where('a.pidx_korte', $idx)
-            ->orderBy(DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik)'), 'desc')
-            // ->orderByRaw(DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik and pidx = a.pidx_korte)','desc'))
+            // ->orderBy(DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik)'), 'desc')
+            ->orderByRaw('myanggota DESC')
             ->get();
+
+        // usort($anggotaKorTps, fn($a, $b) => $a->myanggota < $b->myanggota);
+
 
         // dd($anggotaKorTps);
 
