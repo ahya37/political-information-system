@@ -1667,29 +1667,120 @@ class OrgDiagramController extends Controller
     {
 
         $kor_rt = DB::table('org_diagram_rt as a')
-            ->select('a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district')
+            ->select('b.id','a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district','e.tps_number',
+                DB::raw('(select count(b2.id) from users as b2 where b2.user_id= b.id and b2.village_id is not null ) as referal')
+            )
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->join('tps as e','b.tps_id','=','e.id')
             ->where('a.idx', $idx)
             ->where('a.base', 'KORRT')
             ->first();
-
-        // get data anggota by korte
-        $members = DB::table('org_diagram_rt as a')
-            ->select('a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district', 'b.address', 'a.telp')
+            
+            // get data anggota by korte
+            $members = DB::table('org_diagram_rt as a')
+            ->select('a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district', 'b.address', 'a.telp', 'e.tps_number',
+                DB::raw('TIMESTAMPDIFF(YEAR, b.date_berth, NOW()) as usia')
+            )
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->leftJoin('tps as e','b.tps_id','=','e.id')
             ->where('a.pidx', $idx)
             ->where('a.base', 'ANGGOTA')
             ->get();
-
-        $no = 1;
+ 
+            $no = 1;
 
 
         $pdf = PDF::LoadView('pages.report.memberbykorte', compact('kor_rt', 'members', 'no'))->setPaper('a4');
         return $pdf->download('ANGGOTA KORTE RT ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
+    }
+
+    public function downloadMembersKeluargaSerumahRtPDF($idx)
+    {
+        $kor_rt = DB::table('org_diagram_rt as a')
+            ->select('b.id','a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district','e.tps_number',
+                DB::raw('(select count(b2.id) from users as b2 where b2.user_id= b.id and b2.village_id is not null ) as referal')
+            )
+            ->join('users as b', 'b.nik', '=', 'a.nik')
+            ->join('villages as c', 'c.id', '=', 'a.village_id')
+            ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->join('tps as e','b.tps_id','=','e.id')
+            ->where('a.idx', $idx)
+            ->where('a.base', 'KORRT')
+            ->first();
+
+            
+        //     // get data anggota by korte
+        //     $members = DB::table('org_diagram_rt as a')
+        //     ->select('a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district', 'b.address', 'a.telp', 'e.tps_number',
+        //         DB::raw('TIMESTAMPDIFF(YEAR, b.date_berth, NOW()) as usia')
+        //     )
+        //     ->join('users as b', 'b.nik', '=', 'a.nik')
+        //     ->join('villages as c', 'c.id', '=', 'a.village_id')
+        //     ->join('districts as d', 'd.id', '=', 'a.district_id')
+        //     ->join('tps as e','b.tps_id','=','e.id')
+        //     ->where('a.pidx', $idx)
+        //     ->where('a.base', 'ANGGOTA')
+        //     ->get();
+
+
+        $list_keluarga = DB::table('family_group as a')
+                        ->select('a.id','b.name')
+                        ->join('users as b','a.nik','=','b.nik')
+                        ->where('a.pidx_korte', $idx)
+                        ->get();
+
+        $coutn_list_keluarga = count($list_keluarga);
+
+        $anggota = DB::table('detail_family_group as a')
+                        ->select('b.nik','b.name','a.family_group_id') 
+                        ->join('users as b','a.user_id','=','b.id')
+                        ->where('a.pidx_korte', $idx)
+                        ->get();
+
+        $results = [];
+        // foreach($anggota as $item){
+
+        //     $kapala_keluarga = DB::table("family_group as a")
+        //                         ->select("b.name", 
+        //                             DB::raw("(select count(id) from detail_family_group where family_group_id = $item->family_group_id) as counts")
+        //                         )
+        //                         ->join("users as b","a.user_id","=","b.id")
+        //                         ->where("a.id", $item->family_group_id)
+        //                         ->first();
+
+        //     $results[] = [
+        //         'anggota' => $item->name,
+        //         'kapala_keluarga' => $kapala_keluarga->name,
+        //         'count_anggota' => $kapala_keluarga->counts
+        //     ];
+        // }
+        foreach($list_keluarga as $item){
+            $anggota = DB::table('detail_family_group as a')
+                        ->select('b.nik','b.name') 
+                        ->join('users as b','a.user_id','=','b.id')
+                        ->where('a.family_group_id', $item->id)
+                        ->get();
+
+            $count_anggota = count($anggota);
+
+            $results[] = [
+                'kepala_keluarga' => $item->name,
+                'anggota' => $anggota,
+                'count_anggota' => $count_anggota,
+            ];
+        }
+
+        // dd($results);  
+            $no = 1;
+            $no_anggota = 1;
+
+
+        $pdf = PDF::LoadView('pages.report.keluargaserumah', compact('kor_rt', 'no','results','no_anggota','coutn_list_keluarga'))->setPaper('a4');
+        return $pdf->stream('ANGGOTA KELUARGA SERUMAH ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
     }
 
     public function downloadTpsTimPemenanganSuara($id)
@@ -3020,17 +3111,23 @@ class OrgDiagramController extends Controller
             return response()->download(public_path($createZip));
         }elseif ($request->report_type == 'Download Anggota Belum Tercover Kortps'){
 
+
             $orgDiagramModel = new OrgDiagram();
 
             if(isset($village_id) AND !isset($request->rt)){
 
                 $village = Village::select('name')->where('id', $village_id)->first();
                 $anggota         = $orgDiagramModel->getDataAnggotaBelumterCoverKortpsByVillage($village_id);
+                // dd($anggota);
                 return $this->excel->download(new AnggotaBelumTercoverKortps($anggota), 'ANGGOTA BELUM TERCOVER DS.' . $village->name . '.xls');
 
             }elseif(isset($village_id) AND isset($request->rt)){
 
+                return 'PILIH PER DESA SAJA';
+
                  $anggota         = $orgDiagramModel->getDataAnggotaBelumterCoverKortpsByVillageAndRt($village_id, $request->rt);
+                // dd($anggota);
+
                  return $this->excel->download(new AnggotaBelumTercoverKortps($anggota), 'ANGGOTA BELUM TERCOVER DS.' . $village->name .', RT. '.$request->rt.'.xls');
 
             }else{ 
@@ -4014,25 +4111,28 @@ class OrgDiagramController extends Controller
                 'pidx_korte' => $idx,
                 'cby' => auth()->guard('admin')->user()->id 
             ]);
+
     
             // insert ke detail familly group
-            $member['members'] = $request->members;
-            foreach ($member['members'] as $key => $value) {
-
-                // jangan simpan jika member nya terpilih sebagai kepala keluarga
-                if ($request->kepalakel != $value) {
-                    $data_org = DB::table('org_diagram_rt as a')
-                            ->select('a.nik','b.id')
-                            ->join('users as b','a.nik','=','b.nik')
-                            ->where('a.idx', $value)
-                            ->first();
+            if ($request->members != null) {
+                $member['members'] = $request->members;
+                foreach ($member['members'] as $key => $value) {
     
-                    $members = new DetailFamilyGroup();
-                    $members->family_group_id = $famillyGroup->id;
-                    $members->user_id = $data_org->id;
-                    $members->nik = $data_org->nik;
-                    $members->pidx_korte = $idx;
-                    $members->save();
+                    // jangan simpan jika member nya terpilih sebagai kepala keluarga
+                    if ($request->kepalakel != $value) {
+                        $data_org = DB::table('org_diagram_rt as a')
+                                ->select('a.nik','b.id')
+                                ->join('users as b','a.nik','=','b.nik')
+                                ->where('a.idx', $value)
+                                ->first();
+        
+                        $members = new DetailFamilyGroup();
+                        $members->family_group_id = $famillyGroup->id;
+                        $members->user_id = $data_org->id;
+                        $members->nik = $data_org->nik;
+                        $members->pidx_korte = $idx;
+                        $members->save();
+                    }
                 }
             }
 
@@ -4059,16 +4159,21 @@ class OrgDiagramController extends Controller
             ->where('a.base', 'KORRT')
             ->first();
             // get data anggota by korte
-            $members = DB::table('anggota_koordinator_tps_korte')
-                ->select('name','nik')
-                ->where('pidx_korte', $idx)
+            $members = DB::table('anggota_koordinator_tps_korte as a')
+                ->select('a.name','a.nik','b.nik as registered')
+                ->leftJoin('users as b','a.nik','b.nik')
+                ->where('a.pidx_korte', $idx)
+                ->orderBy('b.nik','asc')
                 ->get();
 
             $no = 1;
 
 
+            // dd($members);
+
+
     $pdf = PDF::LoadView('pages.report.memberbyformkortps', compact('kor_rt', 'members', 'no'))->setPaper('a4');
-    return $pdf->download('ANGGOTA KORTE RT ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
+    return $pdf->download('ANGGOTA KORTPS RT ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
 
     //     $kor_rt = DB::table('org_diagram_rt as a')
     //             ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district')

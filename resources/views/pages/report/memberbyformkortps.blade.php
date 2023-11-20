@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>ANGGOTA KORTE RT. {{$kor_rt->rt}} ({{$kor_rt->name}}) DS. {{$kor_rt->village}}</title>
+        <title>ANGGOTA KORTPS RT. {{$kor_rt->rt}} ({{$kor_rt->name}}) DS. {{$kor_rt->village}}</title>
     </head>
     <style>
             /** Define the margins of your page **/
@@ -120,7 +120,7 @@
                 <tbody> 
 				@foreach($members as $member)
 					<tr>
-						<td align="center">{{$no++}}</td>
+						<td align="center" style="{{$member->registered == null ? 'background-color:#FFC0CB' : ''}}">{{$no++}}</td>
 						<td>{{$member->name}}</td> 
 						<td>{{$member->nik}}</td> 
 					</tr>

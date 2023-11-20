@@ -27,13 +27,21 @@ class AnggotaBelumTercoverKortps implements FromCollection,  WithHeadings, WithE
         $data = $this->data;
 
         $results = [];
+        $no = 1;
         foreach ($data as $value) {
+            $referal = DB::table('users as a')
+                        ->join('villages as b','a.village_id','=','b.id')
+                        ->where('user_id', $value->id)
+                        ->count();
             $results[] = [
+                'no'   => $no++,
                 'nik'  => "'".$value->nik ?? '',
                 'name' => $value->name ?? '',
                 // 'desa' => $value->desa ?? '',
                 'rt' => $value->rt ?? '',
                 'rw' => $value->rw,
+                'referal' => $referal ?? 0,
+                'address' => $value->address
                 // 'village' => $value->desa,
                 // 'district' => $value->district,
                 // 'telp'    => $value->phone_number,
@@ -49,11 +57,14 @@ class AnggotaBelumTercoverKortps implements FromCollection,  WithHeadings, WithE
     public function headings(): array
     {
         return [
+            'NO',
             'NIK',
             'NAMA',
             // 'DESA',
             'RT',
             'RW',
+            'REFERAL',
+            'ALAMAT'
             // 'DESA',
             // 'KECAMATAN',
             // 'NO.TELP',

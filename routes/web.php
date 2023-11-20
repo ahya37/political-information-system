@@ -471,6 +471,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/rt/detail/anggota/{idx}','OrgDiagramController@detailAnggotaByKorRT')->name('admin-struktur-organisasi-rt-detail-anggota');
             Route::get('/rt/detail/anggota/download/excel/{idx}','OrgDiagramController@downloadMembersRt')->name('admin-struktur-organisasi-rt-detail-anggota-download');
             Route::get('/rt/detail/anggota/download/pdf/{idx}','OrgDiagramController@downloadMembersRtPDF')->name('admin-struktur-organisasi-rt-detail-anggota-download');
+             Route::get('/rt/detail/anggotakeluargaseryumah/download/pdf/{idx}','OrgDiagramController@downloadMembersKeluargaSerumahRtPDF')->name('admin-struktur-organisasi-rt-detail-anggotakeluargaseryumah-download');
             Route::get('/rt/detail/anggota/tpsttimpemenangan/download/pdf/{idx}','OrgDiagramController@downloadTpsTimPemenanganSuara')->name('admin-struktur-organisasi-rt-detail-anggota-download');
             Route::get('/district','OrgDiagramController@indexOrgDistrict')->name('admin-struktur-organisasi-district-index');
             Route::get('/district/create','OrgDiagramController@createOrgDistrict')->name('admin-struktur-organisasi-district-create');

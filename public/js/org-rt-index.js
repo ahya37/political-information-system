@@ -602,6 +602,9 @@ let table = $("#data").DataTable({
 								<a href='/admin/struktur/rt/detail/anggota/download/pdf/${row.idx}' class="dropdown-item ">
                                 Download Anggota PDF
                                 </a>
+                                <a href='/admin/struktur/rt/detail/anggotakeluargaseryumah/download/pdf/${row.idx}' class="dropdown-item ">
+                                Download Anggota Keluarga Serumah
+                                </a>
 								<a href='/admin/struktur/rt/detail/anggota/suratpernyatan/${row.idx}' class="dropdown-item ">
                                 Download Surat Pernyataan
                                 </a>
