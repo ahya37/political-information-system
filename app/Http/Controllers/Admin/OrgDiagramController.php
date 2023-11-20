@@ -1380,8 +1380,19 @@ class OrgDiagramController extends Controller
             // if ($cek_nik_user == 0) return redirect()->back()->with(['warning' => 'NIK tidak terdaftar disistem!']);
 
             // #cek jika nik sudah terdaftar di tb org_diagram_village
-            $cek_nik_org  = DB::table('org_diagram_rt')->where('nik', $user->nik)->count();
-            if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur anggota!']);
+            $cek_nik_org  = DB::table('org_diagram_rt')->select('pidx')->where('nik', $user->nik)->first();
+            if($cek_nik_org != null){
+                $kortps = DB::table('org_diagram_rt as a')
+                        ->select('c.name','b.name as desa')
+                        ->join('villages as b','a.village_id','=','b.id')
+                        ->join('users as c','a.nik','=','c.nik')
+                        ->where('a.idx', $cek_nik_org->pidx)
+                        ->first();
+
+                return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur anggota, Kortps : '.$kortps->name.' Ds.'.$kortps->desa]);
+                
+            }
+            // if ($cek_nik_org > 0) return redirect()->back()->with(['warning' => 'NIK sudah terdaftar distruktur anggota!']);
 
             #get villlage, regency, district, rt where idx
             $domisili = DB::table('org_diagram_rt')->select('regency_id', 'district_id', 'village_id', 'rt')->where('idx', $request->pidx)->first();
