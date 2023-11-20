@@ -127,7 +127,7 @@
                                         <td id="totalCountAnggota"></td>
                                         <td id="totalCountReferal"></td>
                                         <td id="totalFormKosong"></td>
-                                        <td></td>
+                                        <td id="totalkgs"></td>
                                         <td></td>
                                     </tfoot>
                                     </table>
