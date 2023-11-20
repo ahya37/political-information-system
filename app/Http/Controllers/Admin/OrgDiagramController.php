@@ -1837,7 +1837,7 @@ class OrgDiagramController extends Controller
 
 
         $pdf = PDF::LoadView('pages.report.keluargaserumah', compact('kor_rt', 'no','results','no_anggota','coutn_list_keluarga','members','results_family_group'))->setPaper('a4');
-        return $pdf->stream('ANGGOTA KELUARGA SERUMAH ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
+        return $pdf->download('ANGGOTA KELUARGA SERUMAH ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
     }
 
     public function downloadTpsTimPemenanganSuara($id)
