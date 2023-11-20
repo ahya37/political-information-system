@@ -1615,12 +1615,13 @@ class OrgDiagramController extends Controller
         $anggotaKorTps = DB::table('anggota_koordinator_tps_korte as a')
             ->select('a.id','a.name', 'a.nik', 'b.photo', 
                 DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik) as is_cover'),
-                DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik and pidx = a.pidx_korte) as notmyanggota')
+                DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik and pidx = a.pidx_korte) as myanggota')
 
             )
             ->leftJoin('users as b', 'b.nik', '=', 'a.nik')
             ->where('a.pidx_korte', $idx)
             ->orderBy(DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik)'), 'desc')
+            // ->orderByRaw(DB::raw('(select COUNT(nik) from org_diagram_rt where nik = a.nik and pidx = a.pidx_korte)','desc'))
             ->get();
 
         // dd($anggotaKorTps);

@@ -162,12 +162,14 @@
                                         @php
                                         $class = '';
                                         $btnDelete = 'btn btn-sm btn-danger';
-                                        if ($item->is_cover == 1 && $item->notmyanggota == 1) {
+                                        if ($item->is_cover == 1 && $item->myanggota == 1) {
                                             $class = 'bg-success text-white';
-                                        }else{
+                                        }elseif($item->is_cover == 1 && $item->myanggota == 0 ){
                                             $class = 'bg-danger text-white';
                                             $btnDelete = 'btn btn-sm btn-warning text-white';
-
+                                        }else{
+                                            $class = '';
+                                            $btnDelete = 'btn btn-sm btn-danger';
                                         }
                                         @endphp
                                             {{-- <tr class="{{ $item->is_cover == 1 ? 'bg-success text-white' : '' }}">
