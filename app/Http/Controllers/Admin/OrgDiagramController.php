@@ -972,15 +972,23 @@ class OrgDiagramController extends Controller
     {
 
         // DATATABLE
-        $orderBy = 'a.name';
+        $orderBy = 'b.name';
         switch ($request->input('order.0.column')) {
             case '1':
-                $orderBy = 'a.name';
+                $orderBy = 'b.name';
+                break;
+            case '9':
+                $orderBy = 'b.form_kosong';
                 break;
         }
 
         $data = DB::table('org_diagram_rt as a')
-            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'b.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id')
+            ->select('a.idx', 'a.village_id', 'a.rt', 'a.rw', 'b.address', 'a.title', 'a.nik', 'b.name', 'b.photo', 'a.telp as phone_number', 'a.base', 'a.id', 'c.name as village', 'd.name as district', 'e.tps_number','b.id as user_id',
+                    DB::raw("(select count(*) from org_diagram_rt where pidx = a.idx and base ='ANGGOTA') as count_anggota"),
+                    DB::raw("(select count(*) from users where user_id = b.id and village_id is not null) as referal"),
+                    DB::raw("(select count(*) from anggota_koordinator_tps_korte where pidx_korte = a.idx) as formkortps"),
+                    DB::raw("(select count(*) from family_group where pidx_korte = a.idx) as keluargaserumah")
+            )
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
             ->join('districts as d', 'd.id', '=', 'a.district_id')
@@ -991,7 +999,7 @@ class OrgDiagramController extends Controller
 
         if ($request->input('search.value') != null) {
             $data = $data->where(function ($q) use ($request) {
-                $q->whereRaw('LOWER(a.name) like ? ', ['%' . strtolower($request->input('search.value')) . '%']);
+                $q->whereRaw('LOWER(b.name) like ? ', ['%' . strtolower($request->input('search.value')) . '%']);
             });
         }
 
@@ -1014,49 +1022,51 @@ class OrgDiagramController extends Controller
 
         $recordsFiltered = $data->get()->count();
         if ($request->input('length') != -1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+        $data = $data->orderBy($orderBy, $request->input('order.0.dir'))->get();
 
-        $data = $data->orderBy('a.rt', 'asc');
-        $data = $data->orderBy($orderBy, $request->input('order.0.dir'));
-        $data = $data->get();
+
+        // $data = $data->orderBy('a.rt', 'asc');
+        // $data = $data->orderBy($orderBy, $request->input('order.0.dir'));
+        // $data = $data->get();
 
         $recordsTotal = $data->count();
 
-        $results = [];
-        $no = 1;
-        foreach ($data as $value) {
-            $count_anggota = DB::table('org_diagram_rt')->where('pidx', $value->idx)->count();
-            $referal = DB::table('users as a')->join('villages as b','a.village_id','=','b.id')->where('a.user_id', $value->user_id)->count();
-            $formkortps = DB::table('anggota_koordinator_tps_korte')->where('pidx_korte', $value->idx)->count();
-            $results[] = [
-                'no' => $no++,
-                'id' => $value->id,
-                'idx' => $value->idx,
-                'village_id' => $value->village_id,
-                'rt' => $value->rt,
-                'tps_number' => $value->tps_number,
-                'rw' => $value->rw,
-                'address' => $value->address,
-                'village' => $value->village,
-                'district' => $value->district,
-                'title' => $value->title,
-                'nik' => $value->nik,
-                'name' => $value->name,
-                'photo' => $value->photo,
-                'phone_number' => $value->phone_number,
-                'count_anggota' => $count_anggota,
-                'formkortps' => $formkortps,
-                'referal' => $referal,
-                'user_id' => $value->user_id,
-                'base' => "KORTPS"
+        // $results = [];
+        // $no = 1;
+        // foreach ($data as $value) {
+        //     $count_anggota = DB::table('org_diagram_rt')->where('pidx', $value->idx)->count();
+        //     $referal = DB::table('users as a')->join('villages as b','a.village_id','=','b.id')->where('a.user_id', $value->user_id)->count();
+        //     $formkortps = DB::table('anggota_koordinator_tps_korte')->where('pidx_korte', $value->idx)->count();
+        //     $results[] = [
+        //         'no' => $no++,
+        //         'id' => $value->id,
+        //         'idx' => $value->idx,
+        //         'village_id' => $value->village_id,
+        //         'rt' => $value->rt,
+        //         'tps_number' => $value->tps_number,
+        //         'rw' => $value->rw,
+        //         'address' => $value->address,
+        //         'village' => $value->village,
+        //         'district' => $value->district,
+        //         'title' => $value->title,
+        //         'nik' => $value->nik,
+        //         'name' => $value->name,
+        //         'photo' => $value->photo,
+        //         'phone_number' => $value->phone_number,
+        //         'count_anggota' => $count_anggota,
+        //         'formkortps' => $formkortps,
+        //         'referal' => $referal,
+        //         'user_id' => $value->user_id,
+        //         'base' => "KORTPS"
 
-            ];
-        }
+        //     ];
+        // }
 
         return response()->json([
             'draw' => $request->input('draw'),
             'recordsTotal' => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,
-            'data' => $results
+            'data' => $data
         ]);
     }
 
@@ -1724,19 +1734,70 @@ class OrgDiagramController extends Controller
             ->first();
 
             
-        //     // get data anggota by korte
-        //     $members = DB::table('org_diagram_rt as a')
-        //     ->select('a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district', 'b.address', 'a.telp', 'e.tps_number',
-        //         DB::raw('TIMESTAMPDIFF(YEAR, b.date_berth, NOW()) as usia')
-        //     )
-        //     ->join('users as b', 'b.nik', '=', 'a.nik')
-        //     ->join('villages as c', 'c.id', '=', 'a.village_id')
-        //     ->join('districts as d', 'd.id', '=', 'a.district_id')
-        //     ->join('tps as e','b.tps_id','=','e.id')
-        //     ->where('a.pidx', $idx)
-        //     ->where('a.base', 'ANGGOTA')
-        //     ->get();
+            // get data anggota by korte
+        $members = DB::table('org_diagram_rt as a')
+            ->select('a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district', 'b.address', 'a.telp', 'e.tps_number',
+                DB::raw('TIMESTAMPDIFF(YEAR, b.date_berth, NOW()) as usia'),
+                DB::raw('(select id from family_group where nik = a.nik limit 1) as fg_kepala'),
+                DB::raw('(select family_group_id from detail_family_group where nik = a.nik limit 1) as fg_anggota')
+            )
+            ->join('users as b', 'b.nik', '=', 'a.nik')
+            ->join('villages as c', 'c.id', '=', 'a.village_id')
+            ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->leftJoin('tps as e','b.tps_id','=','e.id')
+            ->where('a.pidx', $idx)
+            ->where('a.base', 'ANGGOTA')
+            ->get();
 
+        // dd($members); 
+
+         // bedah data array untuk menyatukan kelompok keluarga
+        $results = [];
+        foreach ($members as  $value) {
+            $results[] = [
+                'name' => $value->name,
+                'base' => $value->base,
+                'rt'   => $value->rt,
+                'village'  => $value->village,
+                'district' => $value->district,
+                'address'  => $value->address,
+                'telp'     => $value->telp,
+                'tps_number' => $value->tps_number,
+                'usia' => $value->usia,
+                'family_group_id' => $value->fg_kepala == null ? $value->fg_anggota : $value->fg_kepala
+            ];
+        }
+
+        $after_results = [];
+        foreach ($results as $key => $item) {
+           $family_group_id = $item['family_group_id'] == null ? 'Belum Terkelompokan' : $item['family_group_id'];
+           $after_results[] = [
+                'name' => $item['name'],
+                'base' => $item['base'],
+                'rt'   => $item['rt'],
+                'village'  => $item['village'],
+                'district' => $item['district'],
+                'address'  => $item['address'],
+                'telp'     => $item['telp'],
+                'tps_number' => $item['tps_number'],
+                'usia' => $item['usia'],
+                'family_group_id' => $family_group_id
+           ];
+        }
+
+        // dd($after_results);
+        usort($after_results, fn($a, $b) => $a['family_group_id'] <= $b['family_group_id']);
+
+        
+        // kelompokan data dengan keluarga nya
+        $results_family_group = [];
+        foreach ($after_results as  $key => $item) {
+                $results_family_group[$item['family_group_id']][$key] = $item;
+        }
+
+
+        // dd($results_family_group);
+        // dd($results);
 
         $list_keluarga = DB::table('family_group as a')
                         ->select('a.id','b.name')
@@ -1753,22 +1814,7 @@ class OrgDiagramController extends Controller
                         ->get();
 
         $results = [];
-        // foreach($anggota as $item){
-
-        //     $kapala_keluarga = DB::table("family_group as a")
-        //                         ->select("b.name", 
-        //                             DB::raw("(select count(id) from detail_family_group where family_group_id = $item->family_group_id) as counts")
-        //                         )
-        //                         ->join("users as b","a.user_id","=","b.id")
-        //                         ->where("a.id", $item->family_group_id)
-        //                         ->first();
-
-        //     $results[] = [
-        //         'anggota' => $item->name,
-        //         'kapala_keluarga' => $kapala_keluarga->name,
-        //         'count_anggota' => $kapala_keluarga->counts
-        //     ];
-        // }
+    
         foreach($list_keluarga as $item){
             $anggota = DB::table('detail_family_group as a')
                         ->select('b.nik','b.name') 
@@ -1790,7 +1836,7 @@ class OrgDiagramController extends Controller
             $no_anggota = 1;
 
 
-        $pdf = PDF::LoadView('pages.report.keluargaserumah', compact('kor_rt', 'no','results','no_anggota','coutn_list_keluarga'))->setPaper('a4');
+        $pdf = PDF::LoadView('pages.report.keluargaserumah', compact('kor_rt', 'no','results','no_anggota','coutn_list_keluarga','members','results_family_group'))->setPaper('a4');
         return $pdf->stream('ANGGOTA KELUARGA SERUMAH ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
     }
 

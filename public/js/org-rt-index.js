@@ -482,6 +482,7 @@ function showDivHtmlRT(m) {
     return `<option value="${m.rt}">${m.rt}</option>`;
 }
 
+let i = 1;
 let table = $("#data").DataTable({
     pageLength: 10,
 
@@ -508,7 +509,8 @@ let table = $("#data").DataTable({
             targets: 0,
             sortable: true,
             render: function (data, type, row, meta) {
-                return row.no
+                // return row.no
+                return i++;
             },
         },
         {
@@ -535,32 +537,32 @@ let table = $("#data").DataTable({
             targets: 4,
             orderable: true,
             render: function (data, type, row, meta) {
-                return row.tps_number
+                return `<p class='text-center'>${row.tps_number ?? ''}</p>`;
             },
         },
         {
             targets: 5,
             render: function (data, type, row, meta) {
-                return `<p>${row.base}</p>`;
+                return `<p class="text-center">${row.count_anggota}</p>`;
             },
         },
         {
             targets: 6,
             render: function (data, type, row, meta) {
-                return `<p class="text-center">${row.count_anggota}</p>`;
+                return `<p class="text-center">${row.referal}</p>`;
             },
         },
         {
             targets: 7,
             render: function (data, type, row, meta) {
-                return `<p class="text-center">${row.referal}</p>`;
+                return `<p class="text-center">${row.formkortps}</p>`;
             },
         },
         {
             targets: 8,
             render: function (data, type, row, meta) {
-                return `<p class="text-center">${row.formkortps}</p>`;
-            },
+                return `<p class="text-center">${row.keluargaserumah}</p>`;
+            }, 
         },
         {
             targets: 9,
@@ -623,6 +625,25 @@ let table = $("#data").DataTable({
             },
         },
     ],
+    fnDrawCallback: function(row, data, start, end, display){
+
+        let totalCountAnggota = 0;
+        let totalCountReferal = 0;
+        let totalFormKosong   = 0;
+        row.aoData.forEach(element => {
+             totalCountAnggota += parseFloat(element._aData.count_anggota);
+             totalCountReferal += parseFloat(element._aData.referal);
+             totalFormKosong += parseFloat(element._aData.formkortps);
+
+        });
+
+        $('#totalCountAnggota').empty();
+        $('#totalCountReferal').empty();
+        $('#totalFormKosong').empty();
+        $('#totalCountAnggota').append(`<p class="text-center"><b>${totalCountAnggota}</b></p>`);
+        $('#totalCountReferal').append(`<p class="text-center"><b>${totalCountReferal}</b></p>`);
+        $('#totalFormKosong').append(`<p class="text-center"><b>${totalFormKosong}</b></p>`);
+    }
 });
 
 async function updateNoTelpKorTps(data){
