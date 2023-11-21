@@ -189,7 +189,9 @@ class OrgDiagramController extends Controller
         return response()->json([
             'data' => $results,
             'target_anggota' => $gF->decimalFormat($target_anggota),
+            'target_kortps'  => $gF->decimalFormat($target_anggota / 25),
             'jml_dpt' => $gF->decimalFormat($jml_dpt),
+            'kurang_kortps' => $gF->decimalFormat($results->kortps_terisi - ($target_anggota / 25)),
             'pengurus' => $pengurus,
             'tpsnotexists' => $tpsNotExists,
             'tpsExists' => $tpsExists

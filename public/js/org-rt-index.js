@@ -64,6 +64,23 @@ async function initialGetAnggotaCover(
                     .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>`);
+                $("#kortpsterisi")
+                        .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>`);
+                    $("#kurangtpsterisi")
+                        .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>`);
+                    $("#targetkortps")
+                        .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>`);
+                    $("#jmltps")
+                        .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>`);
+            
 
             },
             success: function () {
@@ -115,72 +132,18 @@ async function initialGetAnggotaCoverFirst() {
 
     $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
-    // jumlah kortps dan kurangnya
-    const dataKortps = await initialGetKortps(
-        selectListArea,
-        selectDistrictId,
-        selectVillageId,
-        selectRT
-    );
 
-
-    $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
-    $("#targetkortps").text(` ${numberWithDot(dataKortps.data.target_kortps)}`);
-    $("#kortpsterisi").text(` ${numberWithDot(dataKortps.data.kortps_terisi)}`);
+    $("#jmltps").text(` ${numberWithDot(dataCover.data.tps)}`);
+    $("#targetkortps").text(` ${numberWithDot(dataCover.target_kortps)}`);
+    $("#kortpsterisi").text(` ${numberWithDot(dataCover.data.kortps_terisi)}`);
     $("#kurangtpsterisi").text(
-        ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
+        ` ${numberWithDot(dataCover.kurang_kortps)}`
     );
     
 }
 
 initialGetAnggotaCoverFirst();
 
-async function initialGetKortps(
-    selectListAreaId,
-    selectDistrictId,
-    selectVillageId,
-    selectRT
-) {
-    return new Promise((resolve, reject) => {
-        const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-        $.ajax({
-            url: "/api/datatimkortps",
-            method: "POST",
-            cache: false,
-            data: {
-                _token: CSRF_TOKEN,
-                dapil: selectListAreaId,
-                district: selectDistrictId,
-                village: selectVillageId,
-                rt: selectRT,
-            },
-            beforeSend: function () {
-                $("#kortpsterisi")
-                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>`);
-                $("#kurangtpsterisi")
-                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>`);
-                $("#targetkortps")
-                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>`);
-                $("#jmltps")
-                    .append(`<div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>`);
-            },
-            success: function () {},
-            complete: function (data) {
-                return data;
-            },
-        })
-            .done(resolve)
-            .fail(reject);
-    });
-}
 
 // DAPIL
 $("#selectListArea").change(async function () {
@@ -233,21 +196,12 @@ $("#selectListArea").change(async function () {
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         // jumlah kortps dan kurangnya
-        const dataKortps = await initialGetKortps(
-            selectListArea,
-            null,
-            null,
-            null
-        );
-        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
-        $("#targetkortps").text(
-            ` ${numberWithDot(dataKortps.data.target_kortps)}`
-        );
-        $("#kortpsterisi").text(
-            ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
-        );
+
+        $("#jmltps").text(` ${numberWithDot(dataCover.data.tps)}`);
+        $("#targetkortps").text(` ${numberWithDot(dataCover.target_kortps)}`);
+        $("#kortpsterisi").text(` ${numberWithDot(dataCover.data.kortps_terisi)}`);
         $("#kurangtpsterisi").text(
-            ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataCover.kurang_kortps)}`
         );
 
         table.ajax.reload(null, false);
@@ -288,23 +242,12 @@ $("#selectListArea").change(async function () {
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
  
         // jumlah kortps dan kurangnya
-        const dataKortps = await initialGetKortps(
-            selectListArea,
-            null,
-            null,
-            null
-        );
-        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
-
-        $("#targetkortps").text(
-            ` ${numberWithDot(dataKortps.data.target_kortps)}`
-        );
-
-        $("#kortpsterisi").text(
-            ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
-        );
+       
+        $("#jmltps").text(` ${numberWithDot(dataCover.data.tps)}`);
+        $("#targetkortps").text(` ${numberWithDot(dataCover.target_kortps)}`);
+        $("#kortpsterisi").text(` ${numberWithDot(dataCover.data.kortps_terisi)}`);
         $("#kurangtpsterisi").text(
-            ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataCover.kurang_kortps)}`
         );
         
 
@@ -371,22 +314,12 @@ $("#selectDistrictId").change(async function () {
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         // jumlah kortps dan kurangnya
-        const dataKortps = await initialGetKortps(
-            selectListArea,
-            selectDistrictId,
-            null,
-            null
-        );
-        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
-
-        $("#targetkortps").text(
-            ` ${numberWithDot(dataKortps.data.target_kortps)}`
-        );
-        $("#kortpsterisi").text(
-            `${numberWithDot(dataKortps.data.kortps_terisi)}`
-        );
+       
+        $("#jmltps").text(` ${numberWithDot(dataCover.data.tps)}`);
+        $("#targetkortps").text(` ${numberWithDot(dataCover.target_kortps)}`);
+        $("#kortpsterisi").text(` ${numberWithDot(dataCover.data.kortps_terisi)}`);
         $("#kurangtpsterisi").text(
-            `${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataCover.kurang_kortps)}`
         );
 
         table.ajax.reload(null, false);
@@ -429,26 +362,13 @@ $("#selectDistrictId").change(async function () {
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         // jumlah kortps dan kurangnya
-        const dataKortps = await initialGetKortps(
-            selectListArea,
-            selectDistrictId,
-            null,
-            null
-        );
-        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
-
-        $("#targetkortps").text(
-            ` ${numberWithDot(dataKortps.data.target_kortps)}`
-        );
-
-        $("#kortpsterisi").text(
-            ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
-        );
+       
+        $("#jmltps").text(` ${numberWithDot(dataCover.data.tps)}`);
+        $("#targetkortps").text(` ${numberWithDot(dataCover.target_kortps)}`);
+        $("#kortpsterisi").text(` ${numberWithDot(dataCover.data.kortps_terisi)}`);
         $("#kurangtpsterisi").text(
-            ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataCover.kurang_kortps)}`
         );
-
-        $(".pengurus").hide();
     
        
 
@@ -546,24 +466,14 @@ $("#selectVillageId").change(async function () {
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         // jumlah kortps dan kurangnya
-        const dataKortps = await initialGetKortps(
-            selectListArea,
-            selectDistrictId,
-            selectVillageId,
-            null
-        );
-
-        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
-        $("#targetkortps").text(
-            ` ${numberWithDot(dataKortps.data.target_kortps)}`
-        );
-
-        $("#kortpsterisi").text(
-            ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
-        );
+       
+        $("#jmltps").text(` ${numberWithDot(dataCover.data.tps)}`);
+        $("#targetkortps").text(` ${numberWithDot(dataCover.target_kortps)}`);
+        $("#kortpsterisi").text(` ${numberWithDot(dataCover.data.kortps_terisi)}`);
         $("#kurangtpsterisi").text(
-            ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataCover.kurang_kortps)}`
         );
+
     } else {
        $(".tpsnotexist").hide();
        $(".tpsexist").hide();
@@ -611,23 +521,13 @@ $("#selectVillageId").change(async function () {
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         // jumlah kortps dan kurangnya
-        const dataKortps = await initialGetKortps(
-            selectListArea,
-            selectDistrictId,
-            selectVillageId,
-            null
-        );
+        
 
-        $("#jmltps").text(` ${numberWithDot(dataKortps.data.tps)}`);
-        $("#targetkortps").text(
-            ` ${numberWithDot(dataKortps.data.target_kortps)}`
-        );
-
-        $("#kortpsterisi").text(
-            ` ${numberWithDot(dataKortps.data.kortps_terisi)}`
-        );
+        $("#jmltps").text(` ${numberWithDot(dataCover.data.tps)}`);
+        $("#targetkortps").text(` ${numberWithDot(dataCover.target_kortps)}`);
+        $("#kortpsterisi").text(` ${numberWithDot(dataCover.data.kortps_terisi)}`);
         $("#kurangtpsterisi").text(
-            ` ${numberWithDot(dataKortps.data.kurang_kortps)}`
+            ` ${numberWithDot(dataCover.kurang_kortps)}`
         );
     }
 });
@@ -670,6 +570,7 @@ $("#selectRt").change(async function () {
 
        blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
+        
     } else {
         selectListArea = $("#selectListArea").val();
         selectDistrictId = $("#selectDistrictId").val();
