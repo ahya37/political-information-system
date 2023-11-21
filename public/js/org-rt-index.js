@@ -109,8 +109,10 @@ async function initialGetAnggotaCoverFirst() {
    $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
     $("#blmtercover").empty();
-    blmTerCover =
-        parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+    // blmTerCover =
+    //     parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
+    blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
+
     $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
     // jumlah kortps dan kurangnya
@@ -1129,11 +1131,17 @@ let table = $("#data").DataTable({
         {
             targets: 9,
             render: function (data, type, row, meta) {
+                return `<p class="text-center">${row.keluargaserumah}</p>`;
+            }, 
+        },
+        {
+            targets: 10,
+            render: function (data, type, row, meta) {
                 return `<p>${row.phone_number ?? ""}</p>`;
             },
         },
         {
-            targets: 10,
+            targets: 11,
             render: function (data, type, row, meta) {
                 return `<div class="btn-group">
                         <div class="dropdown">
@@ -1153,6 +1161,9 @@ let table = $("#data").DataTable({
                                 </a>
 								<a href='/admin/struktur/rt/detail/anggota/download/pdf/${row.idx}' class="dropdown-item ">
                                 Download Anggota PDF
+                                </a>
+                                <a href='/admin/struktur/rt/detail/anggotakeluargaseryumah/download/pdf/${row.idx}' class="dropdown-item ">
+                                Download Keluarga Serumah
                                 </a>
 								<a href='/admin/struktur/rt/detail/anggota/suratpernyatan/${row.idx}' class="dropdown-item ">
                                 Download Surat Pernyataan

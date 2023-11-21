@@ -73,15 +73,14 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Opsi Download
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="btn btn-sm dropdown-item text-primary"
-                                        href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah Kor TPS</a>
+                                    
                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit"
                                         value="Download Korte Excel" name="report_type">
                                     <input class="btn btn-sm mt-2 dropdown-item" type="submit"
@@ -100,11 +99,23 @@
                                         value="Download Tim Kor TPS Belum Ada Data Form Kosong" name="report_type">
                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit"
                                         value="Download Surat Undangan Kor TPS Per Desa PDF" name="report_type">
+                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Download Anggota Belum Tercover Per Desa" name="report_type">
+
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <input class="btn btn-danger text-white" type="submit" value="Anggota Belum Tercover Per Desa" name="report_type">
+                            </div>
+                        </div>
                 </div>
+                 <div class="row">
+                        <div class="col-md-3">
+                            <a class="btn btn-sm btn-sc-primary text-white"
+                                        href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah Kor TPS</a>
+                        </div>
+                    </div>
             </form>
 
             <div class="row">
@@ -270,6 +281,7 @@
                                             <th scope="col">ANGGOTA</th>
                                             <th scope="col">REFERAL</th>
                                             <th scope="col">FORM KORTPS</th>
+                                            <th scope="col">KLG.SERUMAH</th>
                                             <th scope="col">NO HP / WA</th>
                                             <th scope="col">OPSI</th>
                                         </tr>

@@ -478,6 +478,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/report/rt/excel','OrgDiagramController@reportOrgRTExcel')->name('admin-struktur-organisasi-rt-report-excel');
 			
 			Route::get('/rt/detail/anggota/suratpernyatan/{idx}','OrgDiagramController@storeSuratPernyatanKorte');
+
+            Route::get('/rt/detail/anggotakeluargaseryumah/download/pdf/{idx}','OrgDiagramController@downloadMembersKeluargaSerumahRtPDF')->name('admin-struktur-organisasi-rt-detail-anggotakeluargaseryumah-download');
 			
 			
 			Route::get('/rt/detail/anggota/formkoordinator/{idx}','OrgDiagramController@formKoordinatorTpsKorte');
@@ -502,6 +504,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/daftartim','OrgDiagramController@daftarTim')->name('admin-daftartim');
             Route::get('/daftartim/dapil/{dapilId}','OrgDiagramController@daftatTimDapil')->name('admin-daftartim-data-dapil');
             Route::get('/daftartim/district/{districtId}','OrgDiagramController@daftarTimDistrict')->name('admin-daftartim-data-district');
+
+            Route::get('/rt/anggota/belumtercover','OrgDiagramController@anggotaBelumtercoverPerDesa')->name('admin-daftartim-data-anggotabelumtercover');;
 
         });
 		
