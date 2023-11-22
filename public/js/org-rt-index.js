@@ -570,6 +570,13 @@ $("#selectRt").change(async function () {
 
        blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
+
+        $("#jmltps").text(` ${numberWithDot(dataCover.data.tps)}`);
+        $("#targetkortps").text(` ${numberWithDot(dataCover.target_kortps)}`);
+        $("#kortpsterisi").text(` ${numberWithDot(dataCover.data.kortps_terisi)}`);
+        $("#kurangtpsterisi").text(
+            ` ${numberWithDot(dataCover.kurang_kortps)}`
+        );
         
     } else {
         selectListArea = $("#selectListArea").val();

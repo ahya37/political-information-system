@@ -417,27 +417,27 @@ class OrgDiagram extends Model
         //         from villages as a
         //         WHERE a.district_id = $districtId order by (SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) desc";
 	$sql = "SELECT a.id, a.name, a.target_persentage ,
-		(select COUNT(id)  from org_diagram_village where title = 'KETUA' and village_id = a.id) as ketua,
-		(select COUNT(id)  from org_diagram_village where title = 'SEKRETARIS' and village_id = a.id) as sekretaris,
-		(select COUNT(id)  from org_diagram_village where title = 'BENDAHARA' and village_id = a.id) as bendahara,
-		(SELECT COUNT(id) from dpt_kpu WHERE village_id = a.id ) as dpt,
-		(SELECT COUNT(id) from users WHERE village_id = a.id) as anggota,
-		((SELECT COUNT(id) from users WHERE village_id = a.id )/25)as target_korte,
-		(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and village_id = a.id and nik is not null ) as korte_terisi,
-		(SELECT COUNT(id) from witnesses WHERE village_id = a.id ) as saksi,
-		(SELECT COUNT(*) from tps WHERE tps.village_id = a.id) tps,
+		(select COUNT(org_diagram_village.id)  from org_diagram_village where title = 'KETUA' and village_id = a.id) as ketua,
+		(select COUNT(org_diagram_village.id)  from org_diagram_village where title = 'SEKRETARIS' and village_id = a.id) as sekretaris,
+		(select COUNT(org_diagram_village.id)  from org_diagram_village where title = 'BENDAHARA' and village_id = a.id) as bendahara,
+		(SELECT COUNT(dpt_kpu.id) from dpt_kpu WHERE village_id = a.id ) as dpt,
+		(SELECT COUNT(users.id) from users join villages on users.village_id = villages.id  WHERE villages.id = a.id) as anggota,
+		((SELECT COUNT(users.id) from users join villages on users.village_id = villages.id WHERE villages.id = a.id )/25)as target_korte,
+		(SELECT COUNT(org_diagram_rt.id) from org_diagram_rt join users on org_diagram_rt.nik = users.nik WHERE org_diagram_rt.base = 'KORRT' and org_diagram_rt.village_id = a.id ) as korte_terisi,
+		(SELECT COUNT(witnesses.id) from witnesses WHERE village_id = a.id ) as saksi,
+		(SELECT COUNT(tps.id) from tps WHERE tps.village_id = a.id) tps,
 		(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'ANGGOTA' and da4.village_id = a.id) as anggota_tercover_kortps,
 		(
-			(SELECT COUNT(id) from users WHERE village_id = a.id) - 
+			(SELECT COUNT(s1.id) from users as s1 join villages as s2 on s1.village_id = s2.id WHERE s2.id = a.id) - 
 			(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'ANGGOTA' and da4.village_id = a.id) - 
-			(SELECT COUNT(a3.nik) from org_diagram_village as a2 join users as a3 on a2.nik = a3.nik WHERE a2.village_id = a.id) -
+			(SELECT COUNT(a2.nik) from org_diagram_village as a2 join users as a3 on a2.nik = a3.nik WHERE a2.village_id = a.id) -
 			(SELECT COUNT(a4.nik) from org_diagram_district as a4 join users as a5 on a4.nik = a5.nik WHERE a5.village_id = a.id) -
 			(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'KORRT' and da4.village_id = a.id)
 		) as belum_ada_korte
 		from villages as a
 		WHERE a.district_id = $districtId";
          
-        	return DB::select($sql); 
+        return DB::select($sql); 
 	}
 
 
@@ -494,9 +494,23 @@ class OrgDiagram extends Model
 					(SELECT COUNT(odr.id)
 						from org_diagram_rt as odr
 						join dapil_areas da2 on odr.district_id = da2.district_id
-						WHERE odr.base = 'KORRT' and odr.nik is not null and da2.dapil_id = a.id
+						join users as da3 on odr.nik = da3.nik
+						WHERE odr.base = 'KORRT' and da2.dapil_id = a.id
 					) as korte_terisi,
-
+					(
+						SELECT COUNT(a5.nik)
+						from org_diagram_village as a5
+						join users as a6 on a5.nik = a6.nik
+						join dapil_areas as a51 on a5.district_id = a51.district_id
+						where a51.dapil_id = a.id
+					) as kordes,
+					(
+						SELECT COUNT(a7.nik)
+						from org_diagram_district as a7
+						join users as a8 on a8.nik = a7.nik
+						join dapil_areas as a71 on a7.district_id = a71.district_id 
+						where a71.dapil_id = a.id
+					) as korcam,
 					(SELECT DISTINCT  COUNT(w.id) from witnesses as w join dapil_areas da3 on w.district_id = da3.district_id where da3.dapil_id = a.id ) as saksi,
 					(SELECT COUNT(*) from tps join dapil_areas on tps.district_id = dapil_areas.district_id WHERE dapil_areas.dapil_id = a.id) tps,
 					(
@@ -596,7 +610,11 @@ class OrgDiagram extends Model
 				(SELECT COUNT(b1.id) from dpt_kpu as b1 join villages b2 on b1.village_id = b2.id WHERE b2.district_id = a.district_id) as dpt,
 				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) as anggota,
 				((SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id)/25) as target_korte,
-				(SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and district_id  = a.district_id and nik is not null ) as korte_terisi,
+				(
+					SELECT COUNT(org_diagram_rt.id) from org_diagram_rt
+					join users on org_diagram_rt.nik = users.nik
+					WHERE org_diagram_rt.base = 'KORRT' and org_diagram_rt.district_id  = a.district_id
+				) as korte_terisi,
 				-- ((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and district_id  = a.district_id and nik is not null )*25) anggota_tercover,
 				(
 					(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id)-
@@ -607,7 +625,19 @@ class OrgDiagram extends Model
 				(
 						SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik
 						where da4.base = 'ANGGOTA' and da4.district_id = a.district_id
-				) as anggota_tercover_kortps
+				) as anggota_tercover_kortps,
+				(
+					SELECT COUNT(a5.nik)
+					from org_diagram_village as a5
+					join users as a6 on a5.nik = a6.nik
+					where a5.district_id = a.district_id
+				) as kordes,
+				(
+					SELECT COUNT(a7.nik)
+					from org_diagram_district as a7
+					join users as a8 on a8.nik = a7.nik
+					where a7.district_id = a.district_id
+				) as korcam
 				from dapil_areas as a
 				join districts as b on a.district_id = b.id
 				where a.dapil_id = $dapilId order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";
@@ -773,18 +803,18 @@ class OrgDiagram extends Model
 					join users as a10 on a9.nik = a10.nik
 					where a9.district_id  = $districtId and a9.base = 'KORRT')
 				) as fix_anggota_belum_tercover,
-				-- (
-				-- 	SELECT COUNT(a5.nik)
-				-- 	from org_diagram_village as a5
-				-- 	join users as a6 on a5.nik = a6.nik
-				-- 	where a5.district_id = $districtId
-				-- ) as kordes,
-				-- (
-				-- 	SELECT COUNT(a7.nik)
-				-- 	from org_diagram_district as a7
-				-- 	join users as a8 on a8.nik = a7.nik
-				-- 	where a7.district_id  = $districtId
-				-- ) as korcam,
+				(
+					SELECT COUNT(a5.nik)
+					from org_diagram_village as a5
+					join users as a6 on a5.nik = a6.nik
+					where a5.district_id = $districtId
+				) as kordes,
+				(
+					SELECT COUNT(a7.nik)
+					from org_diagram_district as a7
+					join users as a8 on a8.nik = a7.nik
+					where a7.district_id  = $districtId
+				) as korcam,
 				(
 					SELECT COUNT(a9.nik)
 					from org_diagram_rt as a9
