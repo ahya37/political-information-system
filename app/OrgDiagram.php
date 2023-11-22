@@ -518,14 +518,22 @@ class OrgDiagram extends Model
 		// 		join users as e on a.cby = c.id
 		// 		WHERE b.id = $village_id and (SELECT COUNT(id) from org_diagram_rt WHERE nik = a.nik ) = 0
 		// 		order by a.rt asc";
-		$sql = "SELECT a.id, a.nik, a.name, a.rt, a.address , a.rw,
-				b.name as desa
-				from users as a 
-				join villages as b on a.village_id = b.id
-				WHERE b.id  = $village_id and (SELECT COUNT(id) from org_diagram_rt 
-				WHERE nik = a.nik and base = 'ANGGOTA' ) = 0
-				and (SELECT COUNT(id) from org_diagram_rt WHERE nik = a.nik and base = 'KORRT' )   = 0
-				and (SELECT COUNT(id) from org_diagram_village where nik = a.nik) = 0";
+		// $sql = "SELECT a.id, a.nik, a.name, a.rt, a.address , a.rw,
+		// 		b.name as desa
+		// 		from users as a 
+		// 		join villages as b on a.village_id = b.id
+		// 		WHERE b.id  = $village_id and (SELECT COUNT(id) from org_diagram_rt 
+		// 		WHERE nik = a.nik and base = 'ANGGOTA' ) = 0
+		// 		and (SELECT COUNT(id) from org_diagram_rt WHERE nik = a.nik and base = 'KORRT' )   = 0
+		// 		and (SELECT COUNT(id) from org_diagram_village where nik = a.nik) = 0";
+		$sql = "SELECT a.id , a.nik, a.name, a.rt, a.address , a.rw, b.name as desa
+		from users as a
+		join villages as b on a.village_id = b.id 
+		left join org_diagram_rt as c on a.nik = c.nik
+		left join org_diagram_village as d on a.nik = d.nik
+		left join org_diagram_district  as e on a.nik = e.nik 
+		where b.id  = $village_id and c.base is null and d.nik is null and e.nik is null and c.nik is null 
+		order by a.rt asc ";
 
 		return DB::select($sql);
 	}
