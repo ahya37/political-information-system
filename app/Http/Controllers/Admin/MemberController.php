@@ -216,8 +216,11 @@ class MemberController extends Controller
 
     public function editMember($id)
     {
-        $id = decrypt($id);
-        $profile = app('UserModel')->getProfile($id);
+        // $idprofile = decrypt($id);
+       
+        // $profile = app('UserModel')->getProfile($id);
+        $profile    = User::where('id', $id)->first();
+        //  dd($profile);
         return view('pages.admin.member.edit', compact('profile'));
     }
 
