@@ -428,11 +428,18 @@ class OrgDiagram extends Model
 		(SELECT COUNT(tps.id) from tps WHERE tps.village_id = a.id) tps,
 		(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'ANGGOTA' and da4.village_id = a.id) as anggota_tercover_kortps,
 		(
-			(SELECT COUNT(s1.id) from users as s1 join villages as s2 on s1.village_id = s2.id WHERE s2.id = a.id) - 
-			(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'ANGGOTA' and da4.village_id = a.id) - 
-			(SELECT COUNT(a2.nik) from org_diagram_village as a2 join users as a3 on a2.nik = a3.nik WHERE a2.village_id = a.id) -
-			(SELECT COUNT(a4.nik) from org_diagram_district as a4 join users as a5 on a4.nik = a5.nik WHERE a5.village_id = a.id) -
-			(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'KORRT' and da4.village_id = a.id)
+			-- (SELECT COUNT(s1.id) from users as s1 join villages as s2 on s1.village_id = s2.id WHERE s1.village_id = a.id) - 
+			-- (SELECT count(da4.nik) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'ANGGOTA' and da4.village_id = a.id) - 
+			-- (SELECT COUNT(a2.nik) from org_diagram_village as a2 join users as a3 on a2.nik = a3.nik WHERE a2.village_id = a.id) -
+			-- (SELECT COUNT(a4.nik) from org_diagram_district as a4 join users as a5 on a4.nik = a5.nik WHERE a5.village_id = a.id) -
+			-- (SELECT count(da4.nik) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'KORRT' and da4.village_id = a.id)
+			SELECT COUNT(DISTINCT(a1.nik))
+			from users as a1
+			join villages as b1 on a1.village_id = b1.id 
+			left join org_diagram_rt as c1 on a1.nik = c1.nik
+			left join org_diagram_village as d1 on a1.nik = d1.nik
+			left join org_diagram_district  as e1 on a1.nik = e1.nik
+			where b1.id  = a.id and c1.base is null and d1.nik is null and e1.nik is null and c1.nik is null
 		) as belum_ada_korte
 		from villages as a
 		WHERE a.district_id = $districtId";
@@ -498,19 +505,31 @@ class OrgDiagram extends Model
 						WHERE odr.base = 'KORRT' and da2.dapil_id = a.id
 					) as korte_terisi,
 					(
-						SELECT COUNT(a5.nik)
-						from org_diagram_village as a5
-						join users as a6 on a5.nik = a6.nik
-						join dapil_areas as a51 on a5.district_id = a51.district_id
-						where a51.dapil_id = a.id
-					) as kordes,
-					(
-						SELECT COUNT(a7.nik)
-						from org_diagram_district as a7
-						join users as a8 on a8.nik = a7.nik
-						join dapil_areas as a71 on a7.district_id = a71.district_id 
-						where a71.dapil_id = a.id
-					) as korcam,
+						SELECT COUNT(DISTINCT(a1.nik))
+							from users as a1
+							join villages as b1 on a1.village_id = b1.id 
+							left join org_diagram_rt as c1 on a1.nik = c1.nik
+							left join org_diagram_village as d1 on a1.nik = d1.nik
+							left join org_diagram_district  as e1 on a1.nik = e1.nik
+							join districts as f1 on b1.district_id = f1.id 
+							join dapil_areas as g1 on g1.district_id = f1.id
+							where g1.dapil_id  = a.id and c1.base is null and d1.nik is null and e1.nik is null and c1.nik is null
+					 ) as belum_ada_korte,
+					
+					-- (
+					-- 	SELECT COUNT(a5.nik)
+					-- 	from org_diagram_village as a5
+					-- 	join users as a6 on a5.nik = a6.nik
+					-- 	join dapil_areas as a51 on a5.district_id = a51.district_id
+					-- 	where a51.dapil_id = a.id
+					-- ) as kordes,
+					-- (
+					-- 	SELECT COUNT(a7.nik)
+					-- 	from org_diagram_district as a7
+					-- 	join users as a8 on a8.nik = a7.nik
+					-- 	join dapil_areas as a71 on a7.district_id = a71.district_id 
+					-- 	where a71.dapil_id = a.id
+					-- ) as korcam,
 					(SELECT DISTINCT  COUNT(w.id) from witnesses as w join dapil_areas da3 on w.district_id = da3.district_id where da3.dapil_id = a.id ) as saksi,
 					(SELECT COUNT(*) from tps join dapil_areas on tps.district_id = dapil_areas.district_id WHERE dapil_areas.dapil_id = a.id) tps,
 					(
@@ -617,27 +636,33 @@ class OrgDiagram extends Model
 				) as korte_terisi,
 				-- ((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and district_id  = a.district_id and nik is not null )*25) anggota_tercover,
 				(
-					(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id)-
-					((SELECT COUNT(id) from org_diagram_rt WHERE base = 'KORRT' and district_id  = a.district_id and nik is not null )*25)
+					SELECT COUNT(DISTINCT(a1.nik))
+					from users as a1
+					join villages as b1 on a1.village_id = b1.id 
+					left join org_diagram_rt as c1 on a1.nik = c1.nik
+					left join org_diagram_village as d1 on a1.nik = d1.nik
+					left join org_diagram_district  as e1 on a1.nik = e1.nik
+					join districts as f1 on b1.district_id = f1.id 
+					where f1.id  = a.district_id and c1.base is null and d1.nik is null and e1.nik is null and c1.nik is null
 				) as belum_ada_korte,
 				(SELECT COUNT(id) from witnesses WHERE district_id  = a.district_id) as saksi,
 				(SELECT COUNT(tps.id) from tps WHERE tps.district_id  = a.district_id) tps,
 				(
 						SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik
 						where da4.base = 'ANGGOTA' and da4.district_id = a.district_id
-				) as anggota_tercover_kortps,
-				(
-					SELECT COUNT(a5.nik)
-					from org_diagram_village as a5
-					join users as a6 on a5.nik = a6.nik
-					where a5.district_id = a.district_id
-				) as kordes,
-				(
-					SELECT COUNT(a7.nik)
-					from org_diagram_district as a7
-					join users as a8 on a8.nik = a7.nik
-					where a7.district_id = a.district_id
-				) as korcam
+				) as anggota_tercover_kortps
+				-- (
+				-- 	SELECT COUNT(a5.nik)
+				-- 	from org_diagram_village as a5
+				-- 	join users as a6 on a5.nik = a6.nik
+				-- 	where a5.district_id = a.district_id
+				-- ) as kordes,
+				-- (
+				-- 	SELECT COUNT(a7.nik)
+				-- 	from org_diagram_district as a7
+				-- 	join users as a8 on a8.nik = a7.nik
+				-- 	where a7.district_id = a.district_id
+				-- ) as korcam
 				from dapil_areas as a
 				join districts as b on a.district_id = b.id
 				where a.dapil_id = $dapilId order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";
@@ -718,24 +743,15 @@ class OrgDiagram extends Model
 				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on
 				a2.district_id = a3.id join dapil_areas as a4 on a4.district_id = a3.id where a4.dapil_id = $dapilId) as anggota,
 				(
-					(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on
-				a2.district_id = a3.id join dapil_areas as a4 on a4.district_id = a3.id where a4.dapil_id = $dapilId)-
-					COUNT(a.id) -
-					(SELECT COUNT(a5.nik)
-					from org_diagram_village as a5
-					join users as a6 on a5.nik = a6.nik
-					join dapil_areas as a51 on a5.district_id = a51.district_id
-					where a51.dapil_id  = $dapilId)-
-					(SELECT COUNT(a7.nik)
-					from org_diagram_district as a7
-					join users as a8 on a8.nik = a7.nik
-					join dapil_areas as a71 on a7.district_id = a71.district_id 
-					where a71.dapil_id = $dapilId)-
-					(SELECT COUNT(a9.nik)
-					from org_diagram_rt as a9
-					join users as a10 on a9.nik = a10.nik
-					join dapil_areas as a91 on a9.district_id = a91.district_id 
-					where a91.dapil_id  = $dapilId and a9.base = 'KORRT')
+					SELECT COUNT(DISTINCT(a1.nik))
+							from users as a1
+							join villages as b1 on a1.village_id = b1.id 
+							left join org_diagram_rt as c1 on a1.nik = c1.nik
+							left join org_diagram_village as d1 on a1.nik = d1.nik
+							left join org_diagram_district  as e1 on a1.nik = e1.nik
+							join districts as f1 on b1.district_id = f1.id 
+							join dapil_areas as g1 on g1.district_id = f1.id
+							where g1.dapil_id  = $dapilId and c1.base is null and d1.nik is null and e1.nik is null and c1.nik is null
 				) as fix_anggota_belum_tercover,
 				(
 					SELECT COUNT(a9.nik)
@@ -788,33 +804,26 @@ class OrgDiagram extends Model
 		$sql = "SELECT COUNT(a.id) as tercover,
 				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.district_id = $districtId) as anggota,
 				(
-					(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.district_id = $districtId)-
-					COUNT(a.id) -
-					(SELECT COUNT(a5.nik)
-					from org_diagram_village as a5
-					join users as a6 on a5.nik = a6.nik
-					where a5.district_id = $districtId)-
-					(SELECT COUNT(a7.nik)
-					from org_diagram_district as a7
-					join users as a8 on a8.nik = a7.nik
-					where a7.district_id  = $districtId)-
-					(SELECT COUNT(a9.nik)
-					from org_diagram_rt as a9
-					join users as a10 on a9.nik = a10.nik
-					where a9.district_id  = $districtId and a9.base = 'KORRT')
+					SELECT COUNT(DISTINCT(a1.nik))
+					from users as a1
+					join villages as b1 on a1.village_id = b1.id 
+					left join org_diagram_rt as c1 on a1.nik = c1.nik
+					left join org_diagram_village as d1 on a1.nik = d1.nik
+					left join org_diagram_district  as e1 on a1.nik = e1.nik
+					where b1.district_id  = $districtId and c1.base is null and d1.nik is null and e1.nik is null and c1.nik is null
 				) as fix_anggota_belum_tercover,
-				(
-					SELECT COUNT(a5.nik)
-					from org_diagram_village as a5
-					join users as a6 on a5.nik = a6.nik
-					where a5.district_id = $districtId
-				) as kordes,
-				(
-					SELECT COUNT(a7.nik)
-					from org_diagram_district as a7
-					join users as a8 on a8.nik = a7.nik
-					where a7.district_id  = $districtId
-				) as korcam,
+				-- (
+				-- 	SELECT COUNT(a5.nik)
+				-- 	from org_diagram_village as a5
+				-- 	join users as a6 on a5.nik = a6.nik
+				-- 	where a5.district_id = $districtId
+				-- ) as kordes,
+				-- (
+				-- 	SELECT COUNT(a7.nik)
+				-- 	from org_diagram_district as a7
+				-- 	join users as a8 on a8.nik = a7.nik
+				-- 	where a7.district_id  = $districtId
+				-- ) as korcam,
 				(
 					SELECT COUNT(a9.nik)
 					from org_diagram_rt as a9
@@ -861,20 +870,13 @@ class OrgDiagram extends Model
 		$sql = "SELECT COUNT(a.id) as tercover,
 				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id  = $villageId) as anggota,
 				(
-					(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id  = $villageId)-
-					COUNT(a.id) -
-					(SELECT COUNT(a5.nik)
-					from org_diagram_village as a5
-					join users as a6 on a5.nik = a6.nik
-					where a5.village_id  = $villageId)-
-					(SELECT COUNT(a7.nik)
-					from org_diagram_district as a7
-					join users as a8 on a8.nik = a7.nik
-					where a8.village_id  = $villageId)-
-					(SELECT COUNT(a9.nik)
-					from org_diagram_rt as a9
-					join users as a10 on a9.nik = a10.nik
-					where a9.village_id  = $villageId and a9.base = 'KORRT')
+					SELECT COUNT(a.nik)
+					from users as a
+					join villages as b on a.village_id = b.id 
+					left join org_diagram_rt as c on a.nik = c.nik
+					left join org_diagram_village as d on a.nik = d.nik
+					left join org_diagram_district  as e on a.nik = e.nik
+					where b.id  = $villageId and c.base is null and d.nik is null and e.nik is null and c.nik is null
 				) as fix_anggota_belum_tercover,
 				-- (
 				-- 	SELECT COUNT(a5.nik)
@@ -1013,11 +1015,14 @@ class OrgDiagram extends Model
 				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on
 				a2.district_id = a3.id join dapil_areas as a4 on a4.district_id = a3.id where a3.regency_id = $regency) as anggota,
 				(
-					(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id join districts as a3 on a2.district_id = a3.id join dapil_areas as a4 on a4.district_id = a3.id where a3.regency_id = $regency)-
-					COUNT(a.id) -
-					(SELECT COUNT(a5.nik) from org_diagram_village as a5 join users as a6 on a5.nik = a6.nik where a5.regency_id = $regency)-
-					(SELECT COUNT(a7.nik) from org_diagram_district as a7 join users as a8 on a8.nik = a7.nik where a7.regency_id = $regency)-
-					(SELECT COUNT(a9.nik) from org_diagram_rt as a9 join users as a10 on a9.nik = a10.nik where a9.regency_id = $regency and a9.base = 'KORRT')
+					SELECT COUNT(DISTINCT(a1.nik))
+							from users as a1
+							join villages as b1 on a1.village_id = b1.id 
+							left join org_diagram_rt as c1 on a1.nik = c1.nik
+							left join org_diagram_village as d1 on a1.nik = d1.nik
+							left join org_diagram_district  as e1 on a1.nik = e1.nik
+							join districts as f1 on b1.district_id = f1.id 
+							where f1.regency_id = $regency and c1.base is null and d1.nik is null and e1.nik is null and c1.nik is null
 				) as fix_anggota_belum_tercover,
 				(SELECT COUNT(tps.id) from tps where tps.regency_id = 3602 ) tps,
 				-- (

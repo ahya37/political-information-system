@@ -4133,12 +4133,12 @@ class OrgDiagramController extends Controller
                 'dpt' => $val->dpt,
                 'anggota' => $val->anggota,
                 'anggota_tercover_kortps' => $val->anggota_tercover_kortps,
-                'belum_tercover_kortps' => $val->anggota - $val->anggota_tercover_kortps - $val->korte_terisi - $val->kordes - $val->korcam,
+                'belum_tercover_kortps' => $val->belum_ada_korte,
                 // 'target_korte' => $val->target_korte,
                 'target_korte' => $target / 25,
                 'korte_terisi' => $val->korte_terisi,
-                'kordes' => $val->kordes,
-                'korcam' => $val->korcam,
+                // 'kordes' => $val->kordes,
+                // 'korcam' => $val->korcam,
                 'saksi' => $val->saksi,
                 'target' => $target,
                 'tps'    => $val->tps,
@@ -4185,16 +4185,18 @@ class OrgDiagramController extends Controller
         });
         $persentage_target    = ($jml_anggota/$jml_dpt)*100;
 
-        $jml_kordes = collect($dapils)->sum(function($q){
-            return $q['kordes'];
-        });
+        // $jml_kordes = collect($dapils)->sum(function($q){
+        //     return $q['kordes'];
+        // });
 
-        $jml_korcam = collect($dapils)->sum(function($q){
-            return $q['korcam'];
-        });
+        // $jml_korcam = collect($dapils)->sum(function($q){
+        //     return $q['korcam'];
+        // });
 
         // $tmp_blm_ada_korte = $jml_anggota_tercover - $jml_anggota;
-        $jml_blm_ada_korte = $jml_anggota - $jml_anggota_tercover -  $jml_korte_terisi - $jml_kordes - $jml_korcam;
+        $jml_blm_ada_korte = collect($dapils)->sum(function($q){
+                return $q['belum_tercover_kortps'];
+        });
         // if ($jml_blm_ada_korte == - 0) {
         //     $jml_blm_ada_korte = 0;
         // }elseif ($jml_blm_ada_korte > 0) {
@@ -4266,16 +4268,19 @@ class OrgDiagramController extends Controller
         //     return $q->belum_ada_korte;
         // });
 
-        $jml_kordes = collect($data)->sum(function($q){
-            return $q->kordes;
-        });
+        // $jml_kordes = collect($data)->sum(function($q){
+        //     return $q->kordes;
+        // });
 
-        $jml_korcam = collect($data)->sum(function($q){
-            return $q->korcam;
-        });
+        // $jml_korcam = collect($data)->sum(function($q){
+        //     return $q->korcam;
+        // });
 
         // $tmp_blm_ada_korte = $jml_anggota - $jml_anggota_tercover  - $jml_korte_terisi - $jml_kordes -  $jml_korcam;
-        $jml_blm_ada_korte = $jml_anggota - $jml_anggota_tercover  - $jml_korte_terisi - $jml_kordes -  $jml_korcam;
+        // $jml_blm_ada_korte = $jml_anggota - $jml_anggota_tercover  - $jml_korte_terisi - $jml_kordes -  $jml_korcam;
+        $jml_blm_ada_korte = collect($data)->sum(function($q){
+            return $q->belum_ada_korte;
+        });
         // if ($jml_blm_ada_korte == - 0) {
         //     $jml_blm_ada_korte = 0;
         // }elseif ($jml_blm_ada_korte > 0) {

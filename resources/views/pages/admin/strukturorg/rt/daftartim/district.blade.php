@@ -84,7 +84,7 @@
                                                 <td align="center">{{ $gF->decimalFormat($item->korte_terisi) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($target_kortps_plus_minus) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->anggota_tercover_kortps) }}</td>
-                                                <td align="center">{{ $gF->decimalFormat($item->anggota - $item->anggota_tercover_kortps - $item->korte_terisi - $item->kordes - $item->korcam) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item->belum_ada_korte) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->saksi) }}</td>
                                             </tr>
                                         @endforeach
