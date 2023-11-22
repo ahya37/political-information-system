@@ -51,12 +51,12 @@ async function initialGetAnggotaCoverFirst(){
     $("#anggota").empty();
     $("#tercover").empty();
     const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-    $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-    $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+    $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+    $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
     $("#blmtercover").empty();
     blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-    $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+    $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 }
 
 initialGetAnggotaCoverFirst();
@@ -93,11 +93,11 @@ $("#selectListArea").change(async function () {
         $("#blmtercover").empty();
 
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
         
         blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         table.ajax.reload(null, false);
 
@@ -119,11 +119,11 @@ $("#selectListArea").change(async function () {
         $("#blmtercover").empty();
 
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
         blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         table.ajax.reload(null, false);
 
@@ -160,11 +160,11 @@ $("#selectDistrictId").change(async function () {
         $("#blmtercover").empty();
 
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
         blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         table.ajax.reload(null, false);       
 
@@ -186,11 +186,11 @@ $("#selectDistrictId").change(async function () {
         $("#blmtercover").empty();
 
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
         blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
         table.ajax.reload(null, false);
 
@@ -227,11 +227,11 @@ $("#selectVillageId").change(async function () {
         $("#blmtercover").empty();
 
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
         blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
 
     } else {
@@ -257,11 +257,11 @@ $("#selectVillageId").change(async function () {
         $("#blmtercover").empty();
 
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
         blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     }
 });
 
@@ -288,11 +288,11 @@ $("#selectRt").change(async function () {
         $("#blmtercover").empty();
 
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
         blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
 
     } else {
@@ -317,11 +317,11 @@ $("#selectRt").change(async function () {
         $("#blmtercover").empty();
 
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
-        $("#anggota").text(`${numberWithCommas(dataCover.data.anggota)}`);
-        $("#tercover").text(`${numberWithCommas(dataCover.data.tercover)}`);
+        $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+        $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
         
         blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
-        $("#blmtercover").text(`${numberWithCommas(blmTerCover)}`);
+        $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
     }
 });
 
@@ -824,6 +824,6 @@ async function onDelete(data) {
 
 }
 
-function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function numberWithDot(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }

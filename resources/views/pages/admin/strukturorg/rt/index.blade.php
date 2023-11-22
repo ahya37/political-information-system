@@ -65,7 +65,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Anggota</h5>
-                                <h5 id="anggota"></h5>
+                                {{-- <h5 id="anggota"></h5> --}}
+                                <i>progress</i>
+
                             </div>
                         </div>
                     </div>
@@ -73,7 +75,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Tercover Kor TPS</h5>
-                                <h5 id="tercover"></h5>
+                                {{-- <h5 id="tercover"></h5> --}}
+                                <i>progress</i>
                             </div>
                         </div>
                     </div>
@@ -81,7 +84,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Belum Tercover Kor TPS</h5>
-                                <h5 id="blmtercover"></h5>
+                                {{-- <h5 id="blmtercover"></h5> --}}
+                                <i>progress</i>
+
                             </div>
                         </div>
                     </div>
@@ -91,6 +96,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 id="keterangan">Kor TPS</h5>
+
                             </div>
                         </div>
                     </div>

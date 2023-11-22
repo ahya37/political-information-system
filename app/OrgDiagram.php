@@ -464,11 +464,19 @@ class OrgDiagram extends Model
 
 	public function getKalkulasiTercoverVillage($villageId){
 
-		$sql = "SELECT COUNT(a.id) as tercover,
-				(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId) as anggota
-				from org_diagram_rt as a
-				join users as b on a.nik = b.nik
-				where a.base ='ANGGOTA'  and b.village_id = $villageId";
+		// $sql = "SELECT COUNT(a.id) as tercover,
+		// 		(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId) as anggota
+		// 		from org_diagram_rt as a
+		// 		join users as b on a.nik = b.nik
+		// 		where a.base ='ANGGOTA'  and b.village_id = $villageId";
+		$sql = "SELECT COUNT(DISTINCT(a.nik)) as tercover,
+		(SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id where a2.id = $villageId) as anggota
+				from users as a
+				join villages as b on a.village_id = b.id 
+				left join org_diagram_rt as c on a.nik = c.nik
+				left join org_diagram_village as d on a.nik = d.nik
+				left join org_diagram_district  as e on a.nik = e.nik 
+				where b.id  = $villageId and c.base is null and d.nik is null and e.nik is null and c.nik is null";
         
         return collect(DB::select($sql))->first();
 	}
