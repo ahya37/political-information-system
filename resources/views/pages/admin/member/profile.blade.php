@@ -146,7 +146,7 @@
                                   @endif
                                   <div class="text-center">
                                       <a
-                                      href="{{ route('admin-profile-member-edit', encrypt($profile->id)) }}"
+                                      href="{{ route('admin-profile-member-edit', $profile->id) }}"
                                       class="btn btn-sm btn-sc-primary btn-lg"
                                     >
                                       Edit Profil
