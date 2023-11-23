@@ -218,10 +218,10 @@ class MemberController extends Controller
     {
         // $idprofile = decrypt($id);
        
-        // $profile = app('UserModel')->getProfile($id);
-        $profile    = User::where('id', $id)->first();
+        $profile = app('UserModel')->getProfile($id);
+        // $profile    = User::where('id', $id)->first();
         //  dd($profile);
-        return 'PERBAIKAN';
+        // return 'PERBAIKAN';
         return view('pages.admin.member.edit', compact('profile'));
     }
 
