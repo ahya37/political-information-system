@@ -3189,7 +3189,7 @@ class OrgDiagramController extends Controller
                 $village = Village::select('name')->where('id', $village_id)->first();
                 $anggota         = $orgDiagramModel->getDataAnggotaBelumterCoverKortpsByVillage($village_id);
                 // dd($anggota);
-                return $this->excel->download(new AnggotaBelumTercoverKortps($anggota), 'ANGGOTA BELUM TERCOVER DS.' . $village->name . '.xls');
+                return $this->excel->download(new AnggotaBelumTercoverKortps($anggota, $village_id), 'ANGGOTA BELUM TERCOVER DS.' . $village->name . '.xls');
 
             }elseif(isset($village_id) AND isset($request->rt)){
 
