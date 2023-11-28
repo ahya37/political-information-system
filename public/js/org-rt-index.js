@@ -879,6 +879,9 @@ function showDivHtmlTpsExists(m){
                 <tr>
                     <td class='text-center'>${m.tps}</td>
                     <td class='text-center'>${m.kortps} Orang</td>
+                    <td class='text-center'>${m.jml_anggota_kortps} Orang</td>
+                    <td class='text-center'>${m.hasil_suara}</td>
+                    <td class='text-center'>${m.selisih}</td>
                 </tr>
             </tbody>
     `;

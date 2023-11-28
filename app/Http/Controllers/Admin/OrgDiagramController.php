@@ -186,6 +186,35 @@ class OrgDiagramController extends Controller
             'data_pengurus' => $data_pengurus
         ];
 
+        // jumlah gabungan anggota kortps per tps nya
+         // get data kortps per desanya
+        $results_tps_terisi = [];
+        foreach ($tpsExists as $key => $value) {
+         // hitung jumlah anggota berdasarkan jumlah kortps yg ada
+            $list_kortps = DB::table('org_diagram_rt as a')
+                      ->select(
+                        DB::raw('(select count(a1.nik) from org_diagram_rt as a1 join users as a2 on a1.nik = a2.nik where a1.pidx = a.idx and a1.base = "ANGGOTA") as jml_anggota')
+                      )
+                      ->join('users as b','a.nik','=','b.nik')
+                      ->where('a.village_id', $value->village_id)
+                      ->where('b.tps_id', $value->id)
+                      ->where('a.base','KORRT')
+                      ->get();
+
+            $jml_anggota_kortps = collect($list_kortps)->sum(function($q){
+                return $q->jml_anggota;
+            });
+
+            $results_tps_terisi[] = [
+                'tps' => $value->tps,
+                'kortps' => $value->kortps,
+                'jml_anggota_kortps' => $jml_anggota_kortps,
+                'hasil_suara' => 0,
+                'selisih' => 0
+            ];
+        }
+
+
         return response()->json([
             'data' => $results,
             'target_anggota' => $gF->decimalFormat($target_anggota),
@@ -194,7 +223,7 @@ class OrgDiagramController extends Controller
             'kurang_kortps' => $gF->decimalFormat($results->kortps_terisi - ($target_anggota / 25)),
             'pengurus' => $pengurus,
             'tpsnotexists' => $tpsNotExists,
-            'tpsExists' => $tpsExists
+            'tpsExists' => $results_tps_terisi
         ]);
     }
 
@@ -4583,18 +4612,17 @@ class OrgDiagramController extends Controller
                     ) as tps_korte
                     from org_diagram_rt as a
                     join users as b on a.nik = b.nik
-                    WHERE b.tps_id is null  and a.base = 'ANGGOTA' and a.district_id =  $district_id");
+                    WHERE a.base = 'ANGGOTA' and a.district_id =  $district_id");
 
         #update tps_id anggota = tps_id kortps
-        // foreach ($kortps as  $value) {
+        foreach ($kortps as  $value) {
             
-        //     DB::table('users')->where('id', $value->id)->update([
-        //         'tps_id' => $value->tps_korte
-        //     ]);
-        // }
+            DB::table('users')->where('id', $value->id)->update([
+                'tps_id' => $value->tps_korte
+            ]);
+        }
 
         return ResponseFormatter::success([
-            'data' => $kortps,
             'message' => 'Berhasil update tps!'
         ], 200);
 

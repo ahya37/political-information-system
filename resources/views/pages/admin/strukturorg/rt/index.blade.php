@@ -212,9 +212,9 @@
                                             <tr>
                                                 <th class="text-center">TPS</th>
                                                 <th class="text-center">Kor TPS</th>
-                                               <!--  <th class="text-center">Anggota</th> 
-                                                <th class="text-center">Hasil Suara</th> 
-                                                <th class="text-center">Selisih</th>  -->
+                                                <th class="text-center">Anggota</th>
+                                               <th class="text-center">Hasil Suara</th> 
+                                                <th class="text-center">Selisih</th>
                                             </tr>
                                         </thead>
                                     </table>
