@@ -223,7 +223,7 @@
                                         <tfoot>
                                             <tr>
                                                 <td></td>
-                                                <td></td>
+                                                <td class="text-center" id="jmltpsExistsKortps"></td>
                                                 <td class="text-center" id="jmltpsExistsAnggota"></td>
                                                 <td class="text-center">0</td>
                                                 <td class="text-center">0</td> 
