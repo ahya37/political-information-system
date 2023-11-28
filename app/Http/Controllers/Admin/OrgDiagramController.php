@@ -4569,4 +4569,47 @@ class OrgDiagramController extends Controller
 
     }
 
+    public function updateMyTps(Request $request){
+
+        $district_id = $request->district_id;
+
+        #get data kortps by kecamatan
+        $kortps = DB::select("SELECT b.id,
+                    (
+                        SELECT a1.tps_id from users as a1 
+                        join tps as a2 on a1.tps_id = a2.id
+                        join org_diagram_rt as a3 on a1.nik = a3.nik
+                        WHERE  a3.idx = a.pidx limit 1
+                    ) as tps_korte
+                    from org_diagram_rt as a
+                    join users as b on a.nik = b.nik
+                    WHERE b.tps_id is null  and a.base = 'ANGGOTA' and a.district_id =  $district_id");
+
+        #update tps_id anggota = tps_id kortps
+        // foreach ($kortps as  $value) {
+            
+        //     DB::table('users')->where('id', $value->id)->update([
+        //         'tps_id' => $value->tps_korte
+        //     ]);
+        // }
+
+        return ResponseFormatter::success([
+            'data' => $kortps,
+            'message' => 'Berhasil update tps!'
+        ], 200);
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

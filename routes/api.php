@@ -455,3 +455,14 @@ Route::post('/rightchoose/update/field/village','Admin\SettingController@updateF
 
 // get kalkulasi anggota tercover dan belum
 Route::post('/tim/calculate', 'Admin\OrgDiagramController@countMemberNotCover');
+
+
+// update tps id anggota berdasarkan tps koordinator nya
+Route::post('/tim/updatemytps', 'Admin\OrgDiagramController@updateMyTps');
+
+
+
+
+
+
+

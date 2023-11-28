@@ -120,22 +120,22 @@ async function initialGetAnggotaCoverFirst() {
         selectRT
     );
 
-    $("#jmldpt").text(`${dataCover.jml_dpt}`);
-    $("#targetanggota").text(`${dataCover.target_anggota}`);
-    $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
-   $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
+    $("#jmldpt").text(dataCover.jml_dpt);
+    $("#targetanggota").text(dataCover.target_anggota);
+    $("#anggota").text(dataCover.data.anggota);
+   $("#tercover").text(dataCover.data.tercover);
 
     $("#blmtercover").empty();
     // blmTerCover =
     //     parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
     blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
 
-    $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
+    $("#blmtercover").text(blmTerCover);
 
 
-    $("#jmltps").text(` ${numberWithDot(dataCover.data.tps)}`);
-    $("#targetkortps").text(` ${numberWithDot(dataCover.target_kortps)}`);
-    $("#kortpsterisi").text(` ${numberWithDot(dataCover.data.kortps_terisi)}`);
+    $("#jmltps").text(dataCover.data.tps);
+    $("#targetkortps").text(dataCover.target_kortps);
+    $("#kortpsterisi").text(dataCover.data.kortps_terisi);
     $("#kurangtpsterisi").text(
         ` ${numberWithDot(dataCover.kurang_kortps)}`
     );
@@ -449,7 +449,7 @@ $("#selectVillageId").change(async function () {
             selectVillageId,
             selectRT
         );
-        
+
         getPengurusUi(dataCover.pengurus.data_pengurus)
         getLitTpsNotExistUi(dataCover.tpsnotexists);
         getLitTpsExistUi(dataCover.tpsExists);
@@ -554,6 +554,12 @@ $("#selectRt").change(async function () {
         $("#tercover").empty();
         $("#blmtercover").empty();
 
+        $("#kortpsterisi").empty();
+        $("#kurangtpsterisi").empty();
+        $("#targetkortps").empty();
+        $("#jmltps").empty();
+
+
         const dataCover = await initialGetAnggotaCover(
             selectListArea,
             selectDistrictId,
@@ -618,7 +624,14 @@ $("#selectRt").change(async function () {
 
         blmTerCover   = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
-    }
+
+        $("#jmltps").text(` ${numberWithDot(dataCover.data.tps)}`);
+        $("#targetkortps").text(` ${numberWithDot(dataCover.target_kortps)}`);
+        $("#kortpsterisi").text(` ${numberWithDot(dataCover.data.kortps_terisi)}`);
+        $("#kurangtpsterisi").text(
+            ` ${numberWithDot(dataCover.kurang_kortps)}`
+        );
+    } 
 });
 
 // TPS
@@ -1233,9 +1246,6 @@ async function onDelete(data) {
     });
 }
 
-function numberWithDot(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
 function numberWithDot(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
