@@ -438,7 +438,10 @@ $("#selectVillageId").change(async function () {
         $("#targetkortps").empty();
         $("#jmltps").empty();
         $("#listtpsnotexists").empty();
-        $().show();
+        $("#jmltpsExistsAnggota").empty();
+        $("#datalisttpsexists").empty();
+
+        
         $('.tpsexist').show();
         $('.tpsnotexist').show();
         $("#dataPengurusTable").show();
@@ -450,16 +453,21 @@ $("#selectVillageId").change(async function () {
             selectRT
         );
 
+
         getPengurusUi(dataCover.pengurus.data_pengurus)
         getLitTpsNotExistUi(dataCover.tpsnotexists);
         getLitTpsExistUi(dataCover.tpsExists);
 
         $('.pengurus').show();
+        $("#jmltpsExistsAnggota").show();
+        $("#datalisttpsexists").show();
+
         
         $("#jmldpt").text(`${dataCover.jml_dpt}`);
         $("#targetanggota").text(`${dataCover.target_anggota}`);
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
+        $("#jmltpsExistsAnggota").text(dataCover.jmltpsExists_anggota);
 
         // blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
         blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
@@ -862,12 +870,12 @@ function getLitTpsExistUi(dataTps){
         dataTps.forEach((m) => {
             divTpsExists += showDivHtmlTpsExists(m);
         });
-        const divTpsExistsContainer = $("#listtpsexists");
+        const divTpsExistsContainer = $("#datalisttpsexists");
         divTpsExistsContainer.append(divTpsExists);
 
     }else{
 
-        const divTpsExistsContainer = $("#listtpsexists");
+        const divTpsExistsContainer = $("#datalisttpsexists");
         divTpsExistsContainer.append(`<li class='text-danger'>Belum ada</>`);
 
     }
@@ -875,7 +883,7 @@ function getLitTpsExistUi(dataTps){
 
 function showDivHtmlTpsExists(m){
     return `
-            <tbody>
+           
                 <tr>
                     <td class='text-center'>${m.tps}</td>
                     <td class='text-center'>${m.kortps} Orang</td>
@@ -883,7 +891,7 @@ function showDivHtmlTpsExists(m){
                     <td class='text-center'>${m.hasil_suara}</td>
                     <td class='text-center'>${m.selisih}</td>
                 </tr>
-            </tbody>
+           
     `;
 }
 

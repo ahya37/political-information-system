@@ -213,10 +213,22 @@
                                                 <th class="text-center">TPS</th>
                                                 <th class="text-center">Kor TPS</th>
                                                 <th class="text-center">Anggota</th>
-                                               <th class="text-center">Hasil Suara</th> 
+                                                <th class="text-center">Hasil Suara</th> 
                                                 <th class="text-center">Selisih</th>
                                             </tr>
                                         </thead>
+                                        <tbody id="datalisttpsexists">
+                                            
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-center" id="jmltpsExistsAnggota"></td>
+                                                <td class="text-center">0</td>
+                                                <td class="text-center">0</td> 
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>

@@ -192,7 +192,7 @@ class OrgDiagramController extends Controller
         foreach ($tpsExists as $key => $value) {
          // hitung jumlah anggota berdasarkan jumlah kortps yg ada
             $list_kortps = DB::table('org_diagram_rt as a')
-                      ->select(
+                      ->select('b.name',
                         DB::raw('(select count(a1.nik) from org_diagram_rt as a1 join users as a2 on a1.nik = a2.nik where a1.pidx = a.idx and a1.base = "ANGGOTA") as jml_anggota')
                       )
                       ->join('users as b','a.nik','=','b.nik')
@@ -208,11 +208,17 @@ class OrgDiagramController extends Controller
             $results_tps_terisi[] = [
                 'tps' => $value->tps,
                 'kortps' => $value->kortps,
+                'list_kortps' => $list_kortps,
                 'jml_anggota_kortps' => $jml_anggota_kortps,
                 'hasil_suara' => 0,
                 'selisih' => 0
             ];
         }
+
+        //jumlah angota per kortps dari tps yg sudah terisi
+        $jmltpsExists_anggota = collect($results_tps_terisi)->sum(function($q){
+            return $q['jml_anggota_kortps'];
+        });
 
 
         return response()->json([
@@ -223,7 +229,8 @@ class OrgDiagramController extends Controller
             'kurang_kortps' => $gF->decimalFormat($results->kortps_terisi - ($target_anggota / 25)),
             'pengurus' => $pengurus,
             'tpsnotexists' => $tpsNotExists,
-            'tpsExists' => $results_tps_terisi
+            'tpsExists' => $results_tps_terisi,
+            'jmltpsExists_anggota' => $jmltpsExists_anggota
         ]);
     }
 
