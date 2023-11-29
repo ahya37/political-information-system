@@ -122,20 +122,20 @@ async function initialGetAnggotaCoverFirst() {
 
     $("#jmldpt").text(dataCover.jml_dpt);
     $("#targetanggota").text(dataCover.target_anggota);
-    $("#anggota").text(dataCover.data.anggota);
-   $("#tercover").text(dataCover.data.tercover);
+    $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
+   $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
 
     $("#blmtercover").empty();
     // blmTerCover =
     //     parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
     blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
 
-    $("#blmtercover").text(blmTerCover);
+    $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
 
-    $("#jmltps").text(dataCover.data.tps);
-    $("#targetkortps").text(dataCover.target_kortps);
-    $("#kortpsterisi").text(dataCover.data.kortps_terisi);
+    $("#jmltps").text(`${numberWithDot(dataCover.data.tps)}`);
+    $("#targetkortps").text(`${numberWithDot(dataCover.target_kortps)}`);
+    $("#kortpsterisi").text(`${numberWithDot(dataCover.data.kortps_terisi)}`);
     $("#kurangtpsterisi").text(
         ` ${numberWithDot(dataCover.kurang_kortps)}`
     );
