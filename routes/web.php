@@ -505,7 +505,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/daftartim/dapil/{dapilId}','OrgDiagramController@daftatTimDapil')->name('admin-daftartim-data-dapil');
             Route::get('/daftartim/district/{districtId}','OrgDiagramController@daftarTimDistrict')->name('admin-daftartim-data-district');
 
-            Route::get('/rt/anggota/belumtercover','OrgDiagramController@anggotaBelumtercoverPerDesa')->name('admin-daftartim-data-anggotabelumtercover');;
+            Route::get('/rt/anggota/belumtercover','OrgDiagramController@anggotaBelumtercoverPerDesa')->name('admin-daftartim-data-anggotabelumtercover');
+
+            #Daftar Saksi
+            Route::get('/daftartim/saksi','OrgDiagramController@daftarSaksi')->name('admin-daftartim-saksi');
+
 
         });
 		
