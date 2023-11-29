@@ -440,7 +440,7 @@ $("#selectVillageId").change(async function () {
         $("#listtpsnotexists").empty();
         $("#jmltpsExistsAnggota").empty();
         $("#datalisttpsexists").empty();
-        $("#jmltpsExistsKortps").show();
+        $("#jmltpsExistsKortps").empty();
 
         
         $('.tpsexist').show();
@@ -470,8 +470,8 @@ $("#selectVillageId").change(async function () {
         $("#targetanggota").text(`${dataCover.target_anggota}`);
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
         $("#tercover").text(`${numberWithDot(dataCover.data.tercover)}`);
-        $("#jmltpsExistsKortps").text(`${dataCover.jml_kortps} Orang`);
-        $("#jmltpsExistsAnggota").text(`${dataCover.jmltpsExists_anggota} Orang`);
+        $("#jmltpsExistsKortps").append(`<b>${dataCover.jml_kortps} Orang</b>`);
+        $("#jmltpsExistsAnggota").append(`<b>${dataCover.jmltpsExists_anggota} Orang</b>`);
 
         // blmTerCover = parseInt(dataCover.data.anggota) - parseInt(dataCover.data.tercover);
         blmTerCover    = dataCover.data.fix_anggota_belum_tercover;
