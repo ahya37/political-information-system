@@ -186,6 +186,45 @@ class OrgDiagramController extends Controller
             'data_pengurus' => $data_pengurus
         ];
 
+        // jumlah gabungan anggota kortps per tps nya
+         // get data kortps per desanya
+        $results_tps_terisi = [];
+        foreach ($tpsExists as $key => $value) {
+         // hitung jumlah anggota berdasarkan jumlah kortps yg ada
+            $list_kortps = DB::table('org_diagram_rt as a')
+                      ->select(
+                        DB::raw('(select count(a1.nik) from org_diagram_rt as a1 join users as a2 on a1.nik = a2.nik where a1.pidx = a.idx and a1.base = "ANGGOTA") as jml_anggota')
+                      )
+                      ->join('users as b','a.nik','=','b.nik')
+                      ->where('a.village_id', $value->village_id)
+                      ->where('b.tps_id', $value->id)
+                      ->where('a.base','KORRT')
+                      ->get();
+
+            $jml_anggota_kortps = collect($list_kortps)->sum(function($q){
+                return $q->jml_anggota;
+            });
+
+            $results_tps_terisi[] = [
+                'tps' => $value->tps,
+                'kortps' => $value->kortps,
+                // 'list_kortps' => $list_kortps,
+                'jml_anggota_kortps' => $jml_anggota_kortps,
+                'hasil_suara' => 0,
+                'selisih' => 0
+            ];
+        }
+
+        //jumlah angota per kortps dari tps yg sudah terisi
+        $jmltpsExists_anggota = collect($results_tps_terisi)->sum(function($q){
+            return $q['jml_anggota_kortps'];
+        });
+
+        $jml_kortps = collect($results_tps_terisi)->sum(function($q){
+            return $q['kortps'];
+        });
+
+
         return response()->json([
             'data' => $results,
             'target_anggota' => $gF->decimalFormat($target_anggota),
@@ -194,7 +233,9 @@ class OrgDiagramController extends Controller
             'kurang_kortps' => $gF->decimalFormat($results->kortps_terisi - ($target_anggota / 25)),
             'pengurus' => $pengurus,
             'tpsnotexists' => $tpsNotExists,
-            'tpsExists' => $tpsExists
+            'tpsExists' => $results_tps_terisi,
+            'jmltpsExists_anggota' => $jmltpsExists_anggota,
+            'jml_kortps' => $jml_kortps
         ]);
     }
 
@@ -4563,78 +4604,51 @@ class OrgDiagramController extends Controller
 
     }
 
-    public function daftarSaksi(){
-
-        $regency = Regency::select('id', 'name')->where('id', 3602)->first();
-
-        return view('pages.admin.strukturorg.saksi.index', compact('regency'));
-
-    }
-
-    public function getDataOrgSaksi(Request $request)
-    {
-
-        $orderBy = 'b.name';
-        switch ($request->input('order.0.column')) {
-            case '1':
-                $orderBy = 'b.name';
-                break;
-        }
-
-        $data = DB::table('witnesses as a')
-                ->select('a.id','b.name', 'a.status', 'c.tps_number', 'd.name as village','b.whatsapp','b.id as user_id','b.photo','e.name as district','b.address')
-                ->join('users as b','a.user_id','=','b.id')
-                ->join('tps as c','a.tps_id','=','c.id')
-                ->join('villages as d','c.village_id','=','d.id')
-                ->join('districts as e','d.district_id','=','e.id')
-                ->join('dapil_areas as f','f.district_id','=','e.id');
-
-
-        if ($request->input('search.value') != null) {
-            $data = $data->where(function ($q) use ($request) {
-                $q->whereRaw('LOWER(b.name) like ? ', ['%' . strtolower($request->input('search.value')) . '%']);
-            });
-        }
-
-        if ($request->input('dapil') != null) {
-            $data->where('f.dapil_id', $request->dapil);
-        }
-
-        if ($request->input('district') != null) {
-            $data->where('e.id', $request->district);
-        }
-
-        if ($request->input('village') != null) {
-            $data->where('d.id', $request->village);
-        }
-
-        // if ($request->input('rt') != null) {
-        //     $data->where('a.rt', $request->rt);
-        // }
-
-        if ($request->input('tps') != null) {
-            $data->where('c.id', $request->tps);
-        }
-
-
-        $recordsFiltered = $data->get()->count();
-        if ($request->input('length') != -1) $data = $data->skip($request->input('start'))->take($request->input('length'));
-        $data = $data->orderBy($orderBy, $request->input('order.0.dir'))->get();
-
-        $recordsTotal = $data->count();
-
-        return response()->json([
-            'draw' => $request->input('draw'),
-            'recordsTotal' => $recordsTotal,
-            'recordsFiltered' => $recordsFiltered,
-            'data' => $data
-        ]);
-    }
-
     public function anggotaBelumtercoverPerDesa(){
 
         return 'OK';
 
     }
 
+    public function updateMyTps(Request $request){
+
+        $district_id = $request->district_id;
+
+        #get data kortps by kecamatan
+        $kortps = DB::select("SELECT b.id,
+                    (
+                        SELECT a1.tps_id from users as a1 
+                        join tps as a2 on a1.tps_id = a2.id
+                        join org_diagram_rt as a3 on a1.nik = a3.nik
+                        WHERE  a3.idx = a.pidx limit 1
+                    ) as tps_korte
+                    from org_diagram_rt as a
+                    join users as b on a.nik = b.nik
+                    WHERE a.base = 'ANGGOTA' and a.district_id =  $district_id");
+
+        #update tps_id anggota = tps_id kortps
+        foreach ($kortps as  $value) {
+            
+            DB::table('users')->where('id', $value->id)->update([
+                'tps_id' => $value->tps_korte
+            ]);
+        }
+
+        return ResponseFormatter::success([
+            'message' => 'Berhasil update tps!'
+        ], 200);
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
