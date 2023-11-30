@@ -51,8 +51,11 @@
                     </tr>
                 </table>
                 <div class="row mb-2">
-                    <div class="col-md-12 col-sm-12">
-                        <button class="btn btn-sm btn-sc-primary text-white" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-plus"></i>Buat Keluarga Serumah</button>
+                    <div class="col-md-3 col-sm-3">
+                        <button class="btn btn-sm btn-sc-primary text-white" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-plus"></i> Buat Keluarga Serumah</button>
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <button class="btn btn-sm btn-success text-white" data-toggle="modal" data-whatever="{{$idx}}" data-target="#Singkronisasi"><i class="fa fa-refresh"></i> Singkronisasi Data</button>
                     </div>
                 </div>
 
@@ -172,16 +175,6 @@
                                             $btnDelete = 'btn btn-sm btn-danger';
                                         }
                                         @endphp
-                                            {{-- <tr class="{{ $item->is_cover == 1 ? 'bg-success text-white' : '' }}">
-                                                <td>{{ $no++ }}</td>
-                                                <td>
-                                                    <p><img class="rounded" width="40"
-                                                            src="{{ $item->photo != null ? asset('/storage/' . $item->photo) : asset('img/member-icon.svg') }}">
-                                                        {{ $item->name }}</p>
-                                                </td>
-                                                <td>{{ $item->nik }}</td>
-                                                <td><button class="btn btn-sm btn-danger" data-name="{{ $item->name }}" data-whatever="{{ $item->id }}" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-trash"></i></button></td>
-                                            </tr> --}}
                                             <tr class="{{ $class }}">
                                                 <td>{{ $no++ }}</td>
                                                 <td>
@@ -342,8 +335,37 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="Singkronisasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel2">Singkronisasi Data</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="{{ route('admin-singkronisasidata-save', $idx) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group">
+                    <label>Yakin untuk malakukan singkronisasi data ?</label>
+                 </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-sm btn-sc-primary text-white">Ya</button>
+        </div>
+        </form>
+
+    </div>
+</div>
+</div>
       
 @endpush
+
 
 @push('addon-script')
     <script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>

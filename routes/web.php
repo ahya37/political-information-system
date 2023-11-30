@@ -499,6 +499,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 			Route::post('/rt/detail/anggota/formkoordinator/store/{idx}','OrgDiagramController@storeFormKoordinatorTps')->name('admin-koordinatortpskorte-store');
 			Route::post('/rt/detail/anggota/formkoordinator/delete','OrgDiagramController@deleteDataFormKoordinatorTps')->name('admin-koordinatortpskorte-delete');
 			Route::post('/rt/detail/anggota/formkoordinator/nik/update','OrgDiagramController@updateOnlyNikDataFormKoordinatorTps')->name('admin-koordinatortpskorte-nik-update');
+
+			Route::post('/rt/detail/anggota/singkronisasidata/save/{idx}','OrgDiagramController@singkronisasiData')->name('admin-singkronisasidata-save');
 			
 			// Route::post('/rt/detail/anggota/formkoordinator/download/{idx}','OrgDiagramController@downloadAnggotaKorTpsPdf')->name('admin-koordinatortpskorte-store');
 			

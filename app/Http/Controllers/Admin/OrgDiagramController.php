@@ -1660,7 +1660,7 @@ class OrgDiagramController extends Controller
         }
 
         $no_head_familly    = 1;
-        return view('pages.admin.strukturorg.rt.detailanggota', compact('kor_rt', 'anggotaKorTps', 'no', 'korte_idx','no_head_familly','resultsFamilyGroup'));
+        return view('pages.admin.strukturorg.rt.detailanggota', compact('kor_rt', 'anggotaKorTps', 'no', 'korte_idx','no_head_familly','resultsFamilyGroup','idx'));
     }
 
     public function downloadMembersRt($idx)
@@ -4437,6 +4437,55 @@ class OrgDiagramController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
+    }
+
+    public function singkronisasiData(Request $request, $idx){
+
+        DB::beginTransaction();
+        try {
+
+            #get data anggota dari form kortps, yang sudah punya KTA saja, dan bukan dari anggota kortps lain
+            $anggota_kortps = DB::table('anggota_koordinator_tps_korte')
+                            ->select('name','nik', 
+                                DB::raw('(select count(id) from users where nik =  anggota_koordinator_tps_korte.nik) as cek_kta'),
+                                DB::raw('(select COUNT(nik) from org_diagram_rt where nik = anggota_koordinator_tps_korte.nik and pidx = anggota_koordinator_tps_korte.pidx_korte) as myanggota')
+                            )
+                            ->where('pidx_korte', $idx)
+                            ->havingRaw('cek_kta > 0')
+                            ->havingRaw('myanggota > 0')
+                            ->get();
+
+            // dd($anggota_kortps);
+
+            #hapus dulu data dari form kortps kecuali yg belum mempunyai KTA, dan anggota kortps orang lain
+            foreach( $anggota_kortps as $item){
+                DB::table('anggota_koordinator_tps_korte')->where('nik', $item->nik)->where('pidx_korte', $idx)->delete();
+            }
+
+            #get data anggota berdasrkan idx kortps
+            $anggota = DB::table('org_diagram_rt')->select('pidx','nik' ,'name','cby','created_at')->where('base','ANGGOTA')->where('pidx', $idx)->get();
+
+            #insert kembali ke anggotaan 25 ke form kortps
+            foreach ($anggota as  $value) {
+                DB::table('anggota_koordinator_tps_korte')->insert([
+                    'pidx_korte' => $value->pidx,
+                    'nik'  => $value->nik,
+                    'name' => $value->name,
+                    'created_by' => $value->cby,
+                    'created_at' => $value->created_at,
+                    'updated_by' => auth()->guard('admin')->user()->id,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            }
+           
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Berhasil singkronisasi!']);
+        } catch (\Exception $e) {
+           DB::rollback();
+        //    return $e->getMessage();
+           return redirect()->back()->with(['warning' => 'Gagal singkronisasi!']);
+        }
+
     }
 
 

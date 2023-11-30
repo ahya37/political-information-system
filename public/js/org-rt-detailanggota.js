@@ -131,7 +131,7 @@ let table = $("#data").DataTable({
                         <button type="button" onclick="updateNoTelpKorTps(this)" data-name="${row.name}" data-id="${row.id}" class="btn btn-sm btn-info">
                         Edit No.Telp
                         </button>
-                        <a href="/admin/struktur/rt/edittps/anggota/${row.user_id}" class="btn btn-sm btn-warning">Edit TPS</a>
+                        <a href="/admin/struktur/rt/edittps/anggota/${row.id}" class="btn btn-sm btn-warning">Edit TPS</a>
                         <button class="btn btn-sm btn-sc-primary text-white" data-name="${row.name}" data-whatever="${row.id}" data-toggle="modal" data-target="#exampleModal">Stiker</button>
                         <button type="button" class="btn btn-sm btn-danger" onclick="onDelete(this)" data-name="${row.name}" id="${row.id}"><i class="fa fa-trash"></i></button>`;
             },
@@ -221,6 +221,14 @@ $("#editNik").on("show.bs.modal", function (event) {
     modal.find(".modal-title").text("Edit NIK " + name + "?");
     modal.find("#recipient-name2").val(recipient);
     modal.find("#recipient-nik").val(nik);
+
+});
+
+$("#Singkronisasi").on("show.bs.modal", function (event) {
+    var button = $(event.relatedTarget);
+    var recipient = button.data("whatever");
+    var modal = $(this);
+    modal.find("#recipient-idx").val(recipient);
 
 });
 
