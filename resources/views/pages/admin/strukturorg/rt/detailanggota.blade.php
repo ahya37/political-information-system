@@ -51,11 +51,11 @@
                     </tr>
                 </table>
                 <div class="row mb-2">
-                    <div class="col-md-3 col-sm-3">
+                    <div class="col-md-6 col-sm-6">
                         <button class="btn btn-sm btn-sc-primary text-white" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-plus"></i> Buat Keluarga Serumah</button>
                     </div>
-                    <div class="col-md-3 col-sm-3">
-                        <button class="btn btn-sm btn-success text-white" data-toggle="modal" data-whatever="{{$idx}}" data-target="#Singkronisasi"><i class="fa fa-refresh"></i> Singkronisasi Data</button>
+                    <div class="col-md-6 col-sm-6 ">
+                        <button class="btn btn-sm btn-success text-white float-right" data-toggle="modal" data-whatever="{{$idx}}" data-target="#Singkronisasi"><i class="fa fa-refresh"></i> Singkronisasi Data</button>
                     </div>
                 </div>
 
