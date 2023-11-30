@@ -92,6 +92,8 @@ Route::post('org/getdataorgpusat', 'Admin\OrgDiagramController@getDataOrgPusat')
 Route::post('org/pusat/delete', 'Admin\OrgDiagramController@deleteKorPusat');
 Route::post('org/pusat/update', 'Admin\OrgDiagramController@updateOrgPusat');
 
+#DATATABLE SAKSI
+Route::post('org/list/saksi', 'Admin\OrgDiagramController@getDataOrgSaksi');
 
 
 Route::post('org/rt/anggotakeluargaserumah/delete', 'Admin\OrgDiagramController@deleteDataAnggotaByKortpsForFamillyGroup');
@@ -456,15 +458,4 @@ Route::post('/rightchoose/update/field/village','Admin\SettingController@updateF
 // get kalkulasi anggota tercover dan belum
 Route::post('/tim/calculate', 'Admin\OrgDiagramController@countMemberNotCover');
 
-
-// update tps id anggota berdasarkan tps koordinator nya
 Route::post('/tim/updatemytps', 'Admin\OrgDiagramController@updateMyTps');
-
-
-
-
-
-
-
-
-
