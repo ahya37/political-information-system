@@ -462,3 +462,6 @@ Route::post('/migrasi/kortps', 'Admin\OrgDiagramController@migrasiDataFormKorTps
 
 // update no.telp kortps
 Route::post('org/kortps/updatenotelp', 'Admin\OrgDiagramController@updateNoTelpKortps');
+
+#DATATABLE SAKSI
+Route::post('org/list/saksi', 'Admin\OrgDiagramController@getDataOrgSaksi');
