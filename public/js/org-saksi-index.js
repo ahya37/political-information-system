@@ -443,7 +443,8 @@ let table = $("#data").DataTable({
             targets: 3,
             orderable: true,
             render: function (data, type, row, meta) {
-                return row.tps_number;
+                return `<p class='text-center'>${row.tps_number ?? ''}</p>`;
+
             },
         },
         {
@@ -478,59 +479,6 @@ $("#exampleModal").on("show.bs.modal", function (event) {
     var modal = $(this);
     modal.find('.modal-body input[name="pidx"]').val(recipient);
 });
-
-async function onEdit(data) {
-    const id = data.id;
-    const name = data.getAttribute("data-name");
-
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-
-    const { value: nik } = await Swal.fire({
-        title: `Edit ${name}`,
-        input: "number",
-        inputPlaceholder: "NIK",
-        focusConfirm: false,
-        showCancelButton: true,
-        cancelButtonText: "Batal",
-        confirmButtonText: "Simpan",
-        timerProgressBar: true,
-    });
-
-    if (nik) {
-        $.ajax({
-            url: "/api/org/rt/update",
-            method: "POST",
-            cache: false,
-            data: {
-                id: id,
-                nik: nik,
-                _token: CSRF_TOKEN,
-            },
-            success: function (data) {
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: `${data.data.message}`,
-                    showConfirmButton: false,
-                    width: 500,
-                    timer: 900,
-                });
-                const table = $("#data").DataTable();
-                table.ajax.reload();
-            },
-            error: function (error) {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: `${error.responseJSON.data.message}`,
-                    showConfirmButton: false,
-                    width: 500,
-                    timer: 1000,
-                });
-            },
-        });
-    }
-}
 
 async function onDelete(data) {
     // const id = data.id;

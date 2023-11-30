@@ -87,12 +87,6 @@
                             </div>
                         </div>
                 </div>
-                 <div class="row">
-                        <div class="col-md-3">
-                            <a class="btn btn-sm btn-sc-primary text-white"
-                                        href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah Saksi</a>
-                        </div>
-                    </div>
             </form>
 
                 <div class="row mt-4">
