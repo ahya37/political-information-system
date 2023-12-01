@@ -1,279 +1,90 @@
-let selectListArea = $("#selectListArea").val();
-let selectDistrictId = $("#selectDistrictId").val();
-let selectVillageId = $("#selectVillageId").val();
-let selectRT = $("#selectRt").val();
-let selectTps = $("#selectTps").val();
-
-// DAPIL
-$("#selectListArea").change(async function () {
-    selectListArea = $("#selectListArea").val();
-    $(".tpsnotexist").hide();
-
-
-    if (selectListArea !== "") {
-        const listDistricts = await getListDistrict(selectListArea);
-        $("#selectDistrictId").empty();
-        $("#selectVillageId").empty();
-       
-
-        $("#selectDistrictId").show();
-        $("#selectDistrictId").append(
-            "<option value=''>-Pilih Kecamatan-</option>"
-        );
-        getListDistrictUi(listDistricts);
-        province = $("#province").val();
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-        selectRT = $("#selectRt").val();
-        geLocationDapil(selectListArea);
-
-        $("#reqdapil").val(selectListArea);
-        $("#reqdistrict").val("");
-       
-        table.ajax.reload(null, false);
-    } else {
-        $("#selectDistrictId").empty();
-        $("#selectVillageId").empty();
-        province = $("#province").val();
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-        $("#reqdapil").val("");
-        $("#reqdistrict").val("");
-        $("#reqvillage").val("");
-
-        table.ajax.reload(null, false);
-    }
-});
-
-// KECAMATAN
-$("#selectDistrictId").change(async function () {
-    selectDistrictId = $("#selectDistrictId").val();
-    $(".pengurus").show();
-    $(".tpsnotexist").hide();
-    $("#dataPengurusTable").empty();
-    
-    if (selectDistrictId !== "") {
-        const dataVillages = await getListVillage(selectDistrictId);
-        $("#selectVillageId").empty();
-        $("#selectVillageId").show();
-        $("#selectVillageId").append("<option value=''>-Pilih Desa-</option>");
-        getListVillageUi(dataVillages);
-
-        province = $("#province").val();
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-        $("#keterangan").empty();
-        geLocationDistrict(selectDistrictId);
-
-        $("#reqprovince").val(province);
-        $("#reqdapil").val(selectListArea);
-        $("#reqdistrict").val(selectDistrictId);
-        $("#reqvillage").val("");
-
-        table.ajax.reload(null, false);
-    } else {
-
-        $("#selectVillageId").empty();
-        province = $("#province").val();
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-
-        $("#reqdistrict").val("");
-        $("#reqvillage").val("");
-        $("#keterangan").empty();
-        geLocationDapil(selectListArea);
-
-        table.ajax.reload(null, false);
-    }
-});
-
-function getPengurusUi(responseData) {
-    let divHtmlPengurus = "";
-    responseData.forEach((m) => {
-        divHtmlPengurus += showDivHtmlPengurus(m);
-    });
-    const divHtmlPengurusContainer = $("#dataPengurusTable");
-    divHtmlPengurusContainer.append(divHtmlPengurus);
-}
-
-function showDivHtmlPengurus(m) {
-    return `
-            <tr>
-                <td>
-                    <img src='/storage/${m.photo}' width='40px' class='rounded mb-2'>
-                    ${m.name}
-                </td>
-                <td>${m.title}</td>
-                <td align="center">${m.referal}</td>
-                <td>${m.address},DS.${m.village}, KEC.${m.district}</td>
-    `;
-}
+let selectListArea = $(".selectListArea").val();
+let selectDistrictId = $(".selectDistrictId").val();
+let selectVillageId = $(".selectVillageId").val();
+let selectRT = $(".selectRt").val();
+let selectTps = $(".selectTps").val();
 
 // DESA
-$("#selectVillageId").change(async function () {
-    selectVillageId = $("#selectVillageId").val();
-    $("#dataPengurusTable").empty();
+$(".selectVillageId").change(async function () {
+    selectVillageId = $(".selectVillageId").val();
 
     if (selectVillageId !== "") {
         const dataRT = await getListRT(selectVillageId);
 
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-        $("#selectRt").append("<option value=''>-Pilih RT-</option>");
+        selectListArea = $(".selectListArea").val();
+        selectDistrictId = $(".selectDistrictId").val();
+        selectVillageId = $(".selectVillageId").val();
+        $(".selectRt").append("<option value=''>-Pilih RT-</option>");
         getListRTUi(dataRT);
         
         const dataTps = await getListTps(selectVillageId);
-        $("#selectTps").append("<option value=''>-Pilih TPS-</option>");
+        $(".selectTps").append("<option value=''>-Pilih TPS-</option>");
         getListTpsUi(dataTps);
 
         table.ajax.reload(null, false);
-
-       
-        $("#reqdapil").val(selectListArea);
-        $("#reqdistrict").val(selectDistrictId);
-        $("#reqvillage").val(selectVillageId);
-        $("#selectRt").val("");
-        $("#keterangan").empty();
-        geLocationVillage(selectVillageId);
+        $(".selectRt").val("");
+        // geLocationVillage(selectVillageId);
 
     } else {
 
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-        selectRT = $("#selectRT").val();
+        selectListArea = $(".selectListArea").val();
+        selectDistrictId = $(".selectDistrictId").val();
+        selectVillageId = $(".selectVillageId").val();
+        selectRT = $(".selectRT").val();
 
         table.ajax.reload(null, false);
-
-        $("#reqdapil").val(selectListArea);
-        $("#reqdistrict").val(selectDistrictId);
-        $("#reqvillage").val("");
-        $("#selectRt").val("");
-        geLocationDistrict(selectDistrictId);
+        $(".selectRt").val("");
 
     }
 });
 
 // RT
-$("#selectRt").change(async function () {
-    selectRT = $("#selectRt").val();
+$(".selectRt").change(async function () {
+    selectRT = $(".selectRt").val();
 
     if (selectRT !== "") {
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
+        selectListArea = $(".selectListArea").val();
+        selectDistrictId = $(".selectDistrictId").val();
+        selectVillageId = $(".selectVillageId").val();
         table.ajax.reload(null, false);
         
     } else {
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-        selectRT = $("#selectRt").val();
+        selectListArea = $(".selectListArea").val();
+        selectDistrictId = $(".selectDistrictId").val();
+        selectVillageId = $(".selectVillageId").val();
+        selectRT = $(".selectRt").val();
 
         table.ajax.reload(null, false);
-
-        $("#reqdapil").val(selectListArea);
-        $("#reqdistrict").val(selectDistrictId);
-        $("#reqvillage").val("");
-        $("#keterangan").empty();
-        geLocationVillage(selectVillageId);
+        // geLocationVillage(selectVillageId);
     }
 });
 
 // TPS
-$("#selectTps").change(async function () {
-    selectTps = $("#selectTps").val();
+$(".selectTps").change(async function () {
+    selectTps = $(".selectTps").val();
 
     if (selectTps !== "") {
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-        selectTps = $("#selectTps").val();
+        selectListArea = $(".selectListArea").val();
+        selectDistrictId = $(".selectDistrictId").val();
+        selectVillageId = $(".selectVillageId").val();
+        selectTps = $(".selectTps").val();
         table.ajax.reload(null, false);
 
-        $("#reqdapil").val(selectListArea);
-        $("#reqdistrict").val(selectDistrictId);
-        $("#reqvillage").val(selectVillageId);
-        $("#keterangan").empty();
-        geLocationVillageWithRt(selectVillageId, selectRT);
 
     } else {
-        selectListArea = $("#selectListArea").val();
-        selectDistrictId = $("#selectDistrictId").val();
-        selectVillageId = $("#selectVillageId").val();
-        selectRT = $("#selectRt").val();
-        selectTps = $("#selectTps").val();
+        selectListArea = $(".selectListArea").val();
+        selectDistrictId = $(".selectDistrictId").val();
+        selectVillageId = $(".selectVillageId").val();
+        selectRT = $(".selectRt").val();
+        selectTps = $(".selectTps").val();
 
         table.ajax.reload(null, false);
     }
 });
 
-async function getDapilRegency(province) {
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    const response = await fetch(`/api/dapilbyprovinceid/${province}`);
-    return await response.json();
-}
-
-function getDapilRegencyUi(responseData) {
-    let divHtmldapil = "";
-    responseData.forEach((m) => {
-        divHtmldapil += showDivHtmlDapil(m);
-    });
-    const divHtmldapilContainer = $("#selectArea");
-    divHtmldapilContainer.append(divHtmldapil);
-}
-
-function showDivHtmlDapil(m) {
-    return `<option value="${m.id}">${m.name}</option>`;
-}
-
-async function getDapilNames(regencyId) {
-    $("#selectListArea").append("<option value=''>Loading..</option>");
-    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    return await fetch(`/api/getlistdapil`, {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "appliacation/json",
-        },
-        body: JSON.stringify({ token: CSRF_TOKEN, regencyId: regencyId }),
-    })
-        .then((response) => {
-            $("#selectListArea").empty();
-            $("#selectListArea").append(
-                "<option value=''>-Pilih Dapil-</option>"
-            );
-            return response.json();
-        })
-        .catch((error) => {});
-}
-function getDapilNamesUi(listDapils) {
-    let divListDapil = "";
-    listDapils.forEach((m) => {
-        divListDapil += showDivHtmlListDapil(m);
-    });
-    const divListDapilContainer = $("#selectListArea");
-    divListDapilContainer.append(divListDapil);
-}
-function showDivHtmlListDapil(m) {
-    return `<option value="${m.id}">${m.name}</option>`;
-}
-
-async function getDapil(regencyId) {
-    const results = await getDapilNames(regencyId);
-    getDapilNamesUi(results);
-}
-
-let regencyId = $("#regencyId").val();
-getDapil(regencyId);
 
 async function getListDistrict(selectListAreaValue) {
-    $("#selectDistrictId").append("<option value=''>Loading..</option>");
+    $(".selectDistrictId").append("<option value=''>Loading..</option>");
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     const response = await fetch(`/api/getlistdistrictdapil`, {
         method: "POST",
@@ -286,7 +97,7 @@ async function getListDistrict(selectListAreaValue) {
             dapilId: selectListAreaValue,
         }),
     });
-    $("#selectDistrictId").empty();
+    $(".selectDistrictId").empty();
     return await response.json();
 }
 function getListDistrictUi(listDistricts) {
@@ -294,7 +105,7 @@ function getListDistrictUi(listDistricts) {
     listDistricts.forEach((m) => {
         divListDistrict += showDivHtmlListDistrict(m);
     });
-    const divListDistrictContainer = $("#selectDistrictId");
+    const divListDistrictContainer = $(".selectDistrictId");
     divListDistrictContainer.append(divListDistrict);
 }
 
@@ -302,7 +113,7 @@ function showDivHtmlListDistrict(m) {
     return `<option value="${m.district_id}">${m.name}</option>`;
 }
 async function getListVillage(selectDistrictId) {
-    $("#selectVillageId").append("<option value=''>Loading..</option>");
+    $(".selectVillageId").append("<option value=''>Loading..</option>");
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     const response = await fetch(`/api/getlistvillagetdapil`, {
         method: "POST",
@@ -315,7 +126,7 @@ async function getListVillage(selectDistrictId) {
             district_id: selectDistrictId,
         }),
     });
-    $("#selectVillageId").empty();
+    $(".selectVillageId").empty();
     return await response.json();
 }
 function getListVillageUi(dataVillages) {
@@ -323,7 +134,7 @@ function getListVillageUi(dataVillages) {
     dataVillages.forEach((m) => {
         divVillage += showDivHtmlVillage(m);
     });
-    const divVillageContainer = $("#selectVillageId");
+    const divVillageContainer = $(".selectVillageId");
     divVillageContainer.append(divVillage);
 }
 function showDivHtmlVillage(m) {
@@ -332,7 +143,7 @@ function showDivHtmlVillage(m) {
 
 // GET data TPS
 async function getListTps(villageId){
-    $("#selectTps").append("<option value=''>Loading..</option>");
+    $(".selectTps").append("<option value=''>Loading..</option>");
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     const response = await fetch(`/api/gettpsbyvillage`, {
         method: "POST",
@@ -345,7 +156,7 @@ async function getListTps(villageId){
             village_id: villageId,
         }),
     });
-    $("#selectTps").empty();
+    $(".selectTps").empty();
     return await response.json();
 }
 
@@ -354,7 +165,7 @@ function getListTpsUi(dataTps) {
     dataTps.forEach((m) => {
         divTps += showDivHtmlTps(m);
     });
-    const divTpsContainer = $("#selectTps");
+    const divTpsContainer = $(".selectTps");
     divTpsContainer.append(divTps);
 }
 function showDivHtmlTps(m) {
@@ -364,7 +175,7 @@ function showDivHtmlTps(m) {
 
 // GET data RT
 async function getListRT(villageId) {
-    $("#selectRt").append("<option value=''>Loading..</option>");
+    $(".selectRt").append("<option value=''>Loading..</option>");
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     const response = await fetch(`/api/getrtbyvillage`, {
         method: "POST",
@@ -377,7 +188,7 @@ async function getListRT(villageId) {
             village_id: villageId,
         }),
     });
-    $("#selectRt").empty();
+    $(".selectRt").empty();
     return await response.json();
 }
 function getListRTUi(dataRT) {
@@ -385,7 +196,7 @@ function getListRTUi(dataRT) {
     dataRT.forEach((m) => {
         divRT += showDivHtmlRT(m);
     });
-    const divRTContainer = $("#selectRt");
+    const divRTContainer = $(".selectRt");
     divRTContainer.append(divRT);
 }
 function showDivHtmlRT(m) {
@@ -456,6 +267,12 @@ let table = $("#data").DataTable({
         {
             targets: 5,
             render: function (data, type, row, meta) {
+                return `<p>${row.status.toUpperCase()}</p>`;
+            },
+        },
+        {
+            targets: 6,
+            render: function (data, type, row, meta) {
                 return `<div class="btn-group">
                         <div class="dropdown">
                             <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown" aria-haspopup="true">...</button>
@@ -473,32 +290,23 @@ let table = $("#data").DataTable({
 });
 
 
-$("#exampleModal").on("show.bs.modal", function (event) {
-    var button = $(event.relatedTarget);
-    var recipient = button.data("whatever");
-    var modal = $(this);
-    modal.find('.modal-body input[name="pidx"]').val(recipient);
-});
-
-async function onDelete(data) {
-    // const id = data.id;
+function onDelete(data) {
+    const id =data.getAttribute("data-id");
     const name = data.getAttribute("data-name");
-    const id = data.getAttribute("data-id");
 
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
     Swal.fire({
         title: `Yakin hapus ${name}`,
-        text: "Menghapus KOR RT, dapat menghapus beserta anggotanya!",
-        icon: "warning",
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Hapus",
-        cancelButtonText: "Batal",
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Hapus',
+        cancelButtonText: 'Batal',
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "/api/org/korrt/delete",
+                url: "/api/tps/witness/delete",
                 method: "POST",
                 cache: false,
                 data: {
@@ -513,11 +321,14 @@ async function onDelete(data) {
                         showConfirmButton: false,
                         width: 500,
                         timer: 900,
-                    });
-                    const table = $("#data").DataTable();
-                    table.ajax.reload();
+                    },
+                    );
+
+                    table.ajax.reload(null, false);
+
                 },
                 error: function (error) {
+                    console.log(error);
                     Swal.fire({
                         position: "center",
                         icon: "error",
@@ -529,5 +340,7 @@ async function onDelete(data) {
                 },
             });
         }
-    });
+    })
+
+
 }

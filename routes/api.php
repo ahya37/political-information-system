@@ -36,6 +36,8 @@ Route::post('getrtbyvillageNew', 'API\LocationController@getRTByVIllageNew');
 
 Route::post('intelegency/addElement', 'Admin\InformationController@addElementFormIntelegence');
 
+Route::post('gettpsbyvillage', 'API\LocationController@getTpsVIllage');
+
 
 Route::get('selectvillage', 'API\LocationController@getVillageSelect');
 Route::get('searchvillage', 'API\LocationController@getVillageSearch');
@@ -464,4 +466,4 @@ Route::post('/migrasi/kortps', 'Admin\OrgDiagramController@migrasiDataFormKorTps
 Route::post('org/kortps/updatenotelp', 'Admin\OrgDiagramController@updateNoTelpKortps');
 
 #DATATABLE SAKSI
-Route::post('org/list/saksi', 'Admin\OrgDiagramController@getDataOrgSaksi');
+Route::post('org/list/saksi', 'Admin\TpsController@getDataOrgSaksi');

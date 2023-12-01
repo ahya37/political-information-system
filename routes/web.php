@@ -525,6 +525,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
             Route::post('/rt/member/newanggota','OrgDiagramController@saveAnggotaByKorRTAndNewAnggotaKTA')->name('admin-struktur-organisasi-rt-newanggota-save');
             
+            #Daftar Saksi
 
         });
 		
@@ -566,7 +567,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/create','TpsController@create')->name('admin-tps-create');
             Route::post('/store','TpsController@store')->name('admin-tps-store');
             Route::get('/witnesses/{tpsId}','TpsController@witnesses')->name('admin-tps-witnesses');
-            Route::post('/witnesses/store/{tpsId}','TpsController@storeWitness')->name('admin-tps-witnesses-store');
+            Route::post('/witnesses/store','TpsController@storeWitness')->name('admin-tps-witnesses-store');
+
+            Route::get('/saksi','TpsController@daftarSaksi')->name('admin-daftartim-saksi');
+
         });
 
         #historymonitoring

@@ -42,6 +42,11 @@
                         Daftar Tim
                     </a>
 
+                    <a href="{{ route('admin-daftartim-saksi') }}"
+                    class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/daftartim/saksi') ? 'active custom-active-color ' : '' }}">
+                        Daftar Saksi
+                    </a>
+
                     {{-- <a href="{{ route('admin-struktur-organisasi-test') }}" target="_blank"
                         class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/struktur/dashboard') ? 'active custom-active-color' : '' }}">
                         Bagan Struktur

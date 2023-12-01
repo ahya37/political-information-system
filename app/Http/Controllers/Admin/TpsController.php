@@ -265,7 +265,7 @@ class TpsController extends Controller
 
     }
 
-    public function storeWitness(Request $request, $tpsId){
+    public function storeWitness(Request $request){
 
         DB::beginTransaction();
         try {
@@ -273,9 +273,11 @@ class TpsController extends Controller
             $this->validate($request, [
                 'member' => 'required|min:1',
                 'status' => 'required',
+                'tpsid' => 'required'
             ]);
 
             $userId       = $request->member;
+            $tpsId        = $request->tpsid;
 
             $witnessModel = new Witness();
             $user         = User::select('village_id')->where('id', $userId)->first();
@@ -345,6 +347,79 @@ class TpsController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
+    }
+
+    public function daftarSaksi(){
+
+        $regency = Regency::select('id', 'name')->where('id', 3602)->first();
+
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $districtModel  = new District();
+        $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
+        $villages  = Village::select('id','name')->where('district_id', $authAdminDistrict)->get();
+
+        return view('pages.admin.strukturorg.saksi.index', compact('regency','district','villages'));
+
+    }
+
+    public function getDataOrgSaksi(Request $request)
+    {
+
+        $orderBy = 'b.name';
+        switch ($request->input('order.0.column')) {
+            case '1':
+                $orderBy = 'b.name';
+                break;
+        }
+
+        $data = DB::table('witnesses as a')
+                ->select('a.id','b.name', 'a.status', 'c.tps_number', 'd.name as village','b.whatsapp','b.id as user_id','b.photo','e.name as district','b.address')
+                ->join('users as b','a.user_id','=','b.id')
+                ->join('tps as c','a.tps_id','=','c.id')
+                ->join('villages as d','c.village_id','=','d.id')
+                ->join('districts as e','d.district_id','=','e.id')
+                ->join('dapil_areas as f','f.district_id','=','e.id');
+
+
+        if ($request->input('search.value') != null) {
+            $data = $data->where(function ($q) use ($request) {
+                $q->whereRaw('LOWER(b.name) like ? ', ['%' . strtolower($request->input('search.value')) . '%']);
+            });
+        }
+
+        if ($request->input('dapil') != null) {
+            $data->where('f.dapil_id', $request->dapil);
+        }
+
+        if ($request->input('district') != null) {
+            $data->where('e.id', $request->district);
+        }
+
+        if ($request->input('village') != null) {
+            $data->where('d.id', $request->village);
+        }
+
+        // if ($request->input('rt') != null) {
+        //     $data->where('a.rt', $request->rt);
+        // }
+
+        if ($request->input('tps') != null) {
+            $data->where('c.id', $request->tps);
+        }
+
+
+        $recordsFiltered = $data->get()->count();
+        if ($request->input('length') != -1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+        $data = $data->orderBy($orderBy, $request->input('order.0.dir'))->get();
+
+        $recordsTotal = $data->count();
+
+        return response()->json([
+            'draw' => $request->input('draw'),
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data' => $data
+        ]);
     }
 
 }

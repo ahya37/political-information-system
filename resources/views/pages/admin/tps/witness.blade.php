@@ -25,11 +25,11 @@
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="mb-4">
+                                {{-- <div class="mb-4">
                                     <button type="button" class="btn btn-sm btn-sc-primary text-white" data-toggle="modal"
                                         data-target=".bd-example-modal-lg"><i class="fa fa-plus"></i> Tambah
                                         Saksi</button>
-                                </div>
+                                </div> --}}
                                 <table id="data" class="table table-sm table-striped" width="100%">
                                     <thead>
                                         <tr>
