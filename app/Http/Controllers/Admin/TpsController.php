@@ -290,11 +290,15 @@ class TpsController extends Controller
             #cek apakah anggota tersebut domisilinya sama dengan data lokasi TPS
             #parameternya adalah village_id di tbl tps dan village_id di tb users
             if ($user->village_id != $tps->village_id) return redirect()->back()->with(['warning' => 'Gagal simpan, Alamat desa anggota tidak sama dengan alamat TPS berada!']);
+
+            $village = Village::with(['district'])->where('id', $request->village_id)->first();
             
             Witness::create([
                 'tps_id' => $tpsId,
                 'user_id' => $request->member,
                 'status' => $request->status,
+                'village_id' => $village->id,
+                'district_id' =>  $village->district->id,
                 'cby' =>  auth()->guard('admin')->user()->id
             ]);
 
