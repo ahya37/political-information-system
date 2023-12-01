@@ -32,6 +32,7 @@ use App\Providers\StrRandom;
 use PDF;
 use Zipper;
 use File;
+use Illuminate\Support\Facades\Log;
 
 class OrgDiagramController extends Controller
 {
@@ -175,6 +176,7 @@ class OrgDiagramController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Somethin when wrong!',
                 'error' => $e->getMessage()
@@ -207,6 +209,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error' => $e->getMessage()
@@ -231,6 +234,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error' => $e->getMessage()
@@ -712,6 +716,7 @@ class OrgDiagramController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error' => $e->getMessage()
@@ -800,6 +805,7 @@ class OrgDiagramController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error' => $e->getMessage()
@@ -865,6 +871,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error' => $e->getMessage()
@@ -1372,6 +1379,7 @@ class OrgDiagramController extends Controller
             return redirect()->back()->with(['success' => 'Data telah tersimpan ', $message_kortps]);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error($e->getMessage());
             return redirect()->back()->with('error', 'Anggota baru gagal dibuat', $e->getMessage());
 
         }
@@ -1462,6 +1470,7 @@ class OrgDiagramController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return redirect()->back()->with(['error' => 'Data gagal tersimpan!' . $e->getMessage()]);
         }
     }
@@ -1509,6 +1518,7 @@ class OrgDiagramController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return redirect()->back()->with(['error' => 'Data gagal tersimpan!' . $e->getMessage()]);
         }
     }
@@ -1555,6 +1565,7 @@ class OrgDiagramController extends Controller
             return redirect()->route('admin-struktur-organisasi-rt');
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return redirect()->back()->with(['error' => 'Data gagal tersimpan!' . $e->getMessage()]);
         }
     }
@@ -1594,6 +1605,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -1927,6 +1939,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -1951,6 +1964,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -2050,6 +2064,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -2075,6 +2090,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -2289,6 +2305,7 @@ class OrgDiagramController extends Controller
             return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return redirect()->back()->with(['error' => 'Data gagal tersimpan!' . $e->getMessage()]);
         }
     }
@@ -2310,6 +2327,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -2333,6 +2351,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -2375,6 +2394,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -2417,6 +2437,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -2530,6 +2551,7 @@ class OrgDiagramController extends Controller
             return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return redirect()->back()->with(['error' => 'Data gagal tersimpan!' . $e->getMessage()]);
         }
     }
@@ -2550,6 +2572,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -2574,6 +2597,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -2665,6 +2689,7 @@ class OrgDiagramController extends Controller
             return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return redirect()->back()->with(['error' => 'Data gagal tersimpan!' . $e->getMessage()]);
         }
     }
@@ -2772,6 +2797,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error'   => $e->getMessage()
@@ -3734,6 +3760,7 @@ class OrgDiagramController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             // return $e->getMessage();
+            Log::error($e->getMessage());
             return redirect()->back()->with(['error' => 'Data gagal tersimpan!' . $e->getMessage()]);
 
         }
@@ -3902,6 +3929,7 @@ class OrgDiagramController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             // return $e->getMessage();
+            Log::error($e->getMessage());
             return redirect()->back()->with('error', 'Anggota baru gagal disimpan!', $e->getMessage());
         }
     }
@@ -4266,6 +4294,7 @@ class OrgDiagramController extends Controller
             return redirect()->back()->with(['success' => 'Data berhasil tersimpan!']);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error($e->getMessage());
             return redirect()->back()->with(['error' => 'Data gagal tersimpan!']);
         }
 
@@ -4432,6 +4461,7 @@ class OrgDiagramController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error([
                 'message' => 'Something when wrong!',
                 'error' => $e->getMessage()
@@ -4483,6 +4513,7 @@ class OrgDiagramController extends Controller
         } catch (\Exception $e) {
            DB::rollback();
         //    return $e->getMessage();
+        Log::error($e->getMessage());
            return redirect()->back()->with(['warning' => 'Gagal singkronisasi!']);
         }
 
