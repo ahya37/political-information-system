@@ -349,6 +349,35 @@ class TpsController extends Controller
         }
     }
 
+    public function updateNoTelpMember()
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+            $telp  = request()->telp;
+
+            $witness =  Witness::where('id', $id)->first();
+
+            DB::table('users')->where('id', $witness->user_id)->update([
+                'phone_number' => $telp,
+                'whatsapp' => $telp
+            ]);
+
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil ubah no.telp!'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
     public function daftarSaksi(){
 
         $regency = Regency::select('id', 'name')->where('id', 3602)->first();

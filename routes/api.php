@@ -467,3 +467,5 @@ Route::post('org/kortps/updatenotelp', 'Admin\OrgDiagramController@updateNoTelpK
 
 #DATATABLE SAKSI
 Route::post('org/list/saksi', 'Admin\TpsController@getDataOrgSaksi');
+
+Route::post('org/updatenotelp/member', 'Admin\TpsController@updateNoTelpMember');
