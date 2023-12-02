@@ -173,6 +173,34 @@ class OrgDiagramController extends Controller
         // $bendahara_photo   = $this->searchArrayValuePhoto($data_pengurus, 'BENDAHARA');
         // $referal_bendahara = $this->searchArrayValueCountReferal($data_pengurus,'BENDAHARA');
 
+        // jumlah gabungan anggota kortps per tps nya
+         // get data kortps per desanya
+         $results_tps_terisi = [];
+         foreach ($tpsExists as $key => $value) {
+          // hitung jumlah anggota berdasarkan jumlah kortps yg ada
+             $list_kortps = DB::table('org_diagram_rt as a')
+                       ->select(
+                         DB::raw('(select count(a1.nik) from org_diagram_rt as a1 join users as a2 on a1.nik = a2.nik where a1.pidx = a.idx and a1.base = "ANGGOTA") as jml_anggota')
+                       )
+                       ->join('users as b','a.nik','=','b.nik')
+                       ->where('a.village_id', $value->village_id)
+                       ->where('b.tps_id', $value->id)
+                       ->where('a.base','KORRT')
+                       ->get();
+ 
+             $jml_anggota_kortps = collect($list_kortps)->sum(function($q){
+                 return $q->jml_anggota;
+             });
+ 
+             $results_tps_terisi[] = [
+                 'tps' => $value->tps,
+                 'kortps' => $value->kortps,
+                 'jml_anggota_kortps' => $jml_anggota_kortps,
+                 'hasil_suara' => 0,
+                 'selisih' => 0
+             ];
+         }
+
         $pengurus = [
             // 'ketua' => ucwords(strtolower($ketua)) ?? '',
             // 'ketua_photo' => $ketua_photo ?? '',
@@ -194,7 +222,7 @@ class OrgDiagramController extends Controller
             'kurang_kortps' => $gF->decimalFormat($results->kortps_terisi - ($target_anggota / 25)),
             'pengurus' => $pengurus,
             'tpsnotexists' => $tpsNotExists,
-            'tpsExists' => $tpsExists
+            'tpsExists' => $results_tps_terisi
         ]);
     }
 
