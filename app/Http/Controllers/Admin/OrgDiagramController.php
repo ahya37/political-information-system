@@ -192,17 +192,23 @@ class OrgDiagramController extends Controller
                  return $q->jml_anggota;
              });
 
-             $jml_kortps = count($list_kortps);
- 
+
              $results_tps_terisi[] = [
                  'tps' => $value->tps,
                  'kortps' => $value->kortps,
-                 'jml_kortps' => $jml_kortps,
                  'jml_anggota_kortps' => $jml_anggota_kortps,
                  'hasil_suara' => 0,
                  'selisih' => 0
              ];
          }
+
+         $jml_kortps = collect($results_tps_terisi)->sum(function($q){
+                 return $q['kortps'];
+          });
+
+         $jmltpsExists_anggota = collect($results_tps_terisi)->sum(function($q){
+                 return $q['jml_anggota_kortps'];
+          });
          
 
         $pengurus = [
@@ -226,7 +232,9 @@ class OrgDiagramController extends Controller
             'kurang_kortps' => $gF->decimalFormat($results->kortps_terisi - ($target_anggota / 25)),
             'pengurus' => $pengurus,
             'tpsnotexists' => $tpsNotExists,
-            'tpsExists' => $results_tps_terisi
+            'tpsExists' => $results_tps_terisi,
+            'jml_kortps' => $jml_kortps,
+            'jmltpsExists_anggota' => $jmltpsExists_anggota
         ]);
     }
 
