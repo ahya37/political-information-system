@@ -442,7 +442,7 @@ class OrgDiagram extends Model
 			where b1.id  = a.id and c1.base is null and d1.nik is null and e1.nik is null and c1.nik is null
 		) as belum_ada_korte
 		from villages as a
-		WHERE a.district_id = $districtId";
+		WHERE a.district_id = $districtId order by (SELECT COUNT(users.id) from users join villages on users.village_id = villages.id  WHERE villages.id = a.id) desc";
          
         return DB::select($sql); 
 	}
