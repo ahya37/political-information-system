@@ -528,6 +528,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             #test KTA anggota by kortps
             Route::get('/test/rt/detail/anggota/download/kta/pdf/{idx}','TestController@downloadKTAMembersByKortps');
 
+            Route::get('/member/different/village/kortps/{idx}','OrgDiagramController@memberDifferentVillageByKortps')->name('admin-struktur-different-by-kortps');
+
+
         });
 		
 		Route::group(['prefix' => 'report'], function(){

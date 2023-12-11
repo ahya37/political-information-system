@@ -4522,6 +4522,11 @@ class OrgDiagramController extends Controller
 
     }
 
+    public function memberDifferentVillageByKortps($idx)
+    {
+        dd($idx);
+    }
+
 
 
 }
