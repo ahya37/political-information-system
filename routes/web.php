@@ -525,7 +525,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
             Route::post('/rt/member/newanggota','OrgDiagramController@saveAnggotaByKorRTAndNewAnggotaKTA')->name('admin-struktur-organisasi-rt-newanggota-save');
             
-            #Daftar Saksi
+            #test KTA anggota by kortps
+            Route::get('/test/rt/detail/anggota/download/kta/pdf/{idx}','TestController@downloadKTAMembersByKortps');
 
         });
 		
