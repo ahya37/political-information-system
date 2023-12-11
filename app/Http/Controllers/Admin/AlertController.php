@@ -20,7 +20,7 @@ class AlertController extends Controller
 
         return ResponseFormatter::success([
             'data'    =>  $count_data,
-            'message' => $count_data > 0 ? 'anggota berbeda desa dengan kortps' : ''
+            'message' => $count_data > 0 ? 'Kortps memiliki anggota berbeda desa' : ''
         ], 200);
     }
 }

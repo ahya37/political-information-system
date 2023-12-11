@@ -713,7 +713,7 @@ function getDataMemberDifferentVillage(villageid){
         success: function (data) {
             if (data.data.data != 0) {
                 alertMember.show();
-                alertMember.append(`<strong>${data.data.data}</strong> ${data.data.message} !
+                alertMember.append(`<strong>${data.data.data}</strong> ${data.data.message} !, <a href='#'>Lihat detail</a>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>`
