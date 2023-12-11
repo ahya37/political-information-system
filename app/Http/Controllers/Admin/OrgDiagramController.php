@@ -4493,7 +4493,10 @@ class OrgDiagramController extends Controller
             }
 
             #get data anggota berdasrkan idx kortps
-            $anggota = DB::table('org_diagram_rt')->select('pidx','nik' ,'name','cby','created_at')->where('base','ANGGOTA')->where('pidx', $idx)->get();
+            $anggota = DB::table('org_diagram_rt as a')
+                       ->select('a.pidx','a.nik' ,'b.name','a.cby','a.created_at')
+                       ->join('users as b','a.nik','=','b.nik')
+                       ->where('a.base','ANGGOTA')->where('a.pidx', $idx)->get();
 
             #insert kembali ke anggotaan 25 ke form kortps
             foreach ($anggota as  $value) {

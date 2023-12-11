@@ -2,7 +2,7 @@ let selectListArea = $("#selectListArea").val();
 let selectDistrictId = $("#selectDistrictId").val();
 let selectVillageId = $("#selectVillageId").val();
 let selectRT = $("#selectRt").val();
-// let alertMember = $("#alertMember").hide();
+let alertMember = $("#alertMember").hide();
 
 // KABKOT , langsung get dapil by kab lebak
 
@@ -90,7 +90,7 @@ $("#selectVillageId").change(async function () {
         $("#anggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
-        // alertMember.empty();
+        alertMember.empty();
 
 
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
@@ -99,7 +99,7 @@ $("#selectVillageId").change(async function () {
         blmTerCover = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
-        // getDataMemberDifferentVillage(selectVillageId);
+        getDataMemberDifferentVillage(selectVillageId);
 
     } else {
         // province = $("#province").val();
@@ -129,8 +129,8 @@ $("#selectVillageId").change(async function () {
 
         blmTerCover = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
-        // alertMember.empty();
-        // alertMember.hide();
+        alertMember.empty();
+        alertMember.hide();
     }
 });
 
@@ -700,28 +700,28 @@ function numberWithDot(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-// function getDataMemberDifferentVillage(villageid){
-//     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-//     $.ajax({
-//         url: "/api/member/samevillage/check",
-//         method: "POST",
-//         cache: false,
-//         data: {
-//             villageid: villageid,
-//             _token: CSRF_TOKEN,
-//         },
-//         success: function (data) {
-//             if (data.data.data != 0) {
-//                 alertMember.show();
-//                 alertMember.append(`<strong>${data.data.data}</strong> ${data.data.message} !, <a href='#'>Lihat detail</a>
-//                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-//                             <span aria-hidden="true">&times;</span>
-//                             </button>`
-//                             );
-//             }else{
-//                 alertMember.empty();
-//                 alertMember.hide();
-//             }
-//         }
-//     });
-// }
+function getDataMemberDifferentVillage(villageid){
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    $.ajax({
+        url: "/api/member/samevillage/check",
+        method: "POST",
+        cache: false,
+        data: {
+            villageid: villageid,
+            _token: CSRF_TOKEN,
+        },
+        success: function (data) {
+            if (data.data.data != 0) {
+                alertMember.show();
+                alertMember.append(`<strong>${data.data.data}</strong> ${data.data.message} !, <a href='#'>Lihat detail</a>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>`
+                            );
+            }else{
+                alertMember.empty();
+                alertMember.hide();
+            }
+        }
+    });
+}
