@@ -640,5 +640,18 @@ class OrgDiagram extends Model
 		return DB::select($sql);
 	}
 
+	public function getMemberDeferentVillageByKortps($villageId){
+
+		$sql = "SELECT b.name as anggota, c.id as id_desa_anggota, c.name  as desa_anggota, d.name as kortps ,e.id as id_desa_kortps, e.name desa_kortps from org_diagram_rt  as a
+					join users as b on a.nik = b.nik 
+					join villages as c on b.village_id = c.id
+					join org_diagram_rt as d on a.pidx = d.idx
+					join villages as e on d.village_id = e.id 
+					WHERE a.village_id = $villageId and a.base = 'ANGGOTA' HAVING c.id != e.id";
+
+		return DB::select($sql);
+
+	}
+
 
 }

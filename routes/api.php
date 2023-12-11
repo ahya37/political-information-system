@@ -469,3 +469,6 @@ Route::post('org/kortps/updatenotelp', 'Admin\OrgDiagramController@updateNoTelpK
 Route::post('org/list/saksi', 'Admin\TpsController@getDataOrgSaksi');
 
 Route::post('org/updatenotelp/member', 'Admin\TpsController@updateNoTelpMember');
+
+#DATA ANGGOTA YANG BEDA DESA NYA DENGAN KORTPS
+Route::post('member/samevillage/check', 'Admin\AlertController@memberDeferentVillageByKortps');

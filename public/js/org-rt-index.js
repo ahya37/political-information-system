@@ -2,6 +2,7 @@ let selectListArea = $("#selectListArea").val();
 let selectDistrictId = $("#selectDistrictId").val();
 let selectVillageId = $("#selectVillageId").val();
 let selectRT = $("#selectRt").val();
+let alertMember = $("#alertMember").hide();
 
 // KABKOT , langsung get dapil by kab lebak
 
@@ -89,6 +90,8 @@ $("#selectVillageId").change(async function () {
         $("#anggota").empty();
         $("#tercover").empty();
         $("#blmtercover").empty();
+        alertMember.empty();
+
 
         const dataCover = await initialGetAnggotaCover(selectListArea, selectDistrictId, selectVillageId,selectRT);
         $("#anggota").text(`${numberWithDot(dataCover.data.anggota)}`);
@@ -96,6 +99,7 @@ $("#selectVillageId").change(async function () {
         blmTerCover = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
 
+        getDataMemberDifferentVillage(selectVillageId);
 
     } else {
         // province = $("#province").val();
@@ -125,6 +129,8 @@ $("#selectVillageId").change(async function () {
 
         blmTerCover = dataCover.data.fix_anggota_belum_tercover;
         $("#blmtercover").text(`${numberWithDot(blmTerCover)}`);
+        alertMember.empty();
+        alertMember.hide();
     }
 });
 
@@ -544,7 +550,6 @@ async function updateNoTelpKorTps(data){
                 _token: CSRF_TOKEN,
             },
             success: function (data) {
-                console.log('data :', data);
                 Swal.fire({
                     position: "center",
                     icon: "success",
@@ -693,4 +698,30 @@ async function onDelete(data) {
 
 function numberWithDot(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function getDataMemberDifferentVillage(villageid){
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    $.ajax({
+        url: "/api/member/samevillage/check",
+        method: "POST",
+        cache: false,
+        data: {
+            villageid: villageid,
+            _token: CSRF_TOKEN,
+        },
+        success: function (data) {
+            if (data.data.data != 0) {
+                alertMember.show();
+                alertMember.append(`<strong>${data.data.data}</strong> ${data.data.message} !
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>`
+                            );
+            }else{
+                alertMember.empty();
+                alertMember.hide();
+            }
+        }
+    });
 }

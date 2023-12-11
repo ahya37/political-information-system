@@ -17,6 +17,9 @@
 
             <div class="mt-4">
                 @include('layouts.message')
+                <div class="alert alert-warning alert-dismissible fade show" id="alertMember" role="alert">
+                    
+                  </div>
             </div>
 
 
