@@ -17,9 +17,6 @@
 
             <div class="mt-4">
                 @include('layouts.message')
-                <div class="alert alert-warning alert-dismissible fade show" id="alertMember" role="alert">
-                    
-                  </div>
             </div>
 
 
@@ -108,8 +105,15 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 id="keterangan">Kor TPS</h5>
-
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-warning alert-dismissible fade show" id="alertMember" role="alert">
+                    
                         </div>
                     </div>
                 </div>
@@ -156,39 +160,35 @@
             </div>
         </div>
     </div>
-
-    @push('prepend-script')
-        <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Tambah Anggota Kor RT</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('admin-struktur-organisasi-rt-anggota-save') }}" method="POST" id="register">
-                            @csrf
-                            <input type="text" name="pidx" class="form-control" id="recipient-name"
-                                placeholder="Isikan NIK">
-                            <div class="form-group">
-                                <label for="recipient-name" class="col-form-label">NIK</label>
-                                <input type="number" class="form-control" name="nik" value=""
-                                    placeholder="Cari Berdasarkan NIK" required/>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-sm btn-sc-primary">Simpan</button>
-                                </div>
-                        </form>
-                    </div>
-                </div>
+@endsection
+@push('prepend-script')
+<div class="modal fade bd-example-modal-lg" id="different" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" id="dataDifferent">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-data">
+                <table class="table table-sm table-striped" width="100%">
+                    <thead>
+                        <tr>
+                            <th>NO</th>
+                            <th>NAMA</th>
+                            <th>ANGGOTA</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataDifferentTable"></tbody>
+                </table>
             </div>
         </div>
-    @endpush
-@endsection
-
+      </div>
+    </div>
+  </div>
+@endpush
 @push('addon-script')
     <script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>

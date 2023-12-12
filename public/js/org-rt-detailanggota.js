@@ -106,7 +106,7 @@ let table = $("#data").DataTable({
         {
             targets: 2,
             render: function (data, type, row, meta) {
-                return `<p>${row.address}, DS.${row.village}, KEC.${row.district}</p>`;
+                return `<p class='${row.village_id != row.village_id_kortps ? 'text-danger' : ''}' >${row.address}, DS.${row.village}, KEC.${row.district}</p>`;
             },
         },
         {

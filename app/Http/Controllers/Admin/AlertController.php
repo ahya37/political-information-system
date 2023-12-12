@@ -15,11 +15,12 @@ class AlertController extends Controller
         $orgDiagram = new OrgDiagram();
         $villageId  = request()->villageid;
 
-        $data       = $orgDiagram->getMemberDeferentVillageByKortps($villageId);
+        $data       = $orgDiagram->getCountMemberDeferentVillageByKortps($villageId);
         $count_data = count($data);
 
         return ResponseFormatter::success([
-            'data'    =>  $count_data,
+            'count_data'  =>  $count_data,
+            'data' => $data,
             'message' => $count_data > 0 ? 'Kortps memiliki anggota berbeda desa' : ''
         ], 200);
     }

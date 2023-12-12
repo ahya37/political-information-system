@@ -713,7 +713,7 @@ function getDataMemberDifferentVillage(villageid){
         success: function (data) {
             if (data.data.data != 0) {
                 alertMember.show();
-                alertMember.append(`<strong>${data.data.data}</strong> ${data.data.message} !, <a target='_blank' href='/admin/struktur/member/different/village/kortps/${villageid}'>Lihat detail</a>
+                alertMember.append(`<strong>${data.data.count_data}</strong> ${data.data.message} !, <a data-toggle="modal" data-target="#different" href='#' data-whatever='${villageid}'>Lihat detail</a>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>`
@@ -725,3 +725,55 @@ function getDataMemberDifferentVillage(villageid){
         }
     });
 }
+
+$('#different').on('show.bs.modal', function (event) {
+    $('#dataDifferentTable').empty();
+    $('#loadDifferent').empty();
+    var button = $(event.relatedTarget)
+    var recipient = button.data('whatever')
+    var modal = $(this)
+    modal.find('.modal-title').text('Daftar Kortps Yang Memiliki Anggota Beda Desa')
+
+    // call ajax
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    $.ajax({
+        url: "/api/member/samevillage/check",
+        method: "POST",
+        cache: false,
+        data: {
+            villageid: recipient,
+            _token: CSRF_TOKEN,
+        },
+        beforeSend: function(){
+            modal.find('.modal-data').append(
+                `<span id="loadDifferent">Loading...</span>`
+            )
+        },
+        success: function (data) {
+            let divDirreferent = "";
+            data.data.data.forEach((m) => {
+                divDirreferent += showDataDifferentTableUi(m)
+            });
+            let divDirreferentContainer = $('#dataDifferentTable');
+            divDirreferentContainer.append(divDirreferent);
+        },
+        complete: function(){
+            $('#loadDifferent').remove();
+        }
+    });
+});
+
+let num = 1;
+function showDataDifferentTableUi(m){
+    return  `<tr>
+                <td>${num++}</td>
+                <td><a target='_blank' href="/admin/struktur/rt/detail/anggota/${m.idx}"> <img  class="rounded" width="40" src="/storage/${m.photo}"> ${m.name}</a></td>
+                <td>${m.anggota}</td>
+            </tr>`;
+}
+
+$('#different').on('hide.bs.modal', function (event){
+    num = 1;
+    $('#dataDifferentTable').empty();
+    $('#loadDifferent').remove();
+});

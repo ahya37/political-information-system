@@ -640,9 +640,9 @@ class OrgDiagram extends Model
 		return DB::select($sql);
 	}
 
-	public function getMemberDeferentVillageByKortps($villageId){
+	public function getCountMemberDeferentVillageByKortps($villageId){
 
-		$sql = "SELECT b.name,
+		$sql = "SELECT b.photo , b.name, a.idx,
 				(
 					SELECT COUNT(a1.id) from org_diagram_rt as a1 join users as a2 on a1.nik=a2.nik 
 					WHERE a1.pidx = a.idx and a1.base = 'ANGGOTA' and a1.village_id != a.village_id
@@ -654,6 +654,5 @@ class OrgDiagram extends Model
 		return DB::select($sql);
 
 	}
-
 
 }
