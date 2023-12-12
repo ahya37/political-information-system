@@ -178,7 +178,7 @@ class TestController extends Controller
             foreach($data as  $value){
                 foreach($value as $item){
                     foreach ($item as $val) {
-                        $results[] = DB::table('users')->select('name')->where('nik', $val)->first();
+                        $results[] = DB::table('users')->select('name','nik')->where('nik', $val)->first();
                     }
                 }
             }
