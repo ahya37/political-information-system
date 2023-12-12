@@ -472,3 +472,6 @@ Route::post('org/updatenotelp/member', 'Admin\TpsController@updateNoTelpMember')
 
 #DATA ANGGOTA YANG BEDA DESA NYA DENGAN KORTPS
 Route::post('member/samevillage/check', 'Admin\AlertController@memberDeferentVillageByKortps');
+
+Route::post('member/check/nik', 'Admin\TestController@checkNikAnggota');
+

@@ -7,9 +7,19 @@ use App\Http\Controllers\Controller;
 use DB;
 use PDF;
 use App\Providers\GlobalProvider;
+use App\Helpers\ResponseFormatter;
+use App\Imports\checkNikImport;
+use Maatwebsite\Excel\Excel;
+use Maatwebsite\Excel\Facades\Excel as Excels;
 
 class TestController extends Controller
 {
+    public $excel;
+    public function __construct(Excel $excel)
+    {
+        $this->excel = $excel;
+    }
+
     public function downloadKTAMembersByKortps($idx){
 
 
@@ -156,4 +166,27 @@ class TestController extends Controller
 
 
    }
+
+   public function checkNikAnggota(Request $request)
+   {
+
+        try {
+
+            $data =  Excels::toCollection(new checkNikImport, request()->file('file'));
+
+            $results = [];
+            foreach($data as  $value){
+                foreach($value as $item){
+                    foreach ($item as $val) {
+                        $results[] = DB::table('users')->select('name')->where('nik', $val)->first();
+                    }
+                }
+            }
+
+            return $results;
+
+            } catch (\Exception $th) {
+                return $th->getMessage();
+            }
+    }
 }
