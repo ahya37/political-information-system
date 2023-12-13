@@ -257,7 +257,7 @@ class MemberController extends Controller
                 $ktp = $request->ktp != null ?  $gF->cropImageKtp($request_ktp) : $user->ktp;
                 $photo = $request->photo != null ? $gF->cropImagePhoto($request_photo) : $user->photo;
 
-                $user->update([
+               $update = $user->update([
                     'nik'  => $request->nik,
                     'name' => strtoupper($request->name),
                     'gender' => $request->gender,
@@ -279,7 +279,7 @@ class MemberController extends Controller
                     // 'code' => $request->code
                 ]);
             } else {
-                $user->update([
+                $update = $user->update([
                     'nik'  => $request->nik,
                     'name' => strtoupper($request->name),
                     'gender' => $request->gender,
@@ -301,10 +301,12 @@ class MemberController extends Controller
             }
 
             // update nik di tb org_diagram
-            UpdateNikOrg::update($oldNik, $request->nik);
+            UpdateNikOrg::update($oldNik, $request);
             DB::commit();
+            // return $update;
             return redirect()->route('admin-profile-member', ['id' => $id]);
         } catch (\Exception $e) {
+            return $e->getMessage();
             DB::rollBack();
             return redirect()->route('admin-profile-member', ['id' => $id])->with(['error' => $e->getMessage()]);
         }
