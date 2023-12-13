@@ -257,7 +257,7 @@ class MemberController extends Controller
                 $ktp = $request->ktp != null ?  $gF->cropImageKtp($request_ktp) : $user->ktp;
                 $photo = $request->photo != null ? $gF->cropImagePhoto($request_photo) : $user->photo;
 
-               $update = $user->update([
+               $user->update([
                     'nik'  => $request->nik,
                     'name' => strtoupper($request->name),
                     'gender' => $request->gender,
@@ -279,7 +279,7 @@ class MemberController extends Controller
                     // 'code' => $request->code
                 ]);
             } else {
-                $update = $user->update([
+                $user->update([
                     'nik'  => $request->nik,
                     'name' => strtoupper($request->name),
                     'gender' => $request->gender,
@@ -306,7 +306,7 @@ class MemberController extends Controller
             // return $update;
             return redirect()->route('admin-profile-member', ['id' => $id]);
         } catch (\Exception $e) {
-            return $e->getMessage();
+            // return $e->getMessage();
             DB::rollBack();
             return redirect()->route('admin-profile-member', ['id' => $id])->with(['error' => $e->getMessage()]);
         }
