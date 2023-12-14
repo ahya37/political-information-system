@@ -10,10 +10,10 @@ class DocumentController extends Controller
     public function downloadFormatFormKortps()
     {
         $file = public_path('/docs/util/format-upload-form.xlsx');
-        $headers = array(
-            'Content-Type:aplication/xlsx',
-        );
+        // $headers = array(
+        //     'Content-Type:aplication/xlsx',
+        // );
 
-        return response()->download($file, 'format-upload-form', $headers);
+        return response()->download($file, 'format-upload-form.xlsx');
     }
 }
