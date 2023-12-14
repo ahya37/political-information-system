@@ -535,6 +535,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/rt/anggota/formmanual/preview/save/{idx}','OrgDiagramController@previewSaveAnggotaFormManual')->name('admin-struktur-form-manual-preview');
             Route::post('/rt/anggota/formmanual/store/{idx}','OrgDiagramController@saveAnggotaFormManual')->name('admin-struktur-form-manual-store');
 
+            Route::post('/rt/anggota/formkortps/upload/store/{idx}','OrgDiagramController@uploadFormKortps')->name('admin-struktur-form-kortps-store');
+
+
         });
 		
 		Route::group(['prefix' => 'report'], function(){

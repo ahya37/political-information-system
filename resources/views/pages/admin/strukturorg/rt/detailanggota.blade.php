@@ -149,8 +149,16 @@
                                 <h5>Anggota Koordinator TPS / Korte</h5>
                                 <form action="{{ route('admin-formkortps-rt-report-excel', $korte_idx) }}" method="POST" enctype="multipart/form-data" class="mt-2 mb-2">
                                     @csrf
-                                    <button type="submit" class="btn btn-sm btn-sc-primary text-white">Download PDF</button>
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            <button type="submit" class="btn btn-sm btn-sc-primary text-white">Download PDF</button>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <button type="button" class="btn btn-sm btn-success text-white float-right" data-toggle="modal" data-target=".uploadbyexcel"><i class="fa fa-plus"></i> Upload By Excel</button>
+                                        </div>
+                                    </div>
                                 </form>
+                                
                                 <table id="anggotakortps" class="table table-sm table-striped mt-3" width="100%">
                                     <thead>
                                         <tr>
@@ -363,6 +371,34 @@ aria-hidden="true">
     </div>
 </div>
 </div>
+
+<div class="modal fade bd-example-modal-lg uploadbyexcel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload data form kortps</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin-struktur-form-kortps-store',$korte_idx) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Upload File</label>
+                                <input type="file" class="form-control" name="file">
+                            </div>
+                        </div>
+                       
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button class="btn btn-sm btn-sc-primary text-white">Simpan</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
       
 @endpush
 

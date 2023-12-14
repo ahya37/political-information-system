@@ -34,6 +34,7 @@ use Zipper;
 use File;
 use Illuminate\Support\Facades\Log;
 use App\Imports\FormManualImport;
+use App\Imports\FormKortpsImport;
 use Maatwebsite\Excel\Facades\Excel as Excels;
 use Illuminate\Support\Facades\Redis;
 
@@ -4718,5 +4719,35 @@ class OrgDiagramController extends Controller
         }
     }
 
+    public function uploadFormKortps(Request $request, $idx)
+    {
+        DB::beginTransaction();
+        try {
+
+            $request->validate([
+                'file' => 'required|mimes:xls,xlsx',
+            ]);
+
+            $data =  Excels::toCollection(new FormKortpsImport, request()->file('file'));
+            foreach ($data as $value) {
+                foreach ($value as  $item) {
+                    DB::table('anggota_koordinator_tps_korte')->insert([
+                        'pidx_korte' => $idx,
+                        'nik' => $item['nik'] ?? '',
+                        'name' => strtoupper($item['nama'] ?? ''),
+                        'created_by' => auth()->guard('admin')->user()->id,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Berhasil di upload!']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['error' => 'Gagal di upload!', $e->getMessage()]);
+        }
+    }
 
 }
