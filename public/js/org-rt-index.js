@@ -437,11 +437,17 @@ let table = $("#data").DataTable({
         {
             targets: 9,
             render: function (data, type, row, meta) {
+                return `<p class="text-center">${row.formmanual}</p>`;
+            }, 
+        },
+        {
+            targets: 10,
+            render: function (data, type, row, meta) {
                 return `<p>${row.phone_number ?? ''}</p>`;
             },
         },
         {
-            targets: 10,
+            targets: 11,
             render: function (data, type, row, meta) {
                 // <a href='/admin/struktur/rt/detail/anggota/formkoordinator/${row.idx}' class="dropdown-item ">
                 //                 Form Koordinator TPS / Korte
@@ -507,11 +513,13 @@ let table = $("#data").DataTable({
         let totalCountReferal = 0;
         let totalFormKosong   = 0;
         let totalkgs          = 0;
+        let totalFormManual   = 0;
         row.aoData.forEach(element => {
              totalCountAnggota += parseFloat(element._aData.count_anggota);
              totalCountReferal += parseFloat(element._aData.referal);
              totalFormKosong += parseFloat(element._aData.formkortps);
              totalkgs += parseFloat(element._aData.keluargaserumah);
+             totalFormManual += parseFloat(element._aData.formmanual);
 
         });
 
@@ -519,10 +527,12 @@ let table = $("#data").DataTable({
         $('#totalCountReferal').empty();
         $('#totalFormKosong').empty();
         $('#totalkgs').empty();
+        $('#totalFormManual').empty();
         $('#totalCountAnggota').append(`<p class="text-center"><b>${totalCountAnggota}</b></p>`);
         $('#totalCountReferal').append(`<p class="text-center"><b>${totalCountReferal}</b></p>`);
         $('#totalFormKosong').append(`<p class="text-center"><b>${totalFormKosong}</b></p>`);
         $('#totalkgs').append(`<p class="text-center"><b>${totalkgs}</b></p>`);
+        $('#totalFormManual').append(`<p class="text-center"><b>${totalFormManual}</b></p>`);
     }
 });
 

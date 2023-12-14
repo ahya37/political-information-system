@@ -135,6 +135,7 @@
                                                 <th scope="col">REFERAL</th>
                                                 <th scope="col">FORM KORTPS</th>
                                                 <th scope="col">KLG.SERUMAH</th>
+                                                <th scope="col">FORM MANUAL</th>
                                                 <th scope="col">NO HP / WA</th>
                                                 <th scope="col">OPSI</th>
                                             </tr>
@@ -150,6 +151,8 @@
                                         <td id="totalCountReferal"></td>
                                         <td id="totalFormKosong"></td>
                                         <td id="totalkgs"></td>
+                                        <td id="totalFormManual"></td>
+                                        <td></td>
                                         <td></td>
                                     </tfoot>
                                     </table>

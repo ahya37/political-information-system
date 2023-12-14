@@ -997,7 +997,8 @@ class OrgDiagramController extends Controller
                     DB::raw("(select count(*) from org_diagram_rt where pidx = a.idx and base ='ANGGOTA') as count_anggota"),
                     DB::raw("(select count(*) from users where user_id = b.id and village_id is not null) as referal"),
                     DB::raw("(select count(*) from anggota_koordinator_tps_korte where pidx_korte = a.idx) as formkortps"),
-                    DB::raw("(select count(*) from family_group where pidx_korte = a.idx) as keluargaserumah")
+                    DB::raw("(select count(*) from family_group where pidx_korte = a.idx) as keluargaserumah"),
+                    DB::raw('(select count(*) from form_anggota_manual_kortp where pidx_korte = a.idx) as formmanual')
             )
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
