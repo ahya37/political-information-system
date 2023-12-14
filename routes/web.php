@@ -536,6 +536,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/rt/anggota/formmanual/store/{idx}','OrgDiagramController@saveAnggotaFormManual')->name('admin-struktur-form-manual-store');
 
             Route::post('/rt/anggota/formkortps/upload/store/{idx}','OrgDiagramController@uploadFormKortps')->name('admin-struktur-form-kortps-store');
+            
+            
+            Route::get('/rt/formatform/download/','DocumentController@downloadFormatFormKortps')->name('admin-struktur-form-download-format');
 
 
         });

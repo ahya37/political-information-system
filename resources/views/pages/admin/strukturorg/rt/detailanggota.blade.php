@@ -147,6 +147,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5>Anggota Koordinator TPS / Korte</h5>
+                                <div class="row">
+                                    <div class="col-sm-6"></div>
+                                    <div class="col-sm-6">
+                                        <a class="float-right" href="{{route('admin-struktur-form-download-format')}}">Download format upload excel</a>
+                                    </div>
+                                </div>
                                 <form action="{{ route('admin-formkortps-rt-report-excel', $korte_idx) }}" method="POST" enctype="multipart/form-data" class="mt-2 mb-2">
                                     @csrf
                                     <div class="row">

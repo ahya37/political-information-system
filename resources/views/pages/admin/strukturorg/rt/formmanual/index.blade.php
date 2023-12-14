@@ -52,6 +52,11 @@
                 </table>
                 <div class="row mb-2">
                     <div class="col-md-6 col-sm-6">
+                        <a href="{{route('admin-struktur-form-download-format')}}">Download format upload excel</a>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6 col-sm-6">
                         <button class="btn btn-sm btn-sc-primary text-white" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-plus"></i> Upload By Excel</button>
                     </div>
                 </div>
