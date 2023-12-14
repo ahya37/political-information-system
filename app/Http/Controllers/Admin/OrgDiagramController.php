@@ -4546,10 +4546,10 @@ class OrgDiagramController extends Controller
                 ->first();
 
         #get data ke anggotaan sementara 
-        $admin_id =  auth()->guard('admin')->user()->id ?? 0;
-        $redisKey = $idx.'-'.$admin_id;
-        $tmp_anggota = Redis::get($redisKey);
-        $results_tmp_anggota = json_decode($tmp_anggota);
+        // $admin_id =  auth()->guard('admin')->user()->id ?? 0;
+        // $redisKey = $idx.'-'.$admin_id;
+        // $tmp_anggota = Redis::get($redisKey);
+        $results_tmp_anggota =  DB::table('tmp_form_anggota_manual_kortp')->where('pidx_korte', $idx)->get();
         $no = 1;
 
         #data fix anggota form manual
@@ -4560,6 +4560,7 @@ class OrgDiagramController extends Controller
 
     public function previewSaveAnggotaFormManual(Request $request, $idx){
 
+        DB::beginTransaction();
         try {
 
             $request->validate([
@@ -4585,30 +4586,47 @@ class OrgDiagramController extends Controller
                 }
             }
 
+
+            // simpan ke tb sementara
+            $admin_id =  auth()->guard('admin')->user()->id ?? 0;
+            foreach ($list_anggota as $value) {
+                    DB::table('tmp_form_anggota_manual_kortp')->insert([
+                        'pidx_korte' => $idx,
+                        'nik'  => $value['nik'],
+                        'name' => $value['name'],
+                        'is_cover' => $value['is_cover'],
+                        'created_by' => $admin_id,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ]);
+                
+            }
+
             // return $list_anggota;
 
             // Convert the array to a JSON string before saving to Redis
-            $jsonData = json_encode($list_anggota);
+            // $jsonData = json_encode($list_anggota);
 
             // Specify the key under which you want to store the data in Redis
             // jadikan nik korte dan id admin sebagai key redis nya
-            $admin_id =  auth()->guard('admin')->user()->id ?? 0;
-            $redisKey =  $idx.'-'.$admin_id;
+            // $admin_id =  auth()->guard('admin')->user()->id ?? 0;
+            // $redisKey =  $idx.'-'.$admin_id;
 
-            // Save the JSON string to Redis
-            Redis::del($redisKey);
-            Redis::set($redisKey, $jsonData);
+            // // Save the JSON string to Redis
+            // Redis::del($redisKey);
+            // Redis::set($redisKey, $jsonData);
 
-            $results = Redis::get($redisKey);
+            // $results = Redis::get($redisKey);
 
-            $results = json_decode($results);
+            // $results = json_decode($results);
 
             // tampilkan kedalam view
 
+            DB::commit();
             return redirect()->route('admin-struktur-form-manual', $idx);
 
         } catch (\Exception $e) {
-            // return $e->getMessage();
+            return $e->getMessage();
            return redirect()->with(['error' => $e->getMessage()]);
         }
     }
@@ -4624,19 +4642,25 @@ class OrgDiagramController extends Controller
 
              #get data ke anggotaan sementara 
              $admin_id =  auth()->guard('admin')->user()->id ?? 0;
-             $redisKey = $idx.'-'.$admin_id;
-             $tmp_anggota = Redis::get($redisKey);
+            //  $redisKey = $idx.'-'.$admin_id;
+            //  $tmp_anggota = Redis::get($redisKey);
     
-             #jika act remove, maka remove dari redis
+             #jika act remove, maka remove dari tmp
              if ($request->act == 'remove') {
-                Redis::del($redisKey);
+                $tmp_anggota = DB::table('tmp_form_anggota_manual_kortp')->where('pidx_korte', $idx)->get();
+                foreach ($tmp_anggota as  $value) {
+                    DB::table('tmp_form_anggota_manual_kortp')->where('id', $value->id)->delete();
+                }
+
+                DB::commit();
+
                 return redirect()->back()->with(['success' => 'Berhasil terhapus dari preview!']);
 
              }else{
                 // save to db
                 // get tps_id korte nya
                 $korte = DB::table('org_diagram_rt as a')->select('b.tps_id')->join('users as b','a.nik','=','b.nik')->where('idx', $idx)->first();
-                $results_tmp_anggota = json_decode($tmp_anggota);
+                $results_tmp_anggota = DB::table('tmp_form_anggota_manual_kortp')->where('pidx_korte', $idx)->get();
                 foreach ($results_tmp_anggota as  $value) {
                     // simpan yg hanya belum terdaftar di sistem, is_cover = 0
                     if ($value->is_cover == 0) {
@@ -4652,13 +4676,15 @@ class OrgDiagramController extends Controller
                         ]);
                     }
                 }
-                // remove dari redis
-                Redis::del($redisKey);
+                // remove dari tmp
+                // $tmp_anggota = DB::table('tmp_form_anggota_manual_kortp')->where('pidx_korte', $idx)->get();
+                DB::table('tmp_form_anggota_manual_kortp')->where('pidx_korte', $idx)->delete();
     
              }
-             Db::commit();
+             DB::commit();
              return redirect()->back()->with(['success' => 'Berhasil tersimpan!']);
         } catch (\Exception $e) {
+            // return $e->getMessage();
             DB::rollBack();
             return redirect()->back()->with(['error' =>'Gagal tersimpan !', $e->getMessage()]);
 

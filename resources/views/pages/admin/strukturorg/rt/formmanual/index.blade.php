@@ -56,7 +56,7 @@
                     </div>
                 </div>
 
-                @if ($results_tmp_anggota != [])
+                @if (count($results_tmp_anggota) > 0)
                     <div class="row mt-4">
                         <div class="col-md-12 col-sm-12">
                             <div class="card">
