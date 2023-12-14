@@ -1,202 +1,185 @@
 @extends('layouts.admin')
-@section('title', 'Koordinator RT')
+@section('title', 'Daftar Anggota Koordinator RT')
 @push('addon-style')
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/plugins/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/datatable/datatables.min.css') }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+        integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 @section('content')
     <!-- Section Content -->
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
+      
         <div class="container-fluid">
+           
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">Daftar Koordinator TPS Kecamatan {{ ucfirst(strtolower($district->name)) }}</h2>
+                <h2 class="dashboard-title">Daftar Anggota Koordinator RT (Form Manual)</h2>
             </div>
-
             <div class="mt-4">
                 @include('layouts.message')
             </div>
-
-
             <div class="dashboard-content mt-4" id="transactionDetails">
-                <form action="{{ route('admin-struktur-organisasi-rt-report-excel') }}" method="POST">
-                    @csrf
-                    <div class="card card-body mb-4">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <input value="{{ $district->dapil_id }}" type="hidden" id="selectListArea" class="form-control">
-                                    <input value="{{ $district->id }}" type="hidden" name="districtid" id="selectDistrictId" class="form-control">
-                                    <select name="village_id" id="selectVillageId" class="form-control filter">
-                                        <option value="">-Pilih Desa-</option>
-                                        @foreach ($villages as $item )
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select name="rt" id="selectRt" class="form-control filter">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2">
-                                <a class="btn btn-sm btn-sc-primary text-white"
-                                    href="{{ route('admin-struktur-organisasi-rt-create') }}">+ Tambah</a>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="dropdown show">
-                                    <a class="btn btn-sm btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      Opsi Download
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        <input class="dropdown-item mt-2" type="submit" value="Download Korte Excel" name="report_type">
-                                        <input class="dropdown-item mt-2" type="submit" value="Download Catatan Korte PDF" name="report_type">
-                                        <input class="dropdown-item mt-2" type="submit" value="Download Korte + Anggota" name="report_type">
-                                        <input class="dropdown-item mt-2" type="submit" value="Download Korte + Anggota PDF" name="report_type"> 
-                                        <input class="dropdown-item mt-2" type="submit" value="Download Absensi Korte Per Desa PDF" name="report_type"> 
-                                        <input class="dropdown-item mt-2" type="submit" value="Download Surat Undangan Korte Per Desa PDF" name="report_type"> 
-                                        <input class="dropdown-item mt-2" type="submit" value="Download Anggota Belum Tercover Kortps" name="report_type"> 
-                                    </div>
-                                  </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </form>
-                <div class="row">
-                    <div class="col-md-4 mt-2 mb-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Anggota</h5>
-                                <h5 id="anggota"></h5>
-                                {{-- <i>progress</i> --}}
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mt-2 mb-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Tercover Kor TPS</h5>
-                                <h5 id="tercover"></h5>
-                                {{-- <i>progress</i> --}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mt-2 mb-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Belum Tercover Kor TPS</h5>
-                                <h5 id="blmtercover"></h5>
-                                {{-- <i>progress</i> --}}
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 mt-2 mb-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 id="keterangan">Kor TPS</h5>
-                            </div>
-                        </div>
+                <table class="mb-3">
+                    <tr>
+                        <td>RT</td>
+                        <td>&nbsp;:&nbsp;</td>
+                        <td>{{ $kor_rt->rt ?? '' }}</td>
+                    </tr>
+                    <tr>
+                        <td>TPS</td>
+                        <td>&nbsp;:&nbsp;</td>
+                        <td>{{ $kor_rt->tps_number ?? ''}}</td>
+                    </tr>
+                    <tr>
+                        <td>DESA</td>
+                        <td>&nbsp;:&nbsp;</td>
+                        <td>{{ $kor_rt->village ?? ''}}</td>
+                    </tr>
+                    <tr>
+                        <td>KECAMATAN</td>
+                        <td>&nbsp;:&nbsp;</td>
+                        <td>{{ $kor_rt->district ?? '' }}</td>
+                    </tr>
+                    <tr>
+                        <td>NAMA KOORDINATOR</td>
+                        <td>&nbsp;:&nbsp;</td>
+                        <td>{{ $kor_rt->name ?? '' }}</td>
+                    </tr>
+                </table>
+                <div class="row mb-2">
+                    <div class="col-md-6 col-sm-6">
+                        <button class="btn btn-sm btn-sc-primary text-white" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-plus"></i> Upload By Excel</button>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="alert alert-warning alert-dismissible fade show" id="alertMember" role="alert">
-                    
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                       
+                @if ($results_tmp_anggota != [])
+                    <div class="row mt-4">
+                        <div class="col-md-12 col-sm-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <table id="data" class="table table-sm table-striped" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">No</th>
-                                                <th scope="col">NAMA</th>
-                                                <th scope="col">ALAMAT</th>
-                                                <th scope="col">RT</th>
-                                                <th scope="col">TPS</th>
-                                                <th scope="col">ANGGOTA</th>
-                                                <th scope="col">REFERAL</th>
-                                                <th scope="col">FORM KORTPS</th>
-                                                <th scope="col">KLG.SERUMAH</th>
-                                                <th scope="col">NO HP / WA</th>
-                                                <th scope="col">OPSI</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                        <tfoot>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><b>JUMLAH</b></td>
-                                        <td id="totalCountAnggota"></td>
-                                        <td id="totalCountReferal"></td>
-                                        <td id="totalFormKosong"></td>
-                                        <td id="totalkgs"></td>
-                                        <td></td>
-                                    </tfoot>
-                                    </table>
+                                    <h5 class="card-title">Prefiew Data Form Manual</h5>
+                                    <form action="{{route('admin-struktur-form-manual-store', $korte_idx)}}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <table id="tmp_anggotakortps" class="table table-sm table-striped mt-3" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-1">NO</th>
+                                                    <th>NIK</th>
+                                                    <th>NAMA</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($results_tmp_anggota as $item)
+                                                <tr class="{{$item->is_cover == 1 ? 'bg-warning' : ''}}">
+                                                   <td>{{$no++}}</td>
+                                                   <td>{{$item->nik}}</td>
+                                                   <td>{{$item->name}}</td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2"><small>*Warna kuning menandakan suda terdaftar sebagai anggota, tidak akan tersimpan kedalam sistem</small></td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <button type="submit" class="btn btn-sm btn-danger" name="act" value="remove"><i class="fa fa-close"></i> Tutup</button>
+                                                            <button type="submit" class="btn btn-sm text-white btn-sc-primary" name="act" value="save"><i class="fa fa-save"></i> Lanjut simpan</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </form>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="row mt-4">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Anggota Koordinator TPS / Korte</h5>
+                                <form action="{{ route('admin-formkortps-rt-report-excel', $korte_idx) }}" method="POST" enctype="multipart/form-data" class="mt-2 mb-2">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-sc-primary text-white">Download PDF</button>
+                                </form>
+                                <table id="anggotakortps" class="table table-sm table-striped mt-3" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">NO</th>
+                                            <th scope="col">NIK</th>
+                                            <th scope="col">NAMA</th>
+                                            <th scope="col">OPSI</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($anggota as $item)
+                                            <tr>
+                                                <td>{{ $no++ }}</td>
+                                                <td>{{ $item->nik }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td><button type="button" class="btn btn-sm btn-danger" data-name="{{ $item->name }}" id="{{ $item->id }}" onclick="onDelete(this)"><i class="fa fa-trash"></i></button></td>
+                                            </tr>
+                                            
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
 @push('prepend-script')
-<div class="modal fade bd-example-modal-lg" id="different" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content" id="dataDifferent">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="modal-data">
-                <table class="table table-sm table-striped" width="100%">
-                    <thead>
-                        <tr>
-                            <th>NO</th>
-                            <th>NAMA</th>
-                            <th>ANGGOTA</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dataDifferentTable"></tbody>
-                </table>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload data form manual</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin-struktur-form-manual-preview',$korte_idx) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Upload File</label>
+                                <input type="file" class="form-control" name="file">
+                            </div>
+                        </div>
+                       
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button class="btn btn-sm btn-sc-primary text-white">Simpan</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-      </div>
     </div>
-  </div>
 @endpush
+
+
 @push('addon-script')
     <script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('js/getlocation.js') }}"></script>
-    <script src="{{ asset('js/org-rt-index.js') }}"></script>
+    <script src="{{ asset('js/anggota-form-manual.js') }}"></script>
     <script>
         AOS.init();
+        $('#anggotakortps').DataTable();
+        $('#tmp_anggotakortps').DataTable();
     </script>
 @endpush

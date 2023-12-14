@@ -475,3 +475,5 @@ Route::post('member/samevillage/check', 'Admin\AlertController@memberDeferentVil
 
 Route::post('member/check/nik', 'Admin\TestController@checkNikAnggota');
 
+#anggota form manual
+Route::post('org/rt/anggotaformmanual/delete', 'Admin\OrgDiagramController@deleteAnggotaFormManual');

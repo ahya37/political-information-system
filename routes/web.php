@@ -530,6 +530,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
             Route::get('/member/different/village/kortps/{idx}','OrgDiagramController@memberDifferentVillageByKortps')->name('admin-struktur-different-by-kortps');
 
+            #daftar form manual per kortps
+            Route::get('/rt/anggota/formmanual/{idx}','OrgDiagramController@daftarFormManual')->name('admin-struktur-form-manual');
+            Route::post('/rt/anggota/formmanual/preview/save/{idx}','OrgDiagramController@previewSaveAnggotaFormManual')->name('admin-struktur-form-manual-preview');
+            Route::post('/rt/anggota/formmanual/store/{idx}','OrgDiagramController@saveAnggotaFormManual')->name('admin-struktur-form-manual-store');
 
         });
 		

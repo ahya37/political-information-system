@@ -33,6 +33,9 @@ use PDF;
 use Zipper;
 use File;
 use Illuminate\Support\Facades\Log;
+use App\Imports\FormManualImport;
+use Maatwebsite\Excel\Facades\Excel as Excels;
+use Illuminate\Support\Facades\Redis;
 
 class OrgDiagramController extends Controller
 {
@@ -4523,11 +4526,170 @@ class OrgDiagramController extends Controller
 
     }
 
-    public function memberDifferentVillageByKortps($idx)
+    public function daftarFormManual($idx)
     {
-        dd($idx);
+        $regency = Regency::select('id', 'name')->where('id', 3602)->first();
+
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $district  = District::select('name','id')->where('id', $authAdminDistrict)->first();
+        $villages  = Village::select('id','name')->where('district_id', $district->id)->get();
+
+        $korte_idx = $idx;
+
+        $kor_rt = DB::table('org_diagram_rt as a')
+                ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district', 'e.tps_number','b.nik')
+                ->join('users as b', 'b.nik', '=', 'a.nik')
+                ->join('villages as c', 'c.id', '=', 'a.village_id')
+                ->join('districts as d', 'd.id', '=', 'a.district_id')
+                ->leftJoin('tps as e', 'b.tps_id', '=', 'e.id')
+                ->where('idx', $idx)
+                ->first();
+
+        #get data ke anggotaan sementara 
+        $admin_id =  auth()->guard('admin')->user()->id ?? 0;
+        $redisKey = $idx.'-'.$admin_id;
+        $tmp_anggota = Redis::get($redisKey);
+        $results_tmp_anggota = json_decode($tmp_anggota);
+        $no = 1;
+
+        #data fix anggota form manual
+        $anggota = DB::table('form_anggota_manual_kortp')->where('pidx_korte', $idx)->get();
+
+        return view('pages.admin.strukturorg.rt.formmanual.index', compact('regency','district','villages','idx','korte_idx','kor_rt','results_tmp_anggota','no','anggota'));
     }
 
+    public function previewSaveAnggotaFormManual(Request $request, $idx){
+
+        try {
+
+            $request->validate([
+                'file' => 'required|mimes:xls,xlsx',
+            ]);
+
+            #get nik kortps by $idx
+
+            // tampung data dari excel
+            $data =  Excels::toCollection(new FormManualImport, request()->file('file'));
+
+            // export excel to collection
+            $list_anggota = [];
+            foreach($data as  $value){
+                // $list_anggota[] = $value;
+                foreach($value as $item){
+                    $anggota =  DB::table('users')->select('name','nik')->where('nik', $item['nik'])->first();
+                    $list_anggota[] = [
+                        'is_cover' => $anggota == null ? 0 : 1,
+                        'nik' => $anggota->nik ?? $item['nik'],
+                        'name' => $anggota->name ?? $item['nama']
+                    ];
+                }
+            }
+
+            // return $list_anggota;
+
+            // Convert the array to a JSON string before saving to Redis
+            $jsonData = json_encode($list_anggota);
+
+            // Specify the key under which you want to store the data in Redis
+            // jadikan nik korte dan id admin sebagai key redis nya
+            $admin_id =  auth()->guard('admin')->user()->id ?? 0;
+            $redisKey =  $idx.'-'.$admin_id;
+
+            // Save the JSON string to Redis
+            Redis::del($redisKey);
+            Redis::set($redisKey, $jsonData);
+
+            $results = Redis::get($redisKey);
+
+            $results = json_decode($results);
+
+            // tampilkan kedalam view
+
+            return redirect()->route('admin-struktur-form-manual', $idx);
+
+        } catch (\Exception $e) {
+            // return $e->getMessage();
+           return redirect()->with(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function saveAnggotaFormManual(Request $request, $idx)
+    {
+        DB::beginTransaction();
+        try {
+
+            $request->validate([
+                'act' => 'required|string'
+            ]);
+
+             #get data ke anggotaan sementara 
+             $admin_id =  auth()->guard('admin')->user()->id ?? 0;
+             $redisKey = $idx.'-'.$admin_id;
+             $tmp_anggota = Redis::get($redisKey);
+    
+             #jika act remove, maka remove dari redis
+             if ($request->act == 'remove') {
+                Redis::del($redisKey);
+                return redirect()->back()->with(['success' => 'Berhasil terhapus dari preview!']);
+
+             }else{
+                // save to db
+                // get tps_id korte nya
+                $korte = DB::table('org_diagram_rt as a')->select('b.tps_id')->join('users as b','a.nik','=','b.nik')->where('idx', $idx)->first();
+                $results_tmp_anggota = json_decode($tmp_anggota);
+                foreach ($results_tmp_anggota as  $value) {
+                    // simpan yg hanya belum terdaftar di sistem, is_cover = 0
+                    if ($value->is_cover == 0) {
+                        DB::table('form_anggota_manual_kortp')->insert([
+                             'pidx_korte' => $idx,
+                             'nik'  => $value->nik,
+                             'name' => $value->name,
+                             'tps_id' => $korte->tps_id,
+                             'created_by' => $admin_id,
+                             'created_at' => date('Y-m-d H:i:s'),
+                             'updated_at' => date('Y-m-d H:i:s'),
+
+                        ]);
+                    }
+                }
+                // remove dari redis
+                Redis::del($redisKey);
+    
+             }
+             Db::commit();
+             return redirect()->back()->with(['success' => 'Berhasil tersimpan!']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['error' =>'Gagal tersimpan !', $e->getMessage()]);
+
+        }
+
+    }
+
+    public function deleteAnggotaFormManual()
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+
+            #update org
+            DB::table('form_anggota_manual_kortp')->where('id', $id)->delete();
+
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil dihapus!'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error($e->getMessage());
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
 
 
 }
