@@ -11,7 +11,7 @@ class DocumentController extends Controller
     {
         $file = public_path('/docs/util/format-upload-form.xlsx');
         $headers = array(
-            'Content-Type:aplication/pdf',
+            'Content-Type:aplication/xlsx',
         );
 
         return response()->download($file, 'format-upload-form', $headers);
