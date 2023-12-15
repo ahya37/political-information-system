@@ -459,3 +459,5 @@ Route::post('/rightchoose/update/field/village','Admin\SettingController@updateF
 Route::post('/tim/calculate', 'Admin\OrgDiagramController@countMemberNotCover');
 
 Route::post('/tim/updatemytps', 'Admin\OrgDiagramController@updateMyTps');
+
+Route::post('org/rt/anggotaformmanual/delete', 'Admin\OrgDiagramController@deleteAnggotaFormManual');

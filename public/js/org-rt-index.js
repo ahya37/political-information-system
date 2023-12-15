@@ -1040,50 +1040,50 @@ let table = $("#data").DataTable({
                 return row.tps_number;
             },
         },
+        // {
+        //     targets: 5,
+        //     render: function (data, type, row, meta) {
+        //         return `<p>KORTPS</p>`;
+        //     },
+        // },
         {
             targets: 5,
-            render: function (data, type, row, meta) {
-                return `<p>KORTPS</p>`;
-            },
-        },
-        {
-            targets: 6,
             render: function (data, type, row, meta) {
                 return `<p class="text-center">${row.count_anggota}</p>`;
             },
         },
         {
-            targets: 7,
+            targets: 6,
             render: function (data, type, row, meta) {
                 return `<p class="text-center">${row.referal}</p>`;
             },
         },
         {
-            targets: 8,
+            targets: 7,
             render: function (data, type, row, meta) {
                 return `<p class="text-center">${row.form_kosong}</p>`;
             },
         },
         {
-            targets: 9,
+            targets: 8,
             render: function (data, type, row, meta) {
                 return `<p class="text-center">${row.keluargaserumah}</p>`;
             }, 
         },
         {
-            targets: 10,
+            targets: 9,
             render: function (data, type, row, meta) {
                 return `<p class="text-center">${row.formmanual}</p>`;
             }, 
         },
         {
-            targets: 11,
+            targets: 10,
             render: function (data, type, row, meta) {
                 return `<p>${row.phone_number ?? ""}</p>`;
             },
         },
         {
-            targets: 12,
+            targets: 11,
             render: function (data, type, row, meta) {
                 return `<div class="btn-group">
                         <div class="dropdown">

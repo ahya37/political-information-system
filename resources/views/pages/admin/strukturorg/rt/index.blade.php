@@ -292,7 +292,6 @@
                                             <th scope="col">ALAMAT</th>
                                             <th scope="col">RT</th>
                                             <th scope="col">TPS</th>
-                                            {{-- <th scope="col">JABATAN</th> --}}
                                             <th scope="col">ANGGOTA</th>
                                             <th scope="col">REFERAL</th>
                                             <th scope="col">FORM KORTPS</th>
@@ -304,7 +303,6 @@
                                     </thead>
                                     <tbody></tbody>
                                     <tfoot>
-                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

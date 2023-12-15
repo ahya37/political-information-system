@@ -1305,7 +1305,8 @@ class OrgDiagramController extends Controller
                     DB::raw("(select count(*) from org_diagram_rt where pidx = a.idx and base ='ANGGOTA') as count_anggota"),
                     DB::raw("(select count(*) from users where user_id = b.id and village_id is not null) as referal"),
                     DB::raw("(select count(*) from anggota_koordinator_tps_korte where pidx_korte = a.idx) as form_kosong"),
-                    DB::raw("(select count(*) from family_group where pidx_korte = a.idx) as keluargaserumah")
+                    DB::raw("(select count(*) from family_group where pidx_korte = a.idx) as keluargaserumah"),
+                    DB::raw('(select count(*) from form_anggota_manual_kortp where pidx_korte = a.idx) as formmanual')
             )
             ->join('users as b', 'b.nik', '=', 'a.nik')
             ->join('villages as c', 'c.id', '=', 'a.village_id')
@@ -4682,12 +4683,39 @@ class OrgDiagramController extends Controller
                 ->where('idx', $idx)
                 ->first();
 
+        $korte_idx  = $idx;
+
         $no = 1;
 
         #data fix anggota form manual
         $anggota = DB::table('form_anggota_manual_kortp')->where('pidx_korte', $idx)->get();
 
         return view('pages.admin.strukturorg.rt.formmanual.index', compact('idx','korte_idx','kor_rt','no','anggota'));
+    }
+
+     public function deleteAnggotaFormManual()
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+
+            #update org
+            DB::table('form_anggota_manual_kortp')->where('id', $id)->delete();
+
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil dihapus!'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error($e->getMessage());
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
 
