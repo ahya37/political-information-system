@@ -4728,6 +4728,8 @@ class OrgDiagramController extends Controller
                 'file' => 'required|mimes:xls,xlsx',
             ]);
 
+            DB::table('anggota_koordinator_tps_korte')->where('pidx_korte', $idx)->delete();
+
             $data =  Excels::toCollection(new FormKortpsImport, request()->file('file'));
             foreach ($data as $value) {
                 foreach ($value as  $item) {

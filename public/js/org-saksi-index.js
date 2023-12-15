@@ -277,6 +277,12 @@ let table = $("#data").DataTable({
                         <div class="dropdown">
                             <button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown" aria-haspopup="true">...</button>
                             <div class="dropdown-menu">
+                                <a href="/admin/tps/saksi/ktp/download/${row.user_id}" class="dropdown-item btn btn-sm">
+                                    Download KTP
+                                </a>
+                                 <a href="/admin/tps/saksi/photo/download/${row.user_id}" class="dropdown-item btn btn-sm">
+                                    Download Foto
+                                </a>
                                 <button type="button" onclick="onDelete(this)" data-name="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm btn-danger text-danger">
                                 Hapus
                                 </button>

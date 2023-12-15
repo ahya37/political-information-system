@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\UserMenu;
 use App\Models\District;
+use Illuminate\Support\Facades\Validator;
+use PDF;
+
 class TpsController extends Controller
 {
     public function index(){
@@ -50,17 +53,17 @@ class TpsController extends Controller
 
         if($request->input('search.value')!=null){
                 $data = $data->where(function($q)use($request){
-                    $q->whereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                    $q->whereRaw("LOWER(b.name) like ? ",["%".strtolower($request->input("search.value"))."%"]);
                 });
-            }
+        }
 
-            if ($request->input('village') != null) {
+        if ($request->input('village') != null) {
                             $data->where('b.id', $request->village);
-            }
+        }
 
-            if ($request->input('rt') != null) {
+        if ($request->input('rt') != null) {
                             $data->where('a.rt', $request->rt);
-            }
+        }
 
 
           $recordsFiltered = $data->get()->count();
@@ -454,5 +457,74 @@ class TpsController extends Controller
             'data' => $data
         ]);
     }
+
+    public function downloadSaksiByVillage(Request $request)
+    {
+
+            $validator =  Validator::make($request->all(), [
+                'village_id' => 'required|numeric',
+            ]);
+
+            if ($validator->fails()) {
+               return redirect()->back()->with(['warning' => 'Pilih desa terlebih dahulu!']);
+            }
+
+            // get data saksi per desa
+            $data = DB::table('witnesses as a')
+                ->select('a.id','b.name', 'a.status', 'c.tps_number', 'd.name as village','b.whatsapp','b.id as user_id','b.phone_number','e.name as district','b.address')
+                ->join('users as b','a.user_id','=','b.id')
+                ->join('tps as c','a.tps_id','=','c.id')
+                ->join('villages as d','c.village_id','=','d.id')
+                ->join('districts as e','d.district_id','=','e.id')
+                ->join('dapil_areas as f','f.district_id','=','e.id')
+                ->where('a.village_id', $request->village_id)
+                ->orderBy('c.tps_number','asc')
+                ->get();
+
+            $village = Village::with(['district'])->where('id', $request->village_id)->first();
+            $no = 1;
+
+            $pdf  = PDF::LoadView('pages.report.saksi', compact('data','village','no'))->setPaper('a4');
+            return $pdf->download('DAFTAR SAKSI DS.'.$village->name.', KEC.'.$village->district->names.'.pdf');
+
+
+    }
+
+    public function downloadKtpMember($id)
+    {
+        $anggota = DB::table('users')->select('ktp','name')->where('id', $id)->first();
+        
+        if($anggota){
+            $file = public_path('/storage/'.$anggota->ktp);
+            // $headers = array(
+            //     'Content-Type:application/vnd.ms-excel',
+            // );
+
+            return response()->download($file, 'KTP-'.$anggota->name.'.jpg');
+
+        }else{
+            return redirect()->back()->with(['warning' => 'Tidak ada data!']);
+        }
+
+    }
+
+     public function downloadPhotoMember($id)
+    {
+        $anggota = DB::table('users')->select('photo','name')->where('id', $id)->first();
+        
+        if($anggota){
+            $file = public_path('/storage/'.$anggota->photo);
+            // $headers = array(
+            //     'Content-Type:application/vnd.ms-excel',
+            // );
+
+            return response()->download($file, 'Photo-'.$anggota->name.'.jpg');
+
+        }else{
+            return redirect()->back()->with(['warning' => 'Tidak ada data!']);
+        }
+
+    }
+
 
 }

@@ -584,6 +584,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/witnesses/store','TpsController@storeWitness')->name('admin-tps-witnesses-store');
 
             Route::get('/saksi','TpsController@daftarSaksi')->name('admin-daftartim-saksi');
+            Route::post('/saksi/download/pdf','TpsController@downloadSaksiByVillage')->name('admin-daftartim-saksi-download');
+            Route::get('/saksi/ktp/download/{id}','TpsController@downloadKtpMember');
+            Route::get('/saksi/photo/download/{id}','TpsController@downloadPhotoMember');
+
 
         });
 
