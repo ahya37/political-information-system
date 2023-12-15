@@ -4671,6 +4671,26 @@ class OrgDiagramController extends Controller
         ]);
     }
 
+    public function daftarFormManual($idx)
+    {
+        $kor_rt = DB::table('org_diagram_rt as a')
+                ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district', 'e.tps_number','b.nik')
+                ->join('users as b', 'b.nik', '=', 'a.nik')
+                ->join('villages as c', 'c.id', '=', 'a.village_id')
+                ->join('districts as d', 'd.id', '=', 'a.district_id')
+                ->leftJoin('tps as e', 'b.tps_id', '=', 'e.id')
+                ->where('idx', $idx)
+                ->first();
+
+        $no = 1;
+
+        #data fix anggota form manual
+        $anggota = DB::table('form_anggota_manual_kortp')->where('pidx_korte', $idx)->get();
+
+        return view('pages.admin.strukturorg.rt.formmanual.index', compact('idx','korte_idx','kor_rt','no','anggota'));
+    }
+
+
     public function anggotaBelumtercoverPerDesa(){
 
         return 'OK';

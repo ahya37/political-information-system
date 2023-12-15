@@ -292,11 +292,12 @@
                                             <th scope="col">ALAMAT</th>
                                             <th scope="col">RT</th>
                                             <th scope="col">TPS</th>
-                                            <th scope="col">JABATAN</th>
+                                            {{-- <th scope="col">JABATAN</th> --}}
                                             <th scope="col">ANGGOTA</th>
                                             <th scope="col">REFERAL</th>
                                             <th scope="col">FORM KORTPS</th>
                                             <th scope="col">KLG.SERUMAH</th>
+                                            <th scope="col">FORM MANUAL</th>
                                             <th scope="col">NO HP / WA</th>
                                             <th scope="col">OPSI</th>
                                         </tr>
@@ -312,6 +313,8 @@
                                         <td id="totalCountAnggota"></td>
                                         <td id="totalCountReferal"></td>
                                         <td id="totalFormKosong"></td>
+                                        <td id="totalkgs"></td>
+                                        <td id="totalFormManual"></td>
                                         <td></td>
                                         <td></td>
                                     </tfoot>

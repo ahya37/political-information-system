@@ -1073,11 +1073,17 @@ let table = $("#data").DataTable({
         {
             targets: 10,
             render: function (data, type, row, meta) {
+                return `<p class="text-center">${row.formmanual}</p>`;
+            }, 
+        },
+        {
+            targets: 11,
+            render: function (data, type, row, meta) {
                 return `<p>${row.phone_number ?? ""}</p>`;
             },
         },
         {
-            targets: 11,
+            targets: 12,
             render: function (data, type, row, meta) {
                 return `<div class="btn-group">
                         <div class="dropdown">
@@ -1110,8 +1116,8 @@ let table = $("#data").DataTable({
 								<a href='/admin/struktur/rt/detail/anggota/tpsttimpemenangan/download/pdf/${row.idx}' class="dropdown-item ">
                                 Download Surat Undangan
                                 </a>
-								<a href='/admin/struktur/rt/detail/anggota/formkoordinator/${row.idx}' class="dropdown-item ">
-                                Form Koordinator TPS / Korte
+								<a href='/admin/struktur/rt/anggota/formmanual/${row.idx}' class="dropdown-item">
+                                    Form Manual
                                 </a>
                                 <a href='/admin/struktur/rt/edittps/${row.id}' class="dropdown-item ">
                                 Edit TPS
@@ -1133,6 +1139,8 @@ let table = $("#data").DataTable({
         let totalCountAnggota = 0;
         let totalCountReferal = 0;
         let totalFormKosong   = 0;
+        let totalkgs          = 0;
+        let totalFormManual   = 0;
         row.aoData.forEach(element => {
              totalCountAnggota += parseFloat(element._aData.count_anggota);
              totalCountReferal += parseFloat(element._aData.referal);
@@ -1142,9 +1150,13 @@ let table = $("#data").DataTable({
         $('#totalCountAnggota').empty();
         $('#totalCountReferal').empty();
         $('#totalFormKosong').empty();
+        $('#totalkgs').empty();
+        $('#totalFormManual').empty();
         $('#totalCountAnggota').append(`<p class="text-center"><b>${totalCountAnggota}</b></p>`);
         $('#totalCountReferal').append(`<p class="text-center"><b>${totalCountReferal}</b></p>`);
         $('#totalFormKosong').append(`<p class="text-center"><b>${totalFormKosong}</b></p>`);
+        $('#totalkgs').append(`<p class="text-center"><b>${totalkgs}</b></p>`);
+        $('#totalFormManual').append(`<p class="text-center"><b>${totalFormManual}</b></p>`);
     }
 });
 

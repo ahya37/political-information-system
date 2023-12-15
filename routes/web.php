@@ -510,6 +510,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             #Daftar Saksi
             Route::get('/daftartim/saksi','OrgDiagramController@daftarSaksi')->name('admin-daftartim-saksi');
 
+            Route::get('/rt/anggota/formmanual/{idx}','OrgDiagramController@daftarFormManual')->name('admin-struktur-form-manual');
+
 
         });
 		
