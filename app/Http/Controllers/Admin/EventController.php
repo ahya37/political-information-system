@@ -258,7 +258,7 @@ class EventController extends Controller
                $eventDetailModel->status = 'ANGGOTAKORTPS';
                $eventDetailModel->address = $event->address;
                $eventDetailModel->save();
-           }
+           } 
 
         }
 

@@ -262,7 +262,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::post('/event/gallery/update/{id}','EventGalleryController@upodateFoto')->name('admin-event-gallery-update-foto');
         Route::post('/event/gallery/store/video/{id}','EventGalleryController@storeVideo')->name('admin-event-gallery-store-video');
         Route::get('/event/gallery/detail/{id}','EventGalleryController@detailEventGallery');
-
+  
          // report excel
         Route::get('/member/national/export','DashboardController@exportDataNationalExcel')->name('report-member-national-excel');
         Route::get('/member/province/export/{province_id}','DashboardController@exportDataProvinceExcel')->name('report-member-province-excel');

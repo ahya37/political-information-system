@@ -174,7 +174,7 @@
         </div>
     </div>
 @endpush
-
+ 
 @push('addon-script')
 <script src="{{asset('assets/select2/dist/js/select2.min.js')}}"></script>
 <script src="{{ asset('assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js') }}"></script>

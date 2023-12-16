@@ -170,7 +170,7 @@ function getListDistrictUi(listDistricts) {
     const divListDistrictContainer = $("#selectDistrictId");
     divListDistrictContainer.append(divListDistrict);
 }
-
+ 
 function showDivHtmlListDistrict(m) {
     return `<option value="${m.district_id}">${m.name}</option>`;
 }
