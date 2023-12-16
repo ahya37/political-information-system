@@ -230,7 +230,7 @@ class EventController extends Controller
         return view('pages.admin.event.add-participant', compact('province','event_id','result_korte','no'));
     }
 
-    public function addGiftRecipientFromTim(Request $request, $eventId)
+    public function addRecipientFromTim(Request $request, $eventId)
     {
         $this->validate($request, [
             'participant' => 'required',

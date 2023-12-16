@@ -429,6 +429,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         // cost event
         Route::get('/event/cost/create/{id}','EventController@createCost')->name('admin-event-cost-create');
         Route::post('/event/cost/store/{id}','EventController@costEventStore')->name('admin-event-cost-store');
+        
+        Route::post('/event/participantbyitm/store/{eventid}','EventController@addRecipientFromTim')->name('admin-participanbytim-store');
 
         Route::post('/member/download/excel', 'MemberController@getDownloadExcel')->name('member-download-excel');
 
