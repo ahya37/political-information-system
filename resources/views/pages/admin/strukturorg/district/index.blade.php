@@ -18,6 +18,7 @@
             </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
                 <a class="btn btn-sm btn-sc-primary text-white mb-2" href="{{ route('admin-struktur-organisasi-district-create') }}">+ Tambah</a>
+                <a class="btn btn-sm btn-success mb-2" href="{{ route('admin-struktur-tim-download-kta',$district->id) }}">Download KTA</a>
                 <input type="hidden" value="{{ $district->id ?? ''}}" id="admindistrict" />
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
@@ -45,7 +46,7 @@
             </div>
         </div>
     </div>
-@endsection
+@endsection 
 
 @push('addon-script')
     <script type="text/javascript" src="{{ asset('assets/vendor/datatable/datatables.min.js') }}"></script>

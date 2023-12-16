@@ -73,7 +73,7 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     
                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit"
-                                        value="Download Saksi" name="report_type">
+                                        value="Download Saksi" name="report_type"> 
                                 </div>
                             </div>
                         </div>

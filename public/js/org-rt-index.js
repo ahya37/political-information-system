@@ -495,14 +495,14 @@ let table = $("#data").DataTable({
 								<a href='/admin/struktur/rt/detail/anggota/tpsttimpemenangan/download/pdf/${row.idx}' class="dropdown-item ">
                                 Download Surat Undangan
                                 </a>
-                                <a target="_blank" href='/admin/struktur/test/rt/detail/anggota/download/kta/pdf/${row.idx}' class="dropdown-item ">
+                                <a target="_blank" href='/admin/struktur/rt/detail/anggota/download/kta/pdf/${row.idx}' class="dropdown-item ">
                                 Download KTA Anggota PDF
                                 </a>
                                 <button type="button" onclick="onDelete(this)" data-name="${row.name}" data-id="${row.id}" class="dropdown-item btn btn-sm btn-danger text-danger">
                                 Hapus
                                 </button>
                             </div>
-                        </div>
+                        </div> 
                     </div>`;
             },
         },

@@ -296,7 +296,7 @@ let table = $("#data").DataTable({
         },
     ],
     
-});
+}); 
 
 async function updateNoTelpKorTps(data){
     const name = data.getAttribute("data-name");

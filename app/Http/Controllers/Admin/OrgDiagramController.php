@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\DetailFamilyGroup;
 use App\Exports\AnggotaBelumTercoverKortps;
+use App\Exports\AnggotaFormKortpsExport;
 use App\Exports\KorteExportWithSheet;
 use App\Sticker;
 use Illuminate\Http\Request;
@@ -28,13 +29,14 @@ use App\Models\District;
 use App\Models\Village;
 use App\Providers\QrCodeProvider;
 use App\Providers\StrRandom;
-use  Barryvdh\DomPDF\Facade;
+use PDF;
 use Zipper;
-use Illuminate\Support\Facades\File;
+use File;
 use Illuminate\Support\Facades\Log;
 use App\Imports\FormManualImport;
 use App\Imports\FormKortpsImport;
 use Maatwebsite\Excel\Facades\Excel as Excels;
+use Illuminate\Support\Facades\Redis;
 
 class OrgDiagramController extends Controller
 {
@@ -858,13 +860,13 @@ class OrgDiagramController extends Controller
             $old_data = $orgTable->select('idx')->orderBy('idx', 'asc')->get();
 
             #get data where idx
-            $results = [];
-            foreach ($idx as $key => $value) {
-                $results[] = [
-                    'old' => $old_data,
-                    'new' => $idx
-                ];
-            }
+            // $results = [];
+            // foreach ($idx as $key => $value) {
+            //     $results[] = [
+            //         'old' => $old_data,
+            //         'new' => $idx
+            //     ];
+            // }
 
             DB::commit();
             return ResponseFormatter::success([
@@ -4716,7 +4718,7 @@ class OrgDiagramController extends Controller
             ]);
         }
     }
-
+ 
     public function uploadFormKortps(Request $request, $idx)
     {
         DB::beginTransaction();

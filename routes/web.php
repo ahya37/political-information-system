@@ -250,10 +250,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::post('/event/add/addgiftreceipents/store/{event_id}','EventController@storeAddRecipient')->name('admin-event-addgiftreceipents-store');
         Route::post('/event/add/addgiftreceipentsfamilygroup/store/{event_id}','EventController@storeAddRecipientFamilyGroup')->name('admin-event-addgiftreceipentsfamilygroup-store');
         
-		Route::post('/event/download/galery','EventController@downloadGaleryByEvent')->name('admin-event-galery');
-        Route::post('/event/category/store','EventCategoryController@store')->name('admin-eventcategory-store');
+		
+		Route::post('/event/download/galery','EventController@downloadGaleryByEvent')->name('admin-event-galery'); 
+
         
-        Route::post('/event/participan/bytim/store/{eventId}','EventController@addGiftRecipientFromTim')->name('admin-participanbytim-store');
+        Route::post('/event/category/store','EventCategoryController@store')->name('admin-eventcategory-store');
 
         // Gallery Event
         Route::get('/event/gallery/{id}','EventGalleryController@index')->name('admin-event-gallery');
@@ -524,8 +525,6 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
             Route::post('/rt/member/newanggota','OrgDiagramController@saveAnggotaByKorRTAndNewAnggotaKTA')->name('admin-struktur-organisasi-rt-newanggota-save');
             
-            #test KTA anggota by kortps
-            Route::get('/test/rt/detail/anggota/download/kta/pdf/{idx}','TestController@downloadKTAMembersByKortps');
 
             Route::get('/member/different/village/kortps/{idx}','OrgDiagramController@memberDifferentVillageByKortps')->name('admin-struktur-different-by-kortps');
 
@@ -538,6 +537,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             
             
             Route::get('/rt/formatform/download/','DocumentController@downloadFormatFormKortps')->name('admin-struktur-form-download-format');
+
+            #cetak KTA tim, dan anggota per kortps
+            Route::get('/rt/detail/anggota/download/kta/pdf/{idx}','DocumentController@downloadKTAMembersByKortps');
+            Route::get('/rt/detail/tim/download/kta/pdf/{districtId}','DocumentController@downloadKTAKorcamKordes')->name('admin-struktur-tim-download-kta');
 
 
         });
@@ -568,7 +571,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/user/store/{id}','InventoryController@storeInventoryUser')->name('admin-inventory-user-store');
         });
 
-
+ 
         #Spam
         Route::group(['prefix' => 'spam'], function(){
             Route::get('/anggota','SpamController@index')->name('admin-spam-member');
