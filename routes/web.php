@@ -250,11 +250,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::post('/event/add/addgiftreceipents/store/{event_id}','EventController@storeAddRecipient')->name('admin-event-addgiftreceipents-store');
         Route::post('/event/add/addgiftreceipentsfamilygroup/store/{event_id}','EventController@storeAddRecipientFamilyGroup')->name('admin-event-addgiftreceipentsfamilygroup-store');
         
-		
-		Route::post('/event/download/galery','EventController@downloadGaleryByEvent')->name('admin-event-galery'); 
-
-        
+		Route::post('/event/download/galery','EventController@downloadGaleryByEvent')->name('admin-event-galery');
         Route::post('/event/category/store','EventCategoryController@store')->name('admin-eventcategory-store');
+        
+        Route::post('/event/participan/bytim/store/{eventId}','EventController@addGiftRecipientFromTim')->name('admin-participanbytim-store');
 
         // Gallery Event
         Route::get('/event/gallery/{id}','EventGalleryController@index')->name('admin-event-gallery');

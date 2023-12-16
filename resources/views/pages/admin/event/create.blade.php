@@ -116,6 +116,14 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12">
+                                                <label>Alamat (Kp)</label>
+                                                <input  type="text" name="address"  required class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
                                                                           
                                     <div class="form-group">
                                         <button

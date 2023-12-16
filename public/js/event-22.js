@@ -18,59 +18,6 @@ let selectVillageId = $("#selectVillageId").val();
 // selectDistrictId.val();
 // selectVillageId.val();
 
-const table = $("#data").DataTable({
-    pageLength: 100,
-
-    bLengthChange: true,
-    bFilter: true,
-    bInfo: true,
-    processing: true,
-    bServerSide: true,
-    order: [[1, "asc"]],
-    autoWidth: false,
-    ajax: {
-        url: "/api/admin/member/dtmember",
-        type: "POST",
-        data: function (d) {
-            d.province = province;
-            d.regency = selectArea;
-            d.dapil = selectListArea;
-            d.district = selectDistrictId;
-            d.village = selectVillageId;
-            return d;
-        },
-    },
-    columnDefs: [
-        {
-            targets: 0,
-            sortable: false,
-            render: function (data, type, row, meta) {
-                return `<a href="/admin/member/profile/${row.id}">
-                        <img  class="rounded" width="40" src="/storage/${row.photo}">
-                      </a>`;
-            },
-        },
-        {
-            targets: 1,
-            render: function (data, type, row, meta) {
-                return `<p>${row.name}</p>`;
-            },
-        },
-
-        {
-            targets: 2,
-            render: function (data, type, row, meta) {
-                return `<a
-                        href="/admin/event/add/participant/store/${eventId}/${row.id}"
-                        class="btn btn-sm btn-sc-primary text-white"
-                    >
-                        <i class="fa fa-plus"></i>
-                    </a>`;
-            },
-        },
-    ],
-});
-
 $(".filter").change(async function () {
     province = $("#province").val();
     selectArea = $("#selectArea").val();

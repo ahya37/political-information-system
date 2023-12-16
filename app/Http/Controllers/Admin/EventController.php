@@ -22,13 +22,23 @@ use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Regency;
 use PDF;
+use App\Models\District;
+use App\OrgDiagram;
 
 class EventController extends Controller
 {
     public function index()
     {
+        $regency = Regency::select('id', 'name')->where('id', 3602)->first();
+
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $district  = District::select('name','id')->where('id', $authAdminDistrict)->first();
+        $villages  = Village::select('id','name')->where('district_id', $district->id)->get();
+
+        // dd($villages);
+
         $eventModel = new Event();
-        $events     = $eventModel->getEvents();
+        $events     = $eventModel->getEventsByDistrict($district->id);
         if (request()->ajax()) {
             return DataTables::of($events)
                     ->addColumn('action', function($item){
@@ -99,7 +109,7 @@ class EventController extends Controller
 		$regency = Regency::select('id', 'name')->where('id', 3602)->first();
 		$event_cat = DB::table('event_categories')->select('id','name')->get();
 
-        return view('pages.admin.event.index', compact('regency','event_cat'));
+        return view('pages.admin.event.index', compact('regency','event_cat','district','villages'));
     }
 	 
 	public function downloadGaleryByEvent(Request $request){
@@ -164,10 +174,27 @@ class EventController extends Controller
     public function addMemberEvent($id)
     {
         $event_id = $id;
+
+        $event = Event::select('village_id')->where('id', $id)->first();
+        
+        // get data korte berdasarkan desa pada event tersebut
+        $orgModel = new OrgDiagram();
+        $korte    = $orgModel->getDataKorteByDesa($event->village_id);
+
+        // get data kortps where data korte
+        $result_korte = [];
+        foreach ($korte as $value) {
+           $list_anggota = $orgModel->getDataAnggotaByKorte($value->idx);
+           $result_korte[] = [
+                'id'   => $value->id,
+                'name' => $value->NAMA,
+                'list_anggota' => $list_anggota
+           ];
+        }
         
         // mengambil member yang memiliki akun login saja, atau yg daftar mandiri
         // $memberModel = new User();
-        // $members     = $memberModel->getMemberForEvent($event_id);
+        // $members     = $memberModel->getMemberForEvent($event_id);+
 
             // if (request()->ajax()) {
             //     return DataTables::of($members)
@@ -197,7 +224,46 @@ class EventController extends Controller
         // $regencies     = $regencyModel->getSelectRegencies();
         $provinceModel = new Province();
         $province = $provinceModel->getDataProvince();
-        return view('pages.admin.event.add-participant', compact('province','event_id'));
+
+        $no         = 1;
+        
+        return view('pages.admin.event.add-participant', compact('province','event_id','result_korte','no'));
+    }
+
+    public function addGiftRecipientFromTim(Request $request, $eventId)
+    {
+        $this->validate($request, [
+            'participant' => 'required',
+        ]);
+
+        // tampung array data peserta event
+        $data['participant'] = $request->participant;
+
+        $event = Event::select('address')->where('id', $eventId)->first();
+      
+        //get kelengkapan data by id dari list peserta
+        foreach ($data['participant'] as $key => $value) {
+            // cek jika user_id dan event_id sudah ada di detai_event, maka jangan disimpan dua kali
+           $eventDetailModel = new EventDetail();
+
+           $eventDetail = $eventDetailModel->where('event_id', $eventId)->where('user_id', $value)->count();
+           if ($eventDetail == 0) {
+               $anggota = User::select('id','name','village_id')->where('id', $value)->first();
+                // simpan kedalam tabel event_detail sebagai peserta
+               $eventDetailModel = new EventDetail();
+               $eventDetailModel->event_id = $eventId;
+               $eventDetailModel->village_id = $anggota->village_id;
+               $eventDetailModel->user_id = $value;
+               $eventDetailModel->participant = $anggota->name;
+               $eventDetailModel->status = 'ANGGOTAKORTPS';
+               $eventDetailModel->address = $event->address;
+               $eventDetailModel->save();
+           }
+
+        }
+
+        return redirect()->back()->with(['success' => 'Berhasil simpan peserta!']);
+
     }
 
     public function addGiftRecipient($id)
@@ -295,6 +361,7 @@ class EventController extends Controller
     {
         $name = $request->name;
         $data['village_id'] = $request->village_id;
+        
         foreach ($name as $key => $value) {
             $village = Village::with(['district.regency'])->where('id', $data['village_id'][$key])->first();
             $address = 'DS. '. $village->name. ', KEC. ' .$village->district->name. ', '. $village->district->regency->name;
@@ -421,6 +488,7 @@ class EventController extends Controller
     {
         $this->validate($request, [
             'event_category_id' => 'required',
+            'address' => 'required',
         ]);
 
         Event::create([
@@ -433,6 +501,7 @@ class EventController extends Controller
             'dapil_id' => $request->dapil_id,
             'district_id' => $request->district_id,
             'village_id' => $request->village_id,
+            'address' => $request->address,
 			'cby' => auth()->guard('admin')->user()->id
         ]);
 

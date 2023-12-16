@@ -1,64 +1,80 @@
 @extends('layouts.admin')
-@section('title','Daftar Event - Tambah Peserta')
+@section('title', 'Daftar Event - Tambah Peserta')
 @push('addon-style')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link href="{{ asset('assets/style/style.css') }}" rel="stylesheet" />
 @endpush
 @section('content')
-<!-- Section Content -->
- <div
-            class="section-content section-dashboard-home mb-4"
-            data-aos="fade-up"
-          >
-            <div class="container-fluid">
-              <div class="dashboard-heading">
-                <h2 class="dashboard-title">Tambah Peserta Event</h2>
+    <!-- Section Content -->
+    <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
+        <div class="container-fluid">
+            <div class="dashboard-heading">
+                <h2 class="dashboard-title">Tambah Peserta Event (Dari Kortps)</h2>
                 <p class="dashboard-subtitle">
                 </p>
-              </div>
-              <div class="dashboard-content mt-4" id="transactionDetails">
-
+            </div>
+            <div class="dashboard-content mt-4" id="transactionDetails">
                 <div class="row">
-                   <div class="col-12">
-                     @include('layouts.message')
-                    <div class="card">
-                      <div class="card-body">
-                        <form method="post" action="{{ route('admin-event-partisipant-other', $event_id) }}">
-                          @csrf
-                          <div id="elements">
-                            <div class="row" >
-                              <div class="col-1"></div>
-                              <div class="col-5">
-                                <input type="text" name="name[]" class="form-control form-control-sm" placeholder="Nama"/>
-                              </div>
-                              <div class="col-5">
-                                 <select name="village_id[]"  class="form-control select2" required>
-                                            <option value="">- pilih Desa -</option>
-                                  </select>
-                              </div>
-                              
-                            </div>
-                          </div>
-                          <div class="row mt-3">
-                            <div class="col">
-                              <button type="button" class="btn btn-success btn-sm addMore" id="addMore" value="Add"><i class="fas fa-plus"></i></button>
-                              <input type="submit" name="submit" class="btn btn-primary btn-sm" value="Submit"/>	
-
-                            </div>
-                          </div>
-                      </div>
+                    <div class="col-md-6 col-sm-12">
+                        @include('layouts.message')
+                        <div id="accordion">
+                            <form action="{{route('admin-participanbytim-store', $event_id)}}" method="POST" enctype="multipart/form-data">
+                              @csrf
+                                @foreach ($result_korte as $item)
+                                    <div class="card mb-2">
+                                        <div class="card-body">
+                                            <button type="button" class="row btn btn-link mr-4" data-toggle="collapse"
+                                                data-target="#collapseOne{{ $item['id'] }}" aria-expanded="true"
+                                                aria-controls="collapseOne">
+                                                <input type="checkbox" value="{{ $item['id'] }}" name="participant[]">
+                                                {{ $item['name'] }} (Kortps)
+                                            </button>
+                                            <div id="collapseOne{{ $item['id'] }}" class="collapse"
+                                                aria-labelledby="headingOne" data-parent="#accordion">
+                                                <h5 class="card-title">Daftar Anggota</h5>
+                                                <table id="data" class="table table-sm table-striped" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="col-1">Pilih</th>
+                                                            <th class="col-1">NO</th>
+                                                            <th>NAMA</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @php
+                                                            $no_anggota = 1;
+                                                        @endphp
+                                                        @foreach ($item['list_anggota'] as $anggota)
+                                                            <tr>
+                                                                <td align="center">
+                                                                    <input type="checkbox" value="{{ $anggota->id }}"
+                                                                        name="participant[]">
+                                                                </td>
+                                                                <td>{{ $no_anggota++ }}</td>
+                                                                <td>{{ $anggota->name }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                <button type="submit" class="btn btn-sm btn-sc-primary text-white">Simpan</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-              </div>
             </div>
-          </div>
-@endsection
-@push('addon-script')
-<script src="{{asset('assets/select2/dist/js/select2.min.js')}}"></script>
+        </div>
+    @endsection
+    @push('addon-script')
+        <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
 
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
-<script type="text/javascript" src="{{ asset('js/event-22.js') }}"></script>
-@endpush
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+        <script type="text/javascript" src="{{ asset('js/event-22.js') }}"></script>
+    @endpush

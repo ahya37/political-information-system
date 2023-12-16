@@ -34,6 +34,18 @@ class Event extends Model
         return $result; 
     }
 
+    public function getEventsByDistrict($districtId)
+    {			
+		 $sql = "SELECT a.id, a.date, a.created_at as date, a.time, a.description, d.name as village, e.name as title, a.title as old_title from events as a
+                 join villages as d on a.village_id = d.id
+                 left join event_categories as e on a.event_category_id = e.id
+				 where a.isdelete = 0 and d.district_id = $districtId
+                 order by a.date desc";
+
+        $result = DB::select($sql);
+        return $result; 
+    }
+
     public function getAddressEvent($id)
     {
         $sql = "SELECT a.id, a.date, a.time, a.description, d.name as village, c.name as district, b.name as regency from events as a

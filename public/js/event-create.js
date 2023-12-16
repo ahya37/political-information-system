@@ -26,13 +26,10 @@ async function getLisDapil() {
     } catch {}
 }
 getLisDapil();
-function getDapilRegency(selectProvinceValue) {
+async function getDapilRegency(selectProvinceValue) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    return fetch(`/api/dapilbyprovinceid/${selectProvinceValue}`).then(
-        (response) => {
-            return response.json();
-        }
-    );
+    const response = await fetch(`/api/dapilbyprovinceid/${selectProvinceValue}`);
+    return await response.json();
 }
 
 function getDapilRegencyUi(responseData) {
@@ -66,18 +63,17 @@ selectArea.on("change", async function () {
     } catch {}
 });
 
-function getDapilNames(selectAreaValue) {
+async function getDapilNames(selectAreaValue) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    return fetch(`/api/getlistdapil`, {
+    const response = await fetch(`/api/getlistdapil`, {
         method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "appliacation/json",
         },
         body: JSON.stringify({ token: CSRF_TOKEN, regencyId: selectAreaValue }),
-    }).then((response) => {
-        return response.json();
     });
+    return await response.json();
 }
 function getDapilNamesUi(listDapils) {
     let divListDapil = "";
@@ -107,9 +103,9 @@ selectListArea.on("change", async function () {
         }
     } catch {}
 });
-function getListDistrict(selectListAreaValue) {
+async function getListDistrict(selectListAreaValue) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    return fetch(`/api/getlistdistrictdapil`, {
+    const response = await fetch(`/api/getlistdistrictdapil`, {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -119,9 +115,8 @@ function getListDistrict(selectListAreaValue) {
             token: CSRF_TOKEN,
             dapilId: selectListAreaValue,
         }),
-    }).then((response) => {
-        return response.json();
     });
+    return await response.json();
 }
 function getListDistrictUi(listDistricts) {
     let divListDistrict = "";
@@ -152,9 +147,9 @@ selectListArea.on("change", async function () {
         }
     } catch {}
 });
-function getListDistrict(selectListAreaValue) {
+async function getListDistrict(selectListAreaValue) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    return fetch(`/api/getlistdistrictdapil`, {
+    const response = await fetch(`/api/getlistdistrictdapil`, {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -164,9 +159,8 @@ function getListDistrict(selectListAreaValue) {
             token: CSRF_TOKEN,
             dapilId: selectListAreaValue,
         }),
-    }).then((response) => {
-        return response.json();
     });
+    return await response.json();
 }
 function getListDistrictUi(listDistricts) {
     let divListDistrict = "";
@@ -195,9 +189,9 @@ selectDistrictId.on("change", async function () {
         }
     } catch {}
 });
-function getListVillage(selectDistrictValue) {
+async function getListVillage(selectDistrictValue) {
     const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
-    return fetch(`/api/getlistvillagetdapil`, {
+    const response = await fetch(`/api/getlistvillagetdapil`, {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -207,9 +201,8 @@ function getListVillage(selectDistrictValue) {
             token: CSRF_TOKEN,
             district_id: selectDistrictValue,
         }),
-    }).then((response) => {
-        return response.json();
     });
+    return await response.json();
 }
 function getListVillageUi(dataVillages) {
     let divVillage = "";
