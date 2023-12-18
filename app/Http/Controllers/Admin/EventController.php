@@ -12,6 +12,7 @@ use App\ForecastDesc;
 use App\EventCategory;
 use App\FamilyGroup;
 use App\GiftRecipients;
+use App\Helpers\AdminArea;
 use App\Models\Village;
 use App\Models\Province;
 use Illuminate\Http\Request;
@@ -181,6 +182,16 @@ class EventController extends Controller
         $orgModel = new OrgDiagram();
         $korte    = $orgModel->getDataKorteByDesa($event->village_id);
 
+        // get area admin kecamtan
+        $adminArea = new AdminArea();
+        $adminAreaResult  = $adminArea::getDistrict();
+        $districtId       = $adminAreaResult->id;
+
+        // get data korcam, by akun login kecamatan
+        $korcam   = $orgModel->getDataKorcamByAdminDistrict($districtId);
+        // get data kordes, by akun login kecamatan
+        $kordes   = $orgModel->getDataKordesByVillage($event->village_id);
+
         // get data kortps where data korte
         $result_korte = [];
         foreach ($korte as $value) {
@@ -188,46 +199,17 @@ class EventController extends Controller
            $result_korte[] = [
                 'id'   => $value->id,
                 'name' => $value->NAMA,
-                'list_anggota' => $list_anggota
+                'list_anggota' => $list_anggota,
+                'base' => $value->base
            ];
         }
         
-        // mengambil member yang memiliki akun login saja, atau yg daftar mandiri
-        // $memberModel = new User();
-        // $members     = $memberModel->getMemberForEvent($event_id);+
-
-            // if (request()->ajax()) {
-            //     return DataTables::of($members)
-            //             ->addColumn('pilih', function($item) use ($event_id){
-            //                 // jika event_id != id pada event, maka aktifkan kotak pilihnya
-            //                 if ($item->event_id != $event_id) {
-            //                     return '
-            //                     <input type="checkbox" name="user_id[]" value="'.$item->user_id.'" class="form-control-sm">
-            //                     <input type="hidden" name="event_id" value="'.$event_id.'" >
-            //                     ';
-            //                 }
-            //                 return '
-            //                     <span class="fa fa-check"></span>
-            //                 ';
-            //             })
-            //             ->addColumn('district', function($item){
-            //                 return $item->village;
-            //             })
-            //              ->addColumn('regency', function($item){
-            //                 return $item->district;
-            //             })
-            //             ->rawColumns(['pilih','district','regency'])
-            //             ->make();
-
-            //         }
-        // $regencyModel = new Regency();
-        // $regencies     = $regencyModel->getSelectRegencies();
         $provinceModel = new Province();
         $province = $provinceModel->getDataProvince();
 
         $no         = 1;
         
-        return view('pages.admin.event.add-participant', compact('province','event_id','result_korte','no'));
+        return view('pages.admin.event.add-participant', compact('province','event_id','result_korte','no','korcam','kordes'));
     }
 
     public function addRecipientFromTim(Request $request, $eventId)
@@ -248,14 +230,15 @@ class EventController extends Controller
 
            $eventDetail = $eventDetailModel->where('event_id', $eventId)->where('user_id', $value)->count();
            if ($eventDetail == 0) {
-               $anggota = User::select('id','name','village_id')->where('id', $value)->first();
+               $anggota = User::select('id','name','village_id','nik')->where('id', $value)->first();
                 // simpan kedalam tabel event_detail sebagai peserta
                $eventDetailModel = new EventDetail();
                $eventDetailModel->event_id = $eventId;
                $eventDetailModel->village_id = $anggota->village_id;
                $eventDetailModel->user_id = $value;
+               $eventDetailModel->nik = $anggota->nik;
                $eventDetailModel->participant = $anggota->name;
-               $eventDetailModel->status = 'ANGGOTAKORTPS';
+               $eventDetailModel->status = 'TIM';
                $eventDetailModel->address = $event->address;
                $eventDetailModel->save();
            } 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\DetailFamilyGroup;
 use App\Exports\AnggotaBelumTercoverKortps;
-use App\Exports\AnggotaFormKortpsExport;
 use App\Exports\KorteExportWithSheet;
 use App\Sticker;
 use Illuminate\Http\Request;
@@ -36,7 +35,6 @@ use Illuminate\Support\Facades\Log;
 use App\Imports\FormManualImport;
 use App\Imports\FormKortpsImport;
 use Maatwebsite\Excel\Facades\Excel as Excels;
-use Illuminate\Support\Facades\Redis;
 
 class OrgDiagramController extends Controller
 {
@@ -57,11 +55,6 @@ class OrgDiagramController extends Controller
 
     public function show()
     {
-
-        $regency_id = request('regency_id');
-        $dapil_id   = request('dapil_id');
-        $district_id = request('district_id');
-        $village_id = request('village_id');
 
         $org_diagram = OrgDiagram::select('id', 'idx', 'parent', 'title', 'name', 'image', 'user_id', 'base', 'regency_id', 'dapil_id', 'district_id', 'village_id')
             ->orderBy('idx', 'asc')->get();
@@ -1167,7 +1160,6 @@ class OrgDiagramController extends Controller
         $authAdminDistrict = auth()->guard('admin')->user()->district_id;
         $districtModel  = new District();
         $district       = $districtModel->getAreaAdminKoordinator($authAdminDistrict);
-        // dd($district);
         $villages       = Village::select('id', 'name')->where('district_id', $authAdminDistrict)->get();
 
         $kor_rt = DB::table('org_diagram_rt as a')

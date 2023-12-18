@@ -17,13 +17,91 @@
                 <p class="dashboard-subtitle">
                 </p>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @include('layouts.message')
+                </div>
+            </div>
             <div class="dashboard-content mt-4" id="transactionDetails">
-                <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        @include('layouts.message')
-                        <div id="accordion">
-                            <form action="{{route('admin-participanbytim-store', $event_id)}}" method="POST" enctype="multipart/form-data">
-                              @csrf
+                <form action="{{ route('admin-participanbytim-store', $event_id) }}" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Korcam</h5>
+                            <div class="card">
+                                <div class="card-body">
+                                    <table id="data" class="table table-sm table-striped" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-1">Pilih</th>
+                                                <th class="col-1">NO</th>
+                                                <th>NAMA</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $no_kordes = 1;
+                                            @endphp
+                                            @foreach ($korcam as $item)
+                                                <tr>
+                                                    <td align="center">
+                                                        <input type="checkbox" value="{{ $item->id }}"
+                                                            name="participant[]">
+                                                    </td>
+                                                    <td>{{ $no_kordes++ }}</td>
+                                                    <td>{{ $item->name }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <h5>Kordes</h5>
+                            <div class="card">
+                                <div class="card-body">
+                                    <table id="data" class="table table-sm table-striped" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-1">Pilih</th>
+                                                <th class="col-1">NO</th>
+                                                <th>NAMA</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $no_kordes = 1;
+                                            @endphp
+                                            @foreach ($kordes as $item)
+                                                <tr>
+                                                    <td align="center">
+                                                        <input type="checkbox" value="{{ $item->id }}"
+                                                            name="participant[]">
+                                                    </td>
+                                                    <td>{{ $no_kordes++ }}</td>
+                                                    <td>{{ $item->name }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <h5>Kortps</h5>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div id="accordion">
+                                @php
+                                    $no_kortps = 1;
+                                @endphp
+
                                 @foreach ($result_korte as $item)
                                     <div class="card mb-2">
                                         <div class="card-body">
@@ -31,7 +109,7 @@
                                                 data-target="#collapseOne{{ $item['id'] }}" aria-expanded="true"
                                                 aria-controls="collapseOne">
                                                 <input type="checkbox" value="{{ $item['id'] }}" name="participant[]">
-                                                {{ $item['name'] }} (Kortps)
+                                            {{$no_kortps++}}. {{ $item['name'] }} (Kortps)
                                             </button>
                                             <div id="collapseOne{{ $item['id'] }}" class="collapse"
                                                 aria-labelledby="headingOne" data-parent="#accordion">
@@ -65,16 +143,16 @@
                                     </div>
                                 @endforeach
                                 <button type="submit" class="btn btn-sm btn-sc-primary text-white">Simpan</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>   
+                </form>
+            </div>
         </div>
-    @endsection
-    @push('addon-script')
-        <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
+    </div>
+    </div>
+    </div>
+@endsection
+@push('addon-script')
+    <script src="{{ asset('assets/select2/dist/js/select2.min.js') }}"></script>
 
-        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
-        <script type="text/javascript" src="{{ asset('js/event-22.js') }}"></script>
-    @endpush
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+    <script type="text/javascript" src="{{ asset('js/event-22.js') }}"></script>
+@endpush

@@ -168,7 +168,7 @@ class OrgDiagram extends Model
 	
 	public function getDataKorteByDesa($village_id){
 		
-		$sql = "SELECT b.id, a.idx, b.nik as NIK , b.name as NAMA, 
+		$sql = "SELECT a.base, b.id, a.idx, b.nik as NIK , b.name as NAMA, 
 				CASE when b.gender = '0' then 'L' else 'P' end as JENIS_KELAMIN, 
 				DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), b.date_berth)), '%Y') + 0 as 'USIA', a.title as 'JABATAN',
 				d.name as KECAMATAN, c.name as DESA
@@ -658,12 +658,32 @@ class OrgDiagram extends Model
 	public function getDataAnggotaByKorte($idx)
 	{
 		$sql = DB::table('org_diagram_rt as a')
-				->select('b.id','b.name')
+				->select('b.id','b.name','a.base')
 				->join('users as b','a.nik','=','b.nik')
 				->where('a.pidx', $idx)
 				->where('a.base','ANGGOTA')
 				->get();
 				
+		return $sql;
+	}
+
+	public function getDataKorcamByAdminDistrict($districtId)
+	{
+		$sql = DB::table('org_diagram_district as a')
+				->select('b.name','b.id','a.base')
+				->join('users as b','a.nik','b.nik')
+				->where('a.district_id', $districtId)
+				->get();
+		return $sql;
+	}
+
+	public function getDataKordesByVillage($villageId)
+	{
+		$sql = DB::table('org_diagram_village as a')
+				->select('b.name','b.id','a.base')
+				->join('users as b','a.nik','b.nik')
+				->where('a.village_id', $villageId)
+				->get();
 		return $sql;
 	}
 
