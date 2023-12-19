@@ -53,7 +53,7 @@ const table = $("#data").DataTable({
         {
             targets: 5,
             render: function (data, type, row, meta) {
-                return `<p>${row.referal}</p>`;
+                return `<p>${row.referal ?? ''}</p>`;
             },
         },
         {
