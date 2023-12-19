@@ -29,9 +29,7 @@ const table = $("#data").DataTable({
             targets: 1,
             sortable: false,
             render: function (data, type, row, meta) {
-                return `<a href="/admin/member/profile/${row.id}">
-                        <img  class="rounded" width="40" src="/storage/${row.photo}">
-                      </a>`;
+                return `<img  class="rounded" width="40" src="/storage/${row.photo}">`;
             },
         },
         {
