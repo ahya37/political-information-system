@@ -400,13 +400,13 @@ class MemberDatatableController extends Controller
             
     if($request->input('search.value')!=null){
             $data = $data->where(function($q)use($request){
-                $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(regencies.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(districts.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(villages.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(c.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(a.created_at) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                $q->whereRaw("LOWER(a.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                ->orWhereRaw("LOWER(regencies.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                ->orWhereRaw("LOWER(districts.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                ->orWhereRaw("LOWER(villages.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                ->orWhereRaw("LOWER(b.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                ->orWhereRaw("LOWER(c.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                ->orWhereRaw("LOWER(a.created_at) like ? ",["%".strtolower($request->input("search.value"))."%"])
                 ;
             });
         }
@@ -469,83 +469,67 @@ class MemberDatatableController extends Controller
 
         $orderBy = 'a.nik';
         switch ($request->input('order.0.column')) {
-            case '0':
-                $orderBy = 'a.name';
+            case '1':
+                $orderBy = 'a.nik';
                 break;
-            case '2':
-                $orderBy = 'a.name';
-                break;
-            case '3':
-                $orderBy = 'villages.name';
-                break;
-            case '4':
-                $orderBy = 'districts.name';
-                break;
-            case '5':
-                $orderBy = 'regencies.name';
-                break;
-            case '6':
-                $orderBy = 'b.name';
-                break;
-            case '7':
-                $orderBy = 'c.name';
-                break;
-            case '8':
-                $orderBy = 'f.reason';
-                break;
-            case '9':
-                $orderBy = 'f.reason';
-                break;
-            case '10':
-                $orderBy = 'f.reason_desc';
-                break;
+            // case '3':
+            //     $orderBy = 'villages.name';
+            //     break;
+            // case '4':
+            //     $orderBy = 'districts.name';
+            //     break;
+            // case '5':
+            //     $orderBy = 'b.name';
+            //     break;
+            // case '8':
+            //     $orderBy = 'f.name';
+            //     break;
         }
 
         $data = DB::table('tmp_spam_user as a')
-                        ->select('a.id','a.nik','a.user_id','a.name','a.photo','regencies.name as regency','districts.name as district','villages.name as village','b.name as referal','c.name as cby','a.created_at','a.status','a.email','f.name as reason','a.reason as reason_desc')
+                        ->select('a.id','a.nik','a.user_id','a.name','a.photo','districts.name as district','villages.name as village','b.name as referal','a.created_at','a.status','a.reason as reason_desc')
                         ->join('villages','villages.id','a.village_id')
                         ->join('districts','districts.id','villages.district_id')
-                        ->join('regencies','regencies.id','districts.regency_id')
+                        // ->join('regencies','regencies.id','districts.regency_id')
                         ->leftJoin('users as b','b.id','a.user_id')
-                        ->leftJoin('users as c','c.id','a.cby')
-                        ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
-                        ->leftJoin('category_inactive_member as f','a.category_inactive_member_id','=','f.id')
+                        // ->leftJoin('dapil_areas','districts.id','dapil_areas.district_id')
+                        // ->leftJoin('category_inactive_member as f','a.category_inactive_member_id','=','f.id')
                         ->whereNotNull('a.village_id');
 
             
     if($request->input('search.value')!=null){
             $data = $data->where(function($q)use($request){
-                $q->whereRaw('LOWER(a.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(regencies.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(districts.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(villages.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(b.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(c.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(a.nik) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(a.created_at) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(f.reason) like ? ',['%'.strtolower($request->input('search.value')).'%'])
-                ->orWhereRaw('LOWER(a.reason_desc) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                $q->whereRaw("LOWER(a.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(regencies.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(districts.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(villages.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(b.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(c.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(a.nik) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(a.created_at) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(f.name) like ? ",["%".strtolower($request->input("search.value"))."%"])
+                // ->orWhereRaw("LOWER(a.reason_desc) like ? ",["%".strtolower($request->input("search.value"))."%"])
                 ;
             });
         }
 
-     if ($request->input('province') != null) {
-                     $data->where('regencies.province_id', $request->province);
-        }
+     // if ($request->input('province') != null) {
+     //                 $data->where('regencies.province_id', $request->province);
+     //    }
 
-     if ($request->input('regency') != null) {
-                     $data->where('regencies.id', $request->regency);
-        }
+     // if ($request->input('regency') != null) {
+     //                 $data->where('regencies.id', $request->regency);
+     //    }
 
-     if ($request->input('dapil') != null) {
-                     $data ->where('dapil_areas.dapil_id', $request->dapil);
-        }
-     if ($request->input('district') != null) {
-                     $data->where('districts.id', $request->district);
-        }
-     if ($request->input('village') != null) {
-                     $data->where('villages.id', $request->village);
-        }
+     // if ($request->input('dapil') != null) {
+     //                 $data ->where('dapil_areas.dapil_id', $request->dapil);
+     //    }
+     // if ($request->input('district') != null) {
+     //                 $data->where('districts.id', $request->district);
+     //    }
+     // if ($request->input('village') != null) {
+     //                 $data->where('villages.id', $request->village);
+     //    }
 
 
 
@@ -555,34 +539,32 @@ class MemberDatatableController extends Controller
           
           $recordsTotal = $data->count();
 
-        $result = [];
-        foreach($data as $val){
-             $total_referal = User::where('user_id', $val->id)->whereNotNull('village_id')->count();
-             $result[] = [
-                 'id' => $val->id,
-                 'photo' => $val->photo,
-                 'nik' => $val->nik,
-                 'name' => $val->name,
-                 'regency' => $val->regency,
-                 'district' => $val->district,
-                 'village' => $val->village,
-                 'referal' => $val->referal,
-                 'cby' => $val->cby,
-                 'created_at' => date('d-m-Y', strtotime($val->created_at)),
-                 'total_referal' => $total_referal,
-                 'status' => $val->status,
-                 'email' => $val->email,
-                 'reason' => $val->reason ?? '',
-                 'reason_desc' => $val->reason_desc
-             ];
-        }
+        // $result = [];
+        // foreach($data as $val){
+        //      $total_referal = User::where('user_id', $val->id)->whereNotNull('village_id')->count();
+        //      $result[] = [
+        //          'id' => $val->id,
+        //          'photo' => $val->photo,
+        //          'nik' => $val->nik,
+        //          'name' => $val->name,
+        //          'district' => $val->district,
+        //          'village' => $val->village,
+        //          'referal' => $val->referal,
+        //          'created_at' => date('d-m-Y', strtotime($val->created_at)),
+        //          'total_referal' => $total_referal,
+        //          'status' => $val->status,
+        //          // 'email' => $val->email,
+        //          'reason' => $val->reason ?? '',
+        //          'reason_desc' => $val->reason_desc
+        //      ];
+        // }
 
 
           return response()->json([
                 'draw'=>$request->input('draw'),
                 'recordsTotal'=>$recordsTotal,
                 'recordsFiltered'=>$recordsFiltered,
-                'data'=> $result
+                'data'=> $data
             ]);
     }
 }

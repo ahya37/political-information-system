@@ -53,41 +53,23 @@ const table = $("#data").DataTable({
         {
             targets: 5,
             render: function (data, type, row, meta) {
-                return `<p>${row.regency}</p>`;
+                return `<p>${row.referal}</p>`;
             },
         },
         {
             targets: 6,
             render: function (data, type, row, meta) {
-                return `<p>${row.referal}</p>`;
+                return `<p align="right">${row.total_referal}</p>`;
             },
         },
         {
             targets: 7,
             render: function (data, type, row, meta) {
-                return `<p>${row.cby}</p>`;
+                return `<p>${row.reason_desc ?? ''}</p>`;
             },
         },
         {
             targets: 8,
-            render: function (data, type, row, meta) {
-                return `<p align="right">${row.total_referal}</p>`;
-            },
-        },
-        {
-            targets: 9,
-            render: function (data, type, row, meta) {
-                return `<p>${row.reason}</p>`;
-            },
-        },
-        {
-            targets: 10,
-            render: function (data, type, row, meta) {
-                return `<p>${row.reason_desc}</p>`;
-            },
-        },
-        {
-            targets: 11,
             render: function (data, type, row, meta) {
                
                 return `<button type="button" data-name="${row.name}" id="${row.id}" onclick="onDelete(this)" class="btn btn-sm btn-sc-primary text-light">

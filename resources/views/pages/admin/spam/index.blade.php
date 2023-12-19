@@ -31,11 +31,8 @@
                               <th scope="col">NAMA</th>
                               <th scope="col">DESA</th>
                               <th scope="col">KECAMATAN</th>
-                              <th scope="col">KABUPATEN/KOTA</th>
                               <th scope="col">REFERAL DARI</th>
-                              <th scope="col">INPUT DARI</th>
-                              <th scope="col">JUMLAH REFERAL</th>
-                              <th scope="col">ALASAN</th>
+                              <th scope="col">REFERAL</th>
                               <th scope="col">KETERANGAN</th>
                               <th scope="col">OPSI</th>
                             </tr>
