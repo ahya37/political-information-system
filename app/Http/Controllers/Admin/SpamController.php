@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\AdminArea;
 use App\TmpSpamUser;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
@@ -14,13 +15,11 @@ class SpamController extends Controller
 {
     public function index(){
 
-        $InActiveMembers = TmpSpamUser::orderBy('created_at','desc')->get();
-
-        if (request()->ajax()) {
-            return DataTables::of($InActiveMembers)->make();
-        }
+        $districtAdmin = new AdminArea();
+        $district      = $districtAdmin->getDistrict();
+        $district_id   = $district->id;
         
-        return view('pages.admin.spam.index', compact('InActiveMembers'));
+        return view('pages.admin.spam.index',compact('district_id'));
     }
 
     public function restoreSpamAnggota(){

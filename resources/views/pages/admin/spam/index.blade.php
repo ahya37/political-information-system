@@ -14,6 +14,7 @@
             <div class="container-fluid">
               <div class="dashboard-heading">
                 <h2 class="dashboard-title">Anggota Terdaftar Spam</h2>
+                <input type="hidden" value="{{$district_id}}" id="district">
               </div>
               <div class="dashboard-content mt-4" id="transactionDetails">
                 

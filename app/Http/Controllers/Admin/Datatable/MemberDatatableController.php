@@ -487,7 +487,9 @@ class MemberDatatableController extends Controller
         }
 
         $data = DB::table('tmp_spam_user as a')
-                        ->select('a.id','a.nik','a.user_id','a.name','a.photo','districts.name as district','villages.name as village','b.name as referal','a.created_at','a.status','a.reason as reason_desc')
+                        ->select('a.id','a.nik','a.user_id','a.name','a.photo','districts.name as district','villages.name as village','b.name as referal','a.created_at','a.status','a.reason as reason_desc',
+                            DB::raw('(select count(id) from users where user_id = a.id and village_id is not null) as total_referal')
+                        )
                         ->join('villages','villages.id','a.village_id')
                         ->join('districts','districts.id','villages.district_id')
                         // ->join('regencies','regencies.id','districts.regency_id')
@@ -524,9 +526,9 @@ class MemberDatatableController extends Controller
      // if ($request->input('dapil') != null) {
      //                 $data ->where('dapil_areas.dapil_id', $request->dapil);
      //    }
-     // if ($request->input('district') != null) {
-     //                 $data->where('districts.id', $request->district);
-     //    }
+     if ($request->input('district') != null) {
+                     $data->where('districts.id', $request->district);
+        }
      // if ($request->input('village') != null) {
      //                 $data->where('villages.id', $request->village);
      //    }

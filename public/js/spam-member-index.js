@@ -1,3 +1,4 @@
+const district = $('#district').val();
 const table = $("#data").DataTable({
     pageLength: 10,
 
@@ -12,6 +13,7 @@ const table = $("#data").DataTable({
         url: "/api/admin/spam/member/dtmember",
         type: "POST",
         data: function (d) {
+            d.district = district;
             return d;
         },
     },
