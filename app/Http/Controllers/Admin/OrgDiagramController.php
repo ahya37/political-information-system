@@ -1330,17 +1330,38 @@ class OrgDiagramController extends Controller
 
                 #hitung jumlah anggota kortpsnya
                 $message_kortps = '';
-                $count_anggota_kortps = DB::table('org_diagram_rt as a')
-                                        ->join('users as b','a.nik','=','b.nik')
-                                        ->where('a.pidx', $request->pidx)
-                                        ->count();
+                // $count_anggota_kortps = DB::table('org_diagram_rt as a')
+                //                         ->join('users as b','a.nik','=','b.nik')
+                //                         ->where('a.pidx', $request->pidx)
+                //                         ->count();
 
-                if ($count_anggota_kortps >= 25) {
+                // if ($count_anggota_kortps >= 25) {
 
-                    $message_kortps = 'Tapi data tidak tersimpan ke anggota Kor Tps, karena sudah 25';
+                //     $message_kortps = 'Tapi data tidak tersimpan ke anggota Kor Tps, karena sudah 25';
 
-                }else{
-                    #save to table org_diagram_rt;
+                // }else{
+                //     #save to table org_diagram_rt;
+                //     #get villlage, regency, district, rt where idx
+                //     $domisili_by_kortps = DB::table('org_diagram_rt')->select('regency_id', 'district_id', 'village_id', 'rt')->where('idx', $request->pidx)->first();
+                //     DB::table('org_diagram_rt')->insert([
+                //         'idx'    => $request->idx,
+                //         'pidx'   => $request->pidx,
+                //         'title'  => 'ANGGOTA',
+                //         'nik'    => $user->nik,
+                //         'name'   => $user->name,
+                //         'base'   => 'ANGGOTA',
+                //         'photo'  => $user->photo ?? '',
+                //         'telp'  => $request->phone_number,
+                //         'regency_id'  => $domisili_by_kortps->regency_id,
+                //         'district_id' => $domisili_by_kortps->district_id,
+                //         'village_id'  => $domisili_by_kortps->village_id,
+                //         'rt'  => $domisili_by_kortps->rt,
+                //         'cby' => auth()->guard('admin')->user()->id,
+                //         'created_at' => date('Y-m-d H:i:s')
+                //     ]);
+                // }
+
+                #save to table org_diagram_rt;
                     #get villlage, regency, district, rt where idx
                     $domisili_by_kortps = DB::table('org_diagram_rt')->select('regency_id', 'district_id', 'village_id', 'rt')->where('idx', $request->pidx)->first();
                     DB::table('org_diagram_rt')->insert([
@@ -1359,7 +1380,6 @@ class OrgDiagramController extends Controller
                         'cby' => auth()->guard('admin')->user()->id,
                         'created_at' => date('Y-m-d H:i:s')
                     ]);
-                }
 
                 // DB::table('users')->where('id', $user->id)->update(['tps_id' => $request->tpsNewAnggotaBaru]);
                 #save to table form kosong sebagai history
@@ -1431,17 +1451,38 @@ class OrgDiagramController extends Controller
             } else {
 
                 #hitung anggota per kortps, jika lebih dari 25
-                $count_anggota_kortps =  DB::table('org_diagram_rt as a')
-                                        ->join('users as b','a.nik','=','b.nik')
-                                        ->where('a.pidx', $request->pidx)
-                                        ->count();
+                // $count_anggota_kortps =  DB::table('org_diagram_rt as a')
+                //                         ->join('users as b','a.nik','=','b.nik')
+                //                         ->where('a.pidx', $request->pidx)
+                //                         ->count();
 
-                if ($count_anggota_kortps >= 25) {
+                // if ($count_anggota_kortps >= 25) {
 
-                    return redirect()->back()->with(['error' => 'Gagal tersimpan tersimpan, anggota sudah 25']);
+                //     return redirect()->back()->with(['error' => 'Gagal tersimpan tersimpan, anggota sudah 25']);
 
-                }else{
-                    #save to tb org_diagram_rt
+                // }else{
+                //     #save to tb org_diagram_rt
+                //     DB::table('org_diagram_rt')->insert([
+                //         'idx'    => $request->idx,
+                //         'pidx'   => $request->pidx,
+                //         'title'  => 'ANGGOTA',
+                //         'nik'    => $user->nik,
+                //         'name'   => $user->name,
+                //         'base'   => 'ANGGOTA',
+                //         'photo'  => $user->photo ?? '',
+                //         'telp'  => $request->telp,
+                //         'regency_id'  => $domisili->regency_id,
+                //         'district_id' => $domisili->district_id,
+                //         'village_id'  => $domisili->village_id,
+                //         'rt'  => $domisili->rt,
+                //         'cby' => auth()->guard('admin')->user()->id,
+                //         'created_at' => date('Y-m-d H:i:s')
+                //     ]);
+                //     DB::table('users')->where('nik', $user->nik)->update(['tps_id' => $request->tpsid]);
+
+                // }
+
+                #save to tb org_diagram_rt
                     DB::table('org_diagram_rt')->insert([
                         'idx'    => $request->idx,
                         'pidx'   => $request->pidx,
@@ -1459,8 +1500,6 @@ class OrgDiagramController extends Controller
                         'created_at' => date('Y-m-d H:i:s')
                     ]);
                     DB::table('users')->where('nik', $user->nik)->update(['tps_id' => $request->tpsid]);
-
-                }
 
                 DB::commit();
                 return redirect()->back()->with(['success' => 'Data telah tersimpan!']);
