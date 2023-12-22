@@ -1278,7 +1278,7 @@ class MemberController extends Controller
 
         #save ke tb tmp_spam_user
         return TmpSpamUser::create([
-            'user_id' => $user->user_id,
+            'user_id' => $user->user_id ?? null,
             'original_nik' => $originaluser->nik ?? null,
             'number'  => $user->number,
             'code'    => $user->code,
