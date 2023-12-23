@@ -546,6 +546,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/rt/detail/anggota/download/kta/pdf/{idx}','DocumentController@downloadKTAMembersByKortps');
             Route::get('/rt/detail/tim/download/kta/pdf/{districtId}','DocumentController@downloadKTAKorcamKordes')->name('admin-struktur-tim-download-kta');
             Route::post('/village/kta/download','DocumentController@downloadKTAMembersByKortpsByVillage')->name('admin-struktur-tim-download-ktaperdesa');
+            
+            Route::post('/rt/detail/anggota/formmanual/preview/download/{idx}','DocumentController@downloadFormManualPreview')->name('admin-struktur-formmanual-preview-download');
 
 
         });

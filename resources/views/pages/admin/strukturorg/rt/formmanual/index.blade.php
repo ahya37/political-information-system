@@ -66,7 +66,17 @@
                         <div class="col-md-12 col-sm-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Prefiew Data Form Manual</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <h5 class="card-title">Prefiew Data Form Manual</h5>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <form action="{{route('admin-struktur-formmanual-preview-download',$korte_idx)}}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-success text-white float-right" > Download Form Manual Preview</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                     <form action="{{route('admin-struktur-form-manual-store', $korte_idx)}}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <table id="tmp_anggotakortps" class="table table-sm table-striped mt-3" width="100%">

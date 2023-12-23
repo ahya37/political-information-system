@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\FormManualPreviewExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\GlobalProvider;
-use DB;
+use Illuminate\Support\Facades\DB;
 use PDF;
 use File;
 use App\OrgDiagram;
+use Zipper;
+use Maatwebsite\Excel\Excel;
 
 class DocumentController extends Controller
 {
+    public $excel;
+    public function __construct(Excel $excel)
+    {
+        $this->excel = $excel;
+    }
+    
     public function downloadFormatFormKortps()
     {
         $file = public_path('/docs/util/format-upload-form.xlsx');
@@ -159,6 +168,13 @@ class DocumentController extends Controller
 
         return response()->download(public_path($createZip));
 
+   }
+
+   public function downloadFormManualPreview(Request $request, $idx)
+   {
+
+        $title = 'Form Maual Preview.xls';
+        return $this->excel->download(new FormManualPreviewExport($idx), $title);
    }
 
 }
