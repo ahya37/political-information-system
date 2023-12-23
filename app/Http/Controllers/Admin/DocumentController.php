@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Providers\GlobalProvider;
 use DB;
 use PDF;
+use File;
+use App\OrgDiagram;
 
 class DocumentController extends Controller
 {
@@ -24,21 +26,8 @@ class DocumentController extends Controller
 
 
         // // get data anggota by korte
-        $members = DB::table('org_diagram_rt as a')
-                ->select('a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district', 'b.address', 'a.telp', 'e.tps_number','b.photo',
-                    'c.id as village_id','c.name as village','d.id as district_id','d.name as district','e.id as regency_id','g.name as regency',
-                    'f.id as province_id','f.name as province','b.number','b.address','b.rt','b.rw'
-                )
-                ->join('users as b', 'b.nik', '=', 'a.nik')
-                ->join('villages as c', 'c.id', '=', 'a.village_id')
-                ->join('districts as d', 'd.id', '=', 'a.district_id')
-                ->join('regencies as g','d.regency_id','=','g.id')
-                ->join('provinces as f','g.province_id','=','f.id')
-                ->leftJoin('tps as e','b.tps_id','=','e.id')
-                ->where('a.pidx', $idx)
-                ->where('a.base', 'ANGGOTA')
-                ->get();
-
+        $OrgDiagram = new OrgDiagram();
+        $members    = $OrgDiagram->getDataMemberByKorteIdx($idx); 
         
  
         // mengelompokan collection sebanyak 5 data per kelompok
@@ -113,6 +102,63 @@ class DocumentController extends Controller
 
    }
 
+   public function downloadKTAMembersByKortpsByVillage(Request $request)
+   {
 
+        $village = DB::table('villages')
+                    ->select('name')->where('id', $request->village_id)->first();
+
+        
+        $directory = public_path('/docs/kta/korte/pdf/KTA-ANGGOTA DS.' . $village->name);
+
+        if (File::exists($directory)) {
+                File::deleteDirectory($directory); // hapus dir nya juga
+            }
+
+        File::makeDirectory(public_path('/docs/kta/korte/pdf/KTA-ANGGOTA DS.' . $village->name));
+
+        // GET DATA KORTE BY DESA
+        $korte = DB::table('org_diagram_rt as a')
+                    ->select('a.idx')
+                    ->join('users as b', 'a.nik', '=', 'b.nik')
+                    ->where('a.base', 'KORRT')
+                    ->where('a.village_id', $village_id)
+                    ->get();
+
+        $OrgDiagram = new OrgDiagram();
+
+        foreach ($korte as $value) {
+            
+            $path = '/docs/kta/korte/pdf/KTA-ANGGOTA DS.' . $village->name . '/';
+
+            // get data anggota by korte
+          
+            $members    = $OrgDiagram->getDataMemberByKorteIdx($value->idx);
+
+             // mengelompokan collection sebanyak 5 data per kelompok;
+            $group_members = $members->chunk(3);
+
+            $group_members->each(function($chunk){
+                $chunk->toArray();
+            });
+     
+            $no = 1;
+
+            $gF = new GlobalProvider();
+
+           $pdf = PDF::LoadView('pages.report.ktamemberbykortps', compact('group_members','gF'))->setPaper('a4','landscape');
+
+           $pdfFilePath = public_path($path.$fileName);
+           file_put_contents($pdfFilePath, $pdf->output());
+
+        }
+
+        $files = glob(public_path($path.'*'));
+            $createZip = public_path('/docs/kta/korte/pdf/KTA-ANGGOTA DS.' .$village->name  . '.zip');
+            Zipper::make(public_path($createZip))->add($files)->close();
+
+        return response()->download(public_path($createZip));
+
+   }
 
 }

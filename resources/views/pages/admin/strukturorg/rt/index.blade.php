@@ -61,7 +61,8 @@
                                         <input class="dropdown-item mt-2" type="submit" value="Download Korte + Anggota PDF" name="report_type"> 
                                         <input class="dropdown-item mt-2" type="submit" value="Download Absensi Korte Per Desa PDF" name="report_type"> 
                                         <input class="dropdown-item mt-2" type="submit" value="Download Surat Undangan Korte Per Desa PDF" name="report_type"> 
-                                        <input class="dropdown-item mt-2" type="submit" value="Download Anggota Belum Tercover Kortps" name="report_type"> 
+                                        <input class="dropdown-item mt-2" type="submit" value="Download Anggota Belum Tercover Kortps" name="report_type">
+                                        <input class="dropdown-item mt-2" type="submit" value="Download KTA Kortps Per Desa" name="report_type">
                                     </div>
                                   </div>
                             </div>

@@ -477,3 +477,6 @@ Route::post('member/check/nik', 'Admin\TestController@checkNikAnggota');
 
 #anggota form manual
 Route::post('org/rt/anggotaformmanual/delete', 'Admin\OrgDiagramController@deleteAnggotaFormManual');
+
+
+Route::post('/village/kta/download','Admin\DocumentController@downloadKTAMembersByKortpsByVillage');

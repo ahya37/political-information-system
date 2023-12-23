@@ -46,6 +46,8 @@ Route::get('/undangan/{referal}','Admin\InformationController@suratUndangan');
 Route::get('/testgetfigure','TestController@testGretFigure');
 
 
+
+
 Route::group(['prefix' => 'user','middleware' => ['auth']], function(){
     Route::get('/home', 'HomeController@index')->name('home');
 
@@ -543,6 +545,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             #cetak KTA tim, dan anggota per kortps
             Route::get('/rt/detail/anggota/download/kta/pdf/{idx}','DocumentController@downloadKTAMembersByKortps');
             Route::get('/rt/detail/tim/download/kta/pdf/{districtId}','DocumentController@downloadKTAKorcamKordes')->name('admin-struktur-tim-download-kta');
+            Route::post('/village/kta/download','DocumentController@downloadKTAMembersByKortpsByVillage')->name('admin-struktur-tim-download-ktaperdesa');
 
 
         });

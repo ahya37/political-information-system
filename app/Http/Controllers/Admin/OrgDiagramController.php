@@ -3270,7 +3270,69 @@ class OrgDiagramController extends Controller
                 return $this->excel->download(new AnggotaBelumTercoverKortps($anggota), 'ANGGOTA BELUM TERCOVER KEC.' . $district->name .'.xls');
             }
 
-        }else {
+        }elseif($request->report_type == 'Download KTA Kortps Per Desa'){
+
+            if(isset($village_id)){
+
+                $village = Village::select('name')->where('id', $village_id)->first();
+                $directory = public_path('/docs/kta/korte/pdf/KTA-ANGGOTA DS.' . $village->name);
+
+                if (File::exists($directory)) {
+                        File::deleteDirectory($directory); // hapus dir nya juga
+                    }
+
+                File::makeDirectory(public_path('/docs/kta/korte/pdf/KTA-ANGGOTA DS.' . $village->name));
+
+                // GET DATA KORTE BY DESA
+                $korte = DB::table('org_diagram_rt as a')
+                            ->select('a.idx','b.name')
+                            ->join('users as b', 'a.nik', '=', 'b.nik')
+                            ->where('a.base', 'KORRT')
+                            ->where('a.village_id', $village_id)
+                            ->get();
+
+                $OrgDiagram = new OrgDiagram();
+
+
+                foreach ($korte as $value) {
+            
+                    $path = '/docs/kta/korte/pdf/KTA-ANGGOTA DS.' . $village->name . '/';
+
+                        // get data anggota by korte
+                      
+                        $members    = $OrgDiagram->getDataMemberByKorteIdx($value->idx);
+
+                         // mengelompokan collection sebanyak 5 data per kelompok;
+                        $group_members = $members->chunk(3);
+
+                        $group_members->each(function($chunk){
+                            $chunk->toArray();
+                        });
+                 
+                        $no = 1;
+
+                        $gF = new GlobalProvider();
+
+                        $fileName = 'KTA-ANGGOTA KORTPS.' . $value->name . '.pdf';
+
+                       $pdf = PDF::LoadView('pages.report.ktamemberbykortps', compact('group_members','gF'))->setPaper('a4','landscape');
+
+                       $pdfFilePath = public_path($path.$fileName);
+                       file_put_contents($pdfFilePath, $pdf->output());
+
+                }
+
+                $files = glob(public_path($path.'*'));
+                $createZip = public_path('/docs/kta/korte/pdf/KTA-ANGGOTA DS.' .$village->name  . '.zip');
+                Zipper::make(public_path($createZip))->add($files)->close();
+
+                return response()->download(public_path($createZip));
+
+            }else{
+
+                return 'Pilih desa';
+            }
+        }else{
             #report by desa 
 
             return $this->excel->download(new KorteExport($village_id), 'TIM KOORDINATOR RT ' . $village->name . '.xls');
