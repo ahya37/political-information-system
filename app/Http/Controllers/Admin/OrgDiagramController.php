@@ -3330,7 +3330,7 @@ class OrgDiagramController extends Controller
 
             }else{
 
-                return 'Pilih desa';
+                return redirect()->back()->with(['error' => 'Pilih desa terlebih dahulu']); 
             }
         }else{
             #report by desa 
