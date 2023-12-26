@@ -480,3 +480,7 @@ Route::post('org/rt/anggotaformmanual/delete', 'Admin\OrgDiagramController@delet
 
 
 Route::post('/village/kta/download','Admin\DocumentController@downloadKTAMembersByKortpsByVillage');
+
+
+Route::post('/newdpt/download','Admin\DocumentController@downloadNewDpt');
+

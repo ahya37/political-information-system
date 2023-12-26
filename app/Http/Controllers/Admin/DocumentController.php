@@ -2,25 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\FormManualPreviewExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\GlobalProvider;
-use Illuminate\Support\Facades\DB;
+use DB;
 use PDF;
 use File;
 use App\OrgDiagram;
-use Zipper;
-use Maatwebsite\Excel\Excel;
 
 class DocumentController extends Controller
 {
-    public $excel;
-    public function __construct(Excel $excel)
-    {
-        $this->excel = $excel;
-    }
-    
     public function downloadFormatFormKortps()
     {
         $file = public_path('/docs/util/format-upload-form.xlsx');
@@ -170,11 +161,19 @@ class DocumentController extends Controller
 
    }
 
-   public function downloadFormManualPreview(Request $request, $idx)
+   public function downloadNewDpt(Request $request)
    {
+        // get data new dpt per desa, hanya data yg  belum terdaftar di sistem saja
+        $data = DB::table('new_dpt as a')
+                ->select('a.*', DB::raw('(select count(*) from users where nik = a.NIK) as is_registered'))
+                ->where('a.KD_KEL', $request->village_id)
+                ->where('a.NO_RT', $request->rt)
+                ->having('is_registered',0)
+                ->get();
 
-        $title = 'Form Maual Preview.xls';
-        return $this->excel->download(new FormManualPreviewExport($idx), $title);
+        // implement to excel
+
+        return count($data);
    }
 
 }
