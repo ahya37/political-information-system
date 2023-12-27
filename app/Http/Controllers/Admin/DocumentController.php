@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\NewDptExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Village;
 use App\Providers\GlobalProvider;
-use DB;
+use Illuminate\Support\Facades\DB;
 use PDF;
 use File;
 use App\OrgDiagram;
+use Maatwebsite\Excel\Excel;
 
 class DocumentController extends Controller
 {
+    public $excel;
+    public function __construct(Excel $excel)
+    {
+        $this->excel = $excel;
+    }
+
     public function downloadFormatFormKortps()
     {
         $file = public_path('/docs/util/format-upload-form.xlsx');
@@ -171,9 +180,11 @@ class DocumentController extends Controller
                 ->having('is_registered',0)
                 ->get();
 
-        // implement to excel
+        $village = Village::select('name')->where('id', $request->village_id)->first();
 
-        return count($data);
+        // implement to excel
+        return $this->excel->download(new NewDptExport($data), 'RT-'.$request->rt.'DPT BELUM TERDAFTAR SISTEM DS.' . $village->name .'.xls');
+
    }
 
 }
