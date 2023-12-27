@@ -37,9 +37,9 @@ class NewDptExport implements FromCollection, WithHeadings, WithEvents, ShouldAu
                 'tgl_lahir' => $value->TGL_LAHIR,
                 'jns_kelamin' => $value->JENIS_KELAMIN,
                 'alamat' => $value->ALAMAT,
-                'rt' => $value->NO_RT ?? '0',
-                'rw' => $value->NO_RW ?? '0',
-                'tps' => $value->NOMOR_TPS ?? '0'
+                'rt' => $value->NO_RT == 0 ? '0' :  $value->NO_RT,
+                'rw' => $value->NO_RW == 0 ? '0' : $value->NO_RW,
+                'tps' => $value->NOMOR_TPS == 0 ? '0' : $value->NOMOR_TPS 
             ];
 
         }

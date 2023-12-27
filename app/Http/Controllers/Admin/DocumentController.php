@@ -180,6 +180,15 @@ class DocumentController extends Controller
                 ->having('is_registered',0)
                 ->get();
 
+        // $data2 = DB::table('new_dpt as a')
+        //         ->select('a.*', DB::raw('(select count(*) from users where nik = a.NIK) as is_registered'))
+        //         ->where('a.KD_KEL', $request->village_id)
+        //         ->where('a.NO_RT', $request->rt)
+        //         ->having('is_registered',1)
+        //         ->get();
+
+        
+
         $village = Village::select('name')->where('id', $request->village_id)->first();
 
         // implement to excel
