@@ -183,7 +183,7 @@ class DocumentController extends Controller
         $village = Village::select('name')->where('id', $request->village_id)->first();
 
         // implement to excel
-        return $this->excel->download(new NewDptExport($data), 'RT-'.$request->rt.'DPT BELUM TERDAFTAR SISTEM DS.' . $village->name .'.xls');
+        return $this->excel->download(new NewDptExport($data), 'RT-'.$request->rt.' DPT BELUM TERDAFTAR DI SISTEM DS.' . $village->name .'.xls');
 
    }
 
