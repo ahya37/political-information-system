@@ -62,9 +62,10 @@
                                     <table id="data" class="table table-sm table-striped" width="100%">
                                         <thead>
                                             <tr>
-                                                <th scope="col">TPS</th>
-                                                <th scope="col">DESA</th>
-                                                <th scope="col">OPSI</th>
+                                                <th width="5%">TPS</th>
+                                                <th>DESA</th>
+                                                <th width="15%">HASIL SUARA</th>
+                                                <th>OPSI</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>

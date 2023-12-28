@@ -345,7 +345,18 @@ let table = $("#data").DataTable({
         {
             targets: 2,
             render: function (data, type, row, meta) {
-                return `<a href='/admin/tps/witnesses/${row.id}' class='btn btn-sm btn-sc-primary text-white'>Saksi</a>`;
+                return `<p class='text-center'>${row.hasil_suara}</p>`;
+            },
+        },
+        {
+            targets: 3,
+            render: function (data, type, row, meta) {
+                return `
+                        <button type="button" onclick="updateNoTelpKorTps(this)" data-name="${row.tps_number}" data-id="${row.id}" class="btn btn-sm btn-success">
+                            Input hasil suara
+                        </button>
+                        <a href='/admin/tps/witnesses/${row.id}' class='btn btn-sm btn-sc-primary text-white'>Saksi</a>
+                    `;
             },
         },
     ],
@@ -357,3 +368,65 @@ $('#exampleModal').on('show.bs.modal', function (event) {
     var modal = $(this)
     modal.find('.modal-body input[name="pidx"]').val(recipient)
 });
+
+async function updateNoTelpKorTps(data){
+    const name = data.getAttribute("data-name");
+    const id = data.getAttribute("data-id");
+
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    const { value: nilaiSuara } = await Swal.fire({
+        title: `Input hasil suara TPS ${name}`,
+        input: 'number',
+        inputPlaceholder: 'Hasil suara',
+        focusConfirm: false,
+        showCancelButton: true,
+        cancelButtonText: "Batal",
+        confirmButtonText: "Simpan",
+        timerProgressBar: true,
+    })
+
+    if (nilaiSuara) {
+        $.ajax({
+            url: "/api/org/kortps/hasilsuara/input",
+            method: "POST",
+            cache: false,
+            data: {
+                id: id,
+                nilai_suara: nilaiSuara,
+                _token: CSRF_TOKEN,
+            },
+            success: function (data) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+            
+                Toast.fire({
+                    icon: 'success',
+                    title: data.data.message,
+                });
+
+                const table = $("#data").DataTable();
+                table.ajax.reload();
+            },
+            error: function (error) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: `${error.responseJSON.data.message}`,
+                    showConfirmButton: false,
+                    width: 500,
+                    timer: 1000,
+                });
+            },
+        });
+    }
+    
+}

@@ -47,7 +47,7 @@ class TpsController extends Controller
         }
 
         $data = DB::table('tps as a')
-                ->select('a.tps_number','a.rt', 'a.rw', 'b.name as village','a.id')
+                ->select('a.tps_number','a.rt', 'a.rw', 'b.name as village','a.id','a.hasil_suara')
                 ->join('villages as b','a.village_id','=','b.id')
                 ->where('b.district_id', $request->district);
 
@@ -524,6 +524,36 @@ class TpsController extends Controller
             return redirect()->back()->with(['warning' => 'Tidak ada data!']);
         }
 
+    }
+
+    public function inputHasilSuara()
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+            $hasil_suara    = request()->nilai_suara;
+
+            // save hasil suara
+            DB::table('tps')->where('id', $id)->update([
+                'hasil_suara' => $hasil_suara
+            ]);
+
+            //send message event to pusher
+
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil input suara!'
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
 
