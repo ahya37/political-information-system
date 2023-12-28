@@ -549,6 +549,13 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             
             Route::post('/rt/detail/anggota/formmanual/preview/download/{idx}','DocumentController@downloadFormManualPreview')->name('admin-struktur-formmanual-preview-download');
 
+            #form vivi
+            Route::get('/rt/anggota/formvivi/{idx}','OrgDiagramController@formVivi')->name('admin-struktur-form-vivi');
+            Route::post('/rt/anggota/formvivi/save/{idx}','OrgDiagramController@saveFormVivi')->name('admin-struktur-form-vivi-save');
+
+            
+
+
 
         });
 		

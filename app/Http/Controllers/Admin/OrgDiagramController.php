@@ -4845,4 +4845,106 @@ class OrgDiagramController extends Controller
         }
     }
 
+    public function formVivi($idx)
+    {
+        $regency = Regency::select('id', 'name')->where('id', 3602)->first();
+
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $district  = District::select('name','id')->where('id', $authAdminDistrict)->first();
+        $villages  = Village::select('id','name')->where('district_id', $district->id)->get();
+
+        $korte_idx = $idx;
+
+        $kor_rt = DB::table('org_diagram_rt as a')
+                ->select('a.rt', 'a.name', 'c.name as village', 'd.name as district', 'e.tps_number','b.nik')
+                ->join('users as b', 'b.nik', '=', 'a.nik')
+                ->join('villages as c', 'c.id', '=', 'a.village_id')
+                ->join('districts as d', 'd.id', '=', 'a.district_id')
+                ->leftJoin('tps as e', 'b.tps_id', '=', 'e.id')
+                ->where('a.idx', $idx)
+                ->first();
+
+
+        #get data anggota by korts
+        $anggota = DB::table('org_diagram_rt as a')
+                ->select('b.id', 'b.name', 
+                    DB::raw('(select count(id) from form_vivi where nik = a.nik) as is_registered')
+                )
+                ->join('users as b', 'b.nik', '=', 'a.nik')
+                ->where('a.pidx', $idx)
+                ->where('a.base', 'ANGGOTA')
+                ->having('is_registered',0)
+                ->orderBy('b.name','asc')
+                ->get();
+
+        $count_anggota = count($anggota);
+
+        #anggota form vivi
+        $anggota_formvivi = DB::table('form_vivi as a')
+                ->select('a.id', 'b.name','b.photo')
+                ->join('users as b', 'b.nik', '=', 'a.nik')
+                ->where('a.pidx_korte', $idx)
+                ->orderBy('b.name','asc')
+                ->get();
+        
+
+        $no = 1;
+
+        return view('pages.admin.strukturorg.rt.formvivi.index', compact('regency','district','villages','idx','korte_idx','kor_rt','no','anggota','anggota_formvivi','count_anggota'));
+    }
+
+    public function saveFormVivi(Request $request, $idx)
+    {
+        DB::beginTransaction();
+        try {
+
+            #get data anggota berdasarkan id nya dari tb users
+            $req_data['id'] = $request->member;
+            foreach ($req_data['id'] as $key => $value) {
+                $member = DB::table('users')->select('nik','name','tps_id')->where('id', $value)->first();
+                DB::table('form_vivi')->insert([
+                    'pidx_korte' => $idx,
+                    'nik' => $member->nik,
+                    'name' => $member->name,
+                    'tps_id' => $member->tps_id,
+                    'created_by' => auth()->guard('admin')->user()->id,
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+            }  
+
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Berhasil di simpan!']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
+            return redirect()->back()->with(['error' => 'Gagal di simpan!', $e->getMessage()]);
+        }
+    }
+
+    public function deleteAnggotaFormVivi()
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $id    = request()->id;
+
+            #update org
+            DB::table('form_vivi')->where('id', $id)->delete();
+
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil dihapus!'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error($e->getMessage());
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
 }
