@@ -192,13 +192,16 @@ class OrgDiagramController extends Controller
                  return $q->jml_anggota;
              });
 
+             $selisih = $value->hasil_suara - $jml_anggota_kortps;
+             // $selisih = $selisih < 0 ? 0 : $selisih;
+
 
              $results_tps_terisi[] = [
                  'tps' => $value->tps,
                  'kortps' => $value->kortps,
                  'jml_anggota_kortps' => $jml_anggota_kortps,
-                 'hasil_suara' => 0,
-                 'selisih' => 0
+                 'hasil_suara' => $value->hasil_suara,
+                 'selisih' => $selisih
              ];
          }
 
@@ -208,6 +211,14 @@ class OrgDiagramController extends Controller
 
          $jmltpsExists_anggota = collect($results_tps_terisi)->sum(function($q){
                  return $q['jml_anggota_kortps'];
+          });
+
+         $jml_hasil_suara = collect($results_tps_terisi)->sum(function($q){
+                 return $q['hasil_suara'];
+          });
+
+         $jml_selisih = collect($results_tps_terisi)->sum(function($q){
+                 return $q['selisih'];
           });
          
 
@@ -234,7 +245,9 @@ class OrgDiagramController extends Controller
             'tpsnotexists' => $tpsNotExists,
             'tpsExists' => $results_tps_terisi,
             'jml_kortps' => $jml_kortps,
-            'jmltpsExists_anggota' => $jmltpsExists_anggota
+            'jmltpsExists_anggota' => $jmltpsExists_anggota,
+            'jml_hasil_suara'     => $jml_hasil_suara,
+            'jml_selisih' => $jml_selisih
         ]);
     }
 

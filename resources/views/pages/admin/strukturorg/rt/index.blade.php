@@ -225,8 +225,8 @@
                                                 <td></td>
                                                 <td class="text-center" id="jmltpsExistsKortps"></td>
                                                 <td class="text-center" id="jmltpsExistsAnggota"></td>
-                                                <td class="text-center">0</td>
-                                                <td class="text-center">0</td> 
+                                                <td class="text-center" id="jmlHasilSuara"></td>
+                                                <td class="text-center" id="jmlSelisih"></td> 
                                             </tr>
                                         </tfoot>
                                     </table>
