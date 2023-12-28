@@ -478,7 +478,7 @@ let table = $("#data").DataTable({
                                     Form Manual
                                 </a>
                                 <a href='/admin/struktur/rt/anggota/formvivi/${row.idx}' class="dropdown-item">
-                                    Form Ibu Vivi
+                                    Form Vivi
                                 </a>
                                 <a href='/admin/struktur/rt/detail/anggota/download/excel/${row.idx}' class="dropdown-item ">
                                 Download Anggota Excel
