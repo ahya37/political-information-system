@@ -73,7 +73,7 @@
                             <table id="anggotakortps" class="table table-sm table-striped mt-3" width="100%">
                                 <thead>
                                     <tr>
-                                        <th class="col-1">NO</th>
+                                        <th width="4%">NO</th>
                                         <th>NAMA</th>
                                         <th>OPSI</th>
                                     </tr>
