@@ -3258,16 +3258,16 @@ class OrgDiagramController extends Controller
 
                 return 'PILIH PER DESA SAJA';
 
-                 $anggota         = $orgDiagramModel->getDataAnggotaBelumterCoverKortpsByVillageAndRt($village_id, $request->rt);
+                //  $anggota         = $orgDiagramModel->getDataAnggotaBelumterCoverKortpsByVillageAndRt($village_id, $request->rt);
                 // dd($anggota);
 
-                 return $this->excel->download(new AnggotaBelumTercoverKortps($anggota), 'ANGGOTA BELUM TERCOVER DS.' . $village->name .', RT. '.$request->rt.'.xls');
+                //  return $this->excel->download(new AnggotaBelumTercoverKortps($anggota), 'ANGGOTA BELUM TERCOVER DS.' . $village->name .', RT. '.$request->rt.'.xls');
 
             }else{ 
 
                 $district = District::select('name')->where('id', $request->districtid)->first();
                 $anggota         = $orgDiagramModel->getDataAnggotaBelumterCoverKortpsByDistrictId($request->districtid);
-                return $this->excel->download(new AnggotaBelumTercoverKortps($anggota), 'ANGGOTA BELUM TERCOVER KEC.' . $district->name .'.xls');
+                return $this->excel->download(new AnggotaBelumTercoverKortps($anggota, $village_id), 'ANGGOTA BELUM TERCOVER KEC.' . $district->name .'.xls');
             }
 
         }elseif($request->report_type == 'Download KTA Kortps Per Desa'){

@@ -45,7 +45,8 @@ class AnggotaBelumTercoverKortps implements FromCollection,  WithHeadings, WithE
                 'rt' => $value->rt ?? '',
                 'rw' => $value->rw,
                 'referal' => $referal ?? 0,
-                'address' => $value->address
+                'address' => $value->address,
+                'referal_dari' => $value->referal_dari
                 // 'village' => $value->desa,
                 // 'district' => $value->district,
                 // 'telp'    => $value->phone_number,
@@ -68,7 +69,8 @@ class AnggotaBelumTercoverKortps implements FromCollection,  WithHeadings, WithE
             'RT',
             'RW',
             'REFERAL',
-            'ALAMAT'
+            'ALAMAT',
+            'REFERAL DARI'
             // 'DESA',
             // 'KECAMATAN',
             // 'NO.TELP',
@@ -93,7 +95,7 @@ class AnggotaBelumTercoverKortps implements FromCollection,  WithHeadings, WithE
                 $event->sheet->getDelegate()->getColumnDimension('G')->setAutoSize(true);
               
 
-                $event->sheet->getStyle('A1:C1')->applyFromArray([
+                $event->sheet->getStyle('A1:H1')->applyFromArray([
                     'font' => [
                         'bold' => true,
                     ]
