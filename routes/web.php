@@ -593,8 +593,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         #Document
         Route::group(['prefix' => 'doc'], function(){
-            Route::get('/unregistered','DocumentController@dptBelumTerdaftar')->name('admin-doc-unregistered');
-            Route::post('/unregistered/dtunregistered/download', 'DocumentController@DownloadDptBelumTerdaftar')->name('admin-doc-unregistered->download');
+            Route::get('/dpt/unregistered','DocumentController@dptBelumTerdaftar')->name('admin-doc-unregistered');
+            Route::post('/dpt/unregistered/dtunregistered/download', 'DocumentController@DownloadDptBelumTerdaftar')->name('admin-doc-unregistered->download');
 
         });
 
