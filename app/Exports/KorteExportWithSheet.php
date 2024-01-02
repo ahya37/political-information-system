@@ -24,7 +24,6 @@ class KorteExportWithSheet implements WithMultipleSheets
         $sheets = [];
 
         $kortes = $this->kortes;
-       
 
         foreach ($kortes as $value) {
             $sheets[] = new MembersByKorteExport($value->idx,$value->name, $value->rt, $value->village_id);

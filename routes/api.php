@@ -487,3 +487,5 @@ Route::post('/village/kta/download','Admin\DocumentController@downloadKTAMembers
 
 Route::post('/newdpt/download','Admin\DocumentController@downloadNewDpt');
 
+Route::post('/admin/dpt/unregistered/dtunregistered', 'Admin\DocumentController@getListDataUnregistered');
+Route::post('/admin/dpt/unregistered/dtunregistered/download', 'Admin\DocumentController@DownloadDptBelumTerdaftar');

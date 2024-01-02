@@ -591,6 +591,13 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/anggota','SpamController@index')->name('admin-spam-member');
         });
 
+        #Document
+        Route::group(['prefix' => 'doc'], function(){
+            Route::get('/unregistered','DocumentController@dptBelumTerdaftar')->name('admin-doc-unregistered');
+            Route::post('/unregistered/dtunregistered/download', 'DocumentController@DownloadDptBelumTerdaftar')->name('admin-doc-unregistered->download');
+
+        });
+
          #TPS
          Route::group(['prefix' => 'tps'], function(){
             Route::get('/','TpsController@index')->name('admin-tps');

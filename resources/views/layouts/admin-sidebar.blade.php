@@ -324,6 +324,19 @@
             </ul>
         </div>
 
+        <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/doc/*') ? 'active custom-active-color' : '' }}"
+            href="#doc" data-toggle="collapse" data-target="#doc">
+            <span class="d-none d-sm-inline"></span>Dokumen</a>
+        <div class="collapse" id="doc" aria-expanded="false">
+            <ul class="flex-column pl-2 nav">
+                <li class="nav-item">
+                    <a href="{{ route('admin-doc-unregistered') }}"
+                        class="list-group-item  custom-sidebar list-group-item-action custom-active-color {{ request()->is('spam') ? 'active custom-active-color' : '' }}"><span>
+                            DPT Belum Terdaftar</span></a>
+                </li>
+            </ul>
+        </div>
+
 
         <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/catatan/*') ? 'active custom-active-color' : '' }}"
             href="#spam" data-toggle="collapse" data-target="#spam">

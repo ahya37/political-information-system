@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\DptBelumTerdaftarWithSheetExport;
 use App\Exports\NewDptExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,6 +13,8 @@ use PDF;
 use File;
 use App\OrgDiagram;
 use Maatwebsite\Excel\Excel;
+use App\Models\Regency;
+use App\Models\District;
 
 class DocumentController extends Controller
 {
@@ -194,6 +197,78 @@ class DocumentController extends Controller
         // implement to excel
         return $this->excel->download(new NewDptExport($data), 'RT-'.$request->rt.' DPT BELUM TERDAFTAR DI SISTEM DS.' . $village->name .'.xls');
 
+   }
+
+   public function dptBelumTerdaftar()
+   {
+        $regency = Regency::select('id', 'name')->where('id', 3602)->first();
+
+        $authAdminDistrict = auth()->guard('admin')->user()->district_id;
+        $district  = District::select('name','id')->where('id', $authAdminDistrict)->first();
+        $villages  = Village::select('id','name')->where('district_id', $district->id)->get();
+
+        return view('pages.admin.document.dpt-unregistered', compact('villages', 'district'));
+
+
+   }
+
+   public function getListDataUnregistered(Request $request)
+   {
+        $orderBy = 'a.NAMA_LGKP';
+        switch ($request->input('order.0.column')) {
+            case '0':
+                $orderBy = 'a.NAMA_LGKP';
+                break;
+            case '1':
+                $orderBy = 'a.NIK';
+                break;
+        }
+
+        $data = DB::table('new_dpt as a')
+                        ->select('a.NIK as nik','a.NAMA_LGKP as name','villages.name as village',
+                            DB::raw('(select count(nik) from users where nik = a.NIK) is_registered')
+                        )
+                        ->join('villages','villages.id','=','a.KD_KEL')
+                        ->having('is_registered',0)
+                        ->where('a.KD_KEC',  $request->district);
+
+            
+        if($request->input('search.value')!=null){
+                $data = $data->where(function($q)use($request){
+                    $q->whereRaw('LOWER(a.NAMA_LGKP) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                    ->orWhereRaw('LOWER(villages.name) like ? ',['%'.strtolower($request->input('search.value')).'%'])
+                    ->orWhereRaw('LOWER(a.NIK) like ? ',['%'.strtolower($request->input('search.value')).'%']);
+                });
+            }
+
+        if ($request->input('village') != null) {
+                        $data->where('villages.id', $request->village);
+            }
+
+        $recordsFiltered = $data->get()->count();
+        if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+        $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+        
+        $recordsTotal = $data->count();
+
+
+      return response()->json([
+            'draw'=>$request->input('draw'),
+            'recordsTotal'=>$recordsTotal,
+            'recordsFiltered'=>$recordsFiltered,
+            'data'=> $data
+        ]);
+   }
+
+   public function DownloadDptBelumTerdaftar(Request $request)
+   {
+         $village = Village::select('name')->where('id', $request->village_id)->first();
+         $OrgDiagram    = new OrgDiagram();
+
+         // get data dpt baru group by rt
+         $dpt_villages_rt  = $OrgDiagram->getDptBelumTerdaftarGroupByRt($request->village_id);
+
+         return $this->excel->download(new DptBelumTerdaftarWithSheetExport($dpt_villages_rt,$request->village_id), 'DPT BELUM TERDAFTAR DS.' . $village->name . '.xls');
    }
 
 }

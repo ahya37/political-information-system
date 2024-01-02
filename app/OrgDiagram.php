@@ -709,4 +709,43 @@ class OrgDiagram extends Model
          return $members;
 	}
 
+	public function getDptBelumTerdaftarGroupByRt($village_id)
+	{
+		$sql = DB::table('new_dpt')
+				->select('NO_RT','KD_KEL')
+				->where('KD_KEL', $village_id)
+				->groupBy('NO_RT','KD_KEL')
+				->get();
+
+		return $sql;
+	}
+
+	public function getDptBelumTerdaftarByRtAndVillage($villageId, $rt)
+	{
+		$sql = DB::table('new_dpt')
+				->select('NAMA_LGKP','NO_RT','NO_RW','NOMOR_TPS','ALAMAT','NAMA_KEL',
+					DB::raw('(select count(nik) from users where nik = new_dpt.NIK) as is_registered')
+				)
+				->where('KD_KEL', $villageId)
+				->where('NO_RT', $rt)
+				->having('is_registered',0)
+				->get();
+
+		return $sql;
+	}
+
+	public function getDptTerdaftarByRtAndVillage($villageId, $rt)
+	{
+		$sql = DB::table('new_dpt')
+				->select('NAMA_LGKP','NO_RT','NO_RW','NOMOR_TPS','ALAMAT','NAMA_KEL',
+					DB::raw('(select count(nik) from users where nik = new_dpt.NIK) as is_registered')
+				)
+				->where('KD_KEL', $villageId)
+				->where('NO_RT', $rt)
+				->having('is_registered',1)
+				->get();
+
+		return $sql;
+	}
+
 }
