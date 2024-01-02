@@ -32,7 +32,7 @@ const table = $("#data").DataTable({
             targets: 0,
             visible: false,
             render: function (data, type, row, meta) {
-                return `<p>${row.nik}</p>`;
+                return row.nik;
             },
         },
         {

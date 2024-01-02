@@ -217,10 +217,10 @@ class DocumentController extends Controller
         $orderBy = 'a.NAMA_LGKP';
         switch ($request->input('order.0.column')) {
             case '0':
-                $orderBy = 'a.NAMA_LGKP';
-                break;
-            case '1':
                 $orderBy = 'a.NIK';
+                break;
+            case '2':
+                $orderBy = 'a.NAMA_LGKP';
                 break;
         }
 
