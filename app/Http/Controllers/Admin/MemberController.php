@@ -203,7 +203,7 @@ class MemberController extends Controller
             ->whereNotIn('id', [$id_user])
             ->whereNotNull('village_id')
             ->get();
-        $referal_direct = $userModel->getReferalDirect($id_user);
+            $referal_direct = $userModel->getReferalDirect($id_user);
 
         $referal_direct = $referal_direct->total == NULL ? 0 : $referal_direct->total; // referal langsung
         $referal_undirect = $userModel->getReferalUnDirect($id_user);

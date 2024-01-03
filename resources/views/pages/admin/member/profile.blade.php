@@ -215,9 +215,9 @@
                                             {{ $row->name }}
                                           </a>
                                         </td>
-                                        <td>{{ $row->village->district->regency->name }}</td>
-                                        <td>{{ $row->village->district->name }}</td>
-                                        <td>{{ $row->village->name }}</td>
+                                        <td>{{ $row->village->district->regency->name  ?? ''}}</td>
+                                        <td>{{ $row->village->district->name ?? ''}}</td>
+                                        <td>{{ $row->village->name ?? ''}}</td>
                                       </tr>
                                       @endforeach
                                     </tbody>
