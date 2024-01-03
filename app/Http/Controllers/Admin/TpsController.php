@@ -348,6 +348,7 @@ class TpsController extends Controller
                 ->join('villages as c','b.village_id','=','c.id')
                 ->join('districts as d','c.district_id','=','d.id')
                 ->join('tps as e','b.tps_id','=','e.id')
+                ->orderBy('e.tps_number','asc')
                 ->where('a.village_id', $request->village_id)
                 ->get();
         
