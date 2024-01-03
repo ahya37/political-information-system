@@ -554,6 +554,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::post('/store','TpsController@store')->name('admin-tps-store');
             Route::get('/witnesses/{tpsId}','TpsController@witnesses')->name('admin-tps-witnesses');
             Route::post('/witnesses/store/{tpsId}','TpsController@storeWitness')->name('admin-tps-witnesses-store');
+            Route::post('/witnesses/download','TpsController@downloadSaksiPerDesa')->name('admin-tps-witnesses-download');
         });
 
         #historymonitoring

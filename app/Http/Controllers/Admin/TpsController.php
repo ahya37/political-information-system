@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Tps;
 use App\User;
 use App\Dapil;
+use App\Exports\SaksiExport;
 use App\Witness;
 use App\Models\Regency;
 use App\Models\Village;
@@ -17,9 +18,16 @@ use App\Helpers\ResponseFormatter;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\UserMenu;
+use Maatwebsite\Excel\Excel;
 
 class TpsController extends Controller
 {
+    public $excel;
+    public function __construct(Excel $excel)
+    {
+        $this->excel = $excel;
+    }
+
     public function index(){
 
         $regency = Regency::select('id','name')->where('id', 3602)->first();
@@ -327,5 +335,25 @@ class TpsController extends Controller
             ]);
         }
     }
+
+    public function downloadSaksiPerDesa(Request $request)
+    {
+        if (!$request->village_id) return redirect()->back()->with(['warning' => 'Pilih desa terlebih dahulu!']);
+        $village = Village::select('name')->where('id', $request->village_id)->first();
+        
+        // get data saksi per desa
+        $saksi = DB::table('witnesses as a')
+                ->select('b.nik','b.name','b.address','b.phone_number','b.whatsapp','e.tps_number','b.rt')
+                ->join('users as b','a.user_id','=','b.id')
+                ->join('villages as c','b.village_id','=','c.id')
+                ->join('districts as d','c.district_id','=','d.id')
+                ->join('tps as e','b.tps_id','=','e.id')
+                ->where('a.village_id', $request->village_id)
+                ->get();
+        
+        $title = 'DAFTAR SAKSI DS.'.$village->name.'.xls';
+        return $this->excel->download(new SaksiExport($saksi), $title);
+    }
+
 
 }
