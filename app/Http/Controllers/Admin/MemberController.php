@@ -162,7 +162,6 @@ class MemberController extends Controller
         // $id = decrypt($id);
         $userModel = new UserModel();
         $profile = $userModel->getProfile($id);
-        dd($profile);
         return view('pages.admin.member.edit', compact('profile'));
     }
 
