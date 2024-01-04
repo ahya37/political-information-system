@@ -41,6 +41,7 @@ use App\Exports\MemberPotensialReferalByDistrict;
 use App\Exports\MemberPotensialUpperByDistrictUpper;
 use App\Helpers\DeleteNikOrg;
 use App\Helpers\UpdateNikOrg;
+use App\Providers\Model\UserModel;
 use App\TmpSpamUser;
 
 class MemberController extends Controller
@@ -159,7 +160,9 @@ class MemberController extends Controller
     public function editMember($id)
     {
         // $id = decrypt($id);
-        $profile = app('UserModel')->getProfile($id);
+        $userModel = new UserModel();
+        $profile = $userModel->getProfile($id);
+        dd($profile);
         return view('pages.admin.member.edit', compact('profile'));
     }
 
