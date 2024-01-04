@@ -663,6 +663,7 @@ class OrgDiagram extends Model
 				->join('users as b','a.nik','=','b.nik')
 				->where('a.pidx', $idx)
 				->where('a.base','ANGGOTA')
+				->orderBy('b.name','asc')
 				->get();
 				
 		return $sql;
