@@ -461,3 +461,6 @@ Route::post('/tim/calculate', 'Admin\OrgDiagramController@countMemberNotCover');
 Route::post('/tim/updatemytps', 'Admin\OrgDiagramController@updateMyTps');
 
 Route::post('org/rt/anggotaformmanual/delete', 'Admin\OrgDiagramController@deleteAnggotaFormManual');
+
+// Report event sapa anggota
+Route::post('event/anggota/sapa/download', 'Admin\EventController@downloadSapaAnggota');

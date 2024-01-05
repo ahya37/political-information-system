@@ -240,6 +240,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::get('/event/add/addgiftreceipents/{id}','EventController@addGiftRecipient')->name('admin-event-addgiftreceipents');
         Route::post('/event/add/addgiftreceipents/store/{event_id}','EventController@storeAddRecipient')->name('admin-event-addgiftreceipents-store');
         Route::post('/event/add/addgiftreceipentsfamilygroup/store/{event_id}','EventController@storeAddRecipientFamilyGroup')->name('admin-event-addgiftreceipentsfamilygroup-store');
+
+        // Sapa anggota
+        Route::get('/event/anggota/sapa','EventController@sapaAnggotaDapil')->name('admin-event-anggota-sapa');
         
 		
 		Route::post('/event/download/galery','EventController@downloadGaleryByEvent')->name('admin-event-galery'); 
