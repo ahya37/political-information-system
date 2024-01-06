@@ -221,7 +221,7 @@ class EventController extends Controller
         // tampung array data peserta event
         $data['participant'] = $request->participant;
 
-        $event = Event::select('address')->where('id', $eventId)->first();
+        $event = Event::select('address','event_category_id')->where('id', $eventId)->first();
       
         //get kelengkapan data by id dari list peserta
         foreach ($data['participant'] as $key => $value) {
@@ -234,6 +234,7 @@ class EventController extends Controller
                 // simpan kedalam tabel event_detail sebagai peserta
                $eventDetailModel = new EventDetail();
                $eventDetailModel->event_id = $eventId;
+               $eventDetailModel->event_category_id = $event->event_category_id;
                $eventDetailModel->village_id = $anggota->village_id;
                $eventDetailModel->user_id = $value;
                $eventDetailModel->nik = $anggota->nik;
