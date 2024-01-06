@@ -8,16 +8,19 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class SapaAnggotaKecamatanExport implements FromCollection, WithHeadings, WithEvents, ShouldAutoSize
+class SapaAnggotaKecamatanExport implements FromCollection, WithHeadings, WithEvents, ShouldAutoSize, WithTitle
 {
     use Exportable;
 
     protected $data;
+    protected $districtName;
 
-    public function __construct($data)
+    public function __construct($data, string $districtName)
     {
         $this->data = $data;
+        $this->districtName = $districtName;
     }
 
     public function collection() 
@@ -69,4 +72,11 @@ class SapaAnggotaKecamatanExport implements FromCollection, WithHeadings, WithEv
             }
         ] ;  
     }
+
+    public function title(): string
+    {
+        $title = 'KEC.'.$this->districtName;
+        return $title;
+    }
+
 }

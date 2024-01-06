@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Event;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\Exportable;
 
@@ -23,11 +24,15 @@ class SapaAnggotaKabupatenExport implements WithMultipleSheets
         $sheets   = [];
 
         $districts = $this->districts;
+ 
+        $eventModel = new Event();
         
         foreach ($districts as $value) {
-            $sheets[] = new SapaAnggotaKecamatanExport($value->id,$this->eventCategory);
+            $events    = $eventModel->getSapaAnggotaPerKecamatan($value->id, $this->eventCategory);
+            $sheets[] = new SapaAnggotaKecamatanExport($events, $value->kecamatan);
         }
 
         return $sheets;
     }
+
 }

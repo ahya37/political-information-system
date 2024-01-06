@@ -10,6 +10,7 @@ use App\CostEvent;
 use App\EventDetail;
 use App\ForecastDesc;
 use App\EventCategory;
+use App\Exports\SapaAnggotaKabupatenExport;
 use App\Exports\SapaAnggotaKecamatanExport;
 use App\FamilyGroup;
 use App\GiftRecipients;
@@ -587,6 +588,8 @@ class EventController extends Controller
         $village_id  = $request->village_id;
         $event_category_id = $request->event_category_id;
 
+        $eventModel = new Event();
+
         /**
          * get data sapa anggota per kecamatan, get data by regency_id
          * menampilkan : NO | KECAMATAN | PESERTA | ANGGOTA TERCOVER | BIAYA
@@ -607,17 +610,19 @@ class EventController extends Controller
              * get data kecamatan yg sudah mengikuti sapa anggota
              * sheet nya memuat per kecamatan
              */
+            $districts = $eventModel->getKecamatanMengikutiKunjungan($regency_id, $event_category_id);
             
-            return 'per kabkot';
+            $title = 'SAPA ANGGOTA KEC.xls';
+            return $this->excel->download(new SapaAnggotaKabupatenExport($districts,$event_category_id), $title);
 
         } elseif ($regency_id != '' && $district_id != ''  && $village_id == '') {
-            $evenModel = new Event();
-            $events    = $evenModel->getSapaAnggotaPerKecamatan($district_id, $event_category_id);
+            
+            $events    = $eventModel->getSapaAnggotaPerKecamatan($district_id, $event_category_id);
 
             $district = District::select('name')->where('id', $district_id)->first();
 
             $title = 'SAPA ANGGOTA KEC. '.$district->name.'.xls';
-            return $this->excel->download(new SapaAnggotaKecamatanExport($events), $title);
+            return $this->excel->download(new SapaAnggotaKecamatanExport($events,$district->name), $title);
 
         }elseif ($regency_id != '' && $district_id != ''  && $village_id != '') {
             return 'per desa';

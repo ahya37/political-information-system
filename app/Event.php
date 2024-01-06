@@ -66,5 +66,18 @@ class Event extends Model
 
         return $sql;
     }
+
+    public function getKecamatanMengikutiKunjungan($regencyId, $event_category_id)
+    {
+        $sql = DB::table('events as a')
+                ->select('b.id','b.name as kecamatan')
+                ->join('districts as b','a.district_id','=','b.id')
+                ->where('a.event_category_id', $event_category_id)
+                ->where('b.regency_id', $regencyId)
+                ->groupBy('b.name','b.id')
+                ->get();
+
+        return $sql;
+    }
     
 }
