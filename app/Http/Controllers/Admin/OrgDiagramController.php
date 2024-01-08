@@ -1777,6 +1777,36 @@ class OrgDiagramController extends Controller
         return $pdf->download('ANGGOTA KORTE RT ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
     }
 
+    public function downloadMembersFormManualRtPDF($idx)
+    {
+
+        $kor_rt = DB::table('org_diagram_rt as a')
+            ->select('b.id','a.base', 'a.rt', 'b.name', 'c.name as village', 'd.name as district','e.tps_number',
+                DB::raw('(select count(b2.id) from users as b2 where b2.user_id= b.id and b2.village_id is not null ) as referal')
+            )
+            ->join('users as b', 'b.nik', '=', 'a.nik')
+            ->join('villages as c', 'c.id', '=', 'a.village_id')
+            ->join('districts as d', 'd.id', '=', 'a.district_id')
+            ->join('tps as e','b.tps_id','=','e.id')
+            ->where('a.idx', $idx)
+            ->where('a.base', 'KORRT')
+            ->first();
+
+
+            // get data anggota by korte, form manual
+            $members = DB::table('form_anggota_manual_kortp as a')
+            ->select('a.name','a.nik')
+            ->where('a.pidx_korte', $idx)
+            ->orderBy('a.name','asc')
+            ->get();
+
+            $no = 1;
+
+
+        $pdf = PDF::LoadView('pages.report.memberformmanualbykorte', compact('kor_rt', 'members', 'no'))->setPaper('a4');
+        return $pdf->download('ANGGOTA FORM MANUAL KORTE RT ' . $kor_rt->rt . ' (' . $kor_rt->name . ') DS.' . $kor_rt->village . '.pdf');
+    }
+
     public function downloadMembersKeluargaSerumahRtPDF($idx)
     {
         $kor_rt = DB::table('org_diagram_rt as a')

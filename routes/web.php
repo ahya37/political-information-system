@@ -505,6 +505,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 			Route::post('/rt/detail/anggota/formkoordinator/nik/update','OrgDiagramController@updateOnlyNikDataFormKoordinatorTps')->name('admin-koordinatortpskorte-nik-update');
 
 			Route::post('/rt/detail/anggota/singkronisasidata/save/{idx}','OrgDiagramController@singkronisasiData')->name('admin-singkronisasidata-save');
+
+            // Download form manual
+            Route::post('/rt/detail/anggota/download/formmanual/pdf/{idx}','OrgDiagramController@downloadMembersFormManualRtPDF')->name('admin-formmanual-download-by-korte');
+
 			
 			// Route::post('/rt/detail/anggota/formkoordinator/download/{idx}','OrgDiagramController@downloadAnggotaKorTpsPdf')->name('admin-koordinatortpskorte-store');
 			
