@@ -46,22 +46,37 @@ class Event extends Model
 
     public function getSapaAnggotaPerKecamatan($districtId, $event_category_id)
     {
+        // $sql = DB::table('events as a')
+        //         ->select('c.id','c.name as desa',
+        //             DB::raw('(SELECT COUNT(id) from event_details where event_id = a.id) as peserta'),
+        //             DB::raw("
+        //                 (
+        //                     SELECT COUNT(a1.nik) from org_diagram_rt as a1 
+        //                     join users as b1 on a1.nik = b1.nik 
+        //                     where a1.village_id = a.village_id and  a1.district_id  = $districtId and a1.base = 'ANGGOTA'
+        //                 ) as anggota_korte
+        //             ")
+        //         )
+        //         ->join('event_categories as b','a.event_category_id','=','b.id')
+        //         ->join('villages as c','a.village_id','=','c.id')
+        //         ->where('b.id', $event_category_id)
+        //         ->where('a.district_id', $districtId)
+        //         ->orderBy('c.name','asc')
+        //         ->get();
+
         $sql = DB::table('events as a')
-                ->select('c.id','c.name as desa',
-                    DB::raw('(SELECT COUNT(id) from event_details where event_id = a.id) as peserta'),
-                    DB::raw("
-                        (
-                            SELECT COUNT(a1.nik) from org_diagram_rt as a1 
-                            join users as b1 on a1.nik = b1.nik 
-                            where a1.village_id = a.village_id and  a1.district_id  = $districtId and a1.base = 'ANGGOTA'
-                        ) as anggota_korte
-                    ")
+                ->select('b.name as desa',
+                    DB::raw('(select count(id) from event_details where event_category_id = a.event_category_id and village_id = a.village_id) as peserta'),
+                    DB::raw("(
+                        SELECT COUNT(a1.nik) from org_diagram_rt as a1 
+                        join users as b1 on a1.nik = b1.nik 
+                        where a1.village_id = a.village_id and a1.district_id  = $districtId and a1.base = 'ANGGOTA'
+                    )as anggota_korte")
                 )
-                ->join('event_categories as b','a.event_category_id','=','b.id')
-                ->join('villages as c','a.village_id','=','c.id')
-                ->where('b.id', $event_category_id)
+                ->join('villages as b','a.village_id','=','b.id')
+                ->where('a.event_category_id', $event_category_id)
                 ->where('a.district_id', $districtId)
-                ->orderBy('c.name','asc')
+                ->groupBy('b.name')
                 ->get();
 
         return $sql;
