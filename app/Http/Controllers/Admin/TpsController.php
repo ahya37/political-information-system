@@ -356,5 +356,43 @@ class TpsController extends Controller
         return $this->excel->download(new SaksiExport($saksi), $title);
     }
 
+    public function setDumyDataPerolehanSuara()
+    {
+        
+        // get tps all
+        $tps = DB::table('tps')->get();
+        // update kan kepada data tps by id nya
+        foreach ($tps as $key => $value) {
+            // buat angka random dari 100 - 500
+           DB::table('tps')->where('id', $value->id)->update([
+            'hasil_suara' => rand(100,500)
+           ]);
+        }
+
+        return 'OK';
+    }
+
+    public function updateCounterHasilSuara()
+    {
+       // get hasil suara by regency_id
+       $tps_hasil_suara = DB::table('tps')->select('hasil_suara','village_id')->where('regency_id', 3602)->get();
+      
+       // jumlah level kabkot
+       $jml_kabkot = collect($tps_hasil_suara)->sum(function($q){
+        return $q->hasil_suara;
+       });
+
+        DB::table('counter_hasil_suara_village')->update([
+            'regency_id'  => 360,
+            'hasil_suara' => $jml_kabkot
+        ]);
+
+       return 'OK';
+
+       // jumlah level kecamatan
+
+       // jumlah level desa
+    }
+
 
 }

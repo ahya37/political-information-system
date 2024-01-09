@@ -464,3 +464,7 @@ Route::post('org/rt/anggotaformmanual/delete', 'Admin\OrgDiagramController@delet
 
 // Report event sapa anggota
 Route::post('event/anggota/sapa/download', 'Admin\EventController@downloadSapaAnggota');
+
+Route::post('/dumydata/perolehansuara','Admin\TpsController@setDumyDataPerolehanSuara');
+
+Route::get('/hasilsuara/count','Admin\TpsController@updateCounterHasilSuara');

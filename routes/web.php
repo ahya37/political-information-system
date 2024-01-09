@@ -639,11 +639,13 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         Route::post('/reward/referal/download/excel', 'RewardController@getPoinByMonthDefaultExcel')->name('admin-rewardreferaldownload-excel');
         Route::post('/reward/admin/download/excel', 'RewardController@getPoinAdminByMonthDefaultExcel')->name('admin-rewardadmindownload-excel');
-           
+        
+        #DASHBOARD PEROLEHAN SUARA
+        Route::group(['prefix' => 'sip'], function(){
+            Route::get('dashboard','SipController@dashboard')->name('admin-sip-dashboard');
+        });
     });
 	
-	 
-    
 });
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => 'admin'], function () {
