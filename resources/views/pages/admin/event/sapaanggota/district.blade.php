@@ -10,7 +10,7 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">JADWAL KUNJUNGAN</h2>
+                <h2 class="dashboard-title">JADWAL KUNJUNGAN {{strtoupper($dapil->name)}}</h2>
                 <p class="dashboard-subtitle">
                 </p>
             </div>
@@ -26,21 +26,21 @@
                                         width="100%">
                                         <thead>
                                             <tr>
-                                                <th class="center">NO</th>
-                                                <th>DAPIL</th> 
-                                                <th>KECAMATAN DI KUNJUNGI</th>
-                                                <th>KECAMATAN BELUM DI KUNJUNGI</th>
+                                                <th width="5%">NO</th>
+                                                <th>KECAMATAN</th> 
+                                                <th>DESA DI KUNJUNGI</th>
+                                                <th>DESA BELUM DI KUNJUNGI</th>
                                             </tr>
                                         </thead>
                                         <tbody> 
-										 @foreach($dapils as $item)
+										 @foreach($kecamatans as $item) 
 											<tr>
 												<td>{{$no++}}</td>
 												<td>
-													<a href="{{ route('admin-event-anggota-sapa-dapil', $item->id) }}">{{ $item->name }}</a>
+													<a href="{{ route('admin-event-anggota-sapa-district', $item->id) }}">{{ $item->name }}</a>
 												</td>
-												<td>0</td>
-												<td>0</td>
+												<td>{{$item->desa_dikunjungi}}</td>
+												<td>{{$item->jml_desa - $item->desa_dikunjungi}}</td>
 											</tr>
 										 @endforeach()
                                         </tbody>

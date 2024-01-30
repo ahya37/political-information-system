@@ -94,5 +94,83 @@ class Event extends Model
 
         return $sql;
     }
+	
+	public function getSapaAnggotDapilByRegencyId($regencyId)
+	{
+		$sql = DB::table('dapils')->select('id','name')->where('regency_id', $regencyId)->orderBy('name','asc')->get();
+		return $sql; 
+	}
+	public function getSapaAnggotaDistrictByDapilId($dapilId) 
+	{
+		$sql = DB::table('districts as a')
+				->select('a.id','a.name',
+					DB::raw('(
+						SELECT COUNT(DISTINCT(a1.village_id)) from events as a1 WHERE a1.event_category_id = 78 and a1.district_id = a.id 
+					) as desa_dikunjungi'),
+					DB::raw('(
+						SELECT COUNT(a2.id) from villages as a2 WHERE a2.district_id = a.id
+					) as jml_desa')
+				)
+				->join('dapil_areas as b','a.id','=','b.district_id')
+				->where('b.dapil_id', $dapilId)
+				->orderBy('a.name','asc')
+				->get();
+		return $sql; 
+	}
+	
+	public function getSapaAnggotaVillageByDistrictId($district_id)
+	{
+		$sql = DB::table('villages as a')
+				->select('a.id','a.name',
+					DB::raw('(
+						SELECT jml_titik  from pengajuan_sapa_anggota WHERE village_id = a.id limit 1 
+					) as jml_titik'),
+					DB::raw('(
+						SELECT COUNT(village_id) from events WHERE village_id = a.id and event_category_id = 78 
+					) as titik_terkunjungi'),
+					DB::raw('(
+						SELECT COUNT(id) from event_details WHERE event_category_id = 78 and village_id = a.id 
+					) as peserta')
+				)
+				->where('district_id',$district_id)
+				->orderBy('a.name','asc')
+				->get();
+				
+		return $sql;
+	}
+	
+	public function getSapaAnggotaVillageByDistrictIdDataTable($district_id)
+	{
+		$sql = DB::table('villages as a')
+				->select('a.id','a.name',
+					DB::raw('(
+						SELECT jml_titik  from pengajuan_sapa_anggota WHERE village_id = a.id limit 1 
+					) as jml_titik'),
+					DB::raw('(
+						SELECT COUNT(village_id) from events WHERE village_id = a.id and event_category_id = 78 
+					) as titik_terkunjungi'),
+					DB::raw('(
+						SELECT COUNT(id) from event_details WHERE event_category_id = 78 and village_id = a.id 
+					) as peserta')
+				)
+				->where('district_id',$district_id)
+				->orderBy('a.name','asc');
+				
+		return $sql;
+	}
+	
+	public function getTitikSapaAnggotaByDesa($villageId, $event_category_id)
+	{
+		$sql = DB::table('events as a')
+				->select('a.id','a.address',
+					DB::raw('(
+						SELECT COUNT(*) from event_details where event_id =  a.id
+					) as jml_peserta')
+				)
+				->where('a.village_id', $villageId)
+				->where('a.event_category_id', $event_category_id)
+				->get();
+		return $sql;
+	}
     
 }

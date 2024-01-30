@@ -10,7 +10,7 @@
     <div class="section-content section-dashboard-home mb-4" data-aos="fade-up">
         <div class="container-fluid">
             <div class="dashboard-heading">
-                <h2 class="dashboard-title">JADWAL KUNJUNGAN</h2>
+                <h2 class="dashboard-title">TITIK KUNJUNGAN DESA </h2>
                 <p class="dashboard-subtitle">
                 </p>
             </div>
@@ -22,27 +22,18 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive">
+									<input type="hidden" value="{{$district->id}}" id="districtId">
                                     <table id="data" style="font-size: 12px" class="table table-sm table-striped"
                                         width="100%">
                                         <thead>
                                             <tr>
-                                                <th class="center">NO</th>
-                                                <th>DAPIL</th> 
-                                                <th>KECAMATAN DI KUNJUNGI</th>
-                                                <th>KECAMATAN BELUM DI KUNJUNGI</th>
+                                                <th width="5%">NO</th>
+                                                <th>TITIK</th> 
+                                                <th>PESERTA</th>
+                                                <th>OPSI</th>
                                             </tr>
                                         </thead>
-                                        <tbody> 
-										 @foreach($dapils as $item)
-											<tr>
-												<td>{{$no++}}</td>
-												<td>
-													<a href="{{ route('admin-event-anggota-sapa-dapil', $item->id) }}">{{ $item->name }}</a>
-												</td>
-												<td>0</td>
-												<td>0</td>
-											</tr>
-										 @endforeach()
+                                        <tbody>
                                         </tbody>
                                     </table>
                                 </div>
@@ -58,7 +49,7 @@
 @push('addon-script')
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
     <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/member-event-index.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/sapaanggota-village.js') }}" type="text/javascript"></script>
      <script type="text/javascript">
         $('#data').DataTable()
     </script>

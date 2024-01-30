@@ -42,6 +42,7 @@
                                         <th align="center">KORTPS TERISI</th>
                                         <th align="center">KORTPS (-/+)</th>
                                         <th align="center">ANGGOTA TERCOVER</th>
+                                        <th align="center">FORM MANUAL</th>
                                         <th align="center">BELUM ADA KORTPS</th>
                                         <th align="center">SAKSI</th>
 
@@ -76,6 +77,7 @@
                                                 <td align="center">{{ $gF->decimalFormat($item['korte_terisi']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($nilai_kurang_korte) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item['anggota_tercover_kortps']) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item['form_manual']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item['belum_tercover_kortps']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item['saksi']) }}</td>
                                             </tr>
@@ -98,6 +100,7 @@
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_korte_terisi) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_kurang_korte) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_anggota_tercover) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_form_manual) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_blm_ada_korte) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_saksi) }}</b></td>
                                       </tr>

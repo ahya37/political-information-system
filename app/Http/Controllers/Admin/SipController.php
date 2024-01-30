@@ -12,6 +12,16 @@ class SipController extends Controller
     {
         return view('pages.sip.dashboard.all');
     }
+	
+	public function getDataGrafikLevelAll()
+	{
+		//data level all sekab lebak
+		// get data anggota tercover se kab lebak
+		
+		// get data peserta kunjungan se kab lebak
+		 
+		// get data perolehan suara se kab lebak 
+	}
 
     // dashboard level dapil
     public function dashboardDapil($dapilId)

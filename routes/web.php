@@ -243,7 +243,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
 
         // Sapa anggota
         Route::get('/event/anggota/sapa','EventController@sapaAnggotaDapil')->name('admin-event-anggota-sapa');
-        
+        Route::get('/event/anggota/sapa/dapil/{id}','EventController@sapaAnggotaKecamatan')->name('admin-event-anggota-sapa-dapil');
+        Route::get('/event/anggota/sapa/dapil/district/{id}','EventController@sapaAnggotaDesa')->name('admin-event-anggota-sapa-district');
+        Route::get('/event/anggota/sapa/dapil/district/village/{id}','EventController@getDetailSapaAnggotaByDesa')->name('admin-event-anggota-sapa-village');
 		
 		Route::post('/event/download/galery','EventController@downloadGaleryByEvent')->name('admin-event-galery'); 
 
@@ -514,10 +516,12 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('/daftartim/saksi','OrgDiagramController@daftarSaksi')->name('admin-daftartim-saksi');
 
             Route::get('/rt/anggota/formmanual/{idx}','OrgDiagramController@daftarFormManual')->name('admin-struktur-form-manual');
+            
+			
+			Route::get('/rt/anggota/rekap/{idx}','OrgDiagramController@rekapAnggota')->name('admin-struktur-form-manual');
 
-
-        });
-		
+        }); 
+		 
 		Route::group(['prefix' => 'report'], function(){
 			Route::get('/summary','OrgDiagramController@laporanSummary');
 		});
@@ -644,6 +648,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         Route::group(['prefix' => 'sip'], function(){
             Route::get('dashboard','SipController@dashboard')->name('admin-sip-dashboard');
         });
+		
     });
 	
 });

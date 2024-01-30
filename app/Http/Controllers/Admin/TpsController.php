@@ -365,7 +365,7 @@ class TpsController extends Controller
         foreach ($tps as $key => $value) {
             // buat angka random dari 100 - 500
            DB::table('tps')->where('id', $value->id)->update([
-            'hasil_suara' => rand(100,500)
+            'hasil_suara' => rand(100,200)
            ]);
         }
 

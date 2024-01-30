@@ -26,13 +26,14 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Models\Regency;
 use PDF;
 use Maatwebsite\Excel\Excel;
+use App\OrgDiagram;
 
 class EventController extends Controller
 {
     public $excel;
     public function __construct(Excel $excel)
     {
-        $this->excel = $excel;
+        $this->excel = $excel; 
     }
 
     public function index()
@@ -624,9 +625,121 @@ class EventController extends Controller
 
     public function sapaAnggotaDapil()
     {
-        $regency = Regency::select('id', 'name')->where('id', 3602)->first();
-        return view('pages.admin.event.sapaanggota.index', compact('regency'));
+        $regencyModel = Regency::select('id', 'name')->where('id', 3602)->first();
+		$regency = $regencyModel->id;
+		
+		// get data dapil se kab lebak
+		$eventModel = new Event();
+		$dapils 	= $eventModel->getSapaAnggotDapilByRegencyId($regency);
+		
+		$no 		= 1;
+		
+        return view('pages.admin.event.sapaanggota.index', compact('dapils','no'));
     }
+	
+	public function sapaAnggotaKecamatan($dapilId)
+	{
+		$dapil = DB::table('dapils')->select('name')->where('id', $dapilId)->first();
+		// get data kecamatan by dapil
+		$eventModel = new Event();
+		$kecamatans = $eventModel->getSapaAnggotaDistrictByDapilId($dapilId);
+		$no 	= 1; 
+		
+		return view('pages.admin.event.sapaanggota.district', compact('kecamatans','no','dapil')); 
+	}
+	
+	public function sapaAnggotaDesa($districtId)
+	{
+		$district = DB::table('districts')->select('name','target_persentage','id')->where('id', $districtId)->first();
+		
+		$eventModel = new Event();
+		$desa 		= $eventModel->getSapaAnggotaVillageByDistrictId($districtId);
+		
+		// get data desa by kecamatan
+		$no 	 		 = 1;
+		
+		return view('pages.admin.event.sapaanggota.village', compact('desa','no','district'));
+	}
+	
+	public function getDataSapaAnggotaDesaDataTable(Request $request){
+
+        // DATATABLE
+        $orderBy = 'a.name';
+        switch ($request->input('order.0.column')) {
+            case '1':
+                $orderBy = 'a.name';
+                break;
+        }
+		
+		  $eventModel = new Event();
+		  $data 	  = $eventModel->getSapaAnggotaVillageByDistrictIdDataTable($request->district_id);
+
+
+          $recordsFiltered = $data->get()->count();
+          if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
+          $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();
+
+          $recordsTotal = $data->count(); 
+		  
+		  $results = [];
+		  $no      = 1;
+		  foreach($data as $item){
+			  $results[] = [
+				'no' => $no++,
+				'id'  => $item->id,
+				'name' => $item->name,
+				'jml_titik' => $item->jml_titik,
+				'titik_terkunjungi' => $item->titik_terkunjungi, 
+				'titik_belum_dikunjungi' => $item->jml_titik - $item->titik_terkunjungi,
+				'peserta' => $item->peserta
+			  ];
+		  }
+
+          return response()->json([
+                'draw'=>$request->input('draw'),
+                'recordsTotal'=>$recordsTotal,
+                'recordsFiltered'=>$recordsFiltered,
+                'data'=> $results
+            ]);
+    }
+	
+	public function getDetailSapaAnggotaByDesa($villageId)
+	{
+		$village = DB::table('villages')->select('name')->where('id', $villageId)->first();
+		// tampilkan data titik lokasi kampanye berdasarkan
+		$event_category_id = 78;
+		$eventModel = new Event();
+		$data       = $eventModel->getTitikSapaAnggotaByDesa($villageId,$event_category_id);
+		
+		return view('pages.admin.event.sapaanggota.titik', compact('village','no','data'));
+		
+	}
+	
+	public function updateJumlahTitikKampanyeByDesa(Request $request)
+	{
+		DB::beginTransaction();
+        try {
+
+            $id  = request()->id;
+			
+			// update jumlah titik by village_id
+			DB::table('pengajuan_sapa_anggota')->where('village_id', $id)->update(['jml_titik' => request()->jml]);
+
+            #mekanisme sortir idx jika ada yang terhapus
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil update!'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error'   => $e->getMessage()
+            ]);
+        }
+		
+	}
+
 
     public function downloadSapaAnggota(Request $request)
     {

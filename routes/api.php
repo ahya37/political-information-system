@@ -102,6 +102,8 @@ Route::post('org/rt/headkeluargaserumah/delete', 'Admin\OrgDiagramController@del
 #TPS
 Route::post('/list/tps', 'Admin\TpsController@getDataTps');
 
+Route::post('/list/sapaanggota/desa', 'Admin\EventController@getDataSapaAnggotaDesaDataTable');
+
 #new org diagram
 // Route::get('org/rt', 'Admin\OrgDiagramController@getDataOrgDiagramRT');
 Route::get('org/rt', 'Admin\OrgDiagramController@getDataOrgDiagramRT');
@@ -468,3 +470,8 @@ Route::post('event/anggota/sapa/download', 'Admin\EventController@downloadSapaAn
 Route::post('/dumydata/perolehansuara','Admin\TpsController@setDumyDataPerolehanSuara');
 
 Route::get('/hasilsuara/count','Admin\TpsController@updateCounterHasilSuara');
+
+Route::post('event/sapaanggota/jumlahtitik/update','Admin\EventController@updateJumlahTitikKampanyeByDesa');
+
+
+Route::post('doc/keluarhaserumah/calculate','Admin\DocumentController@kalkulasiKeluargaSerumahPerKecamatan');
