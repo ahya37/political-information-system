@@ -426,7 +426,19 @@ class OrgDiagram extends Model
 				org_diagram_rt h on j.pidx_korte  = h.idx
 				join users as k on h.nik = k.nik
 				where h.village_id = a.id 
-			) as form_manual
+			) as form_manual,
+			(
+				select count(k.nik) from form_vivi as k join 
+				org_diagram_rt g on k.pidx_korte  = g.idx
+				join users as i on g.nik = i.nik
+				where g.village_id = a.id 
+			) as form_vivi,
+			(
+				select count(o.nik) from form_anggota_manual_kortp_vivi  as o join 
+				org_diagram_rt p on o.pidx_korte  = p.idx
+				join users as z on p.nik = z.nik
+				where p.village_id = a.id 
+			) as form_manual_vivi 
 			from villages as a
 			WHERE a.district_id = $districtId order by (SELECT COUNT(users.id) from users join villages on users.village_id = villages.id  WHERE villages.id = a.id) desc";
          
@@ -528,7 +540,21 @@ class OrgDiagram extends Model
 						join users as k on h.nik = k.nik
 						join dapil_areas as p on h.district_id = p.district_id
 						where p.dapil_id = a.id
-					) as form_manual 
+					) as form_manual,
+					(
+						select count(k.nik) from form_vivi as k join 
+						org_diagram_rt g on k.pidx_korte  = g.idx
+						join users as i on g.nik = i.nik
+						join dapil_areas as x on g.district_id = x.district_id
+						where x.dapil_id = a.id
+					) as form_vivi, 
+					(
+						select count(o.nik) from form_anggota_manual_kortp_vivi  as o join 
+						org_diagram_rt p on o.pidx_korte  = p.idx
+						join users as z on p.nik = z.nik
+						join dapil_areas as x1 on p.district_id = x1.district_id
+						where x1.dapil_id = a.id
+					) as form_manual_vivi
 					from dapils as a
 					where a.regency_id = $regencyId";
 
@@ -649,7 +675,19 @@ class OrgDiagram extends Model
 						org_diagram_rt h on j.pidx_korte  = h.idx
 						join users as k on h.nik = k.nik
 						where h.district_id = a.district_id 
-				) as form_manual
+				) as form_manual,
+				(
+					select count(k.nik) from form_vivi as k join 
+					org_diagram_rt g on k.pidx_korte  = g.idx
+					join users as i on g.nik = i.nik
+					where g.district_id  = a.district_id 
+				) as form_vivi,
+				(
+					select count(o.nik) from form_anggota_manual_kortp_vivi  as o join 
+					org_diagram_rt p on o.pidx_korte  = p.idx
+					join users as z on p.nik = z.nik
+					where p.district_id  = a.district_id 
+				) as form_manual_vivi
 				from dapil_areas as a
 				join districts as b on a.district_id = b.id
 				where a.dapil_id = $dapilId order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";

@@ -80,9 +80,9 @@
                                     Opsi Download
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    
-                                    <input class="btn btn-sm  mt-2 dropdown-item" type="submit"
-                                        value="Download Saksi" name="report_type">
+                                    <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Download Saksi" name="report_type">
+                                    <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Rekap Saksi Per Kecamatan" name="report_type">
+                                    <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Rekap Saksi Per Desa" name="report_type"> 
                                 </div>
                             </div>
                         </div>

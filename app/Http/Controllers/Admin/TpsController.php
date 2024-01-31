@@ -9,6 +9,7 @@ use App\Exports\SaksiExport;
 use App\Witness;
 use App\Models\Regency;
 use App\Models\Village;
+use App\Models\District;
 use App\RightChooseRegency;
 use App\RightChosseVillage;
 use App\RightChooseDistrict;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\UserMenu;
 use Maatwebsite\Excel\Excel;
+use PDF;
+use App\Providers\GlobalProvider;
 
 class TpsController extends Controller
 {
@@ -338,24 +341,133 @@ class TpsController extends Controller
 
     public function downloadSaksiPerDesa(Request $request)
     {
-        if (!$request->village_id) return redirect()->back()->with(['warning' => 'Pilih desa terlebih dahulu!']);
-        $village = Village::select('name')->where('id', $request->village_id)->first();
-        
-        // get data saksi per desa
-        $saksi = DB::table('witnesses as a')
-                ->select('b.nik','b.name','b.address','b.phone_number','b.whatsapp','e.tps_number','b.rt')
-                ->join('users as b','a.user_id','=','b.id')
-                ->join('villages as c','b.village_id','=','c.id')
-                ->join('districts as d','c.district_id','=','d.id')
-                ->join('tps as e','b.tps_id','=','e.id')
-                ->orderBy('e.tps_number','asc')
-                ->where('a.village_id', $request->village_id)
-                ->get();
-        
-        $title = 'DAFTAR SAKSI DS.'.$village->name.'.xls';
-        return $this->excel->download(new SaksiExport($saksi), $title);
+		$tpsModel = new Tps();
+		
+		$report_type = $request->report_type;
+		if($report_type == 'Download Saksi'){
+			 if (!$request->village_id) return redirect()->back()->with(['warning' => 'Pilih desa terlebih dahulu!']);
+			$village = Village::select('name')->where('id', $request->village_id)->first();
+			
+			// get data saksi per desa
+			$saksi = $tpsModel->getDataSaksiPerdesa($request);
+			
+			$title = 'DAFTAR SAKSI DS.'.$village->name.'.xls';
+			return $this->excel->download(new SaksiExport($saksi), $title);
+			
+		}elseif($report_type == 'Rekap Saksi Per Kecamatan'){
+			if (!$request->district_id) return redirect()->back()->with(['warning' => 'Pilih kecamatan terlebih dahulu!']);
+			
+			$district = District::select('name')->where('id', $request->district_id)->first();
+			$gF = new GlobalProvider();
+			// get rekap data saksi 
+			$saksi = $tpsModel->getRekapSaksiPerKecamatan($request);
+			$no    = 1;
+			
+			$jml_saksi_dalam = collect($saksi)->sum(function($q){
+				return $q->saksi_dalam; 
+			});
+			
+			$jml_saksi_luar = collect($saksi)->sum(function($q){
+				return $q->saksi_luar; 
+			});
+			 
+			$jml_tps = collect($saksi)->sum(function($q){
+				return $q->tps;
+			});
+			
+			$jml_korte = collect($saksi)->sum(function($q){
+				return $q->korte;
+			});
+			
+			$jml_anggota_kta = collect($saksi)->sum(function($q){
+				return $q->anggota;
+			});
+			
+			$jml_anggota_form_manual = collect($saksi)->sum(function($q){
+				return $q->form_manual;
+			});
+			
+			$jml_anggota_all= collect($saksi)->sum(function($q){
+				return $q->jml_all_anggota;
+			});
+			 
+			$pdf = PDF::LoadView('pages.report.rekapsaksiperkecamatan', compact('jml_anggota_all','jml_anggota_form_manual','jml_anggota_kta','no','saksi','district','jml_saksi_dalam','jml_saksi_luar','jml_tps','jml_korte','gF'))->setPaper('a4');
+			return $pdf->download('REKAP SAKSI PER KECAMATAN '.$district->name.'.pdf');
+			
+		}elseif($report_type == 'Rekap Saksi Per Desa'){
+			if (!$request->village_id) return redirect()->back()->with(['warning' => 'Pilih desa terlebih dahulu!']);
+			$village = Village::select('name')->where('id', $request->village_id)->first();
+			
+			// $district = District::select('name')->where('id', $request->district_id)->first();
+			
+			// get rekap data saksi 
+			$saksi = $tpsModel->getRekapSaksiPerDesa($request);
+			
+			$results = [];
+			foreach($saksi as $item){
+				
+				// kalkulasi jumlah anggota dari korte berdasarkan tps nya
+				$anggota_by_tps = $tpsModel->getAnggotaKorteByTps($request->village_id,$item->id);
+				
+				$jml_anggota = collect($anggota_by_tps)->sum(function($q){
+					return $q->jml_anggota;
+				}); 
+				 
+				$anggota_form_manual = $tpsModel->getAnggotaFormManual($request->village_id,$item->id);
+				
+				$jml_anggota_form_manual = collect($anggota_form_manual)->sum(function($q){
+					return $q->jml_anggota;
+				}); 
+				
+				$results[] = [
+					'tps_number' => $item->tps_number,
+					'saksi_dalam' => $item->saksi_dalam,
+					'saksi_luar' => $item->saksi_luar,
+					'korte' => $item->korte,
+					'anggota' => $jml_anggota,
+					'anggota_form_manual' => $jml_anggota_form_manual,
+					'jml_all_anggota' => $jml_anggota + $jml_anggota_form_manual
+				];
+			} 
+			
+			
+			
+			
+			$jml_saksi_dalam = collect($results)->sum(function($q){
+				return $q['saksi_dalam']; 
+			});   
+			
+			$jml_saksi_luar = collect($results)->sum(function($q){
+				return $q['saksi_luar'];
+			});
+			
+			$jml_korte   = collect($results)->sum(function($q){
+				return $q['korte'];
+			}); 
+			
+			$jml_anggota = collect($results)->sum(function($q){
+				return $q['anggota']; 
+			}); 
+			 
+			$jml_form_manual = collect($results)->sum(function($q){
+				return $q['anggota_form_manual']; 
+			});
+			
+			// dd($results,$jml_form_manual);
+			
+			// dd($results,$jml_form_manual);
+			
+			$jml_anggota_kta_manual = $jml_anggota + $jml_form_manual;
+			
+			$no = 1;
+			$gF         = new GlobalProvider();
+			
+			$pdf = PDF::LoadView('pages.report.rekapsaksiperdesa', compact('no','jml_anggota_kta_manual','results','village','jml_saksi_dalam','jml_saksi_luar','jml_anggota','gF','jml_korte','jml_form_manual'))->setPaper('a4');
+			return $pdf->download('REKAP SAKSI PER DS.'.$village->name.'.pdf');
+		}
+       
     }
-
+  
     public function setDumyDataPerolehanSuara()
     {
         
