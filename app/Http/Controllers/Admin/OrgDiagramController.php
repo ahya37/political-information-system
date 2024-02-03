@@ -4157,6 +4157,7 @@ class OrgDiagramController extends Controller
 
         $orgDiagramModel = new OrgDiagram();
         $data            = $orgDiagramModel->getDataDaftarTimByRegency($regency);
+		
         // dd($data);
 		$jml_form_manual = collect($data)->sum(function($q){
             return $q->form_manual;
@@ -4202,11 +4203,16 @@ class OrgDiagramController extends Controller
                 'form_manual'    => $val->form_manual,
                 'form_vivi'    => $val->form_vivi,
                 'form_manual_vivi'    => $val->form_manual_vivi,
+                'pelapis'    => $val->pelapis,
                 'saksi'    => $val->saksi,
             ];
         }
 
         $dapils          = $results;
+		
+		$jml_pelapis = collect($dapils)->sum(function($q){
+            return $q['pelapis'];
+        });
 
         $jml_ketua = collect($dapils)->sum(function($q){
             return $q['k'];
@@ -4279,7 +4285,7 @@ class OrgDiagramController extends Controller
             return $q->form_manual_vivi;
         });
 
-        return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('jml_form_manual_vivi','jml_form_vivi','jml_form_manual','jml_saksi','jml_kurang_korte','jml_tps','persentage_target','jml_blm_ada_korte','jml_anggota_tercover','jml_korte_terisi','jml_target_korte','jml_dpt','jml_ketua','jml_sekretaris','jml_bendahara','dapils','no','gF','jml_target','jml_anggota'));
+        return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('jml_pelapis','jml_form_manual_vivi','jml_form_vivi','jml_form_manual','jml_saksi','jml_kurang_korte','jml_tps','persentage_target','jml_blm_ada_korte','jml_anggota_tercover','jml_korte_terisi','jml_target_korte','jml_dpt','jml_ketua','jml_sekretaris','jml_bendahara','dapils','no','gF','jml_target','jml_anggota'));
 
     } 
 
@@ -4292,6 +4298,11 @@ class OrgDiagramController extends Controller
         $orgDiagramModel = new OrgDiagram();
         $data            = $orgDiagramModel->getDataDaftarTimByDapil($dapilId);
         // dd($data);   
+		
+		$jml_pelapis = collect($data)->sum(function($q){
+            return $q->pelapis;
+        });
+		
 		$jml_form_manual = collect($data)->sum(function($q){
             return $q->form_manual;
         });
@@ -4384,7 +4395,7 @@ class OrgDiagramController extends Controller
             return $q->tps;
         }); 
 
-        return view('pages.admin.strukturorg.rt.daftartim.district', compact('jml_form_manual_vivi','jml_form_vivi','jml_form_manual','jml_tps','persen_dari_target_kab','dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','gF','jml_saksi','jml_target_kortps','kortps_plus_minus'));
+        return view('pages.admin.strukturorg.rt.daftartim.district', compact('jml_pelapis','jml_form_manual_vivi','jml_form_vivi','jml_form_manual','jml_tps','persen_dari_target_kab','dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','gF','jml_saksi','jml_target_kortps','kortps_plus_minus'));
 
     }
 
@@ -4396,6 +4407,10 @@ class OrgDiagramController extends Controller
         $orgDiagramModel = new OrgDiagram();
         #get data desa by kecamatan
         $data = $orgDiagramModel->getDataDaftarTimByKecamatan($districtId);
+		
+		$jml_pelapis = collect($data)->sum(function($q){
+            return $q->pelapis;
+        });
         
 		
 		$jml_form_manual = collect($data)->sum(function($q){
@@ -4467,7 +4482,7 @@ class OrgDiagramController extends Controller
         $kortps_plus_minus = $jml_target_korte -  $jml_korte_terisi;
         // dd($kortps_plus_minus);
 
-        return view('pages.admin.strukturorg.rt.daftartim.village', compact('jml_form_manual_vivi','jml_form_vivi','jml_tps','persen_dari_target_kec','gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi','kortps_plus_minus','jml_form_manual'));
+        return view('pages.admin.strukturorg.rt.daftartim.village', compact('jml_pelapis','jml_form_manual_vivi','jml_form_vivi','jml_tps','persen_dari_target_kec','gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi','kortps_plus_minus','jml_form_manual'));
     }
 
     public function deleteDataAnggotaByKortpsForFamillyGroup(){

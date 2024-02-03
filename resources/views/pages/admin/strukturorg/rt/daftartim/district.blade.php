@@ -46,6 +46,7 @@
 										 <th align="center">FORM MANUAL</th>
 										 <th align="center">FORM VIVI</th>
 										 <th align="center">FORM MANUAL VIVI</th>
+										  <th align="center">PELAPIS</th>
                                         <th align="center">BELUM ADA KORTPS</th>
                                         <th align="center">SAKSI</th>
                                       </tr>
@@ -90,6 +91,7 @@
 												<td align="center">{{ $gF->decimalFormat($item->form_manual) }}</td>
 												<td align="center">{{ $gF->decimalFormat($item->form_vivi) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->form_manual_vivi) }}</td>
+												 <td align="center">{{ $gF->decimalFormat($item->pelapis) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->belum_ada_korte) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->saksi) }}</td>
                                             </tr>
@@ -116,6 +118,7 @@
 										<td align="center"><b>{{ $gF->decimalFormat($jml_form_manual) }}</b></td>
 										<td align="center"><b>{{ $gF->decimalFormat($jml_form_vivi) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_form_manual_vivi) }}</b></td>
+										 <td align="center"><b>{{ $gF->decimalFormat($jml_pelapis) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_blm_ada_korte) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_saksi) }}</b></td>
                                       </tr>
