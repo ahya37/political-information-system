@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\CountAnggaran;
 use Maatwebsite\Excel\Events\AfterSheet;
+use App\Providers\GlobalProvider;
 
 class AnggaranTimSheetExport implements FromCollection, WithHeadings,WithTitle,WithEvents,ShouldAutoSize
 {
@@ -93,20 +94,25 @@ class AnggaranTimSheetExport implements FromCollection, WithHeadings,WithTitle,W
                 ]);
 				
 				$data = $this->collection();
+				$gf   = new GlobalProvider();
 				
 				$sum_kordes = collect($data)->sum(function($q){
-					return $q['kordes'] * CountAnggaran::kordes();
+					return $q['kordes'];
 				});
 				
 				$sum_korte = collect($data)->sum(function($q){
-					return $q['korte'] * CountAnggaran::korte();
+					return $q['korte'];
 				});
 				
 				$event->sheet->appendRows(array(
                     array('','JUMLAH',$sum_kordes,$sum_korte),
                 ), $event); 
 				
-            } 
+				$event->sheet->appendRows(array(
+                    array('','NOMINAL',$gf->decimalFormat($sum_kordes * CountAnggaran::kordes()),$gf->decimalFormat($sum_korte * CountAnggaran::korte())),
+                ), $event); 
+				
+            }  
 			 
 			
         ];

@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\CountAnggaran;
 use Maatwebsite\Excel\Events\AfterSheet;
+use App\Providers\GlobalProvider;
 
 class AnggaranTimRekapDapilSheet implements FromCollection, WithHeadings,WithTitle,WithEvents,ShouldAutoSize
 {
@@ -106,21 +107,26 @@ class AnggaranTimRekapDapilSheet implements FromCollection, WithHeadings,WithTit
                 ), $event);
 				
 				$data = $this->collection();
+				$gf   = new GlobalProvider();
 				
 				$sum_korcam = collect($data)->sum(function($q){
-					return $q['korcam'] * CountAnggaran::korcam();
+					return $q['korcam'];
 				}); 
 				
 				$sum_kordes = collect($data)->sum(function($q){
-					return $q['kordes'] * CountAnggaran::kordes();
+					return $q['kordes'];
 				});
 				
 				$sum_korte = collect($data)->sum(function($q){
-					return $q['korte'] * CountAnggaran::korte();
+					return $q['korte'];
 				});
 				
 				$event->sheet->appendRows(array(
                     array('','JUMLAH',$sum_korcam,$sum_kordes,$sum_korte),
+                ), $event); 
+				
+				$event->sheet->appendRows(array(
+                    array('','NOMINAL',$gf->decimalFormat($sum_korcam * CountAnggaran::korcam()),$gf->decimalFormat($sum_kordes * CountAnggaran::kordes()),$gf->decimalFormat($sum_korte * CountAnggaran::korte())),
                 ), $event); 
 				 
             }

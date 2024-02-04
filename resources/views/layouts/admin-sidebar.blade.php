@@ -43,10 +43,6 @@
                         class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
                         Daftar Tim
                     </a>
-					 <a href="{{ route('admin-daftartim-anggaran') }}"
-                        class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/struktur/create') ? 'active custom-active-color ' : '' }}">
-                        Anggaran Tim
-                    </a>
                     <a href="{{ route('admin-daftartim-saksi') }}"
                     class="list-group-item custom-sidebar  list-group-item-action custom-active-color {{ request()->is('admin/daftartim/saksi') ? 'active custom-active-color ' : '' }}">
                         Daftar Saksi
