@@ -10,7 +10,7 @@
             class="section-content section-dashboard-home mb-4"
             data-aos="fade-up"
           >
-            <div class="container-fluid">
+            <div class="container-fluid"> 
               <div class="dashboard-heading">
                 <h2 class="dashboard-title">Daftar Tim</h2>
                 <p class="dashboard-subtitle">
@@ -48,6 +48,7 @@
 										 <th align="center">PELAPIS</th>
                                         <th align="center">BELUM ADA KORTPS</th>
                                         <th align="center">SAKSI</th>
+                                        <th align="center">OPSI</th>
 
                                       </tr>
                                     </thead>
@@ -86,6 +87,18 @@
                                                 <td align="center">{{ $gF->decimalFormat($item['pelapis']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item['belum_tercover_kortps']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item['saksi']) }}</td>
+                                                <td align="center">
+													<div class="btn-group">
+														<div class="dropdown">
+															<button class="btn btn-sm btn-sc-primary text-white dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown" aria-haspopup="true">...</button>
+															<div class="dropdown-menu">
+																<a href="{{route('admin-daftartim-anggaran-dapil', $item['id'])}}" class="dropdown-item">
+																	Downlaod Anggara Tim
+																</a>
+															</div>
+														</div> 
+													</div>
+												</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -112,6 +125,7 @@
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_pelapis) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_blm_ada_korte) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_saksi) }}</b></td>
+                                        <td align="center"><b></b></td>
                                       </tr>
                                     </tfoot> 
                                   </table>

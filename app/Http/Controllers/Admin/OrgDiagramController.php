@@ -27,9 +27,11 @@ use Illuminate\Support\Facades\DB;
 use App\Exports\KorteMembersExport;
 use App\Http\Controllers\Controller;
 use App\Exports\KorteExportWithSheet;
+use App\Exports\AnggaranTimExport;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Exports\AnggotaBelumTercoverKortps;
+use App\Helpers\CountAnggaran;
 
 class OrgDiagramController extends Controller
 {
@@ -90,7 +92,7 @@ class OrgDiagramController extends Controller
             $dataTim        = $orgDiagram->getDataDaftarTimByDapil($dapil_id);
             $jml_dpt =  collect($dataTim)->sum(function($q){
                 return $q->dpt;
-            });
+            }); 
 
             $target_anggota = collect($dataTim)->sum(function($q){
                 return ($q->dpt * $q->target_persentage)/100;
@@ -4145,7 +4147,115 @@ class OrgDiagramController extends Controller
             return 'per dapil';
         }
     }
+	
+	public function anggaranTim()
+	{
+		// get daftar tim per dapil
+		$gF = new GlobalProvider();
 
+        // tampilkan data dapil 
+        $regency = 3602;
+        // $dapils  = DB::table('dapils')->select('id','name')->where('regency_id', $regency)->get();
+        $no      = 1;
+
+        $orgDiagramModel = new OrgDiagram();
+        $data            = $orgDiagramModel->getDataDaftarTimByRegencyAnggaran($regency);
+		
+		$results = [];
+		foreach($data as $item){
+			$results[] = [
+				'dapil' => $item->name,
+				'korcam' => $item->korcam,
+				'korcam_nominal' => CountAnggaran::korcam(),
+				'kordes' => $item->kordes,
+				'kordes_nominal' => CountAnggaran::kordes(),
+				'korte'  => $item->korte,
+				'korte_nominal' => CountAnggaran::korte(),
+			];
+		}
+		
+		$jml_korcam = collect($results)->sum(function($q){
+			return $q['korcam_nominal'];
+		});
+		
+		$jml_kordes = collect($results)->sum(function($q){
+			return $q['kordes_nominal'];
+		});
+		
+		$jml_korte = collect($results)->sum(function($q){
+			return $q['korte_nominal'];
+		});
+		
+		$data_results = [
+			'tim' => $results,
+			'jml_korcam' => $jml_korcam,
+			'jml_kordes' => $jml_kordes,
+			'jml_korte' => $jml_korte
+		];
+		
+		return $data_results; 
+	}
+	
+	public function anggaranTimDapil($dapilId)
+	{
+		// get daftar tim per dapil
+		$gF = new GlobalProvider();
+
+        // tampilkan data dapil 
+        $regency = 3602;
+        // $dapils  = DB::table('dapils')->select('id','name')->where('regency_id', $regency)->get();
+        $no      = 1;
+		
+		// get data kecamatan by dapil 
+		$districts = DB::table('districts as a')
+					 ->select('a.id','a.name')
+					 ->join('dapil_areas as b','a.id','=','b.district_id')
+					 ->where('b.dapil_id', $dapilId)
+					 ->orderBy('a.id','asc')
+					 ->get();
+					 
+		
+
+        // $orgDiagramModel = new OrgDiagram();
+        // $data            = $orgDiagramModel->getDataDaftarTimByRegencyAnggaranDapil($dapilId);
+		  
+		 
+		// $results = [];
+		// foreach($data as $item){
+			// $results[] = [
+				// 'dapil' => $item->name,
+				// 'korcam' => $item->korcam,
+				// 'korcam_nominal' => CountAnggaran::korcam(),
+				// 'kordes' => $item->kordes,
+				// 'kordes_nominal' => CountAnggaran::kordes(),
+				// 'korte'  => $item->korte,
+				// 'korte_nominal' => CountAnggaran::korte(),
+			// ];
+		// }
+		
+		// $jml_korcam = collect($results)->sum(function($q){
+			// return $q['korcam_nominal'];
+		// });
+		
+		// $jml_kordes = collect($results)->sum(function($q){
+			// return $q['kordes_nominal'];
+		// });
+		
+		// $jml_korte = collect($results)->sum(function($q){
+			// return $q['korte_nominal'];
+		// });
+		
+		// $data_results = [
+			// 'tim' => $results,
+			// 'jml_korcam' => $jml_korcam,
+			// 'jml_kordes' => $jml_kordes,
+			// 'jml_korte' => $jml_korte
+		// ];
+		 
+		// return (new AnggaranTimExport($districts))->download('ANGGARAN TIM.xls');
+		return $this->excel->download(new AnggaranTimExport($districts,$dapilId), 'ANGGARAN TIM.xls.xls');
+	}
+	 
     public function daftarTim(){
 
         $gF = new GlobalProvider();
