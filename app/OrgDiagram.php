@@ -441,7 +441,10 @@ class OrgDiagram extends Model
 			) as form_manual_vivi,
 			(
 				select count(ap.id) from anggota_pelapis as ap where ap.village_id = a.id 
-			) as pelapis			
+			) as pelapis,
+			(
+				select SUM(tp.hasil_suara) from tps as tp WHERE tp.village_id = a.id 
+			) as hasil_suara
 			from villages as a
 			WHERE a.district_id = $districtId order by (SELECT COUNT(users.id) from users join villages on users.village_id = villages.id  WHERE villages.id = a.id) desc";
          
@@ -562,7 +565,13 @@ class OrgDiagram extends Model
 						select count(ap.id) from anggota_pelapis as ap
 						join dapil_areas as ap1 on ap.district_id = ap1.district_id
 						where ap1.dapil_id = a.id
-					) as pelapis
+					) as pelapis,
+					(
+						select SUM(tp.hasil_suara) from tps as tp 
+						join dapil_areas as tp1 on tp.district_id = tp1.district_id 
+						WHERE tp1.dapil_id = a.id
+						
+					) as hasil_suara 
 					from dapils as a
 					where a.regency_id = $regencyId";
 
@@ -699,7 +708,10 @@ class OrgDiagram extends Model
 				) as form_manual_vivi,
 				(
 					select count(ap.id) from anggota_pelapis as ap where ap.district_id = a.district_id 
-				) as pelapis
+				) as pelapis,
+				(
+					select SUM(tp.hasil_suara) from tps as tp WHERE tp.district_id = a.district_id
+				) as hasil_suara
 				from dapil_areas as a
 				join districts as b on a.district_id = b.id
 				where a.dapil_id = $dapilId order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";
@@ -1305,6 +1317,54 @@ class OrgDiagram extends Model
 		return DB::select($sql);
 	}
 	
+	public function getRekapKortePerdesa($villageId)
+	{
+		$sql = DB::table('org_diagram_rt as a')
+					->select(
+						'b.name',
+						'a.title',
+						'b.rt',
+						'c.tps_number',
+						DB::raw("(select count(*) from org_diagram_rt where pidx = a.idx and base = 'ANGGOTA') as anggota"),
+						// DB::raw("(
+								// select COUNT(DISTINCT(a4.nik)) 
+								// from family_group as a4
+								// join org_diagram_rt as c on a4.nik = c.nik 
+								// WHERE a4.pidx_korte = a.idx and c.pidx != 'KORRT' 
+							// ) as keluarga_serumah"),
+						DB::raw('
+							(
+								select count(z.id) from form_anggota_manual_kortp as z 
+								join new_dpt as z1 on z.nik = z1.NIK
+								where z.pidx_korte = a.idx 
+							) as form_manual
+						')
+						// DB::raw('
+							// ( 
+								// select count(id) from form_vivi where pidx_korte = a.idx 
+							// ) as form_vivi
+						// ') 
+					)
+					->join('users as b', 'a.nik', '=', 'b.nik')
+					->join('tps as c','b.tps_id','=','c.id')
+					->where('a.village_id', $villageId)
+					->where('a.base', 'KORRT')
+					->orderBy('c.tps_number', 'asc') 
+					->get();
+					
+		return $sql;
+	}
 	
+	public function getRekapKortePerdesaForBiayaKecamatan($villageId)
+	{
+		$sql = DB::table('org_diagram_rt as a')
+					->select('b.id','b.name')
+					->join('users as b', 'a.nik', '=', 'b.nik')
+					->where('a.village_id', $villageId)
+					->where('a.base', 'KORRT')
+					->get();
+					
+		return $sql;
+	}
 	
 }

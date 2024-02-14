@@ -14,6 +14,7 @@ use App\Models\Regency;
 use App\Models\Village;
 use App\Models\District;
 use App\Models\Province;
+use App\Tps;
 use App\RightChosseVillage;
 use App\Exports\KorteExport;
 use App\KoordinatorTpsKorte;
@@ -3456,13 +3457,269 @@ class OrgDiagramController extends Controller
                 return $this->excel->download(new AnggotaBelumTercoverKortps($anggota, $village_id), 'ANGGOTA BELUM TERCOVER DS.' . $village->name . '.xls');
 
             return DB::select($sql);
-        }
-        else {
+        }elseif($request->report_type == 'Biaya Operasional Tim Desa'){
+			
+				$village_id      = $request->village_id;
+				$orgDiagramModel = new OrgDiagram();
+				$gF = new GlobalProvider();
+				
+				// get data kordes 
+				$abs_kordes = DB::table('org_diagram_village as a')
+					->select('a.name', 'a.title')
+					->join('users as b','a.nik','=','b.nik')
+					->where('a.village_id', $village_id)
+					->whereNotNull('a.nik')
+					->orderBy('a.level_org', 'asc')
+					->get();
+
+				// jika title ketua tidak ada maka tambahkan value array yang memiliki title kordes 
+				$kordes = [];
+				$cek_kordes = $this->searchArrayValue($abs_kordes, 'KETUA');
+				if ($cek_kordes == null) {
+
+					// membuat object baru dengan collection 
+					$array_value = collect([
+						(object)[
+							'name' => '',
+							'title' => 'KETUA'
+						]
+					]);
+
+					$sorted = $array_value->sortBy('name');
+					$sorted->values()->all();
+					$kordes = $sorted->merge($abs_kordes); // gabungkan object baru dengan collectiono yg ada 
+
+				}else{
+
+					$kordes = $abs_kordes;
+				}
+				
+				
+				$result_kordes = [];
+				foreach($kordes as $item){
+					$result_kordes[]=[
+						'name' => $item->name,
+						'title' => $item->title,
+						'biaya' => CountAnggaran::kordes()
+					];
+					
+				}
+				
+				$result_kordes_biaya = [];
+				
+			
+				foreach($kordes as $item){
+					if($item->name != ''){
+							$result_kordes_biaya[] =[
+							'biaya' => CountAnggaran::kordes()
+						];
+					}
+				}
+				
+				$jml_biaya_kordes = collect($result_kordes_biaya)->sum(function($q){
+					return $q['biaya'];
+				}); 
+				
+				$anggaran_kordes = count($result_kordes_biaya) * CountAnggaran::kordes();
+				
+			    $village  = Village::with(['district'])->where('id',$village_id)->first();
+				$korte    = $orgDiagramModel->getRekapKortePerdesa($village_id);
+				$no 	  = 1;
+				
+				$result_korte = [];
+				foreach($korte as $item){
+					$result_korte[] = [
+						'name' => $item->name,
+						'tps' => $item->tps_number, 
+						'anggota' => $item->anggota,
+						'form_manual' => $item->form_manual,
+						'jml_all_anggota' => $item->anggota + $item->form_manual,
+						'biaya' => CountAnggaran::korte(),
+					];
+				}
+				
+				// dd($result_korte);       
+			      
+				// total anggota 
+				$jml_anggota = collect($result_korte)->sum(function($q){
+					return $q['anggota'];
+				});
+				
+				// total form manual 
+				$jml_form_manual = collect($result_korte)->sum(function($q){
+					return $q['form_manual'];
+				});
+				
+				$jml_biaya_korte = collect($result_korte)->sum(function($q){
+					return $q['biaya'];
+				});
+				// $jml_biaya_korte = $gF->decimalFormat($jml_biaya_korte);
+				
+				$jml_all_anggota = $gF->decimalFormat($jml_anggota + $jml_form_manual);
+				
+				$jml_all_biaya = $gF->decimalFormat($jml_biaya_kordes+$jml_biaya_korte);
+				
+				$no = 1;
+				
+				$village = Village::with(['district'])->where('id', $village_id)->first();
+				 
+				$pdf = PDF::LoadView('pages.report.rekapbiayatimperdesa', compact('anggaran_kordes','jml_all_biaya','jml_all_anggota','result_korte','result_kordes','no','jml_anggota','jml_form_manual','jml_biaya_korte','village','gF'))->setPaper('a4');
+				return $pdf->download('BIAYA OPERASIONAL TIM DS.' . $village->name.' KEC.' . $village->district->name . '.pdf');
+			 
+		}elseif($request->report_type == 'Biaya Operasional Tim Kecamatan'){
+			
+			
+			$district_id = $request->district_id;
+			
+			$district = District::select('name')->where('id', $district_id)->first();
+			
+			// $abs_korcam = DB::table('org_diagram_district as a')
+					// ->select('a.name', 'a.title')
+					// ->join('users as b','a.nik','=','b.nik')
+					// ->where('a.district_id', $district_id)
+					// ->whereNotNull('a.nik') 
+					// ->orderBy('a.level_org', 'asc')
+					// ->get();
+					
+			
+			// $korcam_ketua = $this->searchArrayValueTimKorcam($abs_korcam, 'KETUA');
+			// $korcam_sekretaris = $this->searchArrayValueTimKorcam($abs_korcam, 'SEKRETARIS');
+			// $korcam_bendahara = $this->searchArrayValueTimKorcam($abs_korcam, 'BENDAHARA');
+			
+			// dd($korcam_bendahara);  
+
+			// get ketua korcam 
+			$korcam_ketua = DB::table('org_diagram_district as a')
+					->select('a.name', 'a.title')
+					->join('users as b','a.nik','=','b.nik')
+					->where('a.district_id', $district_id)
+					->whereNotNull('a.nik') 
+					->where('a.title','KETUA')
+					->get();
+			$biaya_ketua = count($korcam_ketua) * CountAnggaran::korcam();
+			
+					
+			$korcam_sekretaris = DB::table('org_diagram_district as a')
+					->select('a.name', 'a.title')
+					->join('users as b','a.nik','=','b.nik')
+					->where('a.district_id', $district_id)
+					->whereNotNull('a.nik') 
+					->where('a.title','SEKRETARIS')
+					->get();
+			$biaya_sekretaris = count($korcam_sekretaris) * CountAnggaran::korcam();
+					
+			$korcam_bendahara = DB::table('org_diagram_district as a')
+					->select('a.name', 'a.title')
+					->join('users as b','a.nik','=','b.nik')
+					->where('a.district_id', $district_id)
+					->whereNotNull('a.nik') 
+					->where('a.title','BENDAHARA') 
+					->get();
+			$biaya_bendahara = count($korcam_bendahara) * CountAnggaran::korcam();
+			
+			$biaya_korcam = $biaya_ketua + $biaya_sekretaris + $biaya_bendahara;
+			   
+			$orgDiagramModel = new OrgDiagram();
+			$tpsModel        = new Tps();
+			$gF = new GlobalProvider();
+			
+			$villages = DB::table('villages as a')
+					 ->select('a.id','a.name', 
+						DB::raw('
+							(
+								select count(a1.id) from org_diagram_village as a1
+								join users as a2 on a1.nik = a2.nik
+								where a1.village_id = a.id
+							) as kordes 
+						'),
+						DB::raw('
+							(
+								select count(b1.id) from tps as b1 where b1.village_id = a.id
+							) as tps 
+						')
+					 )
+					 ->where('a.district_id', $district_id)
+					 ->get();
+					 
+			
+			
+			$result_desa = [];
+			foreach($villages as $village){
+				// get biaya tim per desa : biaya kordes, biaya korte
+				// get jumlah kordes se kecamatan
+				
+				// get jumlah korte per desa
+				$korte    = $orgDiagramModel->getRekapKortePerdesaForBiayaKecamatan($village->id);
+				
+				// $result_korte = [];
+				// foreach($korte as $item){
+					// $result_korte[] = [
+						// 'biaya' => CountAnggaran::korte(),
+					// ]; 
+				// }
+				
+				// $jml_biaya_korte = collect($result_korte)->sum(function($q){
+					// return $q['biaya'];
+				// });
+				
+				$biaya_kordes = $village->kordes * CountAnggaran::kordes();
+				$biaya_korte  = count($korte) * CountAnggaran::korte();
+				
+				$result_desa[] = [
+					'id' => $village->id,
+					'desa' => $village->name,
+					'jml_tps' => $village->tps,
+					'jml_kordes' => $village->kordes,
+					'biaya_kordes'  => $biaya_kordes,
+					'jml_korte'     => count($korte),
+					'biaya_korte'   => $biaya_korte,
+					'total_biaya'   => $biaya_kordes + $biaya_korte
+				]; 
+			}
+						 
+			// dd($result_desa);
+			$no = 1;
+			usort($result_desa,function($a, $b){
+				return $a['jml_korte'] < $b['jml_korte']; 
+			});
+		
+			 
+			$jml_tps = collect($result_desa)->sum(function($q){
+				return $q['jml_tps'];
+			});
+			
+			$jml_kordes = collect($result_desa)->sum(function($q){
+				return $q['jml_kordes'];
+			});
+			
+			$jml_biaya_kordes = collect($result_desa)->sum(function($q){
+				return $q['biaya_kordes'];
+			});
+			
+			$jml_korte = collect($result_desa)->sum(function($q){
+				return $q['jml_korte'];
+			});
+			
+			$total_biaya = collect($result_desa)->sum(function($q){
+				return $q['total_biaya'];
+			});
+			
+			$total_all_biaya = $total_biaya + $biaya_korcam;
+			
+			$pdf = PDF::LoadView('pages.report.rekapbiayatimperkecamatan', compact('total_all_biaya','biaya_korcam','biaya_bendahara','biaya_sekretaris','biaya_ketua','korcam_bendahara','korcam_sekretaris','korcam_ketua','total_biaya','jml_korte','jml_biaya_kordes','jml_kordes','jml_tps','no','result_desa','gF','district'))->setPaper('a4');
+			return $pdf->stream('BIAYA OPERASIONAL TIM KEC. '.$district->name.'.pdf');
+			
+		}elseif($request->report_type == 'Biaya Operasional Tim Dapil'){
+			
+			return 'Biaya Operasional Tim Dapil';
+			
+		}else {
             #report by desa 
 
             return $this->excel->download(new KorteExport($village_id), 'TIM KOORDINATOR RT ' . $village->name . '.xls');
         }
     }
+	
 
     public function searchArrayValue($data, $field)
     {
@@ -4314,11 +4571,16 @@ class OrgDiagramController extends Controller
                 'form_vivi'    => $val->form_vivi,
                 'form_manual_vivi'    => $val->form_manual_vivi,
                 'pelapis'    => $val->pelapis,
+                'hasil_suara'    => $val->hasil_suara,
                 'saksi'    => $val->saksi,
             ];
         }
 
         $dapils          = $results;
+		
+		$jml_hasil_suara = collect($dapils)->sum(function($q){
+            return $q['hasil_suara'];
+        });
 		
 		$jml_pelapis = collect($dapils)->sum(function($q){
             return $q['pelapis'];
@@ -4389,13 +4651,13 @@ class OrgDiagramController extends Controller
 		
 		$jml_form_vivi  = collect($data)->sum(function($q){
             return $q->form_vivi;
-        });
+        }); 
 		
 		$jml_form_manual_vivi = collect($data)->sum(function($q){
             return $q->form_manual_vivi;
         });
-
-        return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('jml_pelapis','jml_form_manual_vivi','jml_form_vivi','jml_form_manual','jml_saksi','jml_kurang_korte','jml_tps','persentage_target','jml_blm_ada_korte','jml_anggota_tercover','jml_korte_terisi','jml_target_korte','jml_dpt','jml_ketua','jml_sekretaris','jml_bendahara','dapils','no','gF','jml_target','jml_anggota'));
+ 
+        return view('pages.admin.strukturorg.rt.daftartim.dapil', compact('jml_hasil_suara','jml_pelapis','jml_form_manual_vivi','jml_form_vivi','jml_form_manual','jml_saksi','jml_kurang_korte','jml_tps','persentage_target','jml_blm_ada_korte','jml_anggota_tercover','jml_korte_terisi','jml_target_korte','jml_dpt','jml_ketua','jml_sekretaris','jml_bendahara','dapils','no','gF','jml_target','jml_anggota'));
 
     } 
 
@@ -4408,6 +4670,10 @@ class OrgDiagramController extends Controller
         $orgDiagramModel = new OrgDiagram();
         $data            = $orgDiagramModel->getDataDaftarTimByDapil($dapilId);
         // dd($data);   
+		
+		$jml_hasil_suara = collect($data)->sum(function($q){
+            return $q->hasil_suara;
+        });
 		
 		$jml_pelapis = collect($data)->sum(function($q){
             return $q->pelapis;
@@ -4505,7 +4771,7 @@ class OrgDiagramController extends Controller
             return $q->tps;
         }); 
 
-        return view('pages.admin.strukturorg.rt.daftartim.district', compact('jml_pelapis','jml_form_manual_vivi','jml_form_vivi','jml_form_manual','jml_tps','persen_dari_target_kab','dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','gF','jml_saksi','jml_target_kortps','kortps_plus_minus'));
+        return view('pages.admin.strukturorg.rt.daftartim.district', compact('jml_hasil_suara','jml_pelapis','jml_form_manual_vivi','jml_form_vivi','jml_form_manual','jml_tps','persen_dari_target_kab','dapil','no','data','jml_ketua','jml_sekretaris','jml_bendahara','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','gF','jml_saksi','jml_target_kortps','kortps_plus_minus'));
 
     }
 
@@ -4520,6 +4786,10 @@ class OrgDiagramController extends Controller
 		
 		$jml_pelapis = collect($data)->sum(function($q){
             return $q->pelapis;
+        });
+		
+		$jml_hasil_suara = collect($data)->sum(function($q){
+            return $q->hasil_suara;
         });
         
 		
@@ -4592,7 +4862,7 @@ class OrgDiagramController extends Controller
         $kortps_plus_minus = $jml_target_korte -  $jml_korte_terisi;
         // dd($kortps_plus_minus);
 
-        return view('pages.admin.strukturorg.rt.daftartim.village', compact('jml_pelapis','jml_form_manual_vivi','jml_form_vivi','jml_tps','persen_dari_target_kec','gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi','kortps_plus_minus','jml_form_manual'));
+        return view('pages.admin.strukturorg.rt.daftartim.village', compact('jml_hasil_suara','jml_pelapis','jml_form_manual_vivi','jml_form_vivi','jml_tps','persen_dari_target_kec','gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi','kortps_plus_minus','jml_form_manual'));
     }
 
     public function deleteDataAnggotaByKortpsForFamillyGroup(){
@@ -4905,5 +5175,14 @@ class OrgDiagramController extends Controller
         return 'OK';
 
     }
+	public function searchArrayValueTimKorcam($data, $field)
+    {
+
+        foreach ($data as $row) {
+            if ($row->title == $field)
+             return $row->name;
+        }
+    }
+
 
 }

@@ -93,7 +93,12 @@ class Tps extends Model
 									where a5.base = 'ANGGOTA' and a5.village_id = a.id 
 								)
 							) as jml_all_anggota 
-						")
+						"),
+						DB::raw('
+							(
+								SELECT COUNT(sp.id) from dpt_kpu as sp WHERE sp.village_id = a.id
+							) as dpt
+						')
 				   )  
 				   ->where('a.district_id', $request->district_id)
 				   ->get();
@@ -124,6 +129,48 @@ class Tps extends Model
 					")
 				)
 				->where('a.village_id', $request->village_id)
+				->get();
+				
+		return $sql;
+	}
+	
+	public function getRekapBiayaSaksiPerDesa($village_id)
+	{
+		$sql = DB::table('tps as a')
+				->select('a.id','a.tps_number',
+					DB::raw("
+						(
+							SELECT COUNT(a1.id) from witnesses as a1 
+							WHERE a1.tps_id = a.id 
+							and a1.status = 'saksi dalam'
+						) as saksi_dalam
+					"),
+					DB::raw("
+						(
+							SELECT COUNT(a4.id) from org_diagram_rt as a4 
+							join users as a5 on  a4.nik = a5.nik
+							join tps as a6 on a5.tps_id = a6.id
+							WHERE a4.base = 'KORRT' and a4.village_id = a.village_id  and a5.tps_id = a.id
+						) as korte   
+					")
+				)
+				->where('a.village_id', $village_id)
+				->get();
+				
+		return $sql;
+	}
+	
+	public function getRekapBiayaSaksiPerKecamatan($request)   
+	{
+		$sql = DB::table('villages as a')
+				->select('a.id','a.name',
+					DB::raw('
+						(
+							select count(c1.id) from tps as c1 where c1.village_id = a.id
+						) as tps
+					')
+				)
+				->where('a.district_id', $request->district_id)
 				->get();
 				
 		return $sql;

@@ -126,7 +126,7 @@ class AnggaranTimRekapDapilSheet implements FromCollection, WithHeadings,WithTit
                 ), $event); 
 				
 				$event->sheet->appendRows(array(
-                    array('','NOMINAL',$gf->decimalFormat($sum_korcam * CountAnggaran::korcam()),$gf->decimalFormat($sum_kordes * CountAnggaran::kordes()),$gf->decimalFormat($sum_korte * CountAnggaran::korte())),
+                    array('','NOMINAL',$sum_korcam * CountAnggaran::korcam(),$sum_kordes * CountAnggaran::kordes(),$sum_korte * CountAnggaran::korte()),
                 ), $event); 
 				 
             }

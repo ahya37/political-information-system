@@ -2,7 +2,7 @@
     <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>REKAP SAKSI KECAMATAN {{$district->name}}</title>
+        <title>BIAYA OPERASIONAL SAKSI DESA {{$village->name}}</title>
     </head>
     <style>
             /** Define the margins of your page **/
@@ -119,59 +119,39 @@
 <body>
     <header>
     {{-- <img src="{{asset('assets/images/kopsurataaw.png')}}" width="800" style="margin-top:5px"> --}}
-    <h4 style="margin-top:8px;border-color:#34495e" class="fonts">REKAP SAKSI KECAMATAN {{$district->name}}</h4> 
+    <h4 style="margin-top:8px;border-color:#34495e" class="fonts">BIAYA OPERASIONAL SAKSI DESA {{$village->name}}</h4> 
 	<hr style="border:2px;margin-top:-15px"> 
     </header> 
 	<section >
             <table cellspacing='0' id="table">
                 <thead>
                     <tr>
-                        <th style="padding:1px" rowspan="2">NO</th>
-                        <th rowspan="2">DESA</th>
-                        <th rowspan="2">TPS</th>
-                        <th colspan="2">SAKSI</th>
-                        <th rowspan="2">KORTE</th>
-						<th colspan="3">ANGGOTA</th>
-						<th rowspan="2">DPT</th>
+                        <th style="padding:0.5px">NO</th>
+                        <th>TPS</th>
+                        <th>SAKSI</th>
+                        <th>KORTE</th>
+                        <th>BIAYA OPERASIONAL</th>
                     </tr>
-					<tr>
-						<th>DALAM</th>
-						<th>LUAR</th>
-						<th>KTA</th>
-						<th>MANUAL</th>
-						<th>JUMLAH</th>
-					</tr>
                 </thead>
                 <tbody>
-					@foreach($saksi as $item)
+					@foreach($results as $item)
 						<tr>
 							<td align="center">{{$no++}}</td> 
-							<td>{{$item->name}}</td> 
-							<td align="center">{{$item->tps}}</td> 
-							<td align="center">{{$item->saksi_dalam}}</td> 
-							<td align="center">{{$item->saksi_luar}}</td> 
-							<td align="center">{{$item->korte}}</td>
-							<td align="center">{{$gF->decimalFormat($item->anggota)}}</td>
-							<td align="center">{{$gF->decimalFormat($item->form_manual)}}</td>
-							<td align="center">{{$gF->decimalFormat($item->jml_all_anggota)}}</td>					
-							<td align="center">{{$gF->decimalFormat($item->dpt)}}</td>					
+							<td align="center">{{$item['tps_number']}}</td> 
+							<td align="center">{{$item['saksi_dalam']}}</td> 
+							<td align="center">{{$item['korte']}}</td> 
+							<td align="right" style="padding-right:3px">Rp {{$gF->decimalFormat($item['biaya_saksi_dalam'])}}</td> 
 						</tr>
-					@endforeach()
+					@endforeach() 
 					<tr>
-						<td colspan="2" align="center"><b>JUMLAH</b></td>
-						<td align="center"><b>{{$gF->decimalFormat($jml_tps)}}</b></td> 
-						<td align="center"><b>{{$gF->decimalFormat($jml_saksi_dalam)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_saksi_luar)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_korte)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_anggota_kta)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_anggota_form_manual)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_anggota_all)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_dpt)}}</b></td>  
+						<td colspan="2" align="right" style="padding-right:3px"><b>JUMLAH</b></td>  
+						<td align="center"><b>{{$jml_saksi_dalam}}</b></td>
+						<td align="center"><b>{{$jml_korte}}</b></td>
+						<td align="right" style="padding-right:3px"><b>Rp {{$gF->decimalFormat($jml_biaya_all_saksi)}}</b></td>
 					</tr>
-				</tbody>
+				</tbody> 
             </table>
         </section>
-		
         <footer></footer>
-</body>
+</body> 
 </html>

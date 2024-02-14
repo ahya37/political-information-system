@@ -60,9 +60,9 @@
 	<script src="{{ asset('sip/assets/js/jquery.min.js') }}"></script>
 	<script src="{{ asset('sip/assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
 	<script src="{{ asset('sip/assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
-	<script src="{{ asset('sip/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
+	<!--<script src="{{ asset('sip/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
 	<!--app JS-->
-	<script src="{{ asset('sip/assets/js/app.js') }}"></script>
+	
 	
   @stack('scripts')
 

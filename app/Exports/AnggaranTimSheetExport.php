@@ -109,7 +109,7 @@ class AnggaranTimSheetExport implements FromCollection, WithHeadings,WithTitle,W
                 ), $event); 
 				
 				$event->sheet->appendRows(array(
-                    array('','NOMINAL',$gf->decimalFormat($sum_kordes * CountAnggaran::kordes()),$gf->decimalFormat($sum_korte * CountAnggaran::korte())),
+                    array('','NOMINAL',$sum_kordes * CountAnggaran::kordes(),$sum_korte * CountAnggaran::korte()),
                 ), $event); 
 				
             }  

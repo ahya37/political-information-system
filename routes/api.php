@@ -475,3 +475,8 @@ Route::post('event/sapaanggota/jumlahtitik/update','Admin\EventController@update
 
 
 Route::post('doc/keluarhaserumah/calculate','Admin\DocumentController@kalkulasiKeluargaSerumahPerKecamatan');
+
+Route::post('doc/dpt/duplikat','Admin\DocumentController@getDataDuplikatNikDpt');
+
+#dashboard SIP
+Route::get('sip/dapil', 'Admin\SipController@getSipDapil');

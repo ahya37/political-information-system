@@ -83,12 +83,13 @@
                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Download Saksi" name="report_type">
                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Rekap Saksi Per Kecamatan" name="report_type">
                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Rekap Saksi Per Desa" name="report_type"> 
+                                    <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Biaya Saksi Per Desa" name="report_type"> 
+                                    <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Biaya Saksi Per Kecamatan" name="report_type"> 
                                 </div>
-                            </div>
+                            </div> 
                         </div>
                 </div>
             </form>
-
                 <div class="row mt-4">
                     <div class="col-md-12 col-sm-12">
                                 <table id="data" class="table table-sm table-striped" width="100%">

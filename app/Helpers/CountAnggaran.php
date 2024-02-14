@@ -14,12 +14,17 @@ class CountAnggaran
 	
 	public static function kordes(){
 		
-		return 150000;
+		return 200000;
     }
 	
 	public static function korte(){
 		
-		return 50000; 
+		return 100000; 
+    }
+	
+	public static function saksi(){
+		
+		return 200000; 
     }
 	
 	

@@ -10,8 +10,14 @@ class SipController extends Controller
     // dashbbord all level
     public function dashboard()
     {
-        return view('pages.sip.dashboard.all');
+		return 'UNDER MAINTENANCE';
+        return view('pages.sip.dashboard.dapil');
     }
+	
+	public function getSipDapil()
+	{
+		
+	}
 	
 	public function getDataGrafikLevelAll()
 	{

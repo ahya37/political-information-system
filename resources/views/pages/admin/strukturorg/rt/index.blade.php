@@ -100,6 +100,9 @@
                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit"
                                         value="Download Surat Undangan Kor TPS Per Desa PDF" name="report_type">
                                      <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Download Anggota Belum Tercover Per Desa" name="report_type">
+                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Biaya Operasional Tim Desa" name="report_type">
+                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Biaya Operasional Tim Kecamatan" name="report_type">
+                                     <input class="btn btn-sm  mt-2 dropdown-item" type="submit" value="Biaya Operasional Tim Dapil" name="report_type">
 
                                 </div>
                             </div>

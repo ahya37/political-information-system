@@ -2,7 +2,7 @@
     <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>REKAP SAKSI KECAMATAN {{$district->name}}</title>
+        <title>BIAYA OPERASIONAL TIM DESA {{$village->name ?? ''}}</title>
     </head>
     <style>
             /** Define the margins of your page **/
@@ -10,7 +10,7 @@
                 margin: 100px 50px;
                 height: 100%; 
             }
-
+ 
             header {
                 position: absolute;
                 top: -100px;
@@ -74,7 +74,7 @@
                 cellspacing:0; 
                 margin-top:-28px;
                 font-size: 12px;
-				width:45%;
+				width:60%; 
 				font-style:'bold'; 
 				
             }
@@ -119,54 +119,48 @@
 <body>
     <header>
     {{-- <img src="{{asset('assets/images/kopsurataaw.png')}}" width="800" style="margin-top:5px"> --}}
-    <h4 style="margin-top:8px;border-color:#34495e" class="fonts">REKAP SAKSI KECAMATAN {{$district->name}}</h4> 
+    <h4 style="margin-top:8px;border-color:#34495e" class="fonts">BIAYA OPERASIONAL TIM DESA {{$village->name ?? ''}}</h4> 
 	<hr style="border:2px;margin-top:-15px"> 
     </header> 
+		 <table id="table1">
+			@foreach($result_kordes as $korde)
+				<tr class="fonts" style="font-size:12px">
+					<b><td>{{$korde['title']}}</td><td> : </td><td>{{$korde['name']}}</td></b> 
+				</tr>
+			@endforeach
+			<tr>
+				<td>BIAYA OPERASIONAL</td><td> : </td><td>Rp {{$gF->decimalFormat($anggaran_kordes)}}</td>
+			</tr>
+	</table>
 	<section >
             <table cellspacing='0' id="table">
                 <thead>
                     <tr>
-                        <th style="padding:1px" rowspan="2">NO</th>
-                        <th rowspan="2">DESA</th>
-                        <th rowspan="2">TPS</th>
-                        <th colspan="2">SAKSI</th>
-                        <th rowspan="2">KORTE</th>
-						<th colspan="3">ANGGOTA</th>
-						<th rowspan="2">DPT</th>
+                        <th style="padding:1px">NO</th>
+                        <th>NAMA</th>
+                        <th>TPS</th>
+                        <th>ANGGOTA</th>
+                        <th>BIAYA OPERASIONAL</th>
                     </tr>
-					<tr>
-						<th>DALAM</th>
-						<th>LUAR</th>
-						<th>KTA</th>
-						<th>MANUAL</th>
-						<th>JUMLAH</th>
-					</tr>
                 </thead>
                 <tbody>
-					@foreach($saksi as $item)
+					@foreach($result_korte as $item)
 						<tr>
-							<td align="center">{{$no++}}</td> 
-							<td>{{$item->name}}</td> 
-							<td align="center">{{$item->tps}}</td> 
-							<td align="center">{{$item->saksi_dalam}}</td> 
-							<td align="center">{{$item->saksi_luar}}</td> 
-							<td align="center">{{$item->korte}}</td>
-							<td align="center">{{$gF->decimalFormat($item->anggota)}}</td>
-							<td align="center">{{$gF->decimalFormat($item->form_manual)}}</td>
-							<td align="center">{{$gF->decimalFormat($item->jml_all_anggota)}}</td>					
-							<td align="center">{{$gF->decimalFormat($item->dpt)}}</td>					
+							<td align="center">{{$no++}}</td>
+							<td>{{$item['name']}}</td>
+							<td align="center">{{$item['tps']}}</td>
+							<td align="center">{{$item['jml_all_anggota']}}</td>
+							<td align="right" style="padding-right:3px">Rp {{$gF->decimalFormat($item['biaya'])}}</td>
 						</tr>
-					@endforeach()
+					@endforeach
 					<tr>
-						<td colspan="2" align="center"><b>JUMLAH</b></td>
-						<td align="center"><b>{{$gF->decimalFormat($jml_tps)}}</b></td> 
-						<td align="center"><b>{{$gF->decimalFormat($jml_saksi_dalam)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_saksi_luar)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_korte)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_anggota_kta)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_anggota_form_manual)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_anggota_all)}}</b></td>  
-						<td align="center"><b>{{$gF->decimalFormat($jml_dpt)}}</b></td>  
+						<td colspan="3" align="right" style="padding-right:3px"><b>JUMLAH</b></td>  
+						<td align="center"><b>{{$jml_all_anggota}}</b></td>
+						<td align="right" style="padding-right:3px"><b>Rp {{$gF->decimalFormat($jml_biaya_korte)}}</b></td>
+					</tr>
+					<tr>
+						<td colspan="3" align="right" style="padding-right:3px"><b>TOTAL BIAYA</b></td>  
+						<td colspan="2" align="right" style="padding-right:3px"><b>Rp {{$jml_all_biaya}}</b></td>
 					</tr>
 				</tbody>
             </table>
