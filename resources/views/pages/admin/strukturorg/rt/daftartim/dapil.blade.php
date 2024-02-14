@@ -47,6 +47,8 @@
 										 <th align="center">FORM MANUAL VIVI</th>
 										 <th align="center">PELAPIS</th>
 										 <th align="center">HASIL SUARA</th>
+										  <th align="center">TPS TERISI SUARA</th>
+										    <th align="center">TPS BELUM TERISI SUARA</th>
                                         <th align="center">BELUM ADA KORTPS</th>
                                         <th align="center">SAKSI</th>
                                         <th align="center">OPSI</th>
@@ -87,6 +89,8 @@
                                                 <td align="center">{{ $gF->decimalFormat($item['form_manual_vivi']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item['pelapis']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item['hasil_suara']) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item['tps_terisi_suara']) }}</td>
+                                                <td align="center">{{ $gF->decimalFormat($item['tps_belum_terisi_suara']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item['belum_tercover_kortps']) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item['saksi']) }}</td>
                                                 <td align="center">
@@ -126,6 +130,8 @@
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_form_manual_vivi) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_pelapis) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_hasil_suara) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_tps_terisi_suara) }}</b></td>
+                                        <td align="center"><b>{{ $gF->decimalFormat($jml_tps_belum_terisi_suara) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_blm_ada_korte) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_saksi) }}</b></td>
                                         <td align="center"><b></b></td>

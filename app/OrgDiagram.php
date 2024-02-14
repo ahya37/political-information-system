@@ -444,7 +444,13 @@ class OrgDiagram extends Model
 			) as pelapis,
 			(
 				select SUM(tp.hasil_suara) from tps as tp WHERE tp.village_id = a.id 
-			) as hasil_suara
+			) as hasil_suara,
+			(
+				SELECT COUNT(tp2.id) from tps as tp2 where tp2.village_id = a.id and tp2.hasil_suara > 0
+			) tps_terisi_suara,
+			(
+				SELECT COUNT(tp3.id) from tps as tp3 where tp3.village_id = a.id and tp3.hasil_suara = 0
+			) tps_belum_terisi_suara
 			from villages as a
 			WHERE a.district_id = $districtId order by (SELECT COUNT(users.id) from users join villages on users.village_id = villages.id  WHERE villages.id = a.id) desc";
          
@@ -571,7 +577,18 @@ class OrgDiagram extends Model
 						join dapil_areas as tp1 on tp.district_id = tp1.district_id 
 						WHERE tp1.dapil_id = a.id
 						
-					) as hasil_suara 
+					) as hasil_suara,
+					(
+						select count(tp2.hasil_suara) from tps as tp2 
+						join dapil_areas as tp3 on tp2.district_id = tp3.district_id 
+						WHERE tp3.dapil_id = a.id and tp2.hasil_suara > 0
+						
+					) as tps_terisi_suara,
+					(
+						select count(tp4.hasil_suara) from tps as tp4 
+						join dapil_areas as tp5 on tp4.district_id = tp5.district_id 
+						WHERE tp5.dapil_id = a.id and tp4.hasil_suara = 0
+					) as tps_belum_terisi_suara					
 					from dapils as a
 					where a.regency_id = $regencyId";
 
@@ -711,9 +728,15 @@ class OrgDiagram extends Model
 				) as pelapis,
 				(
 					select SUM(tp.hasil_suara) from tps as tp WHERE tp.district_id = a.district_id
-				) as hasil_suara
-				from dapil_areas as a
-				join districts as b on a.district_id = b.id
+				) as hasil_suara,
+				(
+					select count(tp2.id) from tps as tp2 WHERE tp2.district_id = a.district_id and tp2.hasil_suara > 0
+				) as tps_terisi_suara,
+				(
+					select count(tp3.id) from tps as tp3 WHERE tp3.district_id = a.district_id and tp3.hasil_suara = 0
+				) as tps_belum_terisi_suara
+				from dapil_areas as a 
+				join districts as b on a.district_id = b.id 
 				where a.dapil_id = $dapilId order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";
         
         return DB::select($sql);
