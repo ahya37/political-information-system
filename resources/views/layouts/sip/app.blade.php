@@ -36,10 +36,10 @@
 
 <body>
 
-	<!--wrapper-->
+	<!--wrapper--> 
 	<div class="wrapper">
 		
-    {{-- @include('layouts.sip.navbar') --}}
+    {{-- @include('layouts.sip.navbar') --}} 
    
 	{{-- @include('layouts.sidebar') --}}
 		

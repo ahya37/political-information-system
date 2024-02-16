@@ -479,4 +479,4 @@ Route::post('doc/keluarhaserumah/calculate','Admin\DocumentController@kalkulasiK
 Route::post('doc/dpt/duplikat','Admin\DocumentController@getDataDuplikatNikDpt');
 
 #dashboard SIP
-Route::get('sip/dapil', 'Admin\SipController@getSipDapil');
+Route::post('sip/regency', 'Admin\SipController@getSipRegency');

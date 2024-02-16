@@ -446,6 +446,9 @@ class OrgDiagram extends Model
 				select SUM(tp.hasil_suara) from tps as tp WHERE tp.village_id = a.id 
 			) as hasil_suara,
 			(
+				select SUM(tpv.hasil_suara_vivi) from tps as tpv WHERE tpv.village_id = a.id 
+			) as hasil_suara_vivi,
+			(
 				SELECT COUNT(tp2.id) from tps as tp2 where tp2.village_id = a.id and tp2.hasil_suara > 0
 			) tps_terisi_suara,
 			(
@@ -454,7 +457,7 @@ class OrgDiagram extends Model
 			from villages as a
 			WHERE a.district_id = $districtId order by (SELECT COUNT(users.id) from users join villages on users.village_id = villages.id  WHERE villages.id = a.id) desc";
          
-        return DB::select($sql); 
+        return DB::select($sql);  
 	}
 
 
@@ -579,6 +582,12 @@ class OrgDiagram extends Model
 						
 					) as hasil_suara,
 					(
+						select SUM(tpv.hasil_suara_vivi) from tps as tpv 
+						join dapil_areas as tp1 on tpv.district_id = tp1.district_id 
+						WHERE tp1.dapil_id = a.id
+						
+					) as hasil_suara_vivi,
+					(
 						select count(tp2.hasil_suara) from tps as tp2 
 						join dapil_areas as tp3 on tp2.district_id = tp3.district_id 
 						WHERE tp3.dapil_id = a.id and tp2.hasil_suara > 0
@@ -589,6 +598,53 @@ class OrgDiagram extends Model
 						join dapil_areas as tp5 on tp4.district_id = tp5.district_id 
 						WHERE tp5.dapil_id = a.id and tp4.hasil_suara = 0
 					) as tps_belum_terisi_suara					
+					from dapils as a
+					where a.regency_id = $regencyId";
+
+		return DB::select($sql);
+
+	}
+	
+	public function getDataSipByRegency($regencyId){
+
+		$sql = "SELECT a.id, a.name,
+					(
+						SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id
+						join dapil_areas as a4 on a2.district_id = a4.district_id where a4.dapil_id = a.id
+					) as anggota,
+					(
+						SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik join dapil_areas as da6 on da4.district_id = da6.district_id
+						where da4.base = 'ANGGOTA' and da6.dapil_id = a.id
+					) as anggota_tercover_kortps,
+					(
+						select count(j.nik) from form_anggota_manual_kortp as j join 
+						org_diagram_rt h on j.pidx_korte  = h.idx
+						join users as k on h.nik = k.nik
+						join dapil_areas as p on h.district_id = p.district_id
+						where p.dapil_id = a.id
+					) as form_manual,
+					(
+						select count(ap.id) from anggota_pelapis as ap
+						join dapil_areas as ap1 on ap.district_id = ap1.district_id
+						where ap1.dapil_id = a.id
+					) as pelapis,					
+					(
+						select SUM(tp.hasil_suara) from tps as tp 
+						join dapil_areas as tp1 on tp.district_id = tp1.district_id 
+						WHERE tp1.dapil_id = a.id
+						
+					) as hasil_suara,
+					(
+						select count(tp2.hasil_suara) from tps as tp2 
+						join dapil_areas as tp3 on tp2.district_id = tp3.district_id 
+						WHERE tp3.dapil_id = a.id and tp2.hasil_suara > 0
+						
+					) as tps_terisi_suara,
+					(	
+						SELECT sum(z.peserta_kunjungan) from villages as z
+						join dapil_areas as z1 on z.district_id = z1.district_id 
+						WHERE z1.dapil_id = a.id 
+					) as peserta_kunjungan				
 					from dapils as a
 					where a.regency_id = $regencyId";
 
@@ -729,6 +785,9 @@ class OrgDiagram extends Model
 				(
 					select SUM(tp.hasil_suara) from tps as tp WHERE tp.district_id = a.district_id
 				) as hasil_suara,
+				(
+					select SUM(tpv.hasil_suara_vivi) from tps as tpv WHERE tpv.district_id = a.district_id
+				) as hasil_suara_vivi, 
 				(
 					select count(tp2.id) from tps as tp2 WHERE tp2.district_id = a.district_id and tp2.hasil_suara > 0
 				) as tps_terisi_suara,

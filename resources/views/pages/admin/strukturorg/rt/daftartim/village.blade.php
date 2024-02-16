@@ -50,6 +50,7 @@
 										 <th align="center">HASIL SUARA</th>
 										 <th align="center">TPS TERISI SUARA</th>
 										 <th align="center">TPS BELUM TERISI SUARA</th>
+										 <th align="center">HASIL SUARA VIVI</th>
                                         <th align="center">BELUM ADA KORTPS</th>
                                         <th align="center">SAKSI</th>
                                         
@@ -107,6 +108,7 @@
 												 <td align="center">{{ $gF->decimalFormat($item->hasil_suara) }}</td>
 												 <td align="center">{{ $gF->decimalFormat($item->tps_terisi_suara) }}</td>
 												 <td align="center">{{ $gF->decimalFormat($item->tps_belum_terisi_suara) }}</td>
+												 <td align="center">{{ $gF->decimalFormat($item->hasil_suara_vivi) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->belum_ada_korte) }}</td>
                                                 <td align="center">{{ $gF->decimalFormat($item->saksi) }}</td>
                                             </tr>
@@ -137,6 +139,7 @@
 										<td align="center"><b>{{ $gF->decimalFormat($jml_hasil_suara) }}</b></td>
 										<td align="center"><b>{{ $gF->decimalFormat($jml_tps_terisi_suara) }}</b></td>
 										<td align="center"><b>{{ $gF->decimalFormat($jml_tps_belum_terisi_suara) }}</b></td>
+										<td align="center"><b>{{ $gF->decimalFormat($jml_hasil_suara_vivi) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_blm_ada_korte) }}</b></td>
                                         <td align="center"><b>{{ $gF->decimalFormat($jml_saksi) }}</b></td>
                                       </tr>

@@ -11,7 +11,7 @@
 		{{-- <a href="{{ route('admin-sip-dashboard') }}"
             class="list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/sip*') ? 'active custom-active-color' : '' }}">
             Perolehan Suara
-        </a>--}}
+        </a> --}}
 
         <a class="nav-link nav-link-cs collapsed text-truncate list-group-item custom-sidebar list-group-item-action custom-active-color {{ request()->is('admin/struktur*') ? 'active custom-active-color ' : '' }}"
             href="#org" data-toggle="collapse" data-target="#org">
