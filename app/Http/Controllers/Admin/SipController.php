@@ -103,7 +103,6 @@ class SipController extends Controller
             $chart_sip['label'][] = $val->name;
             $chart_sip['anggota'][] = $val->anggota_tercover_kortps + $val->form_manual + $val->pelapis;  
 			$chart_sip['suara'][] = $val->hasil_suara;   
-			$chart_sip['urls'][] = route('admin-sip-dashboard-dapil',$val->id);
         }
 		 
 		$chartData = array(
@@ -111,13 +110,11 @@ class SipController extends Controller
 			"datasets" => array(
 				array(
 					"label" => "Suara",
-					"data" => $chart_sip['suara'],  
-					"urls" => $chart_sip['urls'] 
+					"data" => $chart_sip['suara'],
 				),
 				array(
 					"label" => "Anggota",
 					"data" => $chart_sip['anggota'],
-					"urls" => $chart_sip['urls'] 
 				),
 			)
 		);

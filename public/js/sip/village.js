@@ -68,14 +68,7 @@ function getSipGrafikRegencyUi(results){
 							  min: 0 
 							}  
 							}
-					},
-					onClick: (event, chartElement) => {
-						if(chartElement.length > 0){
-							const index = chartElement[0].index;
-							const url = data.datasets[0].urls[index];  
-							window.open(url,'_blank');
-						}
-					}  
+					}
 				}
 	}
 	
