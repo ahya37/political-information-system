@@ -1,9 +1,13 @@
 // Data for the bar graph
-const query = document.URL;
-const dapilId = query.substring(query.lastIndexOf("/") + 1);
-console.log(dapilId) 
+
 function getSipDataRegency(){
-	return fetch(`/api/sip/dapil/${dapilId}`).then((response) => { 
+	return fetch("/api/sip/regency",{
+			method: 'POST',
+			headers: {
+			  'Accept': 'application/json',
+			  'Content-Type': 'application/json'
+			},  
+		}).then((response) => { 
                 if (!response.ok) {
                     throw new Error(response.statusText);
                 }

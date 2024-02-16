@@ -1,9 +1,8 @@
 // Data for the bar graph
 const query = document.URL;
-const dapilId = query.substring(query.lastIndexOf("/") + 1);
-console.log(dapilId) 
+const dapil = query.substring(query.lastIndexOf("/") + 1);
 function getSipDataRegency(){
-	return fetch(`/api/sip/dapil/${dapilId}`).then((response) => { 
+	return fetch(`/api/sip/dapil/${dapil}`).then((response) => { 
                 if (!response.ok) {
                     throw new Error(response.statusText);
                 }
@@ -14,7 +13,7 @@ function getSipDataRegency(){
                     throw new Error(response.Error);
                 }
                 return response;
-    });
+    }); 
 }
 
 async function getSipGrafikRegency(){

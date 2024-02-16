@@ -480,3 +480,5 @@ Route::post('doc/dpt/duplikat','Admin\DocumentController@getDataDuplikatNikDpt')
 
 #dashboard SIP
 Route::post('sip/regency', 'Admin\SipController@getSipRegency');
+Route::get('sip/dapil/{dapilid}', 'Admin\SipController@getSipDapil');
+Route::get('sip/district/{dapilid}', 'Admin\SipController@getSipDistrict');

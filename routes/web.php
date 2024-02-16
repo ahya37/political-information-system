@@ -651,7 +651,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
         
         #DASHBOARD PEROLEHAN SUARA
         Route::group(['prefix' => 'sip'], function(){
-            Route::get('dashboard','SipController@dashboard')->name('admin-sip-dashboard');
+            Route::get('dashboard','SipController@dashboard')->name('admin-sip-dashboard-regency');
+            Route::get('dashboard/dapil/{dapilid}','SipController@dashboardDapil')->name('admin-sip-dashboard-dapil');
+            Route::get('dashboard/district/{districId}','SipController@dashboardKecamatan')->name('admin-sip-dashboard-district');
         });
 		
     });

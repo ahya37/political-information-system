@@ -53,7 +53,7 @@ class DashboardController extends Controller
                         $persentage = ($item->realisasi_member / $item->target_member)*100;
                         $persentage = $gF->persen($persentage);
                         $persentageWidth = $persentage + 30;
-                        return '
+                        return'
                         <div class="mt-3 progress" style="width:100%;">
                             <span class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: '.$persentageWidth.'%" aria-valuenow="'.$persentage.'" aria-valuemin="'.$persentage.'" aria-valuemax="'.$persentage.'"><strong>'.$persentage.'%</strong></span>
                         </div>

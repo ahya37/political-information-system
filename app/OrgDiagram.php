@@ -800,7 +800,58 @@ class OrgDiagram extends Model
         
         return DB::select($sql);
 
+	}
+
+	public function getDataSipByDapil($dapilId){
+
+		#get data desa by dapil
+        $sql = "SELECT b.id, a.district_id, b.name, b.target_persentage,
+				(
+						SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik
+						where da4.base = 'ANGGOTA' and da4.district_id = a.district_id
+				) as anggota_tercover_kortps,
+				(
+						select count(j.nik) from form_anggota_manual_kortp as j join 
+						org_diagram_rt h on j.pidx_korte  = h.idx
+						join users as k on h.nik = k.nik
+						where h.district_id = a.district_id 
+				) as form_manual, 
+				(
+					select count(ap.id) from anggota_pelapis as ap where ap.district_id = a.district_id 
+				) as pelapis,
+				(
+					select SUM(tp.hasil_suara) from tps as tp WHERE tp.district_id = a.district_id
+				) as hasil_suara
+				from dapil_areas as a 
+				join districts as b on a.district_id = b.id 
+				where a.dapil_id = $dapilId order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";
+        
+        return DB::select($sql);
+
 	} 
+
+	public function getDataSipByDistrict($districtId)
+	{
+
+		$sql = "SELECT a.id, a.name, a.target_persentage,
+			(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'ANGGOTA' and da4.village_id = a.id) as anggota_tercover_kortps,
+			(
+				select count(j.nik) from form_anggota_manual_kortp as j join 
+				org_diagram_rt h on j.pidx_korte  = h.idx
+				join users as k on h.nik = k.nik
+				where h.village_id = a.id 
+			) as form_manual,
+			(
+				select count(ap.id) from anggota_pelapis as ap where ap.village_id = a.id 
+			) as pelapis,
+			(
+				select SUM(tp.hasil_suara) from tps as tp WHERE tp.village_id = a.id 
+			) as hasil_suara
+			from villages as a
+			WHERE a.district_id = $districtId order by (SELECT COUNT(users.id) from users join villages on users.village_id = villages.id  WHERE villages.id = a.id) desc";
+         
+        return DB::select($sql);  
+	}	
 
 	public function getDataDaftarTimByDapilForRegency($dapilId){
 
