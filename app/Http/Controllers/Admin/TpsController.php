@@ -641,6 +641,28 @@ class TpsController extends Controller
 
        // jumlah level desa
     }
+	
+	public function updateTpsIdKordes(Request $request)
+	{
+		$sql = "SELECT b.id, b.name, b.tps_id, c.tps_number, d.NOMOR_TPS,
+				(
+					SELECT id from tps  WHERE village_id = $request->village_id and tps_number = d.NOMOR_TPS limit 1
+				) as tps
+				from org_diagram_district as a
+				join users as b on a.nik = b.nik 
+				left join tps as c on b.tps_id = c.id
+				left join new_dpt as d on b.nik = d.NIK 
+				WHERE b.tps_id is null ";
+		$sql = DB::select($sql);
+		
+		foreach($sql as $item){
+			DB::table('users')->where('id', $item->id)->update([
+				'tps_id' => $item->tps
+			]); 
+		}
+				
+		return $sql;
+	}
 
 
 }

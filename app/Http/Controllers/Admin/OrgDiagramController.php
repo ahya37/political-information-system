@@ -4927,31 +4927,56 @@ class OrgDiagramController extends Controller
           // hitung jumlah anggota berdasarkan jumlah kortps yg ada
              $list_kortps = DB::table('org_diagram_rt as a')
                        ->select(
-                         DB::raw('(select count(a1.nik) from org_diagram_rt as a1 join users as a2 on a1.nik = a2.nik where a1.pidx = a.idx and a1.base = "ANGGOTA") as jml_anggota')
+                         DB::raw('(select count(a1.nik) from org_diagram_rt as a1 join users as a2 on a1.nik = a2.nik where a1.pidx = a.idx and a1.base = "ANGGOTA") as jml_anggota'),
+						 DB::raw('(select count(a3.id) from form_anggota_manual_kortp as a3 where a3.pidx_korte = a.idx) as form_manual')
                        )
                        ->join('users as b','a.nik','=','b.nik')
                        ->where('a.village_id', $villageId)
                        ->where('b.tps_id', $value->id)
                        ->where('a.base','KORRT')
                        ->get();
+					   
+			 $kordes = DB::table('org_diagram_village as a')
+						->select('a.nik')
+						->join('users as b','a.nik','=','b.nik')
+						->where('b.village_id', $villageId)
+						->where('b.tps_id', $value->id)
+						->get();
+						
+			$korcam  =  DB::table('org_diagram_district as a')
+						->select('a.nik')
+						->join('users as b','a.nik','=','b.nik')
+						->where('b.village_id', $villageId)
+						->where('b.tps_id', $value->id)
+						->get();
  
              $jml_anggota_kortps = collect($list_kortps)->sum(function($q){
                  return $q->jml_anggota; 
              });
+			 
+			 $jml_anggota_form_manual = collect($list_kortps)->sum(function($q){
+                 return $q->form_manual;  
+             });
+			 
+			 $jml_all_anggota = $jml_anggota_kortps + $jml_anggota_form_manual;
 
-             $selisih = $value->hasil_suara - $jml_anggota_kortps;
+             $selisih = $value->hasil_suara - $jml_anggota_kortps; 
              // $selisih = $selisih < 0 ? 0 : $selisih;
 
 
              $results_tps_terisi[] = [
                  'tps' => $value->tps,
-                 'kortps' => $value->kortps,
-                 'jml_anggota_kortps' => $jml_anggota_kortps,
+                 'korcam' =>count($korcam),
+                 // 'kortps' => $value->kortps,
+                 'jml_all_anggota' => $jml_all_anggota + $value->kortps + count($kordes), // anggota tercover + form manual + korte + kordes + korcam 
+                 // 'jml_form_manual' => $jml_anggota_form_manual,  // anggota tercover + form manual + korte + kordes + korcam 
                  'hasil_suara' => $value->hasil_suara,
                  'selisih' => $selisih,
-				 'persentage' => $gf->persen(($value->hasil_suara/$jml_anggota_kortps)*100)
+				 'persentage' => $gf->persen(($value->hasil_suara/$jml_all_anggota)*100)
              ];
          }
+		 
+		 // return $results_tps_terisi;
 
          // $jml_kortps = collect($results_tps_terisi)->sum(function($q){
                  // return $q['kortps'];

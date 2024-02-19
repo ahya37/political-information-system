@@ -484,3 +484,5 @@ Route::get('sip/dapil/{dapilid}', 'Admin\SipController@getSipDapil');
 Route::get('sip/district/{dapilid}', 'Admin\SipController@getSipDistrict');
 // Route::post('sip/rekap/village/{villageId}', 'Admin\SipController@getRekapTpsByDesa'); 
 Route::post('sip/rekap/district/{villageId}', 'Admin\SipController@getRekapTpsByDistrict'); 
+
+Route::post('/kordes/tpsid/update','Admin\TpsController@updateTpsIdKordes'); 

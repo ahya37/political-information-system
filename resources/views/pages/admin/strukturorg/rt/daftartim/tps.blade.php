@@ -19,7 +19,7 @@
               <div class="dashboard-content mt-4" id="transactionDetails">
 
                 <div class="row">
-                  <div class="col-6">
+                  <div class="col-4">
                     @include('layouts.message')
                     <div class="card">
                       <div class="card-body">
@@ -27,12 +27,12 @@
                                   <table id="data" style="font-size: 12px" class="table table-sm table-striped" width="100%">
                                     <thead>
                                       <tr>  
-                                        <th align="center" width="2px">NO</th>
-                                        <th align="center" width="8px">TPS</th>
-                                        <th align="center" width="8px">KORTE</th>
-                                        <th align="center"  width="8px">ANGGOTA</th>
-                                        <th align="center"  width="8px">SUARA</th>
-                                        <th align="center" width="8px">%</th>
+                                        <th align="center" width="8%">NO</th>
+                                        <th align="center" width="8%">TPS</th>
+                                        <th align="center" width="8%">KORCAM</th>
+                                        <th align="center"  width="10%">ANGGOTA</th>
+                                        <th align="center"  width="10%">SUARA</th>
+                                        <th align="center" width="10%">%</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -40,12 +40,12 @@
 										<tr>
 											<td>{{$no++}}</td> 
 											<td>{{$item['tps']}}</td>
-											<td>{{$item['kortps']}}</td>
-											<td>{{$item['jml_anggota_kortps']}}</td>
+											<td>{{$item['korcam']}}</td>
+											<td>{{$item['jml_all_anggota']}}</td>
 											<td>{{$item['hasil_suara']}}</td>
 											<td>{{$item['persentage']}} %</td>
 										</tr>
-									@endforeach
+									@endforeach 
                                     </tbody>
                                   </table>
                         </div>
