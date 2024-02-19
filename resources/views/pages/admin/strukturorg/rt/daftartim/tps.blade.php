@@ -29,7 +29,7 @@
                                       <tr>  
                                         <th align="center" width="8%">NO</th>
                                         <th align="center" width="8%">TPS</th>
-                                        <th align="center" width="8%">KORCAM</th>
+                                       
                                         <th align="center"  width="10%">ANGGOTA</th>
                                         <th align="center"  width="10%">SUARA</th>
                                         <th align="center" width="10%">%</th>
@@ -40,7 +40,7 @@
 										<tr>
 											<td>{{$no++}}</td> 
 											<td>{{$item['tps']}}</td>
-											<td>{{$item['korcam']}}</td>
+											
 											<td>{{$item['jml_all_anggota']}}</td>
 											<td>{{$item['hasil_suara']}}</td>
 											<td>{{$item['persentage']}} %</td>
