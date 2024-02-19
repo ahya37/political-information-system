@@ -84,9 +84,9 @@
                                             $tercapai_dpt = $item->anggota > 0 ? ($item->anggota / $item->dpt)*100 : 0;
 
                                         @endphp
-                                            <tr>
+                                            <tr> 
                                                 <td align="center">{{ $no++ }}</td>
-                                                <td>{{ $item->name }}</td>
+                                                <td><a href="{{ route('admin-daftartim-data-village', $item->id) }}">{{ $item->name }}</a></td>
                                                 <td align="center" style="{{ $item->ketua == 0 ? "background: #ed7d31" : '' }}">{{ $item->ketua }}</td>
                                                 <td align="center" style="{{ $item->sekretaris == 0 ? "background: #ed7d31" : '' }}">{{ $item->sekretaris }}</td>
                                                 <td align="center" style="{{ $item->bendahara == 0 ? "background: #ed7d31" : '' }}">{{ $item->bendahara }}</td>

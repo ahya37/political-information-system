@@ -4913,6 +4913,66 @@ class OrgDiagramController extends Controller
 
         return view('pages.admin.strukturorg.rt.daftartim.village', compact('jml_hasil_suara_vivi','jml_tps_terisi_suara','result_villages','jml_tps_belum_terisi_suara','jml_hasil_suara','jml_pelapis','jml_form_manual_vivi','jml_form_vivi','jml_tps','persen_dari_target_kec','gF','data','no','jml_ketua','jml_sekretaris','jml_bendahara','jml_dpt','jml_anggota','jml_target_korte','jml_korte_terisi','jml_anggota_tercover','jml_kurang_korte','jml_blm_ada_korte','persentage_target','jml_target','district','jml_saksi','kortps_plus_minus','jml_form_manual'));
     }
+	
+	public function daftarTimVillage($villageId)
+	{ 
+		// get data tps 
+		$orgDiagramModel = new OrgDiagram();
+		$tps 			 = $orgDiagramModel->getTpsExistByVillage($villageId);
+		$gf 				 = new GlobalProvider();
+		// return $tps;
+			   
+		$results_tps_terisi = [];
+         foreach ($tps as $key => $value) {
+          // hitung jumlah anggota berdasarkan jumlah kortps yg ada
+             $list_kortps = DB::table('org_diagram_rt as a')
+                       ->select(
+                         DB::raw('(select count(a1.nik) from org_diagram_rt as a1 join users as a2 on a1.nik = a2.nik where a1.pidx = a.idx and a1.base = "ANGGOTA") as jml_anggota')
+                       )
+                       ->join('users as b','a.nik','=','b.nik')
+                       ->where('a.village_id', $villageId)
+                       ->where('b.tps_id', $value->id)
+                       ->where('a.base','KORRT')
+                       ->get();
+ 
+             $jml_anggota_kortps = collect($list_kortps)->sum(function($q){
+                 return $q->jml_anggota; 
+             });
+
+             $selisih = $value->hasil_suara - $jml_anggota_kortps;
+             // $selisih = $selisih < 0 ? 0 : $selisih;
+
+
+             $results_tps_terisi[] = [
+                 'tps' => $value->tps,
+                 'kortps' => $value->kortps,
+                 'jml_anggota_kortps' => $jml_anggota_kortps,
+                 'hasil_suara' => $value->hasil_suara,
+                 'selisih' => $selisih,
+				 'persentage' => $gf->persen(($value->hasil_suara/$jml_anggota_kortps)*100)
+             ];
+         }
+
+         // $jml_kortps = collect($results_tps_terisi)->sum(function($q){
+                 // return $q['kortps'];
+         // });
+
+         // $jmltpsExists_anggota = collect($results_tps_terisi)->sum(function($q){
+                 // return $q['jml_anggota_kortps'];
+          // });
+
+         // $jml_hasil_suara = collect($results_tps_terisi)->sum(function($q){
+                 // return $q['hasil_suara'];
+          // });
+
+         // $jml_selisih = collect($results_tps_terisi)->sum(function($q){
+                 // return $q['selisih'];
+          // });
+		
+		$village = DB::table('villages')->select('name')->where('id', $villageId)->first();
+		$no = 1;
+		return view('pages.admin.strukturorg.rt.daftartim.tps', compact('results_tps_terisi','village','no'));
+	}
 
     public function deleteDataAnggotaByKortpsForFamillyGroup(){
 

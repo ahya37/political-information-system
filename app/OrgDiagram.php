@@ -833,20 +833,31 @@ class OrgDiagram extends Model
 	public function getDataSipByDistrict($districtId)
 	{
 
-		$sql = "SELECT a.id, a.name, a.target_persentage,
+		$sql = "SELECT a.id, a.name, a.target_persentage,a.peserta_kunjungan,
+			(
+				select COUNT(ov.id)  from org_diagram_village as ov 
+				join users as ov1 on ov.nik = ov1.nik
+				where ov.village_id = a.id
+			) as kordes, 
+			(
+				SELECT COUNT(org_diagram_rt.id) from org_diagram_rt join users on org_diagram_rt.nik = users.nik WHERE org_diagram_rt.base = 'KORRT' and org_diagram_rt.village_id = a.id 
+			) as korte,
 			(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'ANGGOTA' and da4.village_id = a.id) as anggota_tercover_kortps,
 			(
 				select count(j.nik) from form_anggota_manual_kortp as j join 
 				org_diagram_rt h on j.pidx_korte  = h.idx
 				join users as k on h.nik = k.nik
-				where h.village_id = a.id 
+				where h.village_id = a.id
 			) as form_manual,
 			(
 				select count(ap.id) from anggota_pelapis as ap where ap.village_id = a.id 
 			) as pelapis,
 			(
 				select SUM(tp.hasil_suara) from tps as tp WHERE tp.village_id = a.id 
-			) as hasil_suara
+			) as hasil_suara,
+			(
+				SELECT COUNT(z.id) from tps as z where z.village_id = a.id
+			) as tps
 			from villages as a
 			WHERE a.district_id = $districtId order by (SELECT COUNT(users.id) from users join villages on users.village_id = villages.id  WHERE villages.id = a.id) desc";
          

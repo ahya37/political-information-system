@@ -482,3 +482,5 @@ Route::post('doc/dpt/duplikat','Admin\DocumentController@getDataDuplikatNikDpt')
 Route::post('sip/regency', 'Admin\SipController@getSipRegency');
 Route::get('sip/dapil/{dapilid}', 'Admin\SipController@getSipDapil');
 Route::get('sip/district/{dapilid}', 'Admin\SipController@getSipDistrict');
+// Route::post('sip/rekap/village/{villageId}', 'Admin\SipController@getRekapTpsByDesa'); 
+Route::post('sip/rekap/district/{villageId}', 'Admin\SipController@getRekapTpsByDistrict'); 
