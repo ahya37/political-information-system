@@ -449,10 +449,10 @@ class OrgDiagram extends Model
 				select SUM(tpv.hasil_suara_vivi) from tps as tpv WHERE tpv.village_id = a.id 
 			) as hasil_suara_vivi,
 			(
-				SELECT COUNT(tp2.id) from tps as tp2 where tp2.village_id = a.id and tp2.hasil_suara > 0
+				SELECT COUNT(tp2.id) from tps as tp2 where tp2.village_id = a.id and tp2.hasil_suara is not null
 			) tps_terisi_suara,
 			(
-				SELECT COUNT(tp3.id) from tps as tp3 where tp3.village_id = a.id and tp3.hasil_suara = 0
+				SELECT COUNT(tp3.id) from tps as tp3 where tp3.village_id = a.id and tp3.hasil_suara is null 
 			) tps_belum_terisi_suara
 			from villages as a
 			WHERE a.district_id = $districtId order by (SELECT COUNT(users.id) from users join villages on users.village_id = villages.id  WHERE villages.id = a.id) desc";
@@ -579,7 +579,6 @@ class OrgDiagram extends Model
 						select SUM(tp.hasil_suara) from tps as tp 
 						join dapil_areas as tp1 on tp.district_id = tp1.district_id 
 						WHERE tp1.dapil_id = a.id
-						
 					) as hasil_suara,
 					(
 						select SUM(tpv.hasil_suara_vivi) from tps as tpv 
@@ -588,15 +587,15 @@ class OrgDiagram extends Model
 						
 					) as hasil_suara_vivi,
 					(
-						select count(tp2.hasil_suara) from tps as tp2 
+						select count(tp2.id) from tps as tp2 
 						join dapil_areas as tp3 on tp2.district_id = tp3.district_id 
-						WHERE tp3.dapil_id = a.id and tp2.hasil_suara > 0
+						WHERE tp3.dapil_id = a.id and tp2.hasil_suara is not null 
 						
 					) as tps_terisi_suara,
 					(
-						select count(tp4.hasil_suara) from tps as tp4 
+						select count(tp4.id) from tps as tp4 
 						join dapil_areas as tp5 on tp4.district_id = tp5.district_id 
-						WHERE tp5.dapil_id = a.id and tp4.hasil_suara = 0
+						WHERE tp5.dapil_id = a.id and tp4.hasil_suara is null
 					) as tps_belum_terisi_suara					
 					from dapils as a
 					where a.regency_id = $regencyId";
@@ -789,10 +788,10 @@ class OrgDiagram extends Model
 					select SUM(tpv.hasil_suara_vivi) from tps as tpv WHERE tpv.district_id = a.district_id
 				) as hasil_suara_vivi, 
 				(
-					select count(tp2.id) from tps as tp2 WHERE tp2.district_id = a.district_id and tp2.hasil_suara > 0
+					select count(tp2.id) from tps as tp2 WHERE tp2.district_id = a.district_id and tp2.hasil_suara is not null 
 				) as tps_terisi_suara,
 				(
-					select count(tp3.id) from tps as tp3 WHERE tp3.district_id = a.district_id and tp3.hasil_suara = 0
+					select count(tp3.id) from tps as tp3 WHERE tp3.district_id = a.district_id and tp3.hasil_suara is null 
 				) as tps_belum_terisi_suara
 				from dapil_areas as a 
 				join districts as b on a.district_id = b.id 
@@ -1405,6 +1404,15 @@ class OrgDiagram extends Model
 				from tps
 				WHERE village_id = $villageId group by village_id, id, tps_number,hasil_suara
 				Having (SELECT COUNT(org_diagram_rt.nik) from org_diagram_rt join users on org_diagram_rt.nik = users.nik where org_diagram_rt.base = 'KORRT' and users.tps_id = tps.id) > 0";
+		return DB::select($sql);
+	}
+	
+	public function getTpsVillage($villageId){
+
+		$sql = "SELECT village_id, id, hasil_suara, tps_number as tps,
+				(SELECT COUNT(org_diagram_rt.nik) from org_diagram_rt join users on org_diagram_rt.nik = users.nik where org_diagram_rt.base = 'KORRT' and users.tps_id = tps.id) as kortps
+				from tps
+				WHERE village_id = $villageId group by village_id, id, tps_number,hasil_suara"; 
 		return DB::select($sql);
 	}
 	

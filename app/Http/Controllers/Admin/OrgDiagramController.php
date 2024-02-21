@@ -4694,6 +4694,7 @@ class OrgDiagramController extends Controller
             return $q->tps_belum_terisi_suara;
         });		
 		
+		
 		$jml_hasil_suara = collect($data)->sum(function($q){
             return $q->hasil_suara;
         });
@@ -4904,7 +4905,7 @@ class OrgDiagramController extends Controller
 		$villages = DB::table('villages')->select('id','name')->where('district_id',$districtId)->get();
 		$result_villages = [];
 		foreach($villages as $item){
-			$tps = DB::table('tps')->select('tps_number')->where('village_id', $item->id)->where('hasil_suara','=',0)->get();
+			$tps = DB::table('tps')->select('tps_number')->where('village_id', $item->id)->where('hasil_suara','=',null)->get();
 			$result_villages[] =[
 				'desa' => $item->name,
 				'tps'  => $tps
@@ -4918,7 +4919,7 @@ class OrgDiagramController extends Controller
 	{ 
 		// get data tps 
 		$orgDiagramModel = new OrgDiagram();
-		$tps 			 = $orgDiagramModel->getTpsExistByVillage($villageId);
+		$tps 			 = $orgDiagramModel->getTpsVillage($villageId);
 		$gf 				 = new GlobalProvider();
 		// return $tps;
 			   
@@ -4958,21 +4959,22 @@ class OrgDiagramController extends Controller
                  return $q->form_manual;  
              });
 			 
-			 $jml_all_anggota = $jml_anggota_kortps + $jml_anggota_form_manual;
+			 $jml_all_anggota = $jml_anggota_kortps + $jml_anggota_form_manual + $value->kortps + count($kordes);
 
-             $selisih = $value->hasil_suara - $jml_anggota_kortps; 
+            $selisih = $value->hasil_suara - $jml_anggota_kortps; 
              // $selisih = $selisih < 0 ? 0 : $selisih;
-
+			 
+			// $jml = $jml_all_anggota == 0 ? 0 : $jml_all_anggota;
 
              $results_tps_terisi[] = [
-                 'tps' => $value->tps,
-                 'korcam' =>count($korcam),
+                 'tps' => $value->tps, 
+                 // 'korcam' =>count($korcam),
                  // 'kortps' => $value->kortps,
-                 'jml_all_anggota' => $jml_all_anggota + $value->kortps + count($kordes), // anggota tercover + form manual + korte + kordes + korcam 
+                 'jml_all_anggota' => $jml_all_anggota, // anggota tercover + form manual + korte + kordes + korcam 
                  // 'jml_form_manual' => $jml_anggota_form_manual,  // anggota tercover + form manual + korte + kordes + korcam 
-                 'hasil_suara' => $value->hasil_suara,
-                 'selisih' => $selisih,
-				 'persentage' => $gf->persen(($value->hasil_suara/$jml_all_anggota)*100)
+                 'hasil_suara' => $value->hasil_suara ?? 0,
+                 'selisih' => $selisih ?? 0,
+				 'persentage' => $jml_all_anggota != 0 ? $gf->persen(($value->hasil_suara/$jml_all_anggota)*100) : 0
              ];
          }
 		 
