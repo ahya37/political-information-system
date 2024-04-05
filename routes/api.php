@@ -482,7 +482,15 @@ Route::post('doc/dpt/duplikat','Admin\DocumentController@getDataDuplikatNikDpt')
 Route::post('sip/regency', 'Admin\SipController@getSipRegency');
 Route::get('sip/dapil/{dapilid}', 'Admin\SipController@getSipDapil');
 Route::get('sip/district/{dapilid}', 'Admin\SipController@getSipDistrict');
+Route::get('sip/district/village/{villageId}', 'Admin\SipController@getSipVillage');
 // Route::post('sip/rekap/village/{villageId}', 'Admin\SipController@getRekapTpsByDesa'); 
 Route::post('sip/rekap/district/{villageId}', 'Admin\SipController@getRekapTpsByDistrict'); 
+Route::post('sip/rekap/district/village/{villageId}', 'Admin\SipController@getRekapTpsByVillage'); 
 
 Route::post('/kordes/tpsid/update','Admin\TpsController@updateTpsIdKordes'); 
+Route::post('/sip/kordes/tpsid/update','Admin\TpsController@replaceTpsIdKordesByKecamatan');  
+Route::post('/sip/usersid/duplicat/spam','Admin\TpsController@deleteAnggotaTidakTercoverKorte');  
+
+Route::post('chart-export','Admin\SipController@dashboardDesaPdfChartDownload');
+
+Route::post('rangking','Admin\SipController@rangkingPerolehanSuara')->name('admin-sip-rangking'); 

@@ -165,6 +165,8 @@ return [
         /*
          * Package Service Providers...
          */
+		Webklex\PDFMerger\Providers\PDFMergerServiceProvider::class,
+		 
         UniSharp\LaravelFilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
 		Chumper\Zipper\ZipperServiceProvider::class,
@@ -241,10 +243,9 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Image' => Intervention\Image\Facades\Image::class,
 		'Zipper' => Chumper\Zipper\Zipper::class,
-
-
         // model custom
         'UserModel' => App\Providers\Model\UserModel::class,
+		'PDFMerger' => Webklex\PDFMerger\Facades\PDFMergerFacade::class,
 
     ],
 

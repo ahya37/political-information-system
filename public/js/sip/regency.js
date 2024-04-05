@@ -1,5 +1,5 @@
 // Data for the bar graph
-
+$('#datatable').DataTable(); 
 function getSipDataRegency(){
 	return fetch("/api/sip/regency",{
 			method: 'POST',
@@ -24,18 +24,21 @@ function getSipDataRegency(){
 async function getSipGrafikRegency(){
 	try{
 		
+		$('#laodingChart').append(`<div class="d-flex justify-content-center">
+		  <div class="spinner-border text-primary" role="status">
+			<span class="sr-only">Loading...</span>
+		  </div>
+		</div>`)
+		
 		const results = await getSipDataRegency();
-		getSipGrafikRegencyUi(results)
+		getSipGrafikRegencyUi(results);
+		$('#laodingChart').empty();
 		
 	}catch(err){
 		console.log(err);
 	} 
 }
 function getSipGrafikRegencyUi(results){
-	// const label = results.label;
-	// const suara = results.hasilsuara; 
-	// const anggota = results.anggota;
-	// const peserta_kunjungan = results.peserta_kunjungan;
 	let data = results
 
 	// Get the context of the canvas element
@@ -74,33 +77,20 @@ function getSipGrafikRegencyUi(results){
 							}  
 							}
 					},
-					onClick: (event, chartElement) => {
-						if(chartElement.length > 0){
-							const index = chartElement[0].index;
-							const url = data.datasets[0].urls[index];  
-							window.open(url,'_blank');
-						}
-					}  
+					// onClick: (event, chartElement) => {
+						// if(chartElement.length > 0){
+							// const index = chartElement[0].index;
+							// const url = data.datasets[0].urls[index];  
+							// window.open(url,'_blank');
+						// }
+					// }  
 				}
 	}
 	
 	let myChart = new Chart(
 		ctx,
-		config
+		config 
 	)
-	
-	// function clickHandler(click){
-		// const points = myChart.getElementsAtEventForMode(click, 'nearest',{intersect: true}, true);
-		// if(points.length){
-			// const firstPoint = points[0];
-			 // const value = myChart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
-			// console.log(firstPoint);
-			
-		// }
-
-	// }
-	
-	// ctx.onclick = clickHandler;
 };
 
 getSipGrafikRegency();

@@ -13,7 +13,7 @@
                 <canvas id="myChart"></canvas>
                 </div> 
               </div>
-        </div>
+        </div> 
     </div>
 @endsection
 

@@ -64,6 +64,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}" type="text/javascript"></script>
 <script src="{{asset('js/member-event-index.js')}}" type="text/javascript"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script type="text/javascript">
     $('#data').DataTable()
 </script>

@@ -23,6 +23,7 @@ use App\UserMenu;
 use Maatwebsite\Excel\Excel;
 use PDF;
 use App\Providers\GlobalProvider;
+use App\TmpSpamUser;
 
 class TpsController extends Controller
 {
@@ -662,6 +663,139 @@ class TpsController extends Controller
 		}
 				
 		return $sql;
+	}
+	
+	public function replaceTpsIdKordesByKecamatan(Request $request)
+	{
+		DB::beginTransaction();
+		try{
+			// get desa by kecamatan
+			$desa = DB::table('villages')->select('id','name')->where('district_id', $request->district_id)->get();
+			
+			$results = [];
+			foreach($desa as $item){
+				$getTps = "SELECT b.id, b.nik, b.name, b.tps_id , c.tps_number, d.name as desa,
+							(
+								SELECT id from tps WHERE village_id = $item->id and tps_number = c.tps_number 
+							) as tps_id_seharusnya
+							from org_diagram_village as a 
+							join users as b on a.nik = b.nik
+							left join tps as c on b.tps_id = c.id
+							left join villages as d on c.village_id = d.id 
+							WHERE a.village_id = $item->id";
+				$getTps = DB::select($getTps);
+				
+				$results[] = [
+					'desa' => $item->name, 
+					'tps' => $getTps
+				];
+			}
+			
+			// replace tps_id kordes masing2 desa nya
+			foreach($results as $key){
+				foreach($key['tps'] as $item){
+					DB::table('users')->where('id', $item->id)->update([
+						'tps_id' =>  $item->tps_id_seharusnya
+					]);
+				}
+				
+			} 
+			
+			DB::commit();
+			return 'OK';
+		}catch(\Exception $e){
+			DB::rollBack();
+			return $e->getMessage();
+		}
+		
+	}
+	
+	public function deleteAnggotaTidakTercoverKorte()
+	{
+		DB::beginTransaction();
+        try {
+			
+			$sql = "SELECT a.*, 
+				(
+					SELECT COUNT(a1.id) from org_diagram_rt as a1 where a1.nik = a.nik
+				) as korte_or_anggota,
+				(
+					SELECT COUNT(a2.id) from org_diagram_village  as a2 where a2.nik = a.nik
+				) as kordes,
+				( 
+					SELECT COUNT(a3.id) from org_diagram_district as a3 where a3.nik = a.nik
+				) as korcam
+				from users as a
+				having korte_or_anggota = 0 and kordes = 0 and korcam = 0";
+		
+		// save kedalam spam
+		
+			$sql = DB::select($sql); 
+			
+			// return $sql;
+			
+			foreach($sql as $item){
+				$user = User::where('id', $item->id)->first();
+				#save ke tb tmp_spam_user
+				TmpSpamUser::create([
+					'user_id' => $user->user_id ?? '',
+					'number'  => $user->number ?? '',
+					'code'    => $user->code ?? '',
+					'nik'     => $user->nik ?? '',
+					'name'    => $user->name ?? '',
+					'gender'  => $user->gender ?? '',
+					'place_berth' => $user->place_berth ?? '',
+					'date_berth'  => $user->date_berth ?? '',
+					'blood_group' => $user->blood_group ?? '',
+					'marital_status' => $user->marital_status ?? '',
+					'job_id' => $user->job_id ?? '',
+					'religion' => $user->religion ?? '',
+					'education_id' => $user->education_id ?? '',
+					'email' => $user->email ?? '',
+					'email_verified_at' => $user->email_verified_at ?? '',
+					'password' => $user->password ?? '',
+					'address'  => $user->address ?? '',
+					'village_id' => $user->village_id ?? '',
+					'rt' => $user->rt ?? '',
+					'rw' => $user->rw ?? '',
+					'phone_number' => $user->phone_number ?? '',
+					'whatsapp' => $user->whatsapp ?? '',
+					'photo' => $user->photo ?? '',
+					'ktp' => $user->ktp ?? '',
+					'level' => $user->level ?? '',
+					'cby' => $user->cby ?? '',
+					'saved_nasdem' => $user->saved_nasdem ?? '',
+					'activate_token' => $user->activate_token ?? '',
+					'status' => $user->status ?? '',
+					'remember_token' => $user->remember_token ?? '',
+					'set_admin' => $user->set_admin ?? '',
+					'category_inactive_member_id' => 0 ?? '',
+					'reason' => 'Tidak Tercover',
+					'created_at' => $user->created_at ?? '',
+					'updated_at' => date('Y-m-d H:i:s') ?? ''
+					]);
+					
+					User::where('id', $item->id)->delete();
+			}
+			
+			
+
+           
+
+            #mekanisme sortir idx jika ada yang terhapus
+            DB::commit();
+            return ResponseFormatter::success([
+                'message' => 'Berhasil spam anggota!'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return ResponseFormatter::error([
+                'message' => 'Something when wrong!',
+                'error'   => $e->getMessage()
+            ]);
+        }
+		
+            
 	}
 
 

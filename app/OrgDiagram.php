@@ -383,15 +383,6 @@ class OrgDiagram extends Model
 		
 		return DB::select($sql);
 	}
-	
-	
-	public function getDataKordesByDistrict(){
-		
-	}
-	
-	public function getDataKorteDapil(){
-		
-	}
 
 	public function getDataDaftarTimByKecamatan($districtId)
 	{
@@ -604,9 +595,68 @@ class OrgDiagram extends Model
 
 	}
 	
+	public function getSipKecamatanByDapil($dapilId)
+	{
+		$districts = DB::table('districts as a')
+						 ->select('a.id','a.name')
+						 ->join('dapil_areas as b','a.id','=','b.district_id')	
+						 ->where('b.dapil_id', $dapilId)
+						 ->get();
+		return $districts;
+	}
+	
+	public function getSipDataSipByRegency($regencyId)
+	{
+		$sql = "SELECT a.id, a.name,				
+					(
+						select SUM(tp.hasil_suara) from tps as tp 
+						join dapil_areas as tp1 on tp.district_id = tp1.district_id 
+						WHERE tp1.dapil_id = a.id
+						
+					) as hasil_suara,
+					(
+						select count(tp2.hasil_suara) from tps as tp2 
+						join dapil_areas as tp3 on tp2.district_id = tp3.district_id 
+						WHERE tp3.dapil_id = a.id and tp2.hasil_suara > 0
+						
+					) as tps_terisi_suara,
+					(	
+						SELECT sum(z.peserta_kunjungan) from villages as z
+						join dapil_areas as z1 on z.district_id = z1.district_id 
+						WHERE z1.dapil_id = a.id 
+					) as peserta_kunjungan,
+					(
+						SELECT COUNT(tp.id) from tps as tp
+						join dapil_areas as tp1 on tp.district_id = tp1.district_id 
+						where tp1.dapil_id = a.id
+					) as tps 
+					from dapils as a
+					where a.regency_id = $regencyId";
+
+		return DB::select($sql);		
+	}
+	
 	public function getDataSipByRegency($regencyId){
 
 		$sql = "SELECT a.id, a.name,
+					(
+						SELECT COUNT(c1.id) from org_diagram_district as c1
+						join users as c2 on c1.nik = c2.nik
+						join dapil_areas as c3 on c1.district_id = c3.district_id 
+						where c3.dapil_id = a.id
+					) as korcam,
+					(
+						SELECT COUNT(z1.id) from org_diagram_village as z1
+						join users as z2 on z1.nik = z2.nik
+						join dapil_areas as z3 on z1.district_id = z3.district_id 
+						where z3.dapil_id = a.id
+					) as kordes,
+					(
+						SELECT COUNT(y1.id) from org_diagram_rt as y1
+						join users as y2 on y1.nik = y2.nik
+						join dapil_areas as y3 on y1.district_id = y3.district_id 
+						where y3.dapil_id = a.id and y1.base = 'KORRT'
+					) as korte, 
 					(
 						SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id
 						join dapil_areas as a4 on a2.district_id = a4.district_id where a4.dapil_id = a.id
@@ -800,49 +850,126 @@ class OrgDiagram extends Model
         return DB::select($sql);
 
 	}
+	
+	public function getAnggotaTercoverByVillage($villageId) 
+	{ 
+		$sql = DB::table('org_diagram_rt as a')
+                       ->select(
+                         DB::raw('(select count(a1.id) from org_diagram_rt as a1 join users as a2 on a1.nik = a2.nik where a1.pidx = a.idx and a1.base = "ANGGOTA") as jml_anggota'),
+						  DB::raw("
+								(
+									select count(b1.id) from form_anggota_manual_kortp as b1 where b1.pidx_korte = a.idx
+								) as form_manual
+						 ")
+                       )
+                       ->join('users as b','a.nik','=','b.nik')
+                       ->where('a.village_id', $villageId)
+                       // ->where('b.tps_id', $value->id)
+                       ->where('a.base','KORRT')
+                       ->get();
+		return $sql; 
+	}
+	
+	public function getDataSipByDapilCopy($dapilId){
+
+		#get data desa by dapil
+        $sql = "SELECT b.id, a.district_id, b.name, b.target_persentage,
+			(
+				SELECT COUNT(b1.id)  from org_diagram_district as b1 
+				join users as b2 on b1.nik = b2.nik
+				where b1.district_id = b.id
+			) as korcam, 
+			(
+				SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik
+				where da4.base = 'ANGGOTA' and da4.district_id = a.district_id
+			) as anggota_tercover_kortps,
+			(
+				select count(j.nik) from form_anggota_manual_kortp as j join 
+				org_diagram_rt h on j.pidx_korte  = h.idx
+				join users as k on h.nik = k.nik
+				where h.district_id = a.district_id 
+			) as form_manual, 
+			(
+				select count(ap.id) from anggota_pelapis as ap where ap.district_id = a.district_id 
+			) as pelapis,
+			(
+				select SUM(tp.hasil_suara) from tps as tp WHERE tp.district_id = a.district_id
+			) as hasil_suara,
+			(
+				SELECT COUNT(t1.id) from tps as t1 where t1.district_id = b.id 
+			) as tps,
+			(
+				SELECT sum(v.peserta_kunjungan) from villages as v WHERE v.district_id = b.id  
+			) as peserta_kunjungan
+			from dapil_areas as a 
+			join districts as b on a.district_id = b.id 
+			where a.dapil_id = $dapilId 
+			order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";
+        
+        return DB::select($sql);
+
+	}
 
 	public function getDataSipByDapil($dapilId){
 
 		#get data desa by dapil
         $sql = "SELECT b.id, a.district_id, b.name, b.target_persentage,
-				(
-						SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik
-						where da4.base = 'ANGGOTA' and da4.district_id = a.district_id
-				) as anggota_tercover_kortps,
-				(
-						select count(j.nik) from form_anggota_manual_kortp as j join 
-						org_diagram_rt h on j.pidx_korte  = h.idx
-						join users as k on h.nik = k.nik
-						where h.district_id = a.district_id 
-				) as form_manual, 
-				(
-					select count(ap.id) from anggota_pelapis as ap where ap.district_id = a.district_id 
-				) as pelapis,
-				(
-					select SUM(tp.hasil_suara) from tps as tp WHERE tp.district_id = a.district_id
-				) as hasil_suara
-				from dapil_areas as a 
-				join districts as b on a.district_id = b.id 
-				where a.dapil_id = $dapilId order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";
+			(
+				select SUM(tp.hasil_suara) from tps as tp WHERE tp.district_id = a.district_id
+			) as hasil_suara,
+			(
+				SELECT COUNT(t1.id) from tps as t1 where t1.district_id = b.id 
+			) as tps, 
+			(
+				SELECT sum(v.peserta_kunjungan) from villages as v WHERE v.district_id = b.id  
+			) as peserta_kunjungan
+			from dapil_areas as a 
+			join districts as b on a.district_id = b.id 
+			where a.dapil_id = $dapilId 
+			order by (SELECT COUNT(a1.id) from users as a1 join villages as a2 on a1.village_id = a2.id WHERE a2.district_id = a.district_id) desc";
         
         return DB::select($sql);
 
-	} 
+	}
+	
+	public function getCountKorcamByVillage($villageId)
+	{			
+		$sql = DB::table('org_diagram_district as a')
+			   ->join('users as b','a.nik','=','b.nik')
+			   ->where('b.village_id', $villageId)
+			   ->count();
+		
+		return $sql;
+	}
+ 
+	public function getCountKordesByVillage($villageId)
+	{
+		$sql = DB::table('org_diagram_village as a')
+			   ->join('users as b','a.nik','=','b.nik')
+			   ->where('a.village_id', $villageId)
+			   ->count();
+		return $sql;
+	}
 
 	public function getDataSipByDistrict($districtId)
 	{
 
 		$sql = "SELECT a.id, a.name, a.target_persentage,a.peserta_kunjungan,
 			(
+				select COUNT(ov1.id)  from org_diagram_district as ov1 
+				join users as ov2 on ov1.nik = ov2.nik
+				where ov2.village_id = a.id
+			) as korcam,
+			(
 				select COUNT(ov.id)  from org_diagram_village as ov 
 				join users as ov1 on ov.nik = ov1.nik
 				where ov.village_id = a.id
-			) as kordes, 
+			) as kordes,  
 			(
 				SELECT COUNT(org_diagram_rt.id) from org_diagram_rt join users on org_diagram_rt.nik = users.nik WHERE org_diagram_rt.base = 'KORRT' and org_diagram_rt.village_id = a.id 
 			) as korte,
 			(SELECT count(da4.id) from org_diagram_rt as da4  join users as da5 on da4.nik = da5.nik where da4.base = 'ANGGOTA' and da4.village_id = a.id) as anggota_tercover_kortps,
-			(
+			( 
 				select count(j.nik) from form_anggota_manual_kortp as j join 
 				org_diagram_rt h on j.pidx_korte  = h.idx
 				join users as k on h.nik = k.nik
@@ -1516,6 +1643,39 @@ class OrgDiagram extends Model
 					->where('a.base', 'KORRT')
 					->get();
 					
+		return $sql;
+	}
+	
+	public function getAllKecamatanOnly($regencyId)
+	{
+		$sql = DB::table('districts as a')
+			   ->select('a.id','a.name',
+					DB::raw('
+						(
+							select SUM(tp.hasil_suara) from tps as tp WHERE tp.district_id = a.id
+						) as hasil_suara
+					'),
+					DB::raw('
+						(
+							SELECT COUNT(t1.id) from tps as t1 where t1.district_id = a.id 
+						) as tps
+					')
+					// DB::raw('
+						// (
+							// SELECT sum(v.peserta_kunjungan) from villages as v WHERE v.district_id = a.id
+						// ) as peserta_kunjungan
+					// ')
+			   )
+			   ->join('dapil_areas as b','a.id','=','b.district_id')
+			   ->join('dapils as c','b.dapil_id','=','c.id')
+			   ->where('c.regency_id', $regencyId)
+			   ->where('b.dapil_id', 8)
+			   ->orWhere('b.dapil_id', 11)
+			   ->orWhere('b.dapil_id', 12)
+			   ->having('a.id','!=',3602051)
+			   ->having('a.id','!=',3602040)
+			   ->get();
+			    
 		return $sql;
 	}
 	

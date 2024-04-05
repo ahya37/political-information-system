@@ -23,6 +23,8 @@ Route::get('/email', function () {
     return view('test-email');
 });
 
+
+
 Route::post('/by_referal/downloadexcel/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadExcel')->name('by-referal-downloadexcel');
 Route::post('/by_referal/downloadpdf/{user_id}/{district_id}','Admin\MemberController@memberByReferalDownloadPDF')->name('by-referal-downloadpdf');
 Route::post('/admin/dashboard/referalbymount','Admin\DashboardController@referalByMountAdmin');
@@ -655,11 +657,20 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin'], function(){
             Route::get('dashboard','SipController@dashboard')->name('admin-sip-dashboard-regency');
             Route::get('dashboard/dapil/{dapilid}','SipController@dashboardDapil')->name('admin-sip-dashboard-dapil');
             Route::get('dashboard/district/{districId}','SipController@dashboardKecamatan')->name('admin-sip-dashboard-district');
+            Route::get('dashboard/district/village/{villageId}','SipController@dashboardDesa')->name('admin-sip-dashboard-village');
+            Route::post('dashboard/district/village/pdf/download/{villageId}','SipController@dashboardDesaPdfDownload')->name('admin-sip-dashboard-village-pdf-download');
+            // Route::get('dashboard/district/village/pdfchart/download/{villageId}','SipController@dashboardDesaPdfChartDownload')->name('admin-sip-dashboard-village-pdfchart-download');
+			Route::post('chart-export','SipController@dashboardDesaPdfChartDownload')->name('export.pdf');
+			Route::post('rangking','SipController@rangkingPerolehanSuara')->name('admin-sip-rangking');
+			Route::post('rangking/desa/{id}','SipController@rangkingPerolehanSuaraDesa')->name('admin-sip-rangking-desa');
+			
         });
 		
-    });
+    }); 
 	
 });
+
+
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => 'admin'], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
