@@ -5117,7 +5117,7 @@ class OrgDiagramController extends Controller
         }
 
         // dd($after_results);
-        usort($after_results, fn($a, $b) => $a['family_group_id'] <= $b['family_group_id']);
+        // usort($after_results, fn($a, $b) => $a['family_group_id'] <= $b['family_group_id']);
 
         
         // kelompokan data dengan keluarga nya
